@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F260C4646B
-	for <live-patching@archiver.kernel.org>; Wed, 26 Jun 2019 03:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 266A3C48BD3
+	for <live-patching@archiver.kernel.org>; Wed, 26 Jun 2019 03:47:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D07FA21743
-	for <live-patching@archiver.kernel.org>; Wed, 26 Jun 2019 03:45:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5C2E2082F
+	for <live-patching@archiver.kernel.org>; Wed, 26 Jun 2019 03:47:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561520710;
-	bh=Zfyei3Jz1x85a+uZGge/JOp/+dhiIg57DVivvgOSfdc=;
+	s=default; t=1561520849;
+	bh=YMxhF3xZpLjkpgDDYAqBSMQStGwzFgN9urEAb/LeJeg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Cg/ByngD8sj20G+fYrF8BnXpP7ZR7+rCygOf/SEAgy/r3hjwJNiiQGmIiIucAnm40
-	 0inGjwwe78mZ95bJvL2ZsV0ssabD+Rlg7X7BoharV8PkutP2mMel/Ki1VsK3VjUJsX
-	 o5Wv0GtpkOLP67taeTlEVp5xDEE93f1LLgVoPJSw=
+	b=YTkxAyoWQrFGwS/y+5AcCazO4cSwLk3GhoNH1EWoX2Rh5JrZu4AwF6zIfzBJ9RqgK
+	 7/6BJ12TFLZBfwU+EbCKlfZywlo/vC3r2aF8uWZiKY1jVvpamEFhvukZDHVBSiRVAo
+	 t1xy51jk+fbRQNzA1b6kwVKV09d08UxI9b8ca8Aw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727714AbfFZDpG (ORCPT
+        id S1727875AbfFZDqB (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 25 Jun 2019 23:45:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56542 "EHLO mail.kernel.org"
+        Tue, 25 Jun 2019 23:46:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726793AbfFZDpF (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:45:05 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-98.mobile.att.net [107.77.172.98])
+        id S1727457AbfFZDqA (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Tue, 25 Jun 2019 23:46:00 -0400
+Received: from sasha-vm.mshome.net (mobile-107-77-172-74.mobile.att.net [107.77.172.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD6B121726;
-        Wed, 26 Jun 2019 03:45:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44F4E21738;
+        Wed, 26 Jun 2019 03:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520704;
-        bh=Zfyei3Jz1x85a+uZGge/JOp/+dhiIg57DVivvgOSfdc=;
+        s=default; t=1561520759;
+        bh=YMxhF3xZpLjkpgDDYAqBSMQStGwzFgN9urEAb/LeJeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgi2hk2OdG+TlOECTfmFs0oIJ2jVoN8rbySUtYU2fnm5C5IasFyC5+wBnqZY7mXKb
-         aWYmP7ScBYuB4nmthnAOngHzXKER1QcWB/Ug2jNChJ0M24MSqy7s31s3BP3EWTh3Xz
-         61RY4NU1vqyoML2Dy+uHWd3/EId3hWyhazQLigYs=
+        b=HOLECe4j2AJVDprEinjdRawbOIQ+0UduJcpIKA/NLAgskBVEIO2iVwsiYs+GVBGAK
+         OLz1EyV6KaJHb+9ihmBX5eOxZfgsmNLa2vfn0gPqoQS6pCDpWHLTcMpL88honMwDRT
+         Tksopat7Xr3tyfssDfcDObkpLCJjVSSeqmFs8MrA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -47,12 +47,12 @@ Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
         Steven Rostedt <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>, live-patching@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 33/34] module: Fix livepatch/ftrace module text permissions race
-Date:   Tue, 25 Jun 2019 23:43:34 -0400
-Message-Id: <20190626034335.23767-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 20/21] module: Fix livepatch/ftrace module text permissions race
+Date:   Tue, 25 Jun 2019 23:45:05 -0400
+Message-Id: <20190626034506.24125-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034335.23767-1-sashal@kernel.org>
-References: <20190626034335.23767-1-sashal@kernel.org>
+In-Reply-To: <20190626034506.24125-1-sashal@kernel.org>
+References: <20190626034506.24125-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -148,7 +148,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 5b77a7314e01..722c27c40e5b 100644
+index 7c51f065b212..88754e9790f9 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
 @@ -30,6 +30,7 @@
@@ -159,7 +159,7 @@ index 5b77a7314e01..722c27c40e5b 100644
  #include <asm/cacheflush.h>
  #include "core.h"
  #include "patch.h"
-@@ -708,16 +709,21 @@ static int klp_init_object_loaded(struct klp_patch *patch,
+@@ -635,16 +636,21 @@ static int klp_init_object_loaded(struct klp_patch *patch,
  	struct klp_func *func;
  	int ret;
  
@@ -182,10 +182,10 @@ index 5b77a7314e01..722c27c40e5b 100644
  		ret = klp_find_object_symbol(obj->name, func->old_name,
  					     func->old_sympos,
 diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 90348b343460..50ba14591996 100644
+index 3e92852c8b23..4e4b88047fcc 100644
 --- a/kernel/trace/ftrace.c
 +++ b/kernel/trace/ftrace.c
-@@ -35,6 +35,7 @@
+@@ -34,6 +34,7 @@
  #include <linux/hash.h>
  #include <linux/rcupdate.h>
  #include <linux/kprobes.h>
@@ -193,7 +193,7 @@ index 90348b343460..50ba14591996 100644
  
  #include <trace/events/sched.h>
  
-@@ -2627,10 +2628,12 @@ static void ftrace_run_update_code(int command)
+@@ -2692,10 +2693,12 @@ static void ftrace_run_update_code(int command)
  {
  	int ret;
  
@@ -207,7 +207,7 @@ index 90348b343460..50ba14591996 100644
  
  	/*
  	 * By default we use stop_machine() to modify the code.
-@@ -2642,6 +2645,9 @@ static void ftrace_run_update_code(int command)
+@@ -2707,6 +2710,9 @@ static void ftrace_run_update_code(int command)
  
  	ret = ftrace_arch_code_modify_post_process();
  	FTRACE_WARN_ON(ret);
@@ -217,7 +217,7 @@ index 90348b343460..50ba14591996 100644
  }
  
  static void ftrace_run_modify_code(struct ftrace_ops *ops, int command,
-@@ -5762,6 +5768,7 @@ void ftrace_module_enable(struct module *mod)
+@@ -5791,6 +5797,7 @@ void ftrace_module_enable(struct module *mod)
  	struct ftrace_page *pg;
  
  	mutex_lock(&ftrace_lock);
@@ -225,7 +225,7 @@ index 90348b343460..50ba14591996 100644
  
  	if (ftrace_disabled)
  		goto out_unlock;
-@@ -5823,6 +5830,7 @@ void ftrace_module_enable(struct module *mod)
+@@ -5851,6 +5858,7 @@ void ftrace_module_enable(struct module *mod)
  		ftrace_arch_code_modify_post_process();
  
   out_unlock:
