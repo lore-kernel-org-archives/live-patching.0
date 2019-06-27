@@ -2,35 +2,32 @@ Return-Path: <SRS0=t6jF=U2=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA3FC4321A
-	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC8F9C4321A
+	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 392102133F
-	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:20:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AAF95214DA
+	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:25:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbfF0XUF (ORCPT
+        id S1726660AbfF0XZR (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 27 Jun 2019 19:20:05 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52218 "EHLO mx1.redhat.com"
+        Thu, 27 Jun 2019 19:25:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48332 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726550AbfF0XUE (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 27 Jun 2019 19:20:04 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726566AbfF0XZQ (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 27 Jun 2019 19:25:16 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4C48A58E33;
-        Thu, 27 Jun 2019 23:20:04 +0000 (UTC)
-Received: from treble (ovpn-126-66.rdu2.redhat.com [10.10.126.66])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 92C581001B17;
-        Thu, 27 Jun 2019 23:19:55 +0000 (UTC)
-Date:   Thu, 27 Jun 2019 18:19:52 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 940992147A;
+        Thu, 27 Jun 2019 23:25:14 +0000 (UTC)
+Date:   Thu, 27 Jun 2019 19:25:13 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Petr Mladek <pmladek@suse.com>,
         Miroslav Benes <mbenes@suse.cz>, Jessica Yu <jeyu@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -41,76 +38,37 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         torvalds@linux-foundation.org
 Subject: Re: [PATCH] ftrace: Remove possible deadlock between
  register_kprobe() and ftrace_run_update_code()
-Message-ID: <20190627231952.nqkbtcculvo2ddif@treble>
+Message-ID: <20190627192513.31abac73@gandalf.local.home>
+In-Reply-To: <20190627231952.nqkbtcculvo2ddif@treble>
 References: <20190627081334.12793-1-pmladek@suse.com>
- <20190627224729.tshtq4bhzhneq24w@treble>
- <20190627190457.703a486e@gandalf.local.home>
- <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
+        <20190627224729.tshtq4bhzhneq24w@treble>
+        <20190627190457.703a486e@gandalf.local.home>
+        <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
+        <20190627231952.nqkbtcculvo2ddif@treble>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Thu, 27 Jun 2019 23:20:04 +0000 (UTC)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 01:09:08AM +0200, Thomas Gleixner wrote:
-> On Thu, 27 Jun 2019, Steven Rostedt wrote:
-> > On Thu, 27 Jun 2019 17:47:29 -0500
-> > > Releasing the lock in a separate function seems a bit surprising and
-> > > fragile, would it be possible to do something like this instead?
-> > > 
-> > > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> > > index b38c388d1087..89ea1af6fd13 100644
-> > > --- a/arch/x86/kernel/ftrace.c
-> > > +++ b/arch/x86/kernel/ftrace.c
-> > > @@ -37,15 +37,21 @@
-> > >  int ftrace_arch_code_modify_prepare(void)
-> > >  {
-> > >  	mutex_lock(&text_mutex);
-> > > +
-> > >  	set_kernel_text_rw();
-> > >  	set_all_modules_text_rw();
-> > > +
-> > > +	mutex_unlock(&text_mutex);
-> > >  	return 0;
-> > >  }
-> > >  
-> > >  int ftrace_arch_code_modify_post_process(void)
-> > >  {
-> > > +	mutex_lock(&text_mutex);
-> > > +
-> > >  	set_all_modules_text_ro();
-> > >  	set_kernel_text_ro();
-> > > +
-> > >  	mutex_unlock(&text_mutex);
-> > >  	return 0;
-> > >  }
-> > 
-> > I agree with Josh on this. As the original bug was the race between
-> > ftrace and live patching / modules changing the text from ro to rw and
-> > vice versa. Just protecting the update to the text permissions is more
-> > robust, and should be more self documenting when we need to handle
-> > other architectures for this.
+On Thu, 27 Jun 2019 18:19:52 -0500
+Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+
+> /me dodges frozen shark
 > 
-> How is that supposed to work?
+> You are right of course.  My brain has apparently already shut off for
+> the day.
+
+And I agreed with your miscalculation. I guess I should have looked
+deeper into it. Or have less faith in you ;-)
+
 > 
->     ftrace  	     	
-> 	prepare()
-> 	 setrw()
-> 			setro()
-> 	patch <- FAIL
+> Maybe a comment or two would help though.
 
-/me dodges frozen shark
+Agreed, this is fragile. I'll just add a patch on top of it with some
+comments and pull this in today.
 
-You are right of course.  My brain has apparently already shut off for
-the day.
-
-Maybe a comment or two would help though.
-
--- 
-Josh
+-- Steve
