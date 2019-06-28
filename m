@@ -1,34 +1,33 @@
-Return-Path: <SRS0=t6jF=U2=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=U5CS=U3=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A9A4C4321A
-	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:25:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C9CDC4321A
+	for <live-patching@archiver.kernel.org>; Fri, 28 Jun 2019 01:13:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 594832133F
-	for <live-patching@archiver.kernel.org>; Thu, 27 Jun 2019 23:25:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE010208E3
+	for <live-patching@archiver.kernel.org>; Fri, 28 Jun 2019 01:13:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfF0XZ3 (ORCPT
+        id S1726658AbfF1BNI (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 27 Jun 2019 19:25:29 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:60058 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726566AbfF0XZ2 (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Thu, 27 Jun 2019 19:25:28 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hgdlS-0002m2-TK; Fri, 28 Jun 2019 01:25:15 +0200
-Date:   Fri, 28 Jun 2019 01:25:13 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
+        Thu, 27 Jun 2019 21:13:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48332 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726647AbfF1BNI (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 27 Jun 2019 21:13:08 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 20CA6206A2;
+        Fri, 28 Jun 2019 01:13:06 +0000 (UTC)
+Date:   Thu, 27 Jun 2019 21:13:04 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Steven Rostedt <rostedt@goodmis.org>,
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Petr Mladek <pmladek@suse.com>,
         Miroslav Benes <mbenes@suse.cz>, Jessica Yu <jeyu@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -37,48 +36,49 @@ cc:     Steven Rostedt <rostedt@goodmis.org>,
         Johannes Erdfelt <johannes@erdfelt.com>,
         Ingo Molnar <mingo@kernel.org>, mhiramat@kernel.org,
         torvalds@linux-foundation.org
-Subject: Re: [PATCH] ftrace: Remove possible deadlock between register_kprobe()
- and ftrace_run_update_code()
+Subject: Re: [PATCH] ftrace: Remove possible deadlock between
+ register_kprobe() and ftrace_run_update_code()
+Message-ID: <20190627211304.7e21fd77@gandalf.local.home>
 In-Reply-To: <20190627231952.nqkbtcculvo2ddif@treble>
-Message-ID: <alpine.DEB.2.21.1906280124170.32342@nanos.tec.linutronix.de>
-References: <20190627081334.12793-1-pmladek@suse.com> <20190627224729.tshtq4bhzhneq24w@treble> <20190627190457.703a486e@gandalf.local.home> <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de> <20190627231952.nqkbtcculvo2ddif@treble>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+References: <20190627081334.12793-1-pmladek@suse.com>
+        <20190627224729.tshtq4bhzhneq24w@treble>
+        <20190627190457.703a486e@gandalf.local.home>
+        <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
+        <20190627231952.nqkbtcculvo2ddif@treble>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, 27 Jun 2019, Josh Poimboeuf wrote:
-> On Fri, Jun 28, 2019 at 01:09:08AM +0200, Thomas Gleixner wrote:
-> > On Thu, 27 Jun 2019, Steven Rostedt wrote:
-> > > I agree with Josh on this. As the original bug was the race between
-> > > ftrace and live patching / modules changing the text from ro to rw and
-> > > vice versa. Just protecting the update to the text permissions is more
-> > > robust, and should be more self documenting when we need to handle
-> > > other architectures for this.
-> > 
-> > How is that supposed to work?
-> > 
-> >     ftrace  	     	
-> > 	prepare()
-> > 	 setrw()
-> > 			setro()
-> > 	patch <- FAIL
-> 
-> /me dodges frozen shark
-> 
-> You are right of course.  My brain has apparently already shut off for
-> the day.
-> 
+On Thu, 27 Jun 2019 18:19:52 -0500
+Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+
+
 > Maybe a comment or two would help though.
+> 
 
-Agreed. That would indeed be useful.
+I'm adding the following change.  Care to add a "reviewed-by" for this
+one?
 
-Thanks,
+-- Steve
 
-	tglx
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 33786044d5ac..d7e93b2783fd 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -36,6 +36,11 @@
+ 
+ int ftrace_arch_code_modify_prepare(void)
+ {
++	/*
++	 * Need to grab text_mutex to prevent a race from module loading
++	 * and live kernel patching from changing the text permissions while
++	 * ftrace has it set to "read/write".
++	 */
+ 	mutex_lock(&text_mutex);
+ 	set_kernel_text_rw();
+ 	set_all_modules_text_rw();
