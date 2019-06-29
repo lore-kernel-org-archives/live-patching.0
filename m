@@ -2,32 +2,47 @@ Return-Path: <SRS0=xJZZ=U4=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7251C5B57B
-	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:19:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8606AC5B57B
+	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A37D821773
-	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:19:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5014021743
+	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:22:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1561843359;
+	bh=mqC0hDhXZ6m8Ltl+UAFPx8XkBbvmmYnQAFIFKw47ZCY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:List-ID:From;
+	b=mE92Ei5OCdClhUuEuOWuOLjWXqb//x7GAYZ7pOj9OY9z9pZR3EmMcfT31zlLjJozZ
+	 yagRtxomvzW51uCHSY8DZBMvJjSL2c/L9+/Xu9pKDKZSbCv5EhWZgPRaibeij9gyT6
+	 EOzMhTQJ4Q5ChwKF7/qcp3N69LpuBsxYBsparKds=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbfF2VTf (ORCPT
+        id S1726925AbfF2VWi (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 29 Jun 2019 17:19:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57910 "EHLO mail.kernel.org"
+        Sat, 29 Jun 2019 17:22:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58916 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726909AbfF2VTf (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Sat, 29 Jun 2019 17:19:35 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        id S1726909AbfF2VWi (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Sat, 29 Jun 2019 17:22:38 -0400
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A19D216FD;
-        Sat, 29 Jun 2019 21:19:33 +0000 (UTC)
-Date:   Sat, 29 Jun 2019 17:19:31 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CBAC214DA;
+        Sat, 29 Jun 2019 21:22:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561843357;
+        bh=mqC0hDhXZ6m8Ltl+UAFPx8XkBbvmmYnQAFIFKw47ZCY=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=vlnUwT5gMiZwFZWP4qOPKWB50PzRyoPRjz3FdoPtZrWVXZOB1McktXZbboFbA9E2i
+         vLGkfTe2723cK8oIFoTi+slFvXLbAmxarzoQcebYLq4HX16/p92Xmx4rMUYSwJ/4+Q
+         l69KxmHJASoENnJpWOdkiS6OoZQ4DIuvzYRaSAO4=
+Date:   Sat, 29 Jun 2019 23:22:33 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Petr Mladek <pmladek@suse.com>,
         Miroslav Benes <mbenes@suse.cz>, Jessica Yu <jeyu@kernel.org>,
@@ -36,38 +51,58 @@ Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Johannes Erdfelt <johannes@erdfelt.com>,
         Ingo Molnar <mingo@kernel.org>, mhiramat@kernel.org,
         torvalds@linux-foundation.org
-Subject: Re: [PATCH] ftrace: Remove possible deadlock between
- register_kprobe() and ftrace_run_update_code()
-Message-ID: <20190629171931.770f05a5@gandalf.local.home>
-In-Reply-To: <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm>
-References: <20190627081334.12793-1-pmladek@suse.com>
-        <20190627224729.tshtq4bhzhneq24w@treble>
-        <20190627190457.703a486e@gandalf.local.home>
-        <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
-        <20190627231952.nqkbtcculvo2ddif@treble>
-        <nycvar.YFH.7.76.1906281932360.27227@cbobk.fhfr.pm>
-        <20190628133702.16a54ccf@gandalf.local.home>
-        <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: [PATCH] ftrace/x86: anotate text_mutex split between
+ ftrace_arch_code_modify_post_process() and
+ ftrace_arch_code_modify_prepare()
+In-Reply-To: <20190629171931.770f05a5@gandalf.local.home>
+Message-ID: <nycvar.YFH.7.76.1906292321170.27227@cbobk.fhfr.pm>
+References: <20190627081334.12793-1-pmladek@suse.com> <20190627224729.tshtq4bhzhneq24w@treble> <20190627190457.703a486e@gandalf.local.home> <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de> <20190627231952.nqkbtcculvo2ddif@treble>
+ <nycvar.YFH.7.76.1906281932360.27227@cbobk.fhfr.pm> <20190628133702.16a54ccf@gandalf.local.home> <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm> <20190629171931.770f05a5@gandalf.local.home>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Sat, 29 Jun 2019 22:56:47 +0200 (CEST)
-Jiri Kosina <jikos@kernel.org> wrote:
+From: Jiri Kosina <jkosina@suse.cz>
 
-> > Care to send a patch? :-)  
-> 
-> From: Jiri Kosina <jkosina@suse.cz>
-> Subject: [PATCH] ftrace/x86: anotate text_mutex split between ftrace_arch_code_modify_post_process() and ftrace_arch_code_modify_prepare()
+ftrace_arch_code_modify_prepare() is acquiring text_mutex, while the
+corresponding release is happening in ftrace_arch_code_modify_post_process().
 
-Care to send a proper patch ;-)
+This has already been documented in the code, but let's also make the fact
+that this is intentional clear to the semantic analysis tools such as sparse.
 
-As in, a separate email. Makes it much easier to apply directly with
-my scripts.
+Fixes: 39611265edc1a ("ftrace/x86: Add a comment to why we take text_mutex in ftrace_arch_code_modify_prepare()")
+Fixes: d5b844a2cf507 ("ftrace/x86: Remove possible deadlock between register_kprobe() and ftrace_run_update_code()")
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ arch/x86/kernel/ftrace.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- Steve
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index d7e93b2783fd..76228525acd0 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -35,6 +35,7 @@
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 
+ int ftrace_arch_code_modify_prepare(void)
++    __acquires(&text_mutex)
+ {
+ 	/*
+ 	 * Need to grab text_mutex to prevent a race from module loading
+@@ -48,6 +49,7 @@ int ftrace_arch_code_modify_prepare(void)
+ }
+ 
+ int ftrace_arch_code_modify_post_process(void)
++    __releases(&text_mutex)
+ {
+ 	set_all_modules_text_ro();
+ 	set_kernel_text_ro();
+	
+-- 
+Jiri Kosina
+SUSE Labs
+
