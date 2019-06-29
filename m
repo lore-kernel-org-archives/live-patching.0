@@ -2,47 +2,32 @@ Return-Path: <SRS0=xJZZ=U4=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1280AC5B57B
-	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 20:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7251C5B57B
+	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:19:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF51F215EA
-	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 20:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1561841965;
-	bh=1GATgUgx4TSdm9N8D/IejkdbWqAZYPBdzUp9aXWmaW4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:List-ID:From;
-	b=z9nJmxs+W+WdLcmifh5xmU1v50dRJrsSGj6sphfvO5xGy9FgG4z+rU3Cq8BzBDBg6
-	 lTyewLRYl76O4a0+x7gx+DsAK6WiwdSqgjrBGG0Z5RIyiysMg3Q+EvTIMthZ8Nx5wb
-	 d3KfsJC0C4GEgaIaWkm1m9+wd414PJ5psbrxFaPg=
+	by mail.kernel.org (Postfix) with ESMTP id A37D821773
+	for <live-patching@archiver.kernel.org>; Sat, 29 Jun 2019 21:19:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbfF2U4x (ORCPT
+        id S1726935AbfF2VTf (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 29 Jun 2019 16:56:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48250 "EHLO mail.kernel.org"
+        Sat, 29 Jun 2019 17:19:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726909AbfF2U4w (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Sat, 29 Jun 2019 16:56:52 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        id S1726909AbfF2VTf (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Sat, 29 Jun 2019 17:19:35 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0C69215EA;
-        Sat, 29 Jun 2019 20:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561841812;
-        bh=1GATgUgx4TSdm9N8D/IejkdbWqAZYPBdzUp9aXWmaW4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=e46obZ95/P32fuOjgyk3QyyDQpNBl3MoON02R7Ps4h+tbBwHu3kuBG47yfTK4WFiZ
-         R7VBvq7HruteZUYHEndFjhkfnJfpCr+b3sxsi6e22kjpzKT/REQGo4gaiJHO6jmD4e
-         etcc0YEZ+RCMRh9dzhj/czO2euLuagCoNGuPz7T4=
-Date:   Sat, 29 Jun 2019 22:56:47 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A19D216FD;
+        Sat, 29 Jun 2019 21:19:33 +0000 (UTC)
+Date:   Sat, 29 Jun 2019 17:19:31 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Petr Mladek <pmladek@suse.com>,
         Miroslav Benes <mbenes@suse.cz>, Jessica Yu <jeyu@kernel.org>,
@@ -51,83 +36,38 @@ cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Johannes Erdfelt <johannes@erdfelt.com>,
         Ingo Molnar <mingo@kernel.org>, mhiramat@kernel.org,
         torvalds@linux-foundation.org
-Subject: Re: [PATCH] ftrace: Remove possible deadlock between register_kprobe()
- and ftrace_run_update_code()
-In-Reply-To: <20190628133702.16a54ccf@gandalf.local.home>
-Message-ID: <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm>
-References: <20190627081334.12793-1-pmladek@suse.com> <20190627224729.tshtq4bhzhneq24w@treble> <20190627190457.703a486e@gandalf.local.home> <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de> <20190627231952.nqkbtcculvo2ddif@treble>
- <nycvar.YFH.7.76.1906281932360.27227@cbobk.fhfr.pm> <20190628133702.16a54ccf@gandalf.local.home>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Subject: Re: [PATCH] ftrace: Remove possible deadlock between
+ register_kprobe() and ftrace_run_update_code()
+Message-ID: <20190629171931.770f05a5@gandalf.local.home>
+In-Reply-To: <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm>
+References: <20190627081334.12793-1-pmladek@suse.com>
+        <20190627224729.tshtq4bhzhneq24w@treble>
+        <20190627190457.703a486e@gandalf.local.home>
+        <alpine.DEB.2.21.1906280106360.32342@nanos.tec.linutronix.de>
+        <20190627231952.nqkbtcculvo2ddif@treble>
+        <nycvar.YFH.7.76.1906281932360.27227@cbobk.fhfr.pm>
+        <20190628133702.16a54ccf@gandalf.local.home>
+        <nycvar.YFH.7.76.1906292256100.27227@cbobk.fhfr.pm>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, 28 Jun 2019, Steven Rostedt wrote:
+On Sat, 29 Jun 2019 22:56:47 +0200 (CEST)
+Jiri Kosina <jikos@kernel.org> wrote:
 
-> > > > How is that supposed to work?
-> > > > 
-> > > >     ftrace  	     	
-> > > > 	prepare()
-> > > > 	 setrw()
-> > > > 			setro()
-> > > > 	patch <- FAIL  
-> > > 
-> > > /me dodges frozen shark
-> > > 
-> > > You are right of course.  My brain has apparently already shut off for
-> > > the day.
-> > > 
-> > > Maybe a comment or two would help though.  
-> > 
-> > I'd actually prefer (perhaps in parallel to the comment) using the 
-> > __acquires() and __releases() anotations, so that sparse and friends don't 
-> > get confused by that either.
-> > 
+> > Care to send a patch? :-)  
 > 
-> Care to send a patch? :-)
+> From: Jiri Kosina <jkosina@suse.cz>
+> Subject: [PATCH] ftrace/x86: anotate text_mutex split between ftrace_arch_code_modify_post_process() and ftrace_arch_code_modify_prepare()
 
-From: Jiri Kosina <jkosina@suse.cz>
-Subject: [PATCH] ftrace/x86: anotate text_mutex split between ftrace_arch_code_modify_post_process() and ftrace_arch_code_modify_prepare()
+Care to send a proper patch ;-)
 
-ftrace_arch_code_modify_prepare() is acquiring text_mutex, while the 
-corresponding release is happening in ftrace_arch_code_modify_post_process().
+As in, a separate email. Makes it much easier to apply directly with
+my scripts.
 
-This has already been documented in the code, but let's also make the fact 
-that this is intentional clear to the semantic analysis tools such as 
-sparse.
-
-Fixes: 39611265edc1a ("ftrace/x86: Add a comment to why we take text_mutex in ftrace_arch_code_modify_prepare()")
-Fixes: d5b844a2cf507 ("ftrace/x86: Remove possible deadlock between register_kprobe() and ftrace_run_update_code()")
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
----
- arch/x86/kernel/ftrace.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index d7e93b2783fd..76228525acd0 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -35,6 +35,7 @@
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
- int ftrace_arch_code_modify_prepare(void)
-+    __acquires(&text_mutex)
- {
- 	/*
- 	 * Need to grab text_mutex to prevent a race from module loading
-@@ -48,6 +49,7 @@ int ftrace_arch_code_modify_prepare(void)
- }
- 
- int ftrace_arch_code_modify_post_process(void)
-+    __releases(&text_mutex)
- {
- 	set_all_modules_text_ro();
- 	set_kernel_text_ro();
-
--- 
-Jiri Kosina
-SUSE Labs
-
+-- Steve
