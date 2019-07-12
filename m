@@ -1,69 +1,82 @@
-Return-Path: <SRS0=K5wt=VI=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=iaYy=VJ=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 686A3C742A1
-	for <live-patching@archiver.kernel.org>; Thu, 11 Jul 2019 22:45:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59845C742D1
+	for <live-patching@archiver.kernel.org>; Fri, 12 Jul 2019 17:14:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 27F58216C8
-	for <live-patching@archiver.kernel.org>; Thu, 11 Jul 2019 22:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1562885113;
-	bh=T9hjZeVkNdRpWOVn06WZ3sowWNuRtNjxDP3EB1+CnzA=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=DV2IuZpxl8jkhHqMoUIEAPwBGemJ633QX7/13RO2MmVtNozYUuAzEAJbOwdKr6Efp
-	 wOCyfD6C7ezpfECcYcpS1JDdpeiJ1etf4yT7qGJnr07DEyJ7TPpbmn0fSQdLvs/1Cd
-	 wYO0F1ENn9yCsjmfubAtKCoERLhvop+Zl/iKt2aE=
+	by mail.kernel.org (Postfix) with ESMTP id 3D08120850
+	for <live-patching@archiver.kernel.org>; Fri, 12 Jul 2019 17:14:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729468AbfGKWpL (ORCPT
+        id S1726907AbfGLROL (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 11 Jul 2019 18:45:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39730 "EHLO mail.kernel.org"
+        Fri, 12 Jul 2019 13:14:11 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34906 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729461AbfGKWpL (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 11 Jul 2019 18:45:11 -0400
-Subject: Re: [GIT PULL] livepatching for 5.3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562885111;
-        bh=T9hjZeVkNdRpWOVn06WZ3sowWNuRtNjxDP3EB1+CnzA=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=vQhxGoZf193c6u5OMq5FZR9sDHwECS9p0k7twWQ/1Z3Gko+qGp2mxZsvROJF7Dzqb
-         4+QfOV05y9aPEDPkxmOnTyC446dW3oiOKrGvoidHqv3tfOK4Y2u9CtSjVbDAIGGRRd
-         LBuUvEzN4e3MlvScgob79wtM5sm8DJnap8HdAMV8=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <nycvar.YFH.7.76.1907100127250.5899@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.1907100127250.5899@cbobk.fhfr.pm>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <nycvar.YFH.7.76.1907100127250.5899@cbobk.fhfr.pm>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git
- for-linus
-X-PR-Tracked-Commit-Id: 38195dd5e916f3e55aec585703f2432562c2db02
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: db0457338ece7482378d88e50ad298191c3e6947
-Message-Id: <156288511109.25905.4136973094169718102.pr-tracker-bot@kernel.org>
-Date:   Thu, 11 Jul 2019 22:45:11 +0000
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+        id S1726811AbfGLROL (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 12 Jul 2019 13:14:11 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6B6C2300194A;
+        Fri, 12 Jul 2019 17:14:11 +0000 (UTC)
+Received: from jlaw-desktop.redhat.com (ovpn-122-246.rdu2.redhat.com [10.10.122.246])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E3FF860BFB;
+        Fri, 12 Jul 2019 17:14:10 +0000 (UTC)
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org
+Subject: [RFC PATCH] selftests/livepatch: only consider supported arches
+Date:   Fri, 12 Jul 2019 13:14:02 -0400
+Message-Id: <20190712171402.15930-1-joe.lawrence@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Fri, 12 Jul 2019 17:14:11 +0000 (UTC)
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The pull request you sent on Wed, 10 Jul 2019 01:34:19 +0200 (CEST):
+Only run the livepatching self-tests on x86_64 and ppc64le arches.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git for-linus
+Reported-by: Jiri Benc <jbenc@redhat.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ tools/testing/selftests/livepatch/Makefile | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/db0457338ece7482378d88e50ad298191c3e6947
-
-Thank you!
-
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index fd405402c3ff..9842fb473d42 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -1,5 +1,16 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++
++ifeq ($(ARCH),x86_64)
++livepatch_supported := 1
++endif
++ifeq ($(ARCH),ppc64le)
++livepatch_supported := 1
++endif
++
++ifdef livepatch_supported
++
+ TEST_PROGS_EXTENDED := functions.sh
+ TEST_PROGS := \
+ 	test-livepatch.sh \
+@@ -7,3 +18,5 @@ TEST_PROGS := \
+ 	test-shadow-vars.sh
+ 
+ include ../lib.mk
++
++endif
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.21.0
+
