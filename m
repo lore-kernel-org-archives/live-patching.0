@@ -2,71 +2,191 @@ Return-Path: <SRS0=BLy0=VQ=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 724EFC76195
-	for <live-patching@archiver.kernel.org>; Fri, 19 Jul 2019 12:28:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77801C76196
+	for <live-patching@archiver.kernel.org>; Fri, 19 Jul 2019 22:11:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 563AC2184E
-	for <live-patching@archiver.kernel.org>; Fri, 19 Jul 2019 12:28:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CDDF2187F
+	for <live-patching@archiver.kernel.org>; Fri, 19 Jul 2019 22:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1563574274;
+	bh=CJKeacO6+Fz48FQ2UIIH5GFAeHwDu2ZUhvMvJNtHMr8=;
+	h=Subject:To:References:From:Date:In-Reply-To:List-ID:From;
+	b=g990fBnR/QlaUAtT9BrJbm2BLBzSmS7vofUYOrhjXw9YquhrVo0q5l+u58HotTy+e
+	 3iiIBxQ/FjrhSJY1CSijBIkEM4HBHzmEa4SzWkBN9dzwsqXL45mNT9on80pZJZM8kL
+	 tG5cTeY++4+7jmEFGUz17SqsG6I6cc1ARU7Q6Ito=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727552AbfGSM2o (ORCPT
+        id S1728727AbfGSWLN (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 19 Jul 2019 08:28:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49126 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727637AbfGSM2o (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 19 Jul 2019 08:28:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DFDCAAECD;
-        Fri, 19 Jul 2019 12:28:42 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     jikos@kernel.org, jpoimboe@redhat.com, pmladek@suse.com
-Cc:     joe.lawrence@redhat.com, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 1/2] livepatch: Nullify obj->mod in klp_module_coming()'s error path
-Date:   Fri, 19 Jul 2019 14:28:39 +0200
-Message-Id: <20190719122840.15353-2-mbenes@suse.cz>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190719122840.15353-1-mbenes@suse.cz>
-References: <20190719122840.15353-1-mbenes@suse.cz>
+        Fri, 19 Jul 2019 18:11:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727344AbfGSWLN (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 19 Jul 2019 18:11:13 -0400
+Received: from [172.20.8.67] (fs96f9c61d.tkyc509.ap.nuro.jp [150.249.198.29])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A2F9B2184E;
+        Fri, 19 Jul 2019 22:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563574273;
+        bh=CJKeacO6+Fz48FQ2UIIH5GFAeHwDu2ZUhvMvJNtHMr8=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=yUKUVjeaNhnOIrnJZmdIu4GPHZtiFh7WQX6cQ1itU5EnJgKT7pQSgyUH6HIyHwuyb
+         s1rxtfVqOq+ivHoTSMA2xs3/gN3Eckh0ycJg+Tm6Zc4uJLn07tghuV1hMdYioTzyyN
+         XoQQ8W1u/MZ0KtdlXWVGxoSuuHS9gbKYtqj18VoM=
+Subject: Re: [PATCH] selftests/livepatch: add test skip handling
+To:     Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190714142829.29458-1-joe.lawrence@redhat.com>
+ <20190714143306.GA29501@redhat.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <5535ff5e-0f75-9185-11bb-400465f09f5c@kernel.org>
+Date:   Fri, 19 Jul 2019 16:11:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190714143306.GA29501@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-klp_module_coming() is called for every module appearing in the system.
-It sets obj->mod to a patched module for klp_object obj. Unfortunately
-it leaves it set even if an error happens later in the function and the
-patched module is not allowed to be loaded.
+On 7/14/19 8:33 AM, Joe Lawrence wrote:
+> On Sun, Jul 14, 2019 at 10:28:29AM -0400, Joe Lawrence wrote:
+>> Before running a livpeatch self-test, first verify that we've built and
+>> installed the livepatch self-test kernel modules by running a 'modprobe
+>> --dry-run'.  This should catch a few environment issues, including
+>> !CONFIG_LIVEPATCH and !CONFIG_TEST_LIVEPATCH.  In these cases, exit
+>> gracefully with test-skip status rather than test-fail status.
+>>
+>> Reported-by: Jiri Benc <jbenc@redhat.com>
+>> Suggested-by: Shuah Khan <shuah@kernel.org>
+>> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+>> ---
+>>   tools/testing/selftests/livepatch/functions.sh | 18 ++++++++++++++++++
+>>   .../selftests/livepatch/test-callbacks.sh      |  5 +++++
+>>   .../selftests/livepatch/test-livepatch.sh      |  3 +++
+>>   .../selftests/livepatch/test-shadow-vars.sh    |  2 ++
+>>   4 files changed, 28 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+>> index 30195449c63c..92d6cfb49365 100644
+>> --- a/tools/testing/selftests/livepatch/functions.sh
+>> +++ b/tools/testing/selftests/livepatch/functions.sh
+>> @@ -13,6 +13,14 @@ function log() {
+>>   	echo "$1" > /dev/kmsg
+>>   }
+>>   
+>> +# skip(msg) - testing can't proceed
+>> +#	msg - explanation
+>> +function skip() {
+>> +	log "SKIP: $1"
+>> +	echo "SKIP: $1" >&2
+>> +	exit 4
+>> +}
+>> +
+>>   # die(msg) - game over, man
+>>   #	msg - dying words
+>>   function die() {
+>> @@ -43,6 +51,16 @@ function loop_until() {
+>>   	done
+>>   }
+>>   
+>> +function assert_mod() {
+>> +	local mod="$1"
+>> +
+>> +	if ! modprobe --dry-run "$mod" &>/dev/null ; then
+>> +		skip "Failed modprobe --dry-run of module: $mod"
+>> +	fi
+>> +
+>> +	return 1
+>> +}
+>> +
+>>   function is_livepatch_mod() {
+>>   	local mod="$1"
+>>   
+>> diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+>> index e97a9dcb73c7..87a407cee7fd 100755
+>> --- a/tools/testing/selftests/livepatch/test-callbacks.sh
+>> +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+>> @@ -9,6 +9,11 @@ MOD_LIVEPATCH2=test_klp_callbacks_demo2
+>>   MOD_TARGET=test_klp_callbacks_mod
+>>   MOD_TARGET_BUSY=test_klp_callbacks_busy
+>>   
+>> +assert_mod $MOD_LIVEPATCH
+>> +assert_mod $MOD_LIVEPATCH2
+>> +assert_mod $MOD_TARGET
+>> +assert_mod $MOD_TARGET_BUSY
+>> +
+>>   set_dynamic_debug
+>>   
+>>   
+>> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+>> index f05268aea859..8d3b75ceeeff 100755
+>> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
+>> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+>> @@ -7,6 +7,9 @@
+>>   MOD_LIVEPATCH=test_klp_livepatch
+>>   MOD_REPLACE=test_klp_atomic_replace
+>>   
+>> +assert_mod $MOD_LIVEPATCH
+>> +assert_mod $MOD_REPLACE
+>> +
+>>   set_dynamic_debug
+>>   
+>>   
+>> diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+>> index 04a37831e204..1ab09bc50363 100755
+>> --- a/tools/testing/selftests/livepatch/test-shadow-vars.sh
+>> +++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+>> @@ -6,6 +6,8 @@
+>>   
+>>   MOD_TEST=test_klp_shadow_vars
+>>   
+>> +assert_mod $MOD_TEST
+>> +
+>>   set_dynamic_debug
+>>   
+>>   
+>> -- 
+>> 2.21.0
+>>
+> 
+> Testing:
+> 
+> Here's the output if modprobe --dry-run doesn't like the modules (not
+> built, etc.):
+> 
+>    TAP version 13
+>    selftests: livepatch: test-livepatch.sh
+>    ========================================
+>    SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
+>    not ok 1..1 selftests: livepatch: test-livepatch.sh [SKIP]
+>    selftests: livepatch: test-callbacks.sh
+>    ========================================
+>    SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_demo
+>    not ok 1..2 selftests: livepatch: test-callbacks.sh [SKIP]
+>    selftests: livepatch: test-shadow-vars.sh
+>    ========================================
+>    SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
+>    not ok 1..3 selftests: livepatch: test-shadow-vars.sh [SKIP]
+> 
+> We could fold assert_mod() into __load_mod() if folks perfer.  I
+> don't have strong opinion either way.
+> 
 
-klp_is_object_loaded() uses obj->mod variable and could currently give a
-wrong return value. The bug is probably harmless as of now.
+Please refine these messages to say what users should do. In addition
+to what failed, also add what is missing - enable config option etc.
 
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
----
- kernel/livepatch/core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index c4ce08f43bd6..ab4a4606d19b 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -1175,6 +1175,7 @@ int klp_module_coming(struct module *mod)
- 	pr_warn("patch '%s' failed for module '%s', refusing to load module '%s'\n",
- 		patch->mod->name, obj->mod->name, obj->mod->name);
- 	mod->klp_alive = false;
-+	obj->mod = NULL;
- 	klp_cleanup_module_patches_limited(mod, patch);
- 	mutex_unlock(&klp_mutex);
- 
--- 
-2.22.0
+thanks,
+-- Shuah
 
