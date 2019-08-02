@@ -6,50 +6,54 @@ X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5517C32750
-	for <live-patching@archiver.kernel.org>; Fri,  2 Aug 2019 20:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D67C433FF
+	for <live-patching@archiver.kernel.org>; Fri,  2 Aug 2019 20:42:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 940AF216C8
-	for <live-patching@archiver.kernel.org>; Fri,  2 Aug 2019 20:04:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CCF92087E
+	for <live-patching@archiver.kernel.org>; Fri,  2 Aug 2019 20:42:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406905AbfHBUEh (ORCPT
+        id S2437009AbfHBUma (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 2 Aug 2019 16:04:37 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41240 "EHLO mx1.redhat.com"
+        Fri, 2 Aug 2019 16:42:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57838 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406875AbfHBUEh (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 2 Aug 2019 16:04:37 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        id S1726574AbfHBUma (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 2 Aug 2019 16:42:30 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D88A5309DEFA;
-        Fri,  2 Aug 2019 20:04:36 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 76D00300C032;
+        Fri,  2 Aug 2019 20:42:30 +0000 (UTC)
 Received: from treble (ovpn-120-177.rdu2.redhat.com [10.10.120.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 76D9A5D962;
-        Fri,  2 Aug 2019 20:04:31 +0000 (UTC)
-Date:   Fri, 2 Aug 2019 15:04:29 -0500
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CDD96600D1;
+        Fri,  2 Aug 2019 20:42:26 +0000 (UTC)
+Date:   Fri, 2 Aug 2019 15:42:24 -0500
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Nicolai Stange <nstange@suse.com>,
-        Joao Moreira <jmoreira@suse.de>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Jason Baron <jbaron@akamai.com>,
         Alice Ferrazzi <alice.ferrazzi@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [URGENT] Please submit your LPC topic proposals by Monday
-Message-ID: <20190802200429.sbk63umojkwjsize@treble>
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Subject: [Linux Plumbers Conference] Please submit your livepatch LPC topic
+ proposals by Monday
+Message-ID: <20190802204224.ochmshq2pzler7ms@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Fri, 02 Aug 2019 20:04:37 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 02 Aug 2019 20:42:30 +0000 (UTC)
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
+
+[ Steven informed me that my original subject looked like spam and he
+  almost deleted it.  He has a point.  Resending with a new subject
+  which is less likely to induce email delete trigger finger. ]
 
 Hi all,
 
