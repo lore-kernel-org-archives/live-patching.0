@@ -1,100 +1,274 @@
-Return-Path: <SRS0=93NG=WK=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=0BEB=WL=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1718EC433FF
-	for <live-patching@archiver.kernel.org>; Wed, 14 Aug 2019 15:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48925C3A589
+	for <live-patching@archiver.kernel.org>; Thu, 15 Aug 2019 15:05:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E61BE2083B
-	for <live-patching@archiver.kernel.org>; Wed, 14 Aug 2019 15:12:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 090792084D
+	for <live-patching@archiver.kernel.org>; Thu, 15 Aug 2019 15:05:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="PddXaK/L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbfHNPMt (ORCPT
+        id S1732253AbfHOPFw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 14 Aug 2019 11:12:49 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:35408 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727111AbfHNPMt (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 14 Aug 2019 11:12:49 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 267D3302C067;
-        Wed, 14 Aug 2019 15:12:49 +0000 (UTC)
-Received: from treble (ovpn-120-159.rdu2.redhat.com [10.10.120.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D4CB17AB7E;
-        Wed, 14 Aug 2019 15:12:45 +0000 (UTC)
-Date:   Wed, 14 Aug 2019 10:12:44 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20190814151244.5xoaxib5iya2qjco@treble>
-References: <20190719122840.15353-1-mbenes@suse.cz>
- <20190719122840.15353-3-mbenes@suse.cz>
- <20190728200427.dbrojgu7hafphia7@treble>
- <alpine.LSU.2.21.1908141256150.16696@pobox.suse.cz>
+        Thu, 15 Aug 2019 11:05:52 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:60595 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732079AbfHOPFv (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 15 Aug 2019 11:05:51 -0400
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id x7FF5gTB012177;
+        Fri, 16 Aug 2019 00:05:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x7FF5gTB012177
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1565881544;
+        bh=7YId5/KWcEONCewuALVN+Idh0R3qavrmJPNyYwf46/Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PddXaK/L/QdtFzPAH//J/ybhDue6w2n+ac/5PIKrsqoZt/6nrKM2KK2+MLCVaTSyU
+         9bBLN/n6c1qw2OGVlCOGWT2ddQcaVuafrA1ovt2NlT+CTUo6e5EoepRTTrMNHAGDFC
+         CKYbKARFieMOJDo0WNk9gooh57IT9XgDWPYXIe2FXR1OfdUtxNnmfSLLpONKK4KWuj
+         iuDGp1Z1/YgBcN2YdDhxQHbE6qaRHdK8oR80EgcO2FaNTTigYJa3SDXTrN2eunL+YX
+         Ewb46veLnyQ6Dis1Oe2cFosXe/1Mwb/ZhuH+ZfNOqK/O5qplzGcvA1yec1f3t6AMcr
+         IZY811H+Qb5Hw==
+X-Nifty-SrcIP: [209.85.222.48]
+Received: by mail-ua1-f48.google.com with SMTP id y19so893930ual.13;
+        Thu, 15 Aug 2019 08:05:43 -0700 (PDT)
+X-Gm-Message-State: APjAAAVFleIUDHp30kI0m5XKEQCQb2p8uPT8MI3EWgreidklYODPXl7D
+        HgCdvnuKT5lQPh9tHQ0VLGKzwpvCPrtBM1LTOgE=
+X-Google-Smtp-Source: APXvYqx5rf35qySXOMhP7i9TefP8EmiWH4AmP1VxeOoQodDNmBhqC1I9+jiBOLUQEGg6kSCah3ecJLxX+Yp7Mc7Tn8Q=
+X-Received: by 2002:ab0:70d9:: with SMTP id r25mr3166754ual.109.1565881542095;
+ Thu, 15 Aug 2019 08:05:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.1908141256150.16696@pobox.suse.cz>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 14 Aug 2019 15:12:49 +0000 (UTC)
+References: <20190509143859.9050-1-joe.lawrence@redhat.com>
+ <20190509143859.9050-7-joe.lawrence@redhat.com> <CAK7LNAQuS-YcXecfJ21BGzc0CimzWxQcYST5-1xRgnCQGtcL4A@mail.gmail.com>
+ <20190812155626.GA19845@redhat.com>
+In-Reply-To: <20190812155626.GA19845@redhat.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Fri, 16 Aug 2019 00:05:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATRLTBqA9c=b+Y38T-zWc9o5JMq18r9auA=enPC=p10pA@mail.gmail.com>
+Message-ID: <CAK7LNATRLTBqA9c=b+Y38T-zWc9o5JMq18r9auA=enPC=p10pA@mail.gmail.com>
+Subject: Re: [PATCH v4 06/10] modpost: Add modinfo flag to livepatch modules
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 01:06:09PM +0200, Miroslav Benes wrote:
-> > Really, we should be going in the opposite direction, by creating module
-> > dependencies, like all other kernel modules do, ensuring that a module
-> > is loaded *before* we patch it.  That would also eliminate this bug.
-> 
-> Yes, but it is not ideal either with cumulative one-fixes-all patch 
-> modules. It would load also modules which are not necessary for a 
-> customer and I know that at least some customers care about this. They 
-> want to deploy only things which are crucial for their systems.
+Hi Joe,
 
-If you frame the question as "do you want to destabilize the live
-patching infrastucture" then the answer might be different.
+On Tue, Aug 13, 2019 at 12:56 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
+>
+> On Wed, Jul 31, 2019 at 02:58:27PM +0900, Masahiro Yamada wrote:
+> > Hi Joe,
+> >
+> >
+> > On Thu, May 9, 2019 at 11:39 PM Joe Lawrence <joe.lawrence@redhat.com> wrote:
+> > >
+> > > From: Miroslav Benes <mbenes@suse.cz>
+> > >
+> > > Currently, livepatch infrastructure in the kernel relies on
+> > > MODULE_INFO(livepatch, "Y") statement in a livepatch module. Then the
+> > > kernel module loader knows a module is indeed livepatch module and can
+> > > behave accordingly.
+> > >
+> > > klp-convert, on the other hand relies on LIVEPATCH_* statement in the
+> > > module's Makefile for exactly the same reason.
+> > >
+> > > Remove dependency on modinfo and generate MODULE_INFO flag
+> > > automatically in modpost when LIVEPATCH_* is defined in the module's
+> > > Makefile. Generate a list of all built livepatch modules based on
+> > > the .livepatch file and store it in (MODVERDIR)/livepatchmods. Give
+> > > this list as an argument for modpost which will use it to identify
+> > > livepatch modules.
+> > >
+> > > As MODULE_INFO is no longer needed, remove it.
+> >
+> >
+> > I do not understand this patch.
+> > This makes the implementation so complicated.
+> >
+> > I think MODULE_INFO(livepatch, "Y") is cleaner than
+> > LIVEPATCH_* in Makefile.
+> >
+> >
+> > How about this approach?
+> >
+> >
+> > [1] Make modpost generate the list of livepatch modules.
+> >     (livepatch-modules)
+> >
+> > [2] Generate Symbols.list in scripts/Makefile.modpost
+> >     (vmlinux + modules excluding livepatch-modules)
+> >
+> > [3] Run klp-convert for modules in livepatch-modules.
+> >
+> >
+> > If you do this, you can remove most of the build system hacks
+> > can't you?
+> >
+> >
+> > I attached an example implementation for [1].
+> >
+> > Please check whether this works.
+> >
+>
+> Hi Masahiro,
+>
+> I tested and step [1] that you attached did create the livepatch-modules
+> as expected.  Thanks for that example, it does look cleaner that what
+> we had in the patchset.
+>
+> I'm admittedly out of my element with kbuild changes, but here are my
+> naive attempts at steps [2] and [3]...
+>
+>
+> [step 2] generate Symbols.list - I tacked this on as a dependency of the
+> $(modules:.ko=.mod.o), but there is probably a better more logical place
+> to put it.  Also used grep -Fxv to exclude the livepatch-modules list
+> from the modules.order list of modules to process.
+>
+> -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
+>
+> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> index 3eca7fccadd4..5409bbc212bb 100644
+> --- a/scripts/Makefile.modpost
+> +++ b/scripts/Makefile.modpost
+> @@ -111,7 +111,23 @@ quiet_cmd_cc_o_c = CC      $@
+>        cmd_cc_o_c = $(CC) $(c_flags) $(KBUILD_CFLAGS_MODULE) $(CFLAGS_MODULE) \
+>                    -c -o $@ $<
+>
+> -$(modules:.ko=.mod.o): %.mod.o: %.mod.c FORCE
+> +quiet_cmd_klp_map = KLP     Symbols.list
+> +SLIST = $(objtree)/Symbols.list
+> +
+> +define cmd_symbols_list
+> +       $(shell echo "klp-convert-symbol-data.0.1" > $(objtree)/Symbols.list)                   \
+> +       $(shell echo "*vmlinux" >> $(objtree)/Symbols.list)                                     \
+> +       $(shell nm -f posix $(objtree)/vmlinux | cut -d\  -f1 >> $(objtree)/Symbols.list)       \
+> +       $(foreach ko, $(sort $(shell grep -Fxv -f livepatch-modules modules.order)),            \
+> +               $(shell echo "*$(shell basename -s .ko $(ko))" >> $(objtree)/Symbols.list)      \
+> +               $(shell nm -f posix $(patsubst %.ko,%.o,$(ko)) | cut -d\  -f1 >> $(objtree)/Symbols.list))
+> +endef
 
-We should look at whether it makes sense to destabilize live patching
-for everybody, for a small minority of people who care about a small
-minority of edge cases.
 
-Or maybe there's some other solution we haven't thought about, which
-fits more in the framework of how kernel modules already work.
+All the $(shell ...) calls are pointless.
 
-> We could split patch modules as you proposed in the past, but that have 
-> issues as well.
 
-Right, I'm not really crazy about that solution either.
+     $(shell echo "hello" > Symbols.list)
 
-Here's another idea: per-object patch modules.  Patches to vmlinux are
-in a vmlinux patch module.  Patches to kvm.ko are in a kvm patch module.
-That would require:
+is equivalent to
 
-- Careful management of dependencies between object-specific patches.
-  Maybe that just means that exported function ABIs shouldn't change.
+     echo "hello" > Symbols.list
 
-- Some kind of hooking into modprobe to ensure the patch module gets
-  loaded with the real one.
 
-- Changing 'atomic replace' to allow patch modules to be per-object.
+> +
+> +Symbols.list: __modpost
+> +       $(if $(CONFIG_LIVEPATCH), $(call cmd,symbols_list))
+> +
+> +
+> +$(modules:.ko=.mod.o): %.mod.o: %.mod.c Symbols.list FORCE
+>         $(call if_changed_dep,cc_o_c)
+>
+>  targets += $(modules:.ko=.mod.o)
+> --
+> 2.18.1
+>
+> -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
+>
+>
+>
+> [step 3] klp-convert the livepatch-modules - more or less what existed
+> in the patchset already, however used the grep -Fx trick to process only
+> modules found in livepatch-modules file:
+>
+> -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
+>
+> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+> index 73e80b917f12..f085644c2b97 100644
+> --- a/scripts/Kbuild.include
+> +++ b/scripts/Kbuild.include
+> @@ -223,6 +223,8 @@ endif
+>  # (needed for the shell)
+>  make-cmd = $(call escsq,$(subst $(pound),$$(pound),$(subst $$,$$$$,$(cmd_$(1)))))
+>
+> +save-cmd = printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd
+> +
+>  # Find any prerequisites that is newer than target or that does not exist.
+>  # PHONY targets skipped in both cases.
+>  any-prereq = $(filter-out $(PHONY),$?)$(filter-out $(PHONY) $(wildcard $^),$^)
+> @@ -230,7 +232,7 @@ any-prereq = $(filter-out $(PHONY),$?)$(filter-out $(PHONY) $(wildcard $^),$^)
+>  # Execute command if command has changed or prerequisite(s) are updated.
+>  if_changed = $(if $(any-prereq)$(cmd-check),                                 \
+>         $(cmd);                                                              \
+> -       printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+> +       $(save-cmd), @:)
+>
+>  # Execute the command and also postprocess generated .d dependencies file.
+>  if_changed_dep = $(if $(any-prereq)$(cmd-check),$(cmd_and_fixdep),@:)
+> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> index 5409bbc212bb..bc3b7b9dd8fa 100644
+> --- a/scripts/Makefile.modpost
+> +++ b/scripts/Makefile.modpost
+> @@ -142,8 +142,22 @@ quiet_cmd_ld_ko_o = LD [M]  $@
+>                   -o $@ $(real-prereqs) ;                                \
+>         $(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
+>
+> +SLIST = $(objtree)/Symbols.list
+> +KLP_CONVERT = scripts/livepatch/klp-convert
+> +quiet_cmd_klp_convert = KLP     $@
+> +      cmd_klp_convert = mv $@ $(@:.ko=.klp.o);                         \
+> +                       $(KLP_CONVERT) $(SLIST) $(@:.ko=.klp.o) $@
+> +
+> +define rule_ld_ko_o
+> +       $(Q)$(call echo-cmd,ld_ko_o) $(cmd_ld_ko_o) ;                           \
+> +       $(call save-cmd,ld_ko_o) ;                                              \
+> +       $(if $(CONFIG_LIVEPATCH),                                               \
+> +               $(if $(shell grep -Fx "$@" livepatch-modules),                  \
+> +                       $(call echo-cmd,klp_convert) $(cmd_klp_convert)))
+> +endef
 
-> Anyway, that is why I proposed "Rethinking late module patching" talk at 
-> LPC and we should try to come up with a solution there.
+This does not correctly detect the command change of cmd_klp_convert.
 
-Thanks, I saw that.  It's definitely worthy of more discussion.  The
-talk may be more productive if there were code to look at.  For example,
-a patch which removes all the "late module patching" gunk, so we can at
-least quantify the cost of the current approach.
 
--- 
-Josh
+I cleaned up the build system, and pushed it based on my
+kbuild tree.
+
+Please see:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+klp-cleanup
+
+
+Thanks.
+
+
+> +
+>  $(modules): %.ko :%.o %.mod.o FORCE
+> -       +$(call if_changed,ld_ko_o)
+> +       +$(call if_changed_rule,ld_ko_o)
+>
+>  targets += $(modules)
+>
+> --
+> 2.18.1
+>
+> -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
+>
+>
+> Thanks,
+>
+> -- Joe
+--
+Best Regards
+Masahiro Yamada
