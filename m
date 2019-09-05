@@ -2,102 +2,69 @@ Return-Path: <SRS0=EEVa=XA=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD792C3A5AB
-	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 826C2C3A5A5
+	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0EE62080C
-	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:36:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 674952245D
+	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:46:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387471AbfIEMgE (ORCPT
+        id S1732628AbfIEMpR (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 5 Sep 2019 08:36:04 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:46922 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387436AbfIEMgE (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 5 Sep 2019 08:36:04 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id EFE333090FDA;
-        Thu,  5 Sep 2019 12:36:03 +0000 (UTC)
-Received: from treble (ovpn-120-170.rdu2.redhat.com [10.10.120.170])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0D21A5C22C;
-        Thu,  5 Sep 2019 12:35:59 +0000 (UTC)
-Date:   Thu, 5 Sep 2019 07:35:58 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>, jikos@kernel.org,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20190905123558.d4zh4h5pnej6pcuk@treble>
-References: <20190816094608.3p2z73oxcoqavnm4@pathway.suse.cz>
- <20190822223649.ptg6e7qyvosrljqx@treble>
- <20190823081306.kbkm7b4deqrare2v@pathway.suse.cz>
- <20190826145449.wyo7avwpqyriem46@treble>
- <alpine.LSU.2.21.1909021802180.29987@pobox.suse.cz>
- <5c649320-a9bf-ae7f-5102-483bc34d219f@redhat.com>
- <alpine.LSU.2.21.1909031447140.3872@pobox.suse.cz>
- <20190904084932.gndrtewubqiaxmzy@pathway.suse.cz>
- <20190905025055.36loaatxtkhdo4q5@treble>
- <alpine.LSU.2.21.1909051355240.25712@pobox.suse.cz>
+        Thu, 5 Sep 2019 08:45:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40652 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731301AbfIEMpR (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 5 Sep 2019 08:45:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 75543B653;
+        Thu,  5 Sep 2019 12:45:16 +0000 (UTC)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     jikos@kernel.org, jpoimboe@redhat.com, pmladek@suse.com
+Cc:     joe.lawrence@redhat.com, nstange@suse.de,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [RFC PATCH v2 0/3] livepatch: Clear relocation targets on a module removal
+Date:   Thu,  5 Sep 2019 14:45:11 +0200
+Message-Id: <20190905124514.8944-1-mbenes@suse.cz>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.1909051355240.25712@pobox.suse.cz>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Thu, 05 Sep 2019 12:36:04 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 02:03:34PM +0200, Miroslav Benes wrote:
-> > >   + I would like to better understand the scope of the current
-> > >     problems. It is about modifying code in the livepatch that
-> > >     depends on position of the related code:
-> > > 
-> > >       + relocations are rather clear; we will need them anyway
-> > > 	to access non-public (static) API from the original code.
-> > > 
-> > >       + What are the other changes?
-> > 
-> > I think the .klp.arch sections are the big ones:
-> > 
-> >   .klp.arch.altinstructions
-> >   .klp.arch.parainstructions
-> >   .klp.arch.jump_labels (doesn't exist yet)
-> > 
-> > And that's just x86...
-> 
-> I may misunderstand, but we have .klp.arch sections because para and 
-> alternatives have to be processed after relocations. And if we cannot get 
-> rid of relocations completely, because of static symbols, then we cannot 
-> get rid of .klp.arch sections either.
+Updated version with Petr's feedback. It looks a bit different and
+better now (I would say). Not that it should be considered before we
+decide what to do with late module patching, but I finished it before
+the discussion started and someone could be interested.
 
-With late module patching gone, the module code can just process the klp
-relocations at the same time it processes normal relocations.
+v1: http://lore.kernel.org/r/20190719122840.15353-1-mbenes@suse.cz
 
-Then the normal module alt/para/jump_label processing code can be used
-instead of arch_klp_init_object_loaded().
+Tested on x86_64, ppc64le and s390x. Cross-compiled on arm64 to verify
+that nothing is broken.
 
-Note this also means that Joe's patches can remove copy_module_elf() and
-free_module_elf().  And module_arch_freeing_init() in s390.
+[1] 20180602161151.apuhs2dygsexmcg2@treble
+[2] 1561019068-132672-1-git-send-email-cj.chengjian@huawei.com
+[3] 20180607092949.1706-1-mbenes@suse.cz
 
-> > And then of course there's the klp coming/going notifiers which have
-> > also been an additional source of complexity.
-> 
-> True, but I think we (me and Petr) do not consider it as much of a problem 
-> as you.
+Miroslav Benes (3):
+  livepatch: Clear relocation targets on a module removal
+  livepatch: Unify functions for writing and clearing object relocations
+  livepatch: Clean up klp_update_object_relocations() return paths
 
-It's less of an issue than .klp.arch and all the related code which can
-be removed.
+ arch/powerpc/kernel/module_64.c | 45 +++++++++++++++++++++++++
+ arch/s390/kernel/module.c       |  8 +++++
+ arch/x86/kernel/module.c        | 43 ++++++++++++++++++++++++
+ include/linux/moduleloader.h    |  7 ++++
+ kernel/livepatch/core.c         | 58 ++++++++++++++++++++++++---------
+ 5 files changed, 146 insertions(+), 15 deletions(-)
 
 -- 
-Josh
+2.23.0
+
