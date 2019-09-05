@@ -2,192 +2,99 @@ Return-Path: <SRS0=EEVa=XA=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F8DCC41514
-	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B6C9C3A5A5
+	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:49:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6A31822474
-	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:46:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8205420650
+	for <live-patching@archiver.kernel.org>; Thu,  5 Sep 2019 12:49:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389503AbfIEMpZ (ORCPT
+        id S1731067AbfIEMtQ (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 5 Sep 2019 08:45:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40678 "EHLO mx1.suse.de"
+        Thu, 5 Sep 2019 08:49:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43184 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731492AbfIEMpT (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 5 Sep 2019 08:45:19 -0400
+        id S1730864AbfIEMtP (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 5 Sep 2019 08:49:15 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 42A42B658;
-        Thu,  5 Sep 2019 12:45:17 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id B0F3CB02C;
+        Thu,  5 Sep 2019 12:49:14 +0000 (UTC)
+Date:   Thu, 5 Sep 2019 14:49:00 +0200 (CEST)
 From:   Miroslav Benes <mbenes@suse.cz>
-To:     jikos@kernel.org, jpoimboe@redhat.com, pmladek@suse.com
-Cc:     joe.lawrence@redhat.com, nstange@suse.de,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: [RFC PATCH v2 2/3] livepatch: Unify functions for writing and clearing object relocations
-Date:   Thu,  5 Sep 2019 14:45:13 +0200
-Message-Id: <20190905124514.8944-3-mbenes@suse.cz>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190905124514.8944-1-mbenes@suse.cz>
-References: <20190905124514.8944-1-mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>, jikos@kernel.org,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] livepatch: Clear relocation targets on a module
+ removal
+In-Reply-To: <20190905123558.d4zh4h5pnej6pcuk@treble>
+Message-ID: <alpine.LSU.2.21.1909051445410.25712@pobox.suse.cz>
+References: <20190816094608.3p2z73oxcoqavnm4@pathway.suse.cz> <20190822223649.ptg6e7qyvosrljqx@treble> <20190823081306.kbkm7b4deqrare2v@pathway.suse.cz> <20190826145449.wyo7avwpqyriem46@treble> <alpine.LSU.2.21.1909021802180.29987@pobox.suse.cz>
+ <5c649320-a9bf-ae7f-5102-483bc34d219f@redhat.com> <alpine.LSU.2.21.1909031447140.3872@pobox.suse.cz> <20190904084932.gndrtewubqiaxmzy@pathway.suse.cz> <20190905025055.36loaatxtkhdo4q5@treble> <alpine.LSU.2.21.1909051355240.25712@pobox.suse.cz>
+ <20190905123558.d4zh4h5pnej6pcuk@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Functions klp_write_object_relocations() and
-klp_clear_object_relocations() share a lot of code. Take the code out to
-a common function and provide the specific actions through callbacks.
+On Thu, 5 Sep 2019, Josh Poimboeuf wrote:
 
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
----
- kernel/livepatch/core.c | 84 +++++++++++++++++------------------------
- 1 file changed, 34 insertions(+), 50 deletions(-)
+> On Thu, Sep 05, 2019 at 02:03:34PM +0200, Miroslav Benes wrote:
+> > > >   + I would like to better understand the scope of the current
+> > > >     problems. It is about modifying code in the livepatch that
+> > > >     depends on position of the related code:
+> > > > 
+> > > >       + relocations are rather clear; we will need them anyway
+> > > > 	to access non-public (static) API from the original code.
+> > > > 
+> > > >       + What are the other changes?
+> > > 
+> > > I think the .klp.arch sections are the big ones:
+> > > 
+> > >   .klp.arch.altinstructions
+> > >   .klp.arch.parainstructions
+> > >   .klp.arch.jump_labels (doesn't exist yet)
+> > > 
+> > > And that's just x86...
+> > 
+> > I may misunderstand, but we have .klp.arch sections because para and 
+> > alternatives have to be processed after relocations. And if we cannot get 
+> > rid of relocations completely, because of static symbols, then we cannot 
+> > get rid of .klp.arch sections either.
+> 
+> With late module patching gone, the module code can just process the klp
+> relocations at the same time it processes normal relocations.
+> 
+> Then the normal module alt/para/jump_label processing code can be used
+> instead of arch_klp_init_object_loaded().
 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index f0b380d2a17a..023c9333c276 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -245,8 +245,11 @@ static int klp_resolve_symbols(Elf_Shdr *relasec, struct module *pmod)
- 	return 0;
- }
+Ah, of course. I obviously cannot grasp the idea of not having late module 
+patching :)
  
--static int klp_write_object_relocations(struct module *pmod,
--					struct klp_object *obj)
-+typedef int (reloc_update_fn_t)(struct module *, unsigned int);
-+
-+static int klp_update_object_relocations(struct module *pmod,
-+					 struct klp_object *obj,
-+					 reloc_update_fn_t reloc_update_fn)
- {
- 	int i, cnt, ret = 0;
- 	const char *objname, *secname;
-@@ -281,13 +284,7 @@ static int klp_write_object_relocations(struct module *pmod,
- 		if (strcmp(objname, sec_objname))
- 			continue;
- 
--		ret = klp_resolve_symbols(sec, pmod);
--		if (ret)
--			break;
--
--		ret = apply_relocate_add(pmod->klp_info->sechdrs,
--					 pmod->core_kallsyms.strtab,
--					 pmod->klp_info->symndx, i, pmod);
-+		ret = reloc_update_fn(pmod, i);
- 		if (ret)
- 			break;
- 	}
-@@ -295,45 +292,6 @@ static int klp_write_object_relocations(struct module *pmod,
- 	return ret;
- }
- 
--static void klp_clear_object_relocations(struct module *pmod,
--					struct klp_object *obj)
--{
--	int i, cnt;
--	const char *objname, *secname;
--	char sec_objname[MODULE_NAME_LEN];
--	Elf_Shdr *sec;
--
--	objname = klp_is_module(obj) ? obj->name : "vmlinux";
--
--	/* For each klp relocation section */
--	for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
--		sec = pmod->klp_info->sechdrs + i;
--		secname = pmod->klp_info->secstrings + sec->sh_name;
--		if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
--			continue;
--
--		/*
--		 * Format: .klp.rela.sec_objname.section_name
--		 * See comment in klp_resolve_symbols() for an explanation
--		 * of the selected field width value.
--		 */
--		secname = pmod->klp_info->secstrings + sec->sh_name;
--		cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
--		if (cnt != 1) {
--			pr_err("section %s has an incorrectly formatted name\n",
--			       secname);
--			continue;
--		}
--
--		if (strcmp(objname, sec_objname))
--			continue;
--
--		clear_relocate_add(pmod->klp_info->sechdrs,
--				   pmod->core_kallsyms.strtab,
--				   pmod->klp_info->symndx, i, pmod);
--	}
--}
--
- /*
-  * Sysfs Interface
-  *
-@@ -751,6 +709,21 @@ void __weak arch_klp_init_object_loaded(struct klp_patch *patch,
- {
- }
- 
-+static int klp_write_relocations(struct module *pmod,
-+				 unsigned int relsec)
-+{
-+	int ret;
-+
-+	ret = klp_resolve_symbols(pmod->klp_info->sechdrs + relsec, pmod);
-+	if (ret)
-+		return ret;
-+
-+	ret = apply_relocate_add(pmod->klp_info->sechdrs,
-+				 pmod->core_kallsyms.strtab,
-+				 pmod->klp_info->symndx, relsec, pmod);
-+	return ret;
-+}
-+
- /* parts of the initialization that is done only when the object is loaded */
- static int klp_init_object_loaded(struct klp_patch *patch,
- 				  struct klp_object *obj)
-@@ -761,7 +734,8 @@ static int klp_init_object_loaded(struct klp_patch *patch,
- 	mutex_lock(&text_mutex);
- 
- 	module_disable_ro(patch->mod);
--	ret = klp_write_object_relocations(patch->mod, obj);
-+	ret = klp_update_object_relocations(patch->mod, obj,
-+					    klp_write_relocations);
- 	if (ret) {
- 		module_enable_ro(patch->mod, true);
- 		mutex_unlock(&text_mutex);
-@@ -1111,6 +1085,15 @@ void klp_discard_nops(struct klp_patch *new_patch)
- 	klp_free_objects_dynamic(klp_transition_patch);
- }
- 
-+static int klp_clear_relocations(struct module *pmod,
-+				 unsigned int relsec)
-+{
-+	clear_relocate_add(pmod->klp_info->sechdrs,
-+			   pmod->core_kallsyms.strtab,
-+			   pmod->klp_info->symndx, relsec, pmod);
-+	return 0;
-+}
-+
- /*
-  * Remove parts of patches that touch a given kernel module. The list of
-  * patches processed might be limited. When limit is NULL, all patches
-@@ -1141,7 +1124,8 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
- 
- 			mutex_lock(&text_mutex);
- 			module_disable_ro(patch->mod);
--			klp_clear_object_relocations(patch->mod, obj);
-+			klp_update_object_relocations(patch->mod, obj,
-+						      klp_clear_relocations);
- 			module_enable_ro(patch->mod, true);
- 			mutex_unlock(&text_mutex);
- 
--- 
-2.23.0
+> Note this also means that Joe's patches can remove copy_module_elf() and
+> free_module_elf().  And module_arch_freeing_init() in s390.
 
+Correct.
+
+So yes, it would simplify the code a lot. I am still worried about the 
+consequences.
+
+> > > And then of course there's the klp coming/going notifiers which have
+> > > also been an additional source of complexity.
+> > 
+> > True, but I think we (me and Petr) do not consider it as much of a problem 
+> > as you.
+> 
+> It's less of an issue than .klp.arch and all the related code which can
+> be removed.
+
+Ok.
+
+Miroslav
