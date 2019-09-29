@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 172F3C352A9
-	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:42:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 145CAC352A9
+	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:43:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D950621835
-	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:41:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC42B2196E
+	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569778920;
+	s=default; t=1569779027;
 	bh=pBQwV3mhbv58jsEbhbzwxQUB2adUWroTzKgDObDMn5I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IOkDMgy7RyQmKz8x/uyut9ZzI3kKf2x9+9ZMn/x0cg+/wmOzkAwMagAQrWna2Di+o
-	 Vb/4Bxb7/g5ubo5rtTnR4b7IKB4gRs6peTz+0sDb4DtuZ+9gP1sxDTRLoyT/3RuN2l
-	 1m+vwp6EiVSkyUTRfC9T6cWhG4qUITJUFp1EFujA=
+	b=P6GeX8f1MJ8MWleJk8YZ0ZmnO2y736av5pz9bPLVc6tWN+ybMeDfD822/eBg6EYc7
+	 ul7fS+pnwPw63MT+1KezPBVkRzNt9FxBCWsGQ/0kV0jMD/2GVqUx411l/y4pcjcd4H
+	 +SosbI6prep1o0LxJo9XVDTGqX8I3KnMFEWaOh4Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729977AbfI2RdM (ORCPT
+        id S1729072AbfI2Rnh (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sun, 29 Sep 2019 13:33:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44392 "EHLO mail.kernel.org"
+        Sun, 29 Sep 2019 13:43:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729973AbfI2RdM (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:33:12 -0400
+        id S1729269AbfI2RbX (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:31:23 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DEB022196E;
-        Sun, 29 Sep 2019 17:33:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B97521927;
+        Sun, 29 Sep 2019 17:31:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778391;
+        s=default; t=1569778282;
         bh=pBQwV3mhbv58jsEbhbzwxQUB2adUWroTzKgDObDMn5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQSzDkWBoYA3HCQECrXKCVLG76WgCJECNFGS8nCTKaTpefRG7RrGoDt+wRvL5usk/
-         x5UYX/M9ZPhrtsywRfL/bz+iuJeH43S9CyCs6jgbld5VpsYBlPQAAzIMPwhrF2p9uK
-         kE0nYTidMWcCwWg3Mim0FaHUi8JoEpNrw0ZoFDeQ=
+        b=DejICp7ElnurRoHzFtHAOkiVgOyapVU1xpaYPbTrRE6X+qnaTJf3KmsZHMHPFtXbm
+         /Mk5ihTXVZTPJr2zn8fup07TYZWfuvXEDGot9JiLhsMSzOtR5QpC2ca7FQYW8ruLk4
+         8Utt3uDn7cz0a8CYOuTEIp5h2UIGBB+GmUd6Ik2k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Sasha Levin <sashal@kernel.org>, live-patching@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 12/42] livepatch: Nullify obj->mod in klp_module_coming()'s error path
-Date:   Sun, 29 Sep 2019 13:32:11 -0400
-Message-Id: <20190929173244.8918-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 13/49] livepatch: Nullify obj->mod in klp_module_coming()'s error path
+Date:   Sun, 29 Sep 2019 13:30:13 -0400
+Message-Id: <20190929173053.8400-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173244.8918-1-sashal@kernel.org>
-References: <20190929173244.8918-1-sashal@kernel.org>
+In-Reply-To: <20190929173053.8400-1-sashal@kernel.org>
+References: <20190929173053.8400-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
