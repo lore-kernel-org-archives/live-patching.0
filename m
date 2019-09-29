@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91BF7C352A9
-	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FFF9C47404
+	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:40:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D32021906
-	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:38:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42EA6222C2
+	for <live-patching@archiver.kernel.org>; Sun, 29 Sep 2019 17:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569778735;
-	bh=7p8XyQrphJ/tq8QCysawjdWH1XU2lS/L9DrP0XhWqyo=;
+	s=default; t=1569778846;
+	bh=28EPEBeuVuP6Khqm6zlfvXCAwy4C7eBB7QJBK6lTiqQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EAjZZDfrewkjbi2t+IqJOgmQ4vxnZC6fdKsClfRjUs8UMfwB6TYLj63xCDZCNqFk4
-	 zA7MH2UQJx2bHCuxhflZlTb+HWhiEDvenXsUaCm9SzD/gsULGEact6QCd62ap0+quQ
-	 JmMMHMe+qN+r8jXyGDm3cGsMGQjyqE3+Tv6eUMoY=
+	b=ZG4XQOzKAd5F3AwFn5Cx/ktvjma6aAdAjd3ShL7KZfGgdNUFbrr07E6kGAFoiDlQY
+	 tlFc+9tEEz+fnZ9YC3Rsygf/o4Y30JFC+LBW9L/P/JtWj32lQHs4n5KYOk9r5YdqfS
+	 V/zEoyqWNJcsDIftgdvS0jk9w3lavE+Jc/lGWNcM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730651AbfI2Rfv (ORCPT
+        id S1730412AbfI2Rel (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sun, 29 Sep 2019 13:35:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48018 "EHLO mail.kernel.org"
+        Sun, 29 Sep 2019 13:34:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729757AbfI2Rfr (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Sun, 29 Sep 2019 13:35:47 -0400
+        id S1729236AbfI2Rek (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Sun, 29 Sep 2019 13:34:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6426121D7D;
-        Sun, 29 Sep 2019 17:35:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C19EE21D7A;
+        Sun, 29 Sep 2019 17:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569778547;
-        bh=7p8XyQrphJ/tq8QCysawjdWH1XU2lS/L9DrP0XhWqyo=;
+        s=default; t=1569778479;
+        bh=28EPEBeuVuP6Khqm6zlfvXCAwy4C7eBB7QJBK6lTiqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vdTezx6U7aHNhMq3QIYLuoo4Zx4LD4mJa87KmHJxYb2AJeRxigjhrDWryfl1unSLq
-         oVtUIP/ZaUuThg1eSRaltlnZPiit3tEAoiON+HBwo+e99N+KKcII2Iir1OHXQM6mCe
-         MwTiywualgL1FpSbQKL0SDox1n0iDPtU5meyJ5G8=
+        b=SFg7/nZQU19uettwodGd+pBvIjhjy0wvcoZaOQJBt9RSXMG8Wvtb2xq2WoibZhgs4
+         sIZwyX4qTEG2fq+Bu9HV/vubJWQFliCxNDTqN26/1Hr5c9SZtEy+2W+zRmprvevHlw
+         miRaTz4CYDaK0XtKRRG+YBiNLae9Xsajy5OcdvpU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Sasha Levin <sashal@kernel.org>, live-patching@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/23] livepatch: Nullify obj->mod in klp_module_coming()'s error path
-Date:   Sun, 29 Sep 2019 13:35:16 -0400
-Message-Id: <20190929173535.9744-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 08/33] livepatch: Nullify obj->mod in klp_module_coming()'s error path
+Date:   Sun, 29 Sep 2019 13:33:56 -0400
+Message-Id: <20190929173424.9361-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190929173535.9744-1-sashal@kernel.org>
-References: <20190929173535.9744-1-sashal@kernel.org>
+In-Reply-To: <20190929173424.9361-1-sashal@kernel.org>
+References: <20190929173424.9361-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -81,10 +81,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 88754e9790f9b..f8dc77b18962c 100644
+index 722c27c40e5b3..a1250ad591c1d 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -941,6 +941,7 @@ int klp_module_coming(struct module *mod)
+@@ -1027,6 +1027,7 @@ int klp_module_coming(struct module *mod)
  	pr_warn("patch '%s' failed for module '%s', refusing to load module '%s'\n",
  		patch->mod->name, obj->mod->name, obj->mod->name);
  	mod->klp_alive = false;
