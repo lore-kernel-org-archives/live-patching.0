@@ -2,231 +2,78 @@ Return-Path: <SRS0=v8ZF=X4=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85CC8ECE589
-	for <live-patching@archiver.kernel.org>; Thu,  3 Oct 2019 09:02:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46789C10F14
+	for <live-patching@archiver.kernel.org>; Thu,  3 Oct 2019 09:09:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 606FC2070B
-	for <live-patching@archiver.kernel.org>; Thu,  3 Oct 2019 09:02:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CCE6217D7
+	for <live-patching@archiver.kernel.org>; Thu,  3 Oct 2019 09:09:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729006AbfJCJB6 (ORCPT
+        id S1727382AbfJCJJN (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 3 Oct 2019 05:01:58 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50316 "EHLO mx1.suse.de"
+        Thu, 3 Oct 2019 05:09:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52602 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728969AbfJCJB5 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 3 Oct 2019 05:01:57 -0400
+        id S1727357AbfJCJJN (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 3 Oct 2019 05:09:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E42C0B14A;
-        Thu,  3 Oct 2019 09:01:55 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Nicolai Stange <nstange@suse.de>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 2/5] livepatch: Basic API to track system state changes
-Date:   Thu,  3 Oct 2019 11:01:34 +0200
-Message-Id: <20191003090137.6874-3-pmladek@suse.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191003090137.6874-1-pmladek@suse.com>
-References: <20191003090137.6874-1-pmladek@suse.com>
+        by mx1.suse.de (Postfix) with ESMTP id DFFDAB14B;
+        Thu,  3 Oct 2019 09:09:11 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 11:08:47 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Petr Mladek <pmladek@suse.com>
+cc:     jikos@kernel.org, jpoimboe@redhat.com, joe.lawrence@redhat.com,
+        nstange@suse.de, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/3] livepatch: Clean up klp_update_object_relocations()
+ return paths
+In-Reply-To: <20191002134623.b6mwrvenrywgwdce@pathway.suse.cz>
+Message-ID: <alpine.LSU.2.21.1910031100150.9011@pobox.suse.cz>
+References: <20190905124514.8944-1-mbenes@suse.cz> <20190905124514.8944-4-mbenes@suse.cz> <20191002134623.b6mwrvenrywgwdce@pathway.suse.cz>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-This is another step how to help maintaining more livepatches.
+On Wed, 2 Oct 2019, Petr Mladek wrote:
 
-One big help was the atomic replace and cumulative livepatches. These
-livepatches replace the already installed ones. Therefore it should
-be enough when each cumulative livepatch is consistent.
+> On Thu 2019-09-05 14:45:14, Miroslav Benes wrote:
+> > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> 
+> This might depend on personal preferences.
 
-The problems might come with shadow variables and callbacks. They might
-change the system behavior or state so that it is no longer safe to
-go back and use an older livepatch or the original kernel code. Also,
-a new livepatch must be able to detect changes which were made by
-the already installed livepatches.
+True.
 
-This is where the livepatch system state tracking gets useful. It
-allows to:
+> What was the motivation
+> for this patch, please? Did it just follow some common
+> style in this source file?
 
-  - find whether a system state has already been modified by
-    previous livepatches
+We had it like this once, so it is only going back to the original code. 
+And yes, I think it is better.
 
-  - store data needed to manipulate and restore the system state
+Commit b56b36ee6751 ("livepatch: Cleanup module page permission changes") 
+changed it due to the error handling. Commit 255e732c61db ("livepatch: use 
+arch_klp_init_object_loaded() to finish arch-specific tasks") removed the 
+reason for the change but did not cleanup the rest.
 
-The information about the manipulated system states is stored in an
-array of struct klp_state. It can be searched by two new functions
-klp_get_state() and klp_get_prev_state().
+> To make it clear. I have no real preference. I just want to avoid
+> some back and forth changes of the code depending on who touches
+> it at the moment.
 
-The dependencies are going to be solved by a version field added later.
-The only important information is that it will be allowed to modify
-the same state by more non-cumulative livepatches. It is similar
-to allowing to modify the same function several times. The livepatch
-author is responsible for preventing incompatible changes.
+I have no real preference either. I noticed something I did not like while 
+touching the code and that's it.
 
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
----
- include/linux/livepatch.h | 15 +++++++++
- kernel/livepatch/Makefile |  2 +-
- kernel/livepatch/state.c  | 85 +++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 101 insertions(+), 1 deletion(-)
- create mode 100644 kernel/livepatch/state.c
+> I would prefer to either remove this patch or explain the motivation
+> in the commit message. Beside that
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index 273400814020..726947338fd5 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -130,10 +130,21 @@ struct klp_object {
- 	bool patched;
- };
- 
-+/**
-+ * struct klp_state - state of the system modified by the livepatch
-+ * @id:		system state identifier (non-zero)
-+ * @data:	custom data
-+ */
-+struct klp_state {
-+	unsigned long id;
-+	void *data;
-+};
-+
- /**
-  * struct klp_patch - patch structure for live patching
-  * @mod:	reference to the live patch module
-  * @objs:	object entries for kernel objects to be patched
-+ * @states:	system states that can get modified
-  * @replace:	replace all actively used patches
-  * @list:	list node for global list of actively used patches
-  * @kobj:	kobject for sysfs resources
-@@ -147,6 +158,7 @@ struct klp_patch {
- 	/* external */
- 	struct module *mod;
- 	struct klp_object *objs;
-+	struct klp_state *states;
- 	bool replace;
- 
- 	/* internal */
-@@ -217,6 +229,9 @@ void *klp_shadow_get_or_alloc(void *obj, unsigned long id,
- void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor);
- void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor);
- 
-+struct klp_state *klp_get_state(struct klp_patch *patch, unsigned long id);
-+struct klp_state *klp_get_prev_state(unsigned long id);
-+
- #else /* !CONFIG_LIVEPATCH */
- 
- static inline int klp_module_coming(struct module *mod) { return 0; }
-diff --git a/kernel/livepatch/Makefile b/kernel/livepatch/Makefile
-index cf9b5bcdb952..cf03d4bdfc66 100644
---- a/kernel/livepatch/Makefile
-+++ b/kernel/livepatch/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
- 
--livepatch-objs := core.o patch.o shadow.o transition.o
-+livepatch-objs := core.o patch.o shadow.o state.o transition.o
-diff --git a/kernel/livepatch/state.c b/kernel/livepatch/state.c
-new file mode 100644
-index 000000000000..0a7014c57478
---- /dev/null
-+++ b/kernel/livepatch/state.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * system_state.c - State of the system modified by livepatches
-+ *
-+ * Copyright (C) 2019 SUSE
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/livepatch.h>
-+#include "core.h"
-+#include "transition.h"
-+
-+#define klp_for_each_state(patch, state)		\
-+	for (state = patch->states;			\
-+	     state && state->id;			\
-+	     state++)
-+
-+/**
-+ * klp_get_state() - get information about system state modified by
-+ *	the given patch
-+ * @patch:	livepatch that modifies the given system state
-+ * @id:		custom identifier of the modified system state
-+ *
-+ * Checks whether the given patch modifies the given system state.
-+ *
-+ * The function can be called either from pre/post (un)patch
-+ * callbacks or from the kernel code added by the livepatch.
-+ *
-+ * Return: pointer to struct klp_state when found, otherwise NULL.
-+ */
-+struct klp_state *klp_get_state(struct klp_patch *patch, unsigned long id)
-+{
-+	struct klp_state *state;
-+
-+	klp_for_each_state(patch, state) {
-+		if (state->id == id)
-+			return state;
-+	}
-+
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(klp_get_state);
-+
-+/**
-+ * klp_get_prev_state() - get information about system state modified by
-+ *	the already installed livepatches
-+ * @id:		custom identifier of the modified system state
-+ *
-+ * Checks whether already installed livepatches modify the given
-+ * system state.
-+ *
-+ * The same system state can be modified by more non-cumulative
-+ * livepatches. It is expected that the latest livepatch has
-+ * the most up-to-date information.
-+ *
-+ * The function can be called only during transition when a new
-+ * livepatch is being enabled or when such a transition is reverted.
-+ * It is typically called only from from pre/post (un)patch
-+ * callbacks.
-+ *
-+ * Return: pointer to the latest struct klp_state from already
-+ *	installed livepatches, NULL when not found.
-+ */
-+struct klp_state *klp_get_prev_state(unsigned long id)
-+{
-+	struct klp_patch *patch;
-+	struct klp_state *state, *last_state = NULL;
-+
-+	if (WARN_ON_ONCE(!klp_transition_patch))
-+		return NULL;
-+
-+	klp_for_each_patch(patch) {
-+		if (patch == klp_transition_patch)
-+			goto out;
-+
-+		state = klp_get_state(patch, id);
-+		if (state)
-+			last_state = state;
-+	}
-+
-+out:
-+	return last_state;
-+}
-+EXPORT_SYMBOL_GPL(klp_get_prev_state);
--- 
-2.16.4
-
+Ok, thanks.
+Miroslav
