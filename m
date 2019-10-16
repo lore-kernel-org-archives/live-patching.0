@@ -4,34 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CADDFA372B
-	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E45FA3728
+	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F5342082C
-	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 890022082C
+	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728838AbfJPLd1 (ORCPT
+        id S1727597AbfJPLdV (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 16 Oct 2019 07:33:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35654 "EHLO mx1.suse.de"
+        Wed, 16 Oct 2019 07:33:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35606 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391089AbfJPLdW (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 16 Oct 2019 07:33:22 -0400
+        id S1728617AbfJPLdU (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 16 Oct 2019 07:33:20 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0EBDCB18D;
-        Wed, 16 Oct 2019 11:33:20 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id D7C8EB1A3;
+        Wed, 16 Oct 2019 11:33:18 +0000 (UTC)
 From:   Miroslav Benes <mbenes@suse.cz>
 To:     rostedt@goodmis.org, mingo@redhat.com, jpoimboe@redhat.com,
         jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com
 Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
         shuah@kernel.org, kamalesh@linux.vnet.ibm.com,
         linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v3 3/3] selftests/livepatch: Test interaction with ftrace_enabled
-Date:   Wed, 16 Oct 2019 13:33:15 +0200
-Message-Id: <20191016113316.13415-4-mbenes@suse.cz>
+Subject: [PATCH v3 1/3] ftrace: Introduce PERMANENT ftrace_ops flag
+Date:   Wed, 16 Oct 2019 13:33:13 +0200
+Message-Id: <20191016113316.13415-2-mbenes@suse.cz>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191016113316.13415-1-mbenes@suse.cz>
 References: <20191016113316.13415-1-mbenes@suse.cz>
@@ -42,150 +43,158 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
+Livepatch uses ftrace for redirection to new patched functions. It means
+that if ftrace is disabled, all live patched functions are disabled as
+well. Toggling global 'ftrace_enabled' sysctl thus affect it directly.
+It is not a problem per se, because only administrator can set sysctl
+values, but it still may be surprising.
 
-Since livepatching depends upon ftrace handlers to implement "patched"
-code functionality, verify that the ftrace_enabled sysctl value
-interacts with livepatch registration as expected.  At the same time,
-ensure that ftrace_enabled is set and part of the test environment
-configuration that is saved and restored when running the selftests.
+Introduce PERMANENT ftrace_ops flag to amend this. If the
+FTRACE_OPS_FL_PERMANENT is set on any ftrace ops, the tracing cannot be
+disabled by disabling ftrace_enabled. Equally, a callback with the flag
+set cannot be registered if ftrace_enabled is disabled.
 
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
 ---
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../testing/selftests/livepatch/functions.sh  | 14 +++-
- .../selftests/livepatch/test-ftrace.sh        | 65 +++++++++++++++++++
- 3 files changed, 80 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-ftrace.sh
+ Documentation/trace/ftrace-uses.rst |  8 ++++++++
+ Documentation/trace/ftrace.rst      |  4 +++-
+ include/linux/ftrace.h              |  3 +++
+ kernel/livepatch/patch.c            |  3 ++-
+ kernel/trace/ftrace.c               | 23 +++++++++++++++++++++--
+ 5 files changed, 37 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index fd405402c3ff..1886d9d94b88 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -4,6 +4,7 @@ TEST_PROGS_EXTENDED := functions.sh
- TEST_PROGS := \
- 	test-livepatch.sh \
- 	test-callbacks.sh \
--	test-shadow-vars.sh
-+	test-shadow-vars.sh \
-+	test-ftrace.sh
+diff --git a/Documentation/trace/ftrace-uses.rst b/Documentation/trace/ftrace-uses.rst
+index 1fbc69894eed..740bd0224d35 100644
+--- a/Documentation/trace/ftrace-uses.rst
++++ b/Documentation/trace/ftrace-uses.rst
+@@ -170,6 +170,14 @@ FTRACE_OPS_FL_RCU
+ 	a callback may be executed and RCU synchronization will not protect
+ 	it.
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index b7e5a67ae434..31eb09e38729 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -32,12 +32,16 @@ function die() {
- function push_config() {
- 	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
- 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
-+	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
++FTRACE_OPS_FL_PERMANENT
++        If this is set on any ftrace ops, then the tracing cannot disabled by
++        writing 0 to the proc sysctl ftrace_enabled. Equally, a callback with
++        the flag set cannot be registered if ftrace_enabled is 0.
++
++        Livepatch uses it not to lose the function redirection, so the system
++        stays protected.
++
+ 
+ Filtering which functions to trace
+ ==================================
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index e3060eedb22d..d2b5657ed33e 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -2976,7 +2976,9 @@ Note, the proc sysctl ftrace_enable is a big on/off switch for the
+ function tracer. By default it is enabled (when function tracing is
+ enabled in the kernel). If it is disabled, all function tracing is
+ disabled. This includes not only the function tracers for ftrace, but
+-also for any other uses (perf, kprobes, stack tracing, profiling, etc).
++also for any other uses (perf, kprobes, stack tracing, profiling, etc). It
++cannot be disabled if there is a callback with FTRACE_OPS_FL_PERMANENT set
++registered.
+ 
+ Please disable this with care.
+ 
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 8a8cb3c401b2..8385cafe4f9f 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -142,6 +142,8 @@ ftrace_func_t ftrace_ops_get_func(struct ftrace_ops *ops);
+  * PID     - Is affected by set_ftrace_pid (allows filtering on those pids)
+  * RCU     - Set when the ops can only be called when RCU is watching.
+  * TRACE_ARRAY - The ops->private points to a trace_array descriptor.
++ * PERMANENT - Set when the ops is permanent and should not be affected by
++ *             ftrace_enabled.
+  */
+ enum {
+ 	FTRACE_OPS_FL_ENABLED			= 1 << 0,
+@@ -160,6 +162,7 @@ enum {
+ 	FTRACE_OPS_FL_PID			= 1 << 13,
+ 	FTRACE_OPS_FL_RCU			= 1 << 14,
+ 	FTRACE_OPS_FL_TRACE_ARRAY		= 1 << 15,
++	FTRACE_OPS_FL_PERMANENT                 = 1 << 16,
+ };
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
+index bd43537702bd..b552cf2d85f8 100644
+--- a/kernel/livepatch/patch.c
++++ b/kernel/livepatch/patch.c
+@@ -196,7 +196,8 @@ static int klp_patch_func(struct klp_func *func)
+ 		ops->fops.func = klp_ftrace_handler;
+ 		ops->fops.flags = FTRACE_OPS_FL_SAVE_REGS |
+ 				  FTRACE_OPS_FL_DYNAMIC |
+-				  FTRACE_OPS_FL_IPMODIFY;
++				  FTRACE_OPS_FL_IPMODIFY |
++				  FTRACE_OPS_FL_PERMANENT;
+ 
+ 		list_add(&ops->node, &klp_ops);
+ 
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 62a50bf399d6..5c8ad14f313a 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -325,6 +325,8 @@ int __register_ftrace_function(struct ftrace_ops *ops)
+ 	if (ops->flags & FTRACE_OPS_FL_SAVE_REGS_IF_SUPPORTED)
+ 		ops->flags |= FTRACE_OPS_FL_SAVE_REGS;
+ #endif
++	if (!ftrace_enabled && (ops->flags & FTRACE_OPS_FL_PERMANENT))
++		return -EBUSY;
+ 
+ 	if (!core_kernel_data((unsigned long)ops))
+ 		ops->flags |= FTRACE_OPS_FL_DYNAMIC;
+@@ -6723,6 +6725,18 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
  }
+ EXPORT_SYMBOL_GPL(unregister_ftrace_function);
  
- function pop_config() {
- 	if [[ -n "$DYNAMIC_DEBUG" ]]; then
- 		echo -n "$DYNAMIC_DEBUG" > /sys/kernel/debug/dynamic_debug/control
- 	fi
-+	if [[ -n "$FTRACE_ENABLED" ]]; then
-+		sysctl kernel.ftrace_enabled="$FTRACE_ENABLED" &> /dev/null
-+	fi
- }
- 
- function set_dynamic_debug() {
-@@ -47,12 +51,20 @@ function set_dynamic_debug() {
- 		EOF
- }
- 
-+function set_ftrace_enabled() {
-+	local sysctl="$1"
-+	result=$(sysctl kernel.ftrace_enabled="$1" 2>&1 | paste --serial --delimiters=' ')
-+	echo "livepatch: $result" > /dev/kmsg
++static bool is_permanent_ops_registered(void)
++{
++	struct ftrace_ops *op;
++
++	do_for_each_ftrace_op(op, ftrace_ops_list) {
++		if (op->flags & FTRACE_OPS_FL_PERMANENT)
++			return true;
++	} while_for_each_ftrace_op(op);
++
++	return false;
 +}
 +
- # setup_config - save the current config and set a script exit trap that
- #		 restores the original config.  Setup the dynamic debug
--#		 for verbose livepatching output.
-+#		 for verbose livepatching output and turn on
-+#		 the ftrace_enabled sysctl.
- function setup_config() {
- 	push_config
- 	set_dynamic_debug
-+	set_ftrace_enabled 1
- 	trap pop_config EXIT INT TERM HUP
- }
+ int
+ ftrace_enable_sysctl(struct ctl_table *table, int write,
+ 		     void __user *buffer, size_t *lenp,
+@@ -6740,8 +6754,6 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
+ 	if (ret || !write || (last_ftrace_enabled == !!ftrace_enabled))
+ 		goto out;
  
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-new file mode 100755
-index 000000000000..e2a76887f40a
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -0,0 +1,65 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2019 Joe Lawrence <joe.lawrence@redhat.com>
+-	last_ftrace_enabled = !!ftrace_enabled;
+-
+ 	if (ftrace_enabled) {
+ 
+ 		/* we are starting ftrace again */
+@@ -6752,12 +6764,19 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
+ 		ftrace_startup_sysctl();
+ 
+ 	} else {
++		if (is_permanent_ops_registered()) {
++			ftrace_enabled = true;
++			ret = -EBUSY;
++			goto out;
++		}
 +
-+. $(dirname $0)/functions.sh
-+
-+MOD_LIVEPATCH=test_klp_livepatch
-+
-+setup_config
-+
-+
-+# TEST: livepatch interaction with ftrace_enabled sysctl
-+# - turn ftrace_enabled OFF and verify livepatches can't load
-+# - turn ftrace_enabled ON and verify livepatch can load
-+# - verify that ftrace_enabled can't be turned OFF while a livepatch is loaded
-+
-+echo -n "TEST: livepatch interaction with ftrace_enabled sysctl ... "
-+dmesg -C
-+
-+set_ftrace_enabled 0
-+load_failing_mod $MOD_LIVEPATCH
-+
-+set_ftrace_enabled 1
-+load_lp $MOD_LIVEPATCH
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+set_ftrace_enabled 0
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+check_result "livepatch: kernel.ftrace_enabled = 0
-+% modprobe $MOD_LIVEPATCH
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
-+livepatch: failed to patch object 'vmlinux'
-+livepatch: failed to enable patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+modprobe: ERROR: could not insert '$MOD_LIVEPATCH': Device or resource busy
-+livepatch: kernel.ftrace_enabled = 1
-+% modprobe $MOD_LIVEPATCH
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy kernel.ftrace_enabled = 0
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH"
-+
-+
-+exit 0
+ 		/* stopping ftrace calls (just send to ftrace_stub) */
+ 		ftrace_trace_function = ftrace_stub;
+ 
+ 		ftrace_shutdown_sysctl();
+ 	}
+ 
++	last_ftrace_enabled = !!ftrace_enabled;
+  out:
+ 	mutex_unlock(&ftrace_lock);
+ 	return ret;
 -- 
 2.23.0
 
