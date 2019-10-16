@@ -2,37 +2,39 @@ Return-Path: <SRS0=TYJS=YJ=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D76DAFA372B
-	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32142FA372B
+	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B30CE21925
-	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15D33218DE
+	for <live-patching@archiver.kernel.org>; Wed, 16 Oct 2019 11:33:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387970AbfJPLdU (ORCPT
+        id S1728831AbfJPLdW (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 16 Oct 2019 07:33:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35590 "EHLO mx1.suse.de"
+        Wed, 16 Oct 2019 07:33:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35626 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727597AbfJPLdU (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 16 Oct 2019 07:33:20 -0400
+        id S1728838AbfJPLdW (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 16 Oct 2019 07:33:22 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5662BB188;
-        Wed, 16 Oct 2019 11:33:18 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 64620B1B1;
+        Wed, 16 Oct 2019 11:33:19 +0000 (UTC)
 From:   Miroslav Benes <mbenes@suse.cz>
 To:     rostedt@goodmis.org, mingo@redhat.com, jpoimboe@redhat.com,
         jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com
 Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
         shuah@kernel.org, kamalesh@linux.vnet.ibm.com,
         linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v3 0/3] ftrace: Introduce PERMANENT ftrace_ops flag
-Date:   Wed, 16 Oct 2019 13:33:12 +0200
-Message-Id: <20191016113316.13415-1-mbenes@suse.cz>
+Subject: [PATCH v3 2/3] selftests/livepatch: Make dynamic debug setup and restore generic
+Date:   Wed, 16 Oct 2019 13:33:14 +0200
+Message-Id: <20191016113316.13415-3-mbenes@suse.cz>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191016113316.13415-1-mbenes@suse.cz>
+References: <20191016113316.13415-1-mbenes@suse.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: live-patching-owner@vger.kernel.org
@@ -40,46 +42,108 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Livepatch uses ftrace for redirection to new patched functions. It means
-that if ftrace is disabled, all live patched functions are disabled as
-well. Toggling global 'ftrace_enabled' sysctl thus affect it directly.
-It is not a problem per se, because only administrator can set sysctl
-values, but it still may be surprising.
+From: Joe Lawrence <joe.lawrence@redhat.com>
 
-Introduce PERMANENT ftrace_ops flag to amend this. If the
-FTRACE_OPS_FL_PERMANENT is set on any ftrace ops, the tracing cannot be
-disabled by disabling ftrace_enabled. Equally, a callback with the flag
-set cannot be registered if ftrace_enabled is disabled.
+Livepatch selftests currently save the current dynamic debug config and
+tweak it for the selftests. The config is restored at the end. Make the
+infrastructure generic, so that more variables can be saved and
+restored.
 
-v2->v3:
-- ftrace_enabled explicitly set to true
-- selftest from Joe Lawrence (I just split it to two patches)
-- typo fix
-
-v1->v2:
-- different logic, proposed by Joe Lawrence
-
-Joe Lawrence (2):
-  selftests/livepatch: Make dynamic debug setup and restore generic
-  selftests/livepatch: Test interaction with ftrace_enabled
-
-Miroslav Benes (1):
-  ftrace: Introduce PERMANENT ftrace_ops flag
-
- Documentation/trace/ftrace-uses.rst           |  8 +++
- Documentation/trace/ftrace.rst                |  4 +-
- include/linux/ftrace.h                        |  3 +
- kernel/livepatch/patch.c                      |  3 +-
- kernel/trace/ftrace.c                         | 23 ++++++-
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../testing/selftests/livepatch/functions.sh  | 34 +++++++---
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+---
+ .../testing/selftests/livepatch/functions.sh  | 22 +++++++++++--------
  .../selftests/livepatch/test-callbacks.sh     |  2 +-
- .../selftests/livepatch/test-ftrace.sh        | 65 +++++++++++++++++++
  .../selftests/livepatch/test-livepatch.sh     |  2 +-
  .../selftests/livepatch/test-shadow-vars.sh   |  2 +-
- 11 files changed, 132 insertions(+), 17 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-ftrace.sh
+ 4 files changed, 16 insertions(+), 12 deletions(-)
 
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 79b0affd21fb..b7e5a67ae434 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -29,29 +29,33 @@ function die() {
+ 	exit 1
+ }
+ 
+-function push_dynamic_debug() {
+-        DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
+-                awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
++function push_config() {
++	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
++			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
+ }
+ 
+-function pop_dynamic_debug() {
++function pop_config() {
+ 	if [[ -n "$DYNAMIC_DEBUG" ]]; then
+ 		echo -n "$DYNAMIC_DEBUG" > /sys/kernel/debug/dynamic_debug/control
+ 	fi
+ }
+ 
+-# set_dynamic_debug() - save the current dynamic debug config and tweak
+-# 			it for the self-tests.  Set a script exit trap
+-#			that restores the original config.
+ function set_dynamic_debug() {
+-        push_dynamic_debug
+-        trap pop_dynamic_debug EXIT INT TERM HUP
+         cat <<-EOF > /sys/kernel/debug/dynamic_debug/control
+ 		file kernel/livepatch/* +p
+ 		func klp_try_switch_task -p
+ 		EOF
+ }
+ 
++# setup_config - save the current config and set a script exit trap that
++#		 restores the original config.  Setup the dynamic debug
++#		 for verbose livepatching output.
++function setup_config() {
++	push_config
++	set_dynamic_debug
++	trap pop_config EXIT INT TERM HUP
++}
++
+ # loop_until(cmd) - loop a command until it is successful or $MAX_RETRIES,
+ #		    sleep $RETRY_INTERVAL between attempts
+ #	cmd - command and its arguments to run
+diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+index e97a9dcb73c7..a35289b13c9c 100755
+--- a/tools/testing/selftests/livepatch/test-callbacks.sh
++++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+@@ -9,7 +9,7 @@ MOD_LIVEPATCH2=test_klp_callbacks_demo2
+ MOD_TARGET=test_klp_callbacks_mod
+ MOD_TARGET_BUSY=test_klp_callbacks_busy
+ 
+-set_dynamic_debug
++setup_config
+ 
+ 
+ # TEST: target module before livepatch
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index f05268aea859..493e3df415a1 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -7,7 +7,7 @@
+ MOD_LIVEPATCH=test_klp_livepatch
+ MOD_REPLACE=test_klp_atomic_replace
+ 
+-set_dynamic_debug
++setup_config
+ 
+ 
+ # TEST: basic function patching
+diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+index 04a37831e204..1aae73299114 100755
+--- a/tools/testing/selftests/livepatch/test-shadow-vars.sh
++++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+@@ -6,7 +6,7 @@
+ 
+ MOD_TEST=test_klp_shadow_vars
+ 
+-set_dynamic_debug
++setup_config
+ 
+ 
+ # TEST: basic shadow variable API
 -- 
 2.23.0
 
