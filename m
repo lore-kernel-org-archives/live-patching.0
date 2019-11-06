@@ -2,108 +2,100 @@ Return-Path: <SRS0=1T1s=Y6=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6675FC5DF64
-	for <live-patching@archiver.kernel.org>; Wed,  6 Nov 2019 09:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AFD2FC6194
+	for <live-patching@archiver.kernel.org>; Wed,  6 Nov 2019 22:28:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4034B217F4
-	for <live-patching@archiver.kernel.org>; Wed,  6 Nov 2019 09:56:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0227621848
+	for <live-patching@archiver.kernel.org>; Wed,  6 Nov 2019 22:28:10 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QNYlmft6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbfKFJ4E (ORCPT
+        id S1727315AbfKFW2J (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 6 Nov 2019 04:56:04 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49938 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725856AbfKFJ4E (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 6 Nov 2019 04:56:04 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C0C07B28A;
-        Wed,  6 Nov 2019 09:56:02 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, jpoimboe@redhat.com,
-        joe.lawrence@redhat.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jikos@kernel.org, pmladek@suse.com, nstange@suse.de,
-        live-patching@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v3 0/4] s390/livepatch: Implement reliable stack tracing for the consistency model
-Date:   Wed,  6 Nov 2019 10:55:57 +0100
-Message-Id: <20191106095601.29986-1-mbenes@suse.cz>
-X-Mailer: git-send-email 2.23.0
+        Wed, 6 Nov 2019 17:28:09 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:29973 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726817AbfKFW2J (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 6 Nov 2019 17:28:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573079288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OaCfCwRffXSl+3ViahqGn4EpovGGgu/EbhfMP+EYy0E=;
+        b=QNYlmft6IH7dSieGq1LegFVgJq7l6a5RxxfipY8fuV5hE5csYOxaPSdh9+edJ5OVUYBvDI
+        EPNJUWIbM9sqnja1CVWehTBFobEo8egSatktQi8ApmTmzpwxe+thDPtd5jDtZDKaM+gcmm
+        RB91sdYKjsnIfZFMOYk/dx10daRlU5A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-227-ACruvKVuPtyL9jLRdIE6Ow-1; Wed, 06 Nov 2019 17:28:05 -0500
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C09E800C73;
+        Wed,  6 Nov 2019 22:28:04 +0000 (UTC)
+Received: from jlaw-desktop.bos.redhat.com (dhcp-17-119.bos.redhat.com [10.18.17.119])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C3FAA19757;
+        Wed,  6 Nov 2019 22:28:03 +0000 (UTC)
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org
+Subject: [PATCH] selftests/livepatch: filter 'taints' from dmesg comparison
+Date:   Wed,  6 Nov 2019 17:28:01 -0500
+Message-Id: <20191106222801.7541-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-MC-Unique: ACruvKVuPtyL9jLRdIE6Ow-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The livepatch consistency model requires reliable stack tracing
-architecture support in order to work properly. In order to achieve
-this, two main issues have to be solved. First, reliable and consistent
-call chain backtracing has to be ensured. Second, the unwinder needs to
-be able to detect stack corruptions and return errors.
+The livepatch selftests compare expected dmesg output to verify kernel
+behavior.  They currently filter out "tainting kernel with
+TAINT_LIVEPATCH" messages which may be logged when loading livepatch
+modules.
 
-The former should be guaranteed (see 4/4 for details), the latter is
-implemented by the patch set (mainly 4/4).
+Further filter the log to also drop "loading out-of-tree module taints
+kernel" messages in case the klp_test modules have been build without
+the in-tree module flag.
 
-It passes livepatch kselftests (with timeout disabled, see
-https://lore.kernel.org/live-patching/20191025115041.23186-1-mbenes@suse.cz/)
-and tests from https://github.com/lpechacek/qa_test_klp.
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
 
-Based on v5.4-rc6. That is why I left 1/4 patch in the series despite
-its presence in s390/features branch. The context of the rest of the
-series could be preserved as such and changes in s390/fixes present in
-v5.4-rc6 are taken into account.
+Note: I stumbled across this in a testing scenario and thought it might
+be generally useful to extend this admittedly fragile mechanism.  Since
+there are no related livepatch-core changes, this can go through Shuah's
+kselftest tree if she prefers.  -- Joe
 
-Changes since v2:
-- unwind_next_frame() is split to several functions to make it easier to
-  review and prepare it for additional changes
-- unwind_next_frame_reliable() merged into the existing
-  unwind_next_frame()
+ tools/testing/selftests/livepatch/functions.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v1 and questions follow:
-- rebased on top of v5.4-rc5. It also meant rebasing on top of
-  ARCH_STACKWALK, which made the outcome nicer and addressed some of
-  Joe's remarks.
-- sp alignment is checked in both _start and _next_frame cases
-- ftrace_graph_ret_addr() calling cleanup
-
-- I tried to use the existing infrastructure as much as possible with
-  one exception. I kept unwind_next_frame_reliable() next to the
-  ordinary unwind_next_frame(). I did not come up with a nice solution
-  how to integrate it. The reliable unwinding is executed on a task
-  stack only, which leads to a nice simplification. My integration
-  attempts only obfuscated the existing unwind_next_frame() which is
-  already not easy to read. Ideas are definitely welcome.
-
-- although not nice (Josh mentioned it in his review), I kept checking
-  for kretprobe_trampoline in the main loop. It could go into _start and
-  _next_frame callbacks, but more changes would be required (changing a
-  function return type, ordinary unwinding does not need it). So I did
-  not think it was worth it. I could change it in v3, of course.
-
-Miroslav Benes (4):
-  s390/unwind: drop unnecessary code around calling
-    ftrace_graph_ret_addr()
-  s390/unwind: split unwind_next_frame() to several functions
-  s390/unwind: prepare the unwinding interface for reliable stack traces
-  s390/livepatch: Implement reliable stack tracing for the consistency
-    model
-
- arch/s390/Kconfig                  |   1 +
- arch/s390/include/asm/stacktrace.h |   3 +-
- arch/s390/include/asm/unwind.h     |  18 +--
- arch/s390/kernel/dumpstack.c       |  16 ++-
- arch/s390/kernel/perf_event.c      |   2 +-
- arch/s390/kernel/stacktrace.c      |  48 ++++++-
- arch/s390/kernel/unwind_bc.c       | 194 ++++++++++++++++++++---------
- arch/s390/oprofile/init.c          |   2 +-
- 8 files changed, 208 insertions(+), 76 deletions(-)
-
--- 
-2.23.0
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing=
+/selftests/livepatch/functions.sh
+index 79b0affd21fb..57975c323542 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -221,7 +221,7 @@ function check_result {
+ =09local expect=3D"$*"
+ =09local result
+=20
+-=09result=3D$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_k=
+lp' | sed 's/^\[[ 0-9.]*\] //')
++=09result=3D$(dmesg | grep -ve '\<taints\>' -ve '\<tainting\>' | grep -e '=
+livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
+=20
+ =09if [[ "$expect" =3D=3D "$result" ]] ; then
+ =09=09echo "ok"
+--=20
+2.21.0
 
