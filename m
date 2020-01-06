@@ -1,109 +1,104 @@
-Return-Path: <SRS0=S9Kr=2H=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=QP6D=23=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA628C2D0BF
-	for <live-patching@archiver.kernel.org>; Tue, 17 Dec 2019 15:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 290CBC33C8C
+	for <live-patching@archiver.kernel.org>; Mon,  6 Jan 2020 16:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B1D6B21D7D
-	for <live-patching@archiver.kernel.org>; Tue, 17 Dec 2019 15:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1576595336;
-	bh=vYx0v2RYfVbzezxf0WzhCOWD1hRsb9GKJtKuNB+YUAc=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=njCjUxkonRuk64W8q4TLpFRiN1tOp505iqZdphg1mzrboHTDHJpoqgDV0WDoXR9Bl
-	 jUkfyIx8+wsIk81nGbL1bjvtAnuW/eTT+dXu4e8lN0wadaoFsksdJ4v6eFq4RegxOR
-	 oD8MycrubEMZjGNFG8RWLZLoFAgOozVJKwRn785Q=
+	by mail.kernel.org (Postfix) with ESMTP id ED7DF2146E
+	for <live-patching@archiver.kernel.org>; Mon,  6 Jan 2020 16:39:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HYACJWe7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbfLQPI4 (ORCPT
+        id S1726526AbgAFQj6 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 17 Dec 2019 10:08:56 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:38318 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727517AbfLQPI4 (ORCPT
+        Mon, 6 Jan 2020 11:39:58 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:44551 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726518AbgAFQj6 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 17 Dec 2019 10:08:56 -0500
-Received: by mail-io1-f68.google.com with SMTP id v3so11390441ioj.5
-        for <live-patching@vger.kernel.org>; Tue, 17 Dec 2019 07:08:55 -0800 (PST)
+        Mon, 6 Jan 2020 11:39:58 -0500
+Received: by mail-ot1-f53.google.com with SMTP id h9so69791716otj.11
+        for <live-patching@vger.kernel.org>; Mon, 06 Jan 2020 08:39:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bHgBoZjI4n84pTBe8b2XKBtgme/qK2l3tBlbTZYezI4=;
-        b=AfmS0cSw5QZHULbCOFeGtG7GAHck2Q++sb5um6GXJkmP3N74teYGjrH8nxhXlh4S9U
-         3K2/LXXnxBr7Qb4EnJcdKWCcBV4kBG6YIs+la6InGRWI03RKxE5NyD3e+dB73rH+39ur
-         bC72PrPQnTlDFqxEATW/TENGnRKLcFeO1pRTo=
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=BYX+ysDLixguPL9U7dTnnMHsyuHIKDFw1NJsrezq400=;
+        b=HYACJWe7iC1JO54rLjWk/PavmoaeeOJJuzQRDOcsQWfJO67/UJxQhZOj7/OHKg/L8x
+         0ysV6fkDOhztER0XKzJ1PwzCjL7zapiZoZqwysTAVMsry+duaYK1I/j8cVw89/qWN1r6
+         UKsTgFexVIq0TbVZLxEB3tkuHabjQfhsLR3ofgyqxSs7IUCTmAzkXf6nOd3RPT2IK3L9
+         JGZolBaGH0slMOBbYeUGag+MGi9wLIYV0cPaFGRfYnXb89/8N/O6iDI2kvoC3HOJI1Eb
+         b2V4RqWKPrfLMpvyjWnsj8D+l+sTzgtEBRw9PsQ0WjFYkjT20hVMrzI9S9bm+pGII2yf
+         EvYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bHgBoZjI4n84pTBe8b2XKBtgme/qK2l3tBlbTZYezI4=;
-        b=OdZKU9E79OAgHffFk0cqjVAE8wYjGPlxGNw7p/vwHOI9C1KNP3awsPmOq5QNNwRrEZ
-         qa5iC5gCZe1Any+6H+5N3l5mPioqNgzzzbrZzdtHyFA0pEBeCmJmqMHDeKn+8JxLMt8b
-         EgUzncjikooKN+ia4/WEUHq++Lzq1Uv0WjqoUDs9fCH62UCMvOIM61qHLZVR+8Ltk503
-         QRqWvteIa8zo1+oOihg+XD75Hc865zq0fEpGi1lgzNGqXQ3lmk7GcvCesb+kR0orjbLr
-         TUBMrXK2/NXqTdS5f1yOZCDwDKyuv6Wwg+Ycd0r+4lRGrPubq6gWBodX9qz+Q5tB6Fdm
-         RZ5Q==
-X-Gm-Message-State: APjAAAWdzQ/eEPt6HEqmdRZwSywe2vjuJlU1wMB0E1w7xX2kSm87+nFh
-        tG/lksUi863Xb5hN6Ny9fSm71g==
-X-Google-Smtp-Source: APXvYqyTHwu0VRhRXpJa0BvlWII0VilsqEu6uN33ZMGJiPdgsD3daCtfo2G9T4JwIvCqzVkI1QWgcA==
-X-Received: by 2002:a6b:ed15:: with SMTP id n21mr1646057iog.128.1576595335283;
-        Tue, 17 Dec 2019 07:08:55 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 16sm5246124iog.13.2019.12.17.07.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2019 07:08:54 -0800 (PST)
-Subject: Re: [PATCH v2] selftests: livepatch: Fix it to do root uid check and
- skip
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, shuah@kernel.org,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20191216191840.15188-1-skhan@linuxfoundation.org>
- <20191217090210.ky3il3qu4jkr2vaa@pathway.suse.cz>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8f2a1599-df35-ec19-da9a-795330cf185f@linuxfoundation.org>
-Date:   Tue, 17 Dec 2019 08:08:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=BYX+ysDLixguPL9U7dTnnMHsyuHIKDFw1NJsrezq400=;
+        b=HmRKuADWN3r04adwB8ca2NTu7CviwUbvmTFmAE/4dHKllgejsIm7JFj4Ke9XfWvba7
+         LvdUjgZ8aMr4BddnsMcuFFy0az8OrytKPbL/mHZzCGyCkCWGM3W7NTLoD+IDrauxwiQW
+         vDGIBGRPmyiNU0pFZ4bF5U/D15ybXb4LYZVpvlA8jvL8n3zlhRogCIst5t/mG+uYr49G
+         m6ypQh+qPtpqA4YbQ2Kx3HzZtb2SftDVuq2wwhrCjqrOslrjqOYyumPVBueIQPFfWjNL
+         tZpMRcoAzyJxYb45rs1ECScT3j94ARK9naCNQsnuBJUrprAJigyEDK1CV93AZ0T0L09D
+         /WPw==
+X-Gm-Message-State: APjAAAXH9BQG393Ye/1nI3XBNtdy3dIEyOCinxguKPAwb7nVvWmi3q6G
+        L7IigwxyiUBCO32n7Ng2VWSGkTpNm2SH9uRs/PNynw==
+X-Google-Smtp-Source: APXvYqyzJZgS9aC7Sd3hjVODNTRsj55lXa5LHChcNvYlVMoVjaqF3LKL0u3oYBiod7r1Yv6oUpSmScmSEqnX9/uI01k=
+X-Received: by 2002:a9d:c02:: with SMTP id 2mr119359452otr.183.1578328797486;
+ Mon, 06 Jan 2020 08:39:57 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191217090210.ky3il3qu4jkr2vaa@pathway.suse.cz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 6 Jan 2020 17:39:30 +0100
+Message-ID: <CAG48ez2gDDRtKaOcGdKLREd7RGtVzCypXiBMHBguOGSpxQFk3w@mail.gmail.com>
+Subject: BPF tracing trampoline synchronization between update/freeing and execution?
+To:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     KP Singh <kpsingh@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On 12/17/19 2:02 AM, Petr Mladek wrote:
-> On Mon 2019-12-16 12:18:40, Shuah Khan wrote:
->> livepatch test configures the system and debug environment to run
->> tests. Some of these actions fail without root access and test
->> dumps several permission denied messages before it exits.
->>
->> Fix test-state.sh to call setup_config instead of set_dynamic_debug
->> as suggested by Petr Mladek <pmladek@suse.com>
->>
->> Fix it to check root uid and exit with skip code instead.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> 
-> Shuah, I assume that you will push this fix via linux-kselftest tree.
-> Please, tell us if you have other preference.
-> 
+Hi!
 
-Hi Petr, Yes I will push this in. Thanks for the reviews.
+I was chatting with kpsingh about BPF trampolines, and I noticed that
+it looks like BPF trampolines (as of current bpf-next/master) seem to
+be missing synchronization between trampoline code updates and
+trampoline execution. Or maybe I'm missing something?
 
-thanks,
--- Shuah
+If I understand correctly, trampolines are executed directly from the
+fentry placeholders at the start of arbitrary kernel functions, so
+they can run without any locks held. So for example, if task A starts
+executing a trampoline on entry to sys_open(), then gets preempted in
+the middle of the trampoline, and then task B quickly calls
+BPF_RAW_TRACEPOINT_OPEN twice, and then task A continues execution,
+task A will end up executing the middle of newly-written machine code,
+which can probably end up crashing the kernel somehow?
+
+I think that at least to synchronize trampoline text freeing with
+concurrent trampoline execution, it is necessary to do something
+similar to what the livepatching code does with klp_check_stack(), and
+then either use a callback from the scheduler to periodically re-check
+tasks that were in the trampoline or let the trampoline tail-call into
+a cleanup helper that is part of normal kernel text. And you'd
+probably have to gate BPF trampolines on
+CONFIG_HAVE_RELIABLE_STACKTRACE.
+
+[Trampoline *updates* could probably be handled more easily if a
+trampoline consisted of an immutable header that increments something
+like a percpu refcount followed by a mutable body, but given that that
+doesn't solve freeing trampolines, I'm not sure if it'd be worth the
+effort. Unless you just never free trampoline memory, but that's
+probably not a great idea.]
