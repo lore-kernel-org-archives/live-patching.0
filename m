@@ -1,307 +1,95 @@
-Return-Path: <SRS0=++G+=26=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=8L+z=3C=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8F7BC33CA1
-	for <live-patching@archiver.kernel.org>; Thu,  9 Jan 2020 09:29:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B56B8C33CAE
+	for <live-patching@archiver.kernel.org>; Mon, 13 Jan 2020 07:48:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AF609206ED
-	for <live-patching@archiver.kernel.org>; Thu,  9 Jan 2020 09:29:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9334C2073D
+	for <live-patching@archiver.kernel.org>; Mon, 13 Jan 2020 07:48:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729602AbgAIJ3j (ORCPT
+        id S1728211AbgAMHsO (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 9 Jan 2020 04:29:39 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54600 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729269AbgAIJ3j (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:29:39 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 40DA7BD10;
-        Thu,  9 Jan 2020 09:29:34 +0000 (UTC)
-Date:   Thu, 9 Jan 2020 10:29:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org
-Subject: Re: [bug report] livepatch: Initialize shadow variables safely by a
- custom callback
-Message-ID: <20200109092934.fdjgqc4es46mjpkv@pathway.suse.cz>
-References: <20200107132929.ficffmrm5ntpzcqa@kili.mountain>
- <4affb6d1-699e-af7e-9a1d-364393adc3a8@redhat.com>
- <20200107152337.GB27042@kadam>
+        Mon, 13 Jan 2020 02:48:14 -0500
+Received: from mail01.vodafone.es ([217.130.24.71]:42301 "EHLO
+        mail01.vodafone.es" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727021AbgAMHsN (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Mon, 13 Jan 2020 02:48:13 -0500
+IronPort-SDR: 8k5nAHk5tSrTpb4ux6cC4Xb5A/2PkQeBZDJ0pT4o3XJztqLTXMmSeRk4c0o36NkjeUt6spEZVS
+ TtNZCVDX96GQ==
+IronPort-PHdr: =?us-ascii?q?9a23=3AG0jPtRB3csWRSAixMPf/UyQJP3N1i/DPJgcQr6?=
+ =?us-ascii?q?AfoPdwSPX7pcbcNUDSrc9gkEXOFd2Cra4d0KyM7fGrADVcqb+681k6OKRWUB?=
+ =?us-ascii?q?EEjchE1ycBO+WiTXPBEfjxciYhF95DXlI2t1uyMExSBdqsLwaK+i764jEdAA?=
+ =?us-ascii?q?jwOhRoLerpBIHSk9631+ev8JHPfglEnjWwba58IRmsswnct80bjYR/JqosxR?=
+ =?us-ascii?q?bCv2dFdflRyW50P1yYggzy5t23/J5t8iRQv+wu+stdWqjkfKo2UKJVAi0+P2?=
+ =?us-ascii?q?86+MPkux/DTRCS5nQHSWUZjgBIAwne4x7kWJr6rzb3ufB82CmeOs32UKw0VD?=
+ =?us-ascii?q?G/5KplVBPklCEKPCM//G3Ql8J/kLhUoBehphBm3YPUZ5uVNOJ5fqPHZ9waWX?=
+ =?us-ascii?q?ROUt9PWCxHG4+xc5cPD/YbMulEr4nyuV4OogW4BQmwHe/g1DlIimbx06091e?=
+ =?us-ascii?q?QuDwHH0BU+ENIIrX/YqNv4OLsOXeywyqTD0DfNYO5M2Trl5obGcgohr++PU7?=
+ =?us-ascii?q?xtfsXe1UYhGhjZjliStYPpIy+Z2vgTv2Wd8uFuVfivi2kiqwxpuDag2NsshZ?=
+ =?us-ascii?q?fThokIyl/E8iN5wIkoLtC/UE50f8KkH4VKtyCUMIt2RMwiTnpouCYh0bIJpY?=
+ =?us-ascii?q?S3czQNyJQi3RLfa/+HfpGO7xn+V+iROS91iGx4dL+9nRq+7EatxvHmWsWq31?=
+ =?us-ascii?q?tGtCRIn9nKu3sQzRLc8NKHReF4/kq53DaP0B3c5f9cLEAvkKrbN4Yhwrktlp?=
+ =?us-ascii?q?oPqUjDHjH5mEHxjKKOc0Ur4Omo6+D9Yrr4op+QK4B5hhvgMqQph8OwG+o4Mg?=
+ =?us-ascii?q?8IX2eF4+izyqbj8VX4QLVMkPI2jrHUvI7HKckZvKK1HgFY3po55xqhADqqyt?=
+ =?us-ascii?q?oVkHkfIFJAYh2HjozpO1/UIPD/CPeym0ysnyl3x//YJL3gDJLNLn7MkLr6fb?=
+ =?us-ascii?q?Z98FVTxxYpwd9D4JJUD6sNIPLwWkPprtzXEgc5MxCow+bgENh90oIeWXyRDa?=
+ =?us-ascii?q?OAKKPdq0OI6f4vI+mNYo8Vty3wK+Yq5/Hwl381g1wdcrez3ZsRdn+4Gu5qI0?=
+ =?us-ascii?q?KDYXrj0Z89FjIOvxQzCfTjlFaCUDhcT2i9Urh65TwhDo+iS4DZSdOXjaSFzR?=
+ =?us-ascii?q?u8S6Vbem1cQm+LF3igI52JR/oWdyWULc9ikicOXpCuToYg0VelswqsmJR9Ke?=
+ =?us-ascii?q?+BwiAEuIir699z6KWHjRwu+CZrCMKS+2GWRWoylWQNAT81ivMs6Xdhw0uOhP?=
+ =?us-ascii?q?Ery8dTEsZesqgRCgo=3D?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2EGEgBqIBxeeiMYgtkUBjMYGgEBAQE?=
+ =?us-ascii?q?BAQEBAQMBAQEBEQEBAQICAQEBAYF7AgEBFwEBgS6BTVIgEpNQgU0fg0OLY4E?=
+ =?us-ascii?q?Agx4VhggTDIFbDQEBAQEBGxoCAQGEQE4BF4ESJDoEDQIDDQEBBQEBAQEBBQQ?=
+ =?us-ascii?q?BAQIQAQEJDQsEK4VKgh0MHgEEAQEBAQMDAwEBDAGDXQcZDzlKTAEOAVOFTwE?=
+ =?us-ascii?q?BM4UolzUBhASJAA0NAoUdgkUECoEJgRojgTYBjBgagUE/gSMhgisIAYIBgn8?=
+ =?us-ascii?q?BEgFsgkiCWQSNQhIhgQeIKZgXgkEEdolMjAKCNwEPiAGEMQMQgkUPgQmIA4R?=
+ =?us-ascii?q?OgX2jN1eBDA16cTMagiYagSBPGA2WSECBFhACT4kugjIBAQ?=
+X-IPAS-Result: =?us-ascii?q?A2EGEgBqIBxeeiMYgtkUBjMYGgEBAQEBAQEBAQMBAQEBE?=
+ =?us-ascii?q?QEBAQICAQEBAYF7AgEBFwEBgS6BTVIgEpNQgU0fg0OLY4EAgx4VhggTDIFbD?=
+ =?us-ascii?q?QEBAQEBGxoCAQGEQE4BF4ESJDoEDQIDDQEBBQEBAQEBBQQBAQIQAQEJDQsEK?=
+ =?us-ascii?q?4VKgh0MHgEEAQEBAQMDAwEBDAGDXQcZDzlKTAEOAVOFTwEBM4UolzUBhASJA?=
+ =?us-ascii?q?A0NAoUdgkUECoEJgRojgTYBjBgagUE/gSMhgisIAYIBgn8BEgFsgkiCWQSNQ?=
+ =?us-ascii?q?hIhgQeIKZgXgkEEdolMjAKCNwEPiAGEMQMQgkUPgQmIA4ROgX2jN1eBDA16c?=
+ =?us-ascii?q?TMagiYagSBPGA2WSECBFhACT4kugjIBAQ?=
+X-IronPort-AV: E=Sophos;i="5.69,428,1571695200"; 
+   d="scan'208";a="304668533"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail01.vodafone.es with ESMTP; 13 Jan 2020 08:48:10 +0100
+Received: (qmail 10454 invoked from network); 12 Jan 2020 05:37:46 -0000
+Received: from unknown (HELO 192.168.1.3) (quesosbelda@[217.217.179.17])
+          (envelope-sender <peterwong@hsbc.com.hk>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <live-patching@vger.kernel.org>; 12 Jan 2020 05:37:46 -0000
+Date:   Sun, 12 Jan 2020 06:37:45 +0100 (CET)
+From:   Peter Wong <peterwong@hsbc.com.hk>
+Reply-To: Peter Wong <peterwonghkhsbc@gmail.com>
+To:     live-patching@vger.kernel.org
+Message-ID: <19632617.579275.1578807466069.JavaMail.cash@217.130.24.55>
+Subject: Investment opportunity
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200107152337.GB27042@kadam>
-User-Agent: NeoMutt/20170912 (1.9.0)
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue 2020-01-07 18:23:37, Dan Carpenter wrote:
-> On Tue, Jan 07, 2020 at 10:06:21AM -0500, Joe Lawrence wrote:
-> > On 1/7/20 8:29 AM, Dan Carpenter wrote:
-> > > Hello Petr Mladek,
-> > > 
-> > > The patch e91c2518a5d2: "livepatch: Initialize shadow variables
-> > > safely by a custom callback" from Apr 16, 2018, leads to the
-> > > following static checker warning:
-> > > 
-> > > 	samples/livepatch/livepatch-shadow-fix1.c:86 livepatch_fix1_dummy_alloc()
-> > > 	error: 'klp_shadow_alloc()' 'leak' too small (4 vs 8)
-> > > 
-> > > samples/livepatch/livepatch-shadow-fix1.c
-> > >      53  static int shadow_leak_ctor(void *obj, void *shadow_data, void *ctor_data)
-> > >      54  {
-> > >      55          void **shadow_leak = shadow_data;
-> > >      56          void *leak = ctor_data;
-> > >      57
-> > >      58          *shadow_leak = leak;
-> > >      59          return 0;
-> > >      60  }
-> > >      61
-> > >      62  static struct dummy *livepatch_fix1_dummy_alloc(void)
-> > >      63  {
-> > >      64          struct dummy *d;
-> > >      65          void *leak;
-> > >      66
-> > >      67          d = kzalloc(sizeof(*d), GFP_KERNEL);
-> > >      68          if (!d)
-> > >      69                  return NULL;
-> > >      70
-> > >      71          d->jiffies_expire = jiffies +
-> > >      72                  msecs_to_jiffies(1000 * EXPIRE_PERIOD);
-> > >      73
-> > >      74          /*
-> > >      75           * Patch: save the extra memory location into a SV_LEAK shadow
-> > >      76           * variable.  A patched dummy_free routine can later fetch this
-> > >      77           * pointer to handle resource release.
-> > >      78           */
-> > >      79          leak = kzalloc(sizeof(int), GFP_KERNEL);
-> > >      80          if (!leak) {
-> > >      81                  kfree(d);
-> > >      82                  return NULL;
-> > >      83          }
-> > >      84
-> > >      85          klp_shadow_alloc(d, SV_LEAK, sizeof(leak), GFP_KERNEL,
-> > >                                               ^^^^^^^^^^^^
-> > > This doesn't seem right at all?  Leak is a pointer.  Why is leak a void
-> > > pointer instead of an int pointer?
-> > > 
-> > 
-> > Hi Dan,
-> > 
-> > If I remember this code correctly, the shadow variable is tracking the
-> > pointer value itself and not its contents, so sizeof(leak) should be correct
-> > for the shadow variable data size.
-> > 
-> > (For kernel/livepatch/shadow.c :: __klp_shadow_get_or_alloc() creates new
-> > struct klp_shadow with .data[size] to accommodate its meta-data plus the
-> > desired data).
-> > 
-> > Why isn't leak an int pointer?  I don't remember why, according to git
-> > history it's been that way since the beginning.  I think it was coded to
-> > say, "Give me some storage, any size an int will do.  I'm not going to touch
-> > it, but I want to demonstrate a memory leak".
-> > 
-> > Would modifying the pointer type satisfy the static code complaint?
-> > 
-> > Since the warning is about a size mismatch, what are the parameters that it
-> > is keying on?  Does it expect to see the typical allocation pattern like:
-> > 
-> >   int *foo = alloc(sizeof(*foo))
-> > 
-> > and not:
-> > 
-> >   int *foo = alloc(sizeof(foo))
-> > 
-> 
-> It looks at places which call klp_shadow_alloc() and says that sometimes
-> the third argument is the size of the last argument.  Then it complains
-> when a caller doesn't match.
+Greetings,
+Please read the attached investment proposal and reply for more details.
+Are you interested in loan?
+Sincerely: Peter Wong
 
-I think that this is the problem. 3rd argument is size of the
-data. The last argument should be pointer to the data.
 
-In our case, the data is pointer to the integer. We correctly
-pass the size of the pointer but we pass the pointer directly.
-It works because shadow_leak_ctor() is aware of this. But
-it is semantically wrong.
 
-I propose the following patch. It should probably get split
-into 2 or 3 patches. In addition, we should fix
-lib/livepatch/test_klp_shadow_vars.c and use the API
-a clean way there as well.
 
-I could prepare a proper patchset if you agree with
-the idea. And if it actually fixes the reported error
-message.
-
-Here is a RFC patch:
-
-From ab6cd83f6a46894c764adf9315db99ce52a9283b Mon Sep 17 00:00:00 2001
-From: Petr Mladek <pmladek@suse.com>
-Date: Wed, 8 Jan 2020 15:44:33 +0100
-Subject: [RFC 1/1] livepatch/samples: Correctly use leak variable as a
- pointer to int
-
-The commit e91c2518a5d2 ("livepatch: Initialize shadow variables
-safely by a custom callback" leads to the following static checker
-warning:
-
-	samples/livepatch/livepatch-shadow-fix1.c:86 livepatch_fix1_dummy_alloc()
-	error: 'klp_shadow_alloc()' 'leak' too small (4 vs 8)
-
-It is because klp_shadow_alloc() is used a wrong way:
-
-	int *leak;
-	shadow_leak = klp_shadow_alloc(d, SV_LEAK, sizeof(leak), GFP_KERNEL,
-				       shadow_leak_ctor, leak);
-
-The code is supposed to store the "leak" pointer into the shadow variable.
-3rd parameter correctly passes size of the data (size if pointer). But
-the 5th parameter is wrong. It should pass pointer to the data (pointer
-to the pointer) but it passes the pointer directly.
-
-It works because shadow_leak_ctor() handle "ctor_data" as the data
-insted of pointer to the data. But it is semantically wrong and
-confusing.
-
-The minimal fix is to pass poiter to the poitner. Even better is
-using the correct type: int pointer instead of void poiter.
-
-In addition there should be some check of potential failures.
-
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- samples/livepatch/livepatch-shadow-fix1.c | 38 +++++++++++++++++++++----------
- samples/livepatch/livepatch-shadow-fix2.c |  4 ++--
- samples/livepatch/livepatch-shadow-mod.c  |  2 +-
- 3 files changed, 29 insertions(+), 15 deletions(-)
-
-diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-index e89ca4546114..a02371cf34d3 100644
---- a/samples/livepatch/livepatch-shadow-fix1.c
-+++ b/samples/livepatch/livepatch-shadow-fix1.c
-@@ -52,17 +52,21 @@ struct dummy {
-  */
- static int shadow_leak_ctor(void *obj, void *shadow_data, void *ctor_data)
- {
--	void **shadow_leak = shadow_data;
--	void *leak = ctor_data;
-+	int **shadow_leak = shadow_data;
-+	int **leak = ctor_data;
- 
--	*shadow_leak = leak;
-+	if (!ctor_data)
-+		return -EINVAL;
-+
-+	*shadow_leak = *leak;
- 	return 0;
- }
- 
- static struct dummy *livepatch_fix1_dummy_alloc(void)
- {
- 	struct dummy *d;
--	void *leak;
-+	int *leak;
-+	int **shadow_leak;
- 
- 	d = kzalloc(sizeof(*d), GFP_KERNEL);
- 	if (!d)
-@@ -77,24 +81,34 @@ static struct dummy *livepatch_fix1_dummy_alloc(void)
- 	 * pointer to handle resource release.
- 	 */
- 	leak = kzalloc(sizeof(int), GFP_KERNEL);
--	if (!leak) {
--		kfree(d);
--		return NULL;
--	}
-+	if (!leak)
-+		goto err_leak;
- 
--	klp_shadow_alloc(d, SV_LEAK, sizeof(leak), GFP_KERNEL,
--			 shadow_leak_ctor, leak);
-+	shadow_leak = klp_shadow_alloc(d, SV_LEAK, sizeof(leak), GFP_KERNEL,
-+				       shadow_leak_ctor, &leak);
-+
-+	if (!shadow_leak) {
-+		pr_err("%s: failed to allocate shadow variable for the leaking pointer: dummy @ %p, leak @ %p\n",
-+		       __func__, d, leak);
-+		goto err_shadow;
-+	}
- 
- 	pr_info("%s: dummy @ %p, expires @ %lx\n",
- 		__func__, d, d->jiffies_expire);
- 
- 	return d;
-+
-+err_shadow:
-+	kfree(leak);
-+err_leak:
-+	kfree(d);
-+	return NULL;
- }
- 
- static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
- {
- 	void *d = obj;
--	void **shadow_leak = shadow_data;
-+	int **shadow_leak = shadow_data;
- 
- 	kfree(*shadow_leak);
- 	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-@@ -103,7 +117,7 @@ static void livepatch_fix1_dummy_leak_dtor(void *obj, void *shadow_data)
- 
- static void livepatch_fix1_dummy_free(struct dummy *d)
- {
--	void **shadow_leak;
-+	int **shadow_leak;
- 
- 	/*
- 	 * Patch: fetch the saved SV_LEAK shadow variable, detach and
-diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
-index 50d223b82e8b..29fe5cd42047 100644
---- a/samples/livepatch/livepatch-shadow-fix2.c
-+++ b/samples/livepatch/livepatch-shadow-fix2.c
-@@ -59,7 +59,7 @@ static bool livepatch_fix2_dummy_check(struct dummy *d, unsigned long jiffies)
- static void livepatch_fix2_dummy_leak_dtor(void *obj, void *shadow_data)
- {
- 	void *d = obj;
--	void **shadow_leak = shadow_data;
-+	int **shadow_leak = shadow_data;
- 
- 	kfree(*shadow_leak);
- 	pr_info("%s: dummy @ %p, prevented leak @ %p\n",
-@@ -68,7 +68,7 @@ static void livepatch_fix2_dummy_leak_dtor(void *obj, void *shadow_data)
- 
- static void livepatch_fix2_dummy_free(struct dummy *d)
- {
--	void **shadow_leak;
-+	int **shadow_leak;
- 	int *shadow_count;
- 
- 	/* Patch: copy the memory leak patch from the fix1 module. */
-diff --git a/samples/livepatch/livepatch-shadow-mod.c b/samples/livepatch/livepatch-shadow-mod.c
-index ecfe83a943a7..19c3a6824b64 100644
---- a/samples/livepatch/livepatch-shadow-mod.c
-+++ b/samples/livepatch/livepatch-shadow-mod.c
-@@ -95,7 +95,7 @@ struct dummy {
- static __used noinline struct dummy *dummy_alloc(void)
- {
- 	struct dummy *d;
--	void *leak;
-+	int *leak;
- 
- 	d = kzalloc(sizeof(*d), GFP_KERNEL);
- 	if (!d)
--- 
-2.16.4
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
 
