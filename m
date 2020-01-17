@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 883F1C33CB3
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F698C33CB7
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A7C32083E
+	by mail.kernel.org (Postfix) with ESMTP id E6C8A214AF
 	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729205AbgAQPEF (ORCPT
+        id S1729211AbgAQPEG (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Jan 2020 10:04:05 -0500
+        Fri, 17 Jan 2020 10:04:06 -0500
 Received: from mx2.suse.de ([195.135.220.15]:46524 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729157AbgAQPED (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Jan 2020 10:04:03 -0500
+        id S1729195AbgAQPEG (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 17 Jan 2020 10:04:06 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1CE80BBB7;
-        Fri, 17 Jan 2020 15:04:02 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 4C0F9BBC0;
+        Fri, 17 Jan 2020 15:04:04 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 18/23] module: Refactor add_unformed_module()
-Date:   Fri, 17 Jan 2020 16:03:18 +0100
-Message-Id: <20200117150323.21801-19-pmladek@suse.com>
+Subject: [POC 23/23] module: Remove obsolete module_disable_ro()
+Date:   Fri, 17 Jan 2020 16:03:23 +0100
+Message-Id: <20200117150323.21801-24-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,72 +43,57 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The livepatching code will need to add another condition to avoid
-waiting. Let's make the code slightly less hairy.
-
-Of course, it is a matter of taste. The main ideas of refactoring:
-
-  + Make it clear what happens when old->state == MODULE_STATE_LIVE.
-
-  + Make it more clear when we are leaving the function immediately
-    and when we are doing some extra actions.
-
-  + Be able to add another check that has to be done outside
-    module_mutex and can result into an immediate return.
+The split livepatch modules are relocated immediately during the module
+load. There is no longer needed to disable the RO protection. The function
+can be finally remove because livepatching was the only user (sinner).
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/module.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ include/linux/module.h |  2 --
+ kernel/module.c        | 13 -------------
+ 2 files changed, 15 deletions(-)
 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 8545f3087274..5c9e661ac3bc 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -854,12 +854,10 @@ extern int module_sysfs_initialized;
+ extern void set_all_modules_text_rw(void);
+ extern void set_all_modules_text_ro(void);
+ extern void module_enable_ro(const struct module *mod, bool after_init);
+-extern void module_disable_ro(const struct module *mod);
+ #else
+ static inline void set_all_modules_text_rw(void) { }
+ static inline void set_all_modules_text_ro(void) { }
+ static inline void module_enable_ro(const struct module *mod, bool after_init) { }
+-static inline void module_disable_ro(const struct module *mod) { }
+ #endif
+ 
+ #ifdef CONFIG_GENERIC_BUG
 diff --git a/kernel/module.c b/kernel/module.c
-index b3f11524f8f9..ac45d465ff23 100644
+index 442926fc5f34..d435bad80d7d 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -3721,28 +3721,30 @@ static int add_unformed_module(struct module *mod)
- again:
- 	mutex_lock(&module_mutex);
- 	old = find_module_all(mod->name, strlen(mod->name), true);
-+
- 	if (old != NULL) {
--		if (old->state != MODULE_STATE_LIVE) {
--			/* Wait in case it fails to load. */
-+		if (old->state == MODULE_STATE_LIVE) {
- 			mutex_unlock(&module_mutex);
--			err = wait_event_interruptible(module_wq,
--					       finished_loading(mod->name));
--			if (err)
--				goto out_unlocked;
--			goto again;
-+			return -EEXIST;
- 		}
--		err = -EEXIST;
--		goto out;
-+
-+		/* Wait in case it fails to load. */
-+		mutex_unlock(&module_mutex);
-+		err = wait_event_interruptible(module_wq,
-+					       finished_loading(mod->name));
-+		if (err)
-+			return err;
-+
-+		/* Did the load succeded or failed? */
-+		goto again;
- 	}
-+
- 	mod_update_bounds(mod);
- 	list_add_rcu(&mod->list, &modules);
- 	mod_tree_insert(mod);
--	err = 0;
- 
--out:
- 	mutex_unlock(&module_mutex);
--out_unlocked:
--	return err;
-+	return 0;
+@@ -2030,19 +2030,6 @@ static void frob_writable_data(const struct module_layout *layout,
+ 		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
  }
  
- static int complete_formation(struct module *mod, struct load_info *info)
+-/* livepatching wants to disable read-only so it can frob module. */
+-void module_disable_ro(const struct module *mod)
+-{
+-	if (!rodata_enabled)
+-		return;
+-
+-	frob_text(&mod->core_layout, set_memory_rw);
+-	frob_rodata(&mod->core_layout, set_memory_rw);
+-	frob_ro_after_init(&mod->core_layout, set_memory_rw);
+-	frob_text(&mod->init_layout, set_memory_rw);
+-	frob_rodata(&mod->init_layout, set_memory_rw);
+-}
+-
+ void module_enable_ro(const struct module *mod, bool after_init)
+ {
+ 	if (!rodata_enabled)
 -- 
 2.16.4
 
