@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E36BC3F68F
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7FF8C33CB3
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9772217F4
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:03:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9764214AF
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbgAQPD7 (ORCPT
+        id S1729139AbgAQPEB (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Jan 2020 10:03:59 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46182 "EHLO mx2.suse.de"
+        Fri, 17 Jan 2020 10:04:01 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46284 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729073AbgAQPD6 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Jan 2020 10:03:58 -0500
+        id S1729107AbgAQPEA (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 17 Jan 2020 10:04:00 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 10BA1BBAB;
-        Fri, 17 Jan 2020 15:03:57 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id AC481BBAE;
+        Fri, 17 Jan 2020 15:03:58 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 06/23] livepatch: Enable the livepatch submodule
-Date:   Fri, 17 Jan 2020 16:03:06 +0100
-Message-Id: <20200117150323.21801-7-pmladek@suse.com>
+Subject: [POC 10/23] livepatch: Handle modprobe exit code
+Date:   Fri, 17 Jan 2020 16:03:10 +0100
+Message-Id: <20200117150323.21801-11-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,53 +43,55 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The final step when loading livepatch module for livepatching a module
-is to actually enable the livepatch.
+request_module() returns classic negative error codes when it was
+not even able to call "modprobe" from some reasons. Otherwise,
+it returns the exit code multiplied by 256.
 
-The steps are exactly the same as in kmp_module_comming().
+modprobe exit code is always 1 in case of error. Use -EINVAL
+instead as the least ugly internal error code.
 
-Note that there is no need to call klp_cleanup_module_patches_limited()
-in the error path. klp_add_object() modifies only the single matching
-struct klp_patch.
+A better solution would be to somehow pass the original error
+code from the init_module() syscall or at least the error code
+from klp_module_add() functions. But there is no obvious way
+how to pass the information.
+
+Global variable is not enough because more livepatch modules
+can be loaded simultaneously from klp_enable_patch() and
+klp_module_comming().
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/livepatch/core.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ kernel/livepatch/core.c                             | 3 +++
+ tools/testing/selftests/livepatch/test-callbacks.sh | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 6c27b635e5a7..c21bd9ec2012 100644
+index 8e693c58b736..19ca8baa2f16 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -1011,6 +1011,28 @@ int klp_add_object(struct klp_object *obj)
- 		goto err_free;
+@@ -1109,6 +1109,9 @@ static int klp_try_load_object(const char *patch_name, const char *obj_name)
+ 
+ 	ret = request_module("%s__%s", patch_name, obj_name);
+ 	if (ret) {
++		/* modprobe always set exit code 1 on error */
++		if (ret > 0)
++			ret = -EINVAL;
+ 		pr_info("Module load failed: %s__%s\n", patch_name, obj_name);
+ 		return ret;
  	}
- 
-+	pr_notice("applying patch '%s' to loading module '%s'\n",
-+		  patch->obj->patch_name, obj->name);
-+
-+	ret = klp_pre_patch_callback(obj);
-+	if (ret) {
-+		pr_warn("pre-patch callback failed for object '%s'\n",
-+			obj->name);
-+		goto err_free;
-+	}
-+
-+	ret = klp_patch_object(obj);
-+	if (ret) {
-+		pr_warn("failed to apply patch '%s' to module '%s' (%d)\n",
-+			patch->obj->patch_name, obj->name, ret);
-+
-+		klp_post_unpatch_callback(obj);
-+		goto err_free;
-+	}
-+
-+	if (patch != klp_transition_patch)
-+		klp_post_patch_callback(obj);
-+
- 	mutex_unlock(&klp_mutex);
- 	return 0;
- 
+diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+index 39a4f35e5f8e..060e5b512367 100755
+--- a/tools/testing/selftests/livepatch/test-callbacks.sh
++++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+@@ -331,7 +331,7 @@ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full fo
+ livepatch: pre-patch callback failed for object '$MOD_TARGET'
+ livepatch: patch '$MOD_LIVEPATCH' failed for module '$MOD_TARGET', refusing to load module '$MOD_TARGET'
+ livepatch: Module load failed: ${MOD_LIVEPATCH}__${MOD_TARGET}
+-modprobe: ERROR: could not insert '$MOD_TARGET': No such device
++modprobe: ERROR: could not insert '$MOD_TARGET': Invalid argument
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+ livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
 -- 
 2.16.4
 
