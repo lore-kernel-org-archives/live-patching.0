@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB78FC3F68F
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A75A4C33CB1
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A3A5024684
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8350D21D56
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727504AbgAQPEn (ORCPT
+        id S1729387AbgAQPEn (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
         Fri, 17 Jan 2020 10:04:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46254 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:46312 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729133AbgAQPEB (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        id S1729117AbgAQPEB (ORCPT <rfc822;live-patching@vger.kernel.org>);
         Fri, 17 Jan 2020 10:04:01 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5D7BEBB77;
-        Fri, 17 Jan 2020 15:04:00 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 1E0A8BBA3;
+        Fri, 17 Jan 2020 15:03:59 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 14/23] livepatch: Never block livepatch modules when the related module is being removed
-Date:   Fri, 17 Jan 2020 16:03:14 +0100
-Message-Id: <20200117150323.21801-15-pmladek@suse.com>
+Subject: [POC 11/23] livepatch: Safely detect forced transition when removing split livepatch modules
+Date:   Fri, 17 Jan 2020 16:03:11 +0100
+Message-Id: <20200117150323.21801-12-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,46 +43,129 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Originally, it was not possible to remove the single livepatch module when
-the code was used during a forced transition. There were no guarantees that
-the code was no longer used.
+The information about forced livepatch transition is currently stored
+in struct klp_patch. But there is not any obvious safe way how to
+access it when the split livepatch modules are removed.
 
-Even the split livepatch modules have to stay when the entire livepatch
-gets disabled/replaced and the livepatch modules were used during
-a forced transition.
+module_put() for the livepatch module must be called only when neither
+the code nor the data are accessed. The best location is
+klp_kobj_release_object(). It can be called asynchronously when
+the kobject hierarchy is already destroyed and struct klp_patch might
+already be gone.
 
-On the other hand, klp_module_going() callback is called when the patched
-module is about to be removed. It's code should no longer be used.
-The same should be true also for the related livepatch module. Therefore
-the livepatch module could always get removed as well.
-
-It allows to load the patched module again in the future. Otherwise,
-it would get blocked because the related livepatch module could not
-get loaded more times.
+Solve this by moving the "force" flag into struct klp_object.
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/livepatch/core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/linux/livepatch.h     |  4 ++--
+ kernel/livepatch/core.c       | 11 ++++++++---
+ kernel/livepatch/transition.c |  8 ++++++--
+ 3 files changed, 16 insertions(+), 7 deletions(-)
 
+diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
+index feb33f023f9f..e021e512b207 100644
+--- a/include/linux/livepatch.h
++++ b/include/linux/livepatch.h
+@@ -114,6 +114,7 @@ struct klp_callbacks {
+  * @node:	list node for klp_patch obj_list
+  * @dynamic:    temporary object for nop functions; dynamically allocated
+  * @patched:	the object's funcs have been added to the klp_ops list
++ * @forced:	was involved in a forced transition
+  */
+ struct klp_object {
+ 	/* external */
+@@ -129,6 +130,7 @@ struct klp_object {
+ 	struct list_head node;
+ 	bool dynamic;
+ 	bool patched;
++	bool forced;
+ };
+ 
+ /**
+@@ -154,7 +156,6 @@ struct klp_state {
+  * @kobj:	kobject for sysfs resources
+  * @obj_list:	dynamic list of the object entries
+  * @enabled:	the patch is enabled (but operation may be incomplete)
+- * @forced:	was involved in a forced transition
+  * ts:		timestamp when the livepatch has been loaded
+  * @free_work:	patch cleanup from workqueue-context
+  * @finish:	for waiting till it is safe to remove the patch module
+@@ -171,7 +172,6 @@ struct klp_patch {
+ 	struct kobject kobj;
+ 	struct list_head obj_list;
+ 	bool enabled;
+-	bool forced;
+ 	u64 ts;
+ 	struct work_struct free_work;
+ 	struct completion finish;
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 73462b66f63f..4b55d805f3ec 100644
+index 19ca8baa2f16..2f15ff360676 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -1391,6 +1391,13 @@ void klp_module_going(struct module *mod)
- 	klp_for_each_patch(patch) {
- 		klp_for_each_object_safe(patch, obj, tmp_obj) {
- 			if (obj->name && !strcmp(obj->name, mod->name)) {
-+				/*
-+				 * The livepatched module is about to be
-+				 * destroyed. It's code is no longer used.
-+				 * Same is true for the livepatch even when
-+				 * it was part of forced transition.
-+				 */
-+				obj->forced = false;
- 				klp_remove_object(obj);
- 			}
- 		}
+@@ -551,8 +551,13 @@ static void klp_kobj_release_object(struct kobject *kobj)
+ 
+ 	obj = container_of(kobj, struct klp_object, kobj);
+ 
+-	if (obj->dynamic)
++	if (obj->dynamic) {
+ 		klp_free_object_dynamic(obj);
++		return;
++	}
++
++	if (klp_is_module(obj) && !obj->forced)
++		module_put(obj->mod);
+ }
+ 
+ static struct kobj_type klp_ktype_object = {
+@@ -668,7 +673,7 @@ static void klp_free_patch_finish(struct klp_patch *patch)
+ 	wait_for_completion(&patch->finish);
+ 
+ 	/* Put the module after the last access to struct klp_patch. */
+-	if (!patch->forced)
++	if (!patch->obj->forced)
+ 		module_put(patch->obj->mod);
+ }
+ 
+@@ -829,6 +834,7 @@ static int klp_init_object_early(struct klp_patch *patch,
+ 	INIT_LIST_HEAD(&obj->func_list);
+ 	kobject_init(&obj->kobj, &klp_ktype_object);
+ 	list_add_tail(&obj->node, &patch->obj_list);
++	obj->forced = false;
+ 
+ 	klp_for_each_func_static(obj, func) {
+ 		klp_init_func_early(obj, func);
+@@ -854,7 +860,6 @@ static int klp_init_patch_early(struct klp_patch *patch)
+ 	INIT_LIST_HEAD(&patch->obj_list);
+ 	kobject_init(&patch->kobj, &klp_ktype_patch);
+ 	patch->enabled = false;
+-	patch->forced = false;
+ 	patch->ts = local_clock();
+ 	INIT_WORK(&patch->free_work, klp_free_patch_work_fn);
+ 	init_completion(&patch->finish);
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 78e3280560cd..e99c27a5ddbf 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -626,6 +626,7 @@ void klp_copy_process(struct task_struct *child)
+ void klp_force_transition(void)
+ {
+ 	struct klp_patch *patch;
++	struct klp_object *obj;
+ 	struct task_struct *g, *task;
+ 	unsigned int cpu;
+ 
+@@ -639,6 +640,9 @@ void klp_force_transition(void)
+ 	for_each_possible_cpu(cpu)
+ 		klp_update_patch_state(idle_task(cpu));
+ 
+-	klp_for_each_patch(patch)
+-		patch->forced = true;
++	klp_for_each_patch(patch) {
++		klp_for_each_object(patch, obj) {
++			obj->forced = true;
++		}
++	}
+ }
 -- 
 2.16.4
 
