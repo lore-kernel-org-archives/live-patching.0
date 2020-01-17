@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FC70C33CB1
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B05C33CB1
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:05:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DFEFC222C3
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 302DB2087E
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729117AbgAQPEw (ORCPT
+        id S1729431AbgAQPE4 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Jan 2020 10:04:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46352 "EHLO mx2.suse.de"
+        Fri, 17 Jan 2020 10:04:56 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46254 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729126AbgAQPEA (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        id S1729096AbgAQPEA (ORCPT <rfc822;live-patching@vger.kernel.org>);
         Fri, 17 Jan 2020 10:04:00 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8698EBBB1;
-        Fri, 17 Jan 2020 15:03:59 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 4AF15BB9F;
+        Fri, 17 Jan 2020 15:03:58 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 12/23] livepatch: Automatically remove livepatch module when the object is freed
-Date:   Fri, 17 Jan 2020 16:03:12 +0100
-Message-Id: <20200117150323.21801-13-pmladek@suse.com>
+Subject: [POC 09/23] livepatch: Handle race when livepatches are reloaded during a module load
+Date:   Fri, 17 Jan 2020 16:03:09 +0100
+Message-Id: <20200117150323.21801-10-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,95 +43,91 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Make it easy to deal with the split livepatch modules. Remove the livepatch
-modules that livepatched modules when they are no longer used.
+klp_module_coming() might fail to load a livepatch module when
+the related livepatch gets reloaded in the meantime.
 
-It must be done from workqueue context to avoid deadlocks.
-
-It must not be done when klp_add_module() fails because is called from
-the livepatch module init callback. The module will not load at
-all in this case.
+Detect this situation by adding a timestamp into struct klp_patch.
+local_clock is enough because klp_mutex must be released and taken
+several times during this scenario.
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- include/linux/livepatch.h |  4 ++++
- kernel/livepatch/core.c   | 19 ++++++++++++++++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
+ include/linux/livepatch.h | 2 ++
+ kernel/livepatch/core.c   | 9 +++++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index e021e512b207..4afb7f3a5a36 100644
+index a4567c17a9f2..feb33f023f9f 100644
 --- a/include/linux/livepatch.h
 +++ b/include/linux/livepatch.h
-@@ -115,6 +115,8 @@ struct klp_callbacks {
-  * @dynamic:    temporary object for nop functions; dynamically allocated
-  * @patched:	the object's funcs have been added to the klp_ops list
+@@ -155,6 +155,7 @@ struct klp_state {
+  * @obj_list:	dynamic list of the object entries
+  * @enabled:	the patch is enabled (but operation may be incomplete)
   * @forced:	was involved in a forced transition
-+ * @add_err:	failed to add the object when loading the livepatch module
-+ * @remove_work: remove module from workqueue-context
++ * ts:		timestamp when the livepatch has been loaded
+  * @free_work:	patch cleanup from workqueue-context
+  * @finish:	for waiting till it is safe to remove the patch module
   */
- struct klp_object {
- 	/* external */
-@@ -131,6 +133,8 @@ struct klp_object {
- 	bool dynamic;
- 	bool patched;
+@@ -171,6 +172,7 @@ struct klp_patch {
+ 	struct list_head obj_list;
+ 	bool enabled;
  	bool forced;
-+	bool add_err;
-+	struct work_struct remove_work;
++	u64 ts;
+ 	struct work_struct free_work;
+ 	struct completion finish;
  };
- 
- /**
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 2f15ff360676..6c51b194da57 100644
+index 34e3ee2be7ef..8e693c58b736 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -556,8 +556,14 @@ static void klp_kobj_release_object(struct kobject *kobj)
- 		return;
- 	}
+@@ -20,6 +20,7 @@
+ #include <linux/moduleloader.h>
+ #include <linux/completion.h>
+ #include <linux/memory.h>
++#include <linux/sched/clock.h>
+ #include <asm/cacheflush.h>
+ #include "core.h"
+ #include "patch.h"
+@@ -854,6 +855,7 @@ static int klp_init_patch_early(struct klp_patch *patch)
+ 	kobject_init(&patch->kobj, &klp_ktype_patch);
+ 	patch->enabled = false;
+ 	patch->forced = false;
++	patch->ts = local_clock();
+ 	INIT_WORK(&patch->free_work, klp_free_patch_work_fn);
+ 	init_completion(&patch->finish);
  
--	if (klp_is_module(obj) && !obj->forced)
-+	if (obj->forced || !klp_is_module(obj))
-+		return;
-+
-+	/* Must not explicitely remove module when adding failed. */
-+	if (obj->add_err)
- 		module_put(obj->mod);
-+	else
-+		schedule_work(&obj->remove_work);
- }
+@@ -1324,6 +1326,7 @@ int klp_module_coming(struct module *mod)
+ {
+ 	char patch_name[MODULE_NAME_LEN];
+ 	struct klp_patch *patch;
++	u64 patch_ts;
+ 	int ret = 0;
  
- static struct kobj_type klp_ktype_object = {
-@@ -677,6 +683,14 @@ static void klp_free_patch_finish(struct klp_patch *patch)
- 		module_put(patch->obj->mod);
- }
+ 	if (WARN_ON(mod->state != MODULE_STATE_COMING))
+@@ -1339,6 +1342,7 @@ int klp_module_coming(struct module *mod)
+ 			continue;
  
-+static void klp_remove_module_work_fn(struct work_struct *work)
-+{
-+	struct klp_object *obj =
-+		container_of(work, struct klp_object, remove_work);
-+
-+	module_put_and_delete(obj->mod);
-+}
-+
- /*
-  * The livepatch might be freed from sysfs interface created by the patch.
-  * This work allows to wait until the interface is destroyed in a separate
-@@ -835,6 +849,8 @@ static int klp_init_object_early(struct klp_patch *patch,
- 	kobject_init(&obj->kobj, &klp_ktype_object);
- 	list_add_tail(&obj->node, &patch->obj_list);
- 	obj->forced = false;
-+	obj->add_err = false;
-+	INIT_WORK(&obj->remove_work, klp_remove_module_work_fn);
+ 		strncpy(patch_name, patch->obj->patch_name, sizeof(patch_name));
++		patch_ts = patch->ts;
+ 		mutex_unlock(&klp_mutex);
  
- 	klp_for_each_func_static(obj, func) {
- 		klp_init_func_early(obj, func);
-@@ -1063,6 +1079,7 @@ int klp_add_object(struct klp_object *obj)
- 	return 0;
- 
- err_free:
-+	obj->add_err = true;
- 	klp_free_object(obj, false);
- err:
- 	/*
+ 		ret = klp_try_load_object(patch_name, mod->name);
+@@ -1346,14 +1350,11 @@ int klp_module_coming(struct module *mod)
+ 		 * The load might have failed because the patch has
+ 		 * been removed in the meantime. In this case, the
+ 		 * error might be ignored.
+-		 *
+-		 * FIXME: It is not fully proof. The patch might have be
+-		 * unloaded and loaded again in the mean time.
+ 		 */
+ 		mutex_lock(&klp_mutex);
+ 		if (ret) {
+ 			patch = klp_find_patch(patch_name);
+-			if (patch)
++			if (patch && patch->ts == patch_ts)
+ 				goto err;
+ 			ret = 0;
+ 		}
 -- 
 2.16.4
 
