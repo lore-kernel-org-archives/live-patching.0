@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B8CDC33CB1
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6C81C33CB6
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D958217F4
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE4A020842
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:04:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgAQPEG (ORCPT
+        id S1729277AbgAQPET (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Jan 2020 10:04:06 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46254 "EHLO mx2.suse.de"
+        Fri, 17 Jan 2020 10:04:19 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46518 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729163AbgAQPEF (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        id S1729107AbgAQPEF (ORCPT <rfc822;live-patching@vger.kernel.org>);
         Fri, 17 Jan 2020 10:04:05 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8B0AEBBB5;
-        Fri, 17 Jan 2020 15:04:02 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id D1902BBBD;
+        Fri, 17 Jan 2020 15:04:03 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 19/23] module/livepatch: Allow to use exported symbols from livepatch module for "vmlinux"
-Date:   Fri, 17 Jan 2020 16:03:19 +0100
-Message-Id: <20200117150323.21801-20-pmladek@suse.com>
+Subject: [POC 22/23] livepatch/module: Remove obsolete copy_module_elf()
+Date:   Fri, 17 Jan 2020 16:03:22 +0100
+Message-Id: <20200117150323.21801-23-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,289 +43,182 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-HINT: Get some coffee before reading this commit message.
-
-      Stop reading when it gets too complicated. It is possible that we
-      will need to resolve symbols from livepatch modules another way.
-      Livepatches need to access also non-exported symbols anyway.
-
-      Or just ask me to explain the problem a better way. I have
-      ended in many cycles when thinking about it. And it might
-      be much easier from another point of view.
-
-The split per-object livepatches brings even more types of module
-dependencies. Let's split them into few categories:
-
-A. Livepatch module using an exported symbol from "vmlinux".
-
-   It is quite common and works by definition. Livepatch module is just
-   a module from this point of view.
-
-B. Livepatch module using an exported symbol from the patched module.
-
-   It should be avoided even with the non-split livepatch module. The module
-   loader automatically takes reference to make sure the modules are
-   unloaded in the right order. This would basically prevent the livepatched
-   module from unloading.
-
-   Note that it would be perfectly safe to remove this automatic
-   dependency. The livepatch framework makes sure that the livepatch
-   module is loaded only when the patched one is loaded. But it cannot
-   be implemented easily, see below.
-
-C. Livepatch module using an exported symbol from the main livepatch module
-   for "vmlinux".
-
-   It is the 2nd most realistic variant. It even exists in current
-   selftests. Namely, test_klp_callback_demo* modules share
-   the implementation of callbacks. It avoids code duplication.
-   And it is actually needed to make module parameters working.
-
-   Note that the current implementation allows to pass module parameters
-   only to the main livepatch module for "vmlinux". It should not be a real
-   life problem. The parameters are used in selftests. But they are
-   not used in practice.
-
-D. Livepatch modules might depend on each other. Note that dependency on
-   the main livepatch module for "vmlinux" has got a separate category 'C'.
-
-   The dependencies between modules are quite rare. But they exist.
-   One can assume that this might be useful also on the livepatching
-   level.
-
-   To keep it sane, the livepatch modules should just follow
-   the dependencies of the related patched modules. By other words,
-   the livepatch modules might or should have the same dependencies
-   as the patched counter parts but nothing more.
-
-Do these dependencies need some special handling?
-
-Yes, the livepatch module load might get blocked in the following
-situations:
-
-1. Recursion caused by dependency of type B:
-
-   If a livepatch module uses a symbol from the patched module and
-   the livepatch module is loaded by klp_module_coming().
-   The module loader will then automatically try to load the patched module
-   once again while it is blocked in the klp_module_coming() callback
-   and STATE_COMING.
-
-2. Recursion caused by dependency of type C:
-
-   Livepatch for "vmlinux" loads other livepatch modules from
-   klp_enabled_patch() in mod->init(). If any of these other
-   modules use symbol from the main module for "vmlinux" the module
-   loaded will automatically try to load the main module once
-   again. The first instance is waiting in klp_enable_patch()
-   and STATE_COMING.
-
-3. Deadlock caused by dependency of type D:
-
-   Random dependencies between livepatch and patched modules might
-   create a cycle. It need not be obvious and detected by the existing
-   code because some dependencies are created by livepatching code.
-   It loads the livepatches automatically for patched modules.
-
-What can be done?
-
-First, put aside the problems with random dependencies of type D:
-
-   They are not much realistic. Livepatches follow upstream changes.
-   As a result livepatch modules should have the same of less
-   dependencies than the related patched modules.
-
-   Note that the existing code is able to handle non-cyclic dependencies
-   between livepatch modules. The module loader is able to load more
-   modules in parallel. Also klp_add_object() can be called more times
-   in parallel.
-
-Second, let's look more at the recursion problems. They might cause
-deadlock on two locations in the module loader:
-
-i. The recursive instance waits in add_unformed_module() until the first
-   instance reaches STATE_LIVE. But this never happens because the first
-   instance waits until the recursive instance finishes.
-
-ii. resolve_symbol() wants to get reference of the module where
-   the symbol comes from. But strong_try_module_get() refuses
-   to get reference when the module is still in STATE_COMING.
-   It does not want to block removing the module when the load
-   eventually fails later.
-
-Is it possible to avoid the recursion?
-
-1. It might be possible to avoid calling exported symbols directly
-   from the livepatch. For example, using kallsyms lookup. Or some
-   special relocation. This would require some extra action when
-   preparing the livepatchi.
-
-2. Hide these dependencies to depmod and the module loader. This
-   would require changes in the user space tools.
-
-And what about breaking the cycle?
-
-It seems acceptable to return immediately from the nested load
-if we are able to guarantee:
-
-  + The recursion is clearly caused by one the of above described
-    livepatch dependency type.
-
-  + The code from affected modules will be used only after the modules
-    are successfully loaded in the end.
-
-  + The modules will get unloaded when there are other errors
-    on the way.
-
-  + The original caller will get the right error code. By other
-    words, only the automatically triggered loads will be finished
-    prematurely.
-
-OK, this patch provides the solution for the dependency of type C. It is when
-other livepatch modules use symbols from the livepatch module for vmlinux.
-
-The recursive load returns -EEXIST immediately when the recursive module
-tries to load the same livepatch that is already being loaded. It is
-safe because:
-
-  + Only one livepatch can be enabled at a time. Any attempt to enable
-    another livepatch would return -EBUSY.
-
-  + The livepatch module for "vmlinux" is never loaded automatically
-    because of any dependency. Other livepatch modules for other objects
-    might depend on it but the module for "vmlinux" must always be loaded
-    explicitly by the system administrator.
-
-By other words, the recursion of the livepatch module for "vmlinux" that
-is just being enabled is always caused by dependency of type C.
-The recursive instance can and actually must return immediately. It will
-allow to proceed. The entire operation will succeed only when the outer
-load succeeds.
-
-But there is still the problem that strong_try_module_get() could
-not get reference. Isn't it?
-
-Yes, it is solved by not taking references from livepatch modules.
-The reference is needed to make sure that the module will not get
-removed prematurely. But this is guaranteed by the livepatch code:
-
-   + Livepatch module for "vmlinux" is always loaded first.
-
-   + Livepatch modules for other objects can't be loaded before
-     the module for "vmlinux" is loaded, see the checks
-     in klp_add_object().
-
-   + Livepatch module is always loaded and removed automatically
-     together with the patched module. The dependencies between
-     the patched modules are enough as long as the dependencies
-     of livepatch modules are symmetric.
-
-Finally. dependency of type B will still cause deadlock. It happens
-when a livepatch module uses a symbols from the patched module.
-It cannot be solved easily because:
-
-  + The patched module is loaded recursively (not the livepatch one).
-    There is no clear way how to make sure that the recursive
-    module load is the one triggered by "modprobe" called from
-    klp_module_coming().
-
-    As a result, -EEXIST might be returned also to modprobe
-    called by the user. It would force the user to double
-    check that the patched module has really been loaded.
-
-  + If the above problem is not fixed then the result from
-    modprobe is not reliable. The livepatch code might need
-    to double check that request_module() really added the
-    klp_object into the related klp_patch structure.
+The split livepatch modules can be relocated immedidately when they
+are loaded. There is no longer needed to preserve the elf sections.
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- include/linux/livepatch.h |  2 ++
- kernel/livepatch/core.c   | 16 ++++++++++++++++
- kernel/module.c           | 16 ++++++++++++++++
- 3 files changed, 34 insertions(+)
+ Documentation/livepatch/module-elf-format.rst | 18 ++++++
+ include/linux/module.h                        |  3 -
+ kernel/module.c                               | 87 ---------------------------
+ 3 files changed, 18 insertions(+), 90 deletions(-)
 
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index 4afb7f3a5a36..4776deb7418c 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -207,6 +207,7 @@ int klp_add_object(struct klp_object *);
- void arch_klp_init_object_loaded(struct klp_object *obj);
+diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
+index 9f0c997d4940..8c6b894c4661 100644
+--- a/Documentation/livepatch/module-elf-format.rst
++++ b/Documentation/livepatch/module-elf-format.rst
+@@ -14,6 +14,7 @@ This document outlines the Elf format requirements that livepatch modules must f
+    4. Livepatch symbols
+       4.1 A livepatch module's symbol table
+       4.2 Livepatch symbol format
++   5. Symbol table and Elf section access
  
- /* Called from the module loader during module coming/going states */
-+bool klp_break_recursion(struct module *mod);
- int klp_module_coming(struct module *mod);
- void klp_module_going(struct module *mod);
- 
-@@ -244,6 +245,7 @@ struct klp_state *klp_get_prev_state(unsigned long id);
- 
- #else /* !CONFIG_LIVEPATCH */
- 
-+static inline bool klp_break_recursion(struct module *mod) { return false; }
- static inline int klp_module_coming(struct module *mod) { return 0; }
- static inline void klp_module_going(struct module *mod) {}
- static inline bool klp_patch_pending(struct task_struct *task) { return false; }
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 6d4ec7642908..9e00871fbc06 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -1416,6 +1416,22 @@ static bool klp_is_object_module_alive(const char *patch_name,
- 	return alive;
- }
- 
-+bool klp_break_recursion(struct module *mod)
-+{
-+	bool ret = false;
+ 1. Background and motivation
+ ============================
+@@ -295,3 +296,20 @@ See include/uapi/linux/elf.h for the actual definitions.
+ [*]
+   Note that the 'Ndx' (Section index) for these symbols is SHN_LIVEPATCH (0xff20).
+   "OS" means OS-specific.
 +
-+	if (!mod->klp)
-+		return false;
++5. Symbol table and Elf section access
++======================================
++A livepatch module's symbol table is accessible through module->symtab.
 +
-+	mutex_lock(&klp_mutex);
-+	if (klp_loading_patch &&
-+	    !strcmp(klp_loading_patch->obj->mod->name, mod->name))
-+		ret = true;
-+	mutex_unlock(&klp_mutex);
++Since apply_relocate_add() requires access to a module's section headers,
++symbol table, and relocation section indices, Elf information is preserved for
++livepatch modules and is made accessible by the module loader through
++module->klp_info, which is a klp_modinfo struct. When a livepatch module loads,
++this struct is filled in by the module loader. Its fields are documented below::
 +
-+	return ret;
-+}
-+
- int klp_module_coming(struct module *mod)
- {
- 	char patch_name[MODULE_NAME_LEN];
++	struct klp_modinfo {
++		Elf_Ehdr hdr; /* Elf header */
++		Elf_Shdr *sechdrs; /* Section header table */
++		char *secstrings; /* String table for the section headers */
++		unsigned int symndx; /* The symbol table section index */
++	};
+diff --git a/include/linux/module.h b/include/linux/module.h
+index f69f3fd72dd5..8545f3087274 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -483,9 +483,6 @@ struct module {
+ #ifdef CONFIG_LIVEPATCH
+ 	bool klp; /* Is this a livepatch module? */
+ 	bool klp_alive;
+-
+-	/* Elf information */
+-	struct klp_modinfo *klp_info;
+ #endif
+ 
+ #ifdef CONFIG_MODULE_UNLOAD
 diff --git a/kernel/module.c b/kernel/module.c
-index ac45d465ff23..bd92854b42c2 100644
+index c14b5135db27..442926fc5f34 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -867,6 +867,13 @@ int ref_module(struct module *a, struct module *b)
+@@ -2125,82 +2125,6 @@ static void module_enable_nx(const struct module *mod) { }
+ static void module_enable_x(const struct module *mod) { }
+ #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+ 
+-
+-#ifdef CONFIG_LIVEPATCH
+-/*
+- * Persist Elf information about a module. Copy the Elf header,
+- * section header table, section string table, and symtab section
+- * index from info to mod->klp_info.
+- */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	unsigned int size, symndx;
+-	int ret;
+-
+-	size = sizeof(*mod->klp_info);
+-	mod->klp_info = kmalloc(size, GFP_KERNEL);
+-	if (mod->klp_info == NULL)
+-		return -ENOMEM;
+-
+-	/* Elf header */
+-	size = sizeof(mod->klp_info->hdr);
+-	memcpy(&mod->klp_info->hdr, info->hdr, size);
+-
+-	/* Elf section header table */
+-	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
+-	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
+-	if (mod->klp_info->sechdrs == NULL) {
+-		ret = -ENOMEM;
+-		goto free_info;
+-	}
+-
+-	/* Elf section name string table */
+-	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
+-	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
+-	if (mod->klp_info->secstrings == NULL) {
+-		ret = -ENOMEM;
+-		goto free_sechdrs;
+-	}
+-
+-	/* Elf symbol section index */
+-	symndx = info->index.sym;
+-	mod->klp_info->symndx = symndx;
+-
+-	/*
+-	 * For livepatch modules, core_kallsyms.symtab is a complete
+-	 * copy of the original symbol table. Adjust sh_addr to point
+-	 * to core_kallsyms.symtab since the copy of the symtab in module
+-	 * init memory is freed at the end of do_init_module().
+-	 */
+-	mod->klp_info->sechdrs[symndx].sh_addr = \
+-		(unsigned long) mod->core_kallsyms.symtab;
+-
+-	return 0;
+-
+-free_sechdrs:
+-	kfree(mod->klp_info->sechdrs);
+-free_info:
+-	kfree(mod->klp_info);
+-	return ret;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-	kfree(mod->klp_info->sechdrs);
+-	kfree(mod->klp_info->secstrings);
+-	kfree(mod->klp_info);
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	return 0;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-}
+-#endif /* CONFIG_LIVEPATCH */
+-
+ void __weak module_memfree(void *module_region)
  {
- 	int err;
+ 	/*
+@@ -2244,9 +2168,6 @@ static void free_module(struct module *mod)
+ 	/* Free any allocated parameters. */
+ 	destroy_params(mod->kp, mod->num_kp);
  
-+	/*
-+	 * Livepatch modules have their own dependency handling.
-+	 * Implicit dependencies might cause cycles.
-+	 */
-+	if (is_livepatch_module(a))
-+		return 0;
-+
- 	if (b == NULL || already_uses(a, b))
- 		return 0;
+-	if (is_livepatch_module(mod))
+-		free_module_elf(mod);
+-
+ 	/* Now we can delete it from the lists */
+ 	mutex_lock(&module_mutex);
+ 	/* Unlink carefully: kallsyms could be walking list. */
+@@ -3967,12 +3888,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	if (err < 0)
+ 		goto coming_cleanup;
  
-@@ -3730,6 +3737,15 @@ static int add_unformed_module(struct module *mod)
+-	if (is_livepatch_module(mod)) {
+-		err = copy_module_elf(mod, info);
+-		if (err < 0)
+-			goto sysfs_cleanup;
+-	}
+-
+ 	/* Get rid of temporary copy. */
+ 	free_copy(info);
  
- 		/* Wait in case it fails to load. */
- 		mutex_unlock(&module_mutex);
-+
-+		/*
-+		 * Livepatch modules might use exported symbols from vmlinux.
-+		 * It creates automatic dependencies and recursive module load.
-+		 * Livepatch core handles the consistency on its own.
-+		 */
-+		if (klp_break_recursion(mod))
-+			return -EEXIST;
-+
- 		err = wait_event_interruptible(module_wq,
- 					       finished_loading(mod->name));
- 		if (err)
+@@ -3981,8 +3896,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 
+ 	return do_init_module(mod);
+ 
+- sysfs_cleanup:
+-	mod_sysfs_teardown(mod);
+  coming_cleanup:
+ 	mod->state = MODULE_STATE_GOING;
+ 	destroy_params(mod->kp, mod->num_kp);
 -- 
 2.16.4
 
