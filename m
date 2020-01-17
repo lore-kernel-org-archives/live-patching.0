@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95DF6C33CB1
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8E75C33CB3
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:03:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 736502192A
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:03:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8A8C2087E
+	for <live-patching@archiver.kernel.org>; Fri, 17 Jan 2020 15:03:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729076AbgAQPD6 (ORCPT
+        id S1729098AbgAQPD6 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
         Fri, 17 Jan 2020 10:03:58 -0500
-Received: from mx2.suse.de ([195.135.220.15]:46084 "EHLO mx2.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:46120 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729015AbgAQPD5 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Jan 2020 10:03:57 -0500
+        id S1729066AbgAQPD6 (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 17 Jan 2020 10:03:58 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id AC2F3BB96;
-        Fri, 17 Jan 2020 15:03:55 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 952F1AFA8;
+        Fri, 17 Jan 2020 15:03:56 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -32,9 +32,9 @@ Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Nicolai Stange <nstange@suse.de>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [POC 03/23] livepatch: Better checks of struct klp_object definition
-Date:   Fri, 17 Jan 2020 16:03:03 +0100
-Message-Id: <20200117150323.21801-4-pmladek@suse.com>
+Subject: [POC 05/23] livepatch: Initialize and free livepatch submodule
+Date:   Fri, 17 Jan 2020 16:03:05 +0100
+Message-Id: <20200117150323.21801-6-pmladek@suse.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200117150323.21801-1-pmladek@suse.com>
 References: <20200117150323.21801-1-pmladek@suse.com>
@@ -43,138 +43,86 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The number of user defined fields increased in struct klp_object after
-spliting per-object livepatches. It was sometimes unclear why exactly
-the module could not get loded when returned -EINVAL.
+Another step when loading livepatches to livepatch modules is
+to initialize the structure, create sysfs entries, do livepatch
+specific relocations.
 
-Add more checks for the split modules and write useful error
-messages on particular errors.
+These operation can fail and the objects must be freed that case.
+The error message is taken from klp_module_coming() to match
+selftests.
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/livepatch/core.c | 91 ++++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 82 insertions(+), 9 deletions(-)
+ kernel/livepatch/core.c | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index bb62c5407b75..ec7ffc7db3a7 100644
+index e2c7dc6c2d5f..6c27b635e5a7 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -756,9 +756,6 @@ static int klp_init_object(struct klp_patch *patch, struct klp_object *obj)
- 	int ret;
- 	const char *name;
+@@ -583,18 +583,23 @@ static void klp_free_object_loaded(struct klp_object *obj)
+ 	}
+ }
  
--	if (klp_is_module(obj) && strlen(obj->name) >= MODULE_NAME_LEN)
--		return -EINVAL;
++static void klp_free_object(struct klp_object *obj, bool nops_only)
++{
++	__klp_free_funcs(obj, nops_only);
++
++	if (nops_only && !obj->dynamic)
++		return;
++
++	list_del(&obj->node);
++	kobject_put(&obj->kobj);
++}
++
+ static void __klp_free_objects(struct klp_patch *patch, bool nops_only)
+ {
+ 	struct klp_object *obj, *tmp_obj;
+ 
+ 	klp_for_each_object_safe(patch, obj, tmp_obj) {
+-		__klp_free_funcs(obj, nops_only);
 -
- 	obj->patched = false;
- 
- 	name = obj->name ? obj->name : "vmlinux";
-@@ -851,8 +848,86 @@ static int klp_init_patch(struct klp_patch *patch)
- 	return 0;
+-		if (nops_only && !obj->dynamic)
+-			continue;
+-
+-		list_del(&obj->node);
+-		kobject_put(&obj->kobj);
++		klp_free_object(obj, nops_only);
+ 	}
  }
  
-+static int klp_check_module_name(struct klp_object *obj, bool is_module)
-+{
-+	char mod_name[MODULE_NAME_LEN];
-+	const char *expected_name;
-+
-+	if (is_module) {
-+		snprintf(mod_name, sizeof(mod_name), "%s__%s",
-+			 obj->patch_name, obj->name);
-+		expected_name = mod_name;
-+	} else {
-+		expected_name = obj->patch_name;
-+	}
-+
-+	if (strcmp(expected_name, obj->mod->name)) {
-+		pr_err("The module name %s does not match with obj->patch_name and obj->name. The expected name is: %s\n",
-+		       obj->mod->name, expected_name);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int klp_check_object(struct klp_object *obj, bool is_module)
-+{
-+
-+	if (!obj->mod)
-+		return -EINVAL;
-+
-+	if (!is_livepatch_module(obj->mod)) {
-+		pr_err("module %s is not marked as a livepatch module\n",
-+		       obj->mod->name);
-+		return -EINVAL;
-+	}
-+
-+	if (!obj->patch_name) {
-+		pr_err("module %s does not have set obj->patch_name\n",
-+		       obj->mod->name);
-+		return -EINVAL;
-+	}
-+
-+	if (strlen(obj->patch_name) >= MODULE_NAME_LEN) {
-+		pr_err("module %s has too long obj->patch_name\n",
-+		       obj->mod->name);
-+		return -EINVAL;
-+	}
-+
-+	if (is_module) {
-+		if (!obj->name) {
-+			pr_err("module %s does not have set obj->name\n",
-+			       obj->mod->name);
-+			return -EINVAL;
-+		}
-+		if (strlen(obj->name) >= MODULE_NAME_LEN) {
-+			pr_err("module %s has too long obj->name\n",
-+			       obj->mod->name);
-+			return -EINVAL;
-+		}
-+	} else if (obj->name) {
-+		pr_err("module %s for vmlinux must not have set obj->name\n",
-+		       obj->mod->name);
-+		return -EINVAL;
-+	}
-+
-+	if (!obj->funcs) {
-+		pr_err("module %s does not have set obj->funcs\n",
-+		       obj->mod->name);
-+		return -EINVAL;
-+	}
-+
-+	return klp_check_module_name(obj, is_module);
-+}
-+
- int klp_add_object(struct klp_object *obj)
- {
-+	int ret;
-+
-+	ret = klp_check_object(obj, true);
-+	if (ret)
-+		return ret;
-+
- 	return 0;
+@@ -812,6 +817,8 @@ static int klp_init_object_early(struct klp_patch *patch,
+ 	if (obj->dynamic || try_module_get(obj->mod))
+ 		return 0;
+ 
++	/* patch stays when this function fails in klp_add_object() */
++	list_del(&obj->node);
+ 	return -ENODEV;
  }
- EXPORT_SYMBOL_GPL(klp_add_object);
-@@ -958,14 +1033,12 @@ int klp_enable_patch(struct klp_patch *patch)
- {
- 	int ret;
  
--	if (!patch || !patch->obj || !patch->obj->mod)
-+	if (!patch || !patch->obj)
- 		return -EINVAL;
+@@ -993,9 +1000,22 @@ int klp_add_object(struct klp_object *obj)
+ 		goto err;
+ 	}
  
--	if (!is_livepatch_module(patch->obj->mod)) {
--		pr_err("module %s is not marked as a livepatch module\n",
--		       patch->obj->patch_name);
--		return -EINVAL;
--	}
-+	ret = klp_check_object(patch->obj, false);
++	ret = klp_init_object_early(patch, obj);
 +	if (ret)
-+		return ret;
++		goto err;
++
++	ret = klp_init_object(patch, obj);
++	if (ret) {
++		pr_warn("failed to initialize patch '%s' for module '%s' (%d)\n",
++			patch->obj->patch_name, obj->name, ret);
++		goto err_free;
++	}
++
+ 	mutex_unlock(&klp_mutex);
+ 	return 0;
  
- 	if (!klp_initialized())
- 		return -ENODEV;
++err_free:
++	klp_free_object(obj, false);
+ err:
+ 	/*
+ 	 * If a patch is unsuccessfully applied, return
 -- 
 2.16.4
 
