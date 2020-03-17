@@ -2,39 +2,42 @@ Return-Path: <SRS0=v7hF=5C=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDABEC10F29
-	for <live-patching@archiver.kernel.org>; Tue, 17 Mar 2020 09:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D632C10F29
+	for <live-patching@archiver.kernel.org>; Tue, 17 Mar 2020 09:16:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C887320663
-	for <live-patching@archiver.kernel.org>; Tue, 17 Mar 2020 09:14:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40A71205ED
+	for <live-patching@archiver.kernel.org>; Tue, 17 Mar 2020 09:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgCQJOB (ORCPT
+        id S1725730AbgCQJQV (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 17 Mar 2020 05:14:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54498 "EHLO mx2.suse.de"
+        Tue, 17 Mar 2020 05:16:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55206 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbgCQJOB (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 17 Mar 2020 05:14:01 -0400
+        id S1725862AbgCQJQV (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Tue, 17 Mar 2020 05:16:21 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 0D09CAB7F;
-        Tue, 17 Mar 2020 09:13:59 +0000 (UTC)
-Date:   Tue, 17 Mar 2020 10:13:57 +0100 (CET)
+        by mx2.suse.de (Postfix) with ESMTP id 69A5BAC67;
+        Tue, 17 Mar 2020 09:16:19 +0000 (UTC)
+Date:   Tue, 17 Mar 2020 10:16:18 +0100 (CET)
 From:   Miroslav Benes <mbenes@suse.cz>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-cc:     jgross@suse.com, sstabellini@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, jpoimboe@redhat.com,
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     =?ISO-8859-15?Q?J=FCrgen_Gro=DF?= <jgross@suse.com>,
+        boris.ostrovsky@oracle.com, sstabellini@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
         x86@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jslaby@suse.cz
-Subject: Re: [PATCH 1/2] x86/xen: Make the boot CPU idle task reliable
-In-Reply-To: <1b98d601-d9d9-879c-918c-737830d80ac5@oracle.com>
-Message-ID: <alpine.LSU.2.21.2003171013420.21109@pobox.suse.cz>
-References: <20200312142007.11488-1-mbenes@suse.cz> <20200312142007.11488-2-mbenes@suse.cz> <1b98d601-d9d9-879c-918c-737830d80ac5@oracle.com>
+        jslaby@suse.cz, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [RFC PATCH 2/2] x86/xen: Make the secondary CPU idle tasks
+ reliable
+In-Reply-To: <20200316203514.qm7so7b55jbmskgg@treble>
+Message-ID: <alpine.LSU.2.21.2003171014470.21109@pobox.suse.cz>
+References: <20200312142007.11488-1-mbenes@suse.cz> <20200312142007.11488-3-mbenes@suse.cz> <75224ad1-f160-802a-9d72-b092ba864fb7@suse.com> <alpine.LSU.2.21.2003131048110.30076@pobox.suse.cz> <alpine.LSU.2.21.2003161642450.15518@pobox.suse.cz>
+ <20200316203514.qm7so7b55jbmskgg@treble>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -43,23 +46,62 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon, 16 Mar 2020, Boris Ostrovsky wrote:
+On Mon, 16 Mar 2020, Josh Poimboeuf wrote:
 
+> On Mon, Mar 16, 2020 at 04:51:12PM +0100, Miroslav Benes wrote:
+> > > diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
+> > > index 6b88cdcbef8f..39afd88309cb 100644
+> > > --- a/arch/x86/xen/smp_pv.c
+> > > +++ b/arch/x86/xen/smp_pv.c
+> > > @@ -92,6 +92,7 @@ asmlinkage __visible void cpu_bringup_and_idle(void)
+> > >  {
+> > >         cpu_bringup();
+> > >         boot_init_stack_canary();
+> > > +       asm volatile (UNWIND_HINT(ORC_REG_UNDEFINED, 0, ORC_TYPE_CALL, 1));
+> > >         cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
+> > >  }
+> > > 
+> > > and that seems to work. I need to properly verify and test, but the 
+> > > explanation is that as opposed to the above, cpu_startup_entry() is on the 
+> > > idle task's stack and the hint is then taken into account. The unwound 
+> > > stack seems to be complete, so it could indeed be the fix.
+> > 
+> > Not the correct one though. Objtool rightfully complains with
+> > 
+> > arch/x86/xen/smp_pv.o: warning: objtool: cpu_bringup_and_idle()+0x6a: undefined stack state
+> > 
+> > and all the other hacks I tried ended up in the same dead alley. It seems 
+> > to me the correct fix is that all orc entries for cpu_bringup_and_idle() 
+> > should have "end" property set to 1, since it is the first function on the 
+> > stack. I don't know how to achieve that without the assembly hack in the 
+> > patch I sent. If I am not missing something, of course.
+> > 
+> > Josh, any idea?
 > 
+> Yeah, I think mucking with the unwind hints in C code is going to be
+> precarious.  You could maybe have something like
 > 
-> On 3/12/20 10:20 AM, Miroslav Benes wrote:
-> > --- a/arch/x86/xen/xen-head.S
-> > +++ b/arch/x86/xen/xen-head.S
-> > @@ -35,7 +35,7 @@ SYM_CODE_START(startup_xen)
-> >  	rep __ASM_SIZE(stos)
-> >  
-> >  	mov %_ASM_SI, xen_start_info
-> > -	mov $init_thread_union+THREAD_SIZE, %_ASM_SP
-> > +	mov $init_thread_union+THREAD_SIZE-SIZEOF_PTREGS, %_ASM_SP
+> 	asm("
+> 	  UNWIND_HINT_EMPTY\n
+> 	  mov $CPUHP_AP_ONLINE_IDLE, %rdi\n
+> 	  call cpu_startup_entry\n
+> 	)"
+> 	unreachable();
 > 
-> This is initial_stack, isn't it?
+> but that's pretty ugly (and it might not work anyway).
+> 
+> I suppose we could add a new facility to mark an entire C function as an
+> "end" point.
 
-It is. I'll change it.
+I think it would be an overkill for what I perceive as one-off scenario. 
+Maybe if there are more use cases in the future, but I doubt it.
+ 
+> But I think it would be cleanest to just do something like your patch
+> and have the entry code be asm which then calls cpu_bringup_and_idle().
+> That would make it consistent with all other entry code, which all lives
+> in asm.
+
+Ack.
 
 Thanks
 Miroslav
