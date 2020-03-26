@@ -6,24 +6,25 @@ X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85A33C2D0E8
-	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:29:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F04C43331
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:30:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 66682212CC
-	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:29:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEE612073E
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbgCZJ3o (ORCPT
+        id S1727892AbgCZJaM (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 26 Mar 2020 05:29:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47962 "EHLO mx2.suse.de"
+        Thu, 26 Mar 2020 05:30:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48286 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgCZJ3n (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 26 Mar 2020 05:29:43 -0400
+        id S1726354AbgCZJaM (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 26 Mar 2020 05:30:12 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D0E3BAF43;
-        Thu, 26 Mar 2020 09:29:41 +0000 (UTC)
-Subject: Re: [PATCH v3 1/2] x86/xen: Make the boot CPU idle task reliable
+        by mx2.suse.de (Postfix) with ESMTP id B694EAF2C;
+        Thu, 26 Mar 2020 09:30:10 +0000 (UTC)
+Subject: Re: [PATCH v3 2/2] x86/xen: Make the secondary CPU idle tasks
+ reliable
 To:     Miroslav Benes <mbenes@suse.cz>, boris.ostrovsky@oracle.com,
         sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, hpa@zytor.com, jpoimboe@redhat.com
@@ -31,14 +32,14 @@ Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
         jslaby@suse.cz, andrew.cooper3@citrix.com, jbeulich@suse.com
 References: <20200326092603.7230-1-mbenes@suse.cz>
- <20200326092603.7230-2-mbenes@suse.cz>
+ <20200326092603.7230-3-mbenes@suse.cz>
 From:   =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Message-ID: <f743b8bd-7552-24a8-e7bc-fa8b3bbcb9d2@suse.com>
-Date:   Thu, 26 Mar 2020 10:29:40 +0100
+Message-ID: <a39c8c7e-c793-7ec1-5159-102c824bdada@suse.com>
+Date:   Thu, 26 Mar 2020 10:30:09 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200326092603.7230-2-mbenes@suse.cz>
+In-Reply-To: <20200326092603.7230-3-mbenes@suse.cz>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -48,17 +49,18 @@ List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
 On 26.03.20 10:26, Miroslav Benes wrote:
-> The unwinder reports the boot CPU idle task's stack on XEN PV as
-> unreliable, which affects at least live patching. There are two reasons
-> for this. First, the task does not follow the x86 convention that its
-> stack starts at the offset right below saved pt_regs. It allows the
-> unwinder to easily detect the end of the stack and verify it. Second,
-> startup_xen() function does not store the return address before jumping
-> to xen_start_kernel() which confuses the unwinder.
+> The unwinder reports the secondary CPU idle tasks' stack on XEN PV as
+> unreliable, which affects at least live patching.
+> cpu_initialize_context() sets up the context of the CPU through
+> VCPUOP_initialise hypercall. After it is woken up, the idle task starts
+> in cpu_bringup_and_idle() function and its stack starts at the offset
+> right below pt_regs. The unwinder correctly detects the end of stack
+> there but it is confused by NULL return address in the last frame.
 > 
-> Amend both issues by moving the starting point of initial stack in
-> startup_xen() and storing the return address before the jump, which is
-> exactly what call instruction does.
+> Introduce a wrapper in assembly, which just calls
+> cpu_bringup_and_idle(). The return address is thus pushed on the stack
+> and the wrapper contains the annotation hint for the unwinder regarding
+> the stack state.
 > 
 > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
 
