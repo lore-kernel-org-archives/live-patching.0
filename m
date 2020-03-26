@@ -2,91 +2,67 @@ Return-Path: <SRS0=mgOc=5L=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E2A4C43331
-	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85A33C2D0E8
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:29:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0B105207FC
-	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:26:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66682212CC
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:29:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgCZJ0O (ORCPT
+        id S1727842AbgCZJ3o (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 26 Mar 2020 05:26:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45830 "EHLO mx2.suse.de"
+        Thu, 26 Mar 2020 05:29:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47962 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727832AbgCZJ0I (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 26 Mar 2020 05:26:08 -0400
+        id S1726292AbgCZJ3n (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 26 Mar 2020 05:29:43 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6BD77AD08;
-        Thu, 26 Mar 2020 09:26:06 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     boris.ostrovsky@oracle.com, jgross@suse.com,
+        by mx2.suse.de (Postfix) with ESMTP id D0E3BAF43;
+        Thu, 26 Mar 2020 09:29:41 +0000 (UTC)
+Subject: Re: [PATCH v3 1/2] x86/xen: Make the boot CPU idle task reliable
+To:     Miroslav Benes <mbenes@suse.cz>, boris.ostrovsky@oracle.com,
         sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, hpa@zytor.com, jpoimboe@redhat.com
 Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jslaby@suse.cz, andrew.cooper3@citrix.com, jbeulich@suse.com,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v3 1/2] x86/xen: Make the boot CPU idle task reliable
-Date:   Thu, 26 Mar 2020 10:26:02 +0100
-Message-Id: <20200326092603.7230-2-mbenes@suse.cz>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200326092603.7230-1-mbenes@suse.cz>
+        jslaby@suse.cz, andrew.cooper3@citrix.com, jbeulich@suse.com
 References: <20200326092603.7230-1-mbenes@suse.cz>
+ <20200326092603.7230-2-mbenes@suse.cz>
+From:   =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
+Message-ID: <f743b8bd-7552-24a8-e7bc-fa8b3bbcb9d2@suse.com>
+Date:   Thu, 26 Mar 2020 10:29:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200326092603.7230-2-mbenes@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The unwinder reports the boot CPU idle task's stack on XEN PV as
-unreliable, which affects at least live patching. There are two reasons
-for this. First, the task does not follow the x86 convention that its
-stack starts at the offset right below saved pt_regs. It allows the
-unwinder to easily detect the end of the stack and verify it. Second,
-startup_xen() function does not store the return address before jumping
-to xen_start_kernel() which confuses the unwinder.
+On 26.03.20 10:26, Miroslav Benes wrote:
+> The unwinder reports the boot CPU idle task's stack on XEN PV as
+> unreliable, which affects at least live patching. There are two reasons
+> for this. First, the task does not follow the x86 convention that its
+> stack starts at the offset right below saved pt_regs. It allows the
+> unwinder to easily detect the end of the stack and verify it. Second,
+> startup_xen() function does not store the return address before jumping
+> to xen_start_kernel() which confuses the unwinder.
+> 
+> Amend both issues by moving the starting point of initial stack in
+> startup_xen() and storing the return address before the jump, which is
+> exactly what call instruction does.
+> 
+> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
 
-Amend both issues by moving the starting point of initial stack in
-startup_xen() and storing the return address before the jump, which is
-exactly what call instruction does.
+Reviewed-by: Juergen Gross <jgross@suse.com>
 
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
----
- arch/x86/xen/xen-head.S | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index 1d0cee3163e4..d63806e1ff7a 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -35,7 +35,11 @@ SYM_CODE_START(startup_xen)
- 	rep __ASM_SIZE(stos)
- 
- 	mov %_ASM_SI, xen_start_info
--	mov $init_thread_union+THREAD_SIZE, %_ASM_SP
-+#ifdef CONFIG_X86_64
-+	mov initial_stack(%rip), %rsp
-+#else
-+	mov pa(initial_stack), %esp
-+#endif
- 
- #ifdef CONFIG_X86_64
- 	/* Set up %gs.
-@@ -51,7 +55,7 @@ SYM_CODE_START(startup_xen)
- 	wrmsr
- #endif
- 
--	jmp xen_start_kernel
-+	call xen_start_kernel
- SYM_CODE_END(startup_xen)
- 	__FINIT
- #endif
--- 
-2.25.1
-
+Juergen
