@@ -1,66 +1,71 @@
-Return-Path: <SRS0=wFxF=5E=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=mgOc=5L=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0FEFC4332D
-	for <live-patching@archiver.kernel.org>; Thu, 19 Mar 2020 10:38:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D923C43331
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:26:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B003B20722
-	for <live-patching@archiver.kernel.org>; Thu, 19 Mar 2020 10:38:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 775002078E
+	for <live-patching@archiver.kernel.org>; Thu, 26 Mar 2020 09:26:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgCSKih (ORCPT
+        id S1727834AbgCZJ0I (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 19 Mar 2020 06:38:37 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60682 "EHLO mx2.suse.de"
+        Thu, 26 Mar 2020 05:26:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45810 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725767AbgCSKih (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 19 Mar 2020 06:38:37 -0400
+        id S1727729AbgCZJ0H (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 26 Mar 2020 05:26:07 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 94E11B1D1;
-        Thu, 19 Mar 2020 10:38:35 +0000 (UTC)
-Date:   Thu, 19 Mar 2020 11:38:34 +0100 (CET)
+        by mx2.suse.de (Postfix) with ESMTP id C6AE8AC5F;
+        Thu, 26 Mar 2020 09:26:05 +0000 (UTC)
 From:   Miroslav Benes <mbenes@suse.cz>
-To:     Jan Beulich <jbeulich@suse.com>
-cc:     boris.ostrovsky@oracle.com, jgross@suse.com,
+To:     boris.ostrovsky@oracle.com, jgross@suse.com,
         sstabellini@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com, x86@kernel.org,
+        bp@alien8.de, hpa@zytor.com, jpoimboe@redhat.com
+Cc:     x86@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        xen-devel@lists.xenproject.org, jslaby@suse.cz
-Subject: Re: [PATCH v2 2/2] x86/xen: Make the secondary CPU idle tasks
- reliable
-In-Reply-To: <2ca0a03c-734c-3a9e-90fd-8209046c5f01@suse.com>
-Message-ID: <alpine.LSU.2.21.2003191131280.24428@pobox.suse.cz>
-References: <20200319095606.23627-1-mbenes@suse.cz> <20200319095606.23627-3-mbenes@suse.cz> <2ca0a03c-734c-3a9e-90fd-8209046c5f01@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        jslaby@suse.cz, andrew.cooper3@citrix.com, jbeulich@suse.com,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH v3 0/2] x86/xen: Make idle tasks reliable
+Date:   Thu, 26 Mar 2020 10:26:01 +0100
+Message-Id: <20200326092603.7230-1-mbenes@suse.cz>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, 19 Mar 2020, Jan Beulich wrote:
+The unwinder reports idle tasks' stack on XEN PV as unreliable which
+complicates things for at least live patching. The two patches in the
+series try to amend that by using similar approach as non-XEN x86 does.
 
-> On 19.03.2020 10:56, Miroslav Benes wrote:
-> > --- a/arch/x86/xen/smp_pv.c
-> > +++ b/arch/x86/xen/smp_pv.c
-> > @@ -53,6 +53,7 @@ static DEFINE_PER_CPU(struct xen_common_irq, xen_irq_work) = { .irq = -1 };
-> >  static DEFINE_PER_CPU(struct xen_common_irq, xen_pmu_irq) = { .irq = -1 };
-> >  
-> >  static irqreturn_t xen_irq_work_interrupt(int irq, void *dev_id);
-> > +extern unsigned char asm_cpu_bringup_and_idle[];
-> 
-> Imo this would better reflect the actual type, i.e. be a function
-> decl. If left as an array one, I guess you may want to add const.
+v2->v3:
+- change prototype of asm_cpu_bringup_and_idle()
+- replace %_ASM_SP with %rsp and %esp respectively
+- fix build for !CONFIG_XEN_PV_SMP
 
-I sticked to what x86 has for secondary_startup_64. I can make it
+v1->v2:
+- call instruction used instead of push+jmp
+- initial_stack used directly
 
-void asm_cpu_bringup_and_idle(void);
+v1 https://lore.kernel.org/live-patching/20200312142007.11488-1-mbenes@suse.cz/
+v2 https://lore.kernel.org/live-patching/20200319095606.23627-1-mbenes@suse.cz/
 
-Miroslav
+Miroslav Benes (2):
+  x86/xen: Make the boot CPU idle task reliable
+  x86/xen: Make the secondary CPU idle tasks reliable
+
+ arch/x86/xen/smp_pv.c   |  3 ++-
+ arch/x86/xen/xen-head.S | 18 ++++++++++++++++--
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+
