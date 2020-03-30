@@ -1,46 +1,32 @@
-Return-Path: <SRS0=P5dP=5M=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=kogD=5P=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00C98C43331
-	for <live-patching@archiver.kernel.org>; Fri, 27 Mar 2020 13:20:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24EA4C43331
+	for <live-patching@archiver.kernel.org>; Mon, 30 Mar 2020 14:01:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C6F1C2082E
-	for <live-patching@archiver.kernel.org>; Fri, 27 Mar 2020 13:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1585315258;
-	bh=zSWswf+5WS0gDf6lyvGbAoFBxZ8H5nUIyaS2V82uvYE=;
-	h=Date:From:To:cc:Subject:List-ID:From;
-	b=Fj1GNIXgNPtROHXD1BIMdQcT3wC/PAairCbVStjKa0lQAS07RpqLJzJtfuWyVD0P0
-	 2xfj3gTUi1Are79KDCohk0pAtSxP11F78e10exTgT3VxDrsgAMTiiQv95oa33R2GPv
-	 c8o5QDGwnRWjdTujJpTCQrqbRFNhNdVNmlHMf3t0=
+	by mail.kernel.org (Postfix) with ESMTP id 028232073B
+	for <live-patching@archiver.kernel.org>; Mon, 30 Mar 2020 14:01:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgC0NU6 (ORCPT
+        id S1726830AbgC3OBK (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 27 Mar 2020 09:20:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37460 "EHLO mail.kernel.org"
+        Mon, 30 Mar 2020 10:01:10 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38646 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726275AbgC0NU6 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 27 Mar 2020 09:20:58 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 87F2A206DB;
-        Fri, 27 Mar 2020 13:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585315257;
-        bh=zSWswf+5WS0gDf6lyvGbAoFBxZ8H5nUIyaS2V82uvYE=;
-        h=Date:From:To:cc:Subject:From;
-        b=eTvmJSwyVP3L5NOqSRoSEGJ9sy8W3JsSH4iVWLHCKD+JafgyI+EkR12Y49T/LhSdk
-         Bg9Ts/L2zopoWJQIG27zGZMi52f8AgdYMXcnYLijilogOnOPIwGdXcu7Yq9jrO11sK
-         hXKkWK0YWflL4oNvgnkj5xBPqVyeir+0nDGCWgz0=
-Date:   Fri, 27 Mar 2020 14:20:52 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        id S1726099AbgC3OBK (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Mon, 30 Mar 2020 10:01:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 3D741AD3C;
+        Mon, 30 Mar 2020 14:01:09 +0000 (UTC)
+Date:   Mon, 30 Mar 2020 14:01:09 +0000 (UTC)
+From:   Michael Matz <matz@suse.de>
+To:     Jiri Kosina <jikos@kernel.org>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Nicolai Stange <nstange@suse.com>,
@@ -48,11 +34,12 @@ To:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Jason Baron <jbaron@akamai.com>,
         Gabriel Gomes <gagomes@suse.com>,
         Alice Ferrazzi <alice.ferrazzi@gmail.com>,
-        Michael Matz <matz@suse.de>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-cc:     ulp-devel@opensuse.org, live-patching@vger.kernel.org
-Subject: Live patching MC at LPC2020?
-Message-ID: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm>
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        ulp-devel@opensuse.org, live-patching@vger.kernel.org
+Subject: Re: Live patching MC at LPC2020?
+In-Reply-To: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm>
+Message-ID: <alpine.LSU.2.21.2003301359490.21316@wotan.suse.de>
+References: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,41 +48,28 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi everybody,
+Hello,
 
-oh well, it sounds a bit awkward to be talking about any conference plans 
-for this year given how the corona things are untangling in the world, but 
-LPC planning committee has issued (a) statement about Covid-19 (b) call 
-for papers (as originally planned) nevertheless. Please see:
+On Fri, 27 Mar 2020, Jiri Kosina wrote:
 
-	https://linuxplumbersconf.org/
-	https://linuxplumbersconf.org/event/7/abstracts/
+> oh well, it sounds a bit awkward to be talking about any conference plans 
+> for this year given how the corona things are untangling in the world, but 
+> LPC planning committee has issued (a) statement about Covid-19 (b) call 
+> for papers (as originally planned) nevertheless. Please see:
+> 
+> 	https://linuxplumbersconf.org/
+> 	https://linuxplumbersconf.org/event/7/abstracts/
+> 
+> for details.
+> 
+> Under the asumption that this Covid nuisance is over by that time and 
+> travel is possible (and safe) again -- do we want to eventually submit a 
+> livepatching miniconf proposal again?
 
-for details.
-
-Under the asumption that this Covid nuisance is over by that time and 
-travel is possible (and safe) again -- do we want to eventually submit a 
-livepatching miniconf proposal again?
-
-I believe there are still kernel related topics on our plate (like revised 
-handling of the modules that has been agreed on in Lisbon and Petr has 
-started to work on, the C parsing effort by Nicolai, etc), and at the same 
-time I'd really like to include the new kids on the block too -- the 
-userspace livepatching folks (CCing those I know for sure are working on 
-it).
-
-So, please if you have any opinion one way or the other, please speak up. 
-Depending on the feedback, I will be fine handling the logistics of the 
-miniconf submission as last year (together with Josh I guess?) unless 
-someone else wants to step up and volunter himself :)
-
-(*) which is totally unclear, yes -- for example goverment in my country 
-    has been talking for border closure lasting for 1+ years ... but it 
-    all depends on how things develop of course).
+I think that's very optimistic, but in case the conference really can 
+happen I think it'd be useful to have such mini-conference (from the 
+userspace perspective)
 
 
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
+Ciao,
+Michael.
