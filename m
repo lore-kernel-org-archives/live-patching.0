@@ -2,75 +2,131 @@ Return-Path: <SRS0=4WRz=56=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7DA8C2BB85
-	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 18:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 198CCC2BB1D
+	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 19:32:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A757F20575
-	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 18:27:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E56712074D
+	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 19:32:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tD3LQn4f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LpL5y2pT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503938AbgDNS1b (ORCPT
+        id S2504833AbgDNTcM (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 14 Apr 2020 14:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2503947AbgDNS13 (ORCPT
+        Tue, 14 Apr 2020 15:32:12 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:44885 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2504831AbgDNTcA (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 14 Apr 2020 14:27:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBD2C061A0C;
-        Tue, 14 Apr 2020 11:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=w2oScmLWvNS0pE9g0BNFVGRJ1Z3X4h/XpiGkuoMfTl8=; b=tD3LQn4fu/VaX7Xe/1Od68HJYr
-        pQsue+85LW0nQVRKGurdh9H89+cq+T7kyJK81NIT/34ojHpMLUsNro0ArivA2S8eX5d2kbOcq7q3n
-        C16cG89tI/IOhvjg0reh1ApEsmxAL/UIaMByTx2VoL/EsNoCBaK97mxF1/ypRYj9w7Y1PyQ6wVU37
-        VpOuv24MwH0C0JrSMk8gEFV8glwMK9kySl3I53rr1anvD37m99Shsy0d5k6S2isvE97N62nmkoGi6
-        MVUvxqCHAbJFNiaOPw/Rn/nu6wCcOxItpQyELcpbZ0diuG7IhS2qYfX9RpmUfucBzt0OEkpTcZZoT
-        JG4Ccq9A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jOQHR-0005cu-1P; Tue, 14 Apr 2020 18:27:29 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 118D1981086; Tue, 14 Apr 2020 20:27:27 +0200 (CEST)
-Date:   Tue, 14 Apr 2020 20:27:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
+        Tue, 14 Apr 2020 15:32:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586892719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Ahnft7vUrxEzTLFARwrc8iGTJuhUk/MsvvVIUVUZdA=;
+        b=LpL5y2pTDHwwpm/Rnpep/Co1NiuC/qJrJHXZvi2W5iTEmqx8G92kq9BW8OtWJqa4jw5W5m
+        NEdzN1XQbI0GVYL+0p1Je+u/esKYRtYdbxLq2+H1vzO2B1Iw+TuNdcmw1xfMi/w4aSZT+Q
+        OOc8SlcU1eUZLwwDNzGF5IPS5sqx0ns=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-405-APxugEDrOxmPbni84qHg7w-1; Tue, 14 Apr 2020 15:31:55 -0400
+X-MC-Unique: APxugEDrOxmPbni84qHg7w-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D27311034AE1;
+        Tue, 14 Apr 2020 19:31:53 +0000 (UTC)
+Received: from treble (ovpn-116-146.rdu2.redhat.com [10.10.116.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D40F95D9CD;
+        Tue, 14 Apr 2020 19:31:52 +0000 (UTC)
+Date:   Tue, 14 Apr 2020 14:31:50 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jessica Yu <jeyu@kernel.org>
-Subject: Re: [PATCH 0/7] livepatch,module: Remove .klp.arch and
- module_disable_ro()
-Message-ID: <20200414182726.GF2483@worktop.programming.kicks-ass.net>
+Subject: Re: [PATCH 1/7] livepatch: Apply vmlinux-specific KLP relocations
+ early
+Message-ID: <20200414193150.iqw224itgpedpltm@treble>
 References: <cover.1586881704.git.jpoimboe@redhat.com>
+ <8c3af42719fe0add37605ede634c7035a90f9acc.1586881704.git.jpoimboe@redhat.com>
+ <20200414174406.GC2483@worktop.programming.kicks-ass.net>
+ <20200414180109.da4v2b4ifpixuzn3@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cover.1586881704.git.jpoimboe@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200414180109.da4v2b4ifpixuzn3@treble>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 11:28:36AM -0500, Josh Poimboeuf wrote:
-> Better late than never, these patches add simplifications and
-> improvements for some issues Peter found six months ago, as part of his
-> non-writable text code (W^X) cleanups.
+On Tue, Apr 14, 2020 at 01:01:09PM -0500, Josh Poimboeuf wrote:
+> On Tue, Apr 14, 2020 at 07:44:06PM +0200, Peter Zijlstra wrote:
+> > On Tue, Apr 14, 2020 at 11:28:37AM -0500, Josh Poimboeuf wrote:
+> > > KLP relocations are livepatch-specific relocations which are applied to
+> > >   1) vmlinux-specific KLP relocation sections
+> > > 
+> > >      .klp.rela.vmlinux.{sec}
+> > > 
+> > >      These are relocations (applied to the KLP module) which reference
+> > >      unexported vmlinux symbols.
+> > > 
+> > >   2) module-specific KLP relocation sections
+> > > 
+> > >      .klp.rela.{module}.{sec}:
+> > > 
+> > >      These are relocations (applied to the KLP module) which reference
+> > >      unexported or exported module symbols.
+> > 
+> > Is there something that disallows a module from being called 'vmlinux' ?
+> > If not, we might want to enforce this somewhere.
+> 
+> I'm pretty sure we don't have a check for that anywhere, though the KLP
+> module would almost certainly fail during the module load when it
+> couldn't find the vmlinux.ko symbols it needed.
+> 
+> It wouldn't hurt to add a check somewhere though.  Maybe in
+> klp_module_coming() since the restriction only applies to
+> CONFIG_LIVEPATCH...
 
-Excellent stuff, thanks!!
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] livepatch: Disallow vmlinux.ko
 
-I'll go brush up these two patches then:
+This is purely a theoretical issue, but if there were a module named
+vmlinux.ko, the livepatch relocation code wouldn't be able to
+distinguish between vmlinux-specific and vmlinux.o-specific KLP
+relocations.
 
-  https://lkml.kernel.org/r/20191018074634.801435443@infradead.org
-  https://lkml.kernel.org/r/20191018074634.858645375@infradead.org
+If CONFIG_LIVEPATCH is enabled, don't allow a module named vmlinux.ko.
 
-and write a patch that makes the x86 code throw a wobbly on W+X.
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ kernel/livepatch/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 3a88639b3326..3ff886b911ae 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -1169,6 +1169,11 @@ int klp_module_coming(struct module *mod)
+ 	if (WARN_ON(mod->state != MODULE_STATE_COMING))
+ 		return -EINVAL;
+ 
++	if (!strcmp(mod->name, "vmlinux")) {
++		pr_err("vmlinux.ko: invalid module name");
++		return -EINVAL;
++	}
++
+ 	mutex_lock(&klp_mutex);
+ 	/*
+ 	 * Each module has to know that klp_module_coming()
+-- 
+2.21.1
+
