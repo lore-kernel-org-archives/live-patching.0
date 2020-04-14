@@ -2,59 +2,56 @@ Return-Path: <SRS0=4WRz=56=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35586C2BB85
-	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 16:32:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B592BC2BB85
+	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 16:32:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 14AF2206E9
-	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 16:32:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9415320737
+	for <live-patching@archiver.kernel.org>; Tue, 14 Apr 2020 16:32:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JlQiyNVs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EzJ6ByU4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391610AbgDNQcU (ORCPT
+        id S2391729AbgDNQcZ (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 14 Apr 2020 12:32:20 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:26969 "EHLO
+        Tue, 14 Apr 2020 12:32:25 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59171 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2391619AbgDNQ3Q (ORCPT
+        with ESMTP id S2391607AbgDNQ3K (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:29:16 -0400
+        Tue, 14 Apr 2020 12:29:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586881748;
+        s=mimecast20190719; t=1586881743;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZOl4gvwUQNfJhPnPSLsb7hfqt8/TBu9hAvFbDAoKS5Y=;
-        b=JlQiyNVsTthmQit6bYnOXki9QNtelBcYNc0E9jXnsbGovQ9DOqE3Ij4NnRImF5B29CnX80
-        SK4C5/4pisR/CaEeCNd3+dCd3e4VqxyG+JyEX+6jh49ThkfCUg9HuPCZM4qpoNXFlWPlV+
-        h9btEAKYN5kpezgsWXZKWvDa65HgDKE=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UlM+FhdsavTHBo0maWQwyNgbnLg/LDaCZCHGF6K5dDM=;
+        b=EzJ6ByU4szLmVfY647tZRkDQqnhsEUKzoYBbe0Oq/xfzAz4CdGviQXwhZeLPekYfMg7pFX
+        WVFB8j5t/oy4OafGnPq+N576ODkckZal1p63J6HANkPRw6n3HtSmNBjTx9TYMVMre6hPlA
+        sSAUjWu3Y2kzW/6NylIXobHZ5ooRaoA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-251-tYp5-msVPTyiubAwKDOxYg-1; Tue, 14 Apr 2020 12:29:00 -0400
-X-MC-Unique: tYp5-msVPTyiubAwKDOxYg-1
+ us-mta-321-bHDB6GF6NuWQCj5vuygEtQ-1; Tue, 14 Apr 2020 12:28:57 -0400
+X-MC-Unique: bHDB6GF6NuWQCj5vuygEtQ-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 68EFD802560;
-        Tue, 14 Apr 2020 16:28:59 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 83FA2800D53;
+        Tue, 14 Apr 2020 16:28:56 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-116-146.rdu2.redhat.com [10.10.116.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AAFF85DA66;
-        Tue, 14 Apr 2020 16:28:58 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D9C1A5DA7C;
+        Tue, 14 Apr 2020 16:28:55 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Jessica Yu <jeyu@kernel.org>
-Subject: [PATCH 3/7] livepatch: Prevent module-specific KLP rela sections from referencing vmlinux symbols
-Date:   Tue, 14 Apr 2020 11:28:39 -0500
-Message-Id: <9d572c8aa26776e878c14b219b65a360ec6a21cf.1586881704.git.jpoimboe@redhat.com>
-In-Reply-To: <cover.1586881704.git.jpoimboe@redhat.com>
-References: <cover.1586881704.git.jpoimboe@redhat.com>
+Subject: [PATCH 0/7] livepatch,module: Remove .klp.arch and module_disable_ro()
+Date:   Tue, 14 Apr 2020 11:28:36 -0500
+Message-Id: <cover.1586881704.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Content-Transfer-Encoding: quoted-printable
@@ -63,100 +60,57 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Prevent module-specific KLP rela sections from referencing vmlinux
-symbols.  This helps prevent ordering issues with module special section
-initializations.  Presumably such symbols are exported and normal relas
-can be used instead.
+Better late than never, these patches add simplifications and
+improvements for some issues Peter found six months ago, as part of his
+non-writable text code (W^X) cleanups.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- kernel/livepatch/core.c | 39 ++++++++++++++++++++++++++++-----------
- 1 file changed, 28 insertions(+), 11 deletions(-)
+Highlights:
 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index af8f06382e43..817676caddee 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -192,17 +192,20 @@ static int klp_find_object_symbol(const char *objna=
-me, const char *name,
- }
-=20
- static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
--			       unsigned int symndx, Elf_Shdr *relasec)
-+			       unsigned int symndx, Elf_Shdr *relasec,
-+			       const char *sec_objname)
- {
--	int i, cnt, vmlinux, ret;
--	char objname[MODULE_NAME_LEN];
--	char symname[KSYM_NAME_LEN];
-+	int i, cnt, ret;
-+	char sym_objname[MODULE_NAME_LEN];
-+	char sym_name[KSYM_NAME_LEN];
- 	Elf_Rela *relas;
- 	Elf_Sym *sym;
- 	unsigned long sympos, addr;
-+	bool sym_vmlinux;
-+	bool sec_vmlinux =3D !strcmp(sec_objname, "vmlinux");
-=20
- 	/*
--	 * Since the field widths for objname and symname in the sscanf()
-+	 * Since the field widths for sym_objname and sym_name in the sscanf()
- 	 * call are hard-coded and correspond to MODULE_NAME_LEN and
- 	 * KSYM_NAME_LEN respectively, we must make sure that MODULE_NAME_LEN
- 	 * and KSYM_NAME_LEN have the values we expect them to have.
-@@ -223,20 +226,33 @@ static int klp_resolve_symbols(Elf64_Shdr *sechdrs,=
- const char *strtab,
- 			return -EINVAL;
- 		}
-=20
--		/* Format: .klp.sym.objname.symname,sympos */
-+		/* Format: .klp.sym.sym_objname.sym_name,sympos */
- 		cnt =3D sscanf(strtab + sym->st_name,
- 			     ".klp.sym.%55[^.].%127[^,],%lu",
--			     objname, symname, &sympos);
-+			     sym_objname, sym_name, &sympos);
- 		if (cnt !=3D 3) {
- 			pr_err("symbol %s has an incorrectly formatted name\n",
- 			       strtab + sym->st_name);
- 			return -EINVAL;
- 		}
-=20
-+		sym_vmlinux =3D !strcmp(sym_objname, "vmlinux");
-+
-+		/*
-+		 * Prevent module-specific KLP rela sections from referencing
-+		 * vmlinux symbols.  This helps prevent ordering issues with
-+		 * module special section initializations.  Presumably such
-+		 * symbols are exported and normal relas can be used instead.
-+		 */
-+		if (!sec_vmlinux && sym_vmlinux) {
-+			pr_err("invalid access to vmlinux symbol '%s' from module-specific li=
-vepatch relocation section",
-+			       sym_name);
-+			return -EINVAL;
-+		}
-+
- 		/* klp_find_object_symbol() treats a NULL objname as vmlinux */
--		vmlinux =3D !strcmp(objname, "vmlinux");
--		ret =3D klp_find_object_symbol(vmlinux ? NULL : objname,
--					     symname, sympos, &addr);
-+		ret =3D klp_find_object_symbol(sym_vmlinux ? NULL : sym_objname,
-+					     sym_name, sympos, &addr);
- 		if (ret)
- 			return ret;
-=20
-@@ -301,7 +317,8 @@ int klp_write_relocations(Elf_Ehdr *ehdr, Elf_Shdr *s=
-echdrs,
- 		if (strcmp(objname ? objname : "vmlinux", sec_objname))
- 			continue;
-=20
--		ret =3D klp_resolve_symbols(sechdrs, strtab, symndx, sec);
-+		ret =3D klp_resolve_symbols(sechdrs, strtab, symndx, sec,
-+					  sec_objname);
- 		if (ret)
- 			break;
-=20
+- Remove the livepatch arch-specific .klp.arch sections, which were used
+  to do paravirt patching and alternatives patching for livepatch
+  replacement code.
+
+- Add support for jump labels in patched code.
+
+- Remove the last module_disable_ro() usage.
+
+For more background, see this thread:
+
+  https://lkml.kernel.org/r/20191021135312.jbbxsuipxldocdjk@treble
+
+I've tested this with a modified kpatch-build:
+
+  https://github.com/jpoimboe/kpatch/tree/no-klp-arch
+
+(I'm planning to submit a github PR for kpatch-build, once I get
+ the updated unit/integration tests sorted out.
+
+
+Josh Poimboeuf (4):
+  livepatch: Apply vmlinux-specific KLP relocations early
+  livepatch: Prevent module-specific KLP rela sections from referencing
+    vmlinux symbols
+  livepatch: Remove module_disable_ro() usage
+  module: Remove module_disable_ro()
+
+Peter Zijlstra (3):
+  livepatch: Remove .klp.arch
+  s390/module: Use s390_kernel_write() for relocations
+  x86/module: Use text_poke() for relocations
+
+ Documentation/livepatch/module-elf-format.rst |  12 +-
+ arch/s390/kernel/module.c                     | 106 +++++++++------
+ arch/um/kernel/um_arch.c                      |  16 +++
+ arch/x86/kernel/Makefile                      |   1 -
+ arch/x86/kernel/livepatch.c                   |  53 --------
+ arch/x86/kernel/module.c                      |  34 ++++-
+ include/linux/livepatch.h                     |  19 ++-
+ include/linux/module.h                        |   2 -
+ kernel/livepatch/core.c                       | 128 +++++++++++-------
+ kernel/module.c                               |  22 +--
+ 10 files changed, 205 insertions(+), 188 deletions(-)
+ delete mode 100644 arch/x86/kernel/livepatch.c
+
 --=20
 2.21.1
 
