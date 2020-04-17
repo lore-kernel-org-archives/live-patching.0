@@ -2,129 +2,102 @@ Return-Path: <SRS0=LHaF=6B=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E833FC2D0EF
-	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65D4EC2D0EF
+	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:29:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C87A421973
-	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:05:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36D4E21924
+	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:29:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TdF1qID7"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BbU0gDPu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730825AbgDQOEx (ORCPT
+        id S1726436AbgDQO3u (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Apr 2020 10:04:53 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:32583 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730822AbgDQOEw (ORCPT
+        Fri, 17 Apr 2020 10:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbgDQO3u (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Apr 2020 10:04:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587132291;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jzl14S/tVGzQ32rarxG1WpSRn0vKq6/LsU3dsOiZ0hs=;
-        b=TdF1qID73t/S/VBQa+w9bsF4hB68U4sL3CuibxxyIZXhCJ7d0hh71F8k09AFflHYfArIRz
-        urQBKv1iqtiyqQu7xs1G0Y2FlWmoBhb4cdx+8KqjtLcDS0lM2Bv/P6z8C2yGB3bmIJuIBc
-        noOVvQo7nukYZAjzQap4J86AJwjLBFg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-164-D2ilogYQPbCltZ7fQKFYdw-1; Fri, 17 Apr 2020 10:04:46 -0400
-X-MC-Unique: D2ilogYQPbCltZ7fQKFYdw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DF952801A00;
-        Fri, 17 Apr 2020 14:04:44 +0000 (UTC)
-Received: from treble.redhat.com (ovpn-116-146.rdu2.redhat.com [10.10.116.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 417B65C1C5;
-        Fri, 17 Apr 2020 14:04:44 +0000 (UTC)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     live-patching@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>
-Subject: [PATCH v2 0/9] livepatch,module: Remove .klp.arch and module_disable_ro()
-Date:   Fri, 17 Apr 2020 09:04:25 -0500
-Message-Id: <cover.1587131959.git.jpoimboe@redhat.com>
+        Fri, 17 Apr 2020 10:29:50 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953C4C061A0C;
+        Fri, 17 Apr 2020 07:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rhvxWH9vx73LZxxbSLZjrpt6xiGRw+gmZ6cOdnw55xQ=; b=BbU0gDPuafoS2nVanEcj/vqeMM
+        OZtn9r+O/5Vg5H5hwI+87H0npqjd7CFoR/MyBnlj+Y0nHXekfBnEauUIad6MZXPlD3P0HDroaY25n
+        xZZ5XqkYjZMey9qa9p63W74y9wlbhGJ2N9NvodNp+bSDkFsfzv3vMnd2ji3sC2/m8UyB3i4SpveX/
+        doh2Qzvk7XH2/Ol8MyI25RY5lXbCWCJx46vndeUUWEnEFZ0ku7fdeq4Z7vQvudiNdEP5fxnA8rVab
+        ZPkuSUpoO5qsdz4tlCw8tlXVHoTlTKkf0R3HZd9GJOa22uTSYUFj9mmcg6DbAuIs6e4AC7wif5coH
+        6kdqGLhw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jPS02-0005mv-PM; Fri, 17 Apr 2020 14:29:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7EFBD3006E0;
+        Fri, 17 Apr 2020 16:29:44 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6680A2B121814; Fri, 17 Apr 2020 16:29:44 +0200 (CEST)
+Date:   Fri, 17 Apr 2020 16:29:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jessica Yu <jeyu@kernel.org>, x86@kernel.org
+Subject: Re: [PATCH v2 7/9] x86/module: Use text_poke() for late relocations
+Message-ID: <20200417142944.GF20730@hirez.programming.kicks-ass.net>
+References: <cover.1587131959.git.jpoimboe@redhat.com>
+ <572b12b6adcdab29c54cfd41ca8b4672abad628c.1587131959.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <572b12b6adcdab29c54cfd41ca8b4672abad628c.1587131959.git.jpoimboe@redhat.com>
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-v2:
-- add vmlinux.ko check [peterz]
-- remove 'klp_object' forward declaration [mbenes]
-- use text_mutex [jeyu]
-- fix documentation TOC [jeyu]
-- fix s390 issues [mbenes]
-- upstream kpatch-build now supports this
-  (though it's only enabled for Linux >=3D 5.8)
+On Fri, Apr 17, 2020 at 09:04:32AM -0500, Josh Poimboeuf wrote:
+> +int apply_relocate_add(Elf64_Shdr *sechdrs,
+> +		   const char *strtab,
+> +		   unsigned int symindex,
+> +		   unsigned int relsec,
+> +		   struct module *me)
+> +{
+> +	int ret;
+> +	bool early = me->state == MODULE_STATE_UNFORMED;
+> +	void *(*write)(void *, const void *, size_t) = memcpy;
+> +
+> +	if (!early) {
+> +		write = text_poke;
+> +		mutex_lock(&text_mutex);
+> +	}
+> +
+> +	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
+> +				   write);
+> +
+> +	if (!early) {
+> +		mutex_unlock(&text_mutex);
+> +		text_poke_sync();
 
-These patches add simplifications and improvements for some issues Peter
-found six months ago, as part of his non-writable text code (W^X)
-cleanups.
+I'm thinking text_poke_sync() wants to be inside text_mutex. Although
+given that nothing should be running that text, it really doesn't
+matter.
 
-Highlights:
-
-- Remove the livepatch arch-specific .klp.arch sections, which were used
-  to do paravirt patching and alternatives patching for livepatch
-  replacement code.
-
-- Add support for jump labels in patched code.
-
-- Remove the last module_disable_ro() usage.
-
-For more background, see this thread:
-
-  https://lkml.kernel.org/r/20191021135312.jbbxsuipxldocdjk@treble
-
-I've tested this with a modified kpatch-build:
-
-  https://github.com/jpoimboe/kpatch/tree/no-klp-arch
-
-(I'm planning to submit a github PR for kpatch-build, once I get
- the updated unit/integration tests sorted out.
-
-
-
-Josh Poimboeuf (6):
-  livepatch: Disallow vmlinux.ko
-  livepatch: Apply vmlinux-specific KLP relocations early
-  livepatch: Prevent module-specific KLP rela sections from referencing
-    vmlinux symbols
-  s390: Change s390_kernel_write() return type to match memcpy()
-  livepatch: Remove module_disable_ro() usage
-  module: Remove module_disable_ro()
-
-Peter Zijlstra (3):
-  livepatch: Remove .klp.arch
-  s390/module: Use s390_kernel_write() for late relocations
-  x86/module: Use text_poke() for late relocations
-
- Documentation/livepatch/module-elf-format.rst |  15 +-
- arch/s390/include/asm/uaccess.h               |   2 +-
- arch/s390/kernel/module.c                     | 125 ++++++++++------
- arch/s390/mm/maccess.c                        |   9 +-
- arch/um/kernel/um_arch.c                      |  16 +++
- arch/x86/kernel/Makefile                      |   1 -
- arch/x86/kernel/livepatch.c                   |  53 -------
- arch/x86/kernel/module.c                      |  43 +++++-
- include/linux/livepatch.h                     |  17 ++-
- include/linux/module.h                        |   2 -
- kernel/livepatch/core.c                       | 133 +++++++++++-------
- kernel/module.c                               |  22 +--
- 12 files changed, 243 insertions(+), 195 deletions(-)
- delete mode 100644 arch/x86/kernel/livepatch.c
-
---=20
-2.21.1
-
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  #endif
+>  
+>  int module_finalize(const Elf_Ehdr *hdr,
+> -- 
+> 2.21.1
+> 
