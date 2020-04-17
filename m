@@ -2,105 +2,97 @@ Return-Path: <SRS0=LHaF=6B=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCCBC352BE
-	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 09:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B7FDC38A2B
+	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:04:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 714082064A
-	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 09:08:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 236C921924
+	for <live-patching@archiver.kernel.org>; Fri, 17 Apr 2020 14:04:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z9BjD9UJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730154AbgDQJIq (ORCPT
+        id S1730765AbgDQOEu (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Apr 2020 05:08:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46664 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729920AbgDQJIp (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Apr 2020 05:08:45 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 69E84ABE2;
-        Fri, 17 Apr 2020 09:08:43 +0000 (UTC)
-Date:   Fri, 17 Apr 2020 11:08:42 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Peter Zijlstra <peterz@infradead.org>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jessica Yu <jeyu@kernel.org>
-Subject: Re: [PATCH 0/7] livepatch,module: Remove .klp.arch and
- module_disable_ro()
-In-Reply-To: <20200416122051.p3dk5i7h6ty4cwuc@treble>
-Message-ID: <alpine.LSU.2.21.2004171104050.31054@pobox.suse.cz>
-References: <cover.1586881704.git.jpoimboe@redhat.com> <20200414182726.GF2483@worktop.programming.kicks-ass.net> <20200414190814.glra2gceqgy34iyx@treble> <alpine.LSU.2.21.2004161136340.10475@pobox.suse.cz> <20200416122051.p3dk5i7h6ty4cwuc@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Fri, 17 Apr 2020 10:04:50 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:42176 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730744AbgDQOEu (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Fri, 17 Apr 2020 10:04:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587132289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o8foZaTA908TKiqlCeHVCOn2XVeLTmA8LWaRlobZZ4U=;
+        b=Z9BjD9UJ2fi+kr27dht6blCvnJG921ImE0IManixaMa8RUczuwYy4/H4jCWPdu+dQXlJlD
+        GePxanydLnQqzbiKylsj/CSesF92gxHBgJQcqkXRhasZCrr4iR7RvJC30ZB+wZsP7CmYl7
+        vTYhtdpGLhP2GIuCwbM6+xX6fP3iJLU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-162-Q9v-mqkWMqK-jFQWshYwvg-1; Fri, 17 Apr 2020 10:04:47 -0400
+X-MC-Unique: Q9v-mqkWMqK-jFQWshYwvg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EF10B107ACC9;
+        Fri, 17 Apr 2020 14:04:45 +0000 (UTC)
+Received: from treble.redhat.com (ovpn-116-146.rdu2.redhat.com [10.10.116.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2039E5C1C5;
+        Fri, 17 Apr 2020 14:04:45 +0000 (UTC)
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     live-patching@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jessica Yu <jeyu@kernel.org>, Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH v2 1/9] livepatch: Disallow vmlinux.ko
+Date:   Fri, 17 Apr 2020 09:04:26 -0500
+Message-Id: <68b2d27ce7991873ae3932e0f8f3f05c44dbc4f8.1587131959.git.jpoimboe@redhat.com>
+In-Reply-To: <cover.1587131959.git.jpoimboe@redhat.com>
+References: <cover.1587131959.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: quoted-printable
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, 16 Apr 2020, Josh Poimboeuf wrote:
+This is purely a theoretical issue, but if there were a module named
+vmlinux.ko, the livepatch relocation code wouldn't be able to
+distinguish between vmlinux-specific and vmlinux.o-specific KLP
+relocations.
 
-> On Thu, Apr 16, 2020 at 11:45:05AM +0200, Miroslav Benes wrote:
-> > On Tue, 14 Apr 2020, Josh Poimboeuf wrote:
-> > 
-> > > On Tue, Apr 14, 2020 at 08:27:26PM +0200, Peter Zijlstra wrote:
-> > > > On Tue, Apr 14, 2020 at 11:28:36AM -0500, Josh Poimboeuf wrote:
-> > > > > Better late than never, these patches add simplifications and
-> > > > > improvements for some issues Peter found six months ago, as part of his
-> > > > > non-writable text code (W^X) cleanups.
-> > > > 
-> > > > Excellent stuff, thanks!!
-> > > >
-> > > > I'll go brush up these two patches then:
-> > > > 
-> > > >   https://lkml.kernel.org/r/20191018074634.801435443@infradead.org
-> > > >   https://lkml.kernel.org/r/20191018074634.858645375@infradead.org
-> > > 
-> > > Ah right, I meant to bring that up.  I actually played around with those
-> > > patches.  While it would be nice to figure out a way to converge the
-> > > ftrace module init, I didn't really like the first patch.
-> > > 
-> > > It bothers me that both the notifiers and the module init() both see the
-> > > same MODULE_STATE_COMING state, but only in the former case is the text
-> > > writable.
-> > > 
-> > > I think it's cognitively simpler if MODULE_STATE_COMING always means the
-> > > same thing, like the comments imply, "fully formed" and thus
-> > > not-writable:
-> > > 
-> > > enum module_state {
-> > > 	MODULE_STATE_LIVE,	/* Normal state. */
-> > > 	MODULE_STATE_COMING,	/* Full formed, running module_init. */
-> > > 	MODULE_STATE_GOING,	/* Going away. */
-> > > 	MODULE_STATE_UNFORMED,	/* Still setting it up. */
-> > > };
-> > > 
-> > > And, it keeps tighter constraints on what a notifier can do, which is a
-> > > good thing if we can get away with it.
-> > 
-> > Agreed.
-> > 
-> > On the other hand, the first patch would remove the tiny race window when 
-> > a module state is still UNFORMED, but the protections are (being) set up. 
-> > Patches 4/7 and 5/7 allow to use memcpy in that case, because it is early. 
-> > But it is in fact not already. I haven't checked yet if it really matters 
-> > somewhere (a race with livepatch running klp_module_coming while another 
-> > module is being loaded or anything like that).
-> 
-> Maybe I'm missing your point, but I don't see any races here.
-> 
-> apply_relocate_add() only writes to the patch module's text, so there
-> can't be races with other modules.
+If CONFIG_LIVEPATCH is enabled, don't allow a module named vmlinux.ko.
 
-I meant... a patch module is being loaded and at the same time a 
-to-be-patched module too. So apply_relocate_add() called from 
-klp_module_coming() would see UNFORMED in the patch module state and the 
-permissions would be set up already. So memcpy would not work. But we 
-protect against that (and many other things) by taking klp_mutex, of 
-course. I managed to confuse myself again, sorry about that.
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ kernel/livepatch/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Miroslav
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index c3512e7e0801..40cfac8156fd 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -1139,6 +1139,11 @@ int klp_module_coming(struct module *mod)
+ 	if (WARN_ON(mod->state !=3D MODULE_STATE_COMING))
+ 		return -EINVAL;
+=20
++	if (!strcmp(mod->name, "vmlinux")) {
++		pr_err("vmlinux.ko: invalid module name");
++		return -EINVAL;
++	}
++
+ 	mutex_lock(&klp_mutex);
+ 	/*
+ 	 * Each module has to know that klp_module_coming()
+--=20
+2.21.1
+
