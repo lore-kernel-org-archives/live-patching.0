@@ -7,204 +7,157 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D0A8C55199
-	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D402C55185
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:09:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F134206EC
-	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:09:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14F0E20767
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:09:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TopP5Thx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="emgzxQ8j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbgDYLI4 (ORCPT
+        id S1726169AbgDYLIt (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 25 Apr 2020 07:08:56 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:59239 "EHLO
+        Sat, 25 Apr 2020 07:08:49 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48632 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726224AbgDYLIz (ORCPT
+        with ESMTP id S1726119AbgDYLIp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Sat, 25 Apr 2020 07:08:55 -0400
+        Sat, 25 Apr 2020 07:08:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587812933;
+        s=mimecast20190719; t=1587812924;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SZpS9ZAgY7hTEaW+cqikgvnoKPdyylUxSbzydbLbPlI=;
-        b=TopP5Thxy7XhfpsPvquap+TnDQuu4ZK7okdJJqWIt7T8JfTBg2D5UKjSLu4+TeOP8gjpgm
-        +FxiCw+jfS6tLS16qRo9nZsUUkJjQYp2SYyN7IyuAzIHsb6NX21RAuTmWPqgB3mEk7s3cS
-        /ZWTX4wCeFB0dNid6Zr1AtfJ0/K4arY=
+        bh=lWIyf/4ybtf6E18wbXimskaU+YotSJaHopmlU3Qf2aU=;
+        b=emgzxQ8jZiUAd3cBoTL9UsI0bbRlbC2SI/wC1YpCqjuJSFZt1iSEVOQIYXXXx3eNDE50JO
+        ll0IkQi3d4gbooG8n2ZdarsrYe7Os8R+IDzXb6rMvnTryTK/f0C7TV0VuDn6UImzD8S/GB
+        13v0iSQrS70ZE82kMa0Hc6bW8+4WXTY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-6mPiP9lyPvayEXwdq7ejEw-1; Sat, 25 Apr 2020 07:08:51 -0400
-X-MC-Unique: 6mPiP9lyPvayEXwdq7ejEw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-438-PUzW49jtM46GHYJQZlDxew-1; Sat, 25 Apr 2020 07:08:42 -0400
+X-MC-Unique: PUzW49jtM46GHYJQZlDxew-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60CB91005510;
-        Sat, 25 Apr 2020 11:08:50 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6DAD0107ACCA;
+        Sat, 25 Apr 2020 11:08:41 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-114-29.rdu2.redhat.com [10.10.114.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8875F5C1D4;
-        Sat, 25 Apr 2020 11:08:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C107A605D6;
+        Sat, 25 Apr 2020 11:08:40 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Jessica Yu <jeyu@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>, x86@kernel.org
-Subject: [PATCH v3 07/10] x86/module: Use text_poke() for late relocations
-Date:   Sat, 25 Apr 2020 06:07:27 -0500
-Message-Id: <0d0da50f1a8e3526473dec5a6c61d302df72ce3a.1587812518.git.jpoimboe@redhat.com>
+        Joe Lawrence <joe.lawrence@redhat.com>
+Subject: [PATCH v3 04/10] livepatch: Prevent module-specific KLP rela sections from referencing vmlinux symbols
+Date:   Sat, 25 Apr 2020 06:07:24 -0500
+Message-Id: <4cf2d81338cade08ca4fcd1654f3512415a88481.1587812518.git.jpoimboe@redhat.com>
 In-Reply-To: <cover.1587812518.git.jpoimboe@redhat.com>
 References: <cover.1587812518.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Content-Transfer-Encoding: quoted-printable
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+Prevent module-specific KLP rela sections from referencing vmlinux
+symbols.  This helps prevent ordering issues with module special section
+initializations.  Presumably such symbols are exported and normal relas
+can be used instead.
 
-Because of late module patching, a livepatch module needs to be able to
-apply some of its relocations well after it has been loaded.  Instead of
-playing games with module_{dis,en}able_ro(), use existing text poking
-mechanisms to apply relocations after module loading.
-
-So far only x86, s390 and Power have HAVE_LIVEPATCH but only the first
-two also have STRICT_MODULE_RWX.
-
-This will allow removal of the last module_disable_ro() usage in
-livepatch.  The ultimate goal is to completely disallow making
-executable mappings writable.
-
-[ jpoimboe: Split up patches.  Use mod state to determine whether
-	    memcpy() can be used.  Implement text_poke() for UML. ]
-
-Cc: x86@kernel.org
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/um/kernel/um_arch.c | 16 ++++++++++++++++
- arch/x86/kernel/module.c | 38 +++++++++++++++++++++++++++++++-------
- 2 files changed, 47 insertions(+), 7 deletions(-)
+ kernel/livepatch/core.c | 38 +++++++++++++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 11 deletions(-)
 
-diff --git a/arch/um/kernel/um_arch.c b/arch/um/kernel/um_arch.c
-index 0f40eccbd759..375ab720e4aa 100644
---- a/arch/um/kernel/um_arch.c
-+++ b/arch/um/kernel/um_arch.c
-@@ -362,3 +362,19 @@ void __init check_bugs(void)
- void apply_alternatives(struct alt_instr *start, struct alt_instr *end)
- {
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 16632e75112a..f9ebb54affab 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -192,17 +192,20 @@ static int klp_find_object_symbol(const char *objna=
+me, const char *name,
  }
-+
-+void *text_poke(void *addr, const void *opcode, size_t len)
-+{
-+	/*
-+	 * In UML, the only reference to this function is in
-+	 * apply_relocate_add(), which shouldn't ever actually call this
-+	 * because UML doesn't have live patching.
-+	 */
-+	WARN_ON(1);
-+
-+	return memcpy(addr, opcode, len);
-+}
-+
-+void text_poke_sync(void)
-+{
-+}
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index d5c72cb877b3..7614f478fd7a 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -126,11 +126,12 @@ int apply_relocate(Elf32_Shdr *sechdrs,
- 	return 0;
- }
- #else /*X86_64*/
--int apply_relocate_add(Elf64_Shdr *sechdrs,
-+static int __apply_relocate_add(Elf64_Shdr *sechdrs,
- 		   const char *strtab,
- 		   unsigned int symindex,
- 		   unsigned int relsec,
--		   struct module *me)
-+		   struct module *me,
-+		   void *(*write)(void *dest, const void *src, size_t len))
- {
- 	unsigned int i;
- 	Elf64_Rela *rel =3D (void *)sechdrs[relsec].sh_addr;
-@@ -162,19 +163,19 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 		case R_X86_64_64:
- 			if (*(u64 *)loc !=3D 0)
- 				goto invalid_relocation;
--			*(u64 *)loc =3D val;
-+			write(loc, &val, 8);
- 			break;
- 		case R_X86_64_32:
- 			if (*(u32 *)loc !=3D 0)
- 				goto invalid_relocation;
--			*(u32 *)loc =3D val;
-+			write(loc, &val, 4);
- 			if (val !=3D *(u32 *)loc)
- 				goto overflow;
- 			break;
- 		case R_X86_64_32S:
- 			if (*(s32 *)loc !=3D 0)
- 				goto invalid_relocation;
--			*(s32 *)loc =3D val;
-+			write(loc, &val, 4);
- 			if ((s64)val !=3D *(s32 *)loc)
- 				goto overflow;
- 			break;
-@@ -183,7 +184,7 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 			if (*(u32 *)loc !=3D 0)
- 				goto invalid_relocation;
- 			val -=3D (u64)loc;
--			*(u32 *)loc =3D val;
-+			write(loc, &val, 4);
- #if 0
- 			if ((s64)val !=3D *(s32 *)loc)
- 				goto overflow;
-@@ -193,7 +194,7 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 			if (*(u64 *)loc !=3D 0)
- 				goto invalid_relocation;
- 			val -=3D (u64)loc;
--			*(u64 *)loc =3D val;
-+			write(loc, &val, 8);
- 			break;
- 		default:
- 			pr_err("%s: Unknown rela relocation: %llu\n",
-@@ -215,6 +216,29 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
- 	       me->name);
- 	return -ENOEXEC;
- }
-+
-+int apply_relocate_add(Elf64_Shdr *sechdrs,
-+		   const char *strtab,
-+		   unsigned int symindex,
-+		   unsigned int relsec,
-+		   struct module *me)
-+{
-+	int ret;
-+	bool early =3D me->state =3D=3D MODULE_STATE_UNFORMED;
-+	void *(*write)(void *, const void *, size_t) =3D memcpy;
-+
-+	if (!early)
-+		write =3D text_poke;
-+
-+	ret =3D __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
-+				   write);
-+
-+	if (!early)
-+		text_poke_sync();
-+
-+	return ret;
-+}
-+
- #endif
 =20
- int module_finalize(const Elf_Ehdr *hdr,
+ static int klp_resolve_symbols(Elf64_Shdr *sechdrs, const char *strtab,
+-			       unsigned int symndx, Elf_Shdr *relasec)
++			       unsigned int symndx, Elf_Shdr *relasec,
++			       const char *sec_objname)
+ {
+-	int i, cnt, vmlinux, ret;
+-	char objname[MODULE_NAME_LEN];
+-	char symname[KSYM_NAME_LEN];
++	int i, cnt, ret;
++	char sym_objname[MODULE_NAME_LEN];
++	char sym_name[KSYM_NAME_LEN];
+ 	Elf_Rela *relas;
+ 	Elf_Sym *sym;
+ 	unsigned long sympos, addr;
++	bool sym_vmlinux;
++	bool sec_vmlinux =3D !strcmp(sec_objname, "vmlinux");
+=20
+ 	/*
+-	 * Since the field widths for objname and symname in the sscanf()
++	 * Since the field widths for sym_objname and sym_name in the sscanf()
+ 	 * call are hard-coded and correspond to MODULE_NAME_LEN and
+ 	 * KSYM_NAME_LEN respectively, we must make sure that MODULE_NAME_LEN
+ 	 * and KSYM_NAME_LEN have the values we expect them to have.
+@@ -223,20 +226,33 @@ static int klp_resolve_symbols(Elf64_Shdr *sechdrs,=
+ const char *strtab,
+ 			return -EINVAL;
+ 		}
+=20
+-		/* Format: .klp.sym.objname.symname,sympos */
++		/* Format: .klp.sym.sym_objname.sym_name,sympos */
+ 		cnt =3D sscanf(strtab + sym->st_name,
+ 			     ".klp.sym.%55[^.].%127[^,],%lu",
+-			     objname, symname, &sympos);
++			     sym_objname, sym_name, &sympos);
+ 		if (cnt !=3D 3) {
+ 			pr_err("symbol %s has an incorrectly formatted name\n",
+ 			       strtab + sym->st_name);
+ 			return -EINVAL;
+ 		}
+=20
++		sym_vmlinux =3D !strcmp(sym_objname, "vmlinux");
++
++		/*
++		 * Prevent module-specific KLP rela sections from referencing
++		 * vmlinux symbols.  This helps prevent ordering issues with
++		 * module special section initializations.  Presumably such
++		 * symbols are exported and normal relas can be used instead.
++		 */
++		if (!sec_vmlinux && sym_vmlinux) {
++			pr_err("invalid access to vmlinux symbol '%s' from module-specific li=
+vepatch relocation section",
++			       sym_name);
++			return -EINVAL;
++		}
++
+ 		/* klp_find_object_symbol() treats a NULL objname as vmlinux */
+-		vmlinux =3D !strcmp(objname, "vmlinux");
+-		ret =3D klp_find_object_symbol(vmlinux ? NULL : objname,
+-					     symname, sympos, &addr);
++		ret =3D klp_find_object_symbol(sym_vmlinux ? NULL : sym_objname,
++					     sym_name, sympos, &addr);
+ 		if (ret)
+ 			return ret;
+=20
+@@ -294,7 +310,7 @@ int klp_apply_section_relocs(struct module *pmod, Elf=
+_Shdr *sechdrs,
+ 	if (strcmp(objname ? objname : "vmlinux", sec_objname))
+ 		return 0;
+=20
+-	ret =3D klp_resolve_symbols(sechdrs, strtab, symndx, sec);
++	ret =3D klp_resolve_symbols(sechdrs, strtab, symndx, sec, sec_objname);
+ 	if (ret)
+ 		return ret;
+=20
 --=20
 2.21.1
 
