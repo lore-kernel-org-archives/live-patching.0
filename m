@@ -1,104 +1,100 @@
-Return-Path: <SRS0=dxzx=6I=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=DRXR=6J=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04856C54FD0
-	for <live-patching@archiver.kernel.org>; Fri, 24 Apr 2020 13:43:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0308C55186
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D357A20776
-	for <live-patching@archiver.kernel.org>; Fri, 24 Apr 2020 13:43:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72B6D2084D
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V8NcKri1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dx6aYQIv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbgDXNnM (ORCPT
+        id S1726116AbgDYLIo (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 24 Apr 2020 09:43:12 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:58581 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726926AbgDXNnM (ORCPT
+        Sat, 25 Apr 2020 07:08:44 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47911 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726050AbgDYLIo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 24 Apr 2020 09:43:12 -0400
+        Sat, 25 Apr 2020 07:08:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587735791;
+        s=mimecast20190719; t=1587812922;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X4OZnFlcvX3IqZHJE/SPPyQuprY94beQh1BVXIF1Tvc=;
-        b=V8NcKri1MOPuzSazSvs3etbXaOvlQq2r0WZeo5dX6o4qqwZxyWahO+i1CdezXHvgzMOL/L
-        zLGrVuL+pmMbwGC/wB+ySPAlZAZol3QJ84CahNYotOzCWF9f2n4ndLYj7ML9IwbaYjLHKs
-        zWjWwXKro0s3oCDlV2YEeaPDOxdJsxc=
+        bh=TmXsj2wLOusjeYUdzrX/n2pPGal/ML+yFSxtbXAnG/Y=;
+        b=Dx6aYQIvoBygsCSM/yBVqvip5SWNfZ5lY3w4xyyE9Br7YVgOD9zHKbj3/tXYYZgq9mgv28
+        kFpIEwTE85kpsZmzcvsHcE6B5aIZ10yYmzulbFVh+N89xPnJdSqdRy2IbHgkpUjEU+W3VX
+        a76R0zxAEeo90Tz6lz621IFSz/5Q3Rg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-379-ucB76fxYONKVBrG96cDFDw-1; Fri, 24 Apr 2020 09:43:07 -0400
-X-MC-Unique: ucB76fxYONKVBrG96cDFDw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-25-KNOQLXCCMCmuFcIGfR50Yg-1; Sat, 25 Apr 2020 07:08:38 -0400
+X-MC-Unique: KNOQLXCCMCmuFcIGfR50Yg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 638701005510;
-        Fri, 24 Apr 2020 13:43:05 +0000 (UTC)
-Received: from treble (ovpn-118-207.rdu2.redhat.com [10.10.118.207])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 071D85D9CC;
-        Fri, 24 Apr 2020 13:43:03 +0000 (UTC)
-Date:   Fri, 24 Apr 2020 08:43:01 -0500
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8FA1C1800D42;
+        Sat, 25 Apr 2020 11:08:37 +0000 (UTC)
+Received: from treble.redhat.com (ovpn-114-29.rdu2.redhat.com [10.10.114.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C8B23605D8;
+        Sat, 25 Apr 2020 11:08:36 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     live-patching@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Jessica Yu <jeyu@kernel.org>, linux-s390@vger.kernel.org,
-        heiko.carstens@de.ibm.com
-Subject: Re: [PATCH v2 6/9] s390/module: Use s390_kernel_write() for late
- relocations
-Message-ID: <20200424134301.rug4i5hxtnplahge@treble>
-References: <cover.1587131959.git.jpoimboe@redhat.com>
- <18266eb2c2c9a2ce0033426837d89dcb363a85d3.1587131959.git.jpoimboe@redhat.com>
- <alpine.LSU.2.21.2004221411140.28581@pobox.suse.cz>
+        Jessica Yu <jeyu@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [PATCH v3 01/10] livepatch: Disallow vmlinux.ko
+Date:   Sat, 25 Apr 2020 06:07:21 -0500
+Message-Id: <89ad8839664154577ea83fce7b758cb9bb6a7f22.1587812518.git.jpoimboe@redhat.com>
+In-Reply-To: <cover.1587812518.git.jpoimboe@redhat.com>
+References: <cover.1587812518.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2004221411140.28581@pobox.suse.cz>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: quoted-printable
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 02:28:26PM +0200, Miroslav Benes wrote:
-> > +int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> > +		       unsigned int symindex, unsigned int relsec,
-> > +		       struct module *me)
-> > +{
-> > +	int ret;
-> > +	bool early = me->state == MODULE_STATE_UNFORMED;
-> > +	void *(*write)(void *, const void *, size_t) = memcpy;
-> > +
-> > +	if (!early) {
-> > +		write = s390_kernel_write;
-> > +		mutex_lock(&text_mutex);
-> > +	}
-> > +
-> > +	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
-> > +				   write);
-> > +
-> > +	if (!early)
-> > +		mutex_unlock(&text_mutex);
-> > +
-> > +	return ret;
-> > +}
-> 
-> It means that you can take text_mutex the second time here because it 
-> is still taken in klp_init_object_loaded(). It is removed later in the 
-> series though. The same applies for x86 patch.
-> 
-> Also, s390_kernel_write() grabs s390_kernel_write_lock spinlock before 
-> writing anything, so maybe text_mutex is not really needed as long as 
-> s390_kernel_write is called everywhere for text patching.
+This is purely a theoretical issue, but if there were a module named
+vmlinux.ko, the livepatch relocation code wouldn't be able to
+distinguish between vmlinux-specific and vmlinux.o-specific KLP
+relocations.
 
-Good catch, maybe I'll just drop the text_mutex here.
+If CONFIG_LIVEPATCH is enabled, don't allow a module named vmlinux.ko.
 
--- 
-Josh
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+---
+ kernel/livepatch/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index c3512e7e0801..40cfac8156fd 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -1139,6 +1139,11 @@ int klp_module_coming(struct module *mod)
+ 	if (WARN_ON(mod->state !=3D MODULE_STATE_COMING))
+ 		return -EINVAL;
+=20
++	if (!strcmp(mod->name, "vmlinux")) {
++		pr_err("vmlinux.ko: invalid module name");
++		return -EINVAL;
++	}
++
+ 	mutex_lock(&klp_mutex);
+ 	/*
+ 	 * Each module has to know that klp_module_coming()
+--=20
+2.21.1
 
