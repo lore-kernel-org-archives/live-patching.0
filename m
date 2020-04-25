@@ -2,56 +2,61 @@ Return-Path: <SRS0=DRXR=6J=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C21F7C55191
-	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 382B9C55191
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9ADF1206EC
-	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A64A206EC
+	for <live-patching@archiver.kernel.org>; Sat, 25 Apr 2020 11:08:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jUETAH5f"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q88bnzeX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgDYLIp (ORCPT
+        id S1726165AbgDYLIt (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 25 Apr 2020 07:08:45 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:31892 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726101AbgDYLIo (ORCPT
+        Sat, 25 Apr 2020 07:08:49 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:44566 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726151AbgDYLIr (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Sat, 25 Apr 2020 07:08:44 -0400
+        Sat, 25 Apr 2020 07:08:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587812923;
+        s=mimecast20190719; t=1587812926;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=3Vl9Snukidv/nh3jV4JLaaVbQqkBh6w70+8AM81+TZ8=;
-        b=jUETAH5f3+s62v7ht7y2w3cMvYILeY/CMqqCj712GVE1zwN1Goi10485Hw19kUSTXGjW90
-        BeeD8pF2J1l/Zp1741NxXg2+tPj5/lqWCTdfmx6FOLS7WLt+lRIJMM+t/U++a+AwA0yMo0
-        lIV4EW51cqKVUc3Z0/XRj0AeaCjjcWo=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofPRNPiKndJ+19yFksMsIFZm5zHoy/SE96l7lsxCjLM=;
+        b=Q88bnzeXb4V1VlyGp6qeHxLN6mMTrY2EVJcryu449QPgmTgdmwClTZGdvKeH7tPFhVxCXL
+        pXjTtH0goW8/nA2bPpYLP/YkjjFtqK3bcgYiEm0fH6hx7OvzRIXMyIYpCT/zCu6Wd0Bgw2
+        0Tpb8X2IzYpIIBIpDn8EcVdOptP7VDM=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-105-FyARu1wROJScseorMlweyA-1; Sat, 25 Apr 2020 07:08:37 -0400
-X-MC-Unique: FyARu1wROJScseorMlweyA-1
+ us-mta-232-AM4CndC3Nde2qH1gRdX33g-1; Sat, 25 Apr 2020 07:08:44 -0400
+X-MC-Unique: AM4CndC3Nde2qH1gRdX33g-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A21B745F;
-        Sat, 25 Apr 2020 11:08:36 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 975C11005510;
+        Sat, 25 Apr 2020 11:08:43 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-114-29.rdu2.redhat.com [10.10.114.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BCB701ED;
-        Sat, 25 Apr 2020 11:08:32 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 96014605D6;
+        Sat, 25 Apr 2020 11:08:41 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Jessica Yu <jeyu@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Subject: [PATCH v3 00/10] livepatch,module: Remove .klp.arch and module_disable_ro()
-Date:   Sat, 25 Apr 2020 06:07:20 -0500
-Message-Id: <cover.1587812518.git.jpoimboe@redhat.com>
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-s390@vger.kernel.org, heiko.carstens@de.ibm.com
+Subject: [PATCH v3 05/10] s390: Change s390_kernel_write() return type to match memcpy()
+Date:   Sat, 25 Apr 2020 06:07:25 -0500
+Message-Id: <6ddfa9a98db346f295249fbfdbf80e7a18fbabf0.1587812518.git.jpoimboe@redhat.com>
+In-Reply-To: <cover.1587812518.git.jpoimboe@redhat.com>
+References: <cover.1587812518.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Content-Transfer-Encoding: quoted-printable
@@ -60,74 +65,64 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-v3:
-- klp: split klp_write_relocations() into object/section specific
-  functions [joe]
-- s390: fix plt/got writes [joe]
-- s390: remove text_mutex usage [mbenes]
-- x86: do text_poke_sync() before releasing text_mutex [peterz]
-- split x86 text_mutex changes into separate patch [mbenes]
+s390_kernel_write()'s function type is almost identical to memcpy().
+Change its return type to "void *" so they can be used interchangeably.
 
-v2:
-- add vmlinux.ko check [peterz]
-- remove 'klp_object' forward declaration [mbenes]
-- use text_mutex [jeyu]
-- fix documentation TOC [jeyu]
-- fix s390 issues [mbenes]
-- upstream kpatch-build now supports this
-  (though it's only enabled for Linux >=3D 5.8)
+Cc: linux-s390@vger.kernel.org
+Cc: heiko.carstens@de.ibm.com
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ arch/s390/include/asm/uaccess.h | 2 +-
+ arch/s390/mm/maccess.c          | 9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-These patches add simplifications and improvements for some issues Peter
-found six months ago, as part of his non-writable text code (W^X)
-cleanups.
-
-Highlights:
-
-- Remove the livepatch arch-specific .klp.arch sections, which were used
-  to do paravirt patching and alternatives patching for livepatch
-  replacement code.
-
-- Add support for jump labels in patched code.
-
-- Remove the last module_disable_ro() usage.
-
-For more background, see this thread:
-
-  https://lkml.kernel.org/r/20191021135312.jbbxsuipxldocdjk@treble
-
-This has been tested with kpatch-build integration tests and klp-convert
-selftests.
-
-Josh Poimboeuf (7):
-  livepatch: Disallow vmlinux.ko
-  livepatch: Apply vmlinux-specific KLP relocations early
-  livepatch: Prevent module-specific KLP rela sections from referencing
-    vmlinux symbols
-  s390: Change s390_kernel_write() return type to match memcpy()
-  livepatch: Remove module_disable_ro() usage
-  module: Remove module_disable_ro()
-  x86/module: Use text_mutex in apply_relocate_add()
-
-Peter Zijlstra (3):
-  livepatch: Remove .klp.arch
-  s390/module: Use s390_kernel_write() for late relocations
-  x86/module: Use text_poke() for late relocations
-
- Documentation/livepatch/module-elf-format.rst |  15 +-
- arch/s390/include/asm/uaccess.h               |   2 +-
- arch/s390/kernel/module.c                     | 147 +++++++++------
- arch/s390/mm/maccess.c                        |   9 +-
- arch/um/kernel/um_arch.c                      |  16 ++
- arch/x86/kernel/Makefile                      |   1 -
- arch/x86/kernel/livepatch.c                   |  53 ------
- arch/x86/kernel/module.c                      |  43 ++++-
- include/linux/livepatch.h                     |  17 +-
- include/linux/module.h                        |   2 -
- kernel/livepatch/core.c                       | 177 +++++++++++-------
- kernel/module.c                               |  23 +--
- 12 files changed, 277 insertions(+), 228 deletions(-)
- delete mode 100644 arch/x86/kernel/livepatch.c
-
+diff --git a/arch/s390/include/asm/uaccess.h b/arch/s390/include/asm/uacc=
+ess.h
+index a470f1fa9f2a..324438889fe1 100644
+--- a/arch/s390/include/asm/uaccess.h
++++ b/arch/s390/include/asm/uaccess.h
+@@ -276,6 +276,6 @@ static inline unsigned long __must_check clear_user(v=
+oid __user *to, unsigned lo
+ }
+=20
+ int copy_to_user_real(void __user *dest, void *src, unsigned long count)=
+;
+-void s390_kernel_write(void *dst, const void *src, size_t size);
++void *s390_kernel_write(void *dst, const void *src, size_t size);
+=20
+ #endif /* __S390_UACCESS_H */
+diff --git a/arch/s390/mm/maccess.c b/arch/s390/mm/maccess.c
+index de7ca4b6718f..22a0be655f27 100644
+--- a/arch/s390/mm/maccess.c
++++ b/arch/s390/mm/maccess.c
+@@ -55,19 +55,22 @@ static notrace long s390_kernel_write_odd(void *dst, =
+const void *src, size_t siz
+  */
+ static DEFINE_SPINLOCK(s390_kernel_write_lock);
+=20
+-void notrace s390_kernel_write(void *dst, const void *src, size_t size)
++notrace void *s390_kernel_write(void *dst, const void *src, size_t size)
+ {
++	void *tmp =3D dst;
+ 	unsigned long flags;
+ 	long copied;
+=20
+ 	spin_lock_irqsave(&s390_kernel_write_lock, flags);
+ 	while (size) {
+-		copied =3D s390_kernel_write_odd(dst, src, size);
+-		dst +=3D copied;
++		copied =3D s390_kernel_write_odd(tmp, src, size);
++		tmp +=3D copied;
+ 		src +=3D copied;
+ 		size -=3D copied;
+ 	}
+ 	spin_unlock_irqrestore(&s390_kernel_write_lock, flags);
++
++	return dst;
+ }
+=20
+ static int __no_sanitize_address __memcpy_real(void *dest, void *src, si=
+ze_t count)
 --=20
 2.21.1
 
