@@ -4,23 +4,23 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7343BC83000
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9099DC83006
 	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51A9821D82
+	by mail.kernel.org (Postfix) with ESMTP id 6D80422203
 	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SeL0+YWR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WTXM9GWH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727789AbgD2PZZ (ORCPT
+        id S1727841AbgD2PZ0 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 29 Apr 2020 11:25:25 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:54543 "EHLO
+        Wed, 29 Apr 2020 11:25:26 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:26492 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727841AbgD2PZY (ORCPT
+        by vger.kernel.org with ESMTP id S1727843AbgD2PZY (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Wed, 29 Apr 2020 11:25:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
@@ -29,22 +29,22 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EBRv2/+FDr/lrTbtQJ9do2irFBLZgBPX8/+zXznQJVc=;
-        b=SeL0+YWRcdwQYYhRK3VAF1VYeXPb4+9AXB9EGaN7I6j32VtvRbUoUEx2Ag9n/sYDRfP7aK
-        Lqt5/QqD+RhO7IKa5ryBjMJMWZH1/3CIdm1JKZMLVqFdIP/mm4fIvTFPwJcKgfqtAx5Gqr
-        dz11W0Ht4FBuD2A/l362RtAMkjJthLo=
+        bh=CgzAwtsyZTU68WwvLxr2IdSTNi5xOjDVczwYslxfyiw=;
+        b=WTXM9GWHsB1tk/ZPBApUQdQ9VjgSn6tJRO5Jni4cJwDbC1kX/5x4PMGN1ek0MQgS4LmGqf
+        zWnGlRfKHjM5gdWVkdavF9is6fGN3bJOxqcm9I5iFLbkAU3wO7Umf43ZiHYGUVcI5HaJZV
+        D/26j+c+jfTdzKc4b6il9DweWR6VIEE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-484-nQ9Y17OhP_SCQKoP7uXdJw-1; Wed, 29 Apr 2020 11:25:20 -0400
-X-MC-Unique: nQ9Y17OhP_SCQKoP7uXdJw-1
+ us-mta-471-iNzzhXowOq2o9svufc09qw-1; Wed, 29 Apr 2020 11:25:22 -0400
+X-MC-Unique: iNzzhXowOq2o9svufc09qw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 60C468054AE;
-        Wed, 29 Apr 2020 15:25:11 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2FBCF800C78;
+        Wed, 29 Apr 2020 15:25:13 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-113-19.rdu2.redhat.com [10.10.113.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A00E763F65;
-        Wed, 29 Apr 2020 15:25:10 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C671605CB;
+        Wed, 29 Apr 2020 15:25:12 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Jessica Yu <jeyu@kernel.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v4 08/11] livepatch: Remove module_disable_ro() usage
-Date:   Wed, 29 Apr 2020 10:24:50 -0500
-Message-Id: <100e5d6720353ee26acf0dd01511884d509f8cc5.1588173720.git.jpoimboe@redhat.com>
+Subject: [PATCH v4 10/11] x86/module: Use text_mutex in apply_relocate_add()
+Date:   Wed, 29 Apr 2020 10:24:52 -0500
+Message-Id: <506017e7d3e0d86a1c6409418c87516d8baeaa5e.1588173720.git.jpoimboe@redhat.com>
 In-Reply-To: <cover.1588173720.git.jpoimboe@redhat.com>
 References: <cover.1588173720.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
@@ -65,39 +65,80 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-With arch_klp_init_object_loaded() gone, and apply_relocate_add() now
-using text_poke(), livepatch no longer needs to use module_disable_ro().
+Now that the livepatch code no longer needs the text_mutex for changing
+module permissions, move its usage down to apply_relocate_add().
+
+Note the s390 version of apply_relocate_add() doesn't need to use the
+text_mutex because it already uses s390_kernel_write_lock, which
+accomplishes the same task.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 Acked-by: Miroslav Benes <mbenes@suse.cz>
 ---
- kernel/livepatch/core.c | 2 --
- 1 file changed, 2 deletions(-)
+ arch/x86/kernel/module.c | 9 +++++++--
+ kernel/livepatch/core.c  | 6 ------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index 7614f478fd7a..23c95a53d20e 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -18,6 +18,7 @@
+ #include <linux/gfp.h>
+ #include <linux/jump_label.h>
+ #include <linux/random.h>
++#include <linux/memory.h>
+=20
+ #include <asm/text-patching.h>
+ #include <asm/page.h>
+@@ -227,14 +228,18 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	bool early =3D me->state =3D=3D MODULE_STATE_UNFORMED;
+ 	void *(*write)(void *, const void *, size_t) =3D memcpy;
+=20
+-	if (!early)
++	if (!early) {
+ 		write =3D text_poke;
++		mutex_lock(&text_mutex);
++	}
+=20
+ 	ret =3D __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
+ 				   write);
+=20
+-	if (!early)
++	if (!early) {
+ 		text_poke_sync();
++		mutex_unlock(&text_mutex);
++	}
+=20
+ 	return ret;
+ }
 diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index f9ebb54affab..6b8b3c067be0 100644
+index 6b8b3c067be0..96d2da14eb0d 100644
 --- a/kernel/livepatch/core.c
 +++ b/kernel/livepatch/core.c
-@@ -777,7 +777,6 @@ static int klp_init_object_loaded(struct klp_patch *p=
+@@ -775,9 +775,6 @@ static int klp_init_object_loaded(struct klp_patch *p=
 atch,
+ 	int ret;
+=20
  	if (klp_is_module(obj)) {
-=20
- 		mutex_lock(&text_mutex);
--		module_disable_ro(patch->mod);
-=20
+-
+-		mutex_lock(&text_mutex);
+-
  		/*
  		 * Only write module-specific relocations here
-@@ -787,7 +786,6 @@ static int klp_init_object_loaded(struct klp_patch *p=
+ 		 * (.klp.rela.{module}.*).  vmlinux-specific relocations were
+@@ -785,9 +782,6 @@ static int klp_init_object_loaded(struct klp_patch *p=
 atch,
+ 		 * itself.
  		 */
  		ret =3D klp_apply_object_relocs(patch, obj);
-=20
--		module_enable_ro(patch->mod, true);
- 		mutex_unlock(&text_mutex);
-=20
+-
+-		mutex_unlock(&text_mutex);
+-
  		if (ret)
+ 			return ret;
+ 	}
 --=20
 2.21.1
 
