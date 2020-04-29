@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B49C8C83006
-	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED50C83000
+	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9261D208FE
-	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 64FA9208FE
+	for <live-patching@archiver.kernel.org>; Wed, 29 Apr 2020 15:25:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FjmroO5A"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CIGx7IxT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgD2PZ0 (ORCPT
+        id S1726741AbgD2PZs (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 29 Apr 2020 11:25:26 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28623 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727846AbgD2PZZ (ORCPT
+        Wed, 29 Apr 2020 11:25:48 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:53337 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727811AbgD2PZT (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 29 Apr 2020 11:25:25 -0400
+        Wed, 29 Apr 2020 11:25:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588173924;
+        s=mimecast20190719; t=1588173918;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=n7MNVntR2hzdBos1b1qY3omx/9gteBl17M6iJffUlGU=;
-        b=FjmroO5ATiHZs+BrvFXPonU19yDpKHuvHKlF7ZRvP0B2wXEeJ8YnCzrIfMD82Brd3OjlPl
-        KaEId8aFYGXr8PppqQY9nRj/jrFnCRXoxfIWRXFm2aUVlOkcAIcG9YxxR2WzTSpjiFYCcG
-        ypZKbV27QeQxFYbOxxqj+d2CpqvbRl4=
+        bh=55lPP4/9P2Q2fFkp/oMOVjw5upNDuXiv/W3GLreRWds=;
+        b=CIGx7IxTz1RWu9ycj7Y5lYXsfXUGlTlsQpjO46j6Qh+Z57OvmC8f0Y8Lusd4O1DOHguMTA
+        x6NHITp4kHYpAfaoUG9+0ILiYsGy8UhGO6ZHQPao+1wWy7TmUTQ4GeEnLXFGUgu4/ie4a/
+        wI1TQgLIvgerLoNmzVxOcyw6Yo0aPT8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-405-4uGGnM5wOgOOSpEELuMYZw-1; Wed, 29 Apr 2020 11:25:22 -0400
-X-MC-Unique: 4uGGnM5wOgOOSpEELuMYZw-1
+ us-mta-363-JmW7EMqpPkyIt8ZCOgbTkw-1; Wed, 29 Apr 2020 11:25:12 -0400
+X-MC-Unique: JmW7EMqpPkyIt8ZCOgbTkw-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0EF2B80BC52;
-        Wed, 29 Apr 2020 15:25:14 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 713438B904E;
+        Wed, 29 Apr 2020 15:25:02 +0000 (UTC)
 Received: from treble.redhat.com (ovpn-113-19.rdu2.redhat.com [10.10.113.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 516C163BBE;
-        Wed, 29 Apr 2020 15:25:13 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9B439605CB;
+        Wed, 29 Apr 2020 15:25:01 +0000 (UTC)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Jessica Yu <jeyu@kernel.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v4 11/11] module: Make module_enable_ro() static again
-Date:   Wed, 29 Apr 2020 10:24:53 -0500
-Message-Id: <d8b705c20aee017bf9a694c0462a353d6a9f9001.1588173720.git.jpoimboe@redhat.com>
+Subject: [PATCH v4 01/11] livepatch: Disallow vmlinux.ko
+Date:   Wed, 29 Apr 2020 10:24:43 -0500
+Message-Id: <3c23f9861a49662b7b3ee83b3bc17ebf9824e242.1588173720.git.jpoimboe@redhat.com>
 In-Reply-To: <cover.1588173720.git.jpoimboe@redhat.com>
 References: <cover.1588173720.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
@@ -65,59 +65,37 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Now that module_enable_ro() has no more external users, make it static
-again.
+This is purely a theoretical issue, but if there were a module named
+vmlinux.ko, the livepatch relocation code wouldn't be able to
+distinguish between vmlinux-specific and vmlinux.o-specific KLP
+relocations.
 
-Suggested-by: Jessica Yu <jeyu@kernel.org>
+If CONFIG_LIVEPATCH is enabled, don't allow a module named vmlinux.ko.
+
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- include/linux/module.h | 6 ------
- kernel/module.c        | 4 ++--
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ kernel/livepatch/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index e4ef7b36feda..2c2e988bcf10 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -858,12 +858,6 @@ extern int module_sysfs_initialized;
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index c3512e7e0801..40cfac8156fd 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -1139,6 +1139,11 @@ int klp_module_coming(struct module *mod)
+ 	if (WARN_ON(mod->state !=3D MODULE_STATE_COMING))
+ 		return -EINVAL;
 =20
- #define __MODULE_STRING(x) __stringify(x)
-=20
--#ifdef CONFIG_STRICT_MODULE_RWX
--extern void module_enable_ro(const struct module *mod, bool after_init);
--#else
--static inline void module_enable_ro(const struct module *mod, bool after=
-_init) { }
--#endif
--
- #ifdef CONFIG_GENERIC_BUG
- void module_bug_finalize(const Elf_Ehdr *, const Elf_Shdr *,
- 			 struct module *);
-diff --git a/kernel/module.c b/kernel/module.c
-index f0e414a01d91..572d626508d2 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2016,7 +2016,7 @@ static void frob_writable_data(const struct module_=
-layout *layout,
- 		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
- }
-=20
--void module_enable_ro(const struct module *mod, bool after_init)
-+static void module_enable_ro(const struct module *mod, bool after_init)
- {
- 	if (!rodata_enabled)
- 		return;
-@@ -2057,7 +2057,7 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hd=
-r, Elf_Shdr *sechdrs,
- }
-=20
- #else /* !CONFIG_STRICT_MODULE_RWX */
--/* module_{enable,disable}_ro() stubs are in module.h */
-+static void module_enable_ro(const struct module *mod, bool after_init) =
-{}
- static void module_enable_nx(const struct module *mod) { }
- static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
- 				       char *secstrings, struct module *mod)
++	if (!strcmp(mod->name, "vmlinux")) {
++		pr_err("vmlinux.ko: invalid module name");
++		return -EINVAL;
++	}
++
+ 	mutex_lock(&klp_mutex);
+ 	/*
+ 	 * Each module has to know that klp_module_coming()
 --=20
 2.21.1
 
