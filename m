@@ -2,124 +2,232 @@ Return-Path: <SRS0=d+mo=7Q=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02A77C433DF
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 17:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 314B9C433DF
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB4D420679
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 17:00:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16D382053B
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YlEv7uTf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgFCRAN (ORCPT
+        id S1726076AbgFCSVl (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 3 Jun 2020 13:00:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39860 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbgFCRAM (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 3 Jun 2020 13:00:12 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 00A6AABCE;
-        Wed,  3 Jun 2020 17:00:13 +0000 (UTC)
-Date:   Wed, 3 Jun 2020 19:00:10 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Cheng Jian <cj.chengjian@huawei.com>
-cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        chenwandun@huawei.com, xiexiuqi@huawei.com,
-        bobo.shaobowang@huawei.com, huawei.libin@huawei.com,
-        jeyu@kernel.org, jikos@kernel.org
-Subject: Re: [PATCH] module: make module symbols visible after init
-In-Reply-To: <20200603141200.17745-1-cj.chengjian@huawei.com>
-Message-ID: <alpine.LSU.2.21.2006031848020.26737@pobox.suse.cz>
-References: <20200603141200.17745-1-cj.chengjian@huawei.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 3 Jun 2020 14:21:41 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:40030 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725959AbgFCSVj (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 3 Jun 2020 14:21:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1591208497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bAac06P3giR5I4Nc3J9vi1Ip90+x7WJLQsxk772I3oE=;
+        b=YlEv7uTfVyGDZY+UP4BLNP2kp2t3ZIfw03nLH06YfeP9MA5kOsbFR8SoTj60KpXpb2Dlt5
+        klcDgis8D7Wr9PwKPKonZJPipmuTob937eIfunzZC4H3Jn4hzDs0oHirHVTukExSE0eQct
+        bv6b4lj6EyVNCKRpmgBtMJRj2pfEPao=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-67-0WpOuRSGP_6tlyvkYlfIIg-1; Wed, 03 Jun 2020 14:21:35 -0400
+X-MC-Unique: 0WpOuRSGP_6tlyvkYlfIIg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D1A71800D42;
+        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
+Received: from dm.redhat.com (unknown [10.10.67.78])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 938FD5D9CD;
+        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+From:   Yannick Cote <ycote@redhat.com>
+To:     live-patching@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
+        kamalesh@linux.vnet.ibm.com
+Subject: [PATCH v2 1/4] selftests/livepatch: simplify test-klp-callbacks busy target tests
+Date:   Wed,  3 Jun 2020 14:20:55 -0400
+Message-Id: <20200603182058.109470-2-ycote@redhat.com>
+In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
+References: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi,
+From: Joe Lawrence <joe.lawrence@redhat.com>
 
-I'm confused...
+The test-klp-callbacks script includes a few tests which rely on kernel
+task timings that may not always execute as expected under system load.
+These may generate out of sequence kernel log messages that result in
+test failure.
 
-On Wed, 3 Jun 2020, Cheng Jian wrote:
+Instead of using sleep timing windows to orchestrate these tests, add a
+block_transition module parameter to communicate the test purpose and
+utilize flush_queue() to serialize the test module's task output.
 
-> When lookup the symbols of module by module_kallsyms_lookup_name(),
-> the symbols address is visible only if the module's status isn't
-> MODULE_STATE_UNFORMED, This is problematic.
-> 
-> When complete_formation is done, the state of the module is modified
-> to MODULE_STATE_COMING, and the symbol of module is visible to the
-> outside.
-> 
-> At this time, the init function of the module has not been called,
-> so if the address of the function symbol has been found and called,
-> it may cause some exceptions.
-> 
-> For livepatch module, the relocation information of the livepatch
-> module is completed in init by klp_write_object_relocations(), and
-> the symbol name of the old and new functions are the same. Therefore,
-> when we lookup the symbol, we may get the function address of the
-> livepatch module. a crash can occurs when we call this function.
-> 
-> 	CPU 0				CPU 1
-> 	==================================================
-> 	load_module
-> 	add_unformed_module # MODULE_STATE_UNFORMED;
-> 	post_relocation
-> 	complete_formation  # MODULE_STATE_COMING;
-> 					------------------
-> 					module_kallsymc_lookup_name("A")
-> 					call A()	# CRASH
-> 					------------------
-> 	do_init_module
-> 	klp_write_object_relocations
-> 	mod->state = MODULE_STATE_LIVE;
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ lib/livepatch/test_klp_callbacks_busy.c       | 37 ++++++++++++++-----
+ .../selftests/livepatch/test-callbacks.sh     | 29 +++++++--------
+ 2 files changed, 42 insertions(+), 24 deletions(-)
 
-We don't call module_kallsymc_lookup_name() anywhere in livepatch if I am 
-not missing something. So is this your code? Then I could see the problem. 
-You get the address of a function from a livepatch module and call it, 
-which is not correct.
-
-I see two options...
-
-1. don't use the same name for the new function. Use some kind of prefix. 
-It is more bulletproof anyway.
-
-2. module_kallsyms_lookup_name() accepts a module name as a prefix of a 
-symbol. So you can use module_kallsyms_lookup_name("module:A") and it 
-should return A from that particular module only (if it exists).
+diff --git a/lib/livepatch/test_klp_callbacks_busy.c b/lib/livepatch/test_klp_callbacks_busy.c
+index 40beddf8a0e2..7ac845f65be5 100644
+--- a/lib/livepatch/test_klp_callbacks_busy.c
++++ b/lib/livepatch/test_klp_callbacks_busy.c
+@@ -5,34 +5,53 @@
  
-> In commit 0bd476e6c671 ("kallsyms: unexport kallsyms_lookup_name() and
-> kallsyms_on_each_symbol()") restricts the invocation for kernel unexported
-> symbols, but it is still incorrect to make the symbols of non-LIVE modules
-> visible to the outside.
+ #include <linux/module.h>
+ #include <linux/kernel.h>
++#include <linux/sched.h>
+ #include <linux/workqueue.h>
+ #include <linux/delay.h>
+ 
+-static int sleep_secs;
+-module_param(sleep_secs, int, 0644);
+-MODULE_PARM_DESC(sleep_secs, "sleep_secs (default=0)");
++/* load/run-time control from sysfs writer  */
++static bool block_transition;
++module_param(block_transition, bool, 0644);
++MODULE_PARM_DESC(block_transition, "block_transition (default=false)");
+ 
+ static void busymod_work_func(struct work_struct *work);
+-static DECLARE_DELAYED_WORK(work, busymod_work_func);
++static DECLARE_WORK(work, busymod_work_func);
+ 
+ static void busymod_work_func(struct work_struct *work)
+ {
+-	pr_info("%s, sleeping %d seconds ...\n", __func__, sleep_secs);
+-	msleep(sleep_secs * 1000);
++	pr_info("%s enter\n", __func__);
++
++	while (READ_ONCE(block_transition)) {
++		/*
++		 * Busy-wait until the sysfs writer has acknowledged a
++		 * blocked transition and clears the flag.
++		 */
++		msleep(20);
++	}
++
+ 	pr_info("%s exit\n", __func__);
+ }
+ 
+ static int test_klp_callbacks_busy_init(void)
+ {
+ 	pr_info("%s\n", __func__);
+-	schedule_delayed_work(&work,
+-		msecs_to_jiffies(1000 * 0));
++	schedule_work(&work);
++
++	if (!block_transition) {
++		/*
++		 * Serialize output: print all messages from the work
++		 * function before returning from init().
++		 */
++		flush_work(&work);
++	}
++
+ 	return 0;
+ }
+ 
+ static void test_klp_callbacks_busy_exit(void)
+ {
+-	cancel_delayed_work_sync(&work);
++	WRITE_ONCE(block_transition, false);
++	flush_work(&work);
+ 	pr_info("%s\n", __func__);
+ }
+ 
+diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+index a35289b13c9c..32b57ba07f4f 100755
+--- a/tools/testing/selftests/livepatch/test-callbacks.sh
++++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+@@ -356,9 +356,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ echo -n "TEST: multiple target modules ... "
+ dmesg -C
+ 
+-load_mod $MOD_TARGET_BUSY sleep_secs=0
+-# give $MOD_TARGET_BUSY::busymod_work_func() a chance to run
+-sleep 5
++load_mod $MOD_TARGET_BUSY block_transition=N
+ load_lp $MOD_LIVEPATCH
+ load_mod $MOD_TARGET
+ unload_mod $MOD_TARGET
+@@ -366,9 +364,9 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET_BUSY
+ 
+-check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=0
++check_result "% modprobe $MOD_TARGET_BUSY block_transition=N
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
+-$MOD_TARGET_BUSY: busymod_work_func, sleeping 0 seconds ...
++$MOD_TARGET_BUSY: busymod_work_func enter
+ $MOD_TARGET_BUSY: busymod_work_func exit
+ % modprobe $MOD_LIVEPATCH
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+@@ -404,11 +402,10 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+ 
+ 
+-
+ # TEST: busy target module
+ #
+ # A similar test as the previous one, but force the "busy" kernel module
+-# to do longer work.
++# to block the livepatch transition.
+ #
+ # The livepatching core will refuse to patch a task that is currently
+ # executing a to-be-patched function -- the consistency model stalls the
+@@ -417,8 +414,7 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+ # function for a long time.  Meanwhile, load and unload other target
+ # kernel modules while the livepatch transition is in progress.
+ #
+-# - Load the "busy" kernel module, this time make it do 10 seconds worth
+-#   of work.
++# - Load the "busy" kernel module, this time make its work function loop
+ #
+ # - Meanwhile, the livepatch is loaded.  Notice that the patch
+ #   transition does not complete as the targeted "busy" module is
+@@ -438,20 +434,23 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+ echo -n "TEST: busy target module ... "
+ dmesg -C
+ 
+-load_mod $MOD_TARGET_BUSY sleep_secs=10
++load_mod $MOD_TARGET_BUSY block_transition=Y
+ load_lp_nowait $MOD_LIVEPATCH
+-# Don't wait for transition, load $MOD_TARGET while the transition
+-# is still stalled in $MOD_TARGET_BUSY::busymod_work_func()
+-sleep 5
++
++# Wait until the livepatch reports in-transition state, i.e. that it's
++# stalled on $MOD_TARGET_BUSY::busymod_work_func()
++loop_until 'grep -q '^1$' /sys/kernel/livepatch/$MOD_LIVEPATCH/transition' ||
++	die "failed to stall transition"
++
+ load_mod $MOD_TARGET
+ unload_mod $MOD_TARGET
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET_BUSY
+ 
+-check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=10
++check_result "% modprobe $MOD_TARGET_BUSY block_transition=Y
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
+-$MOD_TARGET_BUSY: busymod_work_func, sleeping 10 seconds ...
++$MOD_TARGET_BUSY: busymod_work_func enter
+ % modprobe $MOD_LIVEPATCH
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+-- 
+2.25.4
 
-Why? It could easily break something somewhere. I didn't check properly, 
-but module states are not safe to play with, so I'd be conservative here.
-
-> Signed-off-by: Cheng Jian <cj.chengjian@huawei.com>
-> ---
->  kernel/module.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 64a2b4daaaa5..96c9cb64de57 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -4220,7 +4220,7 @@ unsigned long module_kallsyms_lookup_name(const char *name)
->  			ret = find_kallsyms_symbol_value(mod, colon+1);
->  	} else {
->  		list_for_each_entry_rcu(mod, &modules, list) {
-> -			if (mod->state == MODULE_STATE_UNFORMED)
-> +			if (mod->state != MODULE_STATE_LIVE)
->  				continue;
->  			if ((ret = find_kallsyms_symbol_value(mod, name)) != 0)
->  				break;
-
-Thanks,
-Miroslav
