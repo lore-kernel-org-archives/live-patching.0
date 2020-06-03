@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 314B9C433DF
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6007BC433E0
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 16D382053B
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 434B2207D0
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YlEv7uTf"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OVsKBZP0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726076AbgFCSVl (ORCPT
+        id S1726118AbgFCSVr (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 3 Jun 2020 14:21:41 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:40030 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725959AbgFCSVj (ORCPT
+        Wed, 3 Jun 2020 14:21:47 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:41776 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726148AbgFCSVp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 3 Jun 2020 14:21:39 -0400
+        Wed, 3 Jun 2020 14:21:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591208497;
+        s=mimecast20190719; t=1591208503;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bAac06P3giR5I4Nc3J9vi1Ip90+x7WJLQsxk772I3oE=;
-        b=YlEv7uTfVyGDZY+UP4BLNP2kp2t3ZIfw03nLH06YfeP9MA5kOsbFR8SoTj60KpXpb2Dlt5
-        klcDgis8D7Wr9PwKPKonZJPipmuTob937eIfunzZC4H3Jn4hzDs0oHirHVTukExSE0eQct
-        bv6b4lj6EyVNCKRpmgBtMJRj2pfEPao=
+        bh=N8+QQPH2QujNnngMCvTYk2cn6MqYerfKhZLbvp5VGaU=;
+        b=OVsKBZP00Wm9YcWoY2iCMa56HmTagcHZ/cDJ0Ed6W/RkukwgohnvLw6iw08YK6K01Hy5b/
+        0U/6WcKpNAxj6AVuln+l/I1EUzIOW313M3SxpSEGFWOwHqorntZTdLkKCwSOty5Cuj06Br
+        lsE8vi0UsEdF08uCVkmJgXEh30aaF/U=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-67-0WpOuRSGP_6tlyvkYlfIIg-1; Wed, 03 Jun 2020 14:21:35 -0400
-X-MC-Unique: 0WpOuRSGP_6tlyvkYlfIIg-1
+ us-mta-483-0t8LO991OQmcwyM40xm4Cw-1; Wed, 03 Jun 2020 14:21:42 -0400
+X-MC-Unique: 0t8LO991OQmcwyM40xm4Cw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D1A71800D42;
-        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CAFEE107ACCA;
+        Wed,  3 Jun 2020 18:21:40 +0000 (UTC)
 Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 938FD5D9CD;
-        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C21DF5D9CD;
+        Wed,  3 Jun 2020 18:21:39 +0000 (UTC)
 From:   Yannick Cote <ycote@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
         linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
         kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 1/4] selftests/livepatch: simplify test-klp-callbacks busy target tests
-Date:   Wed,  3 Jun 2020 14:20:55 -0400
-Message-Id: <20200603182058.109470-2-ycote@redhat.com>
+Subject: [PATCH v2 4/4] selftests/livepatch: fix mem leaks in test-klp-shadow-vars
+Date:   Wed,  3 Jun 2020 14:20:58 -0400
+Message-Id: <20200603182058.109470-5-ycote@redhat.com>
 In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
 References: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
@@ -63,171 +63,120 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
+In some cases, when an error occurs during testing and the main test
+routine returns, a memory leak occurs via leaving previously registered
+shadow variables allocated in the kernel as well as shadow_ptr list
+elements. From now on, in case of error, remove all allocated shadow
+variables and shadow_ptr struct elements.
 
-The test-klp-callbacks script includes a few tests which rely on kernel
-task timings that may not always execute as expected under system load.
-These may generate out of sequence kernel log messages that result in
-test failure.
-
-Instead of using sleep timing windows to orchestrate these tests, add a
-block_transition module parameter to communicate the test purpose and
-utilize flush_queue() to serialize the test module's task output.
-
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Yannick Cote <ycote@redhat.com>
 ---
- lib/livepatch/test_klp_callbacks_busy.c       | 37 ++++++++++++++-----
- .../selftests/livepatch/test-callbacks.sh     | 29 +++++++--------
- 2 files changed, 42 insertions(+), 24 deletions(-)
+ lib/livepatch/test_klp_shadow_vars.c | 43 ++++++++++++++++++++--------
+ 1 file changed, 31 insertions(+), 12 deletions(-)
 
-diff --git a/lib/livepatch/test_klp_callbacks_busy.c b/lib/livepatch/test_klp_callbacks_busy.c
-index 40beddf8a0e2..7ac845f65be5 100644
---- a/lib/livepatch/test_klp_callbacks_busy.c
-+++ b/lib/livepatch/test_klp_callbacks_busy.c
-@@ -5,34 +5,53 @@
+diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
+index a49265e56917..b99116490858 100644
+--- a/lib/livepatch/test_klp_shadow_vars.c
++++ b/lib/livepatch/test_klp_shadow_vars.c
+@@ -170,6 +170,7 @@ static int test_klp_shadow_vars_init(void)
+ 	char *pndup[NUM_OBJS];
+ 	int nfields2[NUM_OBJS], *pnfields2[NUM_OBJS], **sv2[NUM_OBJS];
+ 	void **sv;
++	int ret;
+ 	int i;
  
- #include <linux/module.h>
- #include <linux/kernel.h>
-+#include <linux/sched.h>
- #include <linux/workqueue.h>
- #include <linux/delay.h>
+ 	ptr_id(NULL);
+@@ -196,31 +197,39 @@ static int test_klp_shadow_vars_init(void)
+ 					sizeof(pnfields1[i]), GFP_KERNEL,
+ 					shadow_ctor, &pnfields1[i]);
+ 		}
+-		if (!sv1[i])
+-			return -ENOMEM;
++		if (!sv1[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
  
--static int sleep_secs;
--module_param(sleep_secs, int, 0644);
--MODULE_PARM_DESC(sleep_secs, "sleep_secs (default=0)");
-+/* load/run-time control from sysfs writer  */
-+static bool block_transition;
-+module_param(block_transition, bool, 0644);
-+MODULE_PARM_DESC(block_transition, "block_transition (default=false)");
+ 		pnfields2[i] = &nfields2[i];
+ 		ptr_id(pnfields2[i]);
+ 		sv2[i] = shadow_alloc(&objs[i], SV_ID2, sizeof(pnfields2[i]),
+ 					GFP_KERNEL, shadow_ctor, &pnfields2[i]);
+-		if (!sv2[i])
+-			return -ENOMEM;
++		if (!sv2[i]) {
++			ret = -ENOMEM;
++			goto out;
++		}
+ 	}
  
- static void busymod_work_func(struct work_struct *work);
--static DECLARE_DELAYED_WORK(work, busymod_work_func);
-+static DECLARE_WORK(work, busymod_work_func);
+ 	/* pass 2: verify we find allocated svars and where they point to */
+ 	for (i = 0; i < NUM_OBJS; i++) {
+ 		/* check the "char" svar for all objects */
+ 		sv = shadow_get(&objs[i], SV_ID1);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((char **)sv == sv1[i] && *sv1[i] == pnfields1[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 				ptr_id(sv1[i]), ptr_id(*sv1[i]));
  
- static void busymod_work_func(struct work_struct *work)
- {
--	pr_info("%s, sleeping %d seconds ...\n", __func__, sleep_secs);
--	msleep(sleep_secs * 1000);
-+	pr_info("%s enter\n", __func__);
-+
-+	while (READ_ONCE(block_transition)) {
-+		/*
-+		 * Busy-wait until the sysfs writer has acknowledged a
-+		 * blocked transition and clears the flag.
-+		 */
-+		msleep(20);
-+	}
-+
- 	pr_info("%s exit\n", __func__);
- }
+ 		/* check the "int" svar for all objects */
+ 		sv = shadow_get(&objs[i], SV_ID2);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((int **)sv == sv2[i] && *sv2[i] == pnfields2[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 				ptr_id(sv2[i]), ptr_id(*sv2[i]));
+@@ -233,8 +242,10 @@ static int test_klp_shadow_vars_init(void)
  
- static int test_klp_callbacks_busy_init(void)
- {
- 	pr_info("%s\n", __func__);
--	schedule_delayed_work(&work,
--		msecs_to_jiffies(1000 * 0));
-+	schedule_work(&work);
-+
-+	if (!block_transition) {
-+		/*
-+		 * Serialize output: print all messages from the work
-+		 * function before returning from init().
-+		 */
-+		flush_work(&work);
-+	}
-+
+ 		sv = shadow_get_or_alloc(&objs[i], SV_ID1, sizeof(pndup[i]),
+ 					GFP_KERNEL, shadow_ctor, &pndup[i]);
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((char **)sv == sv1[i] && *sv1[i] == pnfields1[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 					ptr_id(sv1[i]), ptr_id(*sv1[i]));
+@@ -251,8 +262,10 @@ static int test_klp_shadow_vars_init(void)
+ 	/* pass 5: check we still find <objs[*], SV_ID2> svar pairs */
+ 	for (i = 0; i < NUM_OBJS; i++) {
+ 		sv = shadow_get(&objs[i], SV_ID2);	/* 'int' pairs */
+-		if (!sv)
+-			return -EINVAL;
++		if (!sv) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 		if ((int **)sv == sv2[i] && *sv2[i] == pnfields2[i])
+ 			pr_info("  got expected PTR%d -> PTR%d result\n",
+ 					ptr_id(sv2[i]), ptr_id(*sv2[i]));
+@@ -269,6 +282,12 @@ static int test_klp_shadow_vars_init(void)
+ 	free_ptr_list();
+ 
  	return 0;
++out:
++	shadow_free_all(SV_ID1, NULL);		/* 'char' pairs */
++	shadow_free_all(SV_ID2, NULL);		/* 'int' pairs */
++	free_ptr_list();
++
++	return ret;
  }
  
- static void test_klp_callbacks_busy_exit(void)
- {
--	cancel_delayed_work_sync(&work);
-+	WRITE_ONCE(block_transition, false);
-+	flush_work(&work);
- 	pr_info("%s\n", __func__);
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-index a35289b13c9c..32b57ba07f4f 100755
---- a/tools/testing/selftests/livepatch/test-callbacks.sh
-+++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-@@ -356,9 +356,7 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- echo -n "TEST: multiple target modules ... "
- dmesg -C
- 
--load_mod $MOD_TARGET_BUSY sleep_secs=0
--# give $MOD_TARGET_BUSY::busymod_work_func() a chance to run
--sleep 5
-+load_mod $MOD_TARGET_BUSY block_transition=N
- load_lp $MOD_LIVEPATCH
- load_mod $MOD_TARGET
- unload_mod $MOD_TARGET
-@@ -366,9 +364,9 @@ disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- unload_mod $MOD_TARGET_BUSY
- 
--check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=0
-+check_result "% modprobe $MOD_TARGET_BUSY block_transition=N
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
--$MOD_TARGET_BUSY: busymod_work_func, sleeping 0 seconds ...
-+$MOD_TARGET_BUSY: busymod_work_func enter
- $MOD_TARGET_BUSY: busymod_work_func exit
- % modprobe $MOD_LIVEPATCH
- livepatch: enabling patch '$MOD_LIVEPATCH'
-@@ -404,11 +402,10 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- 
- 
--
- # TEST: busy target module
- #
- # A similar test as the previous one, but force the "busy" kernel module
--# to do longer work.
-+# to block the livepatch transition.
- #
- # The livepatching core will refuse to patch a task that is currently
- # executing a to-be-patched function -- the consistency model stalls the
-@@ -417,8 +414,7 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- # function for a long time.  Meanwhile, load and unload other target
- # kernel modules while the livepatch transition is in progress.
- #
--# - Load the "busy" kernel module, this time make it do 10 seconds worth
--#   of work.
-+# - Load the "busy" kernel module, this time make its work function loop
- #
- # - Meanwhile, the livepatch is loaded.  Notice that the patch
- #   transition does not complete as the targeted "busy" module is
-@@ -438,20 +434,23 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- echo -n "TEST: busy target module ... "
- dmesg -C
- 
--load_mod $MOD_TARGET_BUSY sleep_secs=10
-+load_mod $MOD_TARGET_BUSY block_transition=Y
- load_lp_nowait $MOD_LIVEPATCH
--# Don't wait for transition, load $MOD_TARGET while the transition
--# is still stalled in $MOD_TARGET_BUSY::busymod_work_func()
--sleep 5
-+
-+# Wait until the livepatch reports in-transition state, i.e. that it's
-+# stalled on $MOD_TARGET_BUSY::busymod_work_func()
-+loop_until 'grep -q '^1$' /sys/kernel/livepatch/$MOD_LIVEPATCH/transition' ||
-+	die "failed to stall transition"
-+
- load_mod $MOD_TARGET
- unload_mod $MOD_TARGET
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- unload_mod $MOD_TARGET_BUSY
- 
--check_result "% modprobe $MOD_TARGET_BUSY sleep_secs=10
-+check_result "% modprobe $MOD_TARGET_BUSY block_transition=Y
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
--$MOD_TARGET_BUSY: busymod_work_func, sleeping 10 seconds ...
-+$MOD_TARGET_BUSY: busymod_work_func enter
- % modprobe $MOD_LIVEPATCH
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ static void test_klp_shadow_vars_exit(void)
 -- 
 2.25.4
 
