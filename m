@@ -2,292 +2,134 @@ Return-Path: <SRS0=d+mo=7Q=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3643C433E0
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61149C433E0
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 20:42:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9A4B72074B
-	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GzVFhN/Y"
+	by mail.kernel.org (Postfix) with ESMTP id 3B091207D3
+	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 20:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1591216939;
+	bh=rgIDUtx4gnXafsKf4tEIintiRIoSRYzk7KDiatMjQfE=;
+	h=Date:From:To:cc:Subject:List-ID:From;
+	b=K0BSM5tncYQ9NsiTkBpQ2w6RiSg/YLddvgOVr6PnDZCb0xS326qe3+/K9ZElSwJaK
+	 Vr3Y7Qpvg2GEyeAnKh0Z5yX5tFTpk901Nig70rLLu8G8wOOLGHuIUOm57ok7iCzyRy
+	 /P0C0ZNz6JU0c+1KDG90BsNV8Ws6NqUmSumhPimQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgFCSV6 (ORCPT
+        id S1726184AbgFCUmT (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 3 Jun 2020 14:21:58 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:23917 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725821AbgFCSVk (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Wed, 3 Jun 2020 14:21:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591208498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rAog9oXLl/KPRUT67WnomCQCFdAZfZBa0BLOwUhaVok=;
-        b=GzVFhN/YL0hJLrXE6ymKsJtbK1N/DX/22AcVJt1BgxN9KsnpevPYJDyifv7DikbO2H2aB8
-        kqMmWa8NDeVVbgEt7P122MgS+zuzgvCDNo8lsfHS8qecmL/0RhEWZaNyD1LBQZIu4F7IGG
-        +pL4m50e+Wsx/4htqKt5iV4swdeu4uc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-379-vX4zcfqUObyawnGnGgs7yg-1; Wed, 03 Jun 2020 14:21:37 -0400
-X-MC-Unique: vX4zcfqUObyawnGnGgs7yg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 3 Jun 2020 16:42:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37584 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725922AbgFCUmS (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 3 Jun 2020 16:42:18 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D92961005510;
-        Wed,  3 Jun 2020 18:21:35 +0000 (UTC)
-Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D10E95D9CD;
-        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
-From:   Yannick Cote <ycote@redhat.com>
-To:     live-patching@vger.kernel.org
-Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
-        kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 2/4] selftests/livepatch: rework test-klp-shadow-vars
-Date:   Wed,  3 Jun 2020 14:20:56 -0400
-Message-Id: <20200603182058.109470-3-ycote@redhat.com>
-In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
-References: <20200603182058.109470-1-ycote@redhat.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 9FC452077D;
+        Wed,  3 Jun 2020 20:42:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591216938;
+        bh=rgIDUtx4gnXafsKf4tEIintiRIoSRYzk7KDiatMjQfE=;
+        h=Date:From:To:cc:Subject:From;
+        b=eANFuzemT/yH+Ov2ksJh3+VWEWJH9YQQeObtKkT475K52lLEu6iZDIw/gOsws2v3b
+         24jfMACpLXug1lv7vODzgHfVDG0PWqqi4bDNCqLPHBjtABpvMjXFpahN2lvcWF7huz
+         VXzfw7Ok/zkmFcL2z7jzTS2Wbrnwx2HGrSrR8DpQ=
+Date:   Wed, 3 Jun 2020 22:42:14 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: [GIT PULL] livepatching for 5.8
+Message-ID: <nycvar.YFH.7.76.2006032232540.13242@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Type: text/plain; charset=US-ASCII
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The initial idea was to make a change to please cppcheck and remove void
-pointer arithmetics found a few times:
+Linus,
 
-	portability: 'obj' is of type 'void *'. When using void pointers
-	             in calculations, the behaviour is undefined.
-		     [arithOperationsOnVoidPointer]
+please pull from
 
-The rest of the changes are to help make the test read as an example
-while continuing to verify the shadow variable code. The logic of the
-test is unchanged but restructured to use descriptive names.
+  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git for-linus
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Yannick Cote <ycote@redhat.com>
----
- lib/livepatch/test_klp_shadow_vars.c | 101 +++++++++++++++------------
- 1 file changed, 57 insertions(+), 44 deletions(-)
+to receive livepatching subsystem updates for 5.8.
 
-diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
-index f0b5a1d24e55..ec2635cff974 100644
---- a/lib/livepatch/test_klp_shadow_vars.c
-+++ b/lib/livepatch/test_klp_shadow_vars.c
-@@ -109,8 +109,7 @@ static void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
- static void shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
- {
- 	klp_shadow_free_all(id, dtor);
--	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n",
--		__func__, id, ptr_id(dtor));
-+	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n", __func__, id, ptr_id(dtor));
- }
- 
- 
-@@ -124,8 +123,7 @@ static int shadow_ctor(void *obj, void *shadow_data, void *ctor_data)
- 		return -EINVAL;
- 
- 	*sv = *var;
--	pr_info("%s: PTR%d -> PTR%d\n",
--		__func__, ptr_id(sv), ptr_id(*var));
-+	pr_info("%s: PTR%d -> PTR%d\n", __func__, ptr_id(sv), ptr_id(*var));
- 
- 	return 0;
- }
-@@ -138,49 +136,63 @@ static void shadow_dtor(void *obj, void *shadow_data)
- 		__func__, ptr_id(obj), ptr_id(sv));
- }
- 
--static int test_klp_shadow_vars_init(void)
--{
--	void *obj			= THIS_MODULE;
--	int id			= 0x1234;
--	gfp_t gfp_flags		= GFP_KERNEL;
-+/* dynamically created obj fields have the following shadow var id values */
-+#define SV_ID1 0x1234
-+#define SV_ID2 0x1235
- 
--	int var1, var2, var3, var4;
--	int *pv1, *pv2, *pv3, *pv4;
--	int **sv1, **sv2, **sv3, **sv4;
-+/*
-+ * The main test case adds/removes new fields (shadow var) to each of these
-+ * test structure instances. The last group of fields in the struct represent
-+ * the idea that shadow variables may be added and removed to and from the
-+ * struct during execution.
-+ */
-+struct test_object {
-+	 /* add anything here below and avoid to define an empty struct */
-+	struct shadow_ptr sp;
- 
--	int **sv;
-+	/* these represent shadow vars added and removed with SV_ID{1,2} */
-+	/* char nfield1; */
-+	/* int  nfield2; */
-+};
- 
--	pv1 = &var1;
--	pv2 = &var2;
--	pv3 = &var3;
--	pv4 = &var4;
-+static int test_klp_shadow_vars_init(void)
-+{
-+	struct test_object obj1, obj2, obj3;
-+	char nfield1, nfield2, *pnfield1, *pnfield2, **sv1, **sv2;
-+	int  nfield3, nfield4, *pnfield3, *pnfield4, **sv3, **sv4;
-+	void **sv;
-+
-+	pnfield1 = &nfield1;
-+	pnfield2 = &nfield2;
-+	pnfield3 = &nfield3;
-+	pnfield4 = &nfield4;
- 
- 	ptr_id(NULL);
--	ptr_id(pv1);
--	ptr_id(pv2);
--	ptr_id(pv3);
--	ptr_id(pv4);
-+	ptr_id(pnfield1);
-+	ptr_id(pnfield2);
-+	ptr_id(pnfield3);
-+	ptr_id(pnfield4);
- 
- 	/*
- 	 * With an empty shadow variable hash table, expect not to find
- 	 * any matches.
- 	 */
--	sv = shadow_get(obj, id);
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
- 	/*
- 	 * Allocate a few shadow variables with different <obj> and <id>.
- 	 */
--	sv1 = shadow_alloc(obj, id, sizeof(pv1), gfp_flags, shadow_ctor, &pv1);
-+	sv1 = shadow_alloc(&obj1, SV_ID1, sizeof(pnfield1), GFP_KERNEL, shadow_ctor, &pnfield1);
- 	if (!sv1)
- 		return -ENOMEM;
- 
--	sv2 = shadow_alloc(obj + 1, id, sizeof(pv2), gfp_flags, shadow_ctor, &pv2);
-+	sv2 = shadow_alloc(&obj2, SV_ID1, sizeof(pnfield2), GFP_KERNEL, shadow_ctor, &pnfield2);
- 	if (!sv2)
- 		return -ENOMEM;
- 
--	sv3 = shadow_alloc(obj, id + 1, sizeof(pv3), gfp_flags, shadow_ctor, &pv3);
-+	sv3 = shadow_alloc(&obj1, SV_ID2, sizeof(pnfield3), GFP_KERNEL, shadow_ctor, &pnfield3);
- 	if (!sv3)
- 		return -ENOMEM;
- 
-@@ -188,23 +200,24 @@ static int test_klp_shadow_vars_init(void)
- 	 * Verify we can find our new shadow variables and that they point
- 	 * to expected data.
- 	 */
--	sv = shadow_get(obj, id);
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv1 && *sv1 == pv1)
-+	if ((char **)sv == sv1 && *sv1 == pnfield1)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv1), ptr_id(*sv1));
- 
--	sv = shadow_get(obj + 1, id);
-+	sv = shadow_get(&obj2, SV_ID1);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv2 && *sv2 == pv2)
-+	if ((char **)sv == sv2 && *sv2 == pnfield2)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv2), ptr_id(*sv2));
--	sv = shadow_get(obj, id + 1);
-+
-+	sv = shadow_get(&obj1, SV_ID2);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv3 && *sv3 == pv3)
-+	if ((int **)sv == sv3 && *sv3 == pnfield3)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv3), ptr_id(*sv3));
- 
-@@ -212,14 +225,14 @@ static int test_klp_shadow_vars_init(void)
- 	 * Allocate or get a few more, this time with the same <obj>, <id>.
- 	 * The second invocation should return the same shadow var.
- 	 */
--	sv4 = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
-+	sv4 = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
- 	if (!sv4)
- 		return -ENOMEM;
- 
--	sv = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
-+	sv = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv4 && *sv4 == pv4)
-+	if ((int **)sv == sv4 && *sv4 == pnfield4)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv4), ptr_id(*sv4));
- 
-@@ -227,36 +240,36 @@ static int test_klp_shadow_vars_init(void)
- 	 * Free the <obj=*, id> shadow variables and check that we can no
- 	 * longer find them.
- 	 */
--	shadow_free(obj, id, shadow_dtor);			/* sv1 */
--	sv = shadow_get(obj, id);
-+	shadow_free(&obj1, SV_ID1, shadow_dtor);		/* sv1 */
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
--	shadow_free(obj + 1, id, shadow_dtor);			/* sv2 */
--	sv = shadow_get(obj + 1, id);
-+	shadow_free(&obj2, SV_ID1, shadow_dtor);		/* sv2 */
-+	sv = shadow_get(&obj2, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
--	shadow_free(obj + 2, id, shadow_dtor);			/* sv4 */
--	sv = shadow_get(obj + 2, id);
-+	shadow_free(&obj3, SV_ID1, shadow_dtor);		/* sv4 */
-+	sv = shadow_get(&obj3, SV_ID1);
- 	if (!sv)
- 		pr_info("  got expected NULL result\n");
- 
- 	/*
- 	 * We should still find an <id+1> variable.
- 	 */
--	sv = shadow_get(obj, id + 1);
-+	sv = shadow_get(&obj1, SV_ID2);
- 	if (!sv)
- 		return -EINVAL;
--	if (sv == sv3 && *sv3 == pv3)
-+	if ((int **)sv == sv3 && *sv3 == pnfield3)
- 		pr_info("  got expected PTR%d -> PTR%d result\n",
- 			ptr_id(sv3), ptr_id(*sv3));
- 
- 	/*
- 	 * Free all the <id+1> variables, too.
- 	 */
--	shadow_free_all(id + 1, shadow_dtor);			/* sv3 */
--	sv = shadow_get(obj, id);
-+	shadow_free_all(SV_ID2, shadow_dtor);			/* sv3 */
-+	sv = shadow_get(&obj1, SV_ID1);
- 	if (!sv)
- 		pr_info("  shadow_get() got expected NULL result\n");
- 
+You are going to get a minor conflict with modules tree; the correct 
+resolution is documented at
+
+	http://lore.kernel.org/r/20200508180524.6995b07e@canb.auug.org.au
+
+Alternatively, I can just prepare a branch for you to pull with the 
+conflict resolved.
+
+Thanks.
+
+=====
+- simplifications and improvements for issues Peter Ziljstra found during 
+  his previous work on W^X cleanups. This allows us to remove livepatch 
+  arch-specific .klp.arch sections and add proper support for jump labels
+  in patched code. Also, this patchset removes the last 
+  module_disable_ro() usage in the tree. Patches from Josh Poimboeuf and 
+  Peter Zijlstra
+- a few other minor cleanups  
+=====
+
+----------------------------------------------------------------
+Jiri Kosina (1):
+      livepatch: add arch-specific headers to MAINTAINERS
+
+Josh Poimboeuf (8):
+      livepatch: Disallow vmlinux.ko
+      livepatch: Apply vmlinux-specific KLP relocations early
+      livepatch: Prevent module-specific KLP rela sections from referencing vmlinux symbols
+      s390: Change s390_kernel_write() return type to match memcpy()
+      livepatch: Remove module_disable_ro() usage
+      module: Remove module_disable_ro()
+      x86/module: Use text_mutex in apply_relocate_add()
+      module: Make module_enable_ro() static again
+
+Kamalesh Babulal (1):
+      MAINTAINERS: add lib/livepatch to LIVE PATCHING
+
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust to livepatch .klp.arch removal
+
+Peter Zijlstra (3):
+      livepatch: Remove .klp.arch
+      s390/module: Use s390_kernel_write() for late relocations
+      x86/module: Use text_poke() for late relocations
+
+Samuel Zou (1):
+      livepatch: Make klp_apply_object_relocs static
+
+ Documentation/livepatch/module-elf-format.rst |  15 +--
+ MAINTAINERS                                   |   4 +-
+ arch/s390/include/asm/uaccess.h               |   2 +-
+ arch/s390/kernel/module.c                     | 147 ++++++++++++---------
+ arch/s390/mm/maccess.c                        |   9 +-
+ arch/um/kernel/um_arch.c                      |  16 +++
+ arch/x86/kernel/Makefile                      |   1 -
+ arch/x86/kernel/livepatch.c                   |  53 --------
+ arch/x86/kernel/module.c                      |  43 ++++++-
+ include/linux/livepatch.h                     |  17 ++-
+ include/linux/module.h                        |   8 --
+ kernel/livepatch/core.c                       | 178 ++++++++++++++++----------
+ kernel/module.c                               |  26 ++--
+ 13 files changed, 283 insertions(+), 236 deletions(-)
+ delete mode 100644 arch/x86/kernel/livepatch.c
+
 -- 
-2.25.4
+Jiri Kosina
+SUSE Labs
 
