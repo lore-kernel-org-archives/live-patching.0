@@ -2,56 +2,59 @@ Return-Path: <SRS0=d+mo=7Q=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E940C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3643C433E0
 	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75C0D2053B
+	by mail.kernel.org (Postfix) with ESMTP id 9A4B72074B
 	for <live-patching@archiver.kernel.org>; Wed,  3 Jun 2020 18:21:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LNpXPPCE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GzVFhN/Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbgFCSVk (ORCPT
+        id S1726096AbgFCSV6 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 3 Jun 2020 14:21:40 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28481 "EHLO
+        Wed, 3 Jun 2020 14:21:58 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:23917 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726076AbgFCSVj (ORCPT
+        by vger.kernel.org with ESMTP id S1725821AbgFCSVk (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 3 Jun 2020 14:21:39 -0400
+        Wed, 3 Jun 2020 14:21:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1591208498;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+c1cgHsK07BrW3OA4NvtHTy/+/91BrD1QDQgKn/57QU=;
-        b=LNpXPPCEIvG+GVvRWvLWsjTofgNOQj8WC0Ty0GTcI3gyI7pEyu47YbxwkML6OQG+bLvARX
-        Cu16loYEK6mkemjGHu20qCmo+STi9ie57j6eWNvyQ9OgSUB3NHap/ypqANlkDJljdAWj/M
-        LAMCIuJQFFN/oNXuMrAx7559rC2OMYM=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rAog9oXLl/KPRUT67WnomCQCFdAZfZBa0BLOwUhaVok=;
+        b=GzVFhN/YL0hJLrXE6ymKsJtbK1N/DX/22AcVJt1BgxN9KsnpevPYJDyifv7DikbO2H2aB8
+        kqMmWa8NDeVVbgEt7P122MgS+zuzgvCDNo8lsfHS8qecmL/0RhEWZaNyD1LBQZIu4F7IGG
+        +pL4m50e+Wsx/4htqKt5iV4swdeu4uc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-214-z6ZVHDynO0SDP4ytoFxXvQ-1; Wed, 03 Jun 2020 14:21:34 -0400
-X-MC-Unique: z6ZVHDynO0SDP4ytoFxXvQ-1
+ us-mta-379-vX4zcfqUObyawnGnGgs7yg-1; Wed, 03 Jun 2020 14:21:37 -0400
+X-MC-Unique: vX4zcfqUObyawnGnGgs7yg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 608F2107ACF2;
-        Wed,  3 Jun 2020 18:21:33 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D92961005510;
+        Wed,  3 Jun 2020 18:21:35 +0000 (UTC)
 Received: from dm.redhat.com (unknown [10.10.67.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 982BD5D9CD;
-        Wed,  3 Jun 2020 18:21:29 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D10E95D9CD;
+        Wed,  3 Jun 2020 18:21:34 +0000 (UTC)
 From:   Yannick Cote <ycote@redhat.com>
 To:     live-patching@vger.kernel.org
 Cc:     linux-kselftest@vger.kernel.org, joe.lawrence@redhat.com,
         linux-kernel@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz,
         kamalesh@linux.vnet.ibm.com
-Subject: [PATCH v2 0/4] selftests/livepatch: rework of test-klp-{callbacks,shadow_vars}
-Date:   Wed,  3 Jun 2020 14:20:54 -0400
-Message-Id: <20200603182058.109470-1-ycote@redhat.com>
+Subject: [PATCH v2 2/4] selftests/livepatch: rework test-klp-shadow-vars
+Date:   Wed,  3 Jun 2020 14:20:56 -0400
+Message-Id: <20200603182058.109470-3-ycote@redhat.com>
+In-Reply-To: <20200603182058.109470-1-ycote@redhat.com>
+References: <20200603182058.109470-1-ycote@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
@@ -60,42 +63,231 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-v2:
- - drop completion variables and flush workqueue [pmladek]
- - comment typo/pr_info cleanup [kbabulal/mbenes]
- - cleanup goto ret assignations [pmladek]
- - allocate pndup[]'s, leave some svar allocations to
-   shadow_get_or_alloc() [pmladek]
- - change allocation order for cleaner test dmesg output [pmladek]
+The initial idea was to make a change to please cppcheck and remove void
+pointer arithmetics found a few times:
 
-The test-klp-callbacks change implements a synchronization replacement of
-initial code which relied on solely on sleep delays. Remove the sleeps
-and pass a block_transition flag from test script to module. Use
-flush_workqueue() to serialize module output for test result
-consideration.
+	portability: 'obj' is of type 'void *'. When using void pointers
+	             in calculations, the behaviour is undefined.
+		     [arithOperationsOnVoidPointer]
 
-The test-klp-shadow-vars changes first refactors the code to be more of
-a readable example as well as continuing to verify the component code.
-The patch is broken in two to display the renaming and restructuring in
-part 1 and the addition and change of logic in part 2. The last change
-frees memory before bailing in case of errors.
+The rest of the changes are to help make the test read as an example
+while continuing to verify the shadow variable code. The logic of the
+test is unchanged but restructured to use descriptive names.
 
-Patchset to be merged via the livepatching tree is against: livepatching/for-next
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Yannick Cote <ycote@redhat.com>
+---
+ lib/livepatch/test_klp_shadow_vars.c | 101 +++++++++++++++------------
+ 1 file changed, 57 insertions(+), 44 deletions(-)
 
-Joe Lawrence (1):
-  selftests/livepatch: simplify test-klp-callbacks busy target tests
-
-Yannick Cote (3):
-  selftests/livepatch: rework test-klp-shadow-vars
-  selftests/livepatch: more verification in test-klp-shadow-vars
-  selftests/livepatch: fix mem leaks in test-klp-shadow-vars
-
- lib/livepatch/test_klp_callbacks_busy.c       |  37 ++-
- lib/livepatch/test_klp_shadow_vars.c          | 240 ++++++++++--------
- .../selftests/livepatch/test-callbacks.sh     |  29 +--
- .../selftests/livepatch/test-shadow-vars.sh   |  81 +++---
- 4 files changed, 225 insertions(+), 162 deletions(-)
-
+diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
+index f0b5a1d24e55..ec2635cff974 100644
+--- a/lib/livepatch/test_klp_shadow_vars.c
++++ b/lib/livepatch/test_klp_shadow_vars.c
+@@ -109,8 +109,7 @@ static void shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
+ static void shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
+ {
+ 	klp_shadow_free_all(id, dtor);
+-	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n",
+-		__func__, id, ptr_id(dtor));
++	pr_info("klp_%s(id=0x%lx, dtor=PTR%d)\n", __func__, id, ptr_id(dtor));
+ }
+ 
+ 
+@@ -124,8 +123,7 @@ static int shadow_ctor(void *obj, void *shadow_data, void *ctor_data)
+ 		return -EINVAL;
+ 
+ 	*sv = *var;
+-	pr_info("%s: PTR%d -> PTR%d\n",
+-		__func__, ptr_id(sv), ptr_id(*var));
++	pr_info("%s: PTR%d -> PTR%d\n", __func__, ptr_id(sv), ptr_id(*var));
+ 
+ 	return 0;
+ }
+@@ -138,49 +136,63 @@ static void shadow_dtor(void *obj, void *shadow_data)
+ 		__func__, ptr_id(obj), ptr_id(sv));
+ }
+ 
+-static int test_klp_shadow_vars_init(void)
+-{
+-	void *obj			= THIS_MODULE;
+-	int id			= 0x1234;
+-	gfp_t gfp_flags		= GFP_KERNEL;
++/* dynamically created obj fields have the following shadow var id values */
++#define SV_ID1 0x1234
++#define SV_ID2 0x1235
+ 
+-	int var1, var2, var3, var4;
+-	int *pv1, *pv2, *pv3, *pv4;
+-	int **sv1, **sv2, **sv3, **sv4;
++/*
++ * The main test case adds/removes new fields (shadow var) to each of these
++ * test structure instances. The last group of fields in the struct represent
++ * the idea that shadow variables may be added and removed to and from the
++ * struct during execution.
++ */
++struct test_object {
++	 /* add anything here below and avoid to define an empty struct */
++	struct shadow_ptr sp;
+ 
+-	int **sv;
++	/* these represent shadow vars added and removed with SV_ID{1,2} */
++	/* char nfield1; */
++	/* int  nfield2; */
++};
+ 
+-	pv1 = &var1;
+-	pv2 = &var2;
+-	pv3 = &var3;
+-	pv4 = &var4;
++static int test_klp_shadow_vars_init(void)
++{
++	struct test_object obj1, obj2, obj3;
++	char nfield1, nfield2, *pnfield1, *pnfield2, **sv1, **sv2;
++	int  nfield3, nfield4, *pnfield3, *pnfield4, **sv3, **sv4;
++	void **sv;
++
++	pnfield1 = &nfield1;
++	pnfield2 = &nfield2;
++	pnfield3 = &nfield3;
++	pnfield4 = &nfield4;
+ 
+ 	ptr_id(NULL);
+-	ptr_id(pv1);
+-	ptr_id(pv2);
+-	ptr_id(pv3);
+-	ptr_id(pv4);
++	ptr_id(pnfield1);
++	ptr_id(pnfield2);
++	ptr_id(pnfield3);
++	ptr_id(pnfield4);
+ 
+ 	/*
+ 	 * With an empty shadow variable hash table, expect not to find
+ 	 * any matches.
+ 	 */
+-	sv = shadow_get(obj, id);
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+ 	/*
+ 	 * Allocate a few shadow variables with different <obj> and <id>.
+ 	 */
+-	sv1 = shadow_alloc(obj, id, sizeof(pv1), gfp_flags, shadow_ctor, &pv1);
++	sv1 = shadow_alloc(&obj1, SV_ID1, sizeof(pnfield1), GFP_KERNEL, shadow_ctor, &pnfield1);
+ 	if (!sv1)
+ 		return -ENOMEM;
+ 
+-	sv2 = shadow_alloc(obj + 1, id, sizeof(pv2), gfp_flags, shadow_ctor, &pv2);
++	sv2 = shadow_alloc(&obj2, SV_ID1, sizeof(pnfield2), GFP_KERNEL, shadow_ctor, &pnfield2);
+ 	if (!sv2)
+ 		return -ENOMEM;
+ 
+-	sv3 = shadow_alloc(obj, id + 1, sizeof(pv3), gfp_flags, shadow_ctor, &pv3);
++	sv3 = shadow_alloc(&obj1, SV_ID2, sizeof(pnfield3), GFP_KERNEL, shadow_ctor, &pnfield3);
+ 	if (!sv3)
+ 		return -ENOMEM;
+ 
+@@ -188,23 +200,24 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Verify we can find our new shadow variables and that they point
+ 	 * to expected data.
+ 	 */
+-	sv = shadow_get(obj, id);
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv1 && *sv1 == pv1)
++	if ((char **)sv == sv1 && *sv1 == pnfield1)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv1), ptr_id(*sv1));
+ 
+-	sv = shadow_get(obj + 1, id);
++	sv = shadow_get(&obj2, SV_ID1);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv2 && *sv2 == pv2)
++	if ((char **)sv == sv2 && *sv2 == pnfield2)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv2), ptr_id(*sv2));
+-	sv = shadow_get(obj, id + 1);
++
++	sv = shadow_get(&obj1, SV_ID2);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv3 && *sv3 == pv3)
++	if ((int **)sv == sv3 && *sv3 == pnfield3)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv3), ptr_id(*sv3));
+ 
+@@ -212,14 +225,14 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Allocate or get a few more, this time with the same <obj>, <id>.
+ 	 * The second invocation should return the same shadow var.
+ 	 */
+-	sv4 = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
++	sv4 = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
+ 	if (!sv4)
+ 		return -ENOMEM;
+ 
+-	sv = shadow_get_or_alloc(obj + 2, id, sizeof(pv4), gfp_flags, shadow_ctor, &pv4);
++	sv = shadow_get_or_alloc(&obj3, SV_ID1, sizeof(pnfield4), GFP_KERNEL, shadow_ctor, &pnfield4);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv4 && *sv4 == pv4)
++	if ((int **)sv == sv4 && *sv4 == pnfield4)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv4), ptr_id(*sv4));
+ 
+@@ -227,36 +240,36 @@ static int test_klp_shadow_vars_init(void)
+ 	 * Free the <obj=*, id> shadow variables and check that we can no
+ 	 * longer find them.
+ 	 */
+-	shadow_free(obj, id, shadow_dtor);			/* sv1 */
+-	sv = shadow_get(obj, id);
++	shadow_free(&obj1, SV_ID1, shadow_dtor);		/* sv1 */
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+-	shadow_free(obj + 1, id, shadow_dtor);			/* sv2 */
+-	sv = shadow_get(obj + 1, id);
++	shadow_free(&obj2, SV_ID1, shadow_dtor);		/* sv2 */
++	sv = shadow_get(&obj2, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+-	shadow_free(obj + 2, id, shadow_dtor);			/* sv4 */
+-	sv = shadow_get(obj + 2, id);
++	shadow_free(&obj3, SV_ID1, shadow_dtor);		/* sv4 */
++	sv = shadow_get(&obj3, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  got expected NULL result\n");
+ 
+ 	/*
+ 	 * We should still find an <id+1> variable.
+ 	 */
+-	sv = shadow_get(obj, id + 1);
++	sv = shadow_get(&obj1, SV_ID2);
+ 	if (!sv)
+ 		return -EINVAL;
+-	if (sv == sv3 && *sv3 == pv3)
++	if ((int **)sv == sv3 && *sv3 == pnfield3)
+ 		pr_info("  got expected PTR%d -> PTR%d result\n",
+ 			ptr_id(sv3), ptr_id(*sv3));
+ 
+ 	/*
+ 	 * Free all the <id+1> variables, too.
+ 	 */
+-	shadow_free_all(id + 1, shadow_dtor);			/* sv3 */
+-	sv = shadow_get(obj, id);
++	shadow_free_all(SV_ID2, shadow_dtor);			/* sv3 */
++	sv = shadow_get(&obj1, SV_ID1);
+ 	if (!sv)
+ 		pr_info("  shadow_get() got expected NULL result\n");
+ 
 -- 
 2.25.4
 
