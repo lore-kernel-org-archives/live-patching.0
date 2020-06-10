@@ -2,53 +2,56 @@ Return-Path: <SRS0=5FE6=7X=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E59AC433DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 492C8C433E1
 	for <live-patching@archiver.kernel.org>; Wed, 10 Jun 2020 17:21:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D8DE2078C
+	by mail.kernel.org (Postfix) with ESMTP id 2C1822072E
 	for <live-patching@archiver.kernel.org>; Wed, 10 Jun 2020 17:21:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MHlVfmXh"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MoVUz+nT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727998AbgFJRVJ (ORCPT
+        id S1727813AbgFJRVK (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 10 Jun 2020 13:21:09 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45510 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727813AbgFJRVI (ORCPT
+        Wed, 10 Jun 2020 13:21:10 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:21739 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727904AbgFJRVJ (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 10 Jun 2020 13:21:08 -0400
+        Wed, 10 Jun 2020 13:21:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591809667;
+        s=mimecast20190719; t=1591809668;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4Nchs7giH9/7F+jYJ/Q/sPpycdHjWoC2ELbn/5DQJ2o=;
-        b=MHlVfmXh32O/WqomG4MIr0TryuT+QDud6Frbxx4LEberAv6Of2cu6YbJXNsKUScjo2BI6h
-        oHT22ZXTPfnDMSeAPP5VdHLeo3vAehqjAvqAjZ1NuLVFkhprHtsaFRgULm1FWBVVUEhi5y
-        9V4yuY2TNaVHasXe5sdpxZRFgXcMAmQ=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8x7zA9DhLqDyItEuwbgv+8oouxrHDSySR8TUcLh+iQM=;
+        b=MoVUz+nT4FCI21X0x9xU4WcUCow7mkTk0jhrm4yIONq3YP7uH8chLlhvzWvYEFQXpPXITU
+        qA0I0GC16ivR8jaUVLT1LfdRlPw3dYBFtCVJsOiRBjhwFBqdneI4JHIOdmA1L00JCExjnz
+        2S/PBFYrrf9sATezLJZQRhvIVP6HC0s=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-20-Y1eX-00sO2eeV1GR3MKuLA-1; Wed, 10 Jun 2020 13:21:04 -0400
-X-MC-Unique: Y1eX-00sO2eeV1GR3MKuLA-1
+ us-mta-172-mwvzNnDFN6qhEhqHIyyxow-1; Wed, 10 Jun 2020 13:21:06 -0400
+X-MC-Unique: mwvzNnDFN6qhEhqHIyyxow-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E2CC100CCC0;
-        Wed, 10 Jun 2020 17:21:03 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6CFA0107ACF4;
+        Wed, 10 Jun 2020 17:21:05 +0000 (UTC)
 Received: from jlaw-desktop.redhat.com (ovpn-117-142.rdu2.redhat.com [10.10.117.142])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CCD267BFE2;
-        Wed, 10 Jun 2020 17:21:02 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 03C6B1944D;
+        Wed, 10 Jun 2020 17:21:04 +0000 (UTC)
 From:   Joe Lawrence <joe.lawrence@redhat.com>
 To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 0/3] selftests/livepatch: small script cleanups
-Date:   Wed, 10 Jun 2020 13:20:58 -0400
-Message-Id: <20200610172101.21910-1-joe.lawrence@redhat.com>
+Subject: [PATCH 3/3] selftests/livepatch: filter 'taints' from dmesg comparison
+Date:   Wed, 10 Jun 2020 13:21:01 -0400
+Message-Id: <20200610172101.21910-4-joe.lawrence@redhat.com>
+In-Reply-To: <20200610172101.21910-1-joe.lawrence@redhat.com>
+References: <20200610172101.21910-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
@@ -57,29 +60,33 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-This is a small collection of tweaks for the shellscript side of the
-livepatch tests.  If anyone else has a small cleanup (or even just a
-suggestion for a low-hanging change) and would like to tack it onto the
-set, let me know.
+The livepatch selftests currently filter out "tainting kernel with
+TAINT_LIVEPATCH" messages which may be logged when loading livepatch
+modules.
 
-based-on: livepatching.git, for-5.9/selftests-cleanup
-merge-thru: livepatching.git
+Further filter the log to drop "loading out-of-tree module taints
+kernel" in the rare case the klp_test modules have been built
+out-of-tree.
 
-Joe Lawrence (3):
-  selftests/livepatch: Don't clear dmesg when running tests
-  selftests/livepatch: use $(dmesg --notime) instead of manually
-    filtering
-  selftests/livepatch: filter 'taints' from dmesg comparison
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/livepatch/README      | 16 +++---
- .../testing/selftests/livepatch/functions.sh  | 16 +++++-
- .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
- .../selftests/livepatch/test-ftrace.sh        |  5 +-
- .../selftests/livepatch/test-livepatch.sh     | 15 +----
- .../selftests/livepatch/test-shadow-vars.sh   |  5 +-
- .../testing/selftests/livepatch/test-state.sh | 20 ++-----
- 7 files changed, 43 insertions(+), 89 deletions(-)
-
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 83560c3df2ee..f5d4ef12f1cb 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -260,7 +260,8 @@ function check_result {
+ 	local result
+ 
+ 	result=$(dmesg --notime | diff --changed-group-format='%>' --unchanged-group-format='' "$SAVED_DMESG" - | \
+-		 grep -v 'tainting' | grep -e '^livepatch:' -e 'test_klp')
++		 grep -e '^livepatch:' -e 'test_klp' | \
++		 grep -ve '\<taints\>' -ve '\<tainting\>')
+ 
+ 	if [[ "$expect" == "$result" ]] ; then
+ 		echo "ok"
 -- 
 2.21.3
 
