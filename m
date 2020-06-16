@@ -3,46 +3,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 435ABC433E0
-	for <live-patching@archiver.kernel.org>; Tue, 16 Jun 2020 11:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D44C433E1
+	for <live-patching@archiver.kernel.org>; Tue, 16 Jun 2020 14:43:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A8B62063A
-	for <live-patching@archiver.kernel.org>; Tue, 16 Jun 2020 11:05:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B607620C56
+	for <live-patching@archiver.kernel.org>; Tue, 16 Jun 2020 14:43:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728314AbgFPLFg (ORCPT
+        id S1728975AbgFPOnZ (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 16 Jun 2020 07:05:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56130 "EHLO mx2.suse.de"
+        Tue, 16 Jun 2020 10:43:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36014 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725901AbgFPLFg (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 16 Jun 2020 07:05:36 -0400
+        id S1728183AbgFPOnZ (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Tue, 16 Jun 2020 10:43:25 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id B3DDCAE43;
-        Tue, 16 Jun 2020 11:05:38 +0000 (UTC)
-Date:   Tue, 16 Jun 2020 13:05:34 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
+        by mx2.suse.de (Postfix) with ESMTP id 6A01EACAE;
+        Tue, 16 Jun 2020 14:43:27 +0000 (UTC)
+Date:   Tue, 16 Jun 2020 16:43:22 +0200
+From:   Petr Mladek <pmladek@suse.com>
 To:     Joe Lawrence <joe.lawrence@redhat.com>
-cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        Petr Mladek <pmladek@suse.com>
+        Miroslav Benes <mbenes@suse.cz>
 Subject: Re: [PATCH v2 0/4] selftests/livepatch: small script cleanups
-In-Reply-To: <20200615172756.12912-1-joe.lawrence@redhat.com>
-Message-ID: <alpine.LSU.2.21.2006161305140.20740@pobox.suse.cz>
+Message-ID: <20200616144322.GP31238@alley>
 References: <20200615172756.12912-1-joe.lawrence@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200615172756.12912-1-joe.lawrence@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon, 15 Jun 2020, Joe Lawrence wrote:
-
+On Mon 2020-06-15 13:27:52, Joe Lawrence wrote:
 > This is a small collection of tweaks for the shellscript side of the
 > livepatch tests.  If anyone else has a small cleanup (or even just a
 > suggestion for a low-hanging change) and would like to tack it onto the
@@ -51,29 +51,16 @@ On Mon, 15 Jun 2020, Joe Lawrence wrote:
 > based-on: livepatching.git, for-5.9/selftests-cleanup
 > merge-thru: livepatching.git
 > 
-> v2:
-> - use consistent start_test messages from the original echoes [mbenes]
-> - move start_test invocations to just after their descriptions [mbenes]
-> - clean up $SAVED_DMSG on trap EXIT [pmladek]
-> - grep longer kernel taint line, avoid word-matching [mbenes, pmladek]
-> - add "===== TEST: $test =====" delimiter patch [pmladek]
-> 
 > Joe Lawrence (4):
 >   selftests/livepatch: Don't clear dmesg when running tests
 >   selftests/livepatch: use $(dmesg --notime) instead of manually
 >     filtering
 >   selftests/livepatch: refine dmesg 'taints' in dmesg comparison
 >   selftests/livepatch: add test delimiter to dmesg
-> 
->  tools/testing/selftests/livepatch/README      | 16 +++---
->  .../testing/selftests/livepatch/functions.sh  | 32 ++++++++++-
->  .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
->  .../selftests/livepatch/test-ftrace.sh        |  4 +-
->  .../selftests/livepatch/test-livepatch.sh     | 12 +---
->  .../selftests/livepatch/test-shadow-vars.sh   |  4 +-
->  .../testing/selftests/livepatch/test-state.sh | 21 +++----
->  7 files changed, 63 insertions(+), 81 deletions(-)
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+For the series:
 
-M
+Revieved-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
