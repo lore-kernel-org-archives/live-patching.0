@@ -2,56 +2,59 @@ Return-Path: <SRS0=Ei/y=77=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 672A2C433DF
-	for <live-patching@archiver.kernel.org>; Thu, 18 Jun 2020 18:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F1C0C433E0
+	for <live-patching@archiver.kernel.org>; Thu, 18 Jun 2020 18:11:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 407B5206F7
-	for <live-patching@archiver.kernel.org>; Thu, 18 Jun 2020 18:11:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E69CE207DD
+	for <live-patching@archiver.kernel.org>; Thu, 18 Jun 2020 18:11:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C5MVAwQA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Btd3kdnA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730012AbgFRSLB (ORCPT
+        id S1729997AbgFRSLH (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 18 Jun 2020 14:11:01 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58728 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726882AbgFRSK6 (ORCPT
+        Thu, 18 Jun 2020 14:11:07 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28616 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730006AbgFRSLC (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 18 Jun 2020 14:10:58 -0400
+        Thu, 18 Jun 2020 14:11:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592503857;
+        s=mimecast20190719; t=1592503859;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LHGyp6CYIKGOqwxes/zzCO/ZvJIZQruxra7ZLeYTBQU=;
-        b=C5MVAwQAd8J0LlByERRCq5NcToZySX6AAMznEIMJ8Px8ZsCgsQ6xvtwJGcnY6OrvaSvGou
-        a8GsToF6yO2OOPW0pSXkyIjsIQ8NBqmrHuLa3Evs26i9t++RNjDHiZ81PawMD1WxC8zCKc
-        5ArGKDAGJQ9CLGYhLYo4om4p62Ixv+E=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZWlQ5y7Pb1QamFT51VCVsggHmDjllVGDgfPdvXE2UE=;
+        b=Btd3kdnARj/TaKqOXuaH9GE9kZ55nCU8kODKxtYdtujhTykAVM7GGF0KQwbj7lIq1VT9/Y
+        +h3uIo9V5GOLawQPXeiuDJ7uc1Qfoqc2wtnQAyPUGxT8JzAiDLWs8buBkZSC2CEvwnHHlV
+        EUvJao3WYRPQWDBzZsN7Lm3D0GYyDL8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-274-u01PmpGkOlmYIPKnLHNA5A-1; Thu, 18 Jun 2020 14:10:53 -0400
-X-MC-Unique: u01PmpGkOlmYIPKnLHNA5A-1
+ us-mta-265-GJu4NKrCMYixIcj9daZjdQ-1; Thu, 18 Jun 2020 14:10:55 -0400
+X-MC-Unique: GJu4NKrCMYixIcj9daZjdQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 04348107BEF5;
-        Thu, 18 Jun 2020 18:10:52 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E104835B5D;
+        Thu, 18 Jun 2020 18:10:54 +0000 (UTC)
 Received: from jlaw-desktop.redhat.com (ovpn-112-56.rdu2.redhat.com [10.10.112.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BE701E2261;
-        Thu, 18 Jun 2020 18:10:51 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D0E1E1E2261;
+        Thu, 18 Jun 2020 18:10:53 +0000 (UTC)
 From:   Joe Lawrence <joe.lawrence@redhat.com>
 To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
 Cc:     Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>, Yannick Cote <ycote@redhat.com>
-Subject: [PATCH v3 0/3] selftests/livepatch: small script cleanups
-Date:   Thu, 18 Jun 2020 14:10:37 -0400
-Message-Id: <20200618181040.21132-1-joe.lawrence@redhat.com>
+Subject: [PATCH v3 3/3] selftests/livepatch: add test delimiter to dmesg
+Date:   Thu, 18 Jun 2020 14:10:40 -0400
+Message-Id: <20200618181040.21132-4-joe.lawrence@redhat.com>
+In-Reply-To: <20200618181040.21132-1-joe.lawrence@redhat.com>
+References: <20200618181040.21132-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
@@ -60,54 +63,32 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi Petr,
+Make it bit easier to parse the kernel logs during the selftests by
+adding a "===== TEST: $test =====" delimiter when each individual test
+begins.
 
-Given the realization about kernel log timestamps and partial log
-comparison with v2, I respun a final version dropping the dmesg --notime
-patch, fixed any rebase conflicts, and added a comment per your
-suggestion.
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+Revieved-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Yannick Cote <ycote@redhat.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-I copied all the ack and review tags from v2 since the patchset is
-unchanged otherwise.  Hopefully this v3 minimizes any maintainer
-fiddling on your end.
-
-I did iterate through the patches and verified that I could run each
-multiple times without the dmesg comparison getting confused.
-
-Thanks,
-
--- Joe
-
-
-v3:
-
-- when modifying the dmesg comparision to select only new messages in
-  patch 1, add a comment explaining the importance of timestamps to
-  accurately pick from where the log left off at start_test [pmladek]
-
-- since Petr determined that the timestamps were in fact very important
-  to maintain for the dmesg / diff comparision, drop the patch which
-  added --notime to dmesg invocations [pmladek]
-
-- update the comparision regex filter for 'livepatch:' now that it's
-  going to be prefixed by '[timestamp] ' and no longer at the start of
-  the buffer line.  This part of the log comparison should now be
-  unmodified by the patchset.
-
-Joe Lawrence (3):
-  selftests/livepatch: Don't clear dmesg when running tests
-  selftests/livepatch: refine dmesg 'taints' in dmesg comparison
-  selftests/livepatch: add test delimiter to dmesg
-
- tools/testing/selftests/livepatch/README      | 16 +++---
- .../testing/selftests/livepatch/functions.sh  | 37 ++++++++++++-
- .../selftests/livepatch/test-callbacks.sh     | 55 ++++---------------
- .../selftests/livepatch/test-ftrace.sh        |  4 +-
- .../selftests/livepatch/test-livepatch.sh     | 12 +---
- .../selftests/livepatch/test-shadow-vars.sh   |  4 +-
- .../testing/selftests/livepatch/test-state.sh | 21 +++----
- 7 files changed, 68 insertions(+), 81 deletions(-)
-
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 5e5a79179fc1..36648ca367c2 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -264,6 +264,7 @@ function start_test {
+ 
+ 	save_dmesg
+ 	echo -n "TEST: $test ... "
++	log "===== TEST: $test ====="
+ }
+ 
+ # check_result() - verify dmesg output
 -- 
 2.21.3
 
