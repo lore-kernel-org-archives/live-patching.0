@@ -1,68 +1,113 @@
-Return-Path: <SRS0=5x6H=AA=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=IhDA=AG=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCE15C433E0
-	for <live-patching@archiver.kernel.org>; Fri, 19 Jun 2020 09:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0ADFC433E0
+	for <live-patching@archiver.kernel.org>; Thu, 25 Jun 2020 06:59:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4C8721527
-	for <live-patching@archiver.kernel.org>; Fri, 19 Jun 2020 09:06:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD472206FA
+	for <live-patching@archiver.kernel.org>; Thu, 25 Jun 2020 06:59:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731384AbgFSJGq (ORCPT
+        id S2390013AbgFYG7s (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 19 Jun 2020 05:06:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41276 "EHLO mx2.suse.de"
+        Thu, 25 Jun 2020 02:59:48 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51520 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728624AbgFSJGp (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 19 Jun 2020 05:06:45 -0400
+        id S2389958AbgFYG7q (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 25 Jun 2020 02:59:46 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id BD493AF84;
-        Fri, 19 Jun 2020 09:06:42 +0000 (UTC)
-Date:   Fri, 19 Jun 2020 11:06:42 +0200
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 16463AAD0;
+        Thu, 25 Jun 2020 06:59:44 +0000 (UTC)
+Date:   Thu, 25 Jun 2020 08:59:43 +0200
 From:   Petr Mladek <pmladek@suse.com>
 To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
-        Yannick Cote <ycote@redhat.com>
-Subject: Re: [PATCH v3 0/3] selftests/livepatch: small script cleanups
-Message-ID: <20200619090641.GI3617@alley>
-References: <20200618181040.21132-1-joe.lawrence@redhat.com>
+        Nicolai Stange <nstange@suse.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Gabriel Gomes <gagomes@suse.com>,
+        Alice Ferrazzi <alice.ferrazzi@gmail.com>,
+        Michael Matz <matz@suse.de>,
+        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
+        ulp-devel@opensuse.org, live-patching@vger.kernel.org
+Subject: Re: Live patching MC at LPC2020?
+Message-ID: <20200625065943.GB6156@alley>
+References: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm>
+ <20200331205204.GA7388@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200618181040.21132-1-joe.lawrence@redhat.com>
+In-Reply-To: <20200331205204.GA7388@redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu 2020-06-18 14:10:37, Joe Lawrence wrote:
-> Hi Petr,
+On Tue 2020-03-31 16:52:04, Joe Lawrence wrote:
+> On Fri, Mar 27, 2020 at 02:20:52PM +0100, Jiri Kosina wrote:
+> > Hi everybody,
+> > 
+> > oh well, it sounds a bit awkward to be talking about any conference plans 
+> > for this year given how the corona things are untangling in the world, but 
+> > LPC planning committee has issued (a) statement about Covid-19 (b) call 
+> > for papers (as originally planned) nevertheless. Please see:
+> > 
+> > 	https://linuxplumbersconf.org/
+> > 	https://linuxplumbersconf.org/event/7/abstracts/
+> > 
+> > for details.
+> > 
+> > Under the asumption that this Covid nuisance is over by that time and 
+> > travel is possible (and safe) again -- do we want to eventually submit a 
+> > livepatching miniconf proposal again?
+
+The conference is going to be an online event.
+
+
+> As for LPC mini-conf topics, I'd be interested in (at least):
 > 
-> Given the realization about kernel log timestamps and partial log
-> comparison with v2, I respun a final version dropping the dmesg --notime
-> patch, fixed any rebase conflicts, and added a comment per your
-> suggestion.
-> 
-> I copied all the ack and review tags from v2 since the patchset is
-> unchanged otherwise.  Hopefully this v3 minimizes any maintainer
-> fiddling on your end.
+> - Petr's per-object livepatch POC
+> - klp-convert status
+> - objtool hacking
+> - Nicolai's klp-ccp status
+> - arch update (arm64, etc)
+ 
+> Hmm, all good points.  Some conferences have gone virtual to cope with
+> necessary cancellations, but who knows what things will look like even
+> at the end of August.  Perhaps we can still do something remotely if the
+> conditions dictate it.  But my vote would be yes, and let's see what
+> topics interest folks.
 
-Ah, I just waited a bit for eventual reaction and was going to push
-the rebased version today.
+It seems that there is interest into sharing/discussing some topics.
+The question is whether is has to be under the LPC even umbrella.
 
-Anyway, you made it easier from me. Also it is great the you
-added the comment.
+Advantages of LPC:
 
-This patchset is commited in livepatching.git,
-branch for-5.9/selftests-cleanup now.
+   + well defined date
+   + more attendees (ARM people, Steven Rostedt ;-)
+   + access to some powerful video conference tool
+   + access to another LPC content
+   + support for the conference in the long term
 
-Best Reagrds,
+
+Advantages of self-organized event:
+
+   + less paperwork?
+   + cheaper?
+   + only interested people invited
+   + date after summer holidays
+   + more time for the discussion
+
+I am in the favor of self organized event. For me, LPC is much less
+interesting without the personal contact and hallway conversations.
+All the LPC date is not ideal for me.
+
+Best Regards,
 Petr
