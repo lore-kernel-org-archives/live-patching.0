@@ -1,113 +1,109 @@
-Return-Path: <SRS0=++gZ=AI=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=sdAZ=AL=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11BFAC433E0
-	for <live-patching@archiver.kernel.org>; Sat, 27 Jun 2020 05:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 791D8C433DF
+	for <live-patching@archiver.kernel.org>; Tue, 30 Jun 2020 13:04:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFDCF206C0
-	for <live-patching@archiver.kernel.org>; Sat, 27 Jun 2020 05:43:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5503720672
+	for <live-patching@archiver.kernel.org>; Tue, 30 Jun 2020 13:04:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725885AbgF0Fnm (ORCPT
+        id S2387936AbgF3NEy (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 27 Jun 2020 01:43:42 -0400
-Received: from smtp.gentoo.org ([140.211.166.183]:40592 "EHLO smtp.gentoo.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbgF0Fnm (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Sat, 27 Jun 2020 01:43:42 -0400
-Subject: Re: Live patching MC at LPC2020?
-To:     Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nicolai Stange <nstange@suse.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Gabriel Gomes <gagomes@suse.com>,
-        Alice Ferrazzi <alice.ferrazzi@gmail.com>,
-        Michael Matz <matz@suse.de>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        ulp-devel@opensuse.org, live-patching@vger.kernel.org
-References: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm>
- <20200331205204.GA7388@redhat.com> <20200625065943.GB6156@alley>
-From:   Alice <alicef@gentoo.org>
-Message-ID: <cbf593e7-6484-7f74-5c19-d4936cb604cf@gentoo.org>
-Date:   Sat, 27 Jun 2020 14:43:30 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 30 Jun 2020 09:04:54 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:45370 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387492AbgF3NEx (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Tue, 30 Jun 2020 09:04:53 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id ABBDE157EE50F893074F;
+        Tue, 30 Jun 2020 21:04:27 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.63) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Tue, 30 Jun 2020
+ 21:04:20 +0800
+Subject: Re: Question: livepatch failed for new fork() task stack unreliable
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+CC:     <huawei.libin@huawei.com>, <xiexiuqi@huawei.com>,
+        <cj.chengjian@huawei.com>, <mingo@redhat.com>, <x86@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <live-patching@vger.kernel.org>,
+        <mbenes@suse.cz>, <devel@etsukata.com>, <viro@zeniv.linux.org.uk>,
+        <esyr@redhat.com>
+References: <20200529174433.wpkknhypx2bmjika@treble>
+ <a9ed9157-f3cf-7d2c-7a8e-56150a2a114e@huawei.com>
+ <20200601180538.o5agg5trbdssqken@treble>
+ <a5e0f476-02b5-cc44-8d4e-d33ff2138143@huawei.com>
+ <20200602131450.oydrydelpdaval4h@treble>
+ <1353648b-f3f7-5b8d-f0bb-28bdb1a66f0f@huawei.com>
+ <20200603153358.2ezz2pgxxxld7mj7@treble>
+ <2225bc83-95f2-bf3d-7651-fdd10a3ddd00@huawei.com>
+ <20200604024051.6ovbr6tbrowwg6jr@treble>
+ <c3a81224-bea1-116b-7528-f03f90be5264@huawei.com>
+ <20200605015142.w65uu5wxfmrun2ro@treble>
+From:   "Wangshaobo (bobo)" <bobo.shaobowang@huawei.com>
+Message-ID: <e914bcd6-009c-0a89-bc59-b9a87a9c552d@huawei.com>
+Date:   Tue, 30 Jun 2020 21:04:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-In-Reply-To: <20200625065943.GB6156@alley>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+In-Reply-To: <20200605015142.w65uu5wxfmrun2ro@treble>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.63]
+X-CFilter-Loop: Reflected
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hello,
 
-On 6/25/20 3:59 PM, Petr Mladek wrote:
-> On Tue 2020-03-31 16:52:04, Joe Lawrence wrote:
->> On Fri, Mar 27, 2020 at 02:20:52PM +0100, Jiri Kosina wrote:
->>> Hi everybody,
->>>
->>> oh well, it sounds a bit awkward to be talking about any conference plans
->>> for this year given how the corona things are untangling in the world, but
->>> LPC planning committee has issued (a) statement about Covid-19 (b) call
->>> for papers (as originally planned) nevertheless. Please see:
->>>
->>> 	https://linuxplumbersconf.org/
->>> 	https://linuxplumbersconf.org/event/7/abstracts/
->>>
->>> for details.
->>>
->>> Under the asumption that this Covid nuisance is over by that time and
->>> travel is possible (and safe) again -- do we want to eventually submit a
->>> livepatching miniconf proposal again?
-> The conference is going to be an online event.
->
->
->> As for LPC mini-conf topics, I'd be interested in (at least):
+在 2020/6/5 9:51, Josh Poimboeuf 写道:
+> On Fri, Jun 05, 2020 at 09:26:42AM +0800, Wangshaobo (bobo) wrote:
+>>>> So, I want to ask is there any side effects if i modify like this ? this
+>>>> modification is based on
+>>>>
+>>>> your fix. It looks like ok with proper test.
+>>>>
+>>>> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+>>>> index e9cc182aa97e..ecce5051e8fd 100644
+>>>> --- a/arch/x86/kernel/unwind_orc.c
+>>>> +++ b/arch/x86/kernel/unwind_orc.c
+>>>> @@ -620,6 +620,7 @@ void __unwind_start(struct unwind_state *state, struct
+>>>> task_struct *task,
+>>>>                   state->sp = task->thread.sp;
+>>>>                   state->bp = READ_ONCE_NOCHECK(frame->bp);
+>>>>                   state->ip = READ_ONCE_NOCHECK(frame->ret_addr);
+>>>> +              state->signal = ((void *)state->ip == ret_from_fork);
+>>>>           }
+>>>>
+>>>> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+>>>> index 7f969b2d240f..d7396431261a 100644
+>>>> --- a/arch/x86/kernel/unwind_orc.c
+>>>> +++ b/arch/x86/kernel/unwind_orc.c
+>>>> @@ -540,7 +540,7 @@ bool unwind_next_frame(struct unwind_state *state)
+>>>>            state->sp = sp;
+>>>>            state->regs = NULL;
+>>>>            state->prev_regs = NULL;
+>>>> -        state->signal = ((void *)state->ip == ret_from_fork);
+>>>> +        state->signal = false;
+>>>>            break;
+>>> Yes that's correct.
+>> Hi, josh
 >>
->> - Petr's per-object livepatch POC
->> - klp-convert status
->> - objtool hacking
->> - Nicolai's klp-ccp status
->> - arch update (arm64, etc)
->   
->> Hmm, all good points.  Some conferences have gone virtual to cope with
->> necessary cancellations, but who knows what things will look like even
->> at the end of August.  Perhaps we can still do something remotely if the
->> conditions dictate it.  But my vote would be yes, and let's see what
->> topics interest folks.
-> It seems that there is interest into sharing/discussing some topics.
-> The question is whether is has to be under the LPC even umbrella.
->
-> Advantages of LPC:
->
->     + well defined date
->     + more attendees (ARM people, Steven Rostedt ;-)
->     + access to some powerful video conference tool
->     + access to another LPC content
->     + support for the conference in the long term
->
->
-> Advantages of self-organized event:
->
->     + less paperwork?
->     + cheaper?
->     + only interested people invited
->     + date after summer holidays
->     + more time for the discussion
+>> Could i ask when are you free to send the patch, all the tests are passed
+>> by.
+> I want to run some regression tests, so it will probably be next week.
 
-As they are both online events,
-I personally have no preference on this.
+Hi, josh
 
-Thanks,
-Alice
+did you send this patch, I haven't received it up to now, so i ask u to 
+confirm again.
+
+thanks,
+
+Wang ShaoBo
+
 
