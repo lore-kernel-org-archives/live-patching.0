@@ -1,104 +1,328 @@
-Return-Path: <SRS0=q++l=AM=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=urFW=AS=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CF1AC433E0
-	for <live-patching@archiver.kernel.org>; Wed,  1 Jul 2020 13:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E06BFC433E1
+	for <live-patching@archiver.kernel.org>; Tue,  7 Jul 2020 09:25:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71FB620772
-	for <live-patching@archiver.kernel.org>; Wed,  1 Jul 2020 13:13:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BF50B206CD
+	for <live-patching@archiver.kernel.org>; Tue,  7 Jul 2020 09:25:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1594113933;
+	bh=SFFIblF5jUq1GJjdAblyK8HQgQfUgYu08HBWCGS0bAU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=0iTY+P0clT39RqPXVi1U6YhJwcFpT6S3WXfi1y/FKjr0ucOqgG6vZcLzbZ1EB19wS
+	 t29x/qhRJspSHUFiQ/aMoJTxgYJTcWvAiZNq9ZV85mOb970nE+t/W0593tci05pVez
+	 p8hxoOnS8kCMxHrjOyBhCaY9rvRBQewYYbEPkbQ8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbgGANNk (ORCPT
+        id S1726946AbgGGJZd (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 1 Jul 2020 09:13:40 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47430 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729033AbgGANNk (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 1 Jul 2020 09:13:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 6FCDDAF69;
-        Wed,  1 Jul 2020 13:13:38 +0000 (UTC)
-Date:   Wed, 1 Jul 2020 13:13:38 +0000 (UTC)
-From:   Michael Matz <matz@suse.de>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
+        Tue, 7 Jul 2020 05:25:33 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:62161 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbgGGJZc (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Tue, 7 Jul 2020 05:25:32 -0400
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-01.nifty.com with ESMTP id 0679NRpL013935;
+        Tue, 7 Jul 2020 18:23:41 +0900
+Received: from oscar.flets-west.jp (softbank126090202047.bbtec.net [126.90.202.47]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id 0679LLSD013006;
+        Tue, 7 Jul 2020 18:21:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 0679LLSD013006
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1594113685;
+        bh=DGOsSYyty8roOyC5A5FX8LaGKLV2BgeM9zt8xr5UYM4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JDbNjpOzvr7/x76F9KaMdoFrTKEggtICdwPlCWJ2nLX8WlTRLUc0XnIZDJhUUfr9S
+         HPlA1ubAq2lrrANKINqbMM9j0unpUpp3xeFrRD5eg57ohA0L8O3BoAhXyVbUuLIxUA
+         yg8Ai+v1KElzTAS1qarKG7CBoTSh0aX4xOlT2ZHIJ6Q/mDXkG3cs51o2Vnbz4QkX6/
+         rfBfozMdn9L0HmhH2amrvY6S+iHkOqvqOVR2u5q5aMB1pmmlhsADDBuJt6GpiLubdi
+         fybtXxsHk7w8cBGHfbU8pLSqAQavPBxRZyN7iDW+fhthgFxD3RuHOQuA+z8me3Xz1C
+         5oFmfKmhIPAaQ==
+X-Nifty-SrcIP: [126.90.202.47]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Haren Myneni <haren@us.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Jiri Kosina <jikos@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
-        Nicolai Stange <nstange@suse.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Gabriel Gomes <gagomes@suse.com>,
-        Alice Ferrazzi <alice.ferrazzi@gmail.com>,
-        Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        ulp-devel@opensuse.org, live-patching@vger.kernel.org
-Subject: Re: Live patching MC at LPC2020?
-In-Reply-To: <20200630214550.cbli6oex4xskwdjp@treble>
-Message-ID: <alpine.LSU.2.20.2007011304210.9982@wotan.suse.de>
-References: <nycvar.YFH.7.76.2003271409380.19500@cbobk.fhfr.pm> <20200331205204.GA7388@redhat.com> <20200625065943.GB6156@alley> <20200630214550.cbli6oex4xskwdjp@treble>
-User-Agent: Alpine 2.20 (LSU 67 2015-01-07)
+        Petr Mladek <pmladek@suse.com>,
+        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org
+Subject: [PATCH v2 2/2] kbuild: trace functions in subdirectories of lib/
+Date:   Tue,  7 Jul 2020 18:21:17 +0900
+Message-Id: <20200707092117.963394-2-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200707092117.963394-1-masahiroy@kernel.org>
+References: <20200707092117.963394-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hello,
+  ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
 
-On Tue, 30 Jun 2020, Josh Poimboeuf wrote:
+exists here in sub-directories of lib/ to keep the behavior of
+commit 2464a609ded0 ("ftrace: do not trace library functions").
 
-> On Thu, Jun 25, 2020 at 08:59:43AM +0200, Petr Mladek wrote:
-> > On Tue 2020-03-31 16:52:04, Joe Lawrence wrote:
-> > It seems that there is interest into sharing/discussing some topics.
-> > The question is whether is has to be under the LPC even umbrella.
-> > 
-> > Advantages of LPC:
-> > 
-> >    + well defined date
-> >    + more attendees (ARM people, Steven Rostedt ;-)
-> >    + access to some powerful video conference tool
-> >    + access to another LPC content
-> >    + support for the conference in the long term
-> > 
-> > 
-> > Advantages of self-organized event:
-> > 
-> >    + less paperwork?
-> >    + cheaper?
-> >    + only interested people invited
-> >    + date after summer holidays
-> >    + more time for the discussion
-> > 
-> > I am in the favor of self organized event. For me, LPC is much less
-> > interesting without the personal contact and hallway conversations.
-> > All the LPC date is not ideal for me.
-> 
-> I'd prefer LPC proper, as it would be easier (infrastructure is already
-> taken care of) and more inclusive (in the past we often got good
-> feedback from outside the direct livepatch community).  And it's only
-> $50 US.
+Since that commit, not only the objects in lib/ but also the ones in
+the sub-directories are excluded from ftrace (although the commit
+description did not explicitly mention this).
 
-Yeah, I think having more attendees would be valuable.
+However, most of library functions in sub-directories are not so hot.
+Re-add them to ftrace.
 
-> But to be honest I have doubts about the usefulness of any online 
-> conference, so either way may be equally useless ;-)
+Going forward, only the objects right under lib/ will be excluded.
 
-Indeed.  OTOH our fellow openSUSE guys seemed to have held a fairly 
-successful virtual summit earlier this year with some in-development 
-virtual-conferencing software that does more than just video/audio 
-streaming ( https://requiredmagic.com/roundtable/ ).  In particular the 
-possibility to have interactive Q&A with the presenter during and after 
-the allotted talk slot seemed to have made up for hallway discussions.
+Cc: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Maybe that's a viable way.  (I personally wasn't at the virtual summit to 
-know for sure, but the experience report from some of them was quite 
-positive; I know nothing about the conferencing software of LPC)
+Changes in v2:
+  - New patch
 
+ lib/842/Makefile          | 3 ---
+ lib/crypto/Makefile       | 2 --
+ lib/dim/Makefile          | 2 --
+ lib/fonts/Makefile        | 2 --
+ lib/kunit/Makefile        | 3 ---
+ lib/livepatch/Makefile    | 2 --
+ lib/lz4/Makefile          | 1 -
+ lib/lzo/Makefile          | 2 --
+ lib/math/Makefile         | 2 --
+ lib/mpi/Makefile          | 2 --
+ lib/raid6/Makefile        | 3 ---
+ lib/reed_solomon/Makefile | 2 --
+ lib/xz/Makefile           | 3 ---
+ lib/zlib_deflate/Makefile | 2 --
+ lib/zlib_dfltcc/Makefile  | 2 --
+ lib/zlib_inflate/Makefile | 2 --
+ lib/zstd/Makefile         | 1 -
+ 17 files changed, 36 deletions(-)
 
-Ciao,
-Michael.
+diff --git a/lib/842/Makefile b/lib/842/Makefile
+index b815e824ae37..6f7aad269288 100644
+--- a/lib/842/Makefile
++++ b/lib/842/Makefile
+@@ -1,6 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_842_COMPRESS) += 842_compress.o
+ obj-$(CONFIG_842_DECOMPRESS) += 842_decompress.o
+diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+index b557ef0b07c2..3a435629d9ce 100644
+--- a/lib/crypto/Makefile
++++ b/lib/crypto/Makefile
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ # chacha is used by the /dev/random driver which is always builtin
+ obj-y						+= chacha.o
+ obj-$(CONFIG_CRYPTO_LIB_CHACHA_GENERIC)		+= libchacha.o
+diff --git a/lib/dim/Makefile b/lib/dim/Makefile
+index 97fc3e89d34e..1d6858a108cb 100644
+--- a/lib/dim/Makefile
++++ b/lib/dim/Makefile
+@@ -2,8 +2,6 @@
+ # DIM Dynamic Interrupt Moderation library
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_DIMLIB) += dim.o
+ 
+ dim-y := dim.o net_dim.o rdma_dim.o
+diff --git a/lib/fonts/Makefile b/lib/fonts/Makefile
+index f951750c179e..ed95070860de 100644
+--- a/lib/fonts/Makefile
++++ b/lib/fonts/Makefile
+@@ -1,8 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Font handling
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ font-objs := fonts.o
+ 
+ font-objs-$(CONFIG_FONT_SUN8x16)   += font_sun8x16.o
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 8c847557ab24..724b94311ca3 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -1,6 +1,3 @@
+-
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_KUNIT) +=			kunit.o
+ 
+ kunit-objs +=				test.o \
+diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
+index 9abdf615b088..295b94bff370 100644
+--- a/lib/livepatch/Makefile
++++ b/lib/livepatch/Makefile
+@@ -2,8 +2,6 @@
+ #
+ # Makefile for livepatch test code.
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
+ 				test_klp_callbacks_demo.o \
+ 				test_klp_callbacks_demo2.o \
+diff --git a/lib/lz4/Makefile b/lib/lz4/Makefile
+index 53da4cab7015..5b42242afaa2 100644
+--- a/lib/lz4/Makefile
++++ b/lib/lz4/Makefile
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ ccflags-y += -O3
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+ 
+ obj-$(CONFIG_LZ4_COMPRESS) += lz4_compress.o
+ obj-$(CONFIG_LZ4HC_COMPRESS) += lz4hc_compress.o
+diff --git a/lib/lzo/Makefile b/lib/lzo/Makefile
+index 9565a555275b..2f58fafbbddd 100644
+--- a/lib/lzo/Makefile
++++ b/lib/lzo/Makefile
+@@ -1,6 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ lzo_compress-objs := lzo1x_compress.o
+ lzo_decompress-objs := lzo1x_decompress_safe.o
+ 
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 49aa50e28185..be6909e943bd 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -1,6 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-y += div64.o gcd.o lcm.o int_pow.o int_sqrt.o reciprocal_div.o
+ 
+ obj-$(CONFIG_CORDIC)		+= cordic.o
+diff --git a/lib/mpi/Makefile b/lib/mpi/Makefile
+index df7883521619..d5874a7f5ff9 100644
+--- a/lib/mpi/Makefile
++++ b/lib/mpi/Makefile
+@@ -3,8 +3,6 @@
+ # MPI multiprecision maths library (from gpg)
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_MPILIB) = mpi.o
+ 
+ mpi-y = \
+diff --git a/lib/raid6/Makefile b/lib/raid6/Makefile
+index 3482d6ae3f3b..b4c0df6d706d 100644
+--- a/lib/raid6/Makefile
++++ b/lib/raid6/Makefile
+@@ -1,7 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_RAID6_PQ)	+= raid6_pq.o
+ 
+ raid6_pq-y	+= algos.o recov.o tables.o int1.o int2.o int4.o \
+diff --git a/lib/reed_solomon/Makefile b/lib/reed_solomon/Makefile
+index a5c9defdac7f..5d4fa68f26cb 100644
+--- a/lib/reed_solomon/Makefile
++++ b/lib/reed_solomon/Makefile
+@@ -3,7 +3,5 @@
+ # This is a modified version of reed solomon lib,
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_REED_SOLOMON) += reed_solomon.o
+ obj-$(CONFIG_REED_SOLOMON_TEST) += test_rslib.o
+diff --git a/lib/xz/Makefile b/lib/xz/Makefile
+index fae9b6c7c389..fa6af814a8d1 100644
+--- a/lib/xz/Makefile
++++ b/lib/xz/Makefile
+@@ -1,7 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_XZ_DEC) += xz_dec.o
+ xz_dec-y := xz_dec_syms.o xz_dec_stream.o xz_dec_lzma2.o
+ xz_dec-$(CONFIG_XZ_DEC_BCJ) += xz_dec_bcj.o
+diff --git a/lib/zlib_deflate/Makefile b/lib/zlib_deflate/Makefile
+index 1fcefe73536f..2622e03c0b94 100644
+--- a/lib/zlib_deflate/Makefile
++++ b/lib/zlib_deflate/Makefile
+@@ -7,8 +7,6 @@
+ # decompression code.
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_ZLIB_DEFLATE) += zlib_deflate.o
+ 
+ zlib_deflate-objs := deflate.o deftree.o deflate_syms.o
+diff --git a/lib/zlib_dfltcc/Makefile b/lib/zlib_dfltcc/Makefile
+index 7a8067f6e772..8e4d5afbbb10 100644
+--- a/lib/zlib_dfltcc/Makefile
++++ b/lib/zlib_dfltcc/Makefile
+@@ -6,8 +6,6 @@
+ # This is the code for s390 zlib hardware support.
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_ZLIB_DFLTCC) += zlib_dfltcc.o
+ 
+ zlib_dfltcc-objs := dfltcc.o dfltcc_deflate.o dfltcc_inflate.o dfltcc_syms.o
+diff --git a/lib/zlib_inflate/Makefile b/lib/zlib_inflate/Makefile
+index a451e96f9845..27327d3e9f54 100644
+--- a/lib/zlib_inflate/Makefile
++++ b/lib/zlib_inflate/Makefile
+@@ -14,8 +14,6 @@
+ # uncompression can be done without blocking on allocation).
+ #
+ 
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+-
+ obj-$(CONFIG_ZLIB_INFLATE) += zlib_inflate.o
+ 
+ zlib_inflate-objs := inffast.o inflate.o infutil.o \
+diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
+index 01be908a2d94..f5d778e7e5c7 100644
+--- a/lib/zstd/Makefile
++++ b/lib/zstd/Makefile
+@@ -3,7 +3,6 @@ obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
+ obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
+ 
+ ccflags-y += -O3
+-ccflags-remove-$(CONFIG_FUNCTION_TRACER) += $(CC_FLAGS_FTRACE)
+ 
+ zstd_compress-y := fse_compress.o huf_compress.o compress.o \
+ 		   entropy_common.o fse_decompress.o zstd_common.o
+-- 
+2.25.1
+
