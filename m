@@ -2,94 +2,121 @@ Return-Path: <SRS0=8KIh=BB=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51693C433DF
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 19:56:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED0D6C433E0
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 20:51:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CB4E20825
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 19:56:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C455922B42
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 20:51:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iebOv938"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732552AbgGVT4Q (ORCPT
+        id S1732921AbgGVUvt (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jul 2020 15:56:16 -0400
-Received: from mga02.intel.com ([134.134.136.20]:40083 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726525AbgGVT4Q (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jul 2020 15:56:16 -0400
-IronPort-SDR: i8mlJNivRn3tjIKkhlmSz3egI/kbAd+e6Yd/SpzDpmUZJlQFyM0cBneI7DseMjG+xGesO0tPx6
- 2lR+219e+ccA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="138501878"
-X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
-   d="scan'208";a="138501878"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 12:56:15 -0700
-IronPort-SDR: dp01G1YgXUZz1OxqW8lljzi0D0OzzYTa7bKaJ2Mo0oDFhpSjcg2Jrf8enws2LkIq4FTbEBDlrT
- fdd7QdYdtahw==
-X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
-   d="scan'208";a="362820651"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.14.158])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 12:56:13 -0700
-Message-ID: <301c7fb7d22ad6ef97856b421873e32c2239d412.camel@linux.intel.com>
-Subject: Re: [PATCH v4 00/10] Function Granular KASLR
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, arjan@linux.intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
-        live-patching@vger.kernel.org
-Date:   Wed, 22 Jul 2020 12:56:10 -0700
-In-Reply-To: <202007221241.EBC2215A@keescook>
-References: <20200717170008.5949-1-kristen@linux.intel.com>
-         <alpine.LSU.2.21.2007221122110.10163@pobox.suse.cz>
-         <202007220738.72F26D2480@keescook> <20200722160730.cfhcj4eisglnzolr@treble>
-         <202007221241.EBC2215A@keescook>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Wed, 22 Jul 2020 16:51:49 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:57274 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726447AbgGVUvt (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 22 Jul 2020 16:51:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595451107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gREK6qCLK9pb41d3z9gQfGNfBTwDTOZTLCxEbymSjNM=;
+        b=iebOv9384Yn+sjvJ0EZrhe1VNmhZU6fzaK1gqSoR91WO5/0AX0r9QpIKhOm+6sAA4Gx/T8
+        qP298sDUwtMjiCV19dyacjUFCl1bW1CgfcB9jE5rJrFzGySXxqMPz1yeM0219RoD+Cb8MA
+        /SoEVIvW5iCBgfrwOONW2ktT+awrFBA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-29-Oa6C2FLtPZe93I8etDCh2Q-1; Wed, 22 Jul 2020 16:51:45 -0400
+X-MC-Unique: Oa6C2FLtPZe93I8etDCh2Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C29CC1030C2A;
+        Wed, 22 Jul 2020 20:51:44 +0000 (UTC)
+Received: from treble (ovpn-116-168.rdu2.redhat.com [10.10.116.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 46FBC8BECC;
+        Wed, 22 Jul 2020 20:51:41 +0000 (UTC)
+Date:   Wed, 22 Jul 2020 15:51:39 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] docs/livepatch: Add new compiler considerations doc
+Message-ID: <20200722205139.hwbej2atk2ejq27n@treble>
+References: <20200721161407.26806-1-joe.lawrence@redhat.com>
+ <20200721161407.26806-2-joe.lawrence@redhat.com>
+ <20200721230442.5v6ah7bpjx4puqva@treble>
+ <de3672ef-8779-245f-943d-3d5a4b875446@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <de3672ef-8779-245f-943d-3d5a4b875446@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, 2020-07-22 at 12:42 -0700, Kees Cook wrote:
-> On Wed, Jul 22, 2020 at 11:07:30AM -0500, Josh Poimboeuf wrote:
-> > On Wed, Jul 22, 2020 at 07:39:55AM -0700, Kees Cook wrote:
-> > > On Wed, Jul 22, 2020 at 11:27:30AM +0200, Miroslav Benes wrote:
-> > > > Let me CC live-patching ML, because from a quick glance this is
-> > > > something 
-> > > > which could impact live patching code. At least it invalidates
-> > > > assumptions 
-> > > > which "sympos" is based on.
+On Wed, Jul 22, 2020 at 01:03:03PM -0400, Joe Lawrence wrote:
+> On 7/21/20 7:04 PM, Josh Poimboeuf wrote:
+> > On Tue, Jul 21, 2020 at 12:14:06PM -0400, Joe Lawrence wrote:
+> > > Compiler optimizations can have serious implications on livepatching.
+> > > Create a document that outlines common optimization patterns and safe
+> > > ways to livepatch them.
 > > > 
-> > > In a quick skim, it looks like the symbol resolution is using
-> > > kallsyms_on_each_symbol(), so I think this is safe? What's a good
-> > > selftest for live-patching?
+> > > Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 > > 
-> > The problem is duplicate symbols.  If there are two static
-> > functions
-> > named 'foo' then livepatch needs a way to distinguish them.
+> > There's a lot of good info here, but I wonder if it should be
+> > reorganized a bit and instead called "how to create a livepatch module",
+> > because that's really the point of it all.
 > > 
-> > Our current approach to that problem is "sympos".  We rely on the
-> > fact
-> > that the second foo() always comes after the first one in the
-> > symbol
-> > list and kallsyms.  So they're referred to as foo,1 and foo,2.
 > 
-> Ah. Fun. In that case, perhaps the LTO series has some solutions. I
-> think builds with LTO end up renaming duplicate symbols like that, so
-> it'll be back to being unique.
-> 
+> That would be nice.  Would you consider a stand-alone compiler-optimizations
+> doc an incremental step towards that end?  Note that the other files
+> (callbacks, shadow-vars, system-state) in their current form might be as
+> confusing to the newbie.
 
-Well, glad to hear there might be some precendence for how to solve
-this, as I wasn't able to think of something reasonable off the top of
-my head. Are you speaking of the Clang LTO series? 
-https://lore.kernel.org/lkml/20200624203200.78870-1-samitolvanen@google.com/
+It's an incremental step towards _something_.  Whether that's a cohesive
+patch creation guide, or just a growing hodgepodge of random documents,
+it may be too early to say :-)
+
+> > I'm thinking a newcomer reading this might be lost.  It's not
+> > necessarily clear that there are currently two completely different
+> > approaches to creating a livepatch module, each with their own quirks
+> > and benefits/drawbacks.  There is one mention of a "source-based
+> > livepatch author" but no explanation of what that means.
+> > 
+> 
+> Yes, the initial draft was light on source-based patching since I only
+> really tinker with it for samples/kselftests.  The doc was the result of an
+> experienced livepatch developer and Sunday afternoon w/the compiler. I'm
+> sure it reads as such. :)
+
+Are experienced livepatch developers the intended audience?  If so I
+question what value this document has in its current form.  Presumably
+experienced livepatch developers would already know this stuff.
+
+> > Maybe it could begin with an overview of the two approaches, and then
+> > delve more into the details of each approach, and then delve even more
+> > into the gory details about compiler optimizations.
+> > 
+> 
+> Up until now, the livepatch documentation has danced around the particular
+> creation method and only described the API in abstract.  If a compiler
+> considerations doc needs to have that complete context then I'd suggest we
+> reorganize the entire lot as a prerequisite.
+
+I wouldn't say it *needs* to have that context.  But it would be a lot
+more useful with it.  As you pointed out, the existing documents do need
+to be reorganized into a more cohesive whole.
+
+-- 
+Josh
 
