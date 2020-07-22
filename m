@@ -2,81 +2,134 @@ Return-Path: <SRS0=8KIh=BB=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BADDC433E4
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 20:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E50BC433E1
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 21:33:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DDBD222B3F
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 20:49:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A7E622C9E
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jul 2020 21:33:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AFCPHQX7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbgGVUtT (ORCPT
+        id S1733003AbgGVVdb (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jul 2020 16:49:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726447AbgGVUtT (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jul 2020 16:49:19 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 22 Jul 2020 17:33:31 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:43896 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726685AbgGVVda (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 22 Jul 2020 17:33:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595453608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6UgVjjJcVGP42I9xFZ1qZP7ITGojf/KeQGKFYq4eMxc=;
+        b=AFCPHQX7m6KANDrYwFW7DRj+rjKOTDXGUdJOB7qDEpVQIjeaNlD7luuHkUa7EGFYXIfx2P
+        t4aOizibfZlKFEjJEVp1Brv1vavEpDIXt5rE1Jc+UFBp4jiV0+LiXRrpNYE2wnOJvhF0uC
+        qHtLSzmZ0x87NnM/zvsMyVxgpQnb6+g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-234-2z4NQGofNKiv8rFqmw4fnw-1; Wed, 22 Jul 2020 17:33:20 -0400
+X-MC-Unique: 2z4NQGofNKiv8rFqmw4fnw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1F4D7207BB;
-        Wed, 22 Jul 2020 20:49:16 +0000 (UTC)
-Date:   Wed, 22 Jul 2020 16:49:15 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Haren Myneni <haren@us.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Tal Gilboa <talgi@mellanox.com>, kunit-dev@googlegroups.com,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, live-patching@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] kbuild: trace functions in subdirectories of
- lib/
-Message-ID: <20200722164915.29be42d9@oasis.local.home>
-In-Reply-To: <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
-References: <20200707092117.963394-1-masahiroy@kernel.org>
-        <20200707092117.963394-2-masahiroy@kernel.org>
-        <20200707120212.7010fa4f@oasis.local.home>
-        <CAK7LNASdytWgqQWux1cyBrGJb_FvS7Ur5UqgHaA2Xf5cwfL85A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AA8EE1923762;
+        Wed, 22 Jul 2020 21:33:17 +0000 (UTC)
+Received: from treble (ovpn-116-168.rdu2.redhat.com [10.10.116.168])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C6D8E710C3;
+        Wed, 22 Jul 2020 21:33:15 +0000 (UTC)
+Date:   Wed, 22 Jul 2020 16:33:13 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     Kees Cook <keescook@chromium.org>, Miroslav Benes <mbenes@suse.cz>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        arjan@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        rick.p.edgecombe@intel.com, live-patching@vger.kernel.org
+Subject: Re: [PATCH v4 00/10] Function Granular KASLR
+Message-ID: <20200722213313.aetl3h5rkub6ktmw@treble>
+References: <20200717170008.5949-1-kristen@linux.intel.com>
+ <alpine.LSU.2.21.2007221122110.10163@pobox.suse.cz>
+ <202007220738.72F26D2480@keescook>
+ <20200722160730.cfhcj4eisglnzolr@treble>
+ <202007221241.EBC2215A@keescook>
+ <301c7fb7d22ad6ef97856b421873e32c2239d412.camel@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <301c7fb7d22ad6ef97856b421873e32c2239d412.camel@linux.intel.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: live-patching-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, 22 Jul 2020 11:08:51 +0900
-Masahiro Yamada <masahiroy@kernel.org> wrote:
-
-> That's why I split this into two commits
-> so that we can do git-bisect and
-> revert the second one in case of a regression.
+On Wed, Jul 22, 2020 at 12:56:10PM -0700, Kristen Carlson Accardi wrote:
+> On Wed, 2020-07-22 at 12:42 -0700, Kees Cook wrote:
+> > On Wed, Jul 22, 2020 at 11:07:30AM -0500, Josh Poimboeuf wrote:
+> > > On Wed, Jul 22, 2020 at 07:39:55AM -0700, Kees Cook wrote:
+> > > > On Wed, Jul 22, 2020 at 11:27:30AM +0200, Miroslav Benes wrote:
+> > > > > Let me CC live-patching ML, because from a quick glance this is
+> > > > > something 
+> > > > > which could impact live patching code. At least it invalidates
+> > > > > assumptions 
+> > > > > which "sympos" is based on.
+> > > > 
+> > > > In a quick skim, it looks like the symbol resolution is using
+> > > > kallsyms_on_each_symbol(), so I think this is safe? What's a good
+> > > > selftest for live-patching?
+> > > 
+> > > The problem is duplicate symbols.  If there are two static
+> > > functions
+> > > named 'foo' then livepatch needs a way to distinguish them.
+> > > 
+> > > Our current approach to that problem is "sympos".  We rely on the
+> > > fact
+> > > that the second foo() always comes after the first one in the
+> > > symbol
+> > > list and kallsyms.  So they're referred to as foo,1 and foo,2.
+> > 
+> > Ah. Fun. In that case, perhaps the LTO series has some solutions. I
+> > think builds with LTO end up renaming duplicate symbols like that, so
+> > it'll be back to being unique.
+> > 
 > 
-> Anyway, we have some more time to test this in linux-next
-> (and somebody reports an issue, if any).
-> 
+> Well, glad to hear there might be some precendence for how to solve
+> this, as I wasn't able to think of something reasonable off the top of
+> my head. Are you speaking of the Clang LTO series? 
+> https://lore.kernel.org/lkml/20200624203200.78870-1-samitolvanen@google.com/
 
-You can add my
+I'm not sure how LTO does it, but a few more (half-brained) ideas that
+could work:
 
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+1) Add a field in kallsyms to keep track of a symbol's original offset
+   before randomization/re-sorting.  Livepatch could use that field to
+   determine the original sympos.
 
-and take it through your tree.
+2) In fgkaslr code, go through all the sections and mark the ones which
+   have duplicates (i.e. same name).  Then when shuffling the sections,
+   skip a shuffle if it involves a duplicate section.  That way all the
+   duplicates would retain their original sympos.
 
--- Steve
+3) Livepatch could uniquely identify symbols by some feature other than
+   sympos.  For example:
+
+   Symbol/function size - obviously this would only work if duplicately
+   named symbols have different sizes.
+
+   Checksum - as part of a separate feature we're also looking at giving
+   each function its own checksum, calculated based on its instruction
+   opcodes.  Though calculating checksums at runtime could be
+   complicated by IP-relative addressing.
+
+I'm thinking #1 or #2 wouldn't be too bad.  #3 might be harder.
+
+-- 
+Josh
+
