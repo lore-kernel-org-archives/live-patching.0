@@ -1,51 +1,57 @@
-Return-Path: <SRS0=6TX2=BW=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=dAtU=B7=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A38C433E0
-	for <live-patching@archiver.kernel.org>; Wed, 12 Aug 2020 17:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA46CC433DF
+	for <live-patching@archiver.kernel.org>; Fri, 21 Aug 2020 23:02:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20BDF20771
-	for <live-patching@archiver.kernel.org>; Wed, 12 Aug 2020 17:19:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEB7D2076E
+	for <live-patching@archiver.kernel.org>; Fri, 21 Aug 2020 23:02:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgHLRS7 (ORCPT
+        id S1726697AbgHUXCn (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 12 Aug 2020 13:18:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:62060 "EHLO mga09.intel.com"
+        Fri, 21 Aug 2020 19:02:43 -0400
+Received: from mga11.intel.com ([192.55.52.93]:30336 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726394AbgHLRS6 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 12 Aug 2020 13:18:58 -0400
-IronPort-SDR: Clhwv4AINdwXiOKnTwh+Q6ZyujGcC8lCmHpgKUhVcjerklAvlh1zt/r3eWUTQG4AIRc2yEFIwl
- C2xZBAsgABYA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9711"; a="155146601"
-X-IronPort-AV: E=Sophos;i="5.76,305,1592895600"; 
-   d="scan'208";a="155146601"
+        id S1726688AbgHUXCl (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 21 Aug 2020 19:02:41 -0400
+IronPort-SDR: StPZFGGBcdKmY04Xv+y/pNhI75rPIq2ARYNw52mEqZk9915od8EypXsExsxQWjk3XdpUVmZn4V
+ fymAAMZGxOEA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="153248926"
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="153248926"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2020 10:18:26 -0700
-IronPort-SDR: cPS3/0S9ObZH1R/S78NwvrmzCv4ASr8jDTp7ZkhhxzHZ8Uwzns2SbgVjHegHmf1yDb2rKP8qf5
- voz92DhRJeAw==
-X-IronPort-AV: E=Sophos;i="5.76,305,1592895600"; 
-   d="scan'208";a="369339205"
-Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.13.108])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2020 10:18:21 -0700
-Message-ID: <4dc070f53f4f96b47dba4e4e51bb65d75f2071bb.camel@linux.intel.com>
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 16:02:40 -0700
+IronPort-SDR: ToGmx6dS8MqJfWdeMn8gS85sydet1IIwHZhopRPEpLlrhZIQI12Cn7bDwDzvyQqiuYnCbfRP41
+ Vaio4ho7wJqA==
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="473214632"
+Received: from jlpaulk-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.252.133.148])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 16:02:37 -0700
+Message-ID: <46c49dec078cb8625a9c3a3cd1310a4de7ec760b.camel@linux.intel.com>
 Subject: Re: [PATCH v4 00/10] Function Granular KASLR
 From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arjan@linux.intel.com, x86@kernel.org,
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>, Miroslav Benes <mbenes@suse.cz>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        arjan@linux.intel.com, x86@kernel.org,
         linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        rick.p.edgecombe@intel.com, live-patching@vger.kernel.org
-Date:   Wed, 12 Aug 2020 10:18:17 -0700
-In-Reply-To: <20200804182359.GA23533@redhat.com>
+        rick.p.edgecombe@intel.com, live-patching@vger.kernel.org,
+        Hongjiu Lu <hongjiu.lu@intel.com>, joe.lawrence@redhat.com
+Date:   Fri, 21 Aug 2020 16:02:24 -0700
+In-Reply-To: <20200722213313.aetl3h5rkub6ktmw@treble>
 References: <20200717170008.5949-1-kristen@linux.intel.com>
-         <20200804182359.GA23533@redhat.com>
+         <alpine.LSU.2.21.2007221122110.10163@pobox.suse.cz>
+         <202007220738.72F26D2480@keescook> <20200722160730.cfhcj4eisglnzolr@treble>
+         <202007221241.EBC2215A@keescook>
+         <301c7fb7d22ad6ef97856b421873e32c2239d412.camel@linux.intel.com>
+         <20200722213313.aetl3h5rkub6ktmw@treble>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
@@ -55,575 +61,104 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, 2020-08-04 at 14:23 -0400, Joe Lawrence wrote:
-> On Fri, Jul 17, 2020 at 09:59:57AM -0700, Kristen Carlson Accardi
+On Wed, 2020-07-22 at 16:33 -0500, Josh Poimboeuf wrote:
+> On Wed, Jul 22, 2020 at 12:56:10PM -0700, Kristen Carlson Accardi
 > wrote:
-> > Function Granular Kernel Address Space Layout Randomization
-> > (fgkaslr)
-> > -----------------------------------------------------------------
-> > ----
+> > On Wed, 2020-07-22 at 12:42 -0700, Kees Cook wrote:
+> > > On Wed, Jul 22, 2020 at 11:07:30AM -0500, Josh Poimboeuf wrote:
+> > > > On Wed, Jul 22, 2020 at 07:39:55AM -0700, Kees Cook wrote:
+> > > > > On Wed, Jul 22, 2020 at 11:27:30AM +0200, Miroslav Benes
+> > > > > wrote:
+> > > > > > Let me CC live-patching ML, because from a quick glance
+> > > > > > this is
+> > > > > > something 
+> > > > > > which could impact live patching code. At least it
+> > > > > > invalidates
+> > > > > > assumptions 
+> > > > > > which "sympos" is based on.
+> > > > > 
+> > > > > In a quick skim, it looks like the symbol resolution is using
+> > > > > kallsyms_on_each_symbol(), so I think this is safe? What's a
+> > > > > good
+> > > > > selftest for live-patching?
+> > > > 
+> > > > The problem is duplicate symbols.  If there are two static
+> > > > functions
+> > > > named 'foo' then livepatch needs a way to distinguish them.
+> > > > 
+> > > > Our current approach to that problem is "sympos".  We rely on
+> > > > the
+> > > > fact
+> > > > that the second foo() always comes after the first one in the
+> > > > symbol
+> > > > list and kallsyms.  So they're referred to as foo,1 and foo,2.
+> > > 
+> > > Ah. Fun. In that case, perhaps the LTO series has some solutions.
+> > > I
+> > > think builds with LTO end up renaming duplicate symbols like
+> > > that, so
+> > > it'll be back to being unique.
+> > > 
 > > 
-> > This patch set is an implementation of finer grained kernel address
-> > space
-> > randomization. It rearranges your kernel code at load time 
-> > on a per-function level granularity, with only around a second
-> > added to
-> > boot time.
-> > 
-> > Changes in v4:
-> > -------------
-> > * dropped the patch to split out change to STATIC definition in
-> >   x86/boot/compressed/misc.c and replaced with a patch authored
-> >   by Kees Cook to avoid the duplicate malloc definitions
-> > * Added a section to Documentation/admin-guide/kernel-
-> > parameters.txt
-> >   to document the fgkaslr boot option.
-> > * redesigned the patch to hide the new layout when reading
-> >   /proc/kallsyms. The previous implementation utilized a
-> > dynamically
-> >   allocated linked list to display the kernel and module symbols
-> >   in alphabetical order. The new implementation uses a randomly
-> >   shuffled index array to display the kernel and module symbols
-> >   in a random order.
-> > 
-> > Changes in v3:
-> > -------------
-> > * Makefile changes to accommodate
-> > CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-> > * removal of extraneous ALIGN_PAGE from _etext changes
-> > * changed variable names in x86/tools/relocs to be less confusing
-> > * split out change to STATIC definition in
-> > x86/boot/compressed/misc.c
-> > * Updates to Documentation to make it more clear what is preserved
-> > in .text
-> > * much more detailed commit message for function granular KASLR
-> > patch
-> > * minor tweaks and changes that make for more readable code
-> > * this cover letter updated slightly to add additional details
-> > 
-> > Changes in v2:
-> > --------------
-> > * Fix to address i386 build failure
-> > * Allow module reordering patch to be configured separately so that
-> >   arm (or other non-x86_64 arches) can take advantage of module
-> > function
-> >   reordering. This support has not be tested by me, but smoke
-> > tested by
-> >   Ard Biesheuvel <ardb@kernel.org> on arm.
-> > * Fix build issue when building on arm as reported by
-> >   Ard Biesheuvel <ardb@kernel.org> 
-> > 
-> > Patches to objtool are included because they are dependencies for
-> > this
-> > patchset, however they have been submitted by their maintainer
-> > separately.
-> > 
-> > Background
-> > ----------
-> > KASLR was merged into the kernel with the objective of increasing
-> > the
-> > difficulty of code reuse attacks. Code reuse attacks reused
-> > existing code
-> > snippets to get around existing memory protections. They exploit
-> > software bugs
-> > which expose addresses of useful code snippets to control the flow
+> > Well, glad to hear there might be some precendence for how to solve
+> > this, as I wasn't able to think of something reasonable off the top
 > > of
-> > execution for their own nefarious purposes. KASLR moves the entire
-> > kernel
-> > code text as a unit at boot time in order to make addresses less
-> > predictable.
-> > The order of the code within the segment is unchanged - only the
-> > base address
-> > is shifted. There are a few shortcomings to this algorithm.
-> > 
-> > 1. Low Entropy - there are only so many locations the kernel can
-> > fit in. This
-> >    means an attacker could guess without too much trouble.
-> > 2. Knowledge of a single address can reveal the offset of the base
-> > address,
-> >    exposing all other locations for a published/known kernel image.
-> > 3. Info leaks abound.
-> > 
-> > Finer grained ASLR has been proposed as a way to make ASLR more
-> > resistant
-> > to info leaks. It is not a new concept at all, and there are many
-> > variations
-> > possible. Function reordering is an implementation of finer grained
-> > ASLR
-> > which randomizes the layout of an address space on a function level
-> > granularity. We use the term "fgkaslr" in this document to refer to
-> > the
-> > technique of function reordering when used with KASLR, as well as
-> > finer grained
-> > KASLR in general.
-> > 
-> > Proposed Improvement
-> > --------------------
-> > This patch set proposes adding function reordering on top of the
-> > existing
-> > KASLR base address randomization. The over-arching objective is
-> > incremental
-> > improvement over what we already have. It is designed to work in
-> > combination
-> > with the existing solution. The implementation is really pretty
-> > simple, and
-> > there are 2 main area where changes occur:
-> > 
-> > * Build time
-> > 
-> > GCC has had an option to place functions into individual .text
-> > sections for
-> > many years now. This option can be used to implement function
-> > reordering at
-> > load time. The final compiled vmlinux retains all the section
-> > headers, which
-> > can be used to help find the address ranges of each function. Using
-> > this
-> > information and an expanded table of relocation addresses,
-> > individual text
-> > sections can be suffled immediately after decompression. Some data
-> > tables
-> > inside the kernel that have assumptions about order require re-
-> > sorting
-> > after being updated when applying relocations. In order to modify
-> > these tables,
-> > a few key symbols are excluded from the objcopy symbol stripping
-> > process for
-> > use after shuffling the text segments.
-> > 
-> > Some highlights from the build time changes to look for:
-> > 
-> > The top level kernel Makefile was modified to add the gcc flag if
-> > it
-> > is supported. Currently, I am applying this flag to everything it
-> > is
-> > possible to randomize. Anything that is written in C and not
-> > present in a
-> > special input section is randomized. The final binary segment 0
-> > retains a
-> > consolidated .text section, as well as all the individual .text.*
-> > sections.
-> > Future work could turn off this flags for selected files or even
-> > entire
-> > subsystems, although obviously at the cost of security.
-> > 
-> > The relocs tool is updated to add relative relocations. This
-> > information
-> > previously wasn't included because it wasn't necessary when moving
-> > the
-> > entire .text segment as a unit. 
-> > 
-> > A new file was created to contain a list of symbols that objcopy
-> > should
-> > keep. We use those symbols at load time as described below.
-> > 
-> > * Load time
-> > 
-> > The boot kernel was modified to parse the vmlinux elf file after
-> > decompression to check for our interesting symbols that we kept,
-> > and to
-> > look for any .text.* sections to randomize. The consolidated .text
-> > section
-> > is skipped and not moved. The sections are shuffled randomly, and
-> > copied
-> > into memory following the .text section in a new random order. The
-> > existing
-> > code which updated relocation addresses was modified to account for
-> > not just a fixed delta from the load address, but the offset that
-> > the function
-> > section was moved to. This requires inspection of each address to
-> > see if
-> > it was impacted by a randomization. We use a bsearch to make this
-> > less
-> > horrible on performance. Any tables that need to be modified with
-> > new
-> > addresses or resorted are updated using the symbol addresses parsed
-> > from the
-> > elf symbol table.
-> > 
-> > In order to hide our new layout, symbols reported through
-> > /proc/kallsyms
-> > will be displayed in a random order.
-> > 
-> > Security Considerations
-> > -----------------------
-> > The objective of this patch set is to improve a technology that is
-> > already
-> > merged into the kernel (KASLR). This code will not prevent all
-> > attacks,
-> > but should instead be considered as one of several tools that can
-> > be used.
-> > In particular, this code is meant to make KASLR more effective in
-> > the presence
-> > of info leaks.
-> > 
-> > How much entropy we are adding to the existing entropy of standard
-> > KASLR will
-> > depend on a few variables. Firstly and most obviously, the number
-> > of functions
-> > that are randomized matters. This implementation keeps the existing
-> > .text
-> > section for code that cannot be randomized - for example, because
-> > it was
-> > assembly code. The less sections to randomize, the less entropy. In
-> > addition,
-> > due to alignment (16 bytes for x86_64), the number of bits in a
-> > address that
-> > the attacker needs to guess is reduced, as the lower bits are
-> > identical.
-> > 
-> > Performance Impact
-> > ------------------
-> > There are two areas where function reordering can impact
-> > performance: boot
-> > time latency, and run time performance.
-> > 
-> > * Boot time latency
-> > This implementation of finer grained KASLR impacts the boot time of
-> > the kernel
-> > in several places. It requires additional parsing of the kernel ELF
-> > file to
-> > obtain the section headers of the sections to be randomized. It
-> > calls the
-> > random number generator for each section to be randomized to
-> > determine that
-> > section's new memory location. It copies the decompressed kernel
-> > into a new
-> > area of memory to avoid corruption when laying out the newly
-> > randomized
-> > sections. It increases the number of relocations the kernel has to
-> > perform at
-> > boot time vs. standard KASLR, and it also requires a lookup on each
-> > address
-> > that needs to be relocated to see if it was in a randomized section
-> > and needs
-> > to be adjusted by a new offset. Finally, it re-sorts a few data
-> > tables that
-> > are required to be sorted by address.
-> > 
-> > Booting a test VM on a modern, well appointed system showed an
-> > increase in
-> > latency of approximately 1 second.
-> > 
-> > * Run time
-> > The performance impact at run-time of function reordering varies by
-> > workload.
-> > Using kcbench, a kernel compilation benchmark, the performance of a
-> > kernel
-> > build with finer grained KASLR was about 1% slower than a kernel
-> > with standard
-> > KASLR. Analysis with perf showed a slightly higher percentage of 
-> > L1-icache-load-misses. Other workloads were examined as well, with
-> > varied
-> > results. Some workloads performed significantly worse under
-> > FGKASLR, while
-> > others stayed the same or were mysteriously better. In general, it
-> > will
-> > depend on the code flow whether or not finer grained KASLR will
-> > impact
-> > your workload, and how the underlying code was designed. Because
-> > the layout
-> > changes per boot, each time a system is rebooted the performance of
-> > a workload
-> > may change.
-> > 
-> > Future work could identify hot areas that may not be randomized and
-> > either
-> > leave them in the .text section or group them together into a
-> > single section
-> > that may be randomized. If grouping things together helps, one
-> > other thing to
-> > consider is that if we could identify text blobs that should be
-> > grouped together
-> > to benefit a particular code flow, it could be interesting to
-> > explore
-> > whether this security feature could be also be used as a
-> > performance
-> > feature if you are interested in optimizing your kernel layout for
-> > a
-> > particular workload at boot time. Optimizing function layout for a
-> > particular
-> > workload has been researched and proven effective - for more
-> > information
-> > read the Facebook paper "Optimizing Function Placement for Large-
-> > Scale
-> > Data-Center Applications" (see references section below).
-> > 
-> > Image Size
-> > ----------
-> > Adding additional section headers as a result of compiling with
-> > -ffunction-sections will increase the size of the vmlinux ELF file.
-> > With a standard distro config, the resulting vmlinux was increased
-> > by
-> > about 3%. The compressed image is also increased due to the header
-> > files,
-> > as well as the extra relocations that must be added. You can expect
-> > fgkaslr
-> > to increase the size of the compressed image by about 15%.
-> > 
-> > Memory Usage
-> > ------------
-> > fgkaslr increases the amount of heap that is required at boot time,
-> > although this extra memory is released when the kernel has finished
-> > decompression. As a result, it may not be appropriate to use this
-> > feature on
-> > systems without much memory.
-> > 
-> > Building
-> > --------
-> > To enable fine grained KASLR, you need to have the following config
-> > options
-> > set (including all the ones you would use to build normal KASLR)
-> > 
-> > CONFIG_FG_KASLR=y
-> > 
-> > In addition, fgkaslr is only supported for the X86_64 architecture.
-> > 
-> > Modules
-> > -------
-> > Modules are randomized similarly to the rest of the kernel by
-> > shuffling
-> > the sections at load time prior to moving them into memory. The
-> > module must
-> > also have been build with the -ffunction-sections compiler option.
-> > 
-> > Although fgkaslr for the kernel is only supported for the X86_64
-> > architecture,
-> > it is possible to use fgkaslr with modules on other architectures.
-> > To enable
-> > this feature, select
-> > 
-> > CONFIG_MODULE_FG_KASLR=y
-> > 
-> > This option is selected automatically for X86_64 when
-> > CONFIG_FG_KASLR is set.
-> > 
-> > Disabling
-> > ---------
-> > Disabling normal KASLR using the nokaslr command line option also
-> > disables
-> > fgkaslr. It is also possible to disable fgkaslr separately by
-> > booting with
-> > fgkaslr=off on the commandline.
-> > 
-> > References
-> > ----------
-> > There are a lot of academic papers which explore finer grained
-> > ASLR.
-> > This paper in particular contributed the most to my implementation
-> > design
-> > as well as my overall understanding of the problem space:
-> > 
-> > Selfrando: Securing the Tor Browser against De-anonymization
-> > Exploits,
-> > M. Conti, S. Crane, T. Frassetto, et al.
-> > 
-> > For more information on how function layout impacts performance,
-> > see:
-> > 
-> > Optimizing Function Placement for Large-Scale Data-Center
-> > Applications,
-> > G. Ottoni, B. Maher
-> > 
-> > Kees Cook (2):
-> >   x86/boot: Allow a "silent" kaslr random byte fetch
-> >   x86/boot/compressed: Avoid duplicate malloc() implementations
-> > 
-> > Kristen Carlson Accardi (8):
-> >   objtool: Do not assume order of parent/child functions
-> >   x86: tools/relocs: Support >64K section headers
-> >   x86: Makefile: Add build and config option for CONFIG_FG_KASLR
-> >   x86: Make sure _etext includes function sections
-> >   x86/tools: Add relative relocs for randomized functions
-> >   x86: Add support for function granular KASLR
-> >   kallsyms: Hide layout
-> >   module: Reorder functions
-> > 
-> >  .../admin-guide/kernel-parameters.txt         |   7 +
-> >  Documentation/security/fgkaslr.rst            | 172 ++++
-> >  Documentation/security/index.rst              |   1 +
-> >  Makefile                                      |   6 +-
-> >  arch/x86/Kconfig                              |   4 +
-> >  arch/x86/Makefile                             |   5 +
-> >  arch/x86/boot/compressed/Makefile             |   9 +-
-> >  arch/x86/boot/compressed/fgkaslr.c            | 811
-> > ++++++++++++++++++
-> >  arch/x86/boot/compressed/kaslr.c              |   4 -
-> >  arch/x86/boot/compressed/misc.c               | 157 +++-
-> >  arch/x86/boot/compressed/misc.h               |  30 +
-> >  arch/x86/boot/compressed/utils.c              |  11 +
-> >  arch/x86/boot/compressed/vmlinux.symbols      |  17 +
-> >  arch/x86/include/asm/boot.h                   |  15 +-
-> >  arch/x86/kernel/vmlinux.lds.S                 |  17 +-
-> >  arch/x86/lib/kaslr.c                          |  18 +-
-> >  arch/x86/tools/relocs.c                       | 143 ++-
-> >  arch/x86/tools/relocs.h                       |   4 +-
-> >  arch/x86/tools/relocs_common.c                |  15 +-
-> >  include/asm-generic/vmlinux.lds.h             |  18 +-
-> >  include/linux/decompress/mm.h                 |  12 +-
-> >  include/uapi/linux/elf.h                      |   1 +
-> >  init/Kconfig                                  |  26 +
-> >  kernel/kallsyms.c                             | 163 +++-
-> >  kernel/module.c                               |  81 ++
-> >  tools/objtool/elf.c                           |   8 +-
-> >  26 files changed, 1670 insertions(+), 85 deletions(-)
-> >  create mode 100644 Documentation/security/fgkaslr.rst
-> >  create mode 100644 arch/x86/boot/compressed/fgkaslr.c
-> >  create mode 100644 arch/x86/boot/compressed/utils.c
-> >  create mode 100644 arch/x86/boot/compressed/vmlinux.symbols
-> > 
-> > 
-> > base-commit: 11ba468877bb23f28956a35e896356252d63c983
-> > -- 
-> > 2.20.1
-> > 
+> > my head. Are you speaking of the Clang LTO series? 
+> > https://lore.kernel.org/lkml/20200624203200.78870-1-samitolvanen@google.com/
 > 
-> Apologies in advance if this has already been discussed elsewhere,
-> but I
-> did finally get around to testing the patchset against the
-> livepatching
-> kselftests.
+> I'm not sure how LTO does it, but a few more (half-brained) ideas
+> that
+> could work:
 > 
-> The livepatching kselftests fail as all livepatches stall their
-> transitions.  It appears that reliable (ORC) stack unwinding is
-> broken
-> when fgkaslr is enabled.
+> 1) Add a field in kallsyms to keep track of a symbol's original
+> offset
+>    before randomization/re-sorting.  Livepatch could use that field
+> to
+>    determine the original sympos.
 > 
-> Relevant config options:
+> 2) In fgkaslr code, go through all the sections and mark the ones
+> which
+>    have duplicates (i.e. same name).  Then when shuffling the
+> sections,
+>    skip a shuffle if it involves a duplicate section.  That way all
+> the
+>    duplicates would retain their original sympos.
 > 
->   CONFIG_ARCH_HAS_FG_KASLR=y
->   CONFIG_ARCH_STACKWALK=y
->   CONFIG_FG_KASLR=y
->   CONFIG_HAVE_LIVEPATCH=y
->   CONFIG_HAVE_RELIABLE_STACKTRACE=y
->   CONFIG_LIVEPATCH=y
->   CONFIG_MODULE_FG_KASLR=y
->   CONFIG_TEST_LIVEPATCH=m
->   CONFIG_UNWINDER_ORC=y
-> 
-> The livepatch transitions are stuck along this call path:
-> 
->   klp_check_stack
->     stack_trace_save_tsk_reliable
->       arch_stack_walk_reliable
->   
->           /* Check for stack corruption */
->           if (unwind_error(&state))
->                   return -EINVAL;
-> 
-> where the unwinder error is set by unwind_next_frame():
-> 
->   arch/x86/kernel/unwind_orc.c
->   bool unwind_next_frame(struct unwind_state *state)
->  
-> sometimes here:
->  
->   	/* End-of-stack check for kernel threads: */
->   	if (orc->sp_reg == ORC_REG_UNDEFINED) {
->   		if (!orc->end)
->   			goto err;
->   
->   		goto the_end;
->   	}
-> 
-> or here:
-> 
->   	/* Prevent a recursive loop due to bad ORC data:
-> */                                                                   
->              
->   	if (state->stack_info.type == prev_type
-> &&                                                                   
->                       
->   	    on_stack(&state->stack_info, (void *)state->sp,
-> sizeof(long))
-> &&                                                               
->   	    state->sp <= prev_sp)
-> {                                                                    
->                                     
->   		orc_warn_current("stack going in the wrong direction?
-> at %pB\n",                                                           
->   				 (void
-> *)orig_ip);                                                          
->                                
->   		goto
-> err;                                                                 
->                                                  
->   	}
-> 
-> (and probably other places the ORC unwinder gets confused.)
-> 
-> 
-> It also manifests itself in other, more visible ways.  For example, a
-> kernel module that calls dump_stack() in its init function or even
-> /proc/<pid>/stack:
-> 
-> (fgkaslr on)
-> ------------
-> 
-> Call Trace:
->  ? dump_stack+0x57/0x73
->  ? 0xffffffffc0850000
->  ? mymodule_init+0xa/0x1000 [dumpstack]
->  ? do_one_initcall+0x46/0x1f0
->  ? free_unref_page_commit+0x91/0x100
->  ? _cond_resched+0x15/0x30
->  ? kmem_cache_alloc_trace+0x14b/0x210
->  ? do_init_module+0x5a/0x220
->  ? load_module+0x1912/0x1b20
->  ? __do_sys_finit_module+0xa8/0x110
->  ? __do_sys_finit_module+0xa8/0x110
->  ? do_syscall_64+0x47/0x80
->  ? entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> 
-> % sudo cat /proc/$$/stack
-> [<0>] do_wait+0x1c3/0x230
-> [<0>] kernel_wait4+0xa6/0x140
-> 
-> 
-> fgkaslr=off
-> -----------
-> 
-> Call Trace:
->  dump_stack+0x57/0x73
->  ? 0xffffffffc04f2000
->  mymodule_init+0xa/0x1000 [readonly]
->  do_one_initcall+0x46/0x1f0
->  ? free_unref_page_commit+0x91/0x100
->  ? _cond_resched+0x15/0x30
->  ? kmem_cache_alloc_trace+0x14b/0x210
->  do_init_module+0x5a/0x220
->  load_module+0x1912/0x1b20
->  ? __do_sys_finit_module+0xa8/0x110
->  __do_sys_finit_module+0xa8/0x110
->  do_syscall_64+0x47/0x80
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> 
-> % sudo cat /proc/$$/stack
-> [<0>] do_wait+0x1c3/0x230
-> [<0>] kernel_wait4+0xa6/0x140
-> [<0>] __do_sys_wait4+0x83/0x90
-> [<0>] do_syscall_64+0x47/0x80
-> [<0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> 
-> 
-> I would think fixing and verifying these latter cases would be easier
+> 3) Livepatch could uniquely identify symbols by some feature other
 > than
-> chasing livepatch transitions (but would still probably fix klp case,
-> too).
-> Perhaps Josh or someone has other ORC unwinder tests that could be
-> used?
+>    sympos.  For example:
 > 
-> -- Joe
+>    Symbol/function size - obviously this would only work if
+> duplicately
+>    named symbols have different sizes.
+> 
+>    Checksum - as part of a separate feature we're also looking at
+> giving
+>    each function its own checksum, calculated based on its
+> instruction
+>    opcodes.  Though calculating checksums at runtime could be
+>    complicated by IP-relative addressing.
+> 
+> I'm thinking #1 or #2 wouldn't be too bad.  #3 might be harder.
 > 
 
-OK, I have root caused these failures to the fact that the relocs for
-the orc_unwind_ip table that I use to adjust the values of the
-orc_unwind_ip table after randomization were incorrect because the
-table is sorted at build time now, thus making the relocs invalid. I
-can fix this either by turning off BUILDTIME_TABLE_SORT (and now the
-relocs are fine), or by ignoring any relocs in the orc_unwind_ip table
-and adjusting without relocs. I think it makes sense to just unset
-BUILDTIME_TABLE_SORT if CONFIG_FG_KASLR and continue to rely on relocs
-to work since it is a useless step anyway.
+Hi there! I was trying to find a super easy way to address this, so I
+thought the best thing would be if there were a compiler or linker
+switch to just eliminate any duplicate symbols at compile time for
+vmlinux. I filed this question on the binutils bugzilla looking to see
+if there were existing flags that might do this, but H.J. Lu went ahead
+and created a new one "-z unique", that seems to do what we would need
+it to do. 
 
+https://sourceware.org/bugzilla/show_bug.cgi?id=26391
+
+When I use this option, it renames any duplicate symbols with an
+extension - for example duplicatefunc.1 or duplicatefunc.2. You could
+either match on the full unique name of the specific binary you are
+trying to patch, or you match the base name and use the extension to
+determine original position. Do you think this solution would work? If
+so, I can modify livepatch to refuse to patch on duplicated symbols if
+CONFIG_FG_KASLR and when this option is merged into the tool chain I
+can add it to KBUILD_LDFLAGS when CONFIG_FG_KASLR and livepatching
+should work in all cases. 
 
