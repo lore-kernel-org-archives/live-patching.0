@@ -1,105 +1,99 @@
-Return-Path: <SRS0=4vjg=CR=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=TObA=DA=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C21B6C433E2
-	for <live-patching@archiver.kernel.org>; Tue,  8 Sep 2020 20:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E12DFC2D0A8
+	for <live-patching@archiver.kernel.org>; Wed, 23 Sep 2020 17:41:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BED32098B
-	for <live-patching@archiver.kernel.org>; Tue,  8 Sep 2020 20:59:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H1qNW6RK"
+	by mail.kernel.org (Postfix) with ESMTP id 88D94206D9
+	for <live-patching@archiver.kernel.org>; Wed, 23 Sep 2020 17:41:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729649AbgIHU7z (ORCPT
+        id S1726600AbgIWRlV (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 8 Sep 2020 16:59:55 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:56788 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725997AbgIHU7y (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Tue, 8 Sep 2020 16:59:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599598793;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QDxqJJtxikAk+TP8erWdser2zhhtAWwdtKyMtfuzbSY=;
-        b=H1qNW6RK5GlNWvWpgmdopBK/M5ZCL5n61MfmWeEAqxMHfGj1w8DS3gydCaFHkdSX3+/Jke
-        uwJW41BUqq8qu5cfUtBumFvaR5pyZEqqk7yRW3lSWDmjoA/IPzqAvsjzp1rJj2lP9zN2jq
-        O/H2j6Ik+GsVyTntFkc2VULOjiKxMLw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-203-cNX-G96bOXm-dG0MkvF8ZA-1; Tue, 08 Sep 2020 16:59:51 -0400
-X-MC-Unique: cNX-G96bOXm-dG0MkvF8ZA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D320A8018A1;
-        Tue,  8 Sep 2020 20:59:49 +0000 (UTC)
-Received: from treble (ovpn-117-163.rdu2.redhat.com [10.10.117.163])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 561CE7EEAC;
-        Tue,  8 Sep 2020 20:59:49 +0000 (UTC)
-Date:   Tue, 8 Sep 2020 15:59:47 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wed, 23 Sep 2020 13:41:21 -0400
+Received: from mga02.intel.com ([134.134.136.20]:14096 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726581AbgIWRlV (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 23 Sep 2020 13:41:21 -0400
+IronPort-SDR: qowO+FkTDejT+9Ubivziaf2Jmx6aEAMfgUNkzWAUA7FWjEi/68qbBWm/tqFXIEhC0hgb/qnPGC
+ 5Fs9QhgsnKJg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9753"; a="148629805"
+X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
+   d="scan'208";a="148629805"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 10:41:20 -0700
+IronPort-SDR: GZk1FRtVMnmSVB61ksssWSFNFU+xjc7kddUpaUMFeMzOTmuJTaNnLCO4Kbb4lhQ2TY/3WZNv/0
+ FyFrdXKqoIKw==
+X-IronPort-AV: E=Sophos;i="5.77,293,1596524400"; 
+   d="scan'208";a="309993326"
+Received: from kcaccard-mobl.amr.corp.intel.com (HELO kcaccard-mobl1.jf.intel.com) ([10.212.14.213])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2020 10:41:15 -0700
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     arjan@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        rick.p.edgecombe@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
         live-patching@vger.kernel.org
-Subject: Re: [GIT PULL] livepatching for 5.9-rc5
-Message-ID: <20200908205947.arryy75c5cvldps7@treble>
-References: <20200907082036.GC8084@alley>
- <CAHk-=wiZUYjmPLiEaN5uHM4mGyYq8RBFvk=iZKkm9=8NxvcoZQ@mail.gmail.com>
- <20200908183239.vhy2txzcmlliul7d@treble>
- <CAHk-=wi==UJf0fWUGn6RhQ2hvLW7PA9Yj4GWaTJxa3roENAHDg@mail.gmail.com>
+Subject: [PATCH v5 10/10] livepatch: only match unique symbols when using fgkaslr
+Date:   Wed, 23 Sep 2020 10:39:04 -0700
+Message-Id: <20200923173905.11219-11-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200923173905.11219-1-kristen@linux.intel.com>
+References: <20200923173905.11219-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi==UJf0fWUGn6RhQ2hvLW7PA9Yj4GWaTJxa3roENAHDg@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-Sender: live-patching-owner@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 11:42:00AM -0700, Linus Torvalds wrote:
-> On Tue, Sep 8, 2020 at 11:32 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > Can you share the .o file?  At least I can't recreate with GCC 9.3.1,
-> > which is all I have at the moment.
-> 
-> Done off-list in private, because I don't think anybody else wants
-> object files flying around on the mailing lists..
+If any type of function granular randomization is enabled, the sympos
+algorithm will fail, as it will be impossible to resolve symbols when
+there are duplicates using the previous symbol position.
 
-The problem is that objtool ignores handle_external_interrupt_irqoff()
-(because it has the STACK_FRAME_NON_STANDARD annotation), and the
-'ignore' logic is a bit crude.
+Override the value of sympos to always be zero if fgkaslr is enabled for
+either the core kernel or modules, forcing the algorithm
+to require that only unique symbols are allowed to be patched.
 
-Because that function is ignored, the tail call isn't detected (as you
-pointed out).  Which confuses the static noreturn detection logic.
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+---
+ kernel/livepatch/core.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The proper fix would be to move that thunk call code to proper asm,
-where we can add some unwind hints, and then get rid of the
-STACK_FRAME_NON_STANDARD.
-
-But, in the interest of being lazy, here's the easiest fix for now.
-I'll need to run some builds to make sure it doesn't break anything.
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e034a8f24f46..90a66891441a 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -619,7 +619,7 @@ static int add_jump_destinations(struct objtool_file *file)
- 		if (!is_static_jump(insn))
- 			continue;
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index f76fdb925532..da08e40f2da2 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -170,6 +170,17 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+ 		kallsyms_on_each_symbol(klp_find_callback, &args);
+ 	mutex_unlock(&module_mutex);
  
--		if (insn->ignore || insn->offset == FAKE_JUMP_OFFSET)
-+		if (insn->offset == FAKE_JUMP_OFFSET)
- 			continue;
- 
- 		reloc = find_reloc_by_dest_range(file->elf, insn->sec,
++	/*
++	 * If any type of function granular randomization is enabled, it
++	 * will be impossible to resolve symbols when there are duplicates
++	 * using the previous symbol position (i.e. sympos != 0). Override
++	 * the value of sympos to always be zero in this case. This will
++	 * force the algorithm to require that only unique symbols are
++	 * allowed to be patched.
++	 */
++	if (IS_ENABLED(CONFIG_FG_KASLR) || IS_ENABLED(CONFIG_MODULE_FG_KASLR))
++		sympos = 0;
++
+ 	/*
+ 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+ 	 * otherwise ensure the symbol position count matches sympos.
+-- 
+2.20.1
 
