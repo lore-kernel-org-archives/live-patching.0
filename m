@@ -1,44 +1,40 @@
-Return-Path: <SRS0=VTxU=DB=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=eiZF=DC=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D1DBC4363D
-	for <live-patching@archiver.kernel.org>; Thu, 24 Sep 2020 13:06:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8043C4363D
+	for <live-patching@archiver.kernel.org>; Fri, 25 Sep 2020 13:23:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A68423741
-	for <live-patching@archiver.kernel.org>; Thu, 24 Sep 2020 13:06:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 711F8239EC
+	for <live-patching@archiver.kernel.org>; Fri, 25 Sep 2020 13:23:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbgIXNGJ (ORCPT
+        id S1728919AbgIYNXp (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 24 Sep 2020 09:06:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33410 "EHLO mx2.suse.de"
+        Fri, 25 Sep 2020 09:23:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44704 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727704AbgIXNGJ (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 24 Sep 2020 09:06:09 -0400
+        id S1728643AbgIYNXo (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 25 Sep 2020 09:23:44 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A1692AD5F;
-        Thu, 24 Sep 2020 13:06:07 +0000 (UTC)
-Date:   Thu, 24 Sep 2020 15:06:06 +0200 (CEST)
+        by mx2.suse.de (Postfix) with ESMTP id 6B7F9B509;
+        Fri, 25 Sep 2020 13:07:01 +0000 (UTC)
+Date:   Fri, 25 Sep 2020 15:06:55 +0200 (CEST)
 From:   Miroslav Benes <mbenes@suse.cz>
 To:     Kristen Carlson Accardi <kristen@linux.intel.com>
 cc:     keescook@chromium.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>, arjan@linux.intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-hardening@lists.openwall.com, rick.p.edgecombe@intel.com,
-        live-patching@vger.kernel.org
-Subject: Re: [PATCH v5 10/10] livepatch: only match unique symbols when using
- fgkaslr
-In-Reply-To: <20200923173905.11219-11-kristen@linux.intel.com>
-Message-ID: <alpine.LSU.2.21.2009241453400.6602@pobox.suse.cz>
-References: <20200923173905.11219-1-kristen@linux.intel.com> <20200923173905.11219-11-kristen@linux.intel.com>
+        bp@alien8.de, arjan@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        rick.p.edgecombe@intel.com, live-patching@vger.kernel.org
+Subject: Re: [PATCH v5 00/10] Function Granular KASLR
+In-Reply-To: <20200923173905.11219-1-kristen@linux.intel.com>
+Message-ID: <alpine.LSU.2.21.2009251450260.13615@pobox.suse.cz>
+References: <20200923173905.11219-1-kristen@linux.intel.com>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -46,62 +42,48 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi,
+Hi Kristen,
 
 On Wed, 23 Sep 2020, Kristen Carlson Accardi wrote:
 
-> If any type of function granular randomization is enabled, the sympos
-> algorithm will fail, as it will be impossible to resolve symbols when
-> there are duplicates using the previous symbol position.
+> Function Granular Kernel Address Space Layout Randomization (fgkaslr)
+> ---------------------------------------------------------------------
 > 
-> Override the value of sympos to always be zero if fgkaslr is enabled for
-> either the core kernel or modules, forcing the algorithm
-> to require that only unique symbols are allowed to be patched.
-> 
-> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> ---
->  kernel/livepatch/core.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index f76fdb925532..da08e40f2da2 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -170,6 +170,17 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  		kallsyms_on_each_symbol(klp_find_callback, &args);
->  	mutex_unlock(&module_mutex);
->  
-> +	/*
-> +	 * If any type of function granular randomization is enabled, it
-> +	 * will be impossible to resolve symbols when there are duplicates
-> +	 * using the previous symbol position (i.e. sympos != 0). Override
-> +	 * the value of sympos to always be zero in this case. This will
-> +	 * force the algorithm to require that only unique symbols are
-> +	 * allowed to be patched.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_FG_KASLR) || IS_ENABLED(CONFIG_MODULE_FG_KASLR))
-> +		sympos = 0;
+> This patch set is an implementation of finer grained kernel address space
+> randomization. It rearranges your kernel code at load time 
+> on a per-function level granularity, with only around a second added to
+> boot time.
 
-This should work, but I wonder if we should make it more explicit. With 
-the change the user will get the error with "unresolvable ambiguity for 
-symbol..." if they specify sympos and the symbol is not unique. It could 
-confuse them.
+I ran live patching kernel selftests on the patch set and everything 
+passed fine.
 
-So, how about it making it something like
+However, we also use not-yet-upstream set of tests at SUSE for testing 
+live patching [1] and one of them, klp_tc_12.sh, is failing. You should be 
+able to run the set on upstream as is.
 
-if (IS_ENABLED(CONFIG_FG_KASLR) || IS_ENABLED(CONFIG_MODULE_FG_KASLR))
-	if (sympos) {
-		pr_err("fgkaslr is enabled, specifying sympos for symbol '%s' in object '%s' does not work.\n",
-			name, objname);
-		*addr = 0;
-		return -EINVAL;
-	}
+The test uninterruptedly sleeps in a kretprobed function called by a 
+patched one. The current master without fgkaslr patch set reports the 
+stack of the sleeping task as unreliable and live patching fails. The 
+situation is different with fgkaslr (even with nofgkaslr on the command 
+line). The stack is returned as reliable. It looks something like 
 
-? (there could be goto to the error out at the end of the function).
+[<0>] __schedule+0x465/0xa40
+[<0>] schedule+0x55/0xd0
+[<0>] orig_do_sleep+0xb1/0x110 [klp_test_support_mod]
+[<0>] swap_pages+0x7f/0x7f
 
-In that case, if sympos is not specified, the user will get the message 
-which matches the reality. If the user specifies it, they will get the 
-error in case of fgkaslr.
+where the last entry is not reliable. I've seen 
+kretprobe_trampoline+0x0/0x4a and some other symbols there too. Since the 
+patched function (orig_sleep_uninterruptible_set) is not on the stack, 
+live patching succeeds, which is not intended.
 
-Thanks for dealing with it
+With kprobe setting removed, all works as expected.
+
+So I wonder if there is still some issue with ORC somewhere as you 
+mentioned in v4 thread. I'll investigate more next week, but wanted to 
+report early.
+
+Regards
 Miroslav
+
+[1] https://github.com/lpechacek/qa_test_klp
