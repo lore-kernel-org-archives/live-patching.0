@@ -1,88 +1,178 @@
-Return-Path: <SRS0=kFvh=DU=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=JLKU=DV=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA26C433DF
-	for <live-patching@archiver.kernel.org>; Tue, 13 Oct 2020 23:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAC25C433E7
+	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 05:30:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CD93D21D7B
-	for <live-patching@archiver.kernel.org>; Tue, 13 Oct 2020 23:34:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WEnlE1kQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TYk5+iUi"
+	by mail.kernel.org (Postfix) with ESMTP id 81D192222C
+	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 05:30:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388787AbgJMXee (ORCPT
+        id S1728819AbgJNFay (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 13 Oct 2020 19:34:34 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:54772 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbgJMXee (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Tue, 13 Oct 2020 19:34:34 -0400
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1602632072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YLDuvh8o8enL8QqTbIk9MoXqIrK4T+TFGRNdqoINP4=;
-        b=WEnlE1kQ4MLaQs7L6tDWLxFdd7SIYrswalGTOed+lzfsXldS3U4lSykGTGimGLkP2iiCuo
-        puXEkPCfudp1G2SM248dqYscfOQvZIIBx63AGDCpFQvHLT5HtQ3bFu6WunztNBfX7MQjhI
-        eDHfMSiGdjMRV2keeFt5yDidfAp5W+FwaMoID3k/FDpFgyrL7MrQQsRNNAoOdlCPd0f2QN
-        xzx+ncer5bo74ojU81ihp3Pz8+nGQZbRW7HoJP2l2wUwiSw6on0UgRNwcV8WE9UQsl9Y3y
-        qtrMLSl2bvKQRxaNQSUwKDNoy38z9BCgd6cupvxSWF4VaoDPeLKX1Fpg5LPFvQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1602632072;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/YLDuvh8o8enL8QqTbIk9MoXqIrK4T+TFGRNdqoINP4=;
-        b=TYk5+iUil0CvGC5kQHsuhcAtBxU8suSFLGWDAAF/I6nM/37J4Oq5FuRFcYIFIGKQduNFzt
-        ut6jgJNZDgbDmsDA==
-To:     Jens Axboe <axboe@kernel.dk>, Miroslav Benes <mbenes@suse.cz>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, peterz@infradead.org,
+        Wed, 14 Oct 2020 01:30:54 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36078 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728619AbgJNFay (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 14 Oct 2020 01:30:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E6783AC3C;
+        Wed, 14 Oct 2020 05:30:51 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     bp@alien8.de
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         live-patching@vger.kernel.org
-Subject: Re: [PATCHSET RFC v3 0/6] Add support for TIF_NOTIFY_SIGNAL
-In-Reply-To: <3c3616f2-8801-1d42-6d7d-3dfbf977edb2@kernel.dk>
-References: <20201005150438.6628-1-axboe@kernel.dk> <20201008145610.GK9995@redhat.com> <alpine.LSU.2.21.2010090959260.23400@pobox.suse.cz> <e33ec671-3143-d720-176b-a8815996fd1c@kernel.dk> <9a01ab10-3140-3fa6-0fcf-07d3179973f2@kernel.dk> <alpine.LSU.2.21.2010121921420.10435@pobox.suse.cz> <3c3616f2-8801-1d42-6d7d-3dfbf977edb2@kernel.dk>
-Date:   Wed, 14 Oct 2020 01:34:32 +0200
-Message-ID: <87lfg9og3b.fsf@nanos.tec.linutronix.de>
+Subject: [PATCH v2] x86/unwind/orc: fix inactive tasks with stack pointer in %sp
+Date:   Wed, 14 Oct 2020 07:30:51 +0200
+Message-Id: <20201014053051.24199-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Jens,
+gcc 10 optimizes the scheduler code differently than its predecessors.
+When DEBUG_SECTION_MISMATCH config is enabled, Makefile forces gcc not
+to inline some functions (-fno-inline-functions-called-once). Before gcc
+10, "no-inlined" __schedule starts with the usual prologue (push %bp; mov
+%sp,%bp). So ORC unwinder simply picks stack pointer from %bp and
+unwinds from __schedule just perfectly:
+$ cat /proc/1/stack
+[<0>] ep_poll+0x3e9/0x450
+[<0>] do_epoll_wait+0xaa/0xc0
+[<0>] __x64_sys_epoll_wait+0x1a/0x20
+[<0>] do_syscall_64+0x33/0x40
+[<0>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-On Tue, Oct 13 2020 at 13:39, Jens Axboe wrote:
-> On 10/12/20 11:27 AM, Miroslav Benes wrote:
-> I'm continuing to hone the series, what's really missing so far is arch
-> review. Most conversions are straight forward, some I need folks to
-> definitely take a look at (arm, s390). powerpc is also a bit hair right
-> now, but I'm told that 5.10 will kill a TIF flag there, so that'll make
-> it trivial once I rebase on that.
+But now, with gcc 10, there is no %bp prologue in __schedule:
+$ cat /proc/1/stack
+<nothing>
 
-can you pretty please not add that to anything which is not going
-through kernel/entry/ ?
+The orc entry of the point in __schedule is:
+sp:sp+88 bp:last_sp-48 type:call end:0
 
-The amount of duplicated and differently buggy, inconsistent and
-incomplete code in syscall and exception handling is just annoying.
+In this case, nobody subtracts sizeof "struct inactive_task_frame" in
+__unwind_start. The struct is put on the stack by __switch_to_asm and
+only then __switch_to_asm stores %sp to task->thread.sp. But we start
+unwinding from a point in __schedule (stored in frame->ret_addr by
+'call') and not in __switch_to_asm.
 
-It's perfectly fine if we keep that #ifdeffery around for a while and
-encourage arch folks to move over to the generic infrastructure instead
-of proliferating the status quo by adding this to their existing pile.
+So for these example values in __unwind_start:
+sp=ffff94b50001fdc8 bp=ffff8e1f41d29340 ip=__schedule+0x1f0
 
-The #ifdef guarding this in set_notify_signal() and other core code
-places wants to be:
+The stack is:
+ ffff94b50001fdc8: ffff8e1f41578000 # struct inactive_task_frame
+ ffff94b50001fdd0: 0000000000000000
+ ffff94b50001fdd8: ffff8e1f41d29340
+ ffff94b50001fde0: ffff8e1f41611d40 # ...
+ ffff94b50001fde8: ffffffff93c41920 # bx
+ ffff94b50001fdf0: ffff8e1f41d29340 # bp
+ ffff94b50001fdf8: ffffffff9376cad0 # ret_addr (and end of the struct)
 
-    #if defined(CONFIG_GENERIC_ENTRY) && defined(TIF_NOTIFY_SIGNAL)
+0xffffffff9376cad0 is __schedule+0x1f0 (after the call to
+__switch_to_asm).  Now follow those 88 bytes from the ORC entry (sp+88).
+The entry is correct, __schedule really pushes 48 bytes (8*7) + 32 bytes
+via subq to store some local values (like 4U below). So to unwind, look
+at the offset 88-sizeof(long) = 0x50 from here:
 
-Thanks,
+ ffff94b50001fe00: ffff8e1f41578618
+ ffff94b50001fe08: 00000cc000000255
+ ffff94b50001fe10: 0000000500000004
+ ffff94b50001fe18: 7793fab6956b2d00 # NOTE (see below)
+ ffff94b50001fe20: ffff8e1f41578000
+ ffff94b50001fe28: ffff8e1f41578000
+ ffff94b50001fe30: ffff8e1f41578000
+ ffff94b50001fe38: ffff8e1f41578000
+ ffff94b50001fe40: ffff94b50001fed8
+ ffff94b50001fe48: ffff8e1f41577ff0
+ ffff94b50001fe50: ffffffff9376cf12
 
-        tglx
+Here               ^^^^^^^^^^^^^^^^ is the correct ret addr from
+__schedule. It translates to schedule+0x42 (insn after a call to
+__schedule).
+
+BUT, unwind_next_frame tries to take the address starting from
+0xffff94b50001fdc8. That is exactly from thread.sp+88-sizeof(long) =
+0xffff94b50001fdc8+88-8 = 0xffff94b50001fe18, which is garbage marked as
+NOTE above. So this quits the unwinding as 7793fab6956b2d00 is obviously
+not a kernel address.
+
+There was a fix to skip 'struct inactive_task_frame' in
+unwind_get_return_address_ptr in commit 187b96db5ca7 ("x86/unwind/orc:
+Fix unwind_get_return_address_ptr() for inactive tasks").
+
+But we need to skip the struct already in the unwinder proper. So
+subtract the size (increase the stack pointer) of the structure in
+__unwind_start directly. This allows for removal of the code added by
+commit 187b96db5ca7 completely, as the address is now at
+'(unsigned long *)state->sp - 1', the same as in the generic case.
+
+Fixes: ee9f8fce9964 ("x86/unwind: Add the ORC unwinder")
+Bug: https://bugzilla.suse.com/show_bug.cgi?id=1176907
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
+Cc: live-patching@vger.kernel.org
+---
+
+[v2]
+  * Remove comment from __unwind_start.
+  * Cc more parties
+  * Polish the commitlog
+
+ arch/x86/kernel/unwind_orc.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 6a339ce328e0..73f800100066 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -321,19 +321,12 @@ EXPORT_SYMBOL_GPL(unwind_get_return_address);
+ 
+ unsigned long *unwind_get_return_address_ptr(struct unwind_state *state)
+ {
+-	struct task_struct *task = state->task;
+-
+ 	if (unwind_done(state))
+ 		return NULL;
+ 
+ 	if (state->regs)
+ 		return &state->regs->ip;
+ 
+-	if (task != current && state->sp == task->thread.sp) {
+-		struct inactive_task_frame *frame = (void *)task->thread.sp;
+-		return &frame->ret_addr;
+-	}
+-
+ 	if (state->sp)
+ 		return (unsigned long *)state->sp - 1;
+ 
+@@ -663,7 +656,7 @@ void __unwind_start(struct unwind_state *state, struct task_struct *task,
+ 	} else {
+ 		struct inactive_task_frame *frame = (void *)task->thread.sp;
+ 
+-		state->sp = task->thread.sp;
++		state->sp = task->thread.sp + sizeof(*frame);
+ 		state->bp = READ_ONCE_NOCHECK(frame->bp);
+ 		state->ip = READ_ONCE_NOCHECK(frame->ret_addr);
+ 		state->signal = (void *)state->ip == ret_from_fork;
+-- 
+2.28.0
+
