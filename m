@@ -2,134 +2,98 @@ Return-Path: <SRS0=JLKU=DV=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 177E2C2BB1B
-	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53647C433E7
+	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 21:48:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B048F20709
-	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBA4C221FF
+	for <live-patching@archiver.kernel.org>; Wed, 14 Oct 2020 21:48:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20150623.gappssmtp.com header.i=@kernel-dk.20150623.gappssmtp.com header.b="cjD4hai8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jTT5y8dA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729095AbgJNJYQ (ORCPT
+        id S1725977AbgJNVsY (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388196AbgJNJU5 (ORCPT
+        Wed, 14 Oct 2020 17:48:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21932 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726662AbgJNVsY (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:20:57 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE0C08EADD
-        for <live-patching@vger.kernel.org>; Tue, 13 Oct 2020 16:37:52 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id r10so737705pgb.10
-        for <live-patching@vger.kernel.org>; Tue, 13 Oct 2020 16:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vNrLxhuzbKySTdaq3eK6IYs4qYFra1Niz95iXgK6Jj4=;
-        b=cjD4hai8nvmN++DcR3kvZkEq/tP8L40YpzvCPlc1ePqdY1yVT4JeA3OyuLC4W3e1K6
-         6g+xwrF/3qc5tVO4LZ1OR/ICoupDOTDlTFkLsGQvmzNxkDIDGhFTkBUkcJaWzr3GRxMk
-         lGIalkMtRUo+mFS6WFpI420AIzjcLspBbrklvjlYwnFmtxgj58/WvxgbpXvEFYcxRGfY
-         sLxv+V3HQFLs4wTtJ/tursNEIZDI9JR+TlZstbItQSZ+IcKyAAixFOMDyrqVWd+re+wg
-         5FRLz2g5W+UUPxzw/1FNbGPqzsvuQbQP4wQdVIC1muE+0mzfQdDauwIowzItn3ATHWPk
-         1KYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vNrLxhuzbKySTdaq3eK6IYs4qYFra1Niz95iXgK6Jj4=;
-        b=sC4d6UxF+03SSAzhyfu84VERvmXZwVRKg+QusQuWA/CxGJRo4g2FpMJnzhWFF6CYaj
-         GDVai0tZFaL8xXaU2aQIzdU88WVH6ArKC82AfXHE4cxmiJ8aeI5Bzq94Ow+4ME5gdlKG
-         /7R8xGtoBb+Pj0DXlWOaYKefBpR8pnDzToju2eDdWN9+GnTiW7UuCe8POSrtB5RbE4Lp
-         xfw/VdFeX/dFOZso79VSHzyh0Vh3uQnnaS+Th4aVa2rx2t456Xh+JrzGLhm1mlHUYkwE
-         EVUywYHDFNQvwpgpdA4VdUvZgWhLqOexJqOy+Z6kfC4qmM51HUz3Eaw5J2nyW1j+KKyW
-         I8Cg==
-X-Gm-Message-State: AOAM531BB2PTUrbdvaYJmG6VNAW6YXCbMQDjeBbTjZRGjcsMxSbsb4ha
-        0/+ORiB5WTP5ti3tGzhfidq7PR5g8gB88uTB
-X-Google-Smtp-Source: ABdhPJylS9WM3J27JvugooESy3X8ZP2DkugADfW8R9kmS5rfhg9PZZ7pOQiiHHcwmhl2bDhMJ1JARQ==
-X-Received: by 2002:a65:4bcc:: with SMTP id p12mr1491715pgr.353.1602632271367;
-        Tue, 13 Oct 2020 16:37:51 -0700 (PDT)
-Received: from [192.168.1.134] ([66.219.217.173])
-        by smtp.gmail.com with ESMTPSA id u27sm810116pgm.60.2020.10.13.16.37.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 16:37:50 -0700 (PDT)
-Subject: Re: [PATCHSET RFC v3 0/6] Add support for TIF_NOTIFY_SIGNAL
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Miroslav Benes <mbenes@suse.cz>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, peterz@infradead.org,
-        live-patching@vger.kernel.org
-References: <20201005150438.6628-1-axboe@kernel.dk>
- <20201008145610.GK9995@redhat.com>
- <alpine.LSU.2.21.2010090959260.23400@pobox.suse.cz>
- <e33ec671-3143-d720-176b-a8815996fd1c@kernel.dk>
- <9a01ab10-3140-3fa6-0fcf-07d3179973f2@kernel.dk>
- <alpine.LSU.2.21.2010121921420.10435@pobox.suse.cz>
- <3c3616f2-8801-1d42-6d7d-3dfbf977edb2@kernel.dk>
- <87lfg9og3b.fsf@nanos.tec.linutronix.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <f5009735-c4e4-816a-d02f-29f7da7ab287@kernel.dk>
-Date:   Tue, 13 Oct 2020 17:37:48 -0600
+        Wed, 14 Oct 2020 17:48:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602712103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=snX9o7DRIpAEdg6HdWJTexdGEfZH+xbF9NPXzawREdU=;
+        b=jTT5y8dAh0XCKmgvxRHa0/yW2sjj927nZ9S8A+TahwWalbKAk4tW+rVV5fzNkwuOdhe4Vm
+        C4mmuwl15v0EyU/hcbsA7//VRSUt2XZWrwnRdIITe8lOVACwlhR+QykTpFsUWCTm6OoAL4
+        u6XAu8jjdlcGVVHLhMDBfLjUCBvC9Cw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-588-UowkHB-JMf6i3WhhTy1oog-1; Wed, 14 Oct 2020 17:48:19 -0400
+X-MC-Unique: UowkHB-JMf6i3WhhTy1oog-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 26EB7186DD23;
+        Wed, 14 Oct 2020 21:48:18 +0000 (UTC)
+Received: from [10.10.116.197] (ovpn-116-197.rdu2.redhat.com [10.10.116.197])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D63010013C1;
+        Wed, 14 Oct 2020 21:48:17 +0000 (UTC)
+Subject: Re: [PATCH] selftests/livepatch: Do not check order when using "comm"
+ for dmesg checking
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@redhat.com,
+        pmladek@suse.com, shuah@kernel.org, live-patching@vger.kernel.org
+References: <20200827110709.26824-1-mbenes@suse.cz>
+ <20200827132058.GA24622@redhat.com>
+ <nycvar.YFH.7.76.2008271528000.27422@cbobk.fhfr.pm>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <bd7b15d6-1796-9fb4-bf52-14bcd981458d@redhat.com>
+Date:   Wed, 14 Oct 2020 17:48:16 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <87lfg9og3b.fsf@nanos.tec.linutronix.de>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <nycvar.YFH.7.76.2008271528000.27422@cbobk.fhfr.pm>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On 10/13/20 5:34 PM, Thomas Gleixner wrote:
-> Jens,
+On 8/27/20 9:28 AM, Jiri Kosina wrote:
+> On Thu, 27 Aug 2020, Joe Lawrence wrote:
 > 
-> On Tue, Oct 13 2020 at 13:39, Jens Axboe wrote:
->> On 10/12/20 11:27 AM, Miroslav Benes wrote:
->> I'm continuing to hone the series, what's really missing so far is arch
->> review. Most conversions are straight forward, some I need folks to
->> definitely take a look at (arm, s390). powerpc is also a bit hair right
->> now, but I'm told that 5.10 will kill a TIF flag there, so that'll make
->> it trivial once I rebase on that.
+>>> , "comm" fails with "comm: file 2 is not in sorted order". Suppress the
+>>> order checking with --nocheck-order option.
+>>>
+>>> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+>>
+>> Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+>>
+>> And not so important for selftests, but helpful for backporting efforts:
+>>
+>> Fixes: 2f3f651f3756 ("selftests/livepatch: Use "comm" instead of "diff" for dmesg")
 > 
-> can you pretty please not add that to anything which is not going
-> through kernel/entry/ ?
-
-Certainly, tif-task_work is just a holding ground for all of it so
-far. Once the core bits are agreed upon and merged, then I'll bounce
-the rest through the arch maintainers. So please don't view it as
-on cohesive series, it only is up until (and including):
-
-commit 8dc14b576a9bf13dba4993e4ddb4068d39dee1e9
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Thu Oct 1 13:29:21 2020 -0600
-
-    task_work: use TIF_NOTIFY_SIGNAL if available
-
-
-> The amount of duplicated and differently buggy, inconsistent and
-> incomplete code in syscall and exception handling is just annoying.
+> I've added the Fixes: tag and applied to for-5.9/upstream-fixes. Thanks,
 > 
-> It's perfectly fine if we keep that #ifdeffery around for a while and
-> encourage arch folks to move over to the generic infrastructure instead
-> of proliferating the status quo by adding this to their existing pile.
 
-Agree
+Hi Jiri,
 
-> The #ifdef guarding this in set_notify_signal() and other core code
-> places wants to be:
-> 
->     #if defined(CONFIG_GENERIC_ENTRY) && defined(TIF_NOTIFY_SIGNAL)
+I was looking at a list of livepatching commits that went into 5.9 for 
+backporting and was wondering if we ever merged this one?
 
-OK no problem, I'll fix that up.
+It's not a show-stopper, but would be nice to get this one in for 5.10 
+if possible.
 
--- 
-Jens Axboe
+Thanks,
+
+-- Joe
 
