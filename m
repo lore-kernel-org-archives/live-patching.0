@@ -2,32 +2,53 @@ Return-Path: <SRS0=ks2W=DW=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE7AC433DF
-	for <live-patching@archiver.kernel.org>; Thu, 15 Oct 2020 18:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9D38C433DF
+	for <live-patching@archiver.kernel.org>; Thu, 15 Oct 2020 18:32:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 440E920760
-	for <live-patching@archiver.kernel.org>; Thu, 15 Oct 2020 18:28:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A83D20848
+	for <live-patching@archiver.kernel.org>; Thu, 15 Oct 2020 18:32:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602786720;
+	bh=QIEcyyIynUrELEiAlqt0aVNgGRJvQPp7jpGWp5yNelU=;
+	h=Date:From:To:cc:Subject:List-ID:From;
+	b=qdJHEm3xKoWFJo5JZBlrHw/f3QRY1nkL3YR8l7H5Xvr3XUmpouWBwIhKgMoJy+umJ
+	 oELsyXyCbikMJbmmbFdGt8mgnWFOr+36RulvmWUAEd9y8t8mLWi5G9U3t5AzuWeIo2
+	 xC8LwLH7qJq5fpw/MOTaPIAWhNVbpviIMj6FdlwQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727468AbgJOS17 (ORCPT
+        id S1730494AbgJOScA (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 15 Oct 2020 14:27:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39164 "EHLO mx2.suse.de"
+        Thu, 15 Oct 2020 14:32:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727416AbgJOS16 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:27:58 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 66955AC4C
-        for <live-patching@vger.kernel.org>; Thu, 15 Oct 2020 18:27:57 +0000 (UTC)
-Date:   Thu, 15 Oct 2020 20:27:57 +0200 (CEST)
-From:   Jiri Kosina <jkosina@suse.cz>
-To:     live-patching@vger.kernel.org
-Subject: livepatching.git#for-linus rebased
-Message-ID: <nycvar.YFH.7.76.2010152005130.18859@cbobk.fhfr.pm>
+        id S1730461AbgJOSb7 (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 15 Oct 2020 14:31:59 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9ED03206B6;
+        Thu, 15 Oct 2020 18:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602786719;
+        bh=QIEcyyIynUrELEiAlqt0aVNgGRJvQPp7jpGWp5yNelU=;
+        h=Date:From:To:cc:Subject:From;
+        b=ZkYTN3HzUR8w0FsPn5McquEn/xS12YWxUn3oSnhjBy5YffnCqD8hLFdmsILZ7fwAt
+         OIfZZxy20aBJFdu1OaeEn17uAzV4DX5CQIKqYGhSWhWUAMe7Jqs2OJcOE4Avbd7H7p
+         Za7rxXVEGqfluKPw1CjgWWmXp1/6G8Qow2ZX74Is=
+Date:   Thu, 15 Oct 2020 20:31:55 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] livepatching for 5.10
+Message-ID: <nycvar.YFH.7.76.2010151950140.18859@cbobk.fhfr.pm>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -35,18 +56,28 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi,
+Linus,
 
-JFYI I decided to rebase for-linus branch, due to slight confusion, that'd 
-result in for-linus be just one commit and one merge commit, which is 
-pointless (it's not possible to do ff-merge into for-linus without 
-rebasing).
+please pull from
 
-As this is just an integration branch, this should be fine for everybody I 
-hope.
+  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching for-linus
 
-Thanks,
+to receive livepatching update for 5.10.
+
+=====
+- livepatching kselftest output fix from Miroslav Benes
+=====
+
+Thanks.
+
+----------------------------------------------------------------
+Miroslav Benes (1):
+      selftests/livepatch: Do not check order when using "comm" for dmesg checking
+
+ tools/testing/selftests/livepatch/functions.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 -- 
 Jiri Kosina
 SUSE Labs
+
