@@ -1,43 +1,48 @@
-Return-Path: <SRS0=fBFr=EK=vger.kernel.org=live-patching-owner@kernel.org>
+Return-Path: <SRS0=fiSE=EM=vger.kernel.org=live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F959C2D0A3
-	for <live-patching@archiver.kernel.org>; Wed,  4 Nov 2020 19:13:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D0D4C388F7
+	for <live-patching@archiver.kernel.org>; Fri,  6 Nov 2020 02:36:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3558B206E3
-	for <live-patching@archiver.kernel.org>; Wed,  4 Nov 2020 19:13:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BCA0E22228
+	for <live-patching@archiver.kernel.org>; Fri,  6 Nov 2020 02:36:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731453AbgKDTNg convert rfc822-to-8bit (ORCPT
+        id S1726027AbgKFCgC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 4 Nov 2020 14:13:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39990 "EHLO mail.kernel.org"
+        Thu, 5 Nov 2020 21:36:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40850 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730666AbgKDTNf (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 4 Nov 2020 14:13:35 -0500
+        id S1725616AbgKFCfv (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 5 Nov 2020 21:35:51 -0500
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CDB4206DB;
-        Wed,  4 Nov 2020 19:13:29 +0000 (UTC)
-Date:   Wed, 4 Nov 2020 14:13:26 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id ACD8C22203;
+        Fri,  6 Nov 2020 02:35:49 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.94)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1karbQ-007WOD-8l; Thu, 05 Nov 2020 21:35:48 -0500
+Message-ID: <20201106023548.102375687@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Thu, 05 Nov 2020 21:32:46 -0500
+From:   Steven Rostedt (VMware) <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, Guo Ren <guoren@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
@@ -59,58 +64,15 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH 11/11 v2.2] ftrace: Add recording of functions that
- caused recursion
-Message-ID: <20201104141326.71866510@gandalf.local.home>
-In-Reply-To: <20201103141043.GO20201@alley>
-References: <20201030213142.096102821@goodmis.org>
-        <20201030214014.801706340@goodmis.org>
-        <20201102164147.GJ20201@alley>
-        <20201102123721.4fcce2cb@gandalf.local.home>
-        <20201102124606.72bd89c5@gandalf.local.home>
-        <20201102142254.7e148f8a@gandalf.local.home>
-        <20201103141043.GO20201@alley>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Subject: [PATCH 11/11 v3] ftrace: Add recording of functions that caused recursion
+References: <20201106023235.367190737@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, 3 Nov 2020 15:10:43 +0100
-Petr Mladek <pmladek@suse.com> wrote:
-
-> BTW: What is actually the purpose of paranoid_test, please?
-> 
-> It prevents nested ftrace_record_recursion() calls on the same CPU
-> (recursion, nesting from IRQ, NMI context).
-> 
-> Parallel calls from different CPUs are still possible:
-> 
-> CPU0					CPU1
-> if (!atomic_read(&paranoid_test))	if (!atomic_read(&paranoid_test))
->    // passes				  // passes
->    atomic_inc(&paranoid_test);            atomic_inc(&paranoid_test);
-> 
-> 
-> I do not see how a nested call could cause crash while a parallel
-> one would be OK.
-
-The problem was that I don't want something in the recording to get traced,
-and that detect the recursion, which would then call the recording, which
-would also be traced and detect the recursion and that would call the
-recording, which would also be traced and detect the recursion and that
-would call the recording, which .... (BOOM!)
-
-Anyway, I decided to simply use another bit to protect against that.
-
-New patch:
-
-From a1f2aae996506169f2561986656f898d067d398b Mon Sep 17 00:00:00 2001
 From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Date: Thu, 29 Oct 2020 15:27:06 -0400
-Subject: [PATCH] ftrace: Add recording of functions that caused recursion
 
 This adds CONFIG_FTRACE_RECORD_RECURSION that will record to a file
 "recursed_functions" all the functions that caused recursion while a
@@ -151,6 +113,13 @@ Cc: linux-s390@vger.kernel.org
 Cc: live-patching@vger.kernel.org
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
+
+Changes since v2:
+
+ - Use trace_recursion flags in current for protecting recursion of recursion recording
+ - Make the recursion logic a little cleaner
+ - Export GPL the recursion recording
+
  Documentation/trace/ftrace-uses.rst   |   6 +-
  arch/csky/kernel/probes/ftrace.c      |   2 +-
  arch/parisc/kernel/ftrace.c           |   2 +-
@@ -724,5 +693,6 @@ index 000000000000..b2edac1fe156
 +
 +fs_initcall(create_recursed_functions);
 -- 
-2.25.4
+2.28.0
+
 
