@@ -2,52 +2,32 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 154DDC2D0A3
-	for <live-patching@archiver.kernel.org>; Thu, 12 Nov 2020 11:41:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0020DC5519F
+	for <live-patching@archiver.kernel.org>; Thu, 12 Nov 2020 14:59:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D9792074B
-	for <live-patching@archiver.kernel.org>; Thu, 12 Nov 2020 11:41:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lDnDxzUP"
+	by mail.kernel.org (Postfix) with ESMTP id 997F82224A
+	for <live-patching@archiver.kernel.org>; Thu, 12 Nov 2020 14:59:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728116AbgKLLkn (ORCPT
+        id S1728198AbgKLO7S (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 12 Nov 2020 06:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728168AbgKLLjz (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Thu, 12 Nov 2020 06:39:55 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BB1C0617A7;
-        Thu, 12 Nov 2020 03:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=b6ATZfVWGAVrJTHLYJ8q8DfRh8F5q774OL7MDaycL9E=; b=lDnDxzUPrpug4qGWJPiQ1cFY+2
-        S3j2YMIm055tPZFqM9J1KwtwdUkCv0Yt5hm4gGBNHDYJ5OVC4R+RVaIt2VRTbMldKZwSnLXHqUNti
-        Fcjil6yScd/4sYyehst1nWnP4rDtZCp3nxXWUb2h/IhgrkXEG/HZl2gA8suUAdzdPATsfbTcVgkAb
-        B7tnG1S3wp4/bJLnl53X2M/oGIY0UojGKj+4+2a9Qc5EsKHpHoimB/r5hZjER3qbZioBn44J6edXj
-        7qV8yQ1aR/w6XSfKWoZVio1IU+ot3r0DG+6zqpPAdoeUF2rynRuRbKzm/3t3Ff2hns7oDmmU8MeU8
-        QEGwcl/w==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kdAx4-00052B-Kw; Thu, 12 Nov 2020 11:39:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Thu, 12 Nov 2020 09:59:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33780 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727035AbgKLO7S (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 12 Nov 2020 09:59:18 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 39D83305C16;
-        Thu, 12 Nov 2020 12:39:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EB14A2C71BAB2; Thu, 12 Nov 2020 12:39:39 +0100 (CET)
-Date:   Thu, 12 Nov 2020 12:39:39 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 518E622201;
+        Thu, 12 Nov 2020 14:59:16 +0000 (UTC)
+Date:   Thu, 12 Nov 2020 09:59:14 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Miroslav Benes <mbenes@suse.cz>,
@@ -57,28 +37,73 @@ Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
         Jiri Kosina <jikos@kernel.org>, live-patching@vger.kernel.org
 Subject: Re: [PATCH 3/3 v5] livepatch: Use the default ftrace_ops instead of
  REGS when ARGS is available
-Message-ID: <20201112113939.GU2651@hirez.programming.kicks-ass.net>
-References: <20201112011516.589846126@goodmis.org>
- <20201112011815.755256598@goodmis.org>
- <20201112082144.GS2628@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <20201112095914.61bb8a3e@gandalf.local.home>
 In-Reply-To: <20201112082144.GS2628@hirez.programming.kicks-ass.net>
+References: <20201112011516.589846126@goodmis.org>
+        <20201112011815.755256598@goodmis.org>
+        <20201112082144.GS2628@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 09:21:44AM +0100, Peter Zijlstra wrote:
+On Thu, 12 Nov 2020 09:21:44 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> On Wed, Nov 11, 2020 at 08:15:19PM -0500, Steven Rostedt wrote:
+> 
+> > diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+> > index e00fe88146e0..235385a38bd9 100644
+> > --- a/arch/x86/include/asm/ftrace.h
+> > +++ b/arch/x86/include/asm/ftrace.h
+> > @@ -54,6 +54,9 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
+> >  		return NULL;
+> >  	return &fregs->regs;
+> >  }
+> > +
+> > +#define ftrace_regs_set_ip(fregs, _ip)		\
+> > +	do { (fregs)->regs.ip = (_ip); } while (0)
+> >  #endif
+> >  
+> >  #ifdef CONFIG_DYNAMIC_FTRACE
+> > diff --git a/arch/x86/include/asm/livepatch.h b/arch/x86/include/asm/livepatch.h
+> > index 1fde1ab6559e..59a08d5c6f1d 100644
+> > --- a/arch/x86/include/asm/livepatch.h
+> > +++ b/arch/x86/include/asm/livepatch.h
+> > @@ -12,9 +12,9 @@
+> >  #include <asm/setup.h>
+> >  #include <linux/ftrace.h>
+> >  
+> > -static inline void klp_arch_set_pc(struct pt_regs *regs, unsigned long ip)
+> > +static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+> >  {
+> > -	regs->ip = ip;
+> > +	ftrace_regs_set_ip(fregs, ip);
+> >  }
+> >    
+> 
+> The normal variant is called instruction_pointer_set(), should this be
+> called ftrace_instruction_pointer_set() ?
+
+Sure, I can change that.
+
+> 
+> (and yes, I hate the long name too).
+
+ ftrace_regs_ip_set()? ;-)
+
+> 
 > Also, do you want something like:
 > 
 > unsigned long ftrace_regs_get_register(struct ftrace_regs *regs, unsigned int offset)
 > {
 
-I forgot the full regs case:
+I haven't gotten this far yet. I'm looking at generic use cases on how to
+get args across archs. Each arch will have its own method.
 
-	if (regs->regs.cs)
-		return regs_get_register(regs->regs, offset);
 
 > 	switch (offset / sizeof(long)) {
 > 	case  4: /* RBP */
@@ -96,6 +121,25 @@ I forgot the full regs case:
 > 
 > 	default:
 > 		WARN_ON_ONCE(1);
+
+Not sure we even want to warn. Perhaps have this as:
+
+bool ftrace_regs_get_register(struct ftrace_regs *regs,
+                  unsigned int offset, unsigned long *val)
+{
+	if (regs->cs) {
+		*val = regs_get_register(regs->regs, offset);
+		return true;
+	}
+		
+	switch (offset / sizeof(long)) {
+	case ...:
+		*val = *(unsigned long *)regs->regs + offset;
+		return true;
+	default;
+		return false;
 > 	}
-> 	return 0;
-> }
+
+
+
+-- Steve
