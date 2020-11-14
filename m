@@ -2,50 +2,48 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D626DC55ABD
-	for <live-patching@archiver.kernel.org>; Fri, 13 Nov 2020 17:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 015D5C63697
+	for <live-patching@archiver.kernel.org>; Sat, 14 Nov 2020 15:35:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 927992225B
-	for <live-patching@archiver.kernel.org>; Fri, 13 Nov 2020 17:20:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA0C6223FB
+	for <live-patching@archiver.kernel.org>; Sat, 14 Nov 2020 15:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbgKMRT2 (ORCPT
+        id S1726908AbgKNPfC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 13 Nov 2020 12:19:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55184 "EHLO mail.kernel.org"
+        Sat, 14 Nov 2020 10:35:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726502AbgKMRT1 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 13 Nov 2020 12:19:27 -0500
+        id S1726891AbgKNPfB (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Sat, 14 Nov 2020 10:35:01 -0500
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9061822258;
-        Fri, 13 Nov 2020 17:19:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2AB9622280;
+        Sat, 14 Nov 2020 15:35:00 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.94)
         (envelope-from <rostedt@goodmis.org>)
-        id 1kdcjb-000A3S-JG; Fri, 13 Nov 2020 12:19:39 -0500
-Message-ID: <20201113171939.455339580@goodmis.org>
+        id 1kdxZr-000HlI-68; Sat, 14 Nov 2020 10:34:59 -0500
+Message-ID: <20201114153459.070853484@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Fri, 13 Nov 2020 12:18:14 -0500
-From:   Steven Rostedt (VMware) <rostedt@goodmis.org>
+Date:   Sat, 14 Nov 2020 10:32:24 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org
-Subject: [PATCH 3/3 v7] livepatch: Use the default ftrace_ops instead of REGS when ARGS is
+        Jiri Kosina <jikos@kernel.org>, live-patching@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [for-next][PATCH 3/4] livepatch: Use the default ftrace_ops instead of REGS when ARGS is
  available
-References: <20201113171811.288150055@goodmis.org>
+References: <20201114153221.050150744@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
@@ -71,9 +69,6 @@ Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Miroslav Benes <mbenes@suse.cz>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
-Changes since v6:
- - Updated to use ftrace_instruction_pointer_set() macro
-
  arch/powerpc/include/asm/livepatch.h | 4 +++-
  arch/s390/include/asm/livepatch.h    | 5 ++++-
  arch/x86/include/asm/ftrace.h        | 3 +++
