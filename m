@@ -2,65 +2,140 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.6 required=3.0 tests=BAYES_50,DKIM_ADSP_CUSTOM_MED,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C82C64E7B
-	for <live-patching@archiver.kernel.org>; Tue, 17 Nov 2020 07:48:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 596E3C6369E
+	for <live-patching@archiver.kernel.org>; Thu, 19 Nov 2020 11:52:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C7A924655
-	for <live-patching@archiver.kernel.org>; Tue, 17 Nov 2020 07:48:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E032E246EE
+	for <live-patching@archiver.kernel.org>; Thu, 19 Nov 2020 11:52:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kGTPNdtA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726954AbgKQHsF convert rfc822-to-8bit (ORCPT
+        id S1727747AbgKSLwE (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 17 Nov 2020 02:48:05 -0500
-Received: from tigeramira.ro ([88.158.78.30]:35059 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726295AbgKQHsE (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 17 Nov 2020 02:48:04 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 8AB38C13ECD
-        for <live-patching@vger.kernel.org>; Sat, 14 Nov 2020 20:59:30 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GeCtSTLUWy-k for <live-patching@vger.kernel.org>;
-        Sat, 14 Nov 2020 20:59:16 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id EC6108546DA
-        for <live-patching@vger.kernel.org>; Thu, 12 Nov 2020 19:58:47 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 29530D3FF85
-        for <live-patching@vger.kernel.org>; Tue, 10 Nov 2020 17:10:14 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
+        Thu, 19 Nov 2020 06:52:04 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38972 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727212AbgKSLwD (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 19 Nov 2020 06:52:03 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1605786720; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0orS1kguKvUDUAcNIvHV8RnxWd3fbv2oJIa1VA4KWp4=;
+        b=kGTPNdtAOvAhUZQxiF+jjUmHO6YpE055dV46rXIiqzmWgMDpHBVXIs0ejY1IcSdv6VQI7L
+        UPKPypxheXaSAQTNDAG9W/PQ0jDorD9t++gaUjWQfPJDNG7ZDsxakl7WhLRelf/qm3PYLD
+        T/K7SIb5v89++Zb3Zr0vHi7rPCAGLBg=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A2E0AABF4;
+        Thu, 19 Nov 2020 11:52:00 +0000 (UTC)
+Date:   Thu, 19 Nov 2020 12:52:00 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org
+Subject: Re: [PATCH 3/3 v7] livepatch: Use the default ftrace_ops instead of
+ REGS when ARGS is available
+Message-ID: <X7ZcYIWJEPXW6Z9s@alley>
+References: <20201113171811.288150055@goodmis.org>
+ <20201113171939.455339580@goodmis.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Corporate and Personal Loan/
-To:     live-patching@vger.kernel.org
-From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Tue, 10 Nov 2020 06:10:42 -0800
-Reply-To: hmurrah39@gmail.com
-Message-Id: <20201110151015.29530D3FF85@mail.tigeramira.ro>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201113171939.455339580@goodmis.org>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hello live-patching@vger.kernel.org
+On Fri 2020-11-13 12:18:14, Steven Rostedt wrote:
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> 
+> When CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS is available, the ftrace call
+> will be able to set the ip of the calling function. This will improve the
+> performance of live kernel patching where it does not need all the regs to
+> be stored just to change the instruction pointer.
+> 
+> If all archs that support live kernel patching also support
+> HAVE_DYNAMIC_FTRACE_WITH_ARGS, then the architecture specific function
+> klp_arch_set_pc() could be made generic.
+> 
+> It is possible that an arch can support HAVE_DYNAMIC_FTRACE_WITH_ARGS but
+> not HAVE_DYNAMIC_FTRACE_WITH_REGS and then have access to live patching.
+> 
+> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> Cc: Jiri Kosina <jikos@kernel.org>
+> Cc: live-patching@vger.kernel.org
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+> Changes since v6:
+>  - Updated to use ftrace_instruction_pointer_set() macro
+> 
+>  arch/powerpc/include/asm/livepatch.h | 4 +++-
+>  arch/s390/include/asm/livepatch.h    | 5 ++++-
+>  arch/x86/include/asm/ftrace.h        | 3 +++
+>  arch/x86/include/asm/livepatch.h     | 4 ++--
+>  arch/x86/kernel/ftrace_64.S          | 4 ++++
+>  include/linux/ftrace.h               | 7 +++++++
+>  kernel/livepatch/Kconfig             | 2 +-
+>  kernel/livepatch/patch.c             | 9 +++++----
+>  8 files changed, 29 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/livepatch.h b/arch/powerpc/include/asm/livepatch.h
+> index 4a3d5d25fed5..ae25e6e72997 100644
+> --- a/arch/powerpc/include/asm/livepatch.h
+> +++ b/arch/powerpc/include/asm/livepatch.h
+> @@ -12,8 +12,10 @@
+>  #include <linux/sched/task_stack.h>
+>  
+>  #ifdef CONFIG_LIVEPATCH
+> -static inline void klp_arch_set_pc(struct pt_regs *regs, unsigned long ip)
+> +static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+>  {
+> +	struct pt_regs *regs = ftrace_get_regs(fregs);
 
+Should we check for NULL pointer here?
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+> +
+>  	regs->nip = ip;
+>  }
+>  
+> diff --git a/arch/s390/include/asm/livepatch.h b/arch/s390/include/asm/livepatch.h
+> index 818612b784cd..d578a8c76676 100644
+> --- a/arch/s390/include/asm/livepatch.h
+> +++ b/arch/s390/include/asm/livepatch.h
+> @@ -11,10 +11,13 @@
+>  #ifndef ASM_LIVEPATCH_H
+>  #define ASM_LIVEPATCH_H
+>  
+> +#include <linux/ftrace.h>
+>  #include <asm/ptrace.h>
+>  
+> -static inline void klp_arch_set_pc(struct pt_regs *regs, unsigned long ip)
+> +static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+>  {
+> +	struct pt_regs *regs = ftrace_get_regs(fregs);
 
+And here?
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+> +
+>  	regs->psw.addr = ip;
+>  }
+>  
 
+Otherwise, it looks for me.
 
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
+Best Regards,
+Petr
