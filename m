@@ -2,95 +2,69 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=BAYES_40,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A203C56201
-	for <live-patching@archiver.kernel.org>; Thu, 19 Nov 2020 16:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1D34C64E7B
+	for <live-patching@archiver.kernel.org>; Thu,  3 Dec 2020 08:52:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EDA7722259
-	for <live-patching@archiver.kernel.org>; Thu, 19 Nov 2020 16:08:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="XjEKbQF+"
+	by mail.kernel.org (Postfix) with ESMTP id 4E13A21D91
+	for <live-patching@archiver.kernel.org>; Thu,  3 Dec 2020 08:52:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727369AbgKSQHx (ORCPT
+        id S1726028AbgLCIwC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:07:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41676 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727940AbgKSQHx (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:07:53 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1605802070; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4jFe/antxe2FdZg8tiI+iVpO8o5c97eszsK32kDY/L0=;
-        b=XjEKbQF+CRK7Grbmpu4QGNIoe8yvloChqKqubPlpPVMBd2KPctnIOX3s05U43AGV47bI43
-        tCq/dZ1VMlCouCOpESzUA+W044kdlRXB+5M65TNCoJw5OF94MhSrdcmZNhWnXQ9dZXQPfB
-        QsC3TXlgoI+95hGKB1Txie+i8//BLrM=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id BDF31AA4F;
-        Thu, 19 Nov 2020 16:07:50 +0000 (UTC)
-Date:   Thu, 19 Nov 2020 17:07:50 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org
-Subject: Re: [PATCH 3/3 v7] livepatch: Use the default ftrace_ops instead of
- REGS when ARGS is available
-Message-ID: <X7aYVgRa5uP8sAMM@alley>
-References: <20201113171811.288150055@goodmis.org>
- <20201113171939.455339580@goodmis.org>
- <X7ZcYIWJEPXW6Z9s@alley>
- <20201119091235.60be696e@gandalf.local.home>
+        Thu, 3 Dec 2020 03:52:02 -0500
+Received: from mail.boldwhite24.com ([80.211.42.67]:56452 "EHLO
+        mail.boldwhite24.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728899AbgLCIwC (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 3 Dec 2020 03:52:02 -0500
+Received: by mail.boldwhite24.com (Postfix, from userid 1001)
+        id 500BCA2A98; Thu,  3 Dec 2020 08:50:15 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=boldwhite24.com;
+        s=mail; t=1606985440;
+        bh=hS3ibs4caZkahrzgcMN2TAJo2B2H5Muwb2NidDYlIzQ=;
+        h=Date:From:To:Subject:From;
+        b=jhfGSWJN7DwjwPDhIpjjr3UnIvb6KD4M2PMhWAmVbbjU4TXLX1xQZWJqbZQLtwzVq
+         qUvg42TKNddjPYvP+3gM1N1NSraJp2u0+HK+zJIrERVTqRvKYq/4PdyNuKkPa+Q8ga
+         0m1kSBi7JcWEShRsMcr2PCo/Zj8/ke0Vo448DGGhEsgEx11vhMUdQgwkqCXJccsKAr
+         Jt8XS5gSau5ycAtF4mXpqs4hImhscm+RmkCgFYF2kx9zok4ENgD9kKIDw4VMnHABF9
+         7Pp890MPAKoUG7uTACGC3N4geLYcuvmakxK48XiNLtAOU10gQcX5JMy+z/F/+UTP7+
+         JREW2UBGq5l4A==
+Received: by mail.boldwhite24.com for <live-patching@vger.kernel.org>; Thu,  3 Dec 2020 08:50:11 GMT
+Message-ID: <20201203074501-0.1.2m.an5m.0.51obcll6dh@boldwhite24.com>
+Date:   Thu,  3 Dec 2020 08:50:11 GMT
+From:   =?UTF-8?Q? "Diego_S=C3=A1nchez" ?= <diego.sanchez@boldwhite24.com>
+To:     <live-patching@vger.kernel.org>
+Subject: Disinfection
+X-Mailer: mail.boldwhite24.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201119091235.60be696e@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu 2020-11-19 09:12:35, Steven Rostedt wrote:
-> On Thu, 19 Nov 2020 12:52:00 +0100
-> Petr Mladek <pmladek@suse.com> wrote:
-> 
-> > >  #ifdef CONFIG_LIVEPATCH
-> > > -static inline void klp_arch_set_pc(struct pt_regs *regs, unsigned long ip)
-> > > +static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
-> > >  {
-> > > +	struct pt_regs *regs = ftrace_get_regs(fregs);  
-> > 
-> > Should we check for NULL pointer here?
-> 
-> As mentioned in my last email. regs could have been NULL for the same
-> reasons before this patch, and we didn't check it then. Why should we check
-> it now?
-> 
-> The ftrace_get_regs() only makes sure that a ftrace_ops that set
-> FL_SAVE_REGS gets it, and those that did not, don't.
-> 
-> But that's not entirely true either. If there's two callbacks to the same
-> function, and one has FL_SAVE_REGS set, they both can have access to the
-> regs (before and after this patch). It's just that the one that did not
-> have FL_SAVE_REGS set, isn't guaranteed to have it.
+Good morning,
 
-Makes sense. Thanks for explanation. Feel free to use:
+looking for companies interested in raising additional capital by diversi=
+fying their offer in soaps, liquids and gels for hand disinfection and co=
+smetics for body and hair care.
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+The distribution of innovative products corresponding to the current pref=
+erences of customers in the field of hygiene and preventive healthcare al=
+lows our partners to gain new markets and achieve better economic results=
+=2E
 
-I actually did review of all patches and they looked fine to me.
-I just did not check all corner cases, assembly, and did not test
-it, so I give it just my ack. I believe your testing ;-)
+In addition to products with bactericidal action, our range includes show=
+er gels, shampoos and hair conditioners, as well as efficient, concentrat=
+ed detergents.
 
-Best Regards,
-Petr
+The versatility (suitable for all skin types) combined with an affordable=
+ price means that customers make an informed choice of a product among ot=
+hers available on the market.
+
+Are you interested in cooperation?
+
+Diego S=C3=A1nchez
