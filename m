@@ -2,118 +2,81 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13038C433DB
-	for <live-patching@archiver.kernel.org>; Mon, 18 Jan 2021 17:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FA8CC433E6
+	for <live-patching@archiver.kernel.org>; Mon, 18 Jan 2021 17:52:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD39B22CA0
-	for <live-patching@archiver.kernel.org>; Mon, 18 Jan 2021 17:45:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 384CC2253A
+	for <live-patching@archiver.kernel.org>; Mon, 18 Jan 2021 17:52:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436669AbhARRnn (ORCPT
+        id S2406081AbhARRwV (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 18 Jan 2021 12:43:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44576 "EHLO mail.kernel.org"
+        Mon, 18 Jan 2021 12:52:21 -0500
+Received: from foss.arm.com ([217.140.110.172]:40148 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436655AbhARRnh (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Mon, 18 Jan 2021 12:43:37 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEA7122CA1;
-        Mon, 18 Jan 2021 17:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610991775;
-        bh=LyPDRuU3UPZhcSSl9mMoTdV/L94Icx6ItI0GSHQV708=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mag3o+7S3+GY79W7Ifa6l1s2MVfXEdfqWoQC8bxL7VfSMo5K6qcC2nE6N0aui5SqE
-         3vLly3XJ+7TNcgdEY0egb37qwqUhmX0bKbxL1pGQVBUkrPmu2ga6eAdWsv4XmBOSte
-         lg1yg7vDPIvPDg0QhsmqBWTa0fCChFpVUbxClxACwOp0PSfUJfN9ik3lO0n8IliIYV
-         XmE0w1Tc/eS7dwiBzw096aKOWvTJUY5AHTLWb2pyl0hU9znln/tOZMvfnhsMorhdb5
-         31iWV7r/3UwDIKz8ujFVGFJ9jOolYCQf/EsOroNJJXm1LlFsztzffRvtowBANwd4ED
-         SNWaSrR+dIAhg==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Rutland <mark.rutland@arm.com>,
+        id S1727931AbhARRvo (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Mon, 18 Jan 2021 12:51:44 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FAD631B;
+        Mon, 18 Jan 2021 09:50:58 -0800 (PST)
+Received: from C02TD0UTHF1T.local (unknown [10.57.39.202])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC8753F719;
+        Mon, 18 Jan 2021 09:50:56 -0800 (PST)
+Date:   Mon, 18 Jan 2021 17:50:54 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
         Jiri Kosina <jikos@kernel.org>,
         Joe Lawrence <joe.lawrence@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-doc@vgert.kernel.org, live-patching@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH v5 1/2] Documentation: livepatch: Convert to automatically generated contents
-Date:   Mon, 18 Jan 2021 17:39:53 +0000
-Message-Id: <20210118173954.36577-2-broonie@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210118173954.36577-1-broonie@kernel.org>
-References: <20210118173954.36577-1-broonie@kernel.org>
+        Miroslav Benes <mbenes@suse.cz>, linux-doc@vger.kernel.org,
+        live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v4] Documentation: livepatch: document reliable stacktrace
+Message-ID: <20210118175054.GB38844@C02TD0UTHF1T.local>
+References: <20210115171617.47273-1-broonie@kernel.org>
+ <YAWU0D50KH4mVTgn@alley>
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; i=B41P/NyBiZr52ZgLMD1EC67DEBuJtlCAf6fQniGZ1yU=; m=nqsLKlThM/W+vzeMqXV5WYNF/9hoOR8pCeQ1bYoHfZI=; p=2MUKXici6S/sAj84vYSavNtcg2sj4YeMK0QGWULmAu0=; g=119515872595811257e582bba7d8323e2f1210c3
-X-Patch-Sig: m=pgp; i=broonie@kernel.org; s=0xC3F436CA30F5D8EB; b=iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmAFx+cACgkQJNaLcl1Uh9AnFwf9Ffq 7SwXDF75cYktqlnCIbP1u8pSqklL3LduBhpSFSnU84qwVdAuBqEYcFSVBWTvwOqPeeUG7owWFWt4p bkQjysxb19m+FyU5+bpGGE92PXdSDobzQy4YPUh1Tp6IvmI5fq6OVlDnPNGRo3KzkH7kOtyFo0tbm F4/VpNr2fXTC22fzsVOPQzdl7xWFUBbNP08pHF9T6Mpw8EdXp98gUTNh9i0joaXKX8EU/eEriTMoM 68V0UATdTl0y+ipqZqWKtLZq+ZHppQqhEQW3WSn4U0V0Ec9d3s/mpxXMS2EqmaVVPvYiTQQ8SiIGY bnZGrXQcjuqQ03TCFlu7AWNJTyPrJbA==
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YAWU0D50KH4mVTgn@alley>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Automatically generate the tables of contents for livepatch documentation
-files that have tables of contents rather than open coding them so things
-are a little easier to maintain.
+Hi Petr,
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/livepatch/livepatch.rst         | 15 +--------------
- Documentation/livepatch/module-elf-format.rst | 10 ++--------
- 2 files changed, 3 insertions(+), 22 deletions(-)
+On Mon, Jan 18, 2021 at 03:02:31PM +0100, Petr Mladek wrote:
+> On Fri 2021-01-15 17:16:17, Mark Brown wrote:
+> > I've made a few assumptions about preferred behaviour, notably:
+> > 
+> > * If you can reliably unwind through exceptions, you should (as x86_64
+> >   does).
 
-diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatch/livepatch.rst
-index c2c598c4ead8..68e3651e8af9 100644
---- a/Documentation/livepatch/livepatch.rst
-+++ b/Documentation/livepatch/livepatch.rst
-@@ -6,20 +6,7 @@ This document outlines basic information about kernel livepatching.
- 
- .. Table of Contents:
- 
--    1. Motivation
--    2. Kprobes, Ftrace, Livepatching
--    3. Consistency model
--    4. Livepatch module
--       4.1. New functions
--       4.2. Metadata
--    5. Livepatch life-cycle
--       5.1. Loading
--       5.2. Enabling
--       5.3. Replacing
--       5.4. Disabling
--       5.5. Removing
--    6. Sysfs
--    7. Limitations
-+.. contents:: :local:
- 
- 
- 1. Motivation
-diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
-index 8c6b894c4661..dbe9b400e39f 100644
---- a/Documentation/livepatch/module-elf-format.rst
-+++ b/Documentation/livepatch/module-elf-format.rst
-@@ -7,14 +7,8 @@ This document outlines the Elf format requirements that livepatch modules must f
- 
- .. Table of Contents
- 
--   1. Background and motivation
--   2. Livepatch modinfo field
--   3. Livepatch relocation sections
--      3.1 Livepatch relocation section format
--   4. Livepatch symbols
--      4.1 A livepatch module's symbol table
--      4.2 Livepatch symbol format
--   5. Symbol table and Elf section access
-+.. contents:: :local:
-+
- 
- 1. Background and motivation
- ============================
--- 
-2.20.1
+IIRC this was confirmed as desireable, and the text already reflects
+this.
 
+> > * It's fine to omit ftrace_return_to_handler and other return
+> >   trampolines so long as these are not subject to patching and the
+> >   original return address is reported. Most architectures do this for
+> >   ftrace_return_handler, but not other return trampolines.
+
+Likewise I think we agreed this was fine, given these were not
+themselves subkect to patching.
+
+> > * For cases where link register unreliability could result in duplicate
+> >   entries in the trace or an inverted trace, I've assumed this should be
+> >   treated as unreliable. This specific case shouldn't matter to
+> >   livepatching, but I assume that that we want a reliable trace to have
+> >   the correct order.
+
+I don't think we had any comments either way on this, but I think it's
+sane to say this for now and later relax it if we need to.
+
+... so I reckon we can just delete all this as Josh suggests. Any acks
+for the patch itself tacitly agrees with these points. :)
+
+Thanks,
+Mark.
