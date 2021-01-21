@@ -2,77 +2,154 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6DB8C433DB
-	for <live-patching@archiver.kernel.org>; Thu, 21 Jan 2021 19:32:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F815C433E0
+	for <live-patching@archiver.kernel.org>; Thu, 21 Jan 2021 20:10:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C7C523A3A
-	for <live-patching@archiver.kernel.org>; Thu, 21 Jan 2021 19:32:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCF2C23A5F
+	for <live-patching@archiver.kernel.org>; Thu, 21 Jan 2021 20:10:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727329AbhAUTbr (ORCPT
+        id S1726292AbhAUUIw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 21 Jan 2021 14:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
+        Thu, 21 Jan 2021 15:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726324AbhAUTFG (ORCPT
+        with ESMTP id S1727926AbhAUHzo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 21 Jan 2021 14:05:06 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A4FC061756
-        for <live-patching@vger.kernel.org>; Thu, 21 Jan 2021 10:53:46 -0800 (PST)
-Received: from lwn.net (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 91882615F;
-        Thu, 21 Jan 2021 18:52:27 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 91882615F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1611255148; bh=TLHAsi6Ty8O0y2qbsmaLJjfL5054cf7/wZfX1o0btdA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HdMTC+/pzgwibyhHpFXEgZz4hQnlDgiLzf9Ir8UAu9s7MeI5KvP1UQIeF8rFflVGa
-         9M++bSybS/4M0YWty863fPt/VmsUJxsK3x2URWh0RJh0B3snAmqy3MvdKyrPYuRpEg
-         CTFRLehmTWSxPfhN7x3SGe0wCSAO5B2xxi20zocEjFIXF2vJWwFevX4R3dgn4Q1gwB
-         evMHlfNrQmVbVAVLLxmEBy60zB2Ux53lh1gj94N8pYANebEk99GsHKbOTZt4sw2DTh
-         rbQksh9CB1mEc7xiRnurSG0IYif2UReHx3SHfiRBzaXi43UeUTw2gB/IzukM9QoHbT
-         vXJm+aqtme1hQ==
-Date:   Thu, 21 Jan 2021 11:52:26 -0700
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Thu, 21 Jan 2021 02:55:44 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2889AC061575;
+        Wed, 20 Jan 2021 23:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=YWgFZHETTCocNHaS6Y+o9EUn4aXGnKZkK4G71oX+tnQ=; b=qwvFW7akNvNlY4Pjg/pPm41zoq
+        3nvwK7iVvg4bXfNII+oY0Po9cCPHz/XI2rxzSOgIq6flWF4ChGiTtkuOCwrZBwg0yiELa1271URzN
+        52N4SAlXlShIyiHo2LQsK6mmUwDhgh2KOnKEzAoXhrkFebe0VYX8tYuT1ct5dQCCyv9Y/BVmBa6fG
+        Pnllh+kJ5usexM6s61uQxtU4EBFzRFdn8pKJ+4mitTUr5IncxDu7rSqlmYI2VgX1Iv0Em7UXOi1f1
+        eKJi12+bb6H76GpSAMHrZpmrgrA40DprgjSLFW+91B2Jc010XpckXn+Xg+LAkGc//cFDpB1ns8I4p
+        L0hCKdGA==;
+Received: from [2001:4bb8:188:1954:d5b3:2657:287:e45f] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1l2Umw-00Gm7M-Pm; Thu, 21 Jan 2021 07:53:59 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Jessica Yu <jeyu@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-doc@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v6 0/2] Documentation: livepatch: Document reliable
- stacktrace and minor cleanup
-Message-ID: <20210121115226.565790ef@lwn.net>
-In-Reply-To: <20210120164714.16581-1-broonie@kernel.org>
-References: <20210120164714.16581-1-broonie@kernel.org>
-Organization: LWN.net
+        Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH 05/13] kallsyms: refactor {,module_}kallsyms_on_each_symbol
+Date:   Thu, 21 Jan 2021 08:49:51 +0100
+Message-Id: <20210121074959.313333-6-hch@lst.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210121074959.313333-1-hch@lst.de>
+References: <20210121074959.313333-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, 20 Jan 2021 16:47:12 +0000
-Mark Brown <broonie@kernel.org> wrote:
+Require an explicit cll to module_kallsyms_on_each_symbol to look
+for symbols in modules instead of the call from kallsyms_on_each_symbol,
+and acquire module_mutex inside of module_kallsyms_on_each_symbol instead
+of leaving that up to the caller.
 
-> This series adds a document, mainly written by Mark Rutland, which makes
-> explicit the requirements for implementing reliable stacktrace in order
-> to aid architectures adding this feature.  It also updates the other
-> livepatching documents to use automatically generated tables of contents
-> following review comments on Mark's document.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ kernel/kallsyms.c       | 6 +++++-
+ kernel/livepatch/core.c | 6 +-----
+ kernel/module.c         | 8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-So...is this deemed ready and, if so, do you want it to go through the
-docs tree or via some other path?
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index fe9de067771c34..a0d3f0865916f9 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -177,6 +177,10 @@ unsigned long kallsyms_lookup_name(const char *name)
+ 	return module_kallsyms_lookup_name(name);
+ }
+ 
++/*
++ * Iterate over all symbols in vmlinux.  For symbols from modules use
++ * module_kallsyms_on_each_symbol instead.
++ */
+ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 				      unsigned long),
+ 			    void *data)
+@@ -192,7 +196,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 		if (ret != 0)
+ 			return ret;
+ 	}
+-	return module_kallsyms_on_each_symbol(fn, data);
++	return 0;
+ }
+ 
+ static unsigned long get_symbol_pos(unsigned long addr,
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 878759baadd81c..8063b9089bd2f8 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -135,12 +135,8 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+ 		.pos = sympos,
+ 	};
+ 
+-	mutex_lock(&module_mutex);
+-	if (objname)
++	if (objname || !kallsyms_on_each_symbol(klp_find_callback, &args))
+ 		module_kallsyms_on_each_symbol(klp_find_callback, &args);
+-	else
+-		kallsyms_on_each_symbol(klp_find_callback, &args);
+-	mutex_unlock(&module_mutex);
+ 
+ 	/*
+ 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+diff --git a/kernel/module.c b/kernel/module.c
+index 299cbac0775cf2..885feec64c1b6f 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4407,8 +4407,7 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 	unsigned int i;
+ 	int ret;
+ 
+-	module_assert_mutex();
+-
++	mutex_lock(&module_mutex);
+ 	list_for_each_entry(mod, &modules, list) {
+ 		/* We hold module_mutex: no need for rcu_dereference_sched */
+ 		struct mod_kallsyms *kallsyms = mod->kallsyms;
+@@ -4424,10 +4423,11 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+ 				 mod, kallsyms_symbol_value(sym));
+ 			if (ret != 0)
+-				return ret;
++				break;
+ 		}
+ 	}
+-	return 0;
++	mutex_unlock(&module_mutex);
++	return ret;
+ }
+ #endif /* CONFIG_KALLSYMS */
+ 
+-- 
+2.29.2
 
-Thanks,
-
-jon
