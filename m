@@ -2,43 +2,73 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1870C433E0
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6099DC43381
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 20:52:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 56F5564E0E
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39AF264DE0
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 20:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbhA1SU4 (ORCPT
+        id S229840AbhA1UwR (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jan 2021 13:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbhA1SSH (ORCPT
+        Thu, 28 Jan 2021 15:52:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31758 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229831AbhA1UwN (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Jan 2021 13:18:07 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8B7C061794;
-        Thu, 28 Jan 2021 10:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=yOKk2fnchUKV6dOiYsd/LFOPy1HkZGzrcOtdtIA5vO0=; b=nAJtiVFmSQNbH/fB1Kbd5zgUb8
-        xXTEhPGqK+FjplkLgB7xtXa0eAVF82tbSHGC3soj/Y6zfdCQ5mFbZw4JZDJdix7n4R7rJfwF06ha1
-        uEGUOHi/XXdQpBOP1LKQgWC3AbzZjIIeCXPDBigle/o+zgPq5VxFbvxgoKG8tCCajzHEF7cKvqhag
-        W+FAgV3+ubvrJz8izfaANvAqk0lwfS8rLnySG6NDuaTKMmX8htcht2QnxxU5RxXrs89veBipIEp/J
-        gJfzIHIwkutmBo6XH326+FAjuyPLuKaw3QZ35l7wPWd2HFswLj+N13H9aZCFy/3ybLAc4capWQS+H
-        taCO+lvw==;
-Received: from [2001:4bb8:198:6bf4:e052:196b:7e32:37d9] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5Bp3-008nzF-SO; Thu, 28 Jan 2021 18:15:15 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Frederic Barrat <fbarrat@linux.ibm.com>,
+        Thu, 28 Jan 2021 15:52:13 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 10SKVcpg023361;
+        Thu, 28 Jan 2021 15:51:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=references : from : to :
+ cc : subject : in-reply-to : date : message-id : mime-version :
+ content-type; s=pp1; bh=pPg1XBrZNOKt8PfRp2cpKYCHVhYVgYATSuz8a5k9sWs=;
+ b=s/l0pmVJBeGfhLJGM9iTfiQoVbA/zJnyD9eZBqmBkrJsTkZ5ibP8rglrttvRBSJ2rWqC
+ VegDJ4kmPIvKZ7zh+i42gtnv6ereyfJEOfXjA1EJJjouLOAxeL8Wu7sdFp2kaaV/oC5L
+ 0bRfDr0n3n6Ce2PtVwfT7K8X7ahWKVjb6rU9xh3OCwKu/sY1jcDdwAJ+9fN+/0tzmwHg
+ Z/6Q+Y7JCWhJH/daaz4NJ9GkJKNHemPLI+uWgo7PHEcyV1c/FWoPCS9UyXuO9L6ncyb+
+ xKhbBiZEJMePet4Al5qjHZoPW8BVl9ivby8bodas04NDxBMjvtRoM60rMYHWOP8Gezwq iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36c3b6sxe8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 15:51:05 -0500
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 10SKW4IC027685;
+        Thu, 28 Jan 2021 15:51:05 -0500
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 36c3b6sxdx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 15:51:05 -0500
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 10SKgio5020310;
+        Thu, 28 Jan 2021 20:51:04 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma02dal.us.ibm.com with ESMTP id 36a4mccqkt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 28 Jan 2021 20:51:04 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 10SKp3ln28901864
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Jan 2021 20:51:03 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FFFFAE05F;
+        Thu, 28 Jan 2021 20:51:03 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF93EAE060;
+        Thu, 28 Jan 2021 20:50:58 +0000 (GMT)
+Received: from manicouagan.localdomain (unknown [9.85.160.249])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Thu, 28 Jan 2021 20:50:58 +0000 (GMT)
+References: <20210128181421.2279-1-hch@lst.de>
+ <20210128181421.2279-5-hch@lst.de>
+User-agent: mu4e 1.4.10; emacs 27.1
+From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -49,84 +79,52 @@ To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         Michal Marek <michal.lkml@markovi.net>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH 07/13] module: mark module_mutex static
-Date:   Thu, 28 Jan 2021 19:14:15 +0100
-Message-Id: <20210128181421.2279-8-hch@lst.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210128181421.2279-1-hch@lst.de>
-References: <20210128181421.2279-1-hch@lst.de>
+        linux-kbuild@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 04/13] module: use RCU to synchronize find_module
+In-reply-to: <20210128181421.2279-5-hch@lst.de>
+Date:   Thu, 28 Jan 2021 17:50:56 -0300
+Message-ID: <874kj023bj.fsf@manicouagan.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-28_12:2021-01-28,2021-01-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999 clxscore=1011
+ bulkscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2101280097
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Except for two lockdep asserts module_mutex is only used in module.c.
-Remove the two asserts given that the functions they are in are not
-exported and just called from the module code, and mark module_mutex
-static.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- include/linux/module.h | 2 --
- kernel/module.c        | 2 +-
- lib/bug.c              | 3 ---
- 3 files changed, 1 insertion(+), 6 deletions(-)
+Hi Christoph,
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 3ea4ffae608f97..0f360c48fe92a6 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -550,8 +550,6 @@ static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
- }
- #endif
- 
--extern struct mutex module_mutex;
--
- /* FIXME: It'd be nice to isolate modules during init, too, so they
-    aren't used before they (may) fail.  But presently too much code
-    (IDE & SCSI) require entry into the module during init.*/
-diff --git a/kernel/module.c b/kernel/module.c
-index 856df9e17ff3d0..5152fae1fc9406 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -87,7 +87,7 @@
-  * 3) module_addr_min/module_addr_max.
-  * (delete and add uses RCU list operations).
-  */
--DEFINE_MUTEX(module_mutex);
-+static DEFINE_MUTEX(module_mutex);
- static LIST_HEAD(modules);
- 
- /* Work queue for freeing init sections in success case */
-diff --git a/lib/bug.c b/lib/bug.c
-index 7103440c0ee1af..8f9d537bfb2a59 100644
---- a/lib/bug.c
-+++ b/lib/bug.c
-@@ -91,8 +91,6 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
- 	char *secstrings;
- 	unsigned int i;
- 
--	lockdep_assert_held(&module_mutex);
--
- 	mod->bug_table = NULL;
- 	mod->num_bugs = 0;
- 
-@@ -118,7 +116,6 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
- 
- void module_bug_cleanup(struct module *mod)
- {
--	lockdep_assert_held(&module_mutex);
- 	list_del_rcu(&mod->bug_list);
- }
- 
+Christoph Hellwig <hch@lst.de> writes:
+
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 981302f616b411..6772fb2680eb3e 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -668,7 +668,6 @@ static struct module *find_module_all(const char *name, size_t len,
+>  
+>  struct module *find_module(const char *name)
+>  {
+> -	module_assert_mutex();
+
+Does it make sense to replace the assert above with the warn below (untested)?
+
+     RCU_LOCKDEP_WARN(rcu_read_lock_sched_held());
+
+>  	return find_module_all(name, strlen(name), false);
+>  }
+
 -- 
-2.29.2
-
+Thiago Jung Bauermann
+IBM Linux Technology Center
