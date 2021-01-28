@@ -2,41 +2,41 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F5DC433E0
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F91DC433E0
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6AF3364E72
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28BA164DDE
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:18:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbhA1SR7 (ORCPT
+        id S231861AbhA1SR5 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jan 2021 13:17:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
+        Thu, 28 Jan 2021 13:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbhA1SPw (ORCPT
+        with ESMTP id S231829AbhA1SPw (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Thu, 28 Jan 2021 13:15:52 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DB2C061756;
-        Thu, 28 Jan 2021 10:15:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC7C0613ED;
+        Thu, 28 Jan 2021 10:15:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=7s5dD/3siooJ6nsDrgQUKG6OOTocrmy+kkM/wYIzMpc=; b=iqY1YkZhUVUBceYZp90531D8xU
-        ZKg4JwNC+GLLwqAbNZA2rDL2oOqW9LDy/mNx7ttNdwk3ksr1oMYETuKMCln0h0VUfdxtBMttHh0x0
-        5+uUYyyM7n+4VkMxTF9lfnhHn/y96OKGLLG0ulbN7rxlOce4T4wYSTy4/sBkeVNI6KNgWOZZiP9/W
-        LZLrtCdREv2wRQ8tM3SQM6NaI1DYOzhJc8ewPKTWOSO82sgKNR3yqkXV4E2u7aI5qE7heyacTyvwO
-        tWV9YWth5K239OX2a9Mqc+2+ussOlN3yXBOUrAX0k/nm9QlLULsE0vTRtN35Z8BHHPTHPXpHjb8Be
-        yt7k5vKQ==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=0PLW/Fa3jZYHwDqK+8TeRrW7s0mvQirSQmldMFP6fgw=; b=FbDbTpTKwN2+U/znUzueFLSor/
+        bZDiPljN5K0NDUtuVKgPFHeyvLjIy00tUE4nvWCq8eMo6bEkgYcXYFeKwPRgXPuDOnDEF1G1qSL32
+        g9OnDsuenwVOm8ycy4dHMsCRLbmjoDFB6SpNFs/NhoXJI6Wh/NMSew47JWEJUazc1s/1KqMiFStMC
+        I3eWj20LpLMmLLSo9Oi3glxmGRE6akSC7q12Fsk+6nRxMqFzlO4u+F8tanyQtXSiarl3htLqKas9m
+        S+KYMo7/nAdHqfZO3nlv5zZjnTyfyj9vogwHRdQGBg4Z4/wr4XdhAUPDvST5NqY8jwAHlZbEu7SV2
+        BKH3mhSw==;
 Received: from [2001:4bb8:198:6bf4:e052:196b:7e32:37d9] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5BoE-008nqb-2X; Thu, 28 Jan 2021 18:14:27 +0000
+        id 1l5Bob-008nrW-1e; Thu, 28 Jan 2021 18:14:47 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
@@ -55,10 +55,12 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: module loader dead code removal and cleanups v2
-Date:   Thu, 28 Jan 2021 19:14:08 +0100
-Message-Id: <20210128181421.2279-1-hch@lst.de>
+Subject: [PATCH 03/13] module: unexport find_module and module_mutex
+Date:   Thu, 28 Jan 2021 19:14:11 +0100
+Message-Id: <20210128181421.2279-4-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210128181421.2279-1-hch@lst.de>
+References: <20210128181421.2279-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
@@ -66,50 +68,34 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi all,
+find_module is not used by modular code any more, and random driver code
+has no business calling it to start with.
 
-this series removes support for long term unused export types and
-cleans up various loose ends in the module loader.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ kernel/module.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Changes since v1:
- - move struct symsearch to module.c
- - rework drm to not call find_module at all
- - llow RCU-sched locking for find_module
- - keep find_module as a public API instead of module_loaded
- - update a few comments and commit logs
+diff --git a/kernel/module.c b/kernel/module.c
+index 4bf30e4b3eaaa1..981302f616b411 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -88,7 +88,6 @@
+  * (delete and add uses RCU list operations).
+  */
+ DEFINE_MUTEX(module_mutex);
+-EXPORT_SYMBOL_GPL(module_mutex);
+ static LIST_HEAD(modules);
+ 
+ /* Work queue for freeing init sections in success case */
+@@ -672,7 +671,6 @@ struct module *find_module(const char *name)
+ 	module_assert_mutex();
+ 	return find_module_all(name, strlen(name), false);
+ }
+-EXPORT_SYMBOL_GPL(find_module);
+ 
+ #ifdef CONFIG_SMP
+ 
+-- 
+2.29.2
 
-Diffstat:
- arch/arm/configs/bcm2835_defconfig          |    1 
- arch/arm/configs/mxs_defconfig              |    1 
- arch/mips/configs/nlm_xlp_defconfig         |    1 
- arch/mips/configs/nlm_xlr_defconfig         |    1 
- arch/parisc/configs/generic-32bit_defconfig |    1 
- arch/parisc/configs/generic-64bit_defconfig |    1 
- arch/powerpc/configs/ppc6xx_defconfig       |    1 
- arch/powerpc/platforms/powernv/pci-cxl.c    |   22 -
- arch/s390/configs/debug_defconfig           |    1 
- arch/s390/configs/defconfig                 |    1 
- arch/sh/configs/edosk7760_defconfig         |    1 
- arch/sh/configs/sdk7780_defconfig           |    1 
- arch/x86/configs/i386_defconfig             |    1 
- arch/x86/configs/x86_64_defconfig           |    1 
- arch/x86/tools/relocs.c                     |    4 
- drivers/gpu/drm/drm_crtc_helper_internal.h  |   10 
- drivers/gpu/drm/drm_fb_helper.c             |   21 -
- drivers/gpu/drm/drm_kms_helper_common.c     |   25 +-
- include/asm-generic/vmlinux.lds.h           |   42 ---
- include/linux/export.h                      |    9 
- include/linux/kallsyms.h                    |   17 -
- include/linux/module.h                      |   48 ----
- init/Kconfig                                |   17 -
- kernel/kallsyms.c                           |    8 
- kernel/livepatch/core.c                     |   11 
- kernel/module.c                             |  310 +++++++++-------------------
- kernel/trace/trace_kprobe.c                 |    4 
- lib/bug.c                                   |    3 
- scripts/checkpatch.pl                       |    6 
- scripts/mod/modpost.c                       |   50 ----
- scripts/mod/modpost.h                       |    3 
- scripts/module.lds.S                        |    6 
- tools/include/linux/export.h                |    3 
- 33 files changed, 142 insertions(+), 490 deletions(-)
