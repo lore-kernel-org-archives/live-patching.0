@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBC24C433DB
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BDBFC433E6
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 81B9A64DD6
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C131264DE5
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbhA1SUn (ORCPT
+        id S231974AbhA1SUq (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jan 2021 13:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        Thu, 28 Jan 2021 13:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbhA1SSI (ORCPT
+        with ESMTP id S231760AbhA1SSH (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Jan 2021 13:18:08 -0500
+        Thu, 28 Jan 2021 13:18:07 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F36BC0617A9;
-        Thu, 28 Jan 2021 10:16:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B653C061797;
+        Thu, 28 Jan 2021 10:16:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=DcV/PmOY6hAphV/JOGoYAz+wVNDHrAES7FkDy+2zUOQ=; b=nhW7yLcu3KAcayq2OhG3sf4aDH
-        iR+aAX5HpWfNCMTybZ4e/zr8b5juxLRguLk5GoHC7tb36LEdiayGdruxlme+dQs9xGwuEHaPDk9Ll
-        5ewxDEDMdya5NXwltwkqrB+zPie2X5nNPlm+20I4dr7VzTNzCPdfDX6CRzpnaergfvPFllOigepxa
-        NFMcn0pwn4KO8i4FLuvpoq1om8LVQ01NQDlTpP5xCfDejbeRqwFlIGflUffVVwycYjmW0UARPyxCA
-        CbK/5o2APWFLBnvNZscqSro77LxSZhvMnGYPjC+633y8BdYOyYZ3Lk5Hj4Dkzbcc3TgeLXRLi9zYg
-        6ArcDd4A==;
+        bh=4hEp4wFOeFEctoLF9/twuUfnYNlzjyJJa7IvAmNqN1c=; b=Y/CJPI4y8EYyfzB2OLpX7J4JN5
+        OOOp6GAIbGiql+SaEfg3zrWvctrt2R7/7tuxxFown2gL85J2bhozD4uwmRRChnoYG4jMCtf9ZYgO4
+        MdjUoWYvJKsTWRNkPzupPBEtwkTNf8P6pEG906oNjqVgWo9hRWEjJDsDYf5qE/+oEfE0q686LVWAK
+        Lnt0EEYsBE4lsVjcu2achuNfoFSDnI2LfZr5c9Hp33UHhNTOhgjhiJHhZJkRYAlTI5MmGJo29f8do
+        dWBShOok7xdf+pbcTw00DZURt14OpHcypoKpy/g8VSte1Mi2diyst8K7epixVOsShxxckd18KXpKM
+        3ZbE6H1g==;
 Received: from [2001:4bb8:198:6bf4:e052:196b:7e32:37d9] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5Bpc-008o1y-5u; Thu, 28 Jan 2021 18:15:50 +0000
+        id 1l5BpS-008o0k-5E; Thu, 28 Jan 2021 18:15:39 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
@@ -55,9 +55,9 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH 12/13] module: remove EXPORT_SYMBOL_GPL_FUTURE
-Date:   Thu, 28 Jan 2021 19:14:20 +0100
-Message-Id: <20210128181421.2279-13-hch@lst.de>
+Subject: [PATCH 10/13] module: pass struct find_symbol_args to find_symbol
+Date:   Thu, 28 Jan 2021 19:14:18 +0100
+Message-Id: <20210128181421.2279-11-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210128181421.2279-1-hch@lst.de>
 References: <20210128181421.2279-1-hch@lst.de>
@@ -68,288 +68,250 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-As far as I can tell this has never been used at all, and certainly
-not any time recently.
+Simplify the calling convention by passing the find_symbol_args structure
+to find_symbol instead of initializing it inside the function.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- arch/x86/tools/relocs.c           |  4 ++--
- include/asm-generic/vmlinux.lds.h | 14 --------------
- include/linux/export.h            |  1 -
- include/linux/module.h            |  5 -----
- kernel/module.c                   | 29 ++---------------------------
- scripts/mod/modpost.c             | 13 +------------
- scripts/mod/modpost.h             |  1 -
- scripts/module.lds.S              |  2 --
- tools/include/linux/export.h      |  1 -
- 9 files changed, 5 insertions(+), 65 deletions(-)
+ kernel/module.c | 113 ++++++++++++++++++++++--------------------------
+ 1 file changed, 52 insertions(+), 61 deletions(-)
 
-diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index ce7188cbdae58a..0d210d0e83e241 100644
---- a/arch/x86/tools/relocs.c
-+++ b/arch/x86/tools/relocs.c
-@@ -61,8 +61,8 @@ static const char * const sym_regex_kernel[S_NSYMTYPES] = {
- 	"(__iommu_table|__apicdrivers|__smp_locks)(|_end)|"
- 	"__(start|end)_pci_.*|"
- 	"__(start|end)_builtin_fw|"
--	"__(start|stop)___ksymtab(|_gpl|_unused|_unused_gpl|_gpl_future)|"
--	"__(start|stop)___kcrctab(|_gpl|_unused|_unused_gpl|_gpl_future)|"
-+	"__(start|stop)___ksymtab(|_gpl|_unused|_unused_gpl)|"
-+	"__(start|stop)___kcrctab(|_gpl|_unused|_unused_gpl)|"
- 	"__(start|stop)___param|"
- 	"__(start|stop)___modver|"
- 	"__(start|stop)___bug_table|"
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2b3d81b1535a5..83243506e68b00 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -495,13 +495,6 @@
- 		__stop___ksymtab_unused_gpl = .;			\
- 	}								\
- 									\
--	/* Kernel symbol table: GPL-future-only symbols */		\
--	__ksymtab_gpl_future : AT(ADDR(__ksymtab_gpl_future) - LOAD_OFFSET) { \
--		__start___ksymtab_gpl_future = .;			\
--		KEEP(*(SORT(___ksymtab_gpl_future+*)))			\
--		__stop___ksymtab_gpl_future = .;			\
--	}								\
--									\
- 	/* Kernel symbol table: Normal symbols */			\
- 	__kcrctab         : AT(ADDR(__kcrctab) - LOAD_OFFSET) {		\
- 		__start___kcrctab = .;					\
-@@ -530,13 +523,6 @@
- 		__stop___kcrctab_unused_gpl = .;			\
- 	}								\
- 									\
--	/* Kernel symbol table: GPL-future-only symbols */		\
--	__kcrctab_gpl_future : AT(ADDR(__kcrctab_gpl_future) - LOAD_OFFSET) { \
--		__start___kcrctab_gpl_future = .;			\
--		KEEP(*(SORT(___kcrctab_gpl_future+*)))			\
--		__stop___kcrctab_gpl_future = .;			\
--	}								\
--									\
- 	/* Kernel symbol table: strings */				\
-         __ksymtab_strings : AT(ADDR(__ksymtab_strings) - LOAD_OFFSET) {	\
- 		*(__ksymtab_strings)					\
-diff --git a/include/linux/export.h b/include/linux/export.h
-index fceb5e85571711..362b64f8d4a7c2 100644
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -157,7 +157,6 @@ struct kernel_symbol {
- 
- #define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym, "")
- #define EXPORT_SYMBOL_GPL(sym)		_EXPORT_SYMBOL(sym, "_gpl")
--#define EXPORT_SYMBOL_GPL_FUTURE(sym)	_EXPORT_SYMBOL(sym, "_gpl_future")
- #define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", #ns)
- #define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", #ns)
- 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index da0f5966ee80c9..e6e50ee3041238 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -411,11 +411,6 @@ struct module {
- 
- 	bool async_probe_requested;
- 
--	/* symbols that will be GPL-only in the near future. */
--	const struct kernel_symbol *gpl_future_syms;
--	const s32 *gpl_future_crcs;
--	unsigned int num_gpl_future_syms;
--
- 	/* Exception table */
- 	unsigned int num_exentries;
- 	struct exception_table_entry *extable;
 diff --git a/kernel/module.c b/kernel/module.c
-index 576c780e79c799..492b6fa5a662c8 100644
+index ff9045cc984b50..f1441d39c015f5 100644
 --- a/kernel/module.c
 +++ b/kernel/module.c
-@@ -413,11 +413,8 @@ extern const struct kernel_symbol __start___ksymtab[];
- extern const struct kernel_symbol __stop___ksymtab[];
- extern const struct kernel_symbol __start___ksymtab_gpl[];
- extern const struct kernel_symbol __stop___ksymtab_gpl[];
--extern const struct kernel_symbol __start___ksymtab_gpl_future[];
--extern const struct kernel_symbol __stop___ksymtab_gpl_future[];
- extern const s32 __start___kcrctab[];
- extern const s32 __start___kcrctab_gpl[];
--extern const s32 __start___kcrctab_gpl_future[];
- #ifdef CONFIG_UNUSED_SYMBOLS
- extern const struct kernel_symbol __start___ksymtab_unused[];
- extern const struct kernel_symbol __stop___ksymtab_unused[];
-@@ -439,7 +436,6 @@ struct symsearch {
- 	enum mod_license {
- 		NOT_GPL_ONLY,
- 		GPL_ONLY,
--		WILL_BE_GPL_ONLY,
- 	} license;
- 	bool unused;
- };
-@@ -463,15 +459,8 @@ static bool check_exported_symbol(const struct symsearch *syms,
+@@ -536,12 +536,7 @@ static bool find_exported_symbol_in_section(const struct symsearch *syms,
+  * Find an exported symbol and return it, along with, (optional) crc and
+  * (optional) module which owns it.  Needs preempt disabled or module_mutex.
+  */
+-static const struct kernel_symbol *find_symbol(const char *name,
+-					struct module **owner,
+-					const s32 **crc,
+-					enum mod_license *license,
+-					bool gplok,
+-					bool warn)
++static bool find_symbol(struct find_symbol_arg *fsa)
  {
- 	struct find_symbol_arg *fsa = data;
+ 	static const struct symsearch arr[] = {
+ 		{ __start___ksymtab, __stop___ksymtab, __start___kcrctab,
+@@ -561,19 +556,14 @@ static const struct kernel_symbol *find_symbol(const char *name,
+ 		  GPL_ONLY, true },
+ #endif
+ 	};
+-	struct find_symbol_arg fsa = {
+-		.name = name,
+-		.gplok = gplok,
+-		.warn = warn,
+-	};
+ 	struct module *mod;
+ 	unsigned int i;
  
--	if (!fsa->gplok) {
--		if (syms->license == GPL_ONLY)
--			return false;
--		if (syms->license == WILL_BE_GPL_ONLY && fsa->warn) {
--			pr_warn("Symbol %s is being used by a non-GPL module, "
--				"which will not be allowed in the future\n",
--				fsa->name);
--		}
--	}
-+	if (!fsa->gplok && syms->license == GPL_ONLY)
-+		return false;
+ 	module_assert_mutex_or_preempt();
  
- #ifdef CONFIG_UNUSED_SYMBOLS
- 	if (syms->unused && fsa->warn) {
-@@ -555,9 +544,6 @@ static bool find_symbol(struct find_symbol_arg *fsa)
- 		{ __start___ksymtab_gpl, __stop___ksymtab_gpl,
- 		  __start___kcrctab_gpl,
- 		  GPL_ONLY, false },
--		{ __start___ksymtab_gpl_future, __stop___ksymtab_gpl_future,
--		  __start___kcrctab_gpl_future,
--		  WILL_BE_GPL_ONLY, false },
- #ifdef CONFIG_UNUSED_SYMBOLS
- 		{ __start___ksymtab_unused, __stop___ksymtab_unused,
- 		  __start___kcrctab_unused,
-@@ -584,10 +570,6 @@ static bool find_symbol(struct find_symbol_arg *fsa)
- 			{ mod->gpl_syms, mod->gpl_syms + mod->num_gpl_syms,
- 			  mod->gpl_crcs,
- 			  GPL_ONLY, false },
--			{ mod->gpl_future_syms,
--			  mod->gpl_future_syms + mod->num_gpl_future_syms,
--			  mod->gpl_future_crcs,
--			  WILL_BE_GPL_ONLY, false },
- #ifdef CONFIG_UNUSED_SYMBOLS
- 			{ mod->unused_syms,
- 			  mod->unused_syms + mod->num_unused_syms,
-@@ -2297,7 +2279,6 @@ static int verify_exported_symbols(struct module *mod)
- 	} arr[] = {
- 		{ mod->syms, mod->num_syms },
- 		{ mod->gpl_syms, mod->num_gpl_syms },
--		{ mod->gpl_future_syms, mod->num_gpl_future_syms },
- #ifdef CONFIG_UNUSED_SYMBOLS
- 		{ mod->unused_syms, mod->num_unused_syms },
- 		{ mod->unused_gpl_syms, mod->num_unused_gpl_syms },
-@@ -3215,11 +3196,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 				     sizeof(*mod->gpl_syms),
- 				     &mod->num_gpl_syms);
- 	mod->gpl_crcs = section_addr(info, "__kcrctab_gpl");
--	mod->gpl_future_syms = section_objs(info,
--					    "__ksymtab_gpl_future",
--					    sizeof(*mod->gpl_future_syms),
--					    &mod->num_gpl_future_syms);
--	mod->gpl_future_crcs = section_addr(info, "__kcrctab_gpl_future");
+ 	for (i = 0; i < ARRAY_SIZE(arr); i++)
+-		if (find_exported_symbol_in_section(&arr[i], NULL, &fsa))
+-			goto found;
++		if (find_exported_symbol_in_section(&arr[i], NULL, fsa))
++			return true;
  
- #ifdef CONFIG_UNUSED_SYMBOLS
- 	mod->unused_syms = section_objs(info, "__ksymtab_unused",
-@@ -3413,7 +3389,6 @@ static int check_module_license_and_versions(struct module *mod)
- #ifdef CONFIG_MODVERSIONS
- 	if ((mod->num_syms && !mod->crcs)
- 	    || (mod->num_gpl_syms && !mod->gpl_crcs)
--	    || (mod->num_gpl_future_syms && !mod->gpl_future_crcs)
- #ifdef CONFIG_UNUSED_SYMBOLS
- 	    || (mod->num_unused_syms && !mod->unused_crcs)
- 	    || (mod->num_unused_gpl_syms && !mod->unused_gpl_crcs)
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index d6c81657d69550..25c1446055d16b 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -44,7 +44,7 @@ static bool error_occurred;
+ 	list_for_each_entry_rcu(mod, &modules, list,
+ 				lockdep_is_held(&module_mutex)) {
+@@ -603,21 +593,12 @@ static const struct kernel_symbol *find_symbol(const char *name,
+ 			continue;
  
- enum export {
- 	export_plain,      export_unused,     export_gpl,
--	export_unused_gpl, export_gpl_future, export_unknown
-+	export_unused_gpl, export_unknown
- };
+ 		for (i = 0; i < ARRAY_SIZE(arr); i++)
+-			if (find_exported_symbol_in_section(&arr[i], mod, &fsa))
+-				goto found;
++			if (find_exported_symbol_in_section(&arr[i], mod, fsa))
++				return true;
+ 	}
  
- /* In kernel, this size is defined in linux/module.h;
-@@ -304,7 +304,6 @@ static const struct {
- 	{ .str = "EXPORT_UNUSED_SYMBOL",     .export = export_unused },
- 	{ .str = "EXPORT_SYMBOL_GPL",        .export = export_gpl },
- 	{ .str = "EXPORT_UNUSED_SYMBOL_GPL", .export = export_unused_gpl },
--	{ .str = "EXPORT_SYMBOL_GPL_FUTURE", .export = export_gpl_future },
- 	{ .str = "(unknown)",                .export = export_unknown },
- };
- 
-@@ -369,8 +368,6 @@ static enum export export_from_secname(struct elf_info *elf, unsigned int sec)
- 		return export_gpl;
- 	else if (strstarts(secname, "___ksymtab_unused_gpl+"))
- 		return export_unused_gpl;
--	else if (strstarts(secname, "___ksymtab_gpl_future+"))
--		return export_gpl_future;
- 	else
- 		return export_unknown;
+-	pr_debug("Failed to find symbol %s\n", name);
+-	return NULL;
+-
+-found:
+-	if (owner)
+-		*owner = fsa.owner;
+-	if (crc)
+-		*crc = fsa.crc;
+-	if (license)
+-		*license = fsa.license;
+-	return fsa.sym;
++	pr_debug("Failed to find symbol %s\n", fsa->name);
++	return false;
  }
-@@ -385,8 +382,6 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
- 		return export_gpl;
- 	else if (sec == elf->export_unused_gpl_sec)
- 		return export_unused_gpl;
--	else if (sec == elf->export_gpl_future_sec)
--		return export_gpl_future;
- 	else
- 		return export_unknown;
+ 
+ /*
+@@ -1079,12 +1060,15 @@ static inline void print_unload_info(struct seq_file *m, struct module *mod)
+ 
+ void __symbol_put(const char *symbol)
+ {
+-	struct module *owner;
++	struct find_symbol_arg fsa = {
++		.name	= symbol,
++		.gplok	= true,
++	};
+ 
+ 	preempt_disable();
+-	if (!find_symbol(symbol, &owner, NULL, NULL, true, false))
++	if (!find_symbol(&fsa))
+ 		BUG();
+-	module_put(owner);
++	module_put(fsa.owner);
+ 	preempt_enable();
  }
-@@ -596,8 +591,6 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 			info->export_gpl_sec = i;
- 		else if (strcmp(secname, "__ksymtab_unused_gpl") == 0)
- 			info->export_unused_gpl_sec = i;
--		else if (strcmp(secname, "__ksymtab_gpl_future") == 0)
--			info->export_gpl_future_sec = i;
+ EXPORT_SYMBOL(__symbol_put);
+@@ -1353,19 +1337,22 @@ static int check_version(const struct load_info *info,
+ static inline int check_modstruct_version(const struct load_info *info,
+ 					  struct module *mod)
+ {
+-	const s32 *crc;
++	struct find_symbol_arg fsa = {
++		.name	= "module_layout",
++		.gplok	= true,
++	};
  
- 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
- 			unsigned int sh_link_idx;
-@@ -2152,10 +2145,6 @@ static void check_for_gpl_usage(enum export exp, const char *m, const char *s)
- 		error("GPL-incompatible module %s.ko uses GPL-only symbol marked UNUSED '%s'\n",
- 		      m, s);
- 		break;
--	case export_gpl_future:
--		warn("GPL-incompatible module %s.ko uses future GPL-only symbol '%s'\n",
--		     m, s);
--		break;
- 	case export_plain:
- 	case export_unused:
- 	case export_unknown:
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index e6f46eee0af02f..834220de002bd1 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -142,7 +142,6 @@ struct elf_info {
- 	Elf_Section  export_unused_sec;
- 	Elf_Section  export_gpl_sec;
- 	Elf_Section  export_unused_gpl_sec;
--	Elf_Section  export_gpl_future_sec;
- 	char         *strtab;
- 	char	     *modinfo;
- 	unsigned int modinfo_len;
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 69b9b71a6a4731..d82b452e8a7168 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -13,12 +13,10 @@ SECTIONS {
- 	__ksymtab_gpl		0 : { *(SORT(___ksymtab_gpl+*)) }
- 	__ksymtab_unused	0 : { *(SORT(___ksymtab_unused+*)) }
- 	__ksymtab_unused_gpl	0 : { *(SORT(___ksymtab_unused_gpl+*)) }
--	__ksymtab_gpl_future	0 : { *(SORT(___ksymtab_gpl_future+*)) }
- 	__kcrctab		0 : { *(SORT(___kcrctab+*)) }
- 	__kcrctab_gpl		0 : { *(SORT(___kcrctab_gpl+*)) }
- 	__kcrctab_unused	0 : { *(SORT(___kcrctab_unused+*)) }
- 	__kcrctab_unused_gpl	0 : { *(SORT(___kcrctab_unused_gpl+*)) }
--	__kcrctab_gpl_future	0 : { *(SORT(___kcrctab_gpl_future+*)) }
+ 	/*
+ 	 * Since this should be found in kernel (which can't be removed), no
+ 	 * locking is necessary -- use preempt_disable() to placate lockdep.
+ 	 */
+ 	preempt_disable();
+-	if (!find_symbol("module_layout", NULL, &crc, NULL, true, false)) {
++	if (!find_symbol(&fsa)) {
+ 		preempt_enable();
+ 		BUG();
+ 	}
+ 	preempt_enable();
+-	return check_version(info, "module_layout", mod, crc);
++	return check_version(info, "module_layout", mod, fsa.crc);
+ }
  
- 	.init_array		0 : ALIGN(8) { *(SORT(.init_array.*)) *(.init_array) }
+ /* First part is kernel version, which we ignore if module has crcs. */
+@@ -1459,10 +1446,11 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
+ 						  const char *name,
+ 						  char ownername[])
+ {
+-	struct module *owner;
+-	const struct kernel_symbol *sym;
+-	const s32 *crc;
+-	enum mod_license license;
++	struct find_symbol_arg fsa = {
++		.name	= name,
++		.gplok	= !(mod->taints & (1 << TAINT_PROPRIETARY_MODULE)),
++		.warn	= true,
++	};
+ 	int err;
  
-diff --git a/tools/include/linux/export.h b/tools/include/linux/export.h
-index d07e586b9ba0ec..9f61349a8944e1 100644
---- a/tools/include/linux/export.h
-+++ b/tools/include/linux/export.h
-@@ -3,7 +3,6 @@
+ 	/*
+@@ -1472,42 +1460,40 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
+ 	 */
+ 	sched_annotate_sleep();
+ 	mutex_lock(&module_mutex);
+-	sym = find_symbol(name, &owner, &crc, &license,
+-			  !(mod->taints & (1 << TAINT_PROPRIETARY_MODULE)), true);
+-	if (!sym)
++	if (!find_symbol(&fsa))
+ 		goto unlock;
  
- #define EXPORT_SYMBOL(sym)
- #define EXPORT_SYMBOL_GPL(sym)
--#define EXPORT_SYMBOL_GPL_FUTURE(sym)
- #define EXPORT_UNUSED_SYMBOL(sym)
- #define EXPORT_UNUSED_SYMBOL_GPL(sym)
+-	if (license == GPL_ONLY)
++	if (fsa.license == GPL_ONLY)
+ 		mod->using_gplonly_symbols = true;
  
+-	if (!inherit_taint(mod, owner)) {
+-		sym = NULL;
++	if (!inherit_taint(mod, fsa.owner)) {
++		fsa.sym = NULL;
+ 		goto getname;
+ 	}
+ 
+-	if (!check_version(info, name, mod, crc)) {
+-		sym = ERR_PTR(-EINVAL);
++	if (!check_version(info, name, mod, fsa.crc)) {
++		fsa.sym = ERR_PTR(-EINVAL);
+ 		goto getname;
+ 	}
+ 
+-	err = verify_namespace_is_imported(info, sym, mod);
++	err = verify_namespace_is_imported(info, fsa.sym, mod);
+ 	if (err) {
+-		sym = ERR_PTR(err);
++		fsa.sym = ERR_PTR(err);
+ 		goto getname;
+ 	}
+ 
+-	err = ref_module(mod, owner);
++	err = ref_module(mod, fsa.owner);
+ 	if (err) {
+-		sym = ERR_PTR(err);
++		fsa.sym = ERR_PTR(err);
+ 		goto getname;
+ 	}
+ 
+ getname:
+ 	/* We must make copy under the lock if we failed to get ref. */
+-	strncpy(ownername, module_name(owner), MODULE_NAME_LEN);
++	strncpy(ownername, module_name(fsa.owner), MODULE_NAME_LEN);
+ unlock:
+ 	mutex_unlock(&module_mutex);
+-	return sym;
++	return fsa.sym;
+ }
+ 
+ static const struct kernel_symbol *
+@@ -2268,16 +2254,19 @@ static void free_module(struct module *mod)
+ 
+ void *__symbol_get(const char *symbol)
+ {
+-	struct module *owner;
+-	const struct kernel_symbol *sym;
++	struct find_symbol_arg fsa = {
++		.name	= symbol,
++		.gplok	= true,
++		.warn	= true,
++	};
+ 
+ 	preempt_disable();
+-	sym = find_symbol(symbol, &owner, NULL, NULL, true, true);
+-	if (sym && strong_try_module_get(owner))
+-		sym = NULL;
++	if (!find_symbol(&fsa) || !strong_try_module_get(fsa.owner)) {
++		preempt_enable();
++		return NULL;
++	}
+ 	preempt_enable();
+-
+-	return sym ? (void *)kernel_symbol_value(sym) : NULL;
++	return (void *)kernel_symbol_value(fsa.sym);
+ }
+ EXPORT_SYMBOL_GPL(__symbol_get);
+ 
+@@ -2290,7 +2279,6 @@ EXPORT_SYMBOL_GPL(__symbol_get);
+ static int verify_exported_symbols(struct module *mod)
+ {
+ 	unsigned int i;
+-	struct module *owner;
+ 	const struct kernel_symbol *s;
+ 	struct {
+ 		const struct kernel_symbol *sym;
+@@ -2307,12 +2295,15 @@ static int verify_exported_symbols(struct module *mod)
+ 
+ 	for (i = 0; i < ARRAY_SIZE(arr); i++) {
+ 		for (s = arr[i].sym; s < arr[i].sym + arr[i].num; s++) {
+-			if (find_symbol(kernel_symbol_name(s), &owner, NULL,
+-					NULL, true, false)) {
++			struct find_symbol_arg fsa = {
++				.name	= kernel_symbol_name(s),
++				.gplok	= true,
++			};
++			if (find_symbol(&fsa)) {
+ 				pr_err("%s: exports duplicate symbol %s"
+ 				       " (owned by %s)\n",
+ 				       mod->name, kernel_symbol_name(s),
+-				       module_name(owner));
++				       module_name(fsa.owner));
+ 				return -ENOEXEC;
+ 			}
+ 		}
 -- 
 2.29.2
 
