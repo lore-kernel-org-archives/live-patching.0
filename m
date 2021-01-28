@@ -5,38 +5,38 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43855C433E0
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1870C433E0
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EEF5664DF5
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 56F5564E0E
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:21:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbhA1SUu (ORCPT
+        id S231989AbhA1SU4 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jan 2021 13:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        Thu, 28 Jan 2021 13:20:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbhA1SSI (ORCPT
+        with ESMTP id S231754AbhA1SSH (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Jan 2021 13:18:08 -0500
+        Thu, 28 Jan 2021 13:18:07 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89126C0617A7;
-        Thu, 28 Jan 2021 10:16:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8B7C061794;
+        Thu, 28 Jan 2021 10:15:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=whdfL/tlLmNfOgTI4yN4C4LjV+sKymW02WfCUP2FJCE=; b=hNTZWMk/3xUGs41flRK2WV8tDQ
-        crMXkrqFncwDkVMy4OF1hYfSiHzkIQ7s92N+qTpA6CY0P3QxKZ+/FzY8Yp5pV1D++0JDztsjK+jEo
-        w7WQfn1XPnjpD1x0YoMj7uqWdkRU5kKVoVXm2UpRzBdNLlWl2phVz4lBCpiXIwfenbFXiAIgKJtiR
-        CsJNQcboQpScAo5EsMDZA9H6/bCg95lqfKpZeI9SN5p1Dk2xQJNh43cAt5gGrsXoHr5hoMZRXq7e9
-        HsFC6dbJvCZMNPlZ+FX6ywMEzlILABpIfizFZn+JWPGPMWCBBLY+uyN6Qc69gKiQEZtjAg9p5pAAj
-        ZjcU0/gg==;
+        bh=yOKk2fnchUKV6dOiYsd/LFOPy1HkZGzrcOtdtIA5vO0=; b=nAJtiVFmSQNbH/fB1Kbd5zgUb8
+        xXTEhPGqK+FjplkLgB7xtXa0eAVF82tbSHGC3soj/Y6zfdCQ5mFbZw4JZDJdix7n4R7rJfwF06ha1
+        uEGUOHi/XXdQpBOP1LKQgWC3AbzZjIIeCXPDBigle/o+zgPq5VxFbvxgoKG8tCCajzHEF7cKvqhag
+        W+FAgV3+ubvrJz8izfaANvAqk0lwfS8rLnySG6NDuaTKMmX8htcht2QnxxU5RxXrs89veBipIEp/J
+        gJfzIHIwkutmBo6XH326+FAjuyPLuKaw3QZ35l7wPWd2HFswLj+N13H9aZCFy/3ybLAc4capWQS+H
+        taCO+lvw==;
 Received: from [2001:4bb8:198:6bf4:e052:196b:7e32:37d9] (helo=localhost)
         by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1l5BpX-008o1i-L5; Thu, 28 Jan 2021 18:15:44 +0000
+        id 1l5Bp3-008nzF-SO; Thu, 28 Jan 2021 18:15:15 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
@@ -55,9 +55,9 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH 11/13] module: move struct symsearch to module.c
-Date:   Thu, 28 Jan 2021 19:14:19 +0100
-Message-Id: <20210128181421.2279-12-hch@lst.de>
+Subject: [PATCH 07/13] module: mark module_mutex static
+Date:   Thu, 28 Jan 2021 19:14:15 +0100
+Message-Id: <20210128181421.2279-8-hch@lst.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210128181421.2279-1-hch@lst.de>
 References: <20210128181421.2279-1-hch@lst.de>
@@ -68,59 +68,65 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-struct symsearch is only used inside of module.h, so move the definition
-out of module.h.
+Except for two lockdep asserts module_mutex is only used in module.c.
+Remove the two asserts given that the functions they are in are not
+exported and just called from the module code, and mark module_mutex
+static.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- include/linux/module.h | 11 -----------
- kernel/module.c        | 11 +++++++++++
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ include/linux/module.h | 2 --
+ kernel/module.c        | 2 +-
+ lib/bug.c              | 3 ---
+ 3 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/include/linux/module.h b/include/linux/module.h
-index 0f360c48fe92a6..da0f5966ee80c9 100644
+index 3ea4ffae608f97..0f360c48fe92a6 100644
 --- a/include/linux/module.h
 +++ b/include/linux/module.h
-@@ -587,17 +587,6 @@ static inline bool within_module(unsigned long addr, const struct module *mod)
- /* Search for module by name: must be in a RCU-sched critical section. */
- struct module *find_module(const char *name);
- 
--struct symsearch {
--	const struct kernel_symbol *start, *stop;
--	const s32 *crcs;
--	enum mod_license {
--		NOT_GPL_ONLY,
--		GPL_ONLY,
--		WILL_BE_GPL_ONLY,
--	} license;
--	bool unused;
--};
--
- /* Returns 0 and fills in value, defined and namebuf, or -ERANGE if
-    symnum out of range. */
- int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
-diff --git a/kernel/module.c b/kernel/module.c
-index f1441d39c015f5..576c780e79c799 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -433,6 +433,17 @@ extern const s32 __start___kcrctab_unused_gpl[];
- #define symversion(base, idx) ((base != NULL) ? ((base) + (idx)) : NULL)
+@@ -550,8 +550,6 @@ static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
+ }
  #endif
  
-+struct symsearch {
-+	const struct kernel_symbol *start, *stop;
-+	const s32 *crcs;
-+	enum mod_license {
-+		NOT_GPL_ONLY,
-+		GPL_ONLY,
-+		WILL_BE_GPL_ONLY,
-+	} license;
-+	bool unused;
-+};
-+
- struct find_symbol_arg {
- 	/* Input */
- 	const char *name;
+-extern struct mutex module_mutex;
+-
+ /* FIXME: It'd be nice to isolate modules during init, too, so they
+    aren't used before they (may) fail.  But presently too much code
+    (IDE & SCSI) require entry into the module during init.*/
+diff --git a/kernel/module.c b/kernel/module.c
+index 856df9e17ff3d0..5152fae1fc9406 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -87,7 +87,7 @@
+  * 3) module_addr_min/module_addr_max.
+  * (delete and add uses RCU list operations).
+  */
+-DEFINE_MUTEX(module_mutex);
++static DEFINE_MUTEX(module_mutex);
+ static LIST_HEAD(modules);
+ 
+ /* Work queue for freeing init sections in success case */
+diff --git a/lib/bug.c b/lib/bug.c
+index 7103440c0ee1af..8f9d537bfb2a59 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -91,8 +91,6 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+ 	char *secstrings;
+ 	unsigned int i;
+ 
+-	lockdep_assert_held(&module_mutex);
+-
+ 	mod->bug_table = NULL;
+ 	mod->num_bugs = 0;
+ 
+@@ -118,7 +116,6 @@ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+ 
+ void module_bug_cleanup(struct module *mod)
+ {
+-	lockdep_assert_held(&module_mutex);
+ 	list_del_rcu(&mod->bug_list);
+ }
+ 
 -- 
 2.29.2
 
