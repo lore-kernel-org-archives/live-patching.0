@@ -2,30 +2,43 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDCAAC433DB
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 16:25:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3915FC433DB
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:17:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8079F64DF2
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 16:25:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDACA64E72
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jan 2021 18:17:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbhA1QZm (ORCPT
+        id S231626AbhA1SRY (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jan 2021 11:25:42 -0500
-Received: from verein.lst.de ([213.95.11.211]:58020 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232136AbhA1QZi (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Jan 2021 11:25:38 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 968EA68B02; Thu, 28 Jan 2021 17:24:47 +0100 (CET)
-Date:   Thu, 28 Jan 2021 17:24:46 +0100
+        Thu, 28 Jan 2021 13:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231621AbhA1SPv (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 28 Jan 2021 13:15:51 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9663C061573;
+        Thu, 28 Jan 2021 10:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=Dfm4t6IzWCBDJPMpGdSuNSi4QcgFqA2qDwRcbyxPWlk=; b=sFeJTQ+OTqxF4TXdv47v917Xko
+        yfzTFhv4KsYROvCFzVPjUyIE0EwT/HTki4yYi66S+qKtBalhaWPqLCWBMrhi3oc7Y83hXNBJbhLrW
+        G/N/8oTfQxS1ZxRjbclpOKvBL5OZT5mgni2tJpTeVZXUnQlJk/LEEktpeN+Aoyj0N0ua4fbUnULS4
+        pRhm7yB9zVzOcWwHGgi1sUiyPO8V8iq5UcBaJ8/KE2/ww09oIuceqAIt4R9vG/W7Pg2PRhR9/6t8G
+        Xt0cLBiQNSHSW8MzGboNTD45wVOqSrSOown2jBXWeftN/UbhIkOQVJrtyXv220uzQfAv1+wbDMcps
+        ZVMnkxrw==;
+Received: from [2001:4bb8:198:6bf4:e052:196b:7e32:37d9] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1l5BoN-008nqv-6F; Thu, 28 Jan 2021 18:14:32 +0000
 From:   Christoph Hellwig <hch@lst.de>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
+To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -35,36 +48,66 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 03/13] livepatch: refactor klp_init_object
-Message-ID: <20210128162446.GA3883@lst.de>
-References: <20210121074959.313333-1-hch@lst.de> <20210121074959.313333-4-hch@lst.de> <YBFjbbuQ7sn4T7yT@alley> <20210128162240.GA3417@lst.de>
+Subject: [PATCH 01/13] powerpc/powernv: remove get_cxl_module
+Date:   Thu, 28 Jan 2021 19:14:09 +0100
+Message-Id: <20210128181421.2279-2-hch@lst.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210128181421.2279-1-hch@lst.de>
+References: <20210128181421.2279-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210128162240.GA3417@lst.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Jan 28, 2021 at 05:22:40PM +0100, Christoph Hellwig wrote:
-> > We need to either update the function description or keep this check.
-> > 
-> > I prefer to keep the check. The function does the right thing also
-> > for the object "vmlinux". Also the livepatch code includes many
-> > similar paranoid checks that makes the code less error prone
-> > against any further changes.
-> 
-> Well, the check is in the caller now where we have a conditional for
-> it.  So I'd be tempted to either update the comment, or just drop the
-> patch.
+The static inline get_cxl_module function is entirely unused since commit
+8bf6b91a5125a ("Revert "powerpc/powernv: Add support for the cxl kernel
+api on the real phb"), so remove it.
 
-Also even without the check I think it will do the right thing when
-called for vmlinux given that it simplify won't find a module called
-vmlinux..
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
+---
+ arch/powerpc/platforms/powernv/pci-cxl.c | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/arch/powerpc/platforms/powernv/pci-cxl.c b/arch/powerpc/platforms/powernv/pci-cxl.c
+index 8c739c94ed28d6..53172862d23bd3 100644
+--- a/arch/powerpc/platforms/powernv/pci-cxl.c
++++ b/arch/powerpc/platforms/powernv/pci-cxl.c
+@@ -150,25 +150,3 @@ int pnv_cxl_ioda_msi_setup(struct pci_dev *dev, unsigned int hwirq,
+ 	return 0;
+ }
+ EXPORT_SYMBOL(pnv_cxl_ioda_msi_setup);
+-
+-#if IS_MODULE(CONFIG_CXL)
+-static inline int get_cxl_module(void)
+-{
+-	struct module *cxl_module;
+-
+-	mutex_lock(&module_mutex);
+-
+-	cxl_module = find_module("cxl");
+-	if (cxl_module)
+-		__module_get(cxl_module);
+-
+-	mutex_unlock(&module_mutex);
+-
+-	if (!cxl_module)
+-		return -ENODEV;
+-
+-	return 0;
+-}
+-#else
+-static inline int get_cxl_module(void) { return 0; }
+-#endif
+-- 
+2.29.2
+
