@@ -2,33 +2,43 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 255FFC433E0
-	for <live-patching@archiver.kernel.org>; Tue,  2 Feb 2021 10:46:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95B76C433DB
+	for <live-patching@archiver.kernel.org>; Tue,  2 Feb 2021 12:14:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EADDF64F55
-	for <live-patching@archiver.kernel.org>; Tue,  2 Feb 2021 10:46:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 621FE64E4D
+	for <live-patching@archiver.kernel.org>; Tue,  2 Feb 2021 12:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbhBBKqb (ORCPT
+        id S229632AbhBBMOi (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 2 Feb 2021 05:46:31 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33980 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229441AbhBBKqa (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 2 Feb 2021 05:46:30 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 27FC9AE8D;
-        Tue,  2 Feb 2021 10:45:48 +0000 (UTC)
-Date:   Tue, 2 Feb 2021 11:45:47 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Petr Mladek <pmladek@suse.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Tue, 2 Feb 2021 07:14:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229483AbhBBMOh (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Tue, 2 Feb 2021 07:14:37 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE098C061573;
+        Tue,  2 Feb 2021 04:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=fOGP2fwzT2JhZvsiTzA+wVkqRw7CvPV2PR044xdNRuY=; b=LliTpBdGHtCIA0fAUMvVI13eA6
+        01c0muaz3ZnrWPrPvDshwwaT8MXgpAxmjpuEgeUDAc/EpigN8B68ep6dExUouhw55Q1bPtO9I6mWB
+        CIhqmqfonMknWq2WgwOePdJ2pBQEbRFARM02UpoNT2MdhbXC9jvb/e/GNi4UDY7i3ta59mAjXZhKB
+        q8erkuEhgypFT4zJ9j+V+zD51AXB6bRzKxxB471S3cCo8UKn03xV6RnIxOyzRL4WBD0GPyNAr/eaf
+        QqBDDI1kHax8R6J76qZPKIVef0J8cp8CLfm2AJ/GR+7T7n8P7XRrG7+i1e9fSEuHSAxFGbkrQme68
+        AyPNCXgA==;
+Received: from [2001:4bb8:198:6bf4:7f38:755e:a6e0:73e9] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1l6uYu-00FALK-V5; Tue, 02 Feb 2021 12:13:41 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Frederic Barrat <fbarrat@linux.ibm.com>,
         Andrew Donnellan <ajd@linux.ibm.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -37,58 +47,126 @@ cc:     Petr Mladek <pmladek@suse.com>,
         Daniel Vetter <daniel@ffwll.ch>, Jessica Yu <jeyu@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         dri-devel@lists.freedesktop.org, live-patching@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 05/13] kallsyms: refactor
- {,module_}kallsyms_on_each_symbol
-In-Reply-To: <20210201162842.GB7276@lst.de>
-Message-ID: <alpine.LSU.2.21.2102021145160.570@pobox.suse.cz>
-References: <20210128181421.2279-1-hch@lst.de> <20210128181421.2279-6-hch@lst.de> <YBPYyEvesLMrRtZM@alley> <20210201114749.GB19696@lst.de> <alpine.LSU.2.21.2102011436320.21637@pobox.suse.cz> <20210201162842.GB7276@lst.de>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Subject: [PATCH 02/13] drm: remove drm_fb_helper_modinit
+Date:   Tue,  2 Feb 2021 13:13:23 +0100
+Message-Id: <20210202121334.1361503-3-hch@lst.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210202121334.1361503-1-hch@lst.de>
+References: <20210202121334.1361503-1-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon, 1 Feb 2021, Christoph Hellwig wrote:
+drm_fb_helper_modinit has a lot of boilerplate for what is not very
+simple functionality.  Just open code it in the only caller using
+IS_ENABLED and IS_MODULE, and skip the find_module check as a
+request_module is harmless if the module is already loaded (and not
+other caller has this find_module check either).
 
-> On Mon, Feb 01, 2021 at 02:37:12PM +0100, Miroslav Benes wrote:
-> > > > This change is not needed. (objname == NULL) means that we are
-> > > > interested only in symbols in "vmlinux".
-> > > > 
-> > > > module_kallsyms_on_each_symbol(klp_find_callback, &args)
-> > > > will always fail when objname == NULL.
-> > > 
-> > > I just tried to keep the old behavior.  I can respin it with your
-> > > recommended change noting the change in behavior, though.
-> > 
-> > Yes, please. It would be cleaner that way.
-> 
-> Let me know if this works for you:
-> 
-> ---
-> >From 18af41e88d088cfb8680d1669fcae2bc2ede5328 Mon Sep 17 00:00:00 2001
-> From: Christoph Hellwig <hch@lst.de>
-> Date: Wed, 20 Jan 2021 16:23:16 +0100
-> Subject: kallsyms: refactor {,module_}kallsyms_on_each_symbol
-> 
-> Require an explicit call to module_kallsyms_on_each_symbol to look
-> for symbols in modules instead of the call from kallsyms_on_each_symbol,
-> and acquire module_mutex inside of module_kallsyms_on_each_symbol instead
-> of leaving that up to the caller.  Note that this slightly changes the
-> behavior for the livepatch code in that the symbols from vmlinux are not
-> iterated anymore if objname is set, but that actually is the desired
-> behavior in this case.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/gpu/drm/drm_crtc_helper_internal.h | 10 ---------
+ drivers/gpu/drm/drm_fb_helper.c            | 21 ------------------
+ drivers/gpu/drm/drm_kms_helper_common.c    | 25 +++++++++++-----------
+ 3 files changed, 12 insertions(+), 44 deletions(-)
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+diff --git a/drivers/gpu/drm/drm_crtc_helper_internal.h b/drivers/gpu/drm/drm_crtc_helper_internal.h
+index 25ce42e799952c..61e09f8a8d0ff0 100644
+--- a/drivers/gpu/drm/drm_crtc_helper_internal.h
++++ b/drivers/gpu/drm/drm_crtc_helper_internal.h
+@@ -32,16 +32,6 @@
+ #include <drm/drm_encoder.h>
+ #include <drm/drm_modes.h>
+ 
+-/* drm_fb_helper.c */
+-#ifdef CONFIG_DRM_FBDEV_EMULATION
+-int drm_fb_helper_modinit(void);
+-#else
+-static inline int drm_fb_helper_modinit(void)
+-{
+-	return 0;
+-}
+-#endif
+-
+ /* drm_dp_aux_dev.c */
+ #ifdef CONFIG_DRM_DP_AUX_CHARDEV
+ int drm_dp_aux_dev_init(void);
+diff --git a/drivers/gpu/drm/drm_fb_helper.c b/drivers/gpu/drm/drm_fb_helper.c
+index 4b81195106875d..0b9f1ae1b7864c 100644
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@ -2499,24 +2499,3 @@ void drm_fbdev_generic_setup(struct drm_device *dev,
+ 	drm_client_register(&fb_helper->client);
+ }
+ EXPORT_SYMBOL(drm_fbdev_generic_setup);
+-
+-/* The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
+- * but the module doesn't depend on any fb console symbols.  At least
+- * attempt to load fbcon to avoid leaving the system without a usable console.
+- */
+-int __init drm_fb_helper_modinit(void)
+-{
+-#if defined(CONFIG_FRAMEBUFFER_CONSOLE_MODULE) && !defined(CONFIG_EXPERT)
+-	const char name[] = "fbcon";
+-	struct module *fbcon;
+-
+-	mutex_lock(&module_mutex);
+-	fbcon = find_module(name);
+-	mutex_unlock(&module_mutex);
+-
+-	if (!fbcon)
+-		request_module_nowait(name);
+-#endif
+-	return 0;
+-}
+-EXPORT_SYMBOL(drm_fb_helper_modinit);
+diff --git a/drivers/gpu/drm/drm_kms_helper_common.c b/drivers/gpu/drm/drm_kms_helper_common.c
+index 221a8528c9937a..f933da1656eb52 100644
+--- a/drivers/gpu/drm/drm_kms_helper_common.c
++++ b/drivers/gpu/drm/drm_kms_helper_common.c
+@@ -64,19 +64,18 @@ MODULE_PARM_DESC(edid_firmware,
+ 
+ static int __init drm_kms_helper_init(void)
+ {
+-	int ret;
+-
+-	/* Call init functions from specific kms helpers here */
+-	ret = drm_fb_helper_modinit();
+-	if (ret < 0)
+-		goto out;
+-
+-	ret = drm_dp_aux_dev_init();
+-	if (ret < 0)
+-		goto out;
+-
+-out:
+-	return ret;
++	/*
++	 * The Kconfig DRM_KMS_HELPER selects FRAMEBUFFER_CONSOLE (if !EXPERT)
++	 * but the module doesn't depend on any fb console symbols.  At least
++	 * attempt to load fbcon to avoid leaving the system without a usable
++	 * console.
++	 */
++	if (IS_ENABLED(CONFIG_DRM_FBDEV_EMULATION) &&
++	    IS_MODULE(CONFIG_FRAMEBUFFER_CONSOLE) &&
++	    !IS_ENABLED(CONFIG_EXPERT))
++		request_module_nowait("fbcon");
++
++	return drm_dp_aux_dev_init();
+ }
+ 
+ static void __exit drm_kms_helper_exit(void)
+-- 
+2.29.2
 
-Thanks Christoph
-
-M
