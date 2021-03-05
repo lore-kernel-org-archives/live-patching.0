@@ -2,176 +2,99 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B190EC433E9
-	for <live-patching@archiver.kernel.org>; Mon,  1 Mar 2021 17:01:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DA24C433DB
+	for <live-patching@archiver.kernel.org>; Fri,  5 Mar 2021 02:17:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88736650FD
-	for <live-patching@archiver.kernel.org>; Mon,  1 Mar 2021 17:01:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1507164FDB
+	for <live-patching@archiver.kernel.org>; Fri,  5 Mar 2021 02:17:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235960AbhCARBn (ORCPT
+        id S229505AbhCECRi (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 1 Mar 2021 12:01:43 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:34560 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbhCAQ7f (ORCPT
+        Thu, 4 Mar 2021 21:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229436AbhCECRi (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 1 Mar 2021 11:59:35 -0500
-Received: from [192.168.254.32] (unknown [47.187.194.202])
-        by linux.microsoft.com (Postfix) with ESMTPSA id DA81A20B57A1;
-        Mon,  1 Mar 2021 08:58:51 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DA81A20B57A1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1614617932;
-        bh=5iLiT4zCUvpdCRGwIN7OylfYUPKmTAZ9Z3KeVffXDOc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dS1CAaa3yJ0UPOnsU90ZhqIFUaGnM5whBFQxd4ni8FzqozwSNdhHqCBBMfo4UpdRZ
-         yNWiIqBtGNJ7FyPngJzbZcDNLT1EqeU3tLQjuKaN0CVz+YPzSYOuTqxKLDikiqRP09
-         sQglsDNjAYMPV/CAe9LfgyevWmJNRu5VzfExbUXM=
-Subject: Re: [RFC PATCH v1 1/1] arm64: Unwinder enhancements for reliable
- stack trace
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, jthierry@redhat.com,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <bc4761a47ad08ab7fdd555fc8094beb8fc758d33>
- <20210223181243.6776-1-madvenka@linux.microsoft.com>
- <20210223181243.6776-2-madvenka@linux.microsoft.com>
- <20210224121716.GE50741@C02TD0UTHF1T.local>
- <4a96b31d-0d16-1f12-fa64-5fdae64cd2d1@linux.microsoft.com>
- <20210225115825.GB37015@C02TD0UTHF1T.local>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Message-ID: <0227d386-c392-eb5a-3f52-621a637e46a8@linux.microsoft.com>
-Date:   Mon, 1 Mar 2021 10:58:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 4 Mar 2021 21:17:38 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BE2C061574;
+        Thu,  4 Mar 2021 18:17:37 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id g185so583227qkf.6;
+        Thu, 04 Mar 2021 18:17:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7OfH/7aQnmQER1/Jp2nanZu8HmrIn7USSW5vpL5BRBE=;
+        b=FudP2PUGinIUc6kpmSOzXYEcgqURLa3uJm5JsiGyFmmaV5I+W8hIGd+jPLykIR3GLd
+         DAxPJWYaCKyDh1B0B8uNn+Dmp5AnAMZs0scyM3zJ0rFNzIifIs7H5usfso2qkX1bxHDm
+         gIbKRWQCDBPMeTLJODbIytea8/8Sp5OoLM8C3yiSwPw8CyHYjH1Ad1rBkoQVHxGFmhp4
+         +N26cKo1lg7hoUv9YKG5mjnnn3ZvoVMwIF6ULTKuvo8sg6R8a7OKsiSyZnTMX+ymDdmQ
+         igmtG+h1C+9wE5NTsP9dKmKmiBKdMFNg8pJ9qWUCLucOMq6JI16puWTeoHQSmhBeIZbn
+         j/7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7OfH/7aQnmQER1/Jp2nanZu8HmrIn7USSW5vpL5BRBE=;
+        b=KGBXFoTiPyh7Yq9f0H7ws573v3auh+zqaArPDL2Ny1N1p9YS0469+FFN0GnPcOV7Ll
+         e/JArMxKqnoY2xlDMgTIdIPbm5skDnH6bmK3BBLUribgQrEW6JGyPcfqtAo3c3Am5t6T
+         PLeY90RKTh9jZlZYynqDVmCy7ig3Oi6mJUHr4vZEd3EHWsSVAD9+J7Jws5MftdaHnCO/
+         tluysOSSdFYaW7viz7FydaT7oT7JVcsCBSbQdaKzFmbw3U8KkCEc7/iUkLjY0YC0wudL
+         JLizGzo1uJcELaDwCRO63Bsb+/3FQ0x52SAN3cqDSOQnhkGR3FX6KyIPRCitLSZIq2Nz
+         WRXg==
+X-Gm-Message-State: AOAM531bRlBbFXQXJTc7nKT7bAqGfgcU8l/L6gVeuedts/Soz3wYelX5
+        iKDjAej+ZV2CrbQbQyOwBRAW95LLDvoIOe2k
+X-Google-Smtp-Source: ABdhPJyfAU2sf2GWPUNtKJrfgIpvoRbEu6kWTxG2sMJ0R8UWWWhz33cBdvGRRG0//2sv48EUaZGyvA==
+X-Received: by 2002:ae9:e40b:: with SMTP id q11mr7375602qkc.318.1614910656470;
+        Thu, 04 Mar 2021 18:17:36 -0800 (PST)
+Received: from localhost.localdomain ([156.146.54.138])
+        by smtp.gmail.com with ESMTPSA id j2sm1011601qtv.43.2021.03.04.18.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Mar 2021 18:17:35 -0800 (PST)
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        pmladek@suse.com, joe.lawrence@redhat.com, corbet@lwn.net,
+        live-patching@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rdunlap@infradead.org, Bhaskar Chowdhury <unixbhaskar@gmail.com>
+Subject: [PATCH] docs: livepatch: Fix a typo in the file shadow-vars.rst
+Date:   Fri,  5 Mar 2021 07:47:20 +0530
+Message-Id: <20210305021720.21874-1-unixbhaskar@gmail.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <20210225115825.GB37015@C02TD0UTHF1T.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
 
+s/ varibles/variables/
 
-On 2/25/21 5:58 AM, Mark Rutland wrote:
-> On Wed, Feb 24, 2021 at 01:34:09PM -0600, Madhavan T. Venkataraman wrote:
->> On 2/24/21 6:17 AM, Mark Rutland wrote:
->>> On Tue, Feb 23, 2021 at 12:12:43PM -0600, madvenka@linux.microsoft.com wrote:
->>>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>>> 	Termination
->>>> 	===========
->>>>
->>>> 	Currently, the unwinder terminates when both the FP (frame pointer)
->>>> 	and the PC (return address) of a frame are 0. But a frame could get
->>>> 	corrupted and zeroed. There needs to be a better check.
->>>>
->>>> 	The following special terminating frame and function have been
->>>> 	defined for this purpose:
->>>>
->>>> 	const u64    arm64_last_frame[2] __attribute__ ((aligned (16)));
->>>>
->>>> 	void arm64_last_func(void)
->>>> 	{
->>>> 	}
->>>>
->>>> 	So, set the FP to arm64_last_frame and the PC to arm64_last_func in
->>>> 	the bottom most frame.
->>>
->>> My expectation was that we'd do this per-task, creating an empty frame
->>> record (i.e. with fp=NULL and lr=NULL) on the task's stack at the
->>> instant it was created, and chaining this into x29. That way the address
->>> is known (since it can be derived from the task), and the frame will
->>> also implicitly check that the callchain terminates on the task stack
->>> without loops. That also means that we can use it to detect the entry
->>> code going wrong (e.g. if the SP gets corrupted), since in that case the
->>> entry code would place the record at a different location.
->>
->> That is exactly what this is doing. arm64_last_frame[] is a marker frame
->> that contains fp=0 and pc=0.
-> 
-> Almost! What I meant was that rather that each task should have its own
-> final/marker frame record on its task task rather than sharing a common
-> global variable.
-> 
-> That way a check for that frame record implicitly checks that a task
-> started at the expected location *on that stack*, which catches
-> additional stack corruption cases (e.g. if we left data on the stack
-> prior to an EL0 entry).
-> 
+Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
+---
+ Documentation/livepatch/shadow-vars.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ok. I will think about this.
+diff --git a/Documentation/livepatch/shadow-vars.rst b/Documentation/livepatch/shadow-vars.rst
+index c05715aeafa4..8464866d18ba 100644
+--- a/Documentation/livepatch/shadow-vars.rst
++++ b/Documentation/livepatch/shadow-vars.rst
+@@ -165,7 +165,7 @@ In-flight parent objects
 
-> [...]
-> 
->>> ... I reckon once we've moved the last of the exception triage out to C
->>> this will be relatively simple, since all of the exception handlers will
->>> look like:
->>>
->>> | SYM_CODE_START_LOCAL(elX_exception)
->>> | 	kernel_entry X
->>> | 	mov	x0, sp
->>> | 	bl	elX_exception_handler
->>> | 	kernel_exit X
->>> | SYM_CODE_END(elX_exception)
->>>
->>> ... and so we just need to identify the set of elX_exception functions
->>> (which we'll never expect to take exceptions from directly). We could be
->>> strict and reject unwinding into arbitrary bits of the entry code (e.g.
->>> if we took an unexpected exception), and only permit unwinding to the
->>> BL.
->>>
->>>> 	It can do this if the FP and PC are also recorded elsewhere in the
->>>> 	pt_regs for comparison. Currently, the FP is also stored in
->>>> 	regs->regs[29]. The PC is stored in regs->pc. However, regs->pc can
->>>> 	be changed by lower level functions.
->>>>
->>>> 	Create a new field, pt_regs->orig_pc, and record the return address
->>>> 	PC there. With this, the unwinder can validate the exception frame
->>>> 	and set a flag so that the caller of the unwinder can know when
->>>> 	an exception frame is encountered.
->>>
->>> I don't understand the case you're trying to solve here. When is
->>> regs->pc changed in a way that's problematic?
->>>
->>
->> For instance, I used a test driver in which the driver calls a function
->> pointer which is NULL. The low level fault handler sends a signal to the
->> task. Looks like it changes regs->pc for this.
-> 
-> I'm struggling to follow what you mean here.
-> 
-> If the kernel branches to NULL, the CPU should raise an instruction
-> abort from the current EL, and our handling of that should terminate the
-> thread via die_kernel_fault(), without returning to the faulting
-> context, and without altering the PC in the faulting context.
-> 
-> Signals are delivered to userspace and alter the userspace PC, not a
-> kernel PC, so this doesn't seem relevant. Do you mean an exception fixup
-> handler rather than a signal?
-> 
->> When I dump the stack from the low level handler, the comparison with
->> regs->pc does not work.  But comparison with regs->orig_pc works.
-> 
-> As above, I'm struggling with this; could you share a concrete example? 
-> 
+ Sometimes it may not be convenient or possible to allocate shadow
+ variables alongside their parent objects.  Or a livepatch fix may
+-require shadow varibles to only a subset of parent object instances.  In
++require shadow variables to only a subset of parent object instances.  In
+ these cases, the klp_shadow_get_or_alloc() call can be used to attach
+ shadow variables to parents already in-flight.
 
-Actually, my bad. I needed the orig_pc because of something that my test
-driver did. And, it slipped my mind entirely.
+--
+2.30.1
 
-Thanks for pointing it out. I will fix this in my resend.
-
-Thanks again for your comments.
-
-I am currently studying probing/tracing. As soon as I have a solution for that,
-I will send out the next version. I look forward to the in-depth review.
-
-Thanks,
-
-Madhavan
