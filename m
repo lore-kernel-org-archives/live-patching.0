@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30DEC433E0
-	for <live-patching@archiver.kernel.org>; Mon, 15 Mar 2021 16:59:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F229C433DB
+	for <live-patching@archiver.kernel.org>; Mon, 15 Mar 2021 16:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C2C526157F
-	for <live-patching@archiver.kernel.org>; Mon, 15 Mar 2021 16:59:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18E4A64DC4
+	for <live-patching@archiver.kernel.org>; Mon, 15 Mar 2021 16:59:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbhCOQ6n (ORCPT
+        id S234609AbhCOQ6p (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 15 Mar 2021 12:58:43 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:51024 "EHLO
+        Mon, 15 Mar 2021 12:58:45 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:51050 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234469AbhCOQ6M (ORCPT
+        with ESMTP id S231590AbhCOQ6O (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 15 Mar 2021 12:58:12 -0400
+        Mon, 15 Mar 2021 12:58:14 -0400
 Received: from x64host.home (unknown [47.187.194.202])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5F1FE20B26F3;
-        Mon, 15 Mar 2021 09:58:11 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F1FE20B26F3
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0D28B20B26FA;
+        Mon, 15 Mar 2021 09:58:12 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0D28B20B26FA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1615827492;
-        bh=igOSjDRkpU/MUXtVWxKHwm0pSTVl31mBseRDsjPu/Gg=;
+        s=default; t=1615827493;
+        bh=0gTjptmyQZ07PiZCSnD/YKcvyyL392ig4rm2FEjYn/Y=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cL7Rj7O+LK/CGWZQFwUQgPXIsAeH7PHuH6bV2e4xsfOmcEQaB4eiA+7kmCdppZ2Px
-         CVV4wEMZDQmdZoVdSPmRXnwXRyykAausL2E5bkXJCWlYWyW4cOlTXZ2q9LUL6f5+8u
-         RzI6aRQD7v+3B4go8wwoGxnTZnveDVIPsxRNztLM=
+        b=R91XTzYfYCb0ZGw7P5w4k2c0wPMwNZx0Cb+QOzipMegJEzUGor2RF4EgdBmkFiCl2
+         myKycQk1amy6owG1HVBpw2L8EDnrxOhlsmEcvGJNMcxBmYgdrTzwMJWJ4ZHWh8xB4g
+         +vEDShINtXTKrHlAz0KkHIh8BpePpQG/nsUveU70=
 From:   madvenka@linux.microsoft.com
 To:     broonie@kernel.org, mark.rutland@arm.com, jpoimboe@redhat.com,
         jthierry@redhat.com, catalin.marinas@arm.com, will@kernel.org,
         linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 1/8] arm64: Implement stack trace termination record
-Date:   Mon, 15 Mar 2021 11:57:53 -0500
-Message-Id: <20210315165800.5948-2-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 3/8] arm64: Terminate the stack trace at TASK_FRAME and EL0_FRAME
+Date:   Mon, 15 Mar 2021 11:57:55 -0500
+Message-Id: <20210315165800.5948-4-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210315165800.5948-1-madvenka@linux.microsoft.com>
 References: <5997dfe8d261a3a543667b83c902883c1e4bd270>
@@ -53,149 +53,51 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-The unwinder needs to be able to reliably tell when it has reached the end
-of a stack trace. One way to do this is to have the last stack frame at a
-fixed offset from the base of the task stack. When the unwinder reaches
-that offset, it knows it is done.
+Implement the following checks in the unwinder to detect the terminating
+frame reliably:
 
-Kernel Tasks
-============
+	- The frame must end in task_pt_regs(task)->stackframe.
 
-All tasks except the idle task have a pt_regs structure right after the
-task stack. This is called the task pt_regs. The pt_regs structure has a
-special stackframe field. Make this stackframe field the last frame in the
-task stack. This needs to be done in copy_thread() which initializes a new
-task's pt_regs and initial CPU context.
-
-For the idle task, there is no task pt_regs. For our purpose, we need one.
-So, create a pt_regs just like other kernel tasks and make
-pt_regs->stackframe the last frame in the idle task stack. This needs to be
-done at two places:
-
-	- On the primary CPU, the boot task runs. It calls start_kernel()
-	  and eventually becomes the idle task for the primary CPU. Just
-	  before start_kernel() is called, set up the last frame.
-
-	- On each secondary CPU, a startup task runs that calls
-	  secondary_startup_kernel() and eventually becomes the idle task
-	  on the secondary CPU. Just before secondary_start_kernel() is
-	  called, set up the last frame.
-
-User Tasks
-==========
-
-User tasks are initially set up like kernel tasks when they are created.
-Then, they return to userland after fork via ret_from_fork(). After that,
-they enter the kernel only on an EL0 exception. (In arm64, system calls are
-also EL0 exceptions). The EL0 exception handler stores state in the task
-pt_regs and calls different functions based on the type of exception. The
-stack trace for an EL0 exception must end at the task pt_regs. So, make
-task pt_regs->stackframe as the last frame in the EL0 exception stack.
-
-In summary, task pt_regs->stackframe is where a successful stack trace ends.
+	- The frame type must be either TASK_FRAME or EL0_FRAME.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/arm64/kernel/entry.S   |  8 +++++---
- arch/arm64/kernel/head.S    | 28 ++++++++++++++++++++++++----
- arch/arm64/kernel/process.c |  5 +++++
- 3 files changed, 34 insertions(+), 7 deletions(-)
+ arch/arm64/kernel/stacktrace.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index a31a0a713c85..e2dc2e998934 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -261,16 +261,18 @@ alternative_else_nop_endif
- 	stp	lr, x21, [sp, #S_LR]
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index ad20981dfda4..504cd161339d 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -43,16 +43,22 @@ int notrace unwind_frame(struct task_struct *tsk, struct stackframe *frame)
+ {
+ 	unsigned long fp = frame->fp;
+ 	struct stack_info info;
++	struct pt_regs *regs;
  
- 	/*
--	 * For exceptions from EL0, terminate the callchain here.
-+	 * For exceptions from EL0, terminate the callchain here at
-+	 * task_pt_regs(current)->stackframe.
-+	 *
- 	 * For exceptions from EL1, create a synthetic frame record so the
- 	 * interrupted code shows up in the backtrace.
- 	 */
- 	.if \el == 0
--	mov	x29, xzr
-+	stp	xzr, xzr, [sp, #S_STACKFRAME]
- 	.else
- 	stp	x29, x22, [sp, #S_STACKFRAME]
--	add	x29, sp, #S_STACKFRAME
- 	.endif
-+	add	x29, sp, #S_STACKFRAME
+-	/* Terminal record; nothing to unwind */
+-	if (!fp)
+-		return -ENOENT;
++	if (!tsk)
++		tsk = current;
++	regs = task_pt_regs(tsk);
  
- #ifdef CONFIG_ARM64_SW_TTBR0_PAN
- alternative_if_not ARM64_HAS_PAN
-diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index 66b0e0b66e31..2769b20934d4 100644
---- a/arch/arm64/kernel/head.S
-+++ b/arch/arm64/kernel/head.S
-@@ -393,6 +393,28 @@ SYM_FUNC_START_LOCAL(__create_page_tables)
- 	ret	x28
- SYM_FUNC_END(__create_page_tables)
+-	if (fp & 0xf)
++	/* Terminal record, nothing to unwind */
++	if (fp == (unsigned long) regs->stackframe) {
++		if (regs->frame_type == TASK_FRAME ||
++		    regs->frame_type == EL0_FRAME)
++			return -ENOENT;
+ 		return -EINVAL;
++	}
  
-+	/*
-+	 * The boot task becomes the idle task for the primary CPU. The
-+	 * CPU startup task on each secondary CPU becomes the idle task
-+	 * for the secondary CPU.
-+	 *
-+	 * The idle task does not require pt_regs. But create a dummy
-+	 * pt_regs so that task_pt_regs(idle_task)->stackframe can be
-+	 * set up to be the last frame on the idle task stack just like
-+	 * all the other kernel tasks. This helps the unwinder to
-+	 * terminate the stack trace at a well-known stack offset.
-+	 *
-+	 * Also, set up the last return PC to be ret_from_fork() just
-+	 * like all the other kernel tasks so that the stack trace of
-+	 * all kernel tasks ends with the same function.
-+	 */
-+	.macro setup_last_frame
-+	sub	sp, sp, #PT_REGS_SIZE
-+	stp	xzr, xzr, [sp, #S_STACKFRAME]
-+	add	x29, sp, #S_STACKFRAME
-+	ldr	x30, =ret_from_fork
-+	.endm
-+
- /*
-  * The following fragment of code is executed with the MMU enabled.
-  *
-@@ -447,8 +469,7 @@ SYM_FUNC_START_LOCAL(__primary_switched)
- #endif
- 	bl	switch_to_vhe			// Prefer VHE if possible
- 	add	sp, sp, #16
--	mov	x29, #0
--	mov	x30, #0
-+	setup_last_frame
- 	b	start_kernel
- SYM_FUNC_END(__primary_switched)
+-	if (!tsk)
+-		tsk = current;
++	if (!fp || fp & 0xf)
++		return -EINVAL;
  
-@@ -606,8 +627,7 @@ SYM_FUNC_START_LOCAL(__secondary_switched)
- 	cbz	x2, __secondary_too_slow
- 	msr	sp_el0, x2
- 	scs_load x2, x3
--	mov	x29, #0
--	mov	x30, #0
-+	setup_last_frame
- 
- #ifdef CONFIG_ARM64_PTR_AUTH
- 	ptrauth_keys_init_cpu x2, x3, x4, x5
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 325c83b1a24d..7ffa689e8b60 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -437,6 +437,11 @@ int copy_thread(unsigned long clone_flags, unsigned long stack_start,
- 	}
- 	p->thread.cpu_context.pc = (unsigned long)ret_from_fork;
- 	p->thread.cpu_context.sp = (unsigned long)childregs;
-+	/*
-+	 * For the benefit of the unwinder, set up childregs->stackframe
-+	 * as the last frame for the new task.
-+	 */
-+	p->thread.cpu_context.fp = (unsigned long)childregs->stackframe;
- 
- 	ptrace_hw_copy_thread(p);
- 
+ 	if (!on_accessible_stack(tsk, fp, &info))
+ 		return -EINVAL;
 -- 
 2.25.1
 
