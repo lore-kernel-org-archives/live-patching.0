@@ -2,117 +2,117 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05CACC43461
-	for <live-patching@archiver.kernel.org>; Thu,  1 Apr 2021 18:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42879C43461
+	for <live-patching@archiver.kernel.org>; Thu,  1 Apr 2021 18:45:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0AD3601FC
-	for <live-patching@archiver.kernel.org>; Thu,  1 Apr 2021 18:37:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17BD661002
+	for <live-patching@archiver.kernel.org>; Thu,  1 Apr 2021 18:45:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbhDASho (ORCPT
+        id S236982AbhDASpt (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 1 Apr 2021 14:37:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237180AbhDASdC (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 1 Apr 2021 14:33:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B143A61365;
-        Thu,  1 Apr 2021 15:27:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617290875;
-        bh=6OyN9qDE9W6bki0U8Z4PuTzkFQGhqo+Vs3sw4cGUYWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nKaF72NUeleGdNu0kKTVFRNk2MtPL/Ll8VRJjNCyJNTndvhTiuzsn5n81GUvaTwJT
-         /5pI6YSDz4UTt1k/i+Bys6f73DM6ZnHszfmzjWATodd1GCZ9CaYUD6d6uhwqCkQqpc
-         5nCl6HVjJgndYKdJDZXD0MBJivD93+q0cFuhVRQNylYJTzkGwVPhJyGrEUFeYqLnT+
-         rIsGW9kB+ivAhhohQUCoVPMO3efByGG4PLeI0u23IitcVFHAUwWvXKyiBgJnhKgMv0
-         2EYXufbsnlJBdjp7kjZYcp+a9eQnOfs75V/wt2NbPfnNq9oO3p7dMh/koSIJaVs2d+
-         oH4OblOL2fsKQ==
-Date:   Thu, 1 Apr 2021 16:27:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     madvenka@linux.microsoft.com
+        Thu, 1 Apr 2021 14:45:49 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:41004 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239423AbhDASkZ (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 1 Apr 2021 14:40:25 -0400
+Received: from [192.168.254.32] (unknown [47.187.194.202])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BDFDF20ABC25;
+        Thu,  1 Apr 2021 11:40:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDFDF20ABC25
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1617302425;
+        bh=SOlvCGNF2qL5Q3qgj9PLqYCmEQf62InHHijTjNlIusI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=PnrhJu9LCcT59AvJiHeY+krR88BIg5ss+Vm+tOQZcJ+rklhu2M8B38Qvj5bnMgCyT
+         O66WxUU29Ta/gNMB+kWtkN6uCu+FU0EsFnFIlSy4xbDWNI6nMkQK+F3EhHOft3iAmO
+         zx7iV8lXhO2Y5OLAwpQgTmfPaGhtpV7VcF9PFkeg=
+Subject: Re: [RFC PATCH v1 3/4] arm64: Detect FTRACE cases that make the stack
+ trace unreliable
+To:     Mark Brown <broonie@kernel.org>
 Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, jthierry@redhat.com,
         catalin.marinas@arm.com, will@kernel.org,
         linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/4] arm64: Implement infrastructure for stack
- trace reliability checks
-Message-ID: <20210401152741.GK4758@sirena.org.uk>
 References: <77bd5edeea72d44533c769b1e8c0fea7a9d7eb3a>
  <20210330190955.13707-1-madvenka@linux.microsoft.com>
- <20210330190955.13707-2-madvenka@linux.microsoft.com>
+ <20210330190955.13707-4-madvenka@linux.microsoft.com>
+ <20210401142759.GJ4758@sirena.org.uk>
+ <0bece48b-5fee-2bd1-752e-66d2b89cc5ad@linux.microsoft.com>
+ <20210401182810.GO4758@sirena.org.uk>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Message-ID: <2a56fe4b-9929-0d8b-aa49-c2b1c1b82b79@linux.microsoft.com>
+Date:   Thu, 1 Apr 2021 13:40:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NhBACjNc9vV+/oop"
-Content-Disposition: inline
-In-Reply-To: <20210330190955.13707-2-madvenka@linux.microsoft.com>
-X-Cookie: You can't take damsel here now.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210401182810.GO4758@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
 
---NhBACjNc9vV+/oop
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 30, 2021 at 02:09:52PM -0500, madvenka@linux.microsoft.com wrot=
-e:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->=20
-> Implement a check_reliability() function that will contain checks for the
-> presence of various features and conditions that can render the stack tra=
-ce
-> unreliable.
+On 4/1/21 1:28 PM, Mark Brown wrote:
+> On Thu, Apr 01, 2021 at 12:43:25PM -0500, Madhavan T. Venkataraman wrote:
+> 
+>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>>>> +	{ (unsigned long) &ftrace_graph_call, 0 },
+>>>> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>>>> +	{ (unsigned long) ftrace_graph_caller, 0 },
+> 
+>>> It's weird that we take the address of ftrace_graph_call but not the
+>>> other functions - we should be consistent or explain why.  It'd probably
+>>> also look nicer to not nest the ifdefs, the dependencies in Kconfig will
+>>> ensure we only get things when we should.
+> 
+>> I have explained it in the comment in the FTRACE trampoline right above
+>> ftrace_graph_call().
+> 
+> Ah, right - it's a result of it being an inner label.  I'd suggest
+> putting a brief note right at that line of code explaining this (eg,
+> "Inner label, not a function"), it wasn't confusing due to the use of
+> that symbol but rather due to it being different from everything else
+> in the list and that's kind of lost in the main comment.
+> 
 
-This looks good to me with one minor stylistic thing:
+OK, So, I will add a note in the main comment above the list. I will add the
+comment line you have suggested at the exact line.
 
-> +/*
-> + * Special functions where the stack trace is unreliable.
-> + */
-> +static struct function_range	special_functions[] =3D {
-> +	{ 0, 0 }
-> +};
+>> So, it is only defined if CONFIG_FUNCTION_GRAPH_TRACER is defined. I can address
+>> this as well as your comment by defining another label whose name is more meaningful
+>> to our use:
+> 
+>> +SYM_INNER_LABEL(ftrace_trampoline, SYM_L_GLOBAL) // checked by the unwinder
+>> #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>> SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
+>>         nop                             // If enabled, this will be replaced
+>>                                         // "b ftrace_graph_caller"
+>> #endif
+> 
+> I'm not sure we need to bother with that, you'd still need the & I think.
 
-Might be good to put a comment here saying that this is terminating the
-list rather than detecting a NULL function pointer:
+I think we need to bother with that. If CONFIG_FUNCTION_GRAPH_TRACER is not on but
+CONFIG_DYNAMIC_FTRACE_WITH_REGS is, then ftrace_graph_call() will not occur in the stack
+trace taken from a tracer function. The unwinder still needs to recognize an ftrace frame.
+I don't want to assume ftrace_common_return which is the label that currently follows
+the above code. So, we need a different label outside the above ifdef.
 
-	{ /* sentinel */ }
+As for the &, I needed it because ftrace_graph_call is currently defined elsewhere as:
 
-is a common idiom for that.
+extern unsigned long ftrace_graph_call;
 
-Given that it's a fixed array we could also...
+I did not want to change that.
 
-> +	for (func =3D special_functions; func->start; func++) {
-> +		if (pc >=3D func->start && pc < func->end)
+Thanks,
 
-=2E..do these as
+Madhavan
 
-	for (i =3D 0; i < ARRAY_SIZE(special_functions); i++)=20
-
-so you don't need something like that, though that gets awkward when you
-have to write out special_functions[i].field a lot.
-
-So many different potential colours for the bikeshed!
-
---NhBACjNc9vV+/oop
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmBl5mwACgkQJNaLcl1U
-h9C7XAf8CStzmgOUDBXGUY/gd9BnKtuzEP7qyRDJ/4Qn521DOcsK5ga4CG1FGT9U
-2BEaooZ5dqyee1IgpO3p4yTDQgLTARXeWK0No6mfiPoXTnR0NnODCclBW5jiYAkI
-yMB4KzOexgmUnuYToDl0p3SDtKzHLtpo+bjgnfEom1sQlHfFursZhBVC9ERJnhF3
-yw2Oe0yRTmKbkT7pKzSKspqOxlfRii9L8G/2phIDaQiTdDL/ul/1hPeLJmh/peiO
-j4WM5WnXdCrHYwje1U3deGU5zx9eEBPQF6S32t6AuwTis5SfuNQ53bOaRda+GeZL
-/MBvmhuX0TRqL5IzkAktpUtPPcZmFA==
-=Wi9w
------END PGP SIGNATURE-----
-
---NhBACjNc9vV+/oop--
