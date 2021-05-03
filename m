@@ -2,64 +2,323 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D74C43461
-	for <live-patching@archiver.kernel.org>; Wed, 28 Apr 2021 01:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E8DC433B4
+	for <live-patching@archiver.kernel.org>; Mon,  3 May 2021 17:36:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B16A61400
-	for <live-patching@archiver.kernel.org>; Wed, 28 Apr 2021 01:17:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD4A761183
+	for <live-patching@archiver.kernel.org>; Mon,  3 May 2021 17:36:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235501AbhD1BSa (ORCPT
+        id S231305AbhECRhS (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 27 Apr 2021 21:18:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230460AbhD1BS3 (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 27 Apr 2021 21:18:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 09DCF613F8;
-        Wed, 28 Apr 2021 01:17:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619572666;
-        bh=Qnc6uhcRff+i34WfEKh4LGbm3CqRJi/J5yXrNAXMVog=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=D8Wwfn3Yv2yQVaUIXZQ0Daucaf6u0wOlEo/WjwcHxlf9q/ttpzNt5qn9kH2casxIh
-         2GJwXxFgojy3jx/ok49Emn3aO4lqNOOS5BsILe+clI7YGqtui2oGr6pbRwyTP5XrHt
-         xZH/KDnd3ijeUDnJPVHhhujkq4aWuECXnYwBlxVXZEIawgwBHceWqKY/aSz5lYwooc
-         UzCTNRr066GIZ0s+YEyj3Kq39PasZ13Lcxc05584wkqEy5aigQyFKnduNDlk/bmh2j
-         +449U6Q5u98ifw/XzDCnXA6UKOn0D5DKmrJl4oGSBFKuW248w5BQHMnzsLKvqKzNU+
-         O9+cd36/E4mFQ==
-Subject: Re: [GIT PULL] livepatching for 5.13
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YIgfdoZ88RrdQ1e8@alley>
-References: <YIgfdoZ88RrdQ1e8@alley>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YIgfdoZ88RrdQ1e8@alley>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.13
-X-PR-Tracked-Commit-Id: 8df1947c71ee53c7e21c96c83796dd8cf06ae77c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: eb6bbacc46720b8b36eb85b2cdd91b9e691959e4
-Message-Id: <161957266601.1632.1631528056790413828.pr-tracker-bot@kernel.org>
-Date:   Wed, 28 Apr 2021 01:17:46 +0000
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+        Mon, 3 May 2021 13:37:18 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:54474 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231329AbhECRhR (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Mon, 3 May 2021 13:37:17 -0400
+Received: from x64host.home (unknown [47.187.223.33])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E963820B7188;
+        Mon,  3 May 2021 10:36:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E963820B7188
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1620063383;
+        bh=0/vmHnPLNqPmJknfoYFWm+pkRMsOY2Mr/ejvD0gplj4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=KKF4/oezPVgF5xwfWvxm9F3MGvNAK3x16YG9SpftshGmEfFfdvHcx02la5wVRJGl7
+         DKicMikQcOAXTLRFujlOnWQGrPQhjCSa31LjXcIEf2AkxupqW+4/vXC2eGedthan94
+         5eDM+Eknw+VKRxl0zRbkdOSvRn9//O0o/2lTkutk=
+From:   madvenka@linux.microsoft.com
+To:     broonie@kernel.org, jpoimboe@redhat.com, mark.rutland@arm.com,
+        jthierry@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, pasha.tatashin@soleen.com,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [RFC PATCH v3 0/4] arm64: Stack trace reliability checks in the unwinder
+Date:   Mon,  3 May 2021 12:36:11 -0500
+Message-Id: <20210503173615.21576-1-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <65cf4dfbc439b010b50a0c46ec500432acde86d6>
+References: <65cf4dfbc439b010b50a0c46ec500432acde86d6>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The pull request you sent on Tue, 27 Apr 2021 16:28:06 +0200:
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.13
+There are a number of places in kernel code where the stack trace is not
+reliable. Enhance the unwinder to check for those cases and mark the
+stack trace as unreliable. Once all of the checks are in place, the unwinder
+can provide a reliable stack trace. But before this can be used for livepatch,
+some other entity needs to guarantee that the frame pointers are all set up
+correctly in kernel functions. objtool is currently being worked on to
+address that need.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/eb6bbacc46720b8b36eb85b2cdd91b9e691959e4
+Return address check
+====================
 
-Thank you!
+Check the return PC of every stack frame to make sure that it is a valid
+kernel text address (and not some generated code, for example). If it is
+not a valid kernel text address, mark the stack trace as unreliable.
 
+Assembly functions
+==================
+
+There are a number of assembly functions in arm64. Except for a couple of
+them, these functions do not have a frame pointer prolog or epilog. Also,
+many of them manipulate low-level state such as registers. These functions
+are, by definition, unreliable from a stack unwinding perspective. That is,
+when these functions occur in a stack trace, the unwinder would not be able
+to unwind through them reliably.
+
+Assembly functions are defined as SYM_FUNC_*() functions or SYM_CODE_*()
+functions. objtool peforms static analysis of SYM_FUNC functions. It ignores
+SYM_CODE functions because they have low level code that is difficult to
+analyze. When objtool becomes ready eventually, SYM_FUNC functions will
+be analyzed and "fixed" as necessary. So, they are not "interesting" for
+the reliable unwinder.
+
+That leaves SYM_CODE functions. It is for the unwinder to deal with these
+for reliable stack trace. The unwinder needs to do the following:
+
+	- Recognize SYM_CODE functions in a stack trace.
+
+	- If a particular SYM_CODE function can be unwinded through using
+	  some special logic, then do it. E.g., the return trampoline for
+	  Function Graph Tracing.
+
+	- Otherwise, mark the stack trace unreliable.
+
+Using text sections to recognize SYM_CODE functions
+===================================================
+
+SYM_CODE functions are present in the following text sections:
+
+	(1) .entry.text
+	(2) .idmap.text
+	(3) .hyp.idmap.text
+	(4) .hyp.text
+	(5) .hibernate_exit.text
+	(6) .entry.tramp.text
+	(7) .text
+	(8) .init.text
+
+For each of these sections, there are global variables that contain the
+starting and ending addresses generated by the linker. So, they can be
+recognized easily. Create an array called sym_code_ranges[] to contain
+the ranges for sections (1) thru (6).
+
+Check if the return PC falls in any of these sections. If it does, mark
+the stack trace unreliable.
+
+Sections (7) and (8)
+====================
+
+Sections (7) and (8) are generic sections which also contain tons of other
+functions which are actually reliable. The SYM_CODE functions in these
+sections must be dealt with differently.
+
+Some of these are "don't care" functions so they can be left in their
+current sections. E.g.,
+
+	efi_enter_kernel().
+	arm64_relocate_new_kernel()
+
+		These functions enter the kernel. So, they will not occur
+		in a stack trace examined by livepatch.
+
+	__kernel_rt_sigreturn()
+
+		This only gets invoked in user context.
+
+	hypervisor vectors
+
+		I don't believe these are interesting to livepatch.
+
+Others need to be moved to a special section. I have created a "catch-all"
+section called ".code.text" for this purpose. Add this section to
+vmlinux.lds.S and sym_code_ranges[].
+
+Reliable SYM_CODE functions
+===========================
+
+The unwinder currently has logic to recognize the return trampoline of the
+Function Graph Tracer (return_to_handler()), retrieve the original return
+address and use that in the stack trace. So, this is a SYM_CODE function
+that the unwinder can actually unwind through.
+
+However, the current logic only addreses stack traces taken while still in
+the traced function. When the traced function returns, control is transferred
+to return_to_handler(). Any stack trace taken while in the return trampoline
+is not handled. This messes up the stack trace as the unwinder has to keep
+track of the current index within the return address stack.
+
+There are two options:
+
+	- Either remove this logic altogether. This would work since the
+	  unwinder would recognize the section of the trampoline and
+	  treat the stack trace as unreliable. So, from a live patch
+	  perspective, this is sufficient.
+
+	- Or, fix the logic. I have taken this approach. See the patch
+	  for more details. That said, I am open to option 1.
+
+Other cases like kretprobe_trampoline() and ftrace entry code can be
+addressed in a similar fashion. But this is outside the scope of this
+work. The only reason I fixed the logic for return_to_handler() in the
+unwinder is because the logic is already there.
+
+Last stack frame
+================
+
+If a SYM_CODE function occurs in the very last frame in the stack trace,
+then the stack trace is not considered unreliable. This is because there
+is no more unwinding to do. Examples:
+
+	- EL0 exception stack traces end in the top level EL0 exception
+	  handlers.
+
+	- All kernel thread stack traces end in ret_from_fork().
+
+Special cases
+=============
+
+Some special cases need to be mentioned.
+
+EL1 interrupt and exception handlers are present in .entry.text. So, all
+EL1 interrupt and exception stack traces will be considered unreliable.
+This the correct behavior as interrupts and exceptions can happen on any
+instruction including ones in the frame pointer prolog and epilog. Unless
+objtool generates metadata so the unwinder can unwind through these
+special cases, such stack traces will be considered unreliable.
+
+A task can get preempted at the end of an interrupt. Stack traces of
+preempted tasks will show the interrupt frame in the stack trace and
+will be considered unreliable.
+
+Breakpoints are exceptions. So, all stack traces in the break point
+handler (including probes) will be considered unreliable.
+
+All of the ftrace trampoline code that gets executed at the beginning
+of a traced function falls in ".code.text". All stack traces taken from
+tracer functions will be considered unreliable.
+
+The same is true for kretprobe trampolines.
+
+---
+Changelog:
+
+v3:
+	- Implemented a sym_code_ranges[] array to contains sections bounds
+	  for text sections that contain SYM_CODE_*() functions. The unwinder
+	  checks each return PC against the sections. If it falls in any of
+	  the sections, the stack trace is marked unreliable.
+
+	- Moved SYM_CODE functions from .text and .init.text into a new
+	  text section called ".code.text". Added this section to
+	  vmlinux.lds.S and sym_code_ranges[].
+
+	- Fixed the logic in the unwinder that handles Function Graph
+	  Tracer return trampoline.
+
+	- Removed all the previous code that handles:
+		- ftrace entry code for traced function
+		- special_functions[] array that lists individual functions
+		- kretprobe_trampoline() special case
+
+	- Synced with mainline v5.12-rc8.
+
+v2
+	- Removed the terminating entry { 0, 0 } in special_functions[]
+	  and replaced it with the idiom { /* sentinel */ }.
+
+	- Change the ftrace trampoline entry ftrace_graph_call in
+	  special_functions[] to ftrace_call + 4 and added explanatory
+	  comments.
+
+	- Unnested #ifdefs in special_functions[] for FTRACE.
+
+v1
+	- Define a bool field in struct stackframe. This will indicate if
+	  a stack trace is reliable.
+
+	- Implement a special_functions[] array that will be populated
+	  with special functions in which the stack trace is considered
+	  unreliable.
+	
+	- Using kallsyms_lookup(), get the address ranges for the special
+	  functions and record them.
+
+	- Implement an is_reliable_function(pc). This function will check
+	  if a given return PC falls in any of the special functions. If
+	  it does, the stack trace is unreliable.
+
+	- Implement check_reliability() function that will check if a
+	  stack frame is reliable. Call is_reliable_function() from
+	  check_reliability().
+
+	- Before a return PC is checked against special_funtions[], it
+	  must be validates as a proper kernel text address. Call
+	  __kernel_text_address() from check_reliability().
+
+	- Finally, call check_reliability() from unwind_frame() for
+	  each stack frame.
+
+	- Add EL1 exception handlers to special_functions[].
+
+		el1_sync();
+		el1_irq();
+		el1_error();
+		el1_sync_invalid();
+		el1_irq_invalid();
+		el1_fiq_invalid();
+		el1_error_invalid();
+
+	- The above functions are currently defined as LOCAL symbols.
+	  Make them global so that they can be referenced from the
+	  unwinder code.
+
+	- Add FTRACE trampolines to special_functions[]:
+
+		ftrace_graph_call()
+		ftrace_graph_caller()
+		return_to_handler()
+
+	- Add the kretprobe trampoline to special functions[]:
+
+		kretprobe_trampoline()
+
+Previous versions and discussion
+================================
+
+v2: https://lore.kernel.org/linux-arm-kernel/20210405204313.21346-1-madvenka@linux.microsoft.com/
+v1: https://lore.kernel.org/linux-arm-kernel/20210330190955.13707-1-madvenka@linux.microsoft.com/
+
+Madhavan T. Venkataraman (4):
+  arm64: Introduce stack trace reliability checks in the unwinder
+  arm64: Check the return PC against unreliable code sections
+  arm64: Handle miscellaneous functions in .text and .init.text
+  arm64: Handle funtion graph tracer better in the unwinder
+
+ arch/arm64/include/asm/sections.h             |   1 +
+ arch/arm64/include/asm/stacktrace.h           |   7 +
+ arch/arm64/kernel/entry-ftrace.S              |   5 +
+ arch/arm64/kernel/entry.S                     |   6 +
+ arch/arm64/kernel/head.S                      |   3 +-
+ arch/arm64/kernel/probes/kprobes_trampoline.S |   2 +
+ arch/arm64/kernel/stacktrace.c                | 129 ++++++++++++++++--
+ arch/arm64/kernel/vmlinux.lds.S               |   7 +
+ 8 files changed, 149 insertions(+), 11 deletions(-)
+
+
+base-commit: bf05bf16c76bb44ab5156223e1e58e26dfe30a88
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
