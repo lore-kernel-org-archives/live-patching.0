@@ -2,126 +2,374 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D86FC11F67
-	for <live-patching@archiver.kernel.org>; Tue, 29 Jun 2021 16:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9678C11F68
+	for <live-patching@archiver.kernel.org>; Wed, 30 Jun 2021 22:34:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F04661DB6
-	for <live-patching@archiver.kernel.org>; Tue, 29 Jun 2021 16:47:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9DAF76147E
+	for <live-patching@archiver.kernel.org>; Wed, 30 Jun 2021 22:34:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbhF2QuN (ORCPT
+        id S233175AbhF3Wgj (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 29 Jun 2021 12:50:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43783 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234160AbhF2QuM (ORCPT
+        Wed, 30 Jun 2021 18:36:39 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:44522 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229818AbhF3Wgg (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 29 Jun 2021 12:50:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1624985265;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+bJvwmYTs4hsRIzvijlTBKZHCJnIV9JSQ/ae942P0nQ=;
-        b=TRWT2D2MZA1qjDDTpPsXkqzp5kK0OwTPjfnvk6Yuh34Zf0y8MZyOeyW45XIP1yO7NsyLsR
-        0KbiPAa/d84IZ360PJRH/M3RJiqLxFbH2l1zxm1vgAsbiD3aiSLADBkLSvmx+GP1LB9hOM
-        SZ5JRyhU5AzNlw6vhcvt6zz06xEOjnk=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-475-ULSGEkxRP5WIBHxzVMYd_Q-1; Tue, 29 Jun 2021 12:47:43 -0400
-X-MC-Unique: ULSGEkxRP5WIBHxzVMYd_Q-1
-Received: by mail-pg1-f198.google.com with SMTP id 4-20020a6315440000b029022154a87a57so14567144pgv.13
-        for <live-patching@vger.kernel.org>; Tue, 29 Jun 2021 09:47:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+bJvwmYTs4hsRIzvijlTBKZHCJnIV9JSQ/ae942P0nQ=;
-        b=NI49t/M8HSmyJLc9onDFYyVMYcO9w+pXI9S654BJk17RCv6GfsaydINhxdoGRmRO6C
-         BS5sUG9rwGK0ssR9KSwcIxgw0+zsweS/VWF+xvjuFaqhysr2J0iyCpveD3XE8WREmj90
-         bf2JlYr4pC+Ki2UxWANgM3ZlgSSnB2pk7C+nMfcTxnnBIyIQlCuWFcuRa6G8Gm1rd2gl
-         CuBKkBfGJB+OTAGqRwlKaMgA6EjSzl0Qrw61w/TDplPVUMshJ1TeD88Pd/hoc1/8zG9E
-         WCXIrPYXFiR6yKLjBZ0S6yxrcN46ZLW0Zb80Hdc6UihDaSWxlN7f16mBHXIc5yyOw5FH
-         J2yg==
-X-Gm-Message-State: AOAM533h6WGaUkaYezLYz0qNpVdVFxkWk04WpmqG4ddHk8IxmWbZV4CE
-        TlODoDXpANHxjaxvnfUlxCZaoXFYdpBtCsy+fj/TfkMui3VJaIG0j24ljfTNsGNahqIEsZljKO+
-        DfDMrxrL3y1RarWdE200TXHKBbA==
-X-Received: by 2002:a17:90a:650b:: with SMTP id i11mr34962309pjj.39.1624985262581;
-        Tue, 29 Jun 2021 09:47:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx3vTTwAHy6BETIsORLHGghBWZRgo8av0Cd/hHZW70tMvDWoqyHwTA6FD/HIjdC3imDZWBejQ==
-X-Received: by 2002:a17:90a:650b:: with SMTP id i11mr34962286pjj.39.1624985262349;
-        Tue, 29 Jun 2021 09:47:42 -0700 (PDT)
-Received: from treble ([2600:380:8772:6cac:dfb6:1d6c:e068:2f39])
-        by smtp.gmail.com with ESMTPSA id u2sm6013505pja.20.2021.06.29.09.47.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 09:47:41 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 11:47:36 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     madvenka@linux.microsoft.com, broonie@kernel.org, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, catalin.marinas@arm.com, will@kernel.org,
+        Wed, 30 Jun 2021 18:36:36 -0400
+Received: from x64host.home (unknown [47.187.214.213])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4005620B7188;
+        Wed, 30 Jun 2021 15:34:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4005620B7188
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1625092447;
+        bh=Gr8ouXN268cAeUy8k+pwSBgaBbzeDcX4e30mNG/JOrQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=lRY/qmCVWLW1T4MtBQvjwz1vDpW+QkLTwKyKyI5gFcDkVJmth0HxxRTMqu6sjeMWO
+         3UCOIUn70Ne3V9z6qU3o46HTavSZyKdKILuXK6pG17YGn6U3gu1E16Wi/mhJjxMZ5t
+         u4BRnBIyeW1F/kI3sz9JYIOAwqCDh1thdcSgvDpw=
+From:   madvenka@linux.microsoft.com
+To:     broonie@kernel.org, mark.rutland@arm.com, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
         jmorris@namei.org, pasha.tatashin@soleen.com, jthierry@redhat.com,
         linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v5 1/2] arm64: Introduce stack trace reliability
- checks in the unwinder
-Message-ID: <20210629164736.dnysynhkjjxya4vc@treble>
-References: <ea0ef9ed6eb34618bcf468fbbf8bdba99e15df7d>
- <20210526214917.20099-1-madvenka@linux.microsoft.com>
- <20210526214917.20099-2-madvenka@linux.microsoft.com>
- <20210624144021.GA17937@C02TD0UTHF1T.local>
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [RFC PATCH v6 1/3] arm64: Improve the unwinder return value
+Date:   Wed, 30 Jun 2021 17:33:54 -0500
+Message-Id: <20210630223356.58714-2-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210630223356.58714-1-madvenka@linux.microsoft.com>
+References: <3f2aab69a35c243c5e97f47c4ad84046355f5b90>
+ <20210630223356.58714-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210624144021.GA17937@C02TD0UTHF1T.local>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 03:40:21PM +0100, Mark Rutland wrote:
-> Hi Madhavan,
-> 
-> On Wed, May 26, 2021 at 04:49:16PM -0500, madvenka@linux.microsoft.com wrote:
-> > From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> > 
-> > The unwinder should check for the presence of various features and
-> > conditions that can render the stack trace unreliable and mark the
-> > the stack trace as unreliable for the benefit of the caller.
-> > 
-> > Introduce the first reliability check - If a return PC is not a valid
-> > kernel text address, consider the stack trace unreliable. It could be
-> > some generated code.
-> > 
-> > Other reliability checks will be added in the future.
-> > 
-> > Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
-> 
-> At a high-level, I'm on-board with keeping track of this per unwind
-> step, but if we do that then I want to be abel to use this during
-> regular unwinds (e.g. so that we can have a backtrace idicate when a
-> step is not reliable, like x86 does with '?'), and to do that we need to
-> be a little more accurate.
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-On x86, the '?' entries don't come from the unwinder's determination of
-whether a frame is reliable.  (And the x86 unwinder doesn't track
-reliable-ness on a per-frame basis anyway; it keeps a per-unwind global
-error state.)
+Currently, the unwinder returns a tri-state return value:
 
-The stack dumping code blindly scans the stack for kernel text
-addresses, in lockstep with calls to the unwinder.  Any text addresses
-which aren't also reported by the unwinder are prepended with '?'.
+	0		means "continue with the unwind"
+	-ENOENT		means "successful termination of the stack trace"
+	-EINVAL		means "fatal error, abort the stack trace"
 
-The point is two-fold:
+This is confusing. To fix this, define an enumeration of different return
+codes to make it clear. Handle the return codes in all of the unwind
+consumers.
 
-  a) failsafe in case the unwinder fails or skips a frame;
+Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+---
+ arch/arm64/include/asm/stacktrace.h | 14 ++++++--
+ arch/arm64/kernel/perf_callchain.c  |  5 ++-
+ arch/arm64/kernel/process.c         |  8 +++--
+ arch/arm64/kernel/return_address.c  | 10 ++++--
+ arch/arm64/kernel/stacktrace.c      | 53 ++++++++++++++++-------------
+ arch/arm64/kernel/time.c            |  9 +++--
+ 6 files changed, 64 insertions(+), 35 deletions(-)
 
-  b) showing of breadcrumbs from previous execution contexts which can
-     help the debugging of more difficult scenarios.
-
+diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+index eb29b1fe8255..6fcd58553fb1 100644
+--- a/arch/arm64/include/asm/stacktrace.h
++++ b/arch/arm64/include/asm/stacktrace.h
+@@ -30,6 +30,12 @@ struct stack_info {
+ 	enum stack_type type;
+ };
+ 
++enum unwind_rc {
++	UNWIND_CONTINUE,		/* No errors encountered */
++	UNWIND_ABORT,			/* Fatal errors encountered */
++	UNWIND_FINISH,			/* End of stack reached successfully */
++};
++
+ /*
+  * A snapshot of a frame record or fp/lr register values, along with some
+  * accounting information necessary for robust unwinding.
+@@ -61,7 +67,8 @@ struct stackframe {
+ #endif
+ };
+ 
+-extern int unwind_frame(struct task_struct *tsk, struct stackframe *frame);
++extern enum unwind_rc unwind_frame(struct task_struct *tsk,
++				   struct stackframe *frame);
+ extern void walk_stackframe(struct task_struct *tsk, struct stackframe *frame,
+ 			    bool (*fn)(void *, unsigned long), void *data);
+ extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+@@ -148,8 +155,8 @@ static inline bool on_accessible_stack(const struct task_struct *tsk,
+ 	return false;
+ }
+ 
+-static inline void start_backtrace(struct stackframe *frame,
+-				   unsigned long fp, unsigned long pc)
++static inline enum unwind_rc start_backtrace(struct stackframe *frame,
++					     unsigned long fp, unsigned long pc)
+ {
+ 	frame->fp = fp;
+ 	frame->pc = pc;
+@@ -169,6 +176,7 @@ static inline void start_backtrace(struct stackframe *frame,
+ 	bitmap_zero(frame->stacks_done, __NR_STACK_TYPES);
+ 	frame->prev_fp = 0;
+ 	frame->prev_type = STACK_TYPE_UNKNOWN;
++	return UNWIND_CONTINUE;
+ }
+ 
+ #endif	/* __ASM_STACKTRACE_H */
+diff --git a/arch/arm64/kernel/perf_callchain.c b/arch/arm64/kernel/perf_callchain.c
+index 88ff471b0bce..f459208149ae 100644
+--- a/arch/arm64/kernel/perf_callchain.c
++++ b/arch/arm64/kernel/perf_callchain.c
+@@ -148,13 +148,16 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 			   struct pt_regs *regs)
+ {
+ 	struct stackframe frame;
++	enum unwind_rc rc;
+ 
+ 	if (perf_guest_cbs && perf_guest_cbs->is_in_guest()) {
+ 		/* We don't support guest os callchain now */
+ 		return;
+ 	}
+ 
+-	start_backtrace(&frame, regs->regs[29], regs->pc);
++	rc = start_backtrace(&frame, regs->regs[29], regs->pc);
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return;
+ 	walk_stackframe(current, &frame, callchain_trace, entry);
+ }
+ 
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 6e60aa3b5ea9..e9c763b44fd4 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -573,6 +573,7 @@ unsigned long get_wchan(struct task_struct *p)
+ 	struct stackframe frame;
+ 	unsigned long stack_page, ret = 0;
+ 	int count = 0;
++	enum unwind_rc rc;
+ 	if (!p || p == current || p->state == TASK_RUNNING)
+ 		return 0;
+ 
+@@ -580,10 +581,13 @@ unsigned long get_wchan(struct task_struct *p)
+ 	if (!stack_page)
+ 		return 0;
+ 
+-	start_backtrace(&frame, thread_saved_fp(p), thread_saved_pc(p));
++	rc = start_backtrace(&frame, thread_saved_fp(p), thread_saved_pc(p));
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return 0;
+ 
+ 	do {
+-		if (unwind_frame(p, &frame))
++		rc = unwind_frame(p, &frame);
++		if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
+ 			goto out;
+ 		if (!in_sched_functions(frame.pc)) {
+ 			ret = frame.pc;
+diff --git a/arch/arm64/kernel/return_address.c b/arch/arm64/kernel/return_address.c
+index a6d18755652f..1224e043e98f 100644
+--- a/arch/arm64/kernel/return_address.c
++++ b/arch/arm64/kernel/return_address.c
+@@ -36,13 +36,17 @@ void *return_address(unsigned int level)
+ {
+ 	struct return_address_data data;
+ 	struct stackframe frame;
++	enum unwind_rc rc;
+ 
+ 	data.level = level + 2;
+ 	data.addr = NULL;
+ 
+-	start_backtrace(&frame,
+-			(unsigned long)__builtin_frame_address(0),
+-			(unsigned long)return_address);
++	rc = start_backtrace(&frame,
++			     (unsigned long)__builtin_frame_address(0),
++			     (unsigned long)return_address);
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return NULL;
++
+ 	walk_stackframe(current, &frame, save_return_addr, &data);
+ 
+ 	if (!data.level)
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index d55bdfb7789c..e9c2c1fa9dde 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -39,26 +39,27 @@
+  * records (e.g. a cycle), determined based on the location and fp value of A
+  * and the location (but not the fp value) of B.
+  */
+-int notrace unwind_frame(struct task_struct *tsk, struct stackframe *frame)
++enum unwind_rc notrace unwind_frame(struct task_struct *tsk,
++					struct stackframe *frame)
+ {
+ 	unsigned long fp = frame->fp;
+ 	struct stack_info info;
+ 
+ 	/* Terminal record; nothing to unwind */
+ 	if (!fp)
+-		return -ENOENT;
++		return UNWIND_FINISH;
+ 
+ 	if (fp & 0xf)
+-		return -EINVAL;
++		return UNWIND_ABORT;
+ 
+ 	if (!tsk)
+ 		tsk = current;
+ 
+ 	if (!on_accessible_stack(tsk, fp, &info))
+-		return -EINVAL;
++		return UNWIND_ABORT;
+ 
+ 	if (test_bit(info.type, frame->stacks_done))
+-		return -EINVAL;
++		return UNWIND_ABORT;
+ 
+ 	/*
+ 	 * As stacks grow downward, any valid record on the same stack must be
+@@ -75,7 +76,7 @@ int notrace unwind_frame(struct task_struct *tsk, struct stackframe *frame)
+ 	 */
+ 	if (info.type == frame->prev_type) {
+ 		if (fp <= frame->prev_fp)
+-			return -EINVAL;
++			return UNWIND_ABORT;
+ 	} else {
+ 		set_bit(frame->prev_type, frame->stacks_done);
+ 	}
+@@ -101,14 +102,14 @@ int notrace unwind_frame(struct task_struct *tsk, struct stackframe *frame)
+ 		 */
+ 		ret_stack = ftrace_graph_get_ret_stack(tsk, frame->graph++);
+ 		if (WARN_ON_ONCE(!ret_stack))
+-			return -EINVAL;
++			return UNWIND_ABORT;
+ 		frame->pc = ret_stack->ret;
+ 	}
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+ 
+ 	frame->pc = ptrauth_strip_insn_pac(frame->pc);
+ 
+-	return 0;
++	return UNWIND_CONTINUE;
+ }
+ NOKPROBE_SYMBOL(unwind_frame);
+ 
+@@ -116,12 +117,12 @@ void notrace walk_stackframe(struct task_struct *tsk, struct stackframe *frame,
+ 			     bool (*fn)(void *, unsigned long), void *data)
+ {
+ 	while (1) {
+-		int ret;
++		enum unwind_rc rc;
+ 
+ 		if (!fn(data, frame->pc))
+ 			break;
+-		ret = unwind_frame(tsk, frame);
+-		if (ret < 0)
++		rc = unwind_frame(tsk, frame);
++		if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
+ 			break;
+ 	}
+ }
+@@ -137,6 +138,7 @@ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ {
+ 	struct stackframe frame;
+ 	int skip = 0;
++	enum unwind_rc rc;
+ 
+ 	pr_debug("%s(regs = %p tsk = %p)\n", __func__, regs, tsk);
+ 
+@@ -153,17 +155,19 @@ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 		return;
+ 
+ 	if (tsk == current) {
+-		start_backtrace(&frame,
+-				(unsigned long)__builtin_frame_address(0),
+-				(unsigned long)dump_backtrace);
++		rc = start_backtrace(&frame,
++				     (unsigned long)__builtin_frame_address(0),
++				     (unsigned long)dump_backtrace);
+ 	} else {
+ 		/*
+ 		 * task blocked in __switch_to
+ 		 */
+-		start_backtrace(&frame,
+-				thread_saved_fp(tsk),
+-				thread_saved_pc(tsk));
++		rc = start_backtrace(&frame,
++				     thread_saved_fp(tsk),
++				     thread_saved_pc(tsk));
+ 	}
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return;
+ 
+ 	printk("%sCall trace:\n", loglvl);
+ 	do {
+@@ -181,7 +185,8 @@ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 			 */
+ 			dump_backtrace_entry(regs->pc, loglvl);
+ 		}
+-	} while (!unwind_frame(tsk, &frame));
++		rc = unwind_frame(tsk, &frame);
++	} while (rc != UNWIND_FINISH && rc != UNWIND_ABORT);
+ 
+ 	put_task_stack(tsk);
+ }
+@@ -199,17 +204,19 @@ noinline void arch_stack_walk(stack_trace_consume_fn consume_entry,
+ 			      struct pt_regs *regs)
+ {
+ 	struct stackframe frame;
++	enum unwind_rc rc;
+ 
+ 	if (regs)
+-		start_backtrace(&frame, regs->regs[29], regs->pc);
++		rc = start_backtrace(&frame, regs->regs[29], regs->pc);
+ 	else if (task == current)
+-		start_backtrace(&frame,
++		rc = start_backtrace(&frame,
+ 				(unsigned long)__builtin_frame_address(1),
+ 				(unsigned long)__builtin_return_address(0));
+ 	else
+-		start_backtrace(&frame, thread_saved_fp(task),
+-				thread_saved_pc(task));
+-
++		rc = start_backtrace(&frame, thread_saved_fp(task),
++				     thread_saved_pc(task));
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return;
+ 	walk_stackframe(task, &frame, consume_entry, cookie);
+ }
+ 
+diff --git a/arch/arm64/kernel/time.c b/arch/arm64/kernel/time.c
+index eebbc8d7123e..eb50218ec9a4 100644
+--- a/arch/arm64/kernel/time.c
++++ b/arch/arm64/kernel/time.c
+@@ -35,15 +35,18 @@
+ unsigned long profile_pc(struct pt_regs *regs)
+ {
+ 	struct stackframe frame;
++	enum unwind_rc rc;
+ 
+ 	if (!in_lock_functions(regs->pc))
+ 		return regs->pc;
+ 
+-	start_backtrace(&frame, regs->regs[29], regs->pc);
++	rc = start_backtrace(&frame, regs->regs[29], regs->pc);
++	if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
++		return 0;
+ 
+ 	do {
+-		int ret = unwind_frame(NULL, &frame);
+-		if (ret < 0)
++		rc = unwind_frame(NULL, &frame);
++		if (rc == UNWIND_FINISH || rc == UNWIND_ABORT)
+ 			return 0;
+ 	} while (in_lock_functions(frame.pc));
+ 
 -- 
-Josh
+2.25.1
 
