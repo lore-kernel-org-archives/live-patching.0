@@ -2,136 +2,162 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B48EC433F5
-	for <live-patching@archiver.kernel.org>; Fri, 10 Sep 2021 16:03:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA3CC433EF
+	for <live-patching@archiver.kernel.org>; Wed, 15 Sep 2021 14:18:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1E307611EF
-	for <live-patching@archiver.kernel.org>; Fri, 10 Sep 2021 16:03:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0417861185
+	for <live-patching@archiver.kernel.org>; Wed, 15 Sep 2021 14:18:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234605AbhIJQE3 (ORCPT
+        id S238013AbhIOOT7 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 10 Sep 2021 12:04:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31059 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234521AbhIJQE2 (ORCPT
+        Wed, 15 Sep 2021 10:19:59 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42948 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237991AbhIOOTr (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 10 Sep 2021 12:04:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1631289797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UtzAchFt0Lhk/coSSurUDkWQxyxTsyejteYjq47a0/U=;
-        b=PSmkx9+lGEkLtWsyyxQeBMKt1l05ckUirzTwQejj/tsT5yIckCCAZ3QXIdKQSAXAhqp5If
-        P/OvjwDBoJ8zA5NcgZdDstFBa+iumOgjavrC4Q2/VdetrMi9lGvnttxXsN06q1t1evvMr1
-        UfEHNgpChxC/mJVEkxm8n9Drchi+Lj8=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-gWxIQZPMPmSziU3xMfIfiQ-1; Fri, 10 Sep 2021 12:03:14 -0400
-X-MC-Unique: gWxIQZPMPmSziU3xMfIfiQ-1
-Received: by mail-qv1-f70.google.com with SMTP id dv7-20020ad44ee7000000b0036fa79fd337so19119248qvb.6
-        for <live-patching@vger.kernel.org>; Fri, 10 Sep 2021 09:03:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UtzAchFt0Lhk/coSSurUDkWQxyxTsyejteYjq47a0/U=;
-        b=F4tkGbjr1DA9PdRy/UYKk9+Gwok3TR3k2Qg2jgcZHTwQYoy+SgXp2UMep0StQaaATk
-         lmUxYJVS2z5BaaF8I0rWlJYnT9o5OpH9d6k4oRSs/F5vuTSfhBUf+hDEdFwfbYosv/Hg
-         Rx/ukTzbL6QkuX6XLLgC0xxVtF37rfTBfhgAjofxYkXxDbp4pbw4/sr6yM9H4lFe+7c8
-         jE+UDzhO7uioUCJ/zl6ZW3Mzr92FaEczDLHuP6kC2ryyD9h0d/y118vtP9y/pNdeDROr
-         pLnF9/oxI1AuyNA2Z6W38B/F72mvBU80dDOgS+T6AwzOioCXTyT6WF8p227qcpfYyvcf
-         MWOw==
-X-Gm-Message-State: AOAM533SSsPodmibAQSe1EyU0QUImwkCyB6eP6aksLPBtNiKRmMN/QqJ
-        3swe4UOWDbpkL2V3YYVk/SpbYAgxQepptPaXwIgtwhvszXK/ubRjTQGxgulkZytRFRXi8cJK+ka
-        HcEgebK6iv/DM6ziXQnFZqYb5Pw==
-X-Received: by 2002:ad4:54e4:: with SMTP id k4mr9320539qvx.54.1631289792973;
-        Fri, 10 Sep 2021 09:03:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx6SZlgo7LHBrrx9oMOb7QAMtI6UI2XIgb6J+qceJloTj2GEpX7MffeBJ9UcNo1Vzg3eAAEUg==
-X-Received: by 2002:ad4:54e4:: with SMTP id k4mr9320506qvx.54.1631289792746;
-        Fri, 10 Sep 2021 09:03:12 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::d])
-        by smtp.gmail.com with ESMTPSA id x27sm3573915qtm.23.2021.09.10.09.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Sep 2021 09:03:12 -0700 (PDT)
-Date:   Fri, 10 Sep 2021 09:03:03 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Wed, 15 Sep 2021 10:19:47 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.0.43) with SMTP id 18FE5GDm004178;
+        Wed, 15 Sep 2021 10:18:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : mime-version : content-type; s=pp1;
+ bh=vJ04kTE5mt6HHs9cYDzrTl2A5jl6K64BO6ltCe/R7lg=;
+ b=pmlCH8sKXgb8CwNo4YNFnr2S+5nZpS58Kx4VaojLj4UYIONF61yV+3KzV8VEdBtSNmEu
+ cJ+XqkSJbh/70VJ8xbRbxBOYBYrpSGCCbtJgCn1IP993hHkiXgUzxJ2WW+7ZNt0K7wRF
+ gwUcJ3dTAZTASgKbUO9G+ywD305Gd2Gn0tGabW+OF7W/jtQjm+krtpC/idV5fHyRAFbO
+ nREwfpg9diPLCWkR9IEp5AO5q7/Vt0ZgyaRpcrYwWBc+Dd0EZWzcK4ojFZubTMRHWfux
+ LNEjP4/dTpYbq4T5UGL5DE6UGvcwzqa0aMbveSGF4WKE+S7ZYblyFofsuUlwe/WVIMlC vw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3b3j9p09jm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 10:18:10 -0400
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 18FEA060023719;
+        Wed, 15 Sep 2021 10:18:10 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3b3j9p09he-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 10:18:09 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 18FE8RM8025422;
+        Wed, 15 Sep 2021 14:18:08 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3b0kqk06y2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Sep 2021 14:18:08 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 18FEI4fg24445212
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Sep 2021 14:18:04 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3CEB611C071;
+        Wed, 15 Sep 2021 14:18:04 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 69A7411C04A;
+        Wed, 15 Sep 2021 14:18:03 +0000 (GMT)
+Received: from localhost (unknown [9.171.18.94])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 15 Sep 2021 14:18:03 +0000 (GMT)
+Date:   Wed, 15 Sep 2021 16:18:01 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Heiko Carstens <hca@linux.ibm.com>,
         Sven Schnelle <svens@linux.ibm.com>,
         Sumanth Korikkar <sumanthk@linux.ibm.com>,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] livepatch: Fix idle cpu's tasks transition
-Message-ID: <20210910160303.alfgjy25y5wfskwz@treble>
-References: <patch.git-a4aad6b1540d.your-ad-here.call-01631177886-ext-3083@work.hours>
+Subject: [PATCH v2] livepatch: Fix idle cpu's tasks transition
+Message-ID: <patch.git-94c1daf66a9c.your-ad-here.call-01631714463-ext-3692@work.hours>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <patch.git-a4aad6b1540d.your-ad-here.call-01631177886-ext-3083@work.hours>
+X-Patchwork-Bot: notify
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UFVeLRztszlvuJi6dmYN6u-Ec74i-FCM
+X-Proofpoint-ORIG-GUID: L0EugqXAUXM9IRxmXHPOz7AiUivKPkoj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
+ definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109030001 definitions=main-2109150087
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Sep 09, 2021 at 11:16:01AM +0200, Vasily Gorbik wrote:
-> On an idle system with large amount of cpus it might happen that
-> klp_update_patch_state() is not reached in do_idle() for a long periods
-> of time. With debug messages enabled log is filled with:
-> [  499.442643] livepatch: klp_try_switch_task: swapper/63:0 is running
-> 
-> without any signs of progress. Ending up with "failed to complete
-> transition".
-> 
-> On s390 LPAR with 128 cpus not a single transition is able to complete
-> and livepatch kselftests fail. Tests on idling x86 kvm instance with 128
-> cpus demonstrate similar symptoms with and without CONFIG_NO_HZ.
-> 
-> To deal with that, since runqueue is already locked in
-> klp_try_switch_task() identify idling cpus and trigger rescheduling
-> potentially waking them up and making sure idle tasks break out of
-> do_idle() inner loop and reach klp_update_patch_state(). This helps to
-> speed up transition time while avoiding unnecessary extra system load.
-> 
-> Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+On an idle system with large amount of cpus it might happen that
+klp_update_patch_state() is not reached in do_idle() for a long periods
+of time. With debug messages enabled log is filled with:
+[  499.442643] livepatch: klp_try_switch_task: swapper/63:0 is running
 
-Looks ok to me, but we should get an ack from Ingo or Peter since
-livepatch would be calling another private scheduler interface.
+without any signs of progress. Ending up with "failed to complete
+transition".
 
-> ---
-> Previous discussion and RFC PATCH:
-> lkml.kernel.org/r/patch.git-b76842ceb035.your-ad-here.call-01625661932-ext-1304@work.hours
-> 
->  kernel/livepatch/transition.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 3a4beb9395c4..c5832b2dd081 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -308,6 +308,8 @@ static bool klp_try_switch_task(struct task_struct *task)
->  	rq = task_rq_lock(task, &flags);
->  
->  	if (task_running(rq, task) && task != current) {
-> +		if (is_idle_task(task))
-> +			resched_curr(rq);
->  		snprintf(err_buf, STACK_ERR_BUF_SIZE,
->  			 "%s: %s:%d is running\n", __func__, task->comm,
->  			 task->pid);
-> -- 
-> 2.25.4
-> 
+On s390 LPAR with 128 cpus not a single transition is able to complete
+and livepatch kselftests fail. Tests on idling x86 kvm instance with 128
+cpus demonstrate similar symptoms with and without CONFIG_NO_HZ.
 
+To deal with that, since runqueue is already locked in
+klp_try_switch_task() identify idling cpus and trigger rescheduling
+potentially waking them up and making sure idle tasks break out of
+do_idle() inner loop and reach klp_update_patch_state(). This helps to
+speed up transition time while avoiding unnecessary extra system load.
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
+---
+Ingo/Peter, as Josh mentioned, could you please ack if you are ok with
+livepatch calling this private scheduler interface?
+
+Changes since v1:
+- added comments suggested by Petr
+  lkml.kernel.org/r/patch.git-a4aad6b1540d.your-ad-here.call-01631177886-ext-3083@work.hours
+
+Previous discussion and RFC PATCH:
+  lkml.kernel.org/r/patch.git-b76842ceb035.your-ad-here.call-01625661932-ext-1304@work.hours
+
+ kernel/livepatch/transition.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 291b857a6e20..2846a879f2dc 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -278,6 +278,8 @@ static int klp_check_stack(struct task_struct *task, char *err_buf)
+  * Try to safely switch a task to the target patch state.  If it's currently
+  * running, or it's sleeping on a to-be-patched or to-be-unpatched function, or
+  * if the stack is unreliable, return false.
++ *
++ * Idle tasks are switched in the main loop when running.
+  */
+ static bool klp_try_switch_task(struct task_struct *task)
+ {
+@@ -308,6 +310,12 @@ static bool klp_try_switch_task(struct task_struct *task)
+ 	rq = task_rq_lock(task, &flags);
+ 
+ 	if (task_running(rq, task) && task != current) {
++		/*
++		 * Idle task might stay running for a long time. Switch them
++		 * in the main loop.
++		 */
++		if (is_idle_task(task))
++			resched_curr(rq);
+ 		snprintf(err_buf, STACK_ERR_BUF_SIZE,
+ 			 "%s: %s:%d is running\n", __func__, task->comm,
+ 			 task->pid);
 -- 
-Josh
-
+2.25.4
