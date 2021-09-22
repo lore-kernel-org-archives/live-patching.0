@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FF0C433EF
-	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 11:16:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A02C4332F
+	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 11:16:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A54260F23
-	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 11:16:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2063C611EE
+	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 11:16:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235603AbhIVLR6 (ORCPT
+        id S235426AbhIVLSA (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Sep 2021 07:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        Wed, 22 Sep 2021 07:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbhIVLRo (ORCPT
+        with ESMTP id S235796AbhIVLRp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Sep 2021 07:17:44 -0400
+        Wed, 22 Sep 2021 07:17:45 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF21C0617A7;
-        Wed, 22 Sep 2021 04:14:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36878C061768;
+        Wed, 22 Sep 2021 04:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=1d0LvJ7ebosJy+t+gBdEEoeagZoG9oczZaU8O5nKVWA=; b=g9F/dbBs7Ryr8dOKRAH6XjNXvG
-        1W9jriIN8yNdeyqK1IgrbxFCNY1hmzbb5uTgmWp8Vh0behpmqZxPK/nH+Lx4msacql4izC5PQ5rsg
-        ReZsBdN2feFoxfN19ZOLWwllqKx4QXhqVMXJyuEsneeLe4tpAe4EVU/0BMfj7sgcGn1YQHwiFw08K
-        0YsI8L3mnfxZzSTKQF782+45zwr9JSy8W1zOoBljqLjbWYfcnkZFCUZkSkiMKJgWyHPw/9gbU3q3G
-        48QekyYcfZSevx1hIoBVvytjgadb+BONmTylVdtEo8pcRNh9TRQZemK83uXz4bKTkLk68g9D8qaqM
-        lhMGkbOQ==;
+        bh=75EGrJG7Ua+Es0fAsznLyLh2q7TOBPNVYsy60bS6edw=; b=HmNq4mJXWJ8ia0wswSKalCB3Cy
+        lauZf2Z2y1kHDJk8DS8NEmTdVc8634MBLYBDRWO3aelKuYLbcsZsSThsz49/ymU0QjxdegnJdZQjO
+        z6dFXxbOWe7YmAzToSu6vDico8+rTe10KhZXXo5HoM/9CeYueJI17KxYs84ny0fAIJUgBQa2WeXIe
+        EzNg0fTP69B84k4tNIaDvNS0AkuwFC+hyZpaF/h3pzMCnLYvdiwsKjZFhFgQd99Xj6woC3bxFppGW
+        NbkYCxakBemze0aDh0Gokrd0E8CbpFf8h9gFkL+z1AH2KKnjEb7oNLkD6CK0VMtqtMFrpUv43Yo00
+        7cmJkLuw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mT09o-004irJ-0Y; Wed, 22 Sep 2021 11:11:28 +0000
+        id 1mT09o-004isD-UR; Wed, 22 Sep 2021 11:11:37 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B12AE300399;
-        Wed, 22 Sep 2021 13:11:18 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3EDA8300E56;
+        Wed, 22 Sep 2021 13:11:19 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 7B5882027194A; Wed, 22 Sep 2021 13:11:18 +0200 (CEST)
-Message-ID: <20210922110835.945716442@infradead.org>
+        id 8B846203C6486; Wed, 22 Sep 2021 13:11:18 +0200 (CEST)
+Message-ID: <20210922110836.185239814@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 22 Sep 2021 13:05:07 +0200
+Date:   Wed, 22 Sep 2021 13:05:11 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     gor@linux.ibm.com, jpoimboe@redhat.com, jikos@kernel.org,
         mbenes@suse.cz, pmladek@suse.com, mingo@kernel.org
@@ -55,7 +55,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         joe.lawrence@redhat.com, fweisbec@gmail.com, tglx@linutronix.de,
         hca@linux.ibm.com, svens@linux.ibm.com, sumanthk@linux.ibm.com,
         live-patching@vger.kernel.org, paulmck@kernel.org
-Subject: [RFC][PATCH 1/7] sched,rcu: Rework try_invoke_on_locked_down_task()
+Subject: [RFC][PATCH 5/7] sched,livepatch: Use wake_up_if_idle()
 References: <20210922110506.703075504@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,145 +63,70 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Give try_invoke_on_locked_down_task() a saner name and have it return
-an int so that the caller might distinguish between different reasons
-of failure.
+Make sure to prod idle CPUs so they call klp_update_patch_state().
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/wait.h    |    3 ++-
- kernel/rcu/tasks.h      |   12 ++++++------
- kernel/rcu/tree_stall.h |    8 ++++----
- kernel/sched/core.c     |   11 +++++------
- 4 files changed, 17 insertions(+), 17 deletions(-)
+ kernel/livepatch/transition.c |   16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
---- a/include/linux/wait.h
-+++ b/include/linux/wait.h
-@@ -1160,6 +1160,7 @@ int autoremove_wake_function(struct wait
- 		(wait)->flags = 0;						\
- 	} while (0)
- 
--bool try_invoke_on_locked_down_task(struct task_struct *p, bool (*func)(struct task_struct *t, void *arg), void *arg);
-+typedef int (*task_try_f)(struct task_struct *p, void *arg);
-+extern int task_try_func(struct task_struct *p, task_try_f func, void *arg);
- 
- #endif /* _LINUX_WAIT_H */
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -928,7 +928,7 @@ static void trc_read_check_handler(void
- }
- 
- /* Callback function for scheduler to check locked-down task.  */
--static bool trc_inspect_reader(struct task_struct *t, void *arg)
-+static int trc_inspect_reader(struct task_struct *t, void *arg)
- {
- 	int cpu = task_cpu(t);
- 	bool in_qs = false;
-@@ -939,7 +939,7 @@ static bool trc_inspect_reader(struct ta
- 
- 		// If no chance of heavyweight readers, do it the hard way.
- 		if (!ofl && !IS_ENABLED(CONFIG_TASKS_TRACE_RCU_READ_MB))
--			return false;
-+			return -EINVAL;
- 
- 		// If heavyweight readers are enabled on the remote task,
- 		// we can inspect its state despite its currently running.
-@@ -947,7 +947,7 @@ static bool trc_inspect_reader(struct ta
- 		n_heavy_reader_attempts++;
- 		if (!ofl && // Check for "running" idle tasks on offline CPUs.
- 		    !rcu_dynticks_zero_in_eqs(cpu, &t->trc_reader_nesting))
--			return false; // No quiescent state, do it the hard way.
-+			return -EINVAL; // No quiescent state, do it the hard way.
- 		n_heavy_reader_updates++;
- 		if (ofl)
- 			n_heavy_reader_ofl_updates++;
-@@ -962,7 +962,7 @@ static bool trc_inspect_reader(struct ta
- 	t->trc_reader_checked = true;
- 
- 	if (in_qs)
--		return true;  // Already in quiescent state, done!!!
-+		return 0;  // Already in quiescent state, done!!!
- 
- 	// The task is in a read-side critical section, so set up its
- 	// state so that it will awaken the grace-period kthread upon exit
-@@ -970,7 +970,7 @@ static bool trc_inspect_reader(struct ta
- 	atomic_inc(&trc_n_readers_need_end); // One more to wait on.
- 	WARN_ON_ONCE(READ_ONCE(t->trc_reader_special.b.need_qs));
- 	WRITE_ONCE(t->trc_reader_special.b.need_qs, true);
--	return true;
-+	return 0;
- }
- 
- /* Attempt to extract the state for the specified task. */
-@@ -992,7 +992,7 @@ static void trc_wait_for_one_reader(stru
- 
- 	// Attempt to nail down the task for inspection.
- 	get_task_struct(t);
--	if (try_invoke_on_locked_down_task(t, trc_inspect_reader, NULL)) {
-+	if (!task_try_func(t, trc_inspect_reader, NULL)) {
- 		put_task_struct(t);
- 		return;
- 	}
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -240,16 +240,16 @@ struct rcu_stall_chk_rdr {
-  * Report out the state of a not-running task that is stalling the
-  * current RCU grace period.
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -287,21 +287,21 @@ static int klp_check_task(struct task_st
+  * running, or it's sleeping on a to-be-patched or to-be-unpatched function, or
+  * if the stack is unreliable, return false.
   */
--static bool check_slow_task(struct task_struct *t, void *arg)
-+static int check_slow_task(struct task_struct *t, void *arg)
+-static bool klp_try_switch_task(struct task_struct *task)
++static int klp_try_switch_task(struct task_struct *task)
  {
- 	struct rcu_stall_chk_rdr *rscrp = arg;
+ 	const char *old_name;
+ 	int ret;
  
- 	if (task_curr(t))
--		return false; // It is running, so decline to inspect it.
-+		return -EBUSY; // It is running, so decline to inspect it.
- 	rscrp->nesting = t->rcu_read_lock_nesting;
- 	rscrp->rs = t->rcu_read_unlock_special;
- 	rscrp->on_blkd_list = !list_empty(&t->rcu_node_entry);
--	return true;
-+	return 0;
+ 	/* check if this task has already switched over */
+ 	if (task->patch_state == klp_target_state)
+-		return true;
++		return 0;
+ 
+ 	/*
+ 	 * For arches which don't have reliable stack traces, we have to rely
+ 	 * on other methods (e.g., switching tasks at kernel exit).
+ 	 */
+ 	if (!klp_have_reliable_stack())
+-		return false;
++		return -EINVAL;
+ 
+ 	/*
+ 	 * Now try to check the stack for any to-be-patched or to-be-unpatched
+@@ -324,7 +324,7 @@ static bool klp_try_switch_task(struct t
+ 		break;
+ 	}
+ 
+-	return !ret;
++	return ret;
  }
  
  /*
-@@ -283,7 +283,7 @@ static int rcu_print_task_stall(struct r
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	while (i) {
- 		t = ts[--i];
--		if (!try_invoke_on_locked_down_task(t, check_slow_task, &rscr))
-+		if (task_try_func(t, check_slow_task, &rscr))
- 			pr_cont(" P%d", t->pid);
- 		else
- 			pr_cont(" P%d/%d:%c%c%c%c",
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4106,7 +4106,7 @@ try_to_wake_up(struct task_struct *p, un
- }
+@@ -394,7 +394,7 @@ void klp_try_complete_transition(void)
+ 	 */
+ 	read_lock(&tasklist_lock);
+ 	for_each_process_thread(g, task)
+-		if (!klp_try_switch_task(task))
++		if (klp_try_switch_task(task))
+ 			complete = false;
+ 	read_unlock(&tasklist_lock);
  
- /**
-- * try_invoke_on_locked_down_task - Invoke a function on task in fixed state
-+ * task_try_func - Invoke a function on task in fixed state
-  * @p: Process for which the function is to be invoked, can be @current.
-  * @func: Function to invoke.
-  * @arg: Argument to function.
-@@ -4119,14 +4119,13 @@ try_to_wake_up(struct task_struct *p, un
-  * lightweight.
-  *
-  * Returns:
-- *	@false if the task slipped out from under the locks.
-- *	@true if the task was locked onto a runqueue or is sleeping.
-- *		However, @func can override this by returning @false.
-+ *   -EAGAIN: we raced against task movement/state
-+ *   *: as returned by @func
-  */
--bool try_invoke_on_locked_down_task(struct task_struct *p, bool (*func)(struct task_struct *t, void *arg), void *arg)
-+int task_try_func(struct task_struct *p, task_try_f func, void *arg)
- {
- 	struct rq_flags rf;
--	bool ret = false;
-+	int ret = -EAGAIN; /* raced, try again later */
- 	struct rq *rq;
- 
- 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+@@ -405,8 +405,10 @@ void klp_try_complete_transition(void)
+ 	for_each_possible_cpu(cpu) {
+ 		task = idle_task(cpu);
+ 		if (cpu_online(cpu)) {
+-			if (!klp_try_switch_task(task))
+-				complete = false;
++			int ret = klp_try_switch_task(task);
++			if (ret == -EBUSY)
++				wake_up_if_idle(cpu);
++			complete = !ret;
+ 		} else if (task->patch_state != klp_target_state) {
+ 			/* offline idle tasks can be switched immediately */
+ 			clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
 
 
