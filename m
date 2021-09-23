@@ -2,86 +2,110 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B16F6C433F5
-	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 20:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4CCC433F5
+	for <live-patching@archiver.kernel.org>; Thu, 23 Sep 2021 08:03:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9150A611C6
-	for <live-patching@archiver.kernel.org>; Wed, 22 Sep 2021 20:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B3C361215
+	for <live-patching@archiver.kernel.org>; Thu, 23 Sep 2021 08:03:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237277AbhIVUEU (ORCPT
+        id S239761AbhIWID6 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Sep 2021 16:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49780 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237276AbhIVUES (ORCPT
-        <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Sep 2021 16:04:18 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF07C061574;
-        Wed, 22 Sep 2021 13:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xMMkEjEh6E2g/7bmfUoiGSvQRpLkGpcY6eTiqRST8LI=; b=DhzinNwGViZ2LB3qjFCetI4dTu
-        vlMTuCI/qLfhGb8MkVX1k6VGrgud5ucv6a9uDOeEx7KTk3/RgXRNbO7tzS1XvBePUE/2c5Aw7eBQs
-        ivBVgemAdQiLZApati8fT9X6dKMlYgz4qPWps6YtUlRinWPb5FMVGGPqXF8hKEtWbEf/0DK+idU2X
-        hcDNwOzq3y3FTZqPbTRA4fF9hT4uUsLi95lTrMXR7L1tcF+AFhxPu65Ri0EfyH3AQKInXZ3r4T/mx
-        UZ5xTy9JFgLcWFJzryobReCmWMwcnO2bTOCEQc7dW2DwQMHiutqBchz9EzsqpovN/PHge4FqIIMfl
-        zHZ4WGIQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mT8Rz-0054Hx-70; Wed, 22 Sep 2021 20:02:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B672C300250;
-        Wed, 22 Sep 2021 22:02:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9D9072C8201A6; Wed, 22 Sep 2021 22:02:38 +0200 (CEST)
-Date:   Wed, 22 Sep 2021 22:02:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     gor@linux.ibm.com, jpoimboe@redhat.com, jikos@kernel.org,
-        mbenes@suse.cz, pmladek@suse.com, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, joe.lawrence@redhat.com,
-        fweisbec@gmail.com, tglx@linutronix.de, hca@linux.ibm.com,
-        svens@linux.ibm.com, sumanthk@linux.ibm.com,
-        live-patching@vger.kernel.org
-Subject: Re: [RFC][PATCH 6/7] context_tracking: Provide SMP ordering using RCU
-Message-ID: <YUuL3sveLOszCDlj@hirez.programming.kicks-ass.net>
-References: <20210922110506.703075504@infradead.org>
- <20210922110836.244770922@infradead.org>
- <20210922151721.GZ880162@paulmck-ThinkPad-P17-Gen-1>
- <YUuFF8+H2PE9m4wy@hirez.programming.kicks-ass.net>
- <20210922195350.GC880162@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 23 Sep 2021 04:03:58 -0400
+Received: from mga17.intel.com ([192.55.52.151]:11295 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239732AbhIWIDu (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 23 Sep 2021 04:03:50 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10115"; a="203945187"
+X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
+   d="scan'208";a="203945187"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2021 01:02:16 -0700
+X-IronPort-AV: E=Sophos;i="5.85,316,1624345200"; 
+   d="scan'208";a="435729635"
+Received: from eugenias-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.252.133.66])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2021 01:02:13 -0700
+Date:   Thu, 23 Sep 2021 01:02:13 -0700
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        Jessica Yu <jeyu@kernel.org>, osandov@fb.com,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] libkmod: add a library notice log level print
+Message-ID: <20210923080213.s3zoqcvngvk2h3f7@ldmartin-desk2>
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <20210810051602.3067384-2-mcgrof@kernel.org>
+ <CAKi4VAKa7LKXdRmA7epgbkUZw2wpUz19JYYdZ35mPCxSL_W_kw@mail.gmail.com>
+ <YUonNDxy+8zU9B52@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20210922195350.GC880162@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <YUonNDxy+8zU9B52@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, Sep 22, 2021 at 12:53:50PM -0700, Paul E. McKenney wrote:
+On Tue, Sep 21, 2021 at 11:40:52AM -0700, Luis Chamberlain wrote:
+>On Mon, Sep 20, 2021 at 10:53:53PM -0700, Lucas De Marchi wrote:
+>> On Mon, Aug 9, 2021 at 11:56 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>> >
+>> > When you use pass the -v argument to modprobe we bump
+>> > the log level from the default modprobe log level of
+>> > LOG_WARNING (4) to LOG_NOTICE (5), however the library
+>> > only has avaiable to print:
+>> >
+>> >  #define DBG(ctx, arg...) kmod_log_cond(ctx, LOG_DEBUG, ## arg)
+>> >  #define INFO(ctx, arg...) kmod_log_cond(ctx, LOG_INFO, ## arg)
+>> >  #define ERR(ctx, arg...) kmod_log_cond(ctx, LOG_ERR, ## arg)
+>> >
+>> > LOG_INFO (6) however is too high of a level for it to be
+>> > effective at printing anything when modprobe -v is passed.
+>> > And so the only way in which modprobe -v can trigger the
+>> > library to print a verbose message is to use ERR() but that
+>> > always prints something and we don't want that in some
+>> > situations.
+>> >
+>> > We need to add a new log level macro which uses LOG_NOTICE (5)
+>> > for a "normal but significant condition" which users and developers
+>> > can use to look underneath the hood to confirm if a situation is
+>> > happening.
+>> >
+>> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+>> > ---
+>> >  libkmod/libkmod-internal.h | 2 ++
+>> >  1 file changed, 2 insertions(+)
+>> >
+>> > diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
+>> > index 398af9c..2e5e1bc 100644
+>> > --- a/libkmod/libkmod-internal.h
+>> > +++ b/libkmod/libkmod-internal.h
+>> > @@ -25,10 +25,12 @@ static _always_inline_ _printf_format_(2, 3) void
+>> >  #  else
+>> >  #    define DBG(ctx, arg...) kmod_log_null(ctx, ## arg)
+>> >  #  endif
+>> > +#  define NOTICE(ctx, arg...) kmod_log_cond(ctx, LOG_NOTICE, ## arg)
+>> >  #  define INFO(ctx, arg...) kmod_log_cond(ctx, LOG_INFO, ## arg)
+>> >  #  define ERR(ctx, arg...) kmod_log_cond(ctx, LOG_ERR, ## arg)
+>> >  #else
+>> >  #  define DBG(ctx, arg...) kmod_log_null(ctx, ## arg)
+>> > +#  define NOTICE(ctx, arg...) kmod_log_cond(ctx, LOG_NOTICE, ## arg)
+>>
+>> did you mean kmod_log_null()?
+>
+>Sure, feel free to change on your end or let me know if you would
+>prefer if I respin.
 
-> I wasn't saying that the patch doesn't work.  But doesn't it add an IPI?
-> Or was I looking at it too early this morning?
+fixed that and pushed this patch.
 
-Ah, no. The patch allows a user-bound NOHZ_FULL task to be transitioned
-remotely. Unlike today, where they'll eventually poke it with a signal
-to force a kernel entry, which is bad m'kay :-)
+thanks
+Lucas De Marchi
 
-The code in question skips transitioning running tasks, seeing as you
-can't tell what they're doing etc.. Howver, with context tracking on
-you're supposedly able to tell they're in userspace without disturbing
-them -- except you really can't today.
-
-So if you can tell that a current running task is in userspace (hence my
-patch) you can allow the task to transition without any further ado,
-userspace is a safe state vs kernel text patching.
+>
+>  Luis
