@@ -2,47 +2,47 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3A3C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4286C43219
 	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 16:08:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 052F1615A7
+	by mail.kernel.org (Postfix) with ESMTP id 85647615A7
 	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 16:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345663AbhI2QKB (ORCPT
+        id S1344948AbhI2QKC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 29 Sep 2021 12:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        Wed, 29 Sep 2021 12:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344649AbhI2QJ5 (ORCPT
+        with ESMTP id S1344300AbhI2QJ5 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Wed, 29 Sep 2021 12:09:57 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F141C0613E4;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71140C0613E5;
         Wed, 29 Sep 2021 09:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=H1cuga11mvZk+h9olL/e15hBNLlFvhKrZGWUXQh2rrU=; b=KONycvIffex9Rz1f5r3Qt2sSnb
-        EXXpXIrEWJ4gKJg5V2l2DRW3JFsU39NE7hBsh6bouQngBLOyVm6Te70bO43G4Etzpy34Jj95MiiKf
-        ryPagaL/fsTqRfunYsbZj/1d+0W22xK+lyf69YAlOGZ4dOqw/jgv0x6o8Gz4wSc47C1NGa4XjMGmR
-        Gmpfau51PaCJ/HvjwmQF8QRFenytx1qKh+K5VVuLlOgoASn58upU+IQ+0kjlQ6sYiYY4zBtiGTTmw
-        d8aMbU3ETZvP0Eq+4+Q8W9OjSyfZgUWUUGQYUWHRFSiUkWTFxqXJCWh2E06xttFSWazCm30ZsADAT
-        HYzOGp+g==;
+        bh=q4wHgwdGzswZxmjd3vOyE/F61GL8wKtFuPXp5kD6iok=; b=XUYV1dJsNtbveMP0cZsMg9rqnZ
+        YE6OKB9bAhV5NlocwYYoMCCUT8WRM10W1UMsKaF4sD9Lj4wY19Kv9Ok4x5/XfyP2oHWvpg0z2CJkB
+        WQpAMurEigAEYlnmVzFKym3/HPDyJgb6zTQwEaFeWzYWa3qal8/kvV8mqtSnlxUMB2EyACtZvpazQ
+        3z2dGuls5cE+pe6IwaQ9LZ8ukzlTHkZwi8yoFnRshnVOragHb/brikCijhAN25HtTLVQ+r1Q4/7es
+        wMg+FARy1Rv+tInjIFIwSOivMRrQxCfENqNyr+sYts6Njh7CqxwWIGhY8JtL6T8TFHs98dND5wZzr
+        zPDetu6g==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mVbxj-00Bz4Q-BG; Wed, 29 Sep 2021 15:57:53 +0000
+        id 1mVbxi-00Bz4O-UH; Wed, 29 Sep 2021 15:57:53 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF627302A13;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 38AD3300328;
         Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 2F4FD2C78F4FE; Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
-Message-ID: <20210929152428.828064133@infradead.org>
+        id 1C8132083A880; Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
+Message-ID: <20210929152428.589323576@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 29 Sep 2021 17:17:28 +0200
+Date:   Wed, 29 Sep 2021 17:17:24 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     gor@linux.ibm.com, jpoimboe@redhat.com, jikos@kernel.org,
         mbenes@suse.cz, pmladek@suse.com, mingo@kernel.org
@@ -51,7 +51,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         hca@linux.ibm.com, svens@linux.ibm.com, sumanthk@linux.ibm.com,
         live-patching@vger.kernel.org, paulmck@kernel.org,
         rostedt@goodmis.org, x86@kernel.org
-Subject: [PATCH v2 05/11] sched,livepatch: Use wake_up_if_idle()
+Subject: [PATCH v2 01/11] sched: Improve try_invoke_on_locked_down_task()
 References: <20210929151723.162004989@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,27 +59,101 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Make sure to prod idle CPUs so they call klp_update_patch_state().
+Clarify and tighten try_invoke_on_locked_down_task().
+
+Basically the function calls @func under task_rq_lock(), except it
+avoids taking rq->lock when possible.
+
+This makes calling @func unconditional (the function will get renamed
+in a later patch to remove the try).
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- kernel/livepatch/transition.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/sched/core.c |   63 ++++++++++++++++++++++++++++++++--------------------
+ 1 file changed, 39 insertions(+), 24 deletions(-)
 
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -413,8 +413,11 @@ void klp_try_complete_transition(void)
- 	for_each_possible_cpu(cpu) {
- 		task = idle_task(cpu);
- 		if (cpu_online(cpu)) {
--			if (!klp_try_switch_task(task))
-+			if (!klp_try_switch_task(task)) {
- 				complete = false;
-+				/* Make idle task go through the main loop. */
-+				wake_up_if_idle(cpu);
-+			}
- 		} else if (task->patch_state != klp_target_state) {
- 			/* offline idle tasks can be switched immediately */
- 			clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4111,41 +4111,56 @@ try_to_wake_up(struct task_struct *p, un
+  * @func: Function to invoke.
+  * @arg: Argument to function.
+  *
+- * If the specified task can be quickly locked into a definite state
+- * (either sleeping or on a given runqueue), arrange to keep it in that
+- * state while invoking @func(@arg).  This function can use ->on_rq and
+- * task_curr() to work out what the state is, if required.  Given that
+- * @func can be invoked with a runqueue lock held, it had better be quite
+- * lightweight.
++ * Fix the task in it's current state by avoiding wakeups and or rq operations
++ * and call @func(@arg) on it.  This function can use ->on_rq and task_curr()
++ * to work out what the state is, if required.  Given that @func can be invoked
++ * with a runqueue lock held, it had better be quite lightweight.
+  *
+  * Returns:
+- *	@false if the task slipped out from under the locks.
+- *	@true if the task was locked onto a runqueue or is sleeping.
+- *		However, @func can override this by returning @false.
++ *   Whatever @func returns
+  */
+ bool try_invoke_on_locked_down_task(struct task_struct *p, bool (*func)(struct task_struct *t, void *arg), void *arg)
+ {
++	struct rq *rq = NULL;
++	unsigned int state;
+ 	struct rq_flags rf;
+ 	bool ret = false;
+-	struct rq *rq;
+ 
+ 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+-	if (p->on_rq) {
++
++	state = READ_ONCE(p->__state);
++
++	/*
++	 * Ensure we load p->on_rq after p->__state, otherwise it would be
++	 * possible to, falsely, observe p->on_rq == 0.
++	 *
++	 * See try_to_wake_up() for a longer comment.
++	 */
++	smp_rmb();
++
++	/*
++	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
++	 * the task is blocked. Make sure to check @state since ttwu() can drop
++	 * locks at the end, see ttwu_queue_wakelist().
++	 */
++	if (state == TASK_RUNNING || state == TASK_WAKING || p->on_rq)
+ 		rq = __task_rq_lock(p, &rf);
+-		if (task_rq(p) == rq)
+-			ret = func(p, arg);
++
++	/*
++	 * At this point the task is pinned; either:
++	 *  - blocked and we're holding off wakeups	 (pi->lock)
++	 *  - woken, and we're holding off enqueue	 (rq->lock)
++	 *  - queued, and we're holding off schedule	 (rq->lock)
++	 *  - running, and we're holding off de-schedule (rq->lock)
++	 *
++	 * The called function (@func) can use: task_curr(), p->on_rq and
++	 * p->__state to differentiate between these states.
++	 */
++	ret = func(p, arg);
++
++	if (rq)
+ 		rq_unlock(rq, &rf);
+-	} else {
+-		switch (READ_ONCE(p->__state)) {
+-		case TASK_RUNNING:
+-		case TASK_WAKING:
+-			break;
+-		default:
+-			smp_rmb(); // See smp_rmb() comment in try_to_wake_up().
+-			if (!p->on_rq)
+-				ret = func(p, arg);
+-		}
+-	}
++
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
+ 	return ret;
+ }
 
 
