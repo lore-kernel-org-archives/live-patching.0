@@ -2,47 +2,47 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5860FC433EF
-	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 15:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E66E2C433FE
+	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 15:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BAB6619E2
-	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 15:58:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF620619A6
+	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 15:58:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345467AbhI2P7r (ORCPT
+        id S1345484AbhI2P7s (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 29 Sep 2021 11:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
+        Wed, 29 Sep 2021 11:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344253AbhI2P7n (ORCPT
+        with ESMTP id S1344379AbhI2P7p (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 29 Sep 2021 11:59:43 -0400
+        Wed, 29 Sep 2021 11:59:45 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41EFC061767;
-        Wed, 29 Sep 2021 08:58:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF77CC061760;
+        Wed, 29 Sep 2021 08:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=N/yAsJuX0k0YvZzhJq4c+PbXSV2Vvfw5OLKfxe9q9sU=; b=LP7QP7GF0oH0ZnPicHN4sHpvz/
-        BjJFsaay5ZlhiGi/x8IZLAOoYHZY7K6KAGTCxYcNoSFIBMDnzaGFwwmunBLu9UxD1sFdwWBNLXTBU
-        SFzoiF+ycfFnrVaFi+N2Sl8nKSTm8c+yXEYGtPAMPkXFT178x+8wKHtuwki5d8Am6iWykqHm6rWKQ
-        DxY+p0lxA/hxn2fu1GZNEFaPnlw6OXx6+OdqXbvnQMKgSGoXlPHS3CJOWttCMkJyvfv0hfThtSmqd
-        9b1mcXQaFZbVAv45ArdXQnEA9p9EZ3Ae7k16MMZuhEdEWLOCm5Oxlbte5f05UszK0h9GdANmaM67l
-        dHubP3Bw==;
+        bh=n8kw0x6YcHBRBPkZKXL7aUNU+yEqKch2rt4IGGCpX+c=; b=bcJIdGogrpD5Jr3uZrjqJD0R5v
+        C21QcYXTbJLy0DH99+3bLb8F8Hk3xOHFWiO3jcjrroOX3k8+QtIdBEDXl/QWdYK66MTjn49GljaCo
+        5iUQIx/Krb4J/IjtK/sP6sCfy4VpA0BlYtX4aK50GKs/jautDLgjBw3JgsUP3RyvI3DtGKoywhlVn
+        ADaqLqI+nsN3aTJgV4NvaK6Ub02Mg12EUymmGCfCX4UHeUlo8bDklYmGGi/UMaSbJqLQ1sxLfogkx
+        YIuBVyjlUfC7/pj0YxwikRaTg8SxN+YfU22i7r+r23sMJlnioG7eurDnDMnv5UrY+EdCtmiVsmHKG
+        UGfry4jg==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mVbxj-006jor-AY; Wed, 29 Sep 2021 15:57:39 +0000
+        id 1mVbxk-006jov-9W; Wed, 29 Sep 2021 15:57:40 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D0329302A1E;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF5AF302A0E;
         Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 4510C2C905DA4; Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
-Message-ID: <20210929152429.067060646@infradead.org>
+        id 3BF792C90588D; Wed, 29 Sep 2021 17:57:37 +0200 (CEST)
+Message-ID: <20210929152428.947246287@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 29 Sep 2021 17:17:32 +0200
+Date:   Wed, 29 Sep 2021 17:17:30 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     gor@linux.ibm.com, jpoimboe@redhat.com, jikos@kernel.org,
         mbenes@suse.cz, pmladek@suse.com, mingo@kernel.org
@@ -51,7 +51,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         hca@linux.ibm.com, svens@linux.ibm.com, sumanthk@linux.ibm.com,
         live-patching@vger.kernel.org, paulmck@kernel.org,
         rostedt@goodmis.org, x86@kernel.org
-Subject: [RFC][PATCH v2 09/11] context_tracking,livepatch: Dont disturb NOHZ_FULL
+Subject: [RFC][PATCH v2 07/11] context_tracking: Add an atomic sequence/state count
 References: <20210929151723.162004989@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,146 +59,293 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Using the new context_tracking infrastructure, avoid disturbing
-userspace tasks when context tracking is enabled.
+Similar to dynticks RCU, add a sequence count that tracks
+USER/GUEST,NMI state. Unlike RCU, use a few more state bits.
 
-When context_tracking_set_cpu_work() returns true, we have the
-guarantee that klp_update_patch_state() is called from noinstr code
-before it runs normal kernel code. This covers
-syscall/exceptions/interrupts and NMI entry.
+It would be possible to, like dyntics RCU, fold the USER and NMI bits,
+for now don't bother and keep them explicit (doing this woulnd't be
+terribly difficult, it would require __context_tracking_nmi_{enter,exit}()
+to conditionally update the state).
+
+Additionally, use bit0 to indicate there's additional work to be done
+on leaving the 'USER' state.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/context_tracking.h |    2 +-
- include/linux/livepatch.h        |    2 ++
- kernel/context_tracking.c        |   11 +++++------
- kernel/livepatch/transition.c    |   29 ++++++++++++++++++++++++++---
- 4 files changed, 34 insertions(+), 10 deletions(-)
+ include/linux/context_tracking.h       |   60 +++++++++++++++++++++
+ include/linux/context_tracking_state.h |    3 +
+ kernel/context_tracking.c              |   93 +++++++++++++++++++++++++++++++++
+ kernel/entry/common.c                  |    2 
+ 4 files changed, 158 insertions(+)
 
 --- a/include/linux/context_tracking.h
 +++ b/include/linux/context_tracking.h
-@@ -10,7 +10,7 @@
+@@ -9,19 +9,47 @@
+ 
  #include <asm/ptrace.h>
  
- enum ct_work {
--	CT_WORK_n = 0,
-+	CT_WORK_KLP = 1,
- };
++enum ct_work {
++	CT_WORK_n = 0,
++};
++
++/*
++ * context_tracking::seq
++ *
++ * bit0 - work
++ * bit1 - nmi
++ * bit2 - user
++ *
++ */
++enum ct_seq_state {
++	CT_SEQ_WORK = 0x01,
++	CT_SEQ_NMI  = 0x02,
++	CT_SEQ_USER = 0x04,
++	CT_SEQ      = 0x08,
++};
++
++static __always_inline bool __context_tracking_seq_in_user(unsigned int seq)
++{
++	return (seq & (CT_SEQ_USER | CT_SEQ_NMI)) == CT_SEQ_USER;
++}
  
- /*
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -201,6 +201,7 @@ void klp_module_going(struct module *mod
+ #ifdef CONFIG_CONTEXT_TRACKING
++
+ extern void context_tracking_cpu_set(int cpu);
  
- void klp_copy_process(struct task_struct *child);
- void klp_update_patch_state(struct task_struct *task);
-+void __klp_update_patch_state(struct task_struct *task);
+ /* Called with interrupts disabled.  */
+ extern void __context_tracking_enter(enum ctx_state state);
+ extern void __context_tracking_exit(enum ctx_state state);
++extern void __context_tracking_nmi_enter(void);
++extern void __context_tracking_nmi_exit(void);
  
- static inline bool klp_patch_pending(struct task_struct *task)
+ extern void context_tracking_enter(enum ctx_state state);
+ extern void context_tracking_exit(enum ctx_state state);
+ extern void context_tracking_user_enter(void);
+ extern void context_tracking_user_exit(void);
+ 
++extern bool context_tracking_set_cpu_work(unsigned int cpu, unsigned int work);
++
+ static inline void ct_user_enter(void)
  {
-@@ -242,6 +243,7 @@ static inline int klp_module_coming(stru
- static inline void klp_module_going(struct module *mod) {}
- static inline bool klp_patch_pending(struct task_struct *task) { return false; }
- static inline void klp_update_patch_state(struct task_struct *task) {}
-+static inline void __klp_update_patch_state(struct task_struct *task) {}
- static inline void klp_copy_process(struct task_struct *child) {}
- 
- static inline
---- a/kernel/context_tracking.c
-+++ b/kernel/context_tracking.c
-@@ -21,6 +21,7 @@
- #include <linux/hardirq.h>
- #include <linux/export.h>
- #include <linux/kprobes.h>
-+#include <linux/livepatch.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/context_tracking.h>
-@@ -55,15 +56,13 @@ static noinstr void ct_exit_user_work(struct
- {
- 	unsigned int work = arch_atomic_read(&ct->work);
- 
--#if 0
--	if (work & CT_WORK_n) {
-+	if (work & CT_WORK_KLP) {
- 		/* NMI happens here and must still do/finish CT_WORK_n */
--		do_work_n();
-+		__klp_update_patch_state(current);
- 
- 		smp_mb__before_atomic();
--		arch_atomic_andnot(CT_WORK_n, &ct->work);
-+		arch_atomic_andnot(CT_WORK_KLP, &ct->work);
- 	}
--#endif
- 
- 	smp_mb__before_atomic();
- 	arch_atomic_andnot(CT_SEQ_WORK, &ct->seq);
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -10,6 +10,7 @@
- #include <linux/cpu.h>
- #include <linux/stacktrace.h>
- #include <linux/tracehook.h>
-+#include <linux/context_tracking.h>
- #include "core.h"
- #include "patch.h"
- #include "transition.h"
-@@ -153,6 +154,11 @@ void klp_cancel_transition(void)
- 	klp_complete_transition();
+ 	if (context_tracking_enabled())
+@@ -47,6 +75,17 @@ static __always_inline void ct_user_exit
+ 		__context_tracking_exit(CONTEXT_USER);
  }
  
-+noinstr void __klp_update_patch_state(struct task_struct *task)
++static __always_inline void ct_nmi_enter_irqoff(void)
 +{
-+	task->patch_state = READ_ONCE(klp_target_state);
++	if (context_tracking_enabled())
++		__context_tracking_nmi_enter();
++}
++static __always_inline void ct_nmi_exit_irqoff(void)
++{
++	if (context_tracking_enabled())
++		__context_tracking_nmi_exit();
 +}
 +
- /*
-  * Switch the patched state of the task to the set of functions in the target
-  * patch state.
-@@ -180,8 +186,10 @@ void klp_update_patch_state(struct task_
- 	 *    of func->transition, if klp_ftrace_handler() is called later on
- 	 *    the same CPU.  See __klp_disable_patch().
- 	 */
--	if (test_and_clear_tsk_thread_flag(task, TIF_PATCH_PENDING))
-+	if (test_tsk_thread_flag(task, TIF_PATCH_PENDING)) {
- 		task->patch_state = READ_ONCE(klp_target_state);
-+		clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
-+	}
- 
- 	preempt_enable_notrace();
- }
-@@ -270,15 +278,30 @@ static int klp_check_and_switch_task(str
+ static inline enum ctx_state exception_enter(void)
  {
- 	int ret;
- 
--	if (task_curr(task))
-+	if (task_curr(task)) {
-+		/*
-+		 * This only succeeds when the task is in NOHZ_FULL user
-+		 * mode, the true return value guarantees any kernel entry
-+		 * will call klp_update_patch_state().
-+		 *
-+		 * XXX: ideally we'd simply return 0 here and leave
-+		 * TIF_PATCH_PENDING alone, to be fixed up by
-+		 * klp_update_patch_state(), except livepatching goes wobbly
-+		 * with 'pending' TIF bits on.
-+		 */
-+		if (context_tracking_set_cpu_work(task_cpu(task), CT_WORK_KLP))
-+			goto clear;
+ 	enum ctx_state prev_ctx;
+@@ -97,19 +136,40 @@ static __always_inline enum ctx_state ct
+ 	return context_tracking_enabled() ?
+ 		this_cpu_read(context_tracking.state) : CONTEXT_DISABLED;
+ }
 +
- 		return -EBUSY;
-+	}
++static __always_inline unsigned int __context_tracking_cpu_seq(unsigned int cpu)
++{
++	return arch_atomic_read(per_cpu_ptr(&context_tracking.seq, cpu));
++}
++
+ #else
+ static inline void ct_user_enter(void) { }
+ static inline void ct_user_exit(void) { }
+ static inline void ct_user_enter_irqoff(void) { }
+ static inline void ct_user_exit_irqoff(void) { }
++static inline void ct_nmi_enter_irqoff(void) { }
++static inline void ct_nmi_exit_irqoff(void) { }
+ static inline enum ctx_state exception_enter(void) { return 0; }
+ static inline void exception_exit(enum ctx_state prev_ctx) { }
+ static inline enum ctx_state ct_state(void) { return CONTEXT_DISABLED; }
+ static inline bool context_tracking_guest_enter(void) { return false; }
+ static inline void context_tracking_guest_exit(void) { }
  
- 	ret = klp_check_stack(task, arg);
- 	if (ret)
- 		return ret;
++static inline bool context_tracking_set_cpu_work(unsigned int cpu, unsigned int work) { return false; }
++
++static __always_inline unsigned int __context_tracking_cpu_seq(unsigned int cpu)
++{
++	return 0;
++}
++
+ #endif /* !CONFIG_CONTEXT_TRACKING */
  
--	clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
- 	task->patch_state = klp_target_state;
-+clear:
-+	clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
- 	return 0;
++static __always_inline bool context_tracking_cpu_in_user(unsigned int cpu)
++{
++	unsigned int seq = __context_tracking_cpu_seq(cpu);
++	return __context_tracking_seq_in_user(seq);
++}
++
+ #define CT_WARN_ON(cond) WARN_ON(context_tracking_enabled() && (cond))
+ 
+ #ifdef CONFIG_CONTEXT_TRACKING_FORCE
+--- a/include/linux/context_tracking_state.h
++++ b/include/linux/context_tracking_state.h
+@@ -4,6 +4,7 @@
+ 
+ #include <linux/percpu.h>
+ #include <linux/static_key.h>
++#include <linux/types.h>
+ 
+ struct context_tracking {
+ 	/*
+@@ -13,6 +14,8 @@ struct context_tracking {
+ 	 * may be further optimized using static keys.
+ 	 */
+ 	bool active;
++	atomic_t seq;
++	atomic_t work;
+ 	int recursion;
+ 	enum ctx_state {
+ 		CONTEXT_DISABLED = -1,	/* returned by ct_state() if unknown */
+--- a/kernel/context_tracking.c
++++ b/kernel/context_tracking.c
+@@ -50,6 +50,85 @@ static __always_inline void context_trac
+ 	__this_cpu_dec(context_tracking.recursion);
  }
  
++/* CT_WORK_n, must be noinstr, non-blocking, NMI safe and deal with spurious calls */
++static noinstr void ct_exit_user_work(struct context_tracking *ct)
++{
++	unsigned int work = arch_atomic_read(&ct->work);
++
++#if 0
++	if (work & CT_WORK_n) {
++		/* NMI happens here and must still do/finish CT_WORK_n */
++		do_work_n();
++
++		smp_mb__before_atomic();
++		arch_atomic_andnot(CT_WORK_n, &ct->work);
++	}
++#endif
++
++	smp_mb__before_atomic();
++	arch_atomic_andnot(CT_SEQ_WORK, &ct->seq);
++}
++
++/* all CPU local */
++
++static __always_inline unsigned int ct_seq_nmi_enter(struct context_tracking *ct)
++{
++	unsigned int seq = arch_atomic_add_return(CT_SEQ_NMI, &ct->seq);
++	if (seq & CT_SEQ_WORK) /* NMI-enter is USER-exit */
++		ct_exit_user_work(ct);
++	return seq;
++}
++
++static __always_inline unsigned int ct_seq_nmi_exit(struct context_tracking *ct)
++{
++	arch_atomic_set(&ct->work, 0);
++	return arch_atomic_add_return(CT_SEQ - CT_SEQ_NMI, &ct->seq);
++}
++
++static __always_inline unsigned int ct_seq_user_enter(struct context_tracking *ct)
++{
++	arch_atomic_set(&ct->work, 0);
++	return arch_atomic_add_return(CT_SEQ_USER, &ct->seq);
++}
++
++static __always_inline unsigned int ct_seq_user_exit(struct context_tracking *ct)
++{
++	unsigned int seq = arch_atomic_add_return(CT_SEQ - CT_SEQ_USER, &ct->seq);
++	if (seq & CT_SEQ_WORK)
++		ct_exit_user_work(ct);
++	return seq;
++}
++
++/* remote */
++
++/*
++ * When returns true: guaratees that CPu will call @work
++ */
++static bool ct_seq_set_user_work(struct context_tracking *ct, unsigned int work)
++{
++	unsigned int seq;
++	bool ret = false;
++
++	if (!context_tracking_enabled() || !ct->active)
++		return false;
++
++	preempt_disable();
++	seq = atomic_read(&ct->seq);
++	if (__context_tracking_seq_in_user(seq)) {
++		/* ctrl-dep */
++		atomic_or(work, &ct->work);
++		ret = atomic_try_cmpxchg(&ct->seq, &seq, seq|CT_SEQ_WORK);
++	}
++	preempt_enable();
++
++	return ret;
++}
++
++bool context_tracking_set_cpu_work(unsigned int cpu, unsigned int work)
++{
++	return ct_seq_set_user_work(per_cpu_ptr(&context_tracking, cpu), work);
++}
++
+ /**
+  * context_tracking_enter - Inform the context tracking that the CPU is going
+  *                          enter user or guest space mode.
+@@ -83,6 +162,7 @@ void noinstr __context_tracking_enter(en
+ 				instrumentation_end();
+ 			}
+ 			rcu_user_enter();
++			ct_seq_user_enter(raw_cpu_ptr(&context_tracking));
+ 		}
+ 		/*
+ 		 * Even if context tracking is disabled on this CPU, because it's outside
+@@ -154,6 +234,7 @@ void noinstr __context_tracking_exit(enu
+ 			 * We are going to run code that may use RCU. Inform
+ 			 * RCU core about that (ie: we may need the tick again).
+ 			 */
++			ct_seq_user_exit(raw_cpu_ptr(&context_tracking));
+ 			rcu_user_exit();
+ 			if (state == CONTEXT_USER) {
+ 				instrumentation_begin();
+@@ -188,6 +269,18 @@ void context_tracking_user_exit(void)
+ }
+ NOKPROBE_SYMBOL(context_tracking_user_exit);
+ 
++void noinstr __context_tracking_nmi_enter(void)
++{
++	if (__this_cpu_read(context_tracking.active))
++		ct_seq_nmi_enter(raw_cpu_ptr(&context_tracking));
++}
++
++void noinstr __context_tracking_nmi_exit(void)
++{
++	if (__this_cpu_read(context_tracking.active))
++		ct_seq_nmi_exit(raw_cpu_ptr(&context_tracking));
++}
++
+ void __init context_tracking_cpu_set(int cpu)
+ {
+ 	static __initdata bool initialized = false;
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -451,6 +451,7 @@ irqentry_state_t noinstr irqentry_nmi_en
+ 	__nmi_enter();
+ 	lockdep_hardirqs_off(CALLER_ADDR0);
+ 	lockdep_hardirq_enter();
++	ct_nmi_enter_irqoff();
+ 	rcu_nmi_enter();
+ 
+ 	instrumentation_begin();
+@@ -472,6 +473,7 @@ void noinstr irqentry_nmi_exit(struct pt
+ 	instrumentation_end();
+ 
+ 	rcu_nmi_exit();
++	ct_nmi_exit_irqoff();
+ 	lockdep_hardirq_exit();
+ 	if (irq_state.lockdep)
+ 		lockdep_hardirqs_on(CALLER_ADDR0);
 
 
