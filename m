@@ -2,80 +2,147 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE52EC433F5
-	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 19:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D80C433F5
+	for <live-patching@archiver.kernel.org>; Thu, 30 Sep 2021 19:26:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 87C086152A
-	for <live-patching@archiver.kernel.org>; Wed, 29 Sep 2021 19:45:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 132F161882
+	for <live-patching@archiver.kernel.org>; Thu, 30 Sep 2021 19:26:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344377AbhI2TrW (ORCPT
+        id S1343956AbhI3T22 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 29 Sep 2021 15:47:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35338 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244887AbhI2TrV (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 29 Sep 2021 15:47:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 754AA613DA;
-        Wed, 29 Sep 2021 19:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632944740;
-        bh=SSBizUwzU7P1hfnNjMjgmannJ7niY7VHv9x1ZCMas4k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=tpxxHwv9+B6xIRrrjrAA+VD6FGEUE+E/hPXl0STStgtE+sqgCeJSK14WYNeaHKS9I
-         9mpg92OrfybCRFoiqbm+c7AY7jKAzBfdaa7AWCTaNMNcd9YlTkt4c6+hl+X2uOPhFb
-         ifijczsbJ4tnHu2EcwGAlFPXhdCBUmTOwHdDqV298HapBXB0W9lPw7gwx4plz9yadt
-         VmcImQYaNfxUgtAEsQX84CO/KUT3MlbfajqTtahgWHt2p1RG5MFhPKmGHKv0+XQpW4
-         lTwJC4ttuTOhXJ3TXcdLriNH4CwjpHBZUFrB0uv7rTOxBJ+73Dnb5JSHIGaRSOd8GB
-         b0imnaJ1WSSwg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4A3A55C1309; Wed, 29 Sep 2021 12:45:40 -0700 (PDT)
-Date:   Wed, 29 Sep 2021 12:45:40 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        Thu, 30 Sep 2021 15:28:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58266 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234440AbhI3T21 (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 30 Sep 2021 15:28:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633030004;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=84aioMVzye4mu3+jKsp5Lz9dVTyI5BIn8daf8EFsh/I=;
+        b=ddyllbr1pUbZHeKTnRJZeLTwseu0IWbW1CBRmFz7zf4SnF+bPa1PBH5yRyUdgZtjyOLVkT
+        Kf56SJEBhEtZcZHiU3BanMIV8M459gc3UE/ejgXI3nA+9GXQIhpkZFWWTLrsJBC5J3dr0n
+        5eFnhbA3qBe1vJ6B6xtvzITbnTQ/ZsU=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-276-_C5vw1-yNWeT9g9JHa5M0A-1; Thu, 30 Sep 2021 15:26:42 -0400
+X-MC-Unique: _C5vw1-yNWeT9g9JHa5M0A-1
+Received: by mail-oi1-f200.google.com with SMTP id m189-20020aca58c6000000b0027381ff1c37so4862798oib.22
+        for <live-patching@vger.kernel.org>; Thu, 30 Sep 2021 12:26:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=84aioMVzye4mu3+jKsp5Lz9dVTyI5BIn8daf8EFsh/I=;
+        b=x1rYUPhasst3qipsCLIjMfVKR/pe+cFFqhQfESpc4Iw50p7PfuJf6+V6928Ay1m3Lo
+         bbuqRt0s+7bSWrfit6d0/gf1KluXGswuuTPt1ZPemHDqPBJfuSaYNZfy8BPK1sm358hf
+         lzrp1suXh8YljbSOUOu8AV6kWX9mUdvxKDujR32L/vCBJidyNP9fVUXoQRLjDoAp/hvY
+         Bavo7JQH4Ik9gnoDPY2Ro64I/qsfhk9D5tDh8fz03aTz4003hdSO1Qk68wkO1/Nd5qQ4
+         R9Kz48LJkEX1PKbmGe2DHxB9+NDgX5PwD+UB1oW8TBj/72QAaMFXaBFGHVnfsvWg8qRp
+         0wMQ==
+X-Gm-Message-State: AOAM533VYAxSKqzdftQiybgfL3F1zsQg8N7aSmM1CgdKU2CVttXLpy6t
+        u34eyCaSsurSB1omGwMZaikMf5JQag2SF7a1tD7LZkKI59TRgtMAnnw3gWvadeYmpLTQ+Dw9HGS
+        BRqMlGpQekv6/Oh3At9wGIAgm+A==
+X-Received: by 2002:a4a:b282:: with SMTP id k2mr6154866ooo.11.1633030001820;
+        Thu, 30 Sep 2021 12:26:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzul+KG+HIrMR3r/kdHh8q4z01ZL0Yv343OQE1gnyfoE9GjNSC5C76UwoXDsn37+QmYhDN5kQ==
+X-Received: by 2002:a4a:b282:: with SMTP id k2mr6154840ooo.11.1633030001550;
+        Thu, 30 Sep 2021 12:26:41 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id x4sm748421otq.25.2021.09.30.12.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 12:26:41 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 12:26:38 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     gor@linux.ibm.com, jpoimboe@redhat.com, jikos@kernel.org,
-        mbenes@suse.cz, pmladek@suse.com, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, joe.lawrence@redhat.com,
-        fweisbec@gmail.com, tglx@linutronix.de, hca@linux.ibm.com,
-        svens@linux.ibm.com, sumanthk@linux.ibm.com,
-        live-patching@vger.kernel.org, rostedt@goodmis.org, x86@kernel.org
-Subject: Re: [RFC][PATCH v2 08/11] context_tracking,rcu: Replace RCU dynticks
- counter with context_tracking
-Message-ID: <20210929194540.GZ880162@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20210929151723.162004989@infradead.org>
- <20210929152429.007420590@infradead.org>
- <20210929183701.GY880162@paulmck-ThinkPad-P17-Gen-1>
- <20210929191326.GZ4323@worktop.programming.kicks-ass.net>
- <20210929192431.GG5106@worktop.programming.kicks-ass.net>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+488ddf8087564d6de6e2@syzkaller.appspotmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        will@kernel.org, x86@kernel.org, live-patching@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [syzbot] upstream test error: KASAN: invalid-access Read in
+ __entry_tramp_text_end
+Message-ID: <20210930192638.xwemcsohivoynwx3@treble>
+References: <20210927170122.GA9201@C02TD0UTHF1T.local>
+ <20210927171812.GB9201@C02TD0UTHF1T.local>
+ <CACT4Y+actfuftwMMOGXmEsLYbnCnqcZ2gJGeoMLsFCUNE-AxcQ@mail.gmail.com>
+ <20210928103543.GF1924@C02TD0UTHF1T.local>
+ <20210929013637.bcarm56e4mqo3ndt@treble>
+ <YVQYQzP/vqNWm/hO@hirez.programming.kicks-ass.net>
+ <20210929085035.GA33284@C02TD0UTHF1T.local>
+ <YVQ5F9aT7oSEKenh@hirez.programming.kicks-ass.net>
+ <20210929103730.GC33284@C02TD0UTHF1T.local>
+ <YVRRWzXqhMIpwelm@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210929192431.GG5106@worktop.programming.kicks-ass.net>
+In-Reply-To: <YVRRWzXqhMIpwelm@hirez.programming.kicks-ass.net>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, Sep 29, 2021 at 09:24:31PM +0200, Peter Zijlstra wrote:
-> On Wed, Sep 29, 2021 at 09:13:26PM +0200, Peter Zijlstra wrote:
-> > On Wed, Sep 29, 2021 at 11:37:01AM -0700, Paul E. McKenney wrote:
-> > 
-> > > And what happens to all of this in !CONFIG_CONTEXT_TRACKING kernels?
-> > > Of course, RCU needs it unconditionally.  (There appear to be at least
-> > > parts of it that are unconditionally available, but I figured that I
-> > > should ask.  Especially given the !CONFIG_CONTEXT_TRACKING definition
-> > > of the __context_tracking_cpu_seq() function.)
-> > 
-> > For !CONFIG_CONTEXT_TRACKING it goes *poof*.
-> > 
-> > Since the thing was called dynticks, I presumed it was actually dynticks
-> > only, silly me (also, I didn't see any obvious !context_tracking usage
-> > of it, i'll go audit it more carefully.
+On Wed, Sep 29, 2021 at 01:43:23PM +0200, Peter Zijlstra wrote:
+> On Wed, Sep 29, 2021 at 11:37:30AM +0100, Mark Rutland wrote:
 > 
-> Oh argh, it does idle too... damn. And I don't suppose having 2 counters
-> is going to be nice :/
+> > > This is because _ASM_EXTABLE only generates data for another section.
+> > > There doesn't need to be code continuity between these two asm
+> > > statements.
+> > 
+> > I think you've missed my point. It doesn't matter that the
+> > asm_volatile_goto() doesn't contain code, and this is solely about the
+> > *state* expected at entry/exit from each asm block being different.
 > 
-> I'll go back to thinking about this.
+> Urgh.. indeed :/
 
-Glad I could help?  For some definition of "help"?  ;-)
+So much for that idea :-/
 
-							Thanx, Paul
+To fix the issue of the wrong .fixup code symbol names getting printed,
+we could (as Mark suggested) add a '__fixup_text_start' symbol at the
+start of the .fixup section.  And then remove all other symbols in the
+.fixup section.
+
+For x86, that means removing the kvm_fastop_exception symbol and a few
+others.  That way it's all anonymous code, displayed by the kernel as
+"__fixup_text_start+0x1234".  Which isn't all that useful, but still
+better than printing the wrong symbol.
+
+But there's still a bigger problem: the function with the faulting
+instruction doesn't get reported in the stack trace.
+
+For example, in the up-thread bug report, __d_lookup() bug report
+doesn't get printed, even though its anonymous .fixup code is running in
+the context of the function and will be branching back to it shortly.
+
+Even worse, this means livepatch is broken, because if for example
+__d_lookup()'s .fixup code gets preempted, __d_lookup() can get skipped
+by a reliable stack trace.
+
+So we may need to get rid of .fixup altogether.  Especially for arches
+which support livepatch.
+
+We can replace some of the custom .fixup handlers with generic handlers
+like x86 does, which do the fixup work in exception context.  This
+generally works better for more generic work like putting an error code
+in a certain register and resuming execution at the subsequent
+instruction.
+
+However a lot of the .fixup code is rather custom and doesn't
+necessarily work well with that model.
+
+In such cases we could just move the .fixup code into the function
+(inline for older compilers; out-of-line for compilers that support
+CC_HAS_ASM_GOTO_OUTPUT).
+
+Alternatively we could convert each .fixup code fragment into a proper
+function which returns to a specified resume point in the function, and
+then have the exception handler emulate a call to it like we do with
+int3_emulate_call().
+
+-- 
+Josh
+
