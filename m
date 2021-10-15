@@ -2,25 +2,25 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 364D5C433F5
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA81C433FE
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:25:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 13D47610D2
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:20:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFC6A61073
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:25:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242565AbhJOSWp (ORCPT
+        id S242590AbhJOS1w (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 15 Oct 2021 14:22:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42904 "EHLO mail.kernel.org"
+        Fri, 15 Oct 2021 14:27:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45530 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237700AbhJOSWp (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 15 Oct 2021 14:22:45 -0400
+        id S242502AbhJOS1w (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Fri, 15 Oct 2021 14:27:52 -0400
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5A1960FF2;
-        Fri, 15 Oct 2021 18:20:35 +0000 (UTC)
-Date:   Fri, 15 Oct 2021 14:20:33 -0400
+        by mail.kernel.org (Postfix) with ESMTPSA id CB69B60FF2;
+        Fri, 15 Oct 2021 18:25:42 +0000 (UTC)
+Date:   Fri, 15 Oct 2021 14:25:41 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -50,13 +50,14 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         =?UTF-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
         Guo Ren <guoren@kernel.org>
 Subject: Re: [PATCH] tracing: Have all levels of checks prevent recursion
-Message-ID: <20211015142033.72605b47@gandalf.local.home>
-In-Reply-To: <20211015180429.GK174703@worktop.programming.kicks-ass.net>
+Message-ID: <20211015142541.4badd8a9@gandalf.local.home>
+In-Reply-To: <20211015142033.72605b47@gandalf.local.home>
 References: <20211015110035.14813389@gandalf.local.home>
         <20211015161702.GF174703@worktop.programming.kicks-ass.net>
         <20211015133504.6c0a9fcc@gandalf.local.home>
         <20211015135806.72d1af23@gandalf.local.home>
         <20211015180429.GK174703@worktop.programming.kicks-ass.net>
+        <20211015142033.72605b47@gandalf.local.home>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -65,24 +66,23 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, 15 Oct 2021 20:04:29 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, 15 Oct 2021 14:20:33 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-> On Fri, Oct 15, 2021 at 01:58:06PM -0400, Steven Rostedt wrote:
-> > Something like this:  
+> > I think having one copy of that in a header is better than having 3
+> > copies. But yes, something along them lines.  
 > 
-> I think having one copy of that in a header is better than having 3
-> copies. But yes, something along them lines.
+> I was just about to ask you about this patch ;-)
 
-I was just about to ask you about this patch ;-)
+Except it doesn't build :-p (need to move the inlined function down a bit)
 
 diff --git a/include/linux/preempt.h b/include/linux/preempt.h
-index 4d244e295e85..a6ae329aa654 100644
+index 4d244e295e85..b32e3dabe28b 100644
 --- a/include/linux/preempt.h
 +++ b/include/linux/preempt.h
-@@ -74,6 +74,27 @@
-  */
- #define FORK_PREEMPT_COUNT	(2*PREEMPT_DISABLE_OFFSET + PREEMPT_ENABLED)
+@@ -77,6 +77,27 @@
+ /* preempt_count() and related functions, depends on PREEMPT_NEED_RESCHED */
+ #include <asm/preempt.h>
  
 +/**
 + * interrupt_context_level - return interrupt context level
@@ -105,9 +105,9 @@ index 4d244e295e85..a6ae329aa654 100644
 +	return level;
 +}
 +
- /* preempt_count() and related functions, depends on PREEMPT_NEED_RESCHED */
- #include <asm/preempt.h>
- 
+ #define nmi_count()	(preempt_count() & NMI_MASK)
+ #define hardirq_count()	(preempt_count() & HARDIRQ_MASK)
+ #ifdef CONFIG_PREEMPT_RT
 diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
 index 41f5bfd9e93f..018a04381556 100644
 --- a/include/linux/trace_recursion.h
