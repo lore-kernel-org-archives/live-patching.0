@@ -2,87 +2,114 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EBF2C433EF
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E6DBC433EF
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:29:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BBF961041
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:28:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44AA560F36
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 18:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242559AbhJOSaY (ORCPT
+        id S242635AbhJOSb4 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 15 Oct 2021 14:30:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46692 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237667AbhJOSaX (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Fri, 15 Oct 2021 14:30:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4412360F36;
-        Fri, 15 Oct 2021 18:28:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634322496;
-        bh=vlXFCcBoyVQ7iQiLse67gO6LLe1CSZH6R8FPMdiU0yE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CGfJXlXTJ9OVFEU2EBteumRtqnc1EoMesBUzy2+do6QV6OkaO1pps3fDuSc7hdN61
-         xICU37Xoju6jvaikQsuleeh/oRFuRjToYPg7ThZQC+IimT3QB6Mm16CXP1FASJ1/ar
-         yGCzkf3f+x9BgVBcp5Fnx66pbze/Lfu+2bNGQ1K4gEAMUyHYtvMWLGzz9itXFynscc
-         hz+RpWX5KvMQhTHvcgLh3Uub2QMEY7yVcqKi8Ie+fiQXgKS5LmrSnJvcPAc+6SeCkD
-         m9JAYZtzLKN7EHbIXdZiRs5TS/pciCRWzE+6udTEk/kQWrnhaHa5SukBM3v6Xwt/iR
-         dMKe6wyAaMpaA==
-Date:   Fri, 15 Oct 2021 19:28:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     madvenka@linux.microsoft.com
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v10 01/11] arm64: Select STACKTRACE in arch/arm64/Kconfig
-Message-ID: <YWnIPU4dRmJHTkXZ@sirena.org.uk>
-References: <c05ce30dcc9be1bd6b5e24a2ca8fe1d66246980b>
- <20211015025847.17694-1-madvenka@linux.microsoft.com>
- <20211015025847.17694-2-madvenka@linux.microsoft.com>
+        Fri, 15 Oct 2021 14:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237667AbhJOSb4 (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Fri, 15 Oct 2021 14:31:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6ADC061570;
+        Fri, 15 Oct 2021 11:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=us4YosfodZgYMwFe8rJkfXK5dBQB718M3Lke3zJ1ToY=; b=cY0CRJ4SyOUVhj9UQyVxaRjiQw
+        /1wr6TKwpWSzfpNTEbXEKVniDAC2ka6eybM+zn4dvXDqwYkZkvTR7v491RJDKTw//hD58xTRj4oSR
+        0QlPPMnjn7Kj5Q69itBEQRhxFEDeXwGDeihgs8rBliRLbgQ1rALI78w76v8T7IV7afCS0Fz+4Wm/4
+        JqW5/oOc7BvO/34prpputAko6YLKktrYcXK5QZw27hBqOhlswQg+31OoFJIp0mMSv5a8AOMHrtuWW
+        Noym6xZO/FLCs8cS2lPtQPTbXYrAqWX9Q1Zx+cYlupXrs+iYell2Jzqq1JcZWRqrfVcDkMJ/NiCjB
+        zMNudW1A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mbRt6-009CM0-0J; Fri, 15 Oct 2021 18:25:17 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 90BD19857C7; Fri, 15 Oct 2021 20:24:59 +0200 (CEST)
+Date:   Fri, 15 Oct 2021 20:24:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jisheng Zhang <jszhang@kernel.org>, linux-csky@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, live-patching@vger.kernel.org,
+        =?utf-8?B?546L6LSH?= <yun.wang@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH] tracing: Have all levels of checks prevent recursion
+Message-ID: <20211015182459.GL174703@worktop.programming.kicks-ass.net>
+References: <20211015110035.14813389@gandalf.local.home>
+ <20211015161702.GF174703@worktop.programming.kicks-ass.net>
+ <20211015133504.6c0a9fcc@gandalf.local.home>
+ <20211015135806.72d1af23@gandalf.local.home>
+ <20211015180429.GK174703@worktop.programming.kicks-ass.net>
+ <20211015142033.72605b47@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zvxU7vCc3P+aDYhz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211015025847.17694-2-madvenka@linux.microsoft.com>
-X-Cookie: 1: No code table for op: ++post
+In-Reply-To: <20211015142033.72605b47@gandalf.local.home>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
+On Fri, Oct 15, 2021 at 02:20:33PM -0400, Steven Rostedt wrote:
+> On Fri, 15 Oct 2021 20:04:29 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Fri, Oct 15, 2021 at 01:58:06PM -0400, Steven Rostedt wrote:
+> > > Something like this:  
+> > 
+> > I think having one copy of that in a header is better than having 3
+> > copies. But yes, something along them lines.
+> 
+> I was just about to ask you about this patch ;-)
 
---zvxU7vCc3P+aDYhz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Much better :-)
 
-On Thu, Oct 14, 2021 at 09:58:37PM -0500, madvenka@linux.microsoft.com wrot=
-e:
-> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->=20
-> Currently, there are multiple functions in ARM64 code that walk the
-> stack using start_backtrace() and unwind_frame() or start_backtrace()
-> and walk_stackframe(). They should all be converted to use
-> arch_stack_walk(). This makes maintenance easier.
+> diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+> index 228801e20788..c91711f20cf8 100644
+> --- a/kernel/events/internal.h
+> +++ b/kernel/events/internal.h
+> @@ -206,11 +206,7 @@ DEFINE_OUTPUT_COPY(__output_copy_user, arch_perf_out_copy_user)
+>  static inline int get_recursion_context(int *recursion)
+>  {
+>  	unsigned int pc = preempt_count();
 
-Reviwed-by: Mark Brown <broonie@kernel.org>
+Although I think we can do without that ^ line as well :-)
 
-Arguably this should be squashed in with the first user but that's
-getting bikesheddy and could make hassle merging things in so meh.
-
---zvxU7vCc3P+aDYhz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmFpyD0ACgkQJNaLcl1U
-h9AaDQgAgGtwF4e6Cy8OuH+Y3EjvGOYWHK1l4qaJrL3MSElhZEt9xRNmyG5Kyx8f
-tM7BVjn3M1CCnxh4hsjQDvIIbtYhDioRhFpGZaSvXkfblLLVtlUC93+gGl00jVAF
-Uylnps1nQh2z9rMyBt1kiM1vnOJTLfz6SstxE7RDeZfJlXovAJJT4tXHG3Bsq6uB
-iXn6Ejp+eegbzOGYLMPcvHvFIMz/MIGfnkZPjwcGEgRhYomG1MKdczAJnCAdMAwx
-3o6iLc3g/Gqd4b9J4BNfj1OWaehyEC9+Q7fwtfZEiEo7LSEiUDT+Pl/p4wy9nZsJ
-3vS1Uij/5VZvA2dlbqwogAarLoBk/w==
-=FSRi
------END PGP SIGNATURE-----
-
---zvxU7vCc3P+aDYhz--
+> -	unsigned char rctx = 0;
+> -
+> -	rctx += !!(pc & (NMI_MASK));
+> -	rctx += !!(pc & (NMI_MASK | HARDIRQ_MASK));
+> -	rctx += !!(pc & (NMI_MASK | HARDIRQ_MASK | SOFTIRQ_OFFSET));
+> +	unsigned char rctx = interrupt_context_level();
+>  
+>  	if (recursion[rctx])
+>  		return -1;
