@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80856C43219
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 02:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5073C433FE
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 02:35:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67CA861247
-	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 02:35:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C30661152
+	for <live-patching@archiver.kernel.org>; Fri, 15 Oct 2021 02:35:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235108AbhJOChF (ORCPT
+        id S235053AbhJOChH (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 14 Oct 2021 22:37:05 -0400
-Received: from linux.microsoft.com ([13.77.154.182]:55442 "EHLO
+        Thu, 14 Oct 2021 22:37:07 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:55472 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbhJOChC (ORCPT
+        with ESMTP id S235099AbhJOChF (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 14 Oct 2021 22:37:02 -0400
+        Thu, 14 Oct 2021 22:37:05 -0400
 Received: from x64host.home (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5D32620B9D21;
-        Thu, 14 Oct 2021 19:34:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5D32620B9D21
+        by linux.microsoft.com (Postfix) with ESMTPSA id 824C320B9D23;
+        Thu, 14 Oct 2021 19:34:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 824C320B9D23
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1634265297;
-        bh=g5fdmzSduoUMkjQHmQa/fhtE8jC0SUmUZcxIW9qvvbk=;
+        s=default; t=1634265299;
+        bh=6B7i9QOJfwrh+wxsghOjM0WArHrFBqgVADtSVHWaIEc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=EOQ4p0HojTauGxaXASPK4GU4vDOJa3UVPC24jbgsqCyZpmxKDiWWo88cajPvWByXK
-         9drraQdhEYYqc/Dv13E31bHo8IcLxqcMGbDUIwksDgMw9TsJh6HJbQVU38QMBkhmGF
-         /jB/cgQWCOsXURyG6hu7O17Md0lH37cTxD6wpqY4=
+        b=JEZx8dVtEoINgrflaJmkhHWKO0ZsSRX5Gmy+r4YZZV93gj2WWBOEKoAuLSzP3Imp/
+         EWkP21966a8CsHiUYoTRuc/o1sH8V+lE5jh++puD4WSpT3NpBcDQfGVe5J+7+DbmkW
+         T1mHUCskR0nlTjF9REbZhjEdA1CkVoNyp6Q2xoPU=
 From:   madvenka@linux.microsoft.com
 To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
         ardb@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
         jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [PATCH v9 03/11] arm64: Make get_wchan() use arch_stack_walk()
-Date:   Thu, 14 Oct 2021 21:34:07 -0500
-Message-Id: <20211015023413.16614-6-madvenka@linux.microsoft.com>
+Subject: [PATCH v9 05/11] arm64: Make dump_stacktrace() use arch_stack_walk()
+Date:   Thu, 14 Oct 2021 21:34:09 -0500
+Message-Id: <20211015023413.16614-8-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211015023413.16614-1-madvenka@linux.microsoft.com>
 References: <c05ce30dcc9be1bd6b5e24a2ca8fe1d66246980b>
@@ -49,75 +49,87 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Currently, get_wchan() in ARM64 code walks the stack using start_backtrace()
-and unwind_frame(). Make it use arch_stack_walk() instead. This makes
-maintenance easier.
+Currently, dump_stacktrace() in ARM64 code walks the stack using
+start_backtrace() and unwind_frame(). Make it use arch_stack_walk()
+instead. This makes maintenance easier.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/arm64/kernel/process.c | 38 ++++++++++++++++++++++---------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+ arch/arm64/kernel/stacktrace.c | 44 +++++-----------------------------
+ 1 file changed, 6 insertions(+), 38 deletions(-)
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index c8989b999250..48ed89acce0d 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -544,11 +544,27 @@ __notrace_funcgraph struct task_struct *__switch_to(struct task_struct *prev,
- 	return last;
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index 8982a2b78acf..776c4debb5a7 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -151,24 +151,20 @@ void notrace walk_stackframe(struct task_struct *tsk, struct stackframe *frame,
+ }
+ NOKPROBE_SYMBOL(walk_stackframe);
+ 
+-static void dump_backtrace_entry(unsigned long where, const char *loglvl)
++static bool dump_backtrace_entry(void *arg, unsigned long where)
+ {
++	char *loglvl = arg;
+ 	printk("%s %pSb\n", loglvl, (void *)where);
++	return true;
  }
  
-+struct wchan_info {
-+	unsigned long	pc;
-+	int		count;
-+};
-+
-+static bool get_wchan_cb(void *arg, unsigned long pc)
-+{
-+	struct wchan_info *wchan_info = arg;
-+
-+	if (!in_sched_functions(pc)) {
-+		wchan_info->pc = pc;
-+		return false;
-+	}
-+	return wchan_info->count++ < 16;
-+}
-+
- unsigned long get_wchan(struct task_struct *p)
+ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 		    const char *loglvl)
  {
 -	struct stackframe frame;
--	unsigned long stack_page, ret = 0;
--	int count = 0;
-+	unsigned long stack_page;
-+	struct wchan_info wchan_info;
-+
- 	if (!p || p == current || task_is_running(p))
- 		return 0;
- 
-@@ -556,20 +572,12 @@ unsigned long get_wchan(struct task_struct *p)
- 	if (!stack_page)
- 		return 0;
- 
--	start_backtrace(&frame, thread_saved_fp(p), thread_saved_pc(p));
-+	wchan_info.pc = 0;
-+	wchan_info.count = 0;
-+	arch_stack_walk(get_wchan_cb, &wchan_info, p, NULL);
- 
--	do {
--		if (unwind_frame(p, &frame))
--			goto out;
--		if (!in_sched_functions(frame.pc)) {
--			ret = frame.pc;
--			goto out;
--		}
--	} while (count++ < 16);
+-	int skip = 0;
 -
--out:
- 	put_task_stack(p);
--	return ret;
-+	return wchan_info.pc;
- }
+ 	pr_debug("%s(regs = %p tsk = %p)\n", __func__, regs, tsk);
  
- unsigned long arch_align_stack(unsigned long sp)
+-	if (regs) {
+-		if (user_mode(regs))
+-			return;
+-		skip = 1;
+-	}
++	if (regs && user_mode(regs))
++		return;
+ 
+ 	if (!tsk)
+ 		tsk = current;
+@@ -176,36 +172,8 @@ void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 	if (!try_get_task_stack(tsk))
+ 		return;
+ 
+-	if (tsk == current) {
+-		start_backtrace(&frame,
+-				(unsigned long)__builtin_frame_address(0),
+-				(unsigned long)dump_backtrace);
+-	} else {
+-		/*
+-		 * task blocked in __switch_to
+-		 */
+-		start_backtrace(&frame,
+-				thread_saved_fp(tsk),
+-				thread_saved_pc(tsk));
+-	}
+-
+ 	printk("%sCall trace:\n", loglvl);
+-	do {
+-		/* skip until specified stack frame */
+-		if (!skip) {
+-			dump_backtrace_entry(frame.pc, loglvl);
+-		} else if (frame.fp == regs->regs[29]) {
+-			skip = 0;
+-			/*
+-			 * Mostly, this is the case where this function is
+-			 * called in panic/abort. As exception handler's
+-			 * stack frame does not contain the corresponding pc
+-			 * at which an exception has taken place, use regs->pc
+-			 * instead.
+-			 */
+-			dump_backtrace_entry(regs->pc, loglvl);
+-		}
+-	} while (!unwind_frame(tsk, &frame));
++	arch_stack_walk(dump_backtrace_entry, (void *)loglvl, tsk, regs);
+ 
+ 	put_task_stack(tsk);
+ }
 -- 
 2.25.1
 
