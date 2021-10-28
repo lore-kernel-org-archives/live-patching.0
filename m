@@ -2,129 +2,83 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3D30C433F5
-	for <live-patching@archiver.kernel.org>; Thu, 28 Oct 2021 12:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34C99C433F5
+	for <live-patching@archiver.kernel.org>; Thu, 28 Oct 2021 12:58:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C431D610C8
-	for <live-patching@archiver.kernel.org>; Thu, 28 Oct 2021 12:24:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1466D60FF2
+	for <live-patching@archiver.kernel.org>; Thu, 28 Oct 2021 12:58:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbhJ1M1U (ORCPT
+        id S230170AbhJ1NAd (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Oct 2021 08:27:20 -0400
-Received: from pegase2.c-s.fr ([93.17.235.10]:41035 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230443AbhJ1M1U (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Oct 2021 08:27:20 -0400
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4Hg4Vr1nryz9sT4;
-        Thu, 28 Oct 2021 14:24:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id g1IAStAKYEEo; Thu, 28 Oct 2021 14:24:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4Hg4Vl6129z9sTG;
-        Thu, 28 Oct 2021 14:24:15 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AC44B8B794;
-        Thu, 28 Oct 2021 14:24:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id s4wV9EDYhJfg; Thu, 28 Oct 2021 14:24:15 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.214])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2FBFD8B78C;
-        Thu, 28 Oct 2021 14:24:15 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1) with ESMTPS id 19SCO7gP194392
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 28 Oct 2021 14:24:07 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.16.1/8.16.1/Submit) id 19SCO74x194391;
-        Thu, 28 Oct 2021 14:24:07 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+        Thu, 28 Oct 2021 09:00:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30316 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230093AbhJ1NAd (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Thu, 28 Oct 2021 09:00:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635425885;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=RLyubtvxjGpeEnTLp10d70mgW+REwGQNEyC836W4VCQ=;
+        b=A99wx56CIC7XvsX+kehqYGxvlAWdI6kzbAm4rBQwQOU/FLApGPxmcfdCu0WyYNst90kAKz
+        hAWm5Il9mG6dLBi4gVE8iGDkGTjcNsdmBYoz3V3xBMm6u/xQbd64vgIelrHSl4SEIloyMC
+        gVmFcO4ddumLoIQ5xzmjUcOa5w8nlNk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-188-kqPdrAPOPdC5wC-EgQAYiA-1; Thu, 28 Oct 2021 08:58:02 -0400
+X-MC-Unique: kqPdrAPOPdC5wC-EgQAYiA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 14DAA19067F2;
+        Thu, 28 Oct 2021 12:57:45 +0000 (UTC)
+Received: from localhost (ovpn-8-40.pek2.redhat.com [10.72.8.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D6C65D9DE;
+        Thu, 28 Oct 2021 12:57:43 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        live-patching@vger.kernel.org
-Subject: [PATCH v1 2/5] powerpc/ftrace: No need to read LR from stack in _mcount()
-Date:   Thu, 28 Oct 2021 14:24:02 +0200
-Message-Id: <24a3ba7db388537c44a038026f926d885372e6d3.1635423081.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1635423081.git.christophe.leroy@csgroup.eu>
-References: <cover.1635423081.git.christophe.leroy@csgroup.eu>
+        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH 0/3] livepatch: cleanup kpl_patch kobject release
+Date:   Thu, 28 Oct 2021 20:57:31 +0800
+Message-Id: <20211028125734.3134176-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1635423843; l=1773; s=20211009; h=from:subject:message-id; bh=BdgcxgTnhLIQz+nFCg438ZdJlGpUJGv35y1aicj1AGk=; b=OQDvBxfJM6arTMja8VXsBuAHwTfB589E+cNZpkX8AmZBoTGmSV0VjxkW4braPU2V3ZXFmuIareBJ 1cSqV0G/Ck1dzwV0GqIVSeuABBpJBOMCkxWpsANCFpPmjv/F7Hi+
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-All functions calling _mcount do it exactly the same way, with the
-following sequence of instructions:
+Hello,
 
-	c07de788:       7c 08 02 a6     mflr    r0
-	c07de78c:       90 01 00 04     stw     r0,4(r1)
-	c07de790:       4b 84 13 65     bl      c001faf4 <_mcount>
+The 1st patch moves module_put() to release handler of klp_patch
+kobject.
 
-Allthough LR is pushed on stack, it is still in r0 while entering
-_mcount().
+The 2nd patch changes to free klp_patch and other kobjects without
+klp_mutex.
 
-Function arguments are in r3-r10, so r11 and r12 are still available
-at that point.
+The 3rd patch switches to synchronous kobject release for klp_patch.
 
-Do like PPC64 and use r12 to move LR into CTR, so that r0 is preserved
-and doesn't need to be restored from the stack.
 
-While at it, bring back the EXPORT_SYMBOL at the end of _mcount.
+Ming Lei (3):
+  livepatch: remove 'struct completion finish' from klp_patch
+  livepatch: free klp_patch object without holding klp_mutex
+  livepatch: free klp_patch object synchronously
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/trace/ftrace_32.S | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ include/linux/livepatch.h     |  2 --
+ kernel/livepatch/core.c       | 63 +++++++++++++++--------------------
+ kernel/livepatch/core.h       |  3 +-
+ kernel/livepatch/transition.c | 23 +++++++++----
+ kernel/livepatch/transition.h |  2 +-
+ 5 files changed, 46 insertions(+), 47 deletions(-)
 
-diff --git a/arch/powerpc/kernel/trace/ftrace_32.S b/arch/powerpc/kernel/trace/ftrace_32.S
-index e023ae59c429..c7d57124cc59 100644
---- a/arch/powerpc/kernel/trace/ftrace_32.S
-+++ b/arch/powerpc/kernel/trace/ftrace_32.S
-@@ -14,16 +14,16 @@ _GLOBAL(mcount)
- _GLOBAL(_mcount)
- 	/*
- 	 * It is required that _mcount on PPC32 must preserve the
--	 * link register. But we have r0 to play with. We use r0
-+	 * link register. But we have r12 to play with. We use r12
- 	 * to push the return address back to the caller of mcount
- 	 * into the ctr register, restore the link register and
- 	 * then jump back using the ctr register.
- 	 */
--	mflr	r0
--	mtctr	r0
--	lwz	r0, 4(r1)
-+	mflr	r12
-+	mtctr	r12
- 	mtlr	r0
- 	bctr
-+EXPORT_SYMBOL(_mcount)
- 
- _GLOBAL(ftrace_caller)
- 	MCOUNT_SAVE_FRAME
-@@ -43,7 +43,6 @@ _GLOBAL(ftrace_graph_stub)
- 	/* old link register ends up in ctr reg */
- 	bctr
- 
--EXPORT_SYMBOL(_mcount)
- 
- _GLOBAL(ftrace_stub)
- 	blr
 -- 
 2.31.1
 
