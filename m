@@ -2,179 +2,157 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABC2C433EF
-	for <live-patching@archiver.kernel.org>; Wed, 10 Nov 2021 14:42:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0A41C433EF
+	for <live-patching@archiver.kernel.org>; Fri, 12 Nov 2021 01:50:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6978561106
-	for <live-patching@archiver.kernel.org>; Wed, 10 Nov 2021 14:42:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B34F61076
+	for <live-patching@archiver.kernel.org>; Fri, 12 Nov 2021 01:50:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbhKJOpQ (ORCPT
+        id S234417AbhKLBw7 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 10 Nov 2021 09:45:16 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:49410 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbhKJOpP (ORCPT
+        Thu, 11 Nov 2021 20:52:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27730 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231918AbhKLBw6 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 10 Nov 2021 09:45:15 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6AAB1218E0;
-        Wed, 10 Nov 2021 14:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1636555347; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 11 Nov 2021 20:52:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636681808;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CjoXnMyzqTopq52JxvUZkIx7GlsUHp6OaZyz7Hm2soE=;
-        b=F6OMTOHejWEHm1+6XVX+PiWRabbHPcZVyMKhy2ykNsL0RDAj+vxSmjKiAjCjRqRkRFdOaz
-        8c9VL49I/j4ZE+GOWRTFVbHyo8jc2p9fLLaBbbczO34v0jhuvUDaFSrDUPFA/Cbi+/tLkT
-        c9rIHHvfm/ZA6g39G60ddtwUWTnT62E=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C6C81A3B91;
-        Wed, 10 Nov 2021 14:42:22 +0000 (UTC)
-Date:   Wed, 10 Nov 2021 15:42:27 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH V4 3/3] livepatch: free klp_patch object synchronously
-Message-ID: <YYvaU1sRRbNAqigG@alley>
-References: <20211102145932.3623108-1-ming.lei@redhat.com>
- <20211102145932.3623108-4-ming.lei@redhat.com>
- <YYKUx+yx4NdeWPBU@alley>
- <YYTkfAwdJio5qOFM@T590>
+        bh=eZNdJ52+fIq4HkyMiP9mgpiY14IZhLrguZdJAwnQXco=;
+        b=AOlaN8dDZFSihYECnley3luWh2gAYlpXz2WfXzBmFSnmGthKos+j8XSiv9Sa24Cz1LiG6M
+        GmT7k3YX3oYDdAmxyj23kDMU6uYSizWofSsud7uvFi79qnJHLbWqtWsaywkp4jwqxmJJ+p
+        HOIKbeJkMQv0yXddCC1rtJf9bTWc/28=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-240-gV7Q_Zf5PoymyzoMF6vC6A-1; Thu, 11 Nov 2021 20:50:07 -0500
+X-MC-Unique: gV7Q_Zf5PoymyzoMF6vC6A-1
+Received: by mail-qt1-f198.google.com with SMTP id y25-20020ac87059000000b002a71d24c242so6157334qtm.0
+        for <live-patching@vger.kernel.org>; Thu, 11 Nov 2021 17:50:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eZNdJ52+fIq4HkyMiP9mgpiY14IZhLrguZdJAwnQXco=;
+        b=E47nd2TiApR4Gc5w9d3+j+8wKOI8nX4/ZCpD0IY0zeUAgYFOx6uDj+0KYXpNFCVfnF
+         WHvSkcGKdUtqtvqzVxtTNszpQCC9C2s9/Paub/acJqxCfSZ8xvs42r1+O+muAAdZQDWY
+         GEuSSjqduTL1K+0IPIDC78zgXrQ+a0EQ9u5vjOXVXuE2KHB/bYVq//F5JMokcb5ib2to
+         bqD4v0/uOYESSUH7YqogUmr44hvhl0hDAccnR1sdEc0O8TN23D6+U+LX6dSe0Jmzs95i
+         XIrrc3kYa0ON/ixJ5+ITV2dT0wzAQiQ1s5aibGnUNdcSaU5vHcKA4uyhYoOKge8eND/f
+         kqag==
+X-Gm-Message-State: AOAM53319/fooKYSyr/U54Rjh6lTjfUuBhHvFOOnJUbMnlnscLMtHU2t
+        /2zoRvfD4Y+ZK9BJ9/yfY/JnNRkYmFDyNlILDCXlNVxrqJolAw0art2ywKAp2CMtb6TL9kTzbDr
+        UF3JlxIHsGmbuR3muQW00zUc3Bw==
+X-Received: by 2002:a0c:fec4:: with SMTP id z4mr11094627qvs.32.1636681807013;
+        Thu, 11 Nov 2021 17:50:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2vRjCqTvnMrxcOB/YLyEnka+z0pWjiGa/K3Lw4rZIUmLTo7LhX5jGZ4nj8eAl72xtNIDgwQ==
+X-Received: by 2002:a0c:fec4:: with SMTP id z4mr11094593qvs.32.1636681806757;
+        Thu, 11 Nov 2021 17:50:06 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id x125sm2012210qkd.8.2021.11.11.17.50.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 17:50:06 -0800 (PST)
+Date:   Thu, 11 Nov 2021 17:50:03 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Peter Zijlstra' <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        live-patching@vger.kernel.org
+Subject: Re: [PATCH 20/22] x86,word-at-a-time: Remove .fixup usage
+Message-ID: <20211112015003.pefl656m3zmir6ov@treble>
+References: <20211105171821.654356149@infradead.org>
+ <20211108164711.mr2cqdcvedin2lvx@treble>
+ <YYlshkTmf5zdvf1Q@hirez.programming.kicks-ass.net>
+ <CAKwvOdkFZ4PSN0GGmKMmoCrcp7_VVNjau_b0sNRm3MuqVi8yow@mail.gmail.com>
+ <YYov8SVHk/ZpFsUn@hirez.programming.kicks-ass.net>
+ <CAKwvOdn8yrRopXyfd299=SwZS9TAPfPj4apYgdCnzPb20knhbg@mail.gmail.com>
+ <20211109210736.GV174703@worktop.programming.kicks-ass.net>
+ <f6dbe42651e84278b44e44ed7d0ed74f@AcuMS.aculab.com>
+ <YYuogZ+2Dnjyj1ge@hirez.programming.kicks-ass.net>
+ <2734a37ebed2432291345aaa8d9fd47e@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YYTkfAwdJio5qOFM@T590>
+In-Reply-To: <2734a37ebed2432291345aaa8d9fd47e@AcuMS.aculab.com>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri 2021-11-05 15:59:56, Ming Lei wrote:
-> On Wed, Nov 03, 2021 at 02:55:19PM +0100, Petr Mladek wrote:
-> > On Tue 2021-11-02 22:59:32, Ming Lei wrote:
-> > > klp_mutex isn't acquired before calling kobject_put(klp_patch), so it is
-> > > fine to free klp_patch object synchronously.
-> > > 
-> > > One issue is that enabled store() method, in which the klp_patch kobject
-> > > itself is deleted & released. However, sysfs has provided APIs for dealing
-> > > with this corner case, so use sysfs_break_active_protection() and
-> > > sysfs_unbreak_active_protection() for releasing klp_patch kobject from
-> > > enabled_store(), meantime the enabled attribute has to be removed
-> > > before deleting the klp_patch kobject.
-> > > 
-> > > --- a/kernel/livepatch/core.c
-> > > +++ b/kernel/livepatch/core.c
-> > > @@ -369,10 +370,18 @@ static ssize_t enabled_store(struct kobject *kobj, struct kobj_attribute *attr,
-> > >  out:
-> > >  	mutex_unlock(&klp_mutex);
-> > >  
-> > > -	klp_free_patches_async(&to_free);
-> > > -
-> > >  	if (ret)
-> > >  		return ret;
-> > > +
-> > > +	if (!list_empty(&to_free)) {
-> > > +		kn = sysfs_break_active_protection(kobj, &attr->attr);
-> > > +		WARN_ON_ONCE(!kn);
-> > > +		sysfs_remove_file(kobj, &attr->attr);
-> > > +		klp_free_patches(&to_free);
-> > > +		if (kn)
-> > > +			sysfs_unbreak_active_protection(kn);
-> > > +	}
+On Wed, Nov 10, 2021 at 12:20:47PM +0000, David Laight wrote:
+> > > Wouldn't moving part of a function to .text.cold (or .text.unlikely)
+> > > generate the same problems with the stack backtrace code as the
+> > > .text.fixup section you are removing had??
 > > 
-> > I agree that using workqueues for free_work looks like a hack.
-> > But this looks even more tricky and fragile to me. It feels like
-> > playing with sysfs/kernfs internals.
+> > GCC can already split a function into func and func.cold today (or
+> > worse: func, func.isra.N, func.cold, func.isra.N.cold etc..).
 > > 
-> > It might look less tricky when using sysfs_remove_file_self().
+> > I'm assuming reliable unwind and livepatch know how to deal with this.
 > 
-> The protection needs to cover removing both 'enabled' attribute and
-> the patch kobject, so sysfs_remove_file_self() isn't good here.
+> They'll have 'proper' function labels at the top - so backtrace
+> stands a chance.
+> Indeed you (probably) want it to output "func.irsa.n.cold" rather
+> than just "func" to help show which copy it is in.  > 
+> I guess that livepatch will need separate patches for each
+> version of the function - which might be 'interesting' if
+> all the copies actually need patching at the same time.
+> You'd certainly want a warning if there seemed to be multiple
+> copies of the function.
 
-I see.
+Hm, I think there is actually a livepatch problem here.
 
-> > Anyway, there are only few users of these APIs:
-> > 
-> >    + sysfs_break_active_protection() is used only scsi
-> >    + kernfs_break_active_protection() is used by cgroups, cpusets, and rdtgroup.
-> >    + sysfs_remove_file_self() is used by some RDMA-related stuff.
-> > 
-> > It means that there are some users but it is not widely used API.
-> 
-> It is used by generic pci device and scsi device, both are the most popular
-> devices in the world, either one of the two subsystem should have huge amount
-> of users, so it means the interface itself has been proved/verified for long
-> time by many enough real users.
+If the .cold (aka "child") function actually had a fentry hook then we'd
+be fine.  Then we could just patch both "parent" and "child" functions
+at the same time.  We already have the ability to patch multiple
+functions having dependent interface changes.
 
-Good to know. It means that if there is a regression then scsi users
-should find it quickly.
+But there's no fentry hook in the child, so we can only patch the
+parent.
 
+If the child schedules out, and then the parent gets patched, things can
+go off-script if the child later jumps back to the unpatched version of
+the parent, and then for example the old parent tries to call another
+patched function with a since-changed ABI.
 
-> > > +		kn = sysfs_break_active_protection(kobj, &attr->attr);
-> > > +		WARN_ON_ONCE(!kn);
-> > > +		sysfs_remove_file(kobj, &attr->attr);
-> > > +		klp_free_patches(&to_free);
-> > > +		if (kn)
-> > > +			sysfs_unbreak_active_protection(kn);
+Granted, it's like three nested edge cases, so it may not be all that
+likely to happen.
 
+Some ideas to fix:
 
-> > I would personally prefer to keep it as is. I do not see any
-> > fundamental advantage of the new code. But I might be biased
-> > because the current code was written by me ;-)
-> 
-> The fundamental advantage is that the API has been used/verified by
-> enough real users. Also killing attribute/kobject itself isn't unique
-> for livepatch, that is actually one common pattern, so it needn't
-> such hacky implementation.
+a) Add a field to 'klp_func' which allows the patch module to specify a
+   function's .cold counterpart?
 
-I am not sure what you mean by many users:
+b) Detect such cold counterparts in klp_enable_patch()?  Presumably it
+   would require searching kallsyms for "<func>.cold", which is somewhat
+   problematic as there might be duplicates.
 
-   + sysfs_break_active_protection() is used only once
-     by sdev_store_delete()
+c) Update the reliable stacktrace code to mark the stack unreliable if
+   it has a function with ".cold" in the name?
 
-   + sysfs_remove_file_self() seems to be used 7x in kernel sources.
+d) Don't patch functions with .cold counterparts? (Probably not a viable
+   long-term solution, there are a ton of .cold functions because calls
+   to printk are marked cold)
 
+e) Disable .cold optimization?
 
-It all goes down to kernfs_break_active_protection() that has
-a bit scary description:
-
- * This function releases the active reference of @kn the caller is
- * holding.  Once this function is called, @kn may be removed at any point
- * and the caller is solely responsible for ensuring that the objects it
- * dereferences are accessible.
+f) Add fentry hooks to .cold functions?
 
 
-and the related kernfs_unbreak_active_protection() has even more
-scarry description:
+I'm thinking a) seems do-able, and less disruptive / more precise than
+most others, but it requires more due diligence on behalf of the patch
+creation.  It sounds be pretty easy for kpatch-build to handle at least.
 
- * If kernfs_break_active_protection() was called, this function must be
- * invoked before finishing the kernfs operation.  Note that while this
- * function restores the active reference, it doesn't and can't actually
- * restore the active protection - @kn may already or be in the process of
- * being removed.  Once kernfs_break_active_protection() is invoked, that
- * protection is irreversibly gone for the kernfs operation instance.
- *
- * While this function may be called at any point after
- * kernfs_break_active_protection() is invoked, its most useful location
- * would be right before the enclosing kernfs operation returns.
+-- 
+Josh
 
-
-It feels like this API allows you to cut the branch you are staying on.
-You have to be sure that you do it in the right order and remove
-the spot under your feet as the very last piece. While normally
-this is guranteed by the refecence counters.
-
-In compare, the workqueue approach looks less risky. You just ask
-someone (worker) to remove your branch after you leave. It will be
-naturally done only when nobody is on the branch and in the right
-order thanks to the reference counters.
-
-Best Regards,
-Petr
