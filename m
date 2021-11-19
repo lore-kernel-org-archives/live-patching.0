@@ -2,127 +2,83 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6674C433EF
-	for <live-patching@archiver.kernel.org>; Fri, 19 Nov 2021 09:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A42DC433FE
+	for <live-patching@archiver.kernel.org>; Fri, 19 Nov 2021 10:18:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D491F61B04
-	for <live-patching@archiver.kernel.org>; Fri, 19 Nov 2021 09:03:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F31B561A7D
+	for <live-patching@archiver.kernel.org>; Fri, 19 Nov 2021 10:18:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234525AbhKSJGd (ORCPT
+        id S234045AbhKSKVF (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 19 Nov 2021 04:06:33 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:53964 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbhKSJGb (ORCPT
+        Fri, 19 Nov 2021 05:21:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229879AbhKSKVF (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 19 Nov 2021 04:06:31 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B667F212C9;
-        Fri, 19 Nov 2021 09:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637312608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kDsgLT8c9xMnLP5HTg9s3ku1Ze0kqVMgaNncakOaoJY=;
-        b=iDCOuYb7bzBWVqw0KvfB3O4cMj8fmBcUrzghBbDhwmIxGHlXPIlPQRsW4MSzpl9Z4cibGP
-        33CYMsEzsQ4DRpU/RngmgOVNB5Ia4hz+bVhT1iuWo9OX53EUw0pQBR00oVJfouUbZhTFPX
-        vaF/MI4SbMpIZN46XHM5yhb4AOJhkaU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637312608;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kDsgLT8c9xMnLP5HTg9s3ku1Ze0kqVMgaNncakOaoJY=;
-        b=n5Ai3hYM80qTZ6YTkz20lrVnxDxXFanrbaoeLOmceCQaBkbcJHoWvA18K7NTyVi/+QkIZa
-        UruNQOyqxvuQB6CQ==
-Received: from san.suse.cz (san.suse.cz [10.100.12.79])
-        by relay2.suse.de (Postfix) with ESMTP id 9E936A3B83;
-        Fri, 19 Nov 2021 09:03:28 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        joe.lawrence@redhat.com
-Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        Fri, 19 Nov 2021 05:21:05 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4A9C061574;
+        Fri, 19 Nov 2021 02:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mU7CXYA7+Z8znZ6H/7El6odieLZp2FQkQXrbGlUHrow=; b=AN3WwQWp9tlGDluAti6I4VlegU
+        GJNtz4TQoreH/oOGY1wkiClDMTiTZxWAEadyO91SHM3iM2cQ7AD2zPIc5g6CuY4Jk33bXfF5mOMIZ
+        0ymOxNZMfQb0p16Rq/svxXUK52AH/eVS4f2hOpg6Gy9zcnZaXbyfz2tXaRn41/uoj5uq0c7BPYQkd
+        j5WmlCVOb2c4fmHmMUPIiiEyndLF5cB6Cs6QGtS22u0viSCBet7zSUW5yglsEP0Slodde5k0nw32f
+        7b59OVtTJZ6iytV0an7/OCwSFhRSneZakgyEp5jE/d83SVdjMXuHJcXnSZRtwrqaitXXkFLWA99ji
+        3jtyoJtA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mo0xm-00GsMZ-GU; Fri, 19 Nov 2021 10:17:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B555A300130;
+        Fri, 19 Nov 2021 11:17:45 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9F1E9265BA1EB; Fri, 19 Nov 2021 11:17:45 +0100 (CET)
+Date:   Fri, 19 Nov 2021 11:17:45 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
+        joe.lawrence@redhat.com, linux-kernel@vger.kernel.org,
         live-patching@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH 1/3] livepatch: Move the initialization of old_func to a new function
-Date:   Fri, 19 Nov 2021 10:03:25 +0100
-Message-Id: <20211119090327.12811-2-mbenes@suse.cz>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211119090327.12811-1-mbenes@suse.cz>
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] livepatch: Allow user to specify functions to search
+ for on a stack
+Message-ID: <YZd5yeql//37xSuw@hirez.programming.kicks-ass.net>
 References: <20211119090327.12811-1-mbenes@suse.cz>
+ <20211119090327.12811-3-mbenes@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119090327.12811-3-mbenes@suse.cz>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-struct klp_func will be used not only for functions to be patched but
-also for functions which must not be found on a stack. Move the
-initialization of needed struct members to a separate function, so the
-code can be reused.
+On Fri, Nov 19, 2021 at 10:03:26AM +0100, Miroslav Benes wrote:
+> livepatch's consistency model requires that no live patched function
+> must be found on any task's stack during a transition process after a
+> live patch is applied. It is achieved by walking through stacks of all
+> blocked tasks.
+> 
+> The user might also want to define more functions to search for without
+> them being patched at all. It may either help with preparing a live
+> patch, which would otherwise require additional touches to achieve the
+> consistency, or it can be used to overcome deficiencies the stack
+> checking inherently has. For example, GCC may optimize a function so
+> that a part of it is moved to a different section and the function would
+> jump to it. This child function would not be found on a stack in this
+> case, but it may be important to search for it so that, again, the
+> consistency is achieved.
+> 
+> Allow the user to specify such functions on klp_object level.
 
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
----
- kernel/livepatch/core.c | 34 +++++++++++++++++++++++-----------
- 1 file changed, 23 insertions(+), 11 deletions(-)
+Ok, so this relies on the patch generator to DTRT but then it should
+work.
 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 335d988bd811..3d8e3caf9f92 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -767,6 +767,28 @@ static int klp_apply_object_relocs(struct klp_patch *patch,
- 	return 0;
- }
- 
-+static int klp_init_old_func(struct klp_object *obj,
-+			     struct klp_func *func)
-+{
-+	int ret;
-+
-+	ret = klp_find_object_symbol(obj->name, func->old_name,
-+				     func->old_sympos,
-+				     (unsigned long *)&func->old_func);
-+	if (ret)
-+		return ret;
-+
-+	ret = kallsyms_lookup_size_offset((unsigned long)func->old_func,
-+					  &func->old_size, NULL);
-+	if (!ret) {
-+		pr_err("kallsyms size lookup failed for '%s'\n",
-+		       func->old_name);
-+		return -ENOENT;
-+	}
-+
-+	return 0;
-+}
-+
- /* parts of the initialization that is done only when the object is loaded */
- static int klp_init_object_loaded(struct klp_patch *patch,
- 				  struct klp_object *obj)
-@@ -787,20 +809,10 @@ static int klp_init_object_loaded(struct klp_patch *patch,
- 	}
- 
- 	klp_for_each_func(obj, func) {
--		ret = klp_find_object_symbol(obj->name, func->old_name,
--					     func->old_sympos,
--					     (unsigned long *)&func->old_func);
-+		ret = klp_init_old_func(obj, func);
- 		if (ret)
- 			return ret;
- 
--		ret = kallsyms_lookup_size_offset((unsigned long)func->old_func,
--						  &func->old_size, NULL);
--		if (!ret) {
--			pr_err("kallsyms size lookup failed for '%s'\n",
--			       func->old_name);
--			return -ENOENT;
--		}
--
- 		if (func->nop)
- 			func->new_func = func->old_func;
- 
--- 
-2.33.1
-
+Thanks!
