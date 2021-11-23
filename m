@@ -2,210 +2,117 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72446C433EF
-	for <live-patching@archiver.kernel.org>; Tue, 23 Nov 2021 19:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B88E4C433F5
+	for <live-patching@archiver.kernel.org>; Tue, 23 Nov 2021 20:41:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239953AbhKWTkz (ORCPT
+        id S233255AbhKWUoH (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 23 Nov 2021 14:40:55 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:41928 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238846AbhKWTkr (ORCPT
+        Tue, 23 Nov 2021 15:44:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232084AbhKWUoE (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 23 Nov 2021 14:40:47 -0500
-Received: from x64host.home (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 062DB20D4D3D;
-        Tue, 23 Nov 2021 11:37:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 062DB20D4D3D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1637696257;
-        bh=ANijem9qrqDRCyqcDOusbbhCMatgyg1SMa0VQG+ycgk=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FDK5nwZ6mp0rwag3tiw+83PEtTTQG2hsym0HD4/QKmyTZH6ca4rRngn+vdO5ZzQTs
-         hJgZMffOgqx1+WS2EgyScKVsK7BEeUOuvmURYFtcyjS6+rRgyAXnQQ9+IUFXpsNQb1
-         FOh07RjB5AJVx13n2fluXl7haaRuQjzzaJ5EDsoc=
-From:   madvenka@linux.microsoft.com
-To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [PATCH v11 4/5] arm64: Introduce stack trace reliability checks in the unwinder
-Date:   Tue, 23 Nov 2021 13:37:22 -0600
-Message-Id: <20211123193723.12112-5-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211123193723.12112-1-madvenka@linux.microsoft.com>
-References: <8b861784d85a21a9bf08598938c11aff1b1249b9>
- <20211123193723.12112-1-madvenka@linux.microsoft.com>
+        Tue, 23 Nov 2021 15:44:04 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0DDC061574
+        for <live-patching@vger.kernel.org>; Tue, 23 Nov 2021 12:40:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mj5i4rADjLu/laWRAJiX8EK9zd7fNQSaV0qkwpWf9wk=; b=SrIUQb+4Ea7EKjYXfkCFpTvhE2
+        WMpl9mXffmKBUkNdj5hjqmsifnsad/EifSCyH93tSvRNVAuvfNjEIAaT5Ynopxco+ggtWeq/RkLJj
+        E5mBCloc4iIKdWiVAugm98tAhsHNEEbH6ka14fZVbfaLh4JSBX7pSzLnGUW/cipnvGk1rqO0tIfeh
+        R10AV78gdrhsFINcjXip8GzLllgd0SW7JJJSKU5iHhYJeeV6vnC0HT3B/Jd1189mvugF3v8qLxId9
+        jBg/zCevLoZO6/5cJ4Y0B312naQnfC93WrjvXmpljWm8/OqI1C0HZUPQ+UdazybExn4bh6frcQzcX
+        W0ZSgJZg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mpcan-0008TA-4X; Tue, 23 Nov 2021 20:40:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CE4C5984951; Tue, 23 Nov 2021 21:40:39 +0100 (CET)
+Date:   Tue, 23 Nov 2021 21:40:39 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Miroslav Benes <mbenes@suse.cz>, joao@overdrivepizza.com,
+        nstange@suse.de, pmladek@suse.cz, jpoimboe@redhat.com,
+        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: CET/IBT support and live-patches
+Message-ID: <20211123204039.GC721624@worktop.programming.kicks-ass.net>
+References: <70828ca9f840960c7a3f66cd8dc141f5@overdrivepizza.com>
+ <alpine.LSU.2.21.2111231035460.15177@pobox.suse.cz>
+ <YZzHE+Cze9AX6HCZ@hirez.programming.kicks-ass.net>
+ <alpine.LSU.2.21.2111231237090.15177@pobox.suse.cz>
+ <20211123110320.75990e0b@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123110320.75990e0b@gandalf.local.home>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+On Tue, Nov 23, 2021 at 11:03:20AM -0500, Steven Rostedt wrote:
+> On Tue, 23 Nov 2021 12:39:15 +0100 (CET)
+> Miroslav Benes <mbenes@suse.cz> wrote:
+> 
+> > +++ b/kernel/livepatch/patch.c
+> > @@ -127,15 +127,18 @@ static void notrace klp_ftrace_handler(unsigned long ip,
+> >  /*
+> >   * Convert a function address into the appropriate ftrace location.
+> >   *
+> > - * Usually this is just the address of the function, but on some architectures
+> > - * it's more complicated so allow them to provide a custom behaviour.
+> > + * Usually this is just the address of the function, but there are some
+> > + * exceptions.
+> > + *
+> > + *   * PPC - live patch works only with -mprofile-kernel. In this case,
+> > + *     the ftrace location is always within the first 16 bytes.
+> > + *   * x86_64 with CET/IBT enabled - there is ENDBR instruction at +0 offset.
+> > + *     __fentry__ follows it.
+> >   */
+> > -#ifndef klp_get_ftrace_location
+> > -static unsigned long klp_get_ftrace_location(unsigned long faddr)
+> > +static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
+> 
+> Why make this the default function? It should only do this for powerpc and
+> x86 *if* CET/IBT is enabled.
 
-There are some kernel features and conditions that make a stack trace
-unreliable. Callers may require the unwinder to detect these cases.
-E.g., livepatch.
+Well, only this variant of IBT. Once Joao gets his clang patches
+together we'll probably have it back at +0.
 
-Introduce a new function called unwind_check_reliability() that will
-detect these cases and set a flag in the stack frame. Call
-unwind_check_reliability() for every frame, that is, in unwind_start()
-and unwind_next().
+Something like the below would be more robust, it also gets us something
+grep-able for when the IBT code-gen changes yet again.
 
-Introduce the first reliability check in unwind_check_reliability() - If
-a return PC is not a valid kernel text address, consider the stack
-trace unreliable. It could be some generated code. Other reliability checks
-will be added in the future.
-
-Let unwind() return a boolean to indicate if the stack trace is
-reliable.
-
-Introduce arch_stack_walk_reliable() for ARM64. This works like
-arch_stack_walk() except that it returns -EINVAL if the stack trace is not
-reliable.
-
-Until all the reliability checks are in place, arch_stack_walk_reliable()
-may not be used by livepatch. But it may be used by debug and test code.
-
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/arm64/include/asm/stacktrace.h |  3 ++
- arch/arm64/kernel/stacktrace.c      | 59 +++++++++++++++++++++++++++--
- 2 files changed, 58 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-index d838586adef9..7143e80c3d96 100644
---- a/arch/arm64/include/asm/stacktrace.h
-+++ b/arch/arm64/include/asm/stacktrace.h
-@@ -53,6 +53,8 @@ struct stack_info {
-  *               value.
-  *
-  * @failed:      Unwind failed.
-+ *
-+ * @reliable:    Stack trace is reliable.
-  */
- struct stackframe {
- 	unsigned long fp;
-@@ -64,6 +66,7 @@ struct stackframe {
- 	struct llist_node *kr_cur;
- #endif
- 	bool failed;
-+	bool reliable;
- };
+diff --git a/arch/x86/include/asm/livepatch.h b/arch/x86/include/asm/livepatch.h
+index 7c5cc6660e4b..4e683a1aa411 100644
+--- a/arch/x86/include/asm/livepatch.h
++++ b/arch/x86/include/asm/livepatch.h
+@@ -17,4 +17,13 @@ static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
+ 	ftrace_instruction_pointer_set(fregs, ip);
+ }
  
- extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
-diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index 3b670ab1f0e9..77eb00e45558 100644
---- a/arch/arm64/kernel/stacktrace.c
-+++ b/arch/arm64/kernel/stacktrace.c
-@@ -18,6 +18,26 @@
- #include <asm/stack_pointer.h>
- #include <asm/stacktrace.h>
- 
-+/*
-+ * Check the stack frame for conditions that make further unwinding unreliable.
-+ */
-+static void unwind_check_reliability(struct task_struct *task,
-+				     struct stackframe *frame)
++#define klp_get_ftrace_location klp_get_ftrace_location
++static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
 +{
-+	if (frame->fp == (unsigned long)task_pt_regs(task)->stackframe) {
-+		/* Final frame; no more unwind, no need to check reliability */
-+		return;
-+	}
-+
-+	/*
-+	 * If the PC is not a known kernel text address, then we cannot
-+	 * be sure that a subsequent unwind will be reliable, as we
-+	 * don't know that the code follows our unwind requirements.
-+	 */
-+	if (!__kernel_text_address(frame->pc))
-+		frame->reliable = false;
++	unsigned long addr = faddr_location(faddr);
++	if (!addr && IS_ENABLED(CONFIG_X86_IBT))
++		addr = faddr_location(faddr + 4);
++	return addr;
 +}
 +
- /*
-  * AArch64 PCS assigns the frame pointer to x29.
-  *
-@@ -33,8 +53,9 @@
-  */
- 
- 
--static void unwind_start(struct stackframe *frame, unsigned long fp,
--			 unsigned long pc)
-+static void unwind_start(struct task_struct *task,
-+			 struct stackframe *frame,
-+			 unsigned long fp, unsigned long pc)
+ #endif /* _ASM_X86_LIVEPATCH_H */
+diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
+index fe316c021d73..fd295bbbcbc7 100644
+--- a/kernel/livepatch/patch.c
++++ b/kernel/livepatch/patch.c
+@@ -133,7 +133,7 @@ static void notrace klp_ftrace_handler(unsigned long ip,
+ #ifndef klp_get_ftrace_location
+ static unsigned long klp_get_ftrace_location(unsigned long faddr)
  {
- 	frame->fp = fp;
- 	frame->pc = pc;
-@@ -55,6 +76,8 @@ static void unwind_start(struct stackframe *frame, unsigned long fp,
- 	frame->prev_fp = 0;
- 	frame->prev_type = STACK_TYPE_UNKNOWN;
- 	frame->failed = false;
-+	frame->reliable = true;
-+	unwind_check_reliability(task, frame);
+-	return faddr;
++	return ftrace_location(faddr);
  }
- 
- /*
-@@ -141,6 +164,7 @@ static void notrace unwind_next(struct task_struct *tsk,
- 	if (is_kretprobe_trampoline(frame->pc))
- 		frame->pc = kretprobe_find_ret_addr(tsk, (void *)frame->fp, &frame->kr_cur);
  #endif
-+	unwind_check_reliability(tsk, frame);
- }
- NOKPROBE_SYMBOL(unwind_next);
  
-@@ -166,15 +190,16 @@ static bool unwind_continue(struct task_struct *task,
- 	return true;
- }
- 
--static void notrace unwind(struct task_struct *tsk,
-+static bool notrace unwind(struct task_struct *tsk,
- 			   unsigned long fp, unsigned long pc,
- 			   bool (*fn)(void *, unsigned long), void *data)
- {
- 	struct stackframe frame;
- 
--	unwind_start(&frame, fp, pc);
-+	unwind_start(tsk, &frame, fp, pc);
- 	while (unwind_continue(tsk, &frame, fn, data))
- 		unwind_next(tsk, &frame);
-+	return !frame.failed && frame.reliable;
- }
- NOKPROBE_SYMBOL(unwind);
- 
-@@ -231,3 +256,29 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
- 	}
- 	unwind(task, fp, pc, consume_entry, cookie);
- }
-+
-+/*
-+ * arch_stack_walk_reliable() may not be used for livepatch until all of
-+ * the reliability checks are in place in unwind_consume(). However,
-+ * debug and test code can choose to use it even if all the checks are not
-+ * in place.
-+ */
-+noinline int notrace arch_stack_walk_reliable(stack_trace_consume_fn consume_fn,
-+					      void *cookie,
-+					      struct task_struct *task)
-+{
-+	unsigned long fp, pc;
-+
-+	if (task == current) {
-+		/* Skip arch_stack_walk_reliable() in the stack trace. */
-+		fp = (unsigned long)__builtin_frame_address(1);
-+		pc = (unsigned long)__builtin_return_address(0);
-+	} else {
-+		/* Caller guarantees that the task is not running. */
-+		fp = thread_saved_fp(task);
-+		pc = thread_saved_pc(task);
-+	}
-+	if (unwind(task, fp, pc, consume_fn, cookie))
-+		return 0;
-+	return -EINVAL;
-+}
--- 
-2.25.1
-
