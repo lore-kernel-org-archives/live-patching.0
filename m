@@ -2,74 +2,138 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 237D8C433EF
-	for <live-patching@archiver.kernel.org>; Tue, 23 Nov 2021 16:03:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13937C433EF
+	for <live-patching@archiver.kernel.org>; Tue, 23 Nov 2021 19:37:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbhKWQGb (ORCPT
+        id S233055AbhKWTkn (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 23 Nov 2021 11:06:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37630 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236114AbhKWQGb (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 23 Nov 2021 11:06:31 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3204E60F6F;
-        Tue, 23 Nov 2021 16:03:22 +0000 (UTC)
-Date:   Tue, 23 Nov 2021 11:03:20 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Peter Zijlstra <peterz@infradead.org>, joao@overdrivepizza.com,
-        nstange@suse.de, pmladek@suse.cz, jpoimboe@redhat.com,
-        joe.lawrence@redhat.com, live-patching@vger.kernel.org,
-        alexei.starovoitov@gmail.com
-Subject: Re: CET/IBT support and live-patches
-Message-ID: <20211123110320.75990e0b@gandalf.local.home>
-In-Reply-To: <alpine.LSU.2.21.2111231237090.15177@pobox.suse.cz>
-References: <70828ca9f840960c7a3f66cd8dc141f5@overdrivepizza.com>
-        <alpine.LSU.2.21.2111231035460.15177@pobox.suse.cz>
-        <YZzHE+Cze9AX6HCZ@hirez.programming.kicks-ass.net>
-        <alpine.LSU.2.21.2111231237090.15177@pobox.suse.cz>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 23 Nov 2021 14:40:43 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:41870 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234338AbhKWTkn (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Tue, 23 Nov 2021 14:40:43 -0500
+Received: from x64host.home (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C5AF920D4D2F;
+        Tue, 23 Nov 2021 11:37:33 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C5AF920D4D2F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1637696254;
+        bh=aBWkrJAFXMJSS+1WUdBJpRlaPcIVMzXm3IBpam3uJ9Y=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=TJytDyRf37Fgz7JgNuv0WuLabLv1H8vkSUBnbEQgY7ZF6U4RwYZ4K+WJLUlurJcBf
+         kiR9pf1NI5YpZWeq7VWjgM/YiVre44eCrIUi4PrE2mExPC+gLT16G8657dAPf70qad
+         I+4Ze/ulCKeoNicrQuBaxlwLMUFlUGFD5t3VdTKk=
+From:   madvenka@linux.microsoft.com
+To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [PATCH v11 1/5] arm64: Call stack_backtrace() only from within walk_stackframe()
+Date:   Tue, 23 Nov 2021 13:37:19 -0600
+Message-Id: <20211123193723.12112-2-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211123193723.12112-1-madvenka@linux.microsoft.com>
+References: <8b861784d85a21a9bf08598938c11aff1b1249b9>
+ <20211123193723.12112-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, 23 Nov 2021 12:39:15 +0100 (CET)
-Miroslav Benes <mbenes@suse.cz> wrote:
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-> +++ b/kernel/livepatch/patch.c
-> @@ -127,15 +127,18 @@ static void notrace klp_ftrace_handler(unsigned long ip,
->  /*
->   * Convert a function address into the appropriate ftrace location.
->   *
-> - * Usually this is just the address of the function, but on some architectures
-> - * it's more complicated so allow them to provide a custom behaviour.
-> + * Usually this is just the address of the function, but there are some
-> + * exceptions.
-> + *
-> + *   * PPC - live patch works only with -mprofile-kernel. In this case,
-> + *     the ftrace location is always within the first 16 bytes.
-> + *   * x86_64 with CET/IBT enabled - there is ENDBR instruction at +0 offset.
-> + *     __fentry__ follows it.
->   */
-> -#ifndef klp_get_ftrace_location
-> -static unsigned long klp_get_ftrace_location(unsigned long faddr)
-> +static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
+Currently, arch_stack_walk() calls start_backtrace() and walk_stackframe()
+separately. There is no need to do that. Instead, call start_backtrace()
+from within walk_stackframe(). In other words, walk_stackframe() is the only
+unwind function a consumer needs to call.
 
-Why make this the default function? It should only do this for powerpc and
-x86 *if* CET/IBT is enabled.
+Currently, the only consumer is arch_stack_walk(). In the future,
+arch_stack_walk_reliable() will be another consumer.
 
--- Steve
+Currently, there is a check for a NULL task in unwind_frame(). It is not
+needed since all current consumers pass a non-NULL task.
 
+Use struct stackframe only within the unwind functions.
 
->  {
-> -	return faddr;
-> +	return ftrace_location_range(faddr, faddr + 16);
->  }
-> -#endif
->  
+Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+---
+ arch/arm64/kernel/stacktrace.c | 41 ++++++++++++++++++----------------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
+
+diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+index 0fb58fed54cb..7217c4f63ef7 100644
+--- a/arch/arm64/kernel/stacktrace.c
++++ b/arch/arm64/kernel/stacktrace.c
+@@ -69,9 +69,6 @@ static int notrace unwind_frame(struct task_struct *tsk,
+ 	unsigned long fp = frame->fp;
+ 	struct stack_info info;
+ 
+-	if (!tsk)
+-		tsk = current;
+-
+ 	/* Final frame; nothing to unwind */
+ 	if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
+ 		return -ENOENT;
+@@ -143,15 +140,19 @@ static int notrace unwind_frame(struct task_struct *tsk,
+ NOKPROBE_SYMBOL(unwind_frame);
+ 
+ static void notrace walk_stackframe(struct task_struct *tsk,
+-				    struct stackframe *frame,
++				    unsigned long fp, unsigned long pc,
+ 				    bool (*fn)(void *, unsigned long), void *data)
+ {
++	struct stackframe frame;
++
++	start_backtrace(&frame, fp, pc);
++
+ 	while (1) {
+ 		int ret;
+ 
+-		if (!fn(data, frame->pc))
++		if (!fn(data, frame.pc))
+ 			break;
+-		ret = unwind_frame(tsk, frame);
++		ret = unwind_frame(tsk, &frame);
+ 		if (ret < 0)
+ 			break;
+ 	}
+@@ -195,17 +196,19 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+ 			      void *cookie, struct task_struct *task,
+ 			      struct pt_regs *regs)
+ {
+-	struct stackframe frame;
+-
+-	if (regs)
+-		start_backtrace(&frame, regs->regs[29], regs->pc);
+-	else if (task == current)
+-		start_backtrace(&frame,
+-				(unsigned long)__builtin_frame_address(1),
+-				(unsigned long)__builtin_return_address(0));
+-	else
+-		start_backtrace(&frame, thread_saved_fp(task),
+-				thread_saved_pc(task));
+-
+-	walk_stackframe(task, &frame, consume_entry, cookie);
++	unsigned long fp, pc;
++
++	if (regs) {
++		fp = regs->regs[29];
++		pc = regs->pc;
++	} else if (task == current) {
++		/* Skip arch_stack_walk() in the stack trace. */
++		fp = (unsigned long)__builtin_frame_address(1);
++		pc = (unsigned long)__builtin_return_address(0);
++	} else {
++		/* Caller guarantees that the task is not running. */
++		fp = thread_saved_fp(task);
++		pc = thread_saved_pc(task);
++	}
++	walk_stackframe(task, fp, pc, consume_entry, cookie);
+ }
+-- 
+2.25.1
+
