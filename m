@@ -2,29 +2,29 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5188C43219
-	for <live-patching@archiver.kernel.org>; Thu,  2 Dec 2021 22:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6424BC433FE
+	for <live-patching@archiver.kernel.org>; Thu,  2 Dec 2021 22:33:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349637AbhLBWgm (ORCPT
+        id S1377352AbhLBWgz (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 2 Dec 2021 17:36:42 -0500
-Received: from mga18.intel.com ([134.134.136.126]:48230 "EHLO mga18.intel.com"
+        Thu, 2 Dec 2021 17:36:55 -0500
+Received: from mga03.intel.com ([134.134.136.65]:52308 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245048AbhLBWga (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:36:30 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="223730390"
+        id S245276AbhLBWgg (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Thu, 2 Dec 2021 17:36:36 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236795822"
 X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="223730390"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 14:33:06 -0800
+   d="scan'208";a="236795822"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 14:33:12 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="677854451"
+   d="scan'208";a="459836417"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 14:32:58 -0800
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2021 14:33:04 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B2MWmYV028552;
-        Thu, 2 Dec 2021 22:32:55 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B2MWmYY028552;
+        Thu, 2 Dec 2021 22:33:01 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -61,9 +61,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v8 04/14] linkage: add macros for putting ASM functions into own sections
-Date:   Thu,  2 Dec 2021 23:32:04 +0100
-Message-Id: <20211202223214.72888-5-alexandr.lobakin@intel.com>
+Subject: [PATCH v8 07/14] kallsyms: Hide layout
+Date:   Thu,  2 Dec 2021 23:32:07 +0100
+Message-Id: <20211202223214.72888-8-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
 References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
@@ -73,112 +73,204 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-With ClangLTO or -ffunction-sections (DCE, FG-KASLR), compiler
-places C functions into separate sections by default.
-However, this doesn't happen with ASM functions which are still
-being placed into .text.
-Introduce a pack of macros which generate a new unique section
-for the describing function named in the same fashion
-(.text.<func_name>).
-This will be needed to make input .text section empty to harden
-the kernel even more.
+From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
+This patch makes /proc/kallsyms display in a random order, rather
+than sorted by address in order to hide the newly randomized address
+layout.
+
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/linkage.h | 82 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ kernel/kallsyms.c | 158 +++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 157 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-index dbf8506decca..baaab7dece08 100644
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -355,4 +355,86 @@
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 3011bc33a5ba..ff9d8b651966 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -583,6 +583,12 @@ struct kallsym_iter {
+ 	int show_value;
+ };
  
- #endif /* __ASSEMBLY__ */
++struct kallsyms_shuffled_iter {
++	struct kallsym_iter iter;
++	loff_t total_syms;
++	loff_t shuffled_index[];
++};
++
+ int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+ 			    char *type, char *name)
+ {
+@@ -830,7 +836,7 @@ bool kallsyms_show_value(const struct cred *cred)
+ 	}
+ }
+ 
+-static int kallsyms_open(struct inode *inode, struct file *file)
++static int __kallsyms_open(struct inode *inode, struct file *file)
+ {
+ 	/*
+ 	 * We keep iterator in m->private, since normal case is to
+@@ -851,6 +857,156 @@ static int kallsyms_open(struct inode *inode, struct file *file)
+ 	return 0;
+ }
  
 +/*
-+ * Allow ASM symbols to have their own unique sections if they are being
-+ * generated by the compiler for C functions (DCE, FG-KASLR, LTO).
++ * When function granular kaslr is enabled, we need to print out the symbols
++ * at random so we don't reveal the new layout.
 + */
-+#if (defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-+    (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
-+    (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
-+    (defined(CONFIG_LTO_CLANG))
++#ifdef CONFIG_FG_KASLR
++static int update_random_pos(struct kallsyms_shuffled_iter *s_iter,
++			     loff_t pos, loff_t *new_pos)
++{
++	loff_t new;
 +
-+#define SYM_TEXT_SECTION(name)				\
-+	.pushsection .text.##name, "ax"
++	if (pos >= s_iter->total_syms)
++		return 0;
 +
-+#define ASM_TEXT_SECTION(name)				\
-+	".text." #name
++	new = s_iter->shuffled_index[pos];
 +
-+#define ASM_PUSH_SECTION(name)				\
-+	".pushsection .text." #name ", \"ax\""
++	/*
++	 * normally this would be done as part of update_iter, however,
++	 * we want to avoid triggering this in the event that new is
++	 * zero since we don't want to blow away our pos end indicators.
++	 */
++	if (new == 0) {
++		s_iter->iter.name[0] = '\0';
++		s_iter->iter.nameoff = get_symbol_offset(new);
++		s_iter->iter.pos = new;
++	}
 +
-+#else /* just .text */
++	*new_pos = new;
++	return 1;
++}
 +
-+#define SYM_TEXT_SECTION(name)				\
-+	.pushsection .text, "ax"
++static void *shuffled_start(struct seq_file *m, loff_t *pos)
++{
++	struct kallsyms_shuffled_iter *s_iter = m->private;
++	loff_t new_pos;
 +
-+#define ASM_TEXT_SECTION(name)				\
-+	".text"
++	if (!update_random_pos(s_iter, *pos, &new_pos))
++		return NULL;
 +
-+#define ASM_PUSH_SECTION(name)				\
-+	".pushsection .text, \"ax\""
++	return s_start(m, &new_pos);
++}
 +
-+#endif /* just .text */
++static void *shuffled_next(struct seq_file *m, void *p, loff_t *pos)
++{
++	struct kallsyms_shuffled_iter *s_iter = m->private;
++	loff_t new_pos;
 +
-+#ifdef __ASSEMBLY__
++	(*pos)++;
 +
-+#define SYM_TEXT_END_SECTION				\
-+	.popsection
++	if (!update_random_pos(s_iter, *pos, &new_pos))
++		return NULL;
 +
-+#define SYM_FUNC_START_LOCAL_ALIAS_SECTION(name)	\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_FUNC_START_LOCAL_ALIAS(name)
++	if (!update_iter(m->private, new_pos))
++		return NULL;
 +
-+#define SYM_FUNC_START_LOCAL_SECTION(name)		\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_FUNC_START_LOCAL(name)
++	return p;
++}
 +
-+#define SYM_FUNC_START_NOALIGN_SECTION(name)		\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_FUNC_START_NOALIGN(name)
++/*
++ * shuffle_index_list()
++ * Use a Fisher Yates algorithm to shuffle a list of text sections.
++ */
++static void shuffle_index_list(loff_t *indexes, loff_t size)
++{
++	u32 i, j;
 +
-+#define SYM_FUNC_START_WEAK_SECTION(name)		\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_FUNC_START_WEAK(name)
++	for (i = size - 1; i > 0; i--) {
++		/* pick a random index from 0 to i */
++		j = get_random_u32() % (i + 1);
 +
-+#define SYM_FUNC_START_SECTION(name)			\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_FUNC_START(name)
++		swap(indexes[i], indexes[j]);
++	}
++}
 +
-+#define SYM_CODE_START_LOCAL_NOALIGN_SECTION(name)	\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_CODE_START_LOCAL_NOALIGN(name)
++static const struct seq_operations kallsyms_shuffled_op = {
++	.start = shuffled_start,
++	.next = shuffled_next,
++	.stop = s_stop,
++	.show = s_show
++};
 +
-+#define SYM_CODE_START_NOALIGN_SECTION(name)		\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_CODE_START_NOALIGN(name)
++static int kallsyms_random_open(struct inode *inode, struct file *file)
++{
++	loff_t pos;
++	struct kallsyms_shuffled_iter *shuffled_iter;
++	struct kallsym_iter iter;
++	bool show_value;
 +
-+#define SYM_CODE_START_SECTION(name)			\
-+	SYM_TEXT_SECTION(name) ASM_NL			\
-+	SYM_CODE_START(name)
++	/*
++	 * If privileged, go ahead and use the normal algorithm for
++	 * displaying symbols
++	 */
++	show_value = kallsyms_show_value(file->f_cred);
++	if (show_value)
++		return __kallsyms_open(inode, file);
 +
-+#define SYM_FUNC_END_ALIAS_SECTION(name)		\
-+	SYM_FUNC_END_ALIAS(name) ASM_NL			\
-+	SYM_TEXT_END_SECTION
++	/*
++	 * we need to figure out how many extra symbols there are
++	 * to print out past kallsyms_num_syms
++	 */
++	pos = kallsyms_num_syms;
++	reset_iter(&iter, 0);
++	do {
++		if (!update_iter(&iter, pos))
++			break;
++		pos++;
++	} while (1);
 +
-+#define SYM_FUNC_END_SECTION(name)			\
-+	SYM_FUNC_END(name) ASM_NL			\
-+	SYM_TEXT_END_SECTION
++	/*
++	 * add storage space for an array of loff_t equal to the size
++	 * of the total number of symbols we need to print
++	 */
++	shuffled_iter = __seq_open_private(file, &kallsyms_shuffled_op,
++					   sizeof(*shuffled_iter) +
++					   (sizeof(pos) * pos));
++	if (!shuffled_iter)
++		return -ENOMEM;
 +
-+#define SYM_CODE_END_SECTION(name)			\
-+	SYM_CODE_END(name) ASM_NL			\
-+	SYM_TEXT_END_SECTION
++	reset_iter(&shuffled_iter->iter, 0);
++	shuffled_iter->iter.show_value = show_value;
++	shuffled_iter->total_syms = pos;
 +
-+#endif /* __ASSEMBLY__ */
++	/*
++	 * the existing update_iter algorithm requires that we
++	 * are either moving along increasing pos sequentially,
++	 * or that these values are correct. Since these values
++	 * were discovered above, initialize our new iter so we
++	 * can use update_iter non-sequentially.
++	 */
++	shuffled_iter->iter.pos_arch_end = iter.pos_arch_end;
++	shuffled_iter->iter.pos_mod_end = iter.pos_mod_end;
++	shuffled_iter->iter.pos_ftrace_mod_end = iter.pos_ftrace_mod_end;
 +
- #endif /* _LINUX_LINKAGE_H */
++	/*
++	 * initialize the array with all possible pos values, then
++	 * shuffle the array so that the values will display in a random
++	 * order.
++	 */
++	for (pos = 0; pos < shuffled_iter->total_syms; pos++)
++		shuffled_iter->shuffled_index[pos] = pos;
++
++	shuffle_index_list(shuffled_iter->shuffled_index, shuffled_iter->total_syms);
++
++	return 0;
++}
++
++#define kallsyms_open kallsyms_random_open
++#else
++#define kallsyms_open __kallsyms_open
++#endif /* !CONFIG_FG_KASLR */
++
+ #ifdef	CONFIG_KGDB_KDB
+ const char *kdb_walk_kallsyms(loff_t *pos)
+ {
 -- 
 2.33.1
 
