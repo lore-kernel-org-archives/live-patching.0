@@ -2,117 +2,115 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93AD4C433FE
-	for <live-patching@archiver.kernel.org>; Thu, 16 Dec 2021 09:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE437C433EF
+	for <live-patching@archiver.kernel.org>; Thu, 16 Dec 2021 14:14:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbhLPJ5J (ORCPT
+        id S229576AbhLPOOn (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 16 Dec 2021 04:57:09 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48664 "EHLO
+        Thu, 16 Dec 2021 09:14:43 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:42854 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbhLPJ5G (ORCPT
+        with ESMTP id S229525AbhLPOOn (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 16 Dec 2021 04:57:06 -0500
+        Thu, 16 Dec 2021 09:14:43 -0500
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1F4391F3D5;
-        Thu, 16 Dec 2021 09:57:05 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id CF34F1F465;
+        Thu, 16 Dec 2021 14:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1639648625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1639664081; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=/qs9vdN+xRjPf2KjM847rLgFEPvaZLOMDkaNcOmQ168=;
-        b=haZVP4CwUHJ6qfUYg0HrUuEPBdwSchA8MxUm6At5ZqNNeXFuxcmTm1dKf9fMOAjTK1n+xy
-        yb3RVjJX0tR5iCchP78Zu0s/UmYUQtldRdK+ffJc+Ifq0v1UTsdQWX3L9rU/BjkQsZQfED
-        y/t55etkmRccGf0VvRtpSkwQ5BWLxkI=
+        bh=1ue6/TYI0i0J8w8ZHXna6f2slYijkGXx+ie8ci2x8po=;
+        b=iG3tZzfJ5SCS+SfJADwn/EPifM89UCPJzH8u6lWyVnQgjHeg04JRxwOrDZypH1wu79x7j3
+        tPIkYtw9Zdr/UofWIVhlE9NYxGgK0ODkYeu5WAgN4W1aZ0T9hD3k7w4nx36EMfEYt7wS26
+        1NXLjXTzPZy7tUpR6rEwdDS1iOq5v7E=
 Received: from suse.cz (unknown [10.100.224.162])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C15032C1D2;
-        Thu, 16 Dec 2021 09:57:04 +0000 (UTC)
-Date:   Thu, 16 Dec 2021 10:57:04 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id 8377DA3B81;
+        Thu, 16 Dec 2021 14:14:41 +0000 (UTC)
+Date:   Thu, 16 Dec 2021 15:14:38 +0100
 From:   Petr Mladek <pmladek@suse.com>
-To:     David Vernet <void@manifault.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, jpoimboe@redhat.com, jikos@kernel.org,
-        mbenes@suse.cz, joe.lawrence@redhat.com, corbet@lwn.net
-Subject: Re: [PATCH v2] Documentation: livepatch: Add livepatch API page
-Message-ID: <YbsNcAKzRCxGqXUA@alley>
-References: <20211215174659.2332589-1-void@manifault.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Vernet <void@manifault.com>, Miroslav Benes <mbenes@suse.cz>,
+        linux-doc@vger.kernel.org, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jpoimboe@redhat.com,
+        jikos@kernel.org, joe.lawrence@redhat.com, corbet@lwn.net,
+        yhs@fb.com, songliubraving@fb.com
+Subject: Re: [PATCH] livepatch: Fix leak on klp_init_patch_early failure path
+Message-ID: <YbtJzonSJjcUaUwh@alley>
+References: <20211213191734.3238783-1-void@manifault.com>
+ <YbhZwVocHDX9ZBAc@alley>
+ <alpine.LSU.2.21.2112141012090.20187@pobox.suse.cz>
+ <Ybi3qcA5ySDYpyib@dev0025.ash9.facebook.com>
+ <Ybi9NzbvWU7ka8m1@kroah.com>
+ <YbmlL0ZyfSuek9OB@alley>
+ <YboLPAmOc8/6khu2@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215174659.2332589-1-void@manifault.com>
+In-Reply-To: <YboLPAmOc8/6khu2@kroah.com>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed 2021-12-15 09:47:00, David Vernet wrote:
-> The livepatch subsystem has several exported functions and objects with
-> kerneldoc comments. Though the livepatch documentation contains
-> handwritten descriptions of all of these exported functions, they are
-> currently not pulled into the docs build using the kernel-doc directive.
+On Wed 2021-12-15 16:35:24, Greg Kroah-Hartman wrote:
+> On Wed, Dec 15, 2021 at 09:19:59AM +0100, Petr Mladek wrote:
+> > On Tue 2021-12-14 16:50:15, Greg Kroah-Hartman wrote:
+> > > 
+> > > kobject_init() does allocate things internally, where does it say it
+> > > does not?  What is trying to be "fixed" here?
+> > 
+> > Could you please show where things are allocated in kobject_init()?
+> > I do not see it in the code!
+> > 
+> > It looks to me like a cargo cult claim to me.
 > 
-> Note that all of the handwritten API descriptions were left alone with
-> the exception of Documentation/livepatch/system-state.rst, which was
-> updated to allow the cross-referencing to work correctly. The file now
-> follows the cross-referencing formatting guidance specified in
-> Documentation/doc-guide/kernel-doc.rst. Furthermore, some comments
-> around klp_shadow_free_all() were updated to say <obj, id> rather than
-> <*, id> to match the rest of the file, and to prevent the docs build
-> from emitting an "Inline emphasis start-string without end string"
-> error.
+> Hm, I thought I saw it yesterday when I reviewed the code.  Let me look
+> again...
 > 
-> --- a/kernel/livepatch/shadow.c
-> +++ b/kernel/livepatch/shadow.c
-> @@ -272,12 +272,12 @@ void klp_shadow_free(void *obj, unsigned long id, klp_shadow_dtor_t dtor)
->  EXPORT_SYMBOL_GPL(klp_shadow_free);
->  
->  /**
-> - * klp_shadow_free_all() - detach and free all <*, id> shadow variables
-> + * klp_shadow_free_all() - detach and free all <obj, id> shadow variables
+> > Documentation/core-api/kobject.rst says:
+> > 
+> >    Once you registered your kobject via kobject_add(), you must never use
+> >    kfree() to free it directly. The only safe way is to use kobject_put().
+> > 
+> > kobject_add() makes perfect sense because it copies the name, takes
+> > reference to the parent, etc.
+> > 
+> > kobject_init() just initializes the structure members and nothing else.
+> 
+> Now it does.  In the past, I think we did create some memory.  I know
+> when we hook debugobjects up to kobjects (there's an external patch for
+> that floating around somewhere), that is one reason to keep the
+> kobject_put() rule, and there might have been other reasons in the past
+> 20+ years as well.
+> 
+> So yes, while you are correct today, the "normal" reference counted
+> object model patern is "after the object is initialized, it MUST only be
+> freed by handling its reference count."  So let's stick to that rule for
+> now.
 
-This change is not good. The function releases all existing shadow
-variables with the given @id for any @obj. And it is not longer clear.
-
-I guess that the primary motivation was to remove  "Inline emphasis
-start-string without end string" mentioned in the commit message.
-
-A solution would be replace '*' with something else, for example, < , id>.
-Another solution would be to describe it another way, for example:
-
- * klp_shadow_free_all() - detach and free all <obj, id> shadow variables
- *		with the given @id.
-
->   * @id:		data identifier
->   * @dtor:	custom callback that can be used to unregister the variable
->   *		and/or free data that the shadow variable points to (optional)
->   *
-> - * This function releases the memory for all <*, id> shadow variable
-> + * This function releases the memory for all <obj, id> shadow variable
-
-Same here.
-
->   * instances, callers should stop referencing them accordingly.
->   */
->  void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
-> @@ -288,7 +288,7 @@ void klp_shadow_free_all(unsigned long id, klp_shadow_dtor_t dtor)
->  
->  	spin_lock_irqsave(&klp_shadow_lock, flags);
->  
-> -	/* Delete all <*, id> from hash */
-> +	/* Delete all <obj, id> from hash */
-
-and here
-
->  	hash_for_each(klp_shadow_hash, i, shadow, node) {
->  		if (klp_shadow_match(shadow, shadow->obj, id))
->  			klp_shadow_free_struct(shadow, dtor);
-
-BTW: There is likely the same problem in Documentation/livepatch/shadow-vars.rst.
-     I see <*, id> there as well.
+Good point.
 
 
-Otherwise, the patch looks fine to me.
+> If you want, I can put some code in the kobject_init() logic to force
+> this to be the case if it bothers you :)
+
+I actually know about one case where this might be very useful.
+
+There is the problem with kobject lifetime and module removal.
+module is removed after mod->exit() callback finishes. But some
+kobject release() callbacks might be delayed, especillay when
+CONFIG_DEBUG_KOBJECT_RELEASE is enabled.
+
+I have proposed there a solution where kobject_add_internal() takes reference
+on the module. It would make sure that the module will stay in the
+memory until the release callbacks is called, see
+https://lore.kernel.org/all/Ya84O2%2FnYCyNb%2Ffp@alley/
+
+But kobject_add_internal() is not the right place. The reference on
+the module should be taken already in kobject_init() because the
+release callbacks might be used after this point.
 
 Best Regards,
 Petr
