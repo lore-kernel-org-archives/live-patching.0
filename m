@@ -2,303 +2,121 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D3F9C433FE
-	for <live-patching@archiver.kernel.org>; Thu, 23 Dec 2021 00:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19809C433F5
+	for <live-patching@archiver.kernel.org>; Thu, 23 Dec 2021 00:42:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbhLWA0g (ORCPT
+        id S237103AbhLWAmr (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Dec 2021 19:26:36 -0500
-Received: from mga09.intel.com ([134.134.136.24]:53166 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345757AbhLWAYC (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:24:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219042; x=1671755042;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+KrOqIqb4aeQ6x0G1EHmcHniPYRjIzt9aPk8YuSf44w=;
-  b=UmzSkarp70lbdny1BCH/IXH1WJ2gz2gDlj7yFWGO4w4MDmVUaMWT5H0K
-   6vE84T+303rLuEt1zi2ndrBGn+gw/te5BrLOwcB7y88tS3Sjfc5SFg8qX
-   ZJdqL9JH1hrMtILIvHkxDmonTLd3LoPL5FyYz4TPrEluYnz9rClkUGB2D
-   RDybQ/H9XoQkw/YZqS6wD920xpLGwsjPYcA94EH4UFUvkX4aziDQk362h
-   Dhbz7N+hnFpBjUst2URYOgPrptDHVLTRuva5kaBVadmk/bXkq5n5MATeq
-   ggW8WcdGAQPTEawosQOHL9uwP6nN2Js6+UY94scf156F9B2r8EZM40kEC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="240533510"
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="240533510"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="521881976"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 22 Dec 2021 16:23:33 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79H032467;
-        Thu, 23 Dec 2021 00:23:31 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     linux-hardening@vger.kernel.org, x86@kernel.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v9 12/15] module: Reorder functions
-Date:   Thu, 23 Dec 2021 01:22:06 +0100
-Message-Id: <20211223002209.1092165-13-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+        Wed, 22 Dec 2021 19:42:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41361 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235461AbhLWAmr (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:42:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640220166;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E7Oy6iCSZJJW8lTBkEZWPZ+i3wkBqq3QgTivZq9ltkY=;
+        b=MM9NeHxuInksUmQQOBtqSTEBhQtqjdFPsXmE/df0VdgO8bIpHXRM0z+0tCz5KtELiEiVEQ
+        95ojNJs64RnsVylSfgFroyFLBhqTbUE2lLnafjpzv1Q1FSONhoGVTOFcCq7UZ/64n0wWkE
+        44A8UXccYnO78LB4haf0OkTNpaDx4ug=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-543-CFXQLiTKOfaGExxWQ_xFGw-1; Wed, 22 Dec 2021 19:42:45 -0500
+X-MC-Unique: CFXQLiTKOfaGExxWQ_xFGw-1
+Received: by mail-ot1-f72.google.com with SMTP id 66-20020a9d0c48000000b0058f58571e0fso40251otr.23
+        for <live-patching@vger.kernel.org>; Wed, 22 Dec 2021 16:42:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E7Oy6iCSZJJW8lTBkEZWPZ+i3wkBqq3QgTivZq9ltkY=;
+        b=Hr7Rq+qpEN0/uS4PYCz+TZTU2oXU2L1b+bjbjkuUAF+534N8Hii0K5ln6da0aqcILP
+         7y39LmlvixQeE2OLlRB96GwhqorqcYLQfOk426U8y139yWaVIVV2blKazd5XuVFZ9OLX
+         yd7Mx/Mocqzom07JGst1Vffy1xq9pBPqL7M0QFPz1DC9+YNpUA5F1Mu3kVH2Gk9vtrOP
+         nBIlJt41qi8Pa6lCYB0pVHZ+3llIoLheOQ785IFnEoRoEFQJrRuJMoSBEPjD7OSOMheP
+         qn+XJSkuiKrTlu1iXrgP0OiQErY731C/8PxYIypNWCCd84inFqJiJFTL6pHjeHury+n7
+         5Y6Q==
+X-Gm-Message-State: AOAM532jB55wXxK7P6bgmeCmlhKH1UIW5JYLbT8o59LhlinI8b33L/KK
+        C482Rh/6cgmgk/btpaxcqUGnxprf8D/NjqvY994UVFpzAtKg/5a0fFyZx3jlq7U1uFIIku/ZN40
+        nTvL+5xTveZkeRSHpS80W4ZnnoQ==
+X-Received: by 2002:a54:470f:: with SMTP id k15mr60144oik.92.1640220164743;
+        Wed, 22 Dec 2021 16:42:44 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwmeT/M9BiyPn2ri4zzJLa19R0qkgWAVHjSJ4zSvj08GjU0PsiTvge1ijDAeDnTdnxbAKY40Q==
+X-Received: by 2002:a54:470f:: with SMTP id k15mr60137oik.92.1640220164471;
+        Wed, 22 Dec 2021 16:42:44 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::c])
+        by smtp.gmail.com with ESMTPSA id s6sm744371ois.3.2021.12.22.16.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Dec 2021 16:42:44 -0800 (PST)
+Date:   Wed, 22 Dec 2021 16:42:41 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     David Vernet <void@manifault.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, corbet@lwn.net
+Subject: Re: [PATCH v3] livepatch: Fix kobject refcount bug on
+ klp_init_patch_early failure path
+Message-ID: <20211223004241.zvv4ymjmcmimumra@treble>
+References: <20211221153930.137579-1-void@manifault.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211221153930.137579-1-void@manifault.com>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Kristen Carlson Accardi <kristen@linux.intel.com>
+On Tue, Dec 21, 2021 at 07:39:31AM -0800, David Vernet wrote:
+> When enabling a klp patch with klp_enable_patch(), klp_init_patch_early()
+> is invoked to initialize the kobjects for the patch itself, as well as the
+> 'struct klp_object' and 'struct klp_func' objects that comprise it.
+> However, there are some error paths in klp_enable_patch() where some
+> kobjects may have been initialized with kobject_init(), but an error code
+> is still returned due to e.g. a 'struct klp_object' having a NULL funcs
+> pointer.
+> 
+> In these paths, the initial reference of the kobject of the 'struct
+> klp_patch' may never be released, along with one or more of its objects and
+> their functions, as kobject_put() is not invoked on the cleanup path if
+> klp_init_patch_early() returns an error code.
+> 
+> For example, if an object entry such as the following were added to the
+> sample livepatch module's klp patch, it would cause the vmlinux klp_object,
+> and its klp_func which updates 'cmdline_proc_show', to never be released:
+> 
+> static struct klp_object objs[] = {
+> 	{
+> 		/* name being NULL means vmlinux */
+> 		.funcs = funcs,
+> 	},
+> 	{
+> 		/* NULL funcs -- would cause reference leak */
+> 		.name = "kvm",
+> 	}, { }
+> };
+> 
+> Without this change, if CONFIG_DEBUG_KOBJECT is enabled, and the sample klp
+> patch is loaded, the kobjects (the patch, the vmlinux 'struct klp_object',
+> and its func) are observed as initialized, but never released, in the dmesg
+> log output.  With the change, these kobject references no longer fail to be
+> released as the error case is properly handled before they are initialized.
+> 
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+> v3:
+>   - Update patch description to not specifically claim to be fixing a
+>     "leak", but rather a kobject reference counting bug.
+>   - Make klp_init_patch_early() void to match klp_init_object_early() and
+>     klp_init_func_early(), and move the arg validation that previously
+>     resided there into klp_enable_patch() (where other argument validation
+>     logic already resides).
 
-Introduce a new config option to allow modules to be re-ordered
-by function. This option can be enabled independently of the
-kernel text KASLR or FG_KASLR settings so that it can be used
-by architectures that do not support either of these features.
-This option will be selected by default if CONFIG_FG_KASLR is
-selected.
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
-If a module has functions split out into separate text sections
-(i.e. compiled with the -ffunction-sections flag), reorder the
-functions to provide some code diversification to modules.
-
-alobakin:
-Make it work with ClangCFI -- in such builds, .text section must
-always come first and be page-aligned. Exclude it from the shuffle
-list and leave as it is.
-Make this feature depend on `-z unique-symbol` as well, due to the
-very same reasons.
-Traditionally, use common shuffle_array() from <linux/random.h>.
-
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Tested-by: Ard Biesheuvel <ardb@kernel.org>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Acked-by: Jessica Yu <jeyu@kernel.org>
-Tested-by: Jessica Yu <jeyu@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
-Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- Makefile                |  6 +++-
- include/linux/linkage.h |  1 +
- init/Kconfig            | 14 ++++++++
- kernel/module.c         | 73 +++++++++++++++++++++++++++++++++++++++--
- 4 files changed, 91 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 3346269341d4..74d270c77d96 100644
---- a/Makefile
-+++ b/Makefile
-@@ -900,7 +900,7 @@ export SECSUBST_AFLAGS
- endif
- 
- # Same for modules. LD DCE doesn't work for them, thus not checking for it
--ifneq ($(CONFIG_LTO_CLANG),)
-+ifneq ($(CONFIG_MODULE_FG_KASLR)$(CONFIG_LTO_CLANG),)
- KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
- KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
- endif
-@@ -909,6 +909,10 @@ endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
- # ClangLTO implies `-ffunction-sections -fdata-sections`, no need
- # to specify them manually and trigger a pointless full rebuild
- ifndef CONFIG_LTO_CLANG
-+ifdef CONFIG_MODULE_FG_KASLR
-+KBUILD_CFLAGS_MODULE += -ffunction-sections
-+endif
-+
- ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
- KBUILD_CFLAGS_KERNEL += -ffunction-sections
- endif
-diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-index f3c96fb6a534..deb26069278a 100644
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -80,6 +80,7 @@
- #if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
-     ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-      (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
-+     (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
-      (defined(CONFIG_LTO_CLANG)))
- 
- #define SYM_PUSH_SECTION(name)				\
-diff --git a/init/Kconfig b/init/Kconfig
-index 381b063b4925..38c82e21efd7 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2376,6 +2376,20 @@ config UNUSED_KSYMS_WHITELIST
- 	  one per line. The path can be absolute, or relative to the kernel
- 	  source tree.
- 
-+config MODULE_FG_KASLR
-+	bool "Module Function Granular Layout Randomization"
-+	depends on $(cc-option,-ffunction-sections)
-+	depends on LD_HAS_Z_UNIQUE_SYMBOL || !LIVEPATCH
-+	default FG_KASLR
-+	depends on BROKEN
-+	help
-+	  This option randomizes the module text section by reordering the text
-+	  section by function at module load time. In order to use this
-+	  feature, the module must have been compiled with the
-+	  -ffunction-sections compiler flag.
-+
-+	  If unsure, say N.
-+
- endif # MODULES
- 
- config MODULES_TREE_LOOKUP
-diff --git a/kernel/module.c b/kernel/module.c
-index 84a9141a5e15..802e1098eaf4 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -57,6 +57,7 @@
- #include <linux/bsearch.h>
- #include <linux/dynamic_debug.h>
- #include <linux/audit.h>
-+#include <linux/random.h>
- #include <uapi/linux/module.h>
- #include "module-internal.h"
- 
-@@ -1527,7 +1528,7 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
- 
- 	for (section = 0; section < sect_attrs->nsections; section++)
- 		kfree(sect_attrs->attrs[section].battr.attr.name);
--	kfree(sect_attrs);
-+	kvfree(sect_attrs);
- }
- 
- static void add_sect_attrs(struct module *mod, const struct load_info *info)
-@@ -1544,7 +1545,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
- 	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
- 			sizeof(sect_attrs->grp.bin_attrs[0]));
- 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
--	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
-+	sect_attrs = kvzalloc(size[0] + size[1], GFP_KERNEL);
- 	if (sect_attrs == NULL)
- 		return;
- 
-@@ -2416,6 +2417,71 @@ static bool module_init_layout_section(const char *sname)
- 	return module_init_section(sname);
- }
- 
-+/*
-+ * randomize_text()
-+ * Look through the core section looking for executable code sections.
-+ * Store sections in an array and then shuffle the sections
-+ * to reorder the functions.
-+ */
-+static void randomize_text(struct module *mod, struct load_info *info)
-+{
-+	int max_sections = info->hdr->e_shnum;
-+	int num_text_sections = 0;
-+	Elf_Shdr **text_list;
-+	int i, size;
-+
-+	text_list = kvmalloc_array(max_sections, sizeof(*text_list), GFP_KERNEL);
-+	if (!text_list)
-+		return;
-+
-+	for (i = 0; i < max_sections; i++) {
-+		Elf_Shdr *shdr = &info->sechdrs[i];
-+		const char *sname = info->secstrings + shdr->sh_name;
-+
-+		if (!(shdr->sh_flags & SHF_ALLOC) ||
-+		    !(shdr->sh_flags & SHF_EXECINSTR) ||
-+		    (shdr->sh_flags & ARCH_SHF_SMALL) ||
-+		    module_init_layout_section(sname))
-+			continue;
-+
-+		/*
-+		 * With CONFIG_CFI_CLANG, .text with __cfi_check() must come
-+		 * before any other text sections, and be aligned to PAGE_SIZE.
-+		 * Don't include it in the shuffle list.
-+		 */
-+		if (IS_ENABLED(CONFIG_CFI_CLANG) && !strcmp(sname, ".text"))
-+			continue;
-+
-+		if (!num_text_sections)
-+			size = shdr->sh_entsize;
-+
-+		text_list[num_text_sections] = shdr;
-+		num_text_sections++;
-+	}
-+
-+	if (!num_text_sections)
-+		goto exit;
-+
-+	shuffle_array(text_list, num_text_sections);
-+
-+	for (i = 0; i < num_text_sections; i++) {
-+		Elf_Shdr *shdr = text_list[i];
-+
-+		/*
-+		 * get_offset has a section index for it's last
-+		 * argument, that is only used by arch_mod_section_prepend(),
-+		 * which is only defined by parisc. Since this type
-+		 * of randomization isn't supported on parisc, we can
-+		 * safely pass in zero as the last argument, as it is
-+		 * ignored.
-+		 */
-+		shdr->sh_entsize = get_offset(mod, &size, shdr, 0);
-+	}
-+
-+exit:
-+	kvfree(text_list);
-+}
-+
- /*
-  * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
-  * might -- code, read-only data, read-write data, small data.  Tally
-@@ -2510,6 +2576,9 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 			break;
- 		}
- 	}
-+
-+	if (IS_ENABLED(CONFIG_MODULE_FG_KASLR))
-+		randomize_text(mod, info);
- }
- 
- static void set_license(struct module *mod, const char *license)
 -- 
-2.33.1
+Josh
 
