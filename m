@@ -2,42 +2,42 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D0F1C4167D
-	for <live-patching@archiver.kernel.org>; Thu, 23 Dec 2021 00:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A87C43217
+	for <live-patching@archiver.kernel.org>; Thu, 23 Dec 2021 00:24:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345792AbhLWAYD (ORCPT
+        id S1345581AbhLWAYQ (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Dec 2021 19:24:03 -0500
-Received: from mga17.intel.com ([192.55.52.151]:59144 "EHLO mga17.intel.com"
+        Wed, 22 Dec 2021 19:24:16 -0500
+Received: from mga17.intel.com ([192.55.52.151]:59169 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345655AbhLWAXm (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:23:42 -0500
+        id S1345645AbhLWAXq (ORCPT <rfc822;live-patching@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:23:46 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219022; x=1671755022;
+  t=1640219026; x=1671755026;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=cJt4EQ6UCbCx+1z2FmP05zLBMZ/f/ExXF1JWdLFGisg=;
-  b=SE+7DKFmwSRdr25NK5yt11XUFQoVl4z1QD0SwtWFHPgPv4ME2UZHvu9h
-   E2NgChM9o3Hd9QibE9VuHGdNx9iL9SIOLi8Cec+eIdyxDS2+Xyc7RPlp+
-   vwR9+mEZKxq1nI2i5eJCjRYLCd1zzZTvjlzm9q8Va1Jc92iMC7gP2cdhY
-   ZCcqRx6cPnEfXiaZCWalYpzQS4o+PnWZube9VzCxpl8dz475EtPOvj+0R
-   +el4qLjnXTv2tvGESmrmhk7IROUAk7yapAULfumAmOzTItuujsWSqeRTK
-   lYjsD8TqmPqzDt4Yo4EPjt8nKMOwF8TniV6jqvj+9K9UV9/03sTZjbzbW
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="221405030"
+  bh=6bgGNBnZwENMN8GpY2U+2AbjFachztYCvAD4DvsBiQw=;
+  b=oIgdReW2znaIz80ygtLYnZzJqe8FqNIw0LFQAVq0EMIt7pmxnvLrNlHG
+   j14iQTezO7Us0L2AX2IZbG875GgsdhImOAX/dpHKxPzBg5o5HZ9lXR3Mn
+   DL0dqtKHVO/+uOUsaoQb9FVhcYJO1phnwLowc3uJqPUsfqOYLqs5jpS7i
+   5UBsrNOiQz3fbTTXg/YvApDbw5I7n8imXvg1u9DMVEz5fukJpmcTiTuSD
+   J3MEd4bGp7n77B+5FnJXGgouPb0LalVljOEVL1wf2rTf6+y4r4eHePJkx
+   DT8eiTc5OHWQSIuw95bcCa66mBZadMQ6UA4pllke9QIYQqEk17dC2Syc+
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="221405076"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="221405030"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:23 -0800
+   d="scan'208";a="221405076"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:46 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="587169695"
+   d="scan'208";a="617312145"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 16:23:16 -0800
+  by orsmga004.jf.intel.com with ESMTP; 22 Dec 2021 16:23:37 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N798032467;
-        Thu, 23 Dec 2021 00:23:13 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79J032467;
+        Thu, 23 Dec 2021 00:23:35 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -75,9 +75,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v9 03/15] kallsyms: Hide layout
-Date:   Thu, 23 Dec 2021 01:21:57 +0100
-Message-Id: <20211223002209.1092165-4-alexandr.lobakin@intel.com>
+Subject: [PATCH v9 14/15] Documentation: add documentation for FG-KASLR
+Date:   Thu, 23 Dec 2021 01:22:08 +0100
+Message-Id: <20211223002209.1092165-15-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
@@ -89,233 +89,225 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-This patch makes /proc/kallsyms display in a random order, rather
-than sorted by address in order to hide the newly randomized address
-layout.
-
-alobakin:
-Don't depend FG-KASLR and always do that for unpriviledged accesses
-as suggested by several folks.
-Also, introduce and use a shuffle_array() macro which shuffles an
-array using Fisher-Yates. We'll make use of it several more times
-later on.
+Describe the main principles behind the FG-KASLR hardening feature
+in a new doc section.
 
 Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
-Suggested-by: Ard Biesheuvel <ardb@kernel.org> # always do that
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com> # always do that
-Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do that, macro
-Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/random.h | 16 ++++++++
- kernel/kallsyms.c      | 93 ++++++++++++++++++++++++++++++++++--------
- 2 files changed, 93 insertions(+), 16 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |   6 +
+ Documentation/security/fgkaslr.rst            | 172 ++++++++++++++++++
+ Documentation/security/index.rst              |   1 +
+ 3 files changed, 179 insertions(+)
+ create mode 100644 Documentation/security/fgkaslr.rst
 
-diff --git a/include/linux/random.h b/include/linux/random.h
-index f45b8be3e3c4..c859a698089c 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -110,6 +110,22 @@ declare_get_random_var_wait(long)
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index fc34332c8d9a..b79423c5a41a 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2224,6 +2224,12 @@
+ 			kernel and module base offset ASLR (Address Space
+ 			Layout Randomization).
  
- unsigned long randomize_page(unsigned long start, unsigned long range);
++	nofgkaslr	[KNL]
++			When CONFIG_FG_KASLR is set, this parameter
++			disables kernel function granular ASLR
++			(Address Space Layout Randomization).
++			See Documentation/security/fgkaslr.rst.
++
+ 	kasan_multi_shot
+ 			[KNL] Enforce KASAN (Kernel Address Sanitizer) to print
+ 			report on every invalid memory access. Without this
+diff --git a/Documentation/security/fgkaslr.rst b/Documentation/security/fgkaslr.rst
+new file mode 100644
+index 000000000000..50dc24f675b5
+--- /dev/null
++++ b/Documentation/security/fgkaslr.rst
+@@ -0,0 +1,172 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++=====================================================================
++Function Granular Kernel Address Space Layout Randomization (fgkaslr)
++=====================================================================
++
++:Date: 6 April 2020
++:Author: Kristen Accardi
++
++Kernel Address Space Layout Randomization (KASLR) was merged into the kernel
++with the objective of increasing the difficulty of code reuse attacks. Code
++reuse attacks reused existing code snippets to get around existing memory
++protections. They exploit software bugs which expose addresses of useful code
++snippets to control the flow of execution for their own nefarious purposes.
++KASLR as it was originally implemented moves the entire kernel code text as a
++unit at boot time in order to make addresses less predictable. The order of the
++code within the segment is unchanged - only the base address is shifted. There
++are a few shortcomings to this algorithm.
++
++1. Low Entropy - there are only so many locations the kernel can fit in. This
++   means an attacker could guess without too much trouble.
++2. Knowledge of a single address can reveal the offset of the base address,
++   exposing all other locations for a published/known kernel image.
++3. Info leaks abound.
++
++Finer grained ASLR has been proposed as a way to make ASLR more resistant
++to info leaks. It is not a new concept at all, and there are many variations
++possible. Function reordering is an implementation of finer grained ASLR
++which randomizes the layout of an address space on a function level
++granularity. The term "fgkaslr" is used in this document to refer to the
++technique of function reordering when used with KASLR, as well as finer grained
++KASLR in general.
++
++The objective of this patch set is to improve a technology that is already
++merged into the kernel (KASLR). This code will not prevent all code reuse
++attacks, and should be considered as one of several tools that can be used.
++
++Implementation Details
++======================
++
++The over-arching objective of the fgkaslr implementation is incremental
++improvement over the existing KASLR algorithm. It is designed to work with
++the existing solution, and there are two main area where code changes occur:
++Build time, and Load time.
++
++Build time
++----------
++
++GCC has had an option to place functions into individual .text sections
++for many years now (-ffunction-sections). This option is used to implement
++function reordering at load time. The final compiled vmlinux retains all the
++section headers, which can be used to help find the address ranges of each
++function. Using this information and an expanded table of relocation addresses,
++individual text sections can be shuffled immediately after decompression.
++Some data tables inside the kernel that have assumptions about order
++require sorting after the update. In order to modify these tables,
++a few key symbols from the objcopy symbol stripping process are preserved
++for use after shuffling the text segments. Any special input sections which are
++defined by the kernel build process and collected into the .text output
++segment are left unmodified and will still be present inside the .text segment,
++unrandomized other than normal base address randomization.
++
++Load time
++---------
++
++The boot kernel was modified to parse the vmlinux elf file after
++decompression to check for symbols for modifying data tables, and to
++look for any .text.* sections to randomize. The sections are then shuffled,
++and tables are updated or resorted. The existing code which updated relocation
++addresses was modified to account for not just a fixed delta from the load
++address, but the offset that the function section was moved to. This requires
++inspection of each address to see if it was impacted by a randomization.
++
++In order to hide the new layout, symbols reported through /proc/kallsyms will
++be displayed in a random order.
++
++Performance Impact
++==================
++
++There are two areas where function reordering can impact performance: boot
++time latency, and run time performance.
++
++Boot time latency
++-----------------
++
++This implementation of finer grained KASLR impacts the boot time of the kernel
++in several places. It requires additional parsing of the kernel ELF file to
++obtain the section headers of the sections to be randomized. It calls the
++random number generator for each section to be randomized to determine that
++section's new memory location. It copies the decompressed kernel into a new
++area of memory to avoid corruption when laying out the newly randomized
++sections. It increases the number of relocations the kernel has to perform at
++boot time vs. standard KASLR, and it also requires a lookup on each address
++that needs to be relocated to see if it was in a randomized section and needs
++to be adjusted by a new offset. Finally, it re-sorts a few data tables that
++are required to be sorted by address.
++
++Booting a test VM on a modern, well appointed system showed an increase in
++latency of approximately 1 second.
++
++Run time
++--------
++
++The performance impact at run-time of function reordering varies by workload.
++Randomly reordering the functions will cause an increase in cache misses
++for some workloads. Some workloads perform significantly worse under FGKASLR,
++while others stay the same or even improve. In general, it will depend on the
++code flow whether or not finer grained KASLR will impact a workload, and how
++the underlying code was designed. Because the layout changes per boot, each
++time a system is rebooted the performance of a workload may change.
++
++Image Size
++==========
++
++fgkaslr increases the size of the kernel binary due to the extra section
++headers that are included, as well as the extra relocations that need to
++be added. You can expect fgkaslr to increase the size of the resulting
++vmlinux by about 3%, and the compressed image (bzImage) by 15%.
++
++Memory Usage
++============
++
++fgkaslr increases the amount of heap that is required at boot time,
++although this extra memory is released when the kernel has finished
++decompression. As a result, it may not be appropriate to use this feature
++on systems without much memory.
++
++Building
++========
++
++To enable fine grained KASLR, you need to have the following config options
++set (including all the ones you would use to build normal KASLR)
++
++``CONFIG_FG_KASLR=y``
++
++fgkaslr for the kernel is only supported for the X86_64 architecture.
++
++Modules
++=======
++
++Modules are randomized similarly to the rest of the kernel by shuffling
++the sections at load time prior to moving them into memory. The module must
++also have been build with the -ffunction-sections compiler option.
++
++Although fgkaslr for the kernel is only supported for the X86_64 architecture,
++it is possible to use fgkaslr with modules on other architectures. To enable
++this feature, select the following config option:
++
++``CONFIG_MODULE_FG_KASLR``
++
++This option is selected automatically for X86_64 when CONFIG_FG_KASLR is set.
++
++Disabling
++=========
++
++Disabling normal kaslr using the nokaslr command line option also disables
++fgkaslr. In addition, it is possible to disable fgkaslr separately by booting
++with "nofgkaslr" on the commandline.
++
++Further Information
++===================
++
++There are a lot of academic papers which explore finer grained ASLR.
++This paper in particular contributed significantly to the implementation design.
++
++Selfrando: Securing the Tor Browser against De-anonymization Exploits,
++M. Conti, S. Crane, T. Frassetto, et al.
++
++For more information on how function layout impacts performance, see:
++
++Optimizing Function Placement for Large-Scale Data-Center Applications,
++G. Ottoni, B. Maher
+diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+index 16335de04e8c..41444124090f 100644
+--- a/Documentation/security/index.rst
++++ b/Documentation/security/index.rst
+@@ -7,6 +7,7 @@ Security Documentation
  
-+/**
-+ * shuffle_array - use a Fisher Yates algorithm to shuffle an array.
-+ * @arr: pointer to the array
-+ * @nents: the number of elements in the array
-+ */
-+#define shuffle_array(arr, nents) ({				\
-+	typeof(&(arr)[0]) __arr = &(arr)[0];			\
-+	size_t __i;						\
-+								\
-+	for (__i = (nents) - 1; __i > 0; __i--) {		\
-+		size_t __j = get_random_long() % (__i + 1);	\
-+								\
-+		swap(__arr[__i], __arr[__j]);			\
-+	}							\
-+})
-+
- /*
-  * This is designed to be standalone for just prandom
-  * users, but for now we include it from <linux/random.h>
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 3011bc33a5ba..5d41b993113f 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -574,13 +574,15 @@ struct kallsym_iter {
- 	loff_t pos_mod_end;
- 	loff_t pos_ftrace_mod_end;
- 	loff_t pos_bpf_end;
-+	loff_t pos_end;
- 	unsigned long value;
- 	unsigned int nameoff; /* If iterating in core kernel symbols. */
- 	char type;
- 	char name[KSYM_NAME_LEN];
- 	char module_name[MODULE_NAME_LEN];
- 	int exported;
--	int show_value;
-+	bool show_layout;
-+	loff_t shuffled_pos[];
- };
- 
- int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-@@ -660,11 +662,19 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
-  */
- static int get_ksymbol_kprobe(struct kallsym_iter *iter)
- {
-+	int ret;
-+
- 	strlcpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
- 	iter->exported = 0;
--	return kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
--				  &iter->value, &iter->type,
--				  iter->name) < 0 ? 0 : 1;
-+	ret = kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
-+				 &iter->value, &iter->type,
-+				 iter->name);
-+	if (ret < 0) {
-+		iter->pos_end = iter->pos;
-+		return 0;
-+	}
-+
-+	return 1;
- }
- 
- /* Returns space to next name. */
-@@ -687,11 +697,12 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
- 	iter->name[0] = '\0';
- 	iter->nameoff = get_symbol_offset(new_pos);
- 	iter->pos = new_pos;
--	if (new_pos == 0) {
-+	if (iter->show_layout && new_pos == 0) {
- 		iter->pos_arch_end = 0;
- 		iter->pos_mod_end = 0;
- 		iter->pos_ftrace_mod_end = 0;
- 		iter->pos_bpf_end = 0;
-+		iter->pos_end = 0;
- 	}
- }
- 
-@@ -720,13 +731,23 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
- 	    get_ksymbol_bpf(iter))
- 		return 1;
- 
--	return get_ksymbol_kprobe(iter);
-+	if ((!iter->pos_end || iter->pos_end > pos) &&
-+	    get_ksymbol_kprobe(iter))
-+		return 1;
-+
-+	return 0;
- }
- 
- /* Returns false if pos at or past end of file. */
- static int update_iter(struct kallsym_iter *iter, loff_t pos)
- {
--	/* Module symbols can be accessed randomly. */
-+	if (!iter->show_layout) {
-+		if (pos > iter->pos_end)
-+			return 0;
-+
-+		pos = iter->shuffled_pos[pos];
-+	}
-+
- 	if (pos >= kallsyms_num_syms)
- 		return update_iter_mod(iter, pos);
- 
-@@ -769,7 +790,7 @@ static int s_show(struct seq_file *m, void *p)
- 	if (!iter->name[0])
- 		return 0;
- 
--	value = iter->show_value ? (void *)iter->value : NULL;
-+	value = iter->show_layout ? (void *)iter->value : NULL;
- 
- 	if (iter->module_name[0]) {
- 		char type;
-@@ -806,9 +827,10 @@ static inline int kallsyms_for_perf(void)
- }
- 
- /*
-- * We show kallsyms information even to normal users if we've enabled
-- * kernel profiling and are explicitly not paranoid (so kptr_restrict
-- * is clear, and sysctl_perf_event_paranoid isn't set).
-+ * We show kallsyms information and display them sorted by address even
-+ * to normal users if we've enabled kernel profiling and are explicitly
-+ * not paranoid (so kptr_restrict is clear, and sysctl_perf_event_paranoid
-+ * isn't set).
-  *
-  * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
-  * block even that).
-@@ -838,16 +860,54 @@ static int kallsyms_open(struct inode *inode, struct file *file)
- 	 * using get_symbol_offset for every symbol.
- 	 */
- 	struct kallsym_iter *iter;
--	iter = __seq_open_private(file, &kallsyms_op, sizeof(*iter));
--	if (!iter)
--		return -ENOMEM;
--	reset_iter(iter, 0);
-+	/*
-+	 * This fake iter is needed for the cases with unprivileged
-+	 * access. We need to know the exact number of symbols to
-+	 * randomize the display layout.
-+	 */
-+	struct kallsym_iter fake;
-+	size_t size = sizeof(*iter);
-+	loff_t pos;
-+
-+	fake.show_layout = true;
-+	reset_iter(&fake, 0);
- 
- 	/*
- 	 * Instead of checking this on every s_show() call, cache
- 	 * the result here at open time.
- 	 */
--	iter->show_value = kallsyms_show_value(file->f_cred);
-+	fake.show_layout = kallsyms_show_value(file->f_cred);
-+	if (fake.show_layout)
-+		goto open;
-+
-+	for (pos = kallsyms_num_syms; update_iter_mod(&fake, pos); pos++)
-+		;
-+
-+	size = struct_size(iter, shuffled_pos, fake.pos_end + 1);
-+
-+open:
-+	iter = __seq_open_private(file, &kallsyms_op, size);
-+	if (!iter)
-+		return -ENOMEM;
-+
-+	iter->show_layout = fake.show_layout;
-+	reset_iter(iter, 0);
-+
-+	if (iter->show_layout)
-+		return 0;
-+
-+	/* Copy the bounds since they were already discovered above */
-+	iter->pos_arch_end = fake.pos_arch_end;
-+	iter->pos_mod_end = fake.pos_mod_end;
-+	iter->pos_ftrace_mod_end = fake.pos_ftrace_mod_end;
-+	iter->pos_bpf_end = fake.pos_bpf_end;
-+	iter->pos_end = fake.pos_end;
-+
-+	for (pos = 0; pos <= iter->pos_end; pos++)
-+		iter->shuffled_pos[pos] = pos;
-+
-+	shuffle_array(iter->shuffled_pos, iter->pos_end + 1);
-+
- 	return 0;
- }
- 
-@@ -858,6 +918,7 @@ const char *kdb_walk_kallsyms(loff_t *pos)
- 	if (*pos == 0) {
- 		memset(&kdb_walk_kallsyms_iter, 0,
- 		       sizeof(kdb_walk_kallsyms_iter));
-+		kdb_walk_kallsyms_iter.show_layout = true;
- 		reset_iter(&kdb_walk_kallsyms_iter, 0);
- 	}
- 	while (1) {
+    credentials
+    IMA-templates
++   fgkaslr
+    keys/index
+    lsm
+    lsm-development
 -- 
 2.33.1
 
