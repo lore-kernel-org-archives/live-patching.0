@@ -2,36 +2,34 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D19CC433F5
-	for <live-patching@archiver.kernel.org>; Thu, 23 Dec 2021 16:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E01ACC4332F
+	for <live-patching@archiver.kernel.org>; Fri, 24 Dec 2021 06:38:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349152AbhLWQTN (ORCPT
+        id S241365AbhLXGiU (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 23 Dec 2021 11:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        Fri, 24 Dec 2021 01:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349149AbhLWQTN (ORCPT
+        with ESMTP id S229862AbhLXGiT (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 23 Dec 2021 11:19:13 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7641C061401;
-        Thu, 23 Dec 2021 08:19:12 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 982081EC050F;
-        Thu, 23 Dec 2021 17:19:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640276345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xD7MPmC+2ErQI45EeQc4ikxUsZJzTJ2cRRbJueAos0k=;
-        b=D4SwgyECbZXrWKJoUzQiCtm8/t6M2YEw709TpWDVw6NzzAgX4EPGOR68xs9k8TPlpgvFUg
-        0uKLMAXKLMbEhbiTqiLG6iucLxuQIsb8Ige1whlicMVNanfochNf6LZ8yBcVMXCvLp/d3r
-        XBe2nuP9Sbzq1wdLW4ZEtOY7iA2jc38=
-Date:   Thu, 23 Dec 2021 17:19:06 +0100
-From:   Borislav Petkov <bp@alien8.de>
+        Fri, 24 Dec 2021 01:38:19 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B77FC061401;
+        Thu, 23 Dec 2021 22:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B+P6/b0Tq7K4487B9M5tJlyJyCrS1rmaPRalccK0nLM=; b=BE8KiPx2efWAi46hmsX9ctm9FN
+        uUpMc3hmUlqSgFHhGgCK57aW86dQ/BvimE8JxtBjzOmlDhh+OCOttS1/6kgFmaVFuiD7Y1B2xYOxV
+        rxqTTC4611IZYe3JlaA96rGvavoyXjgVTH8MUrnnH5D8jTLNlg0/17xYT9sQRIq9cOWX3x3RGlF66
+        OJbZvvl9Z5I5ce939Hnwn7v28xXTtwyenz+maWEGt+/wRb7i9l0OtkwvnVi6ctgXAZ3n+IuYEaSlm
+        sjpWXlYvkRvLyVsrqf56EN/5bHXx8RhV9xd7iFJ7kBsz/P0GhxBqgc5usArz6BOMWoYZTtA3uevdA
+        W7Y2YD2Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0eDW-00DnyK-1T; Fri, 24 Dec 2021 06:38:14 +0000
+Date:   Thu, 23 Dec 2021 22:38:14 -0800
+From:   Christoph Hellwig <hch@infradead.org>
 To:     Alexander Lobakin <alexandr.lobakin@intel.com>
 Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
@@ -53,6 +51,7 @@ Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         "David S. Miller" <davem@davemloft.net>,
         Thomas Gleixner <tglx@linutronix.de>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -66,60 +65,22 @@ Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Message-ID: <YcShenJgaOeOdbIj@zn.tnic>
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 00/15] Function Granular KASLR
+Message-ID: <YcVq1pMHWvPFHH5g@infradead.org>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-2-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211223002209.1092165-2-alexandr.lobakin@intel.com>
+In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 01:21:55AM +0100, Alexander Lobakin wrote:
-> For now, that condition from remove_dot():
-> 
-> if (m && (s[n + m] == '.' || s[n + m] == 0))
-> 
-> which was designed to test if it's a dot or a \0 after the suffix
-> is never satisfied.
-> This is due to that s[n + m] always points to the last digit of a
-> numeric suffix, not on the symbol next to it:
-> 
-> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> 
-> So it's off by one and was like that since 2014.
+On Thu, Dec 23, 2021 at 01:21:54AM +0100, Alexander Lobakin wrote:
+> This is a massive rework and a respin of Kristen Accardi's marvellous
+> FG-KASLR series (v5).
 
-What's the relevance of this? Looking at
-
-  7d02b490e93c ("Kbuild, lto: Drop .number postfixes in modpost")
-
-what you're fixing here is something LTO-related. How do you trigger
-this?
-
-For a Cc:stable patch, I'm missing a lot of context.
-
-> `-z uniq-symbol` linker flag which we are planning to use to
-				     ^^
-
-Who's "we"?
-
-> simplify livepatching brings numeric suffixes back, fix this.
-> Otherwise:
-> 
-> ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> 
-> Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> Cc: stable@vger.kernel.org # 3.17+
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Here would be the place to explain what this series actually does and
+why it is marvellous.
