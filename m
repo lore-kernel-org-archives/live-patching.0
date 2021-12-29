@@ -2,149 +2,113 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ADB4C433EF
-	for <live-patching@archiver.kernel.org>; Tue, 28 Dec 2021 17:05:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAD18C433F5
+	for <live-patching@archiver.kernel.org>; Wed, 29 Dec 2021 21:56:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbhL1RFG (ORCPT
+        id S229898AbhL2V47 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 28 Dec 2021 12:05:06 -0500
-Received: from mga09.intel.com ([134.134.136.24]:23840 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233280AbhL1RFF (ORCPT <rfc822;live-patching@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640711105; x=1672247105;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KHhXdEfIwTp7IIrrW70KmlJrU5+AcMwf8sgzb0u1BTQ=;
-  b=BQDV12zufIn3y7kViZ5Jpt3ulVBzf1xgHYmdvpui4sYL++yBRhMLLgZl
-   +In54oVBpemChMdhPSSao9SBGGuQnw129cutz7Qf/nNUzRCAFu7YWz9R2
-   GxD3zZn3E64NTF62bjny9/LAO6irwQAZcUtaMYwEa2FUmSNP83yXJQxHU
-   0Z9wgDM+bnvLBFseQ3FQ4ne1jZh4VKaDmMBeEuEKGlgQCkglp0egUZOAw
-   Uc7z7Dlj7IfP9sX+k+2BvvismjYilXtXFrvVgBSma1hHoodEN3fhtyl1j
-   cgprRmSQTooX90qS62YE/hsf/m7imZoI75H3rmwRsPJBt8R2BRSmon1qS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241195850"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="241195850"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="572369723"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2021 09:04:56 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BSH4sNa000463;
-        Tue, 28 Dec 2021 17:04:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Date:   Tue, 28 Dec 2021 18:03:08 +0100
-Message-Id: <20211228170308.1454063-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YcovajZkEd0WY8p4@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic> <20211227182246.1447062-1-alexandr.lobakin@intel.com> <YcovajZkEd0WY8p4@zn.tnic>
+        Wed, 29 Dec 2021 16:56:59 -0500
+Received: from mail-qt1-f172.google.com ([209.85.160.172]:34541 "EHLO
+        mail-qt1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhL2V47 (ORCPT
+        <rfc822;live-patching@vger.kernel.org>);
+        Wed, 29 Dec 2021 16:56:59 -0500
+Received: by mail-qt1-f172.google.com with SMTP id o17so20116985qtk.1;
+        Wed, 29 Dec 2021 13:56:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5T8nM04UC1tJr9rLxDUzayx806Y7vEpOmH00QoWqw4s=;
+        b=6YwqugI8A6JISgkj4Uje6kvOdC5/yNQT9q2Dg+/6Pg1P0YcW4Qv1FHta5l1TEAcaw1
+         4MOOKyHnpjdpE0tNABrX25Td7UWlGlObN5TbN3Vlvwmw/mRnWhidqzrM1Z3akUtLiXIE
+         3XlMK97LL5W/eIdxy2BlBoLyDjg1rwOoJRvz+0/c4U3xdzAHRqwsVU/kWegoXk2lWAVA
+         bGDsRJ6wuYxyFS1OCfexV4RnggY8EAR1X30D3y71B8I1P1ct6Gnc7Q9e5QTfbCgikjEo
+         +I/G9ARE2YWbtnBmzJiYdwTEdGy9tpiJXPN/6+p2E+YBBK128DJuZ2rdTmRFhiGyn64F
+         hWhw==
+X-Gm-Message-State: AOAM530jqLjfM0jDTYbtFa1Km2OdVuRrCifKEIQ5pU5QtThzgiAvMYu7
+        eMLsohEhsgAeBKKb8ltXU8SqJahaTM9caQ==
+X-Google-Smtp-Source: ABdhPJzIFAMMUfv/7rlsD5mtWAVj+igNbAhJ2sAwKrwq8sZ0PIh3cGjeWtJg7I2+EiYFROTNoid8Og==
+X-Received: by 2002:ac8:5c49:: with SMTP id j9mr24727466qtj.253.1640815018130;
+        Wed, 29 Dec 2021 13:56:58 -0800 (PST)
+Received: from localhost (fwdproxy-ash-116.fbsv.net. [2a03:2880:20ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id j13sm14351758qta.76.2021.12.29.13.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Dec 2021 13:56:57 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, pmladek@suse.com, jikos@kernel.org,
+        mbenes@suse.cz, joe.lawrence@redhat.com
+Cc:     void@manifault.com
+Subject: [PATCH] livepatch: Avoid CPU hogging with cond_resched
+Date:   Wed, 29 Dec 2021 13:56:47 -0800
+Message-Id: <20211229215646.830451-1-void@manifault.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Mon, 27 Dec 2021 22:26:02 +0100
+When initializing a 'struct klp_object' in klp_init_object_loaded(), and
+performing relocations in klp_resolve_symbols(), klp_find_object_symbol()
+is invoked to look up the address of a symbol in an already-loaded module
+(or vmlinux). This, in turn, calls kallsyms_on_each_symbol() or
+module_kallsyms_on_each_symbol() to find the address of the symbol that is
+being patched.
 
-> On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
-> > It's just a couple lines below. I trigger this using `-z uniq-symbol`
-> > which uses numeric suffixes for globals as well.
-> 
-> Aha, so that's for the fgkaslr purposes now.
+It turns out that symbol lookups often take up the most CPU time when
+enabling and disabling a patch, and may hog the CPU and cause other tasks
+on that CPU's runqueue to starve -- even in paths where interrupts are
+enabled.  For example, under certain workloads, enabling a KLP patch with
+many objects or functions may cause ksoftirqd to be starved, and thus for
+interrupts to be backlogged and delayed. This may end up causing TCP
+retransmits on the host where the KLP patch is being applied, and in
+general, may cause any interrupts serviced by softirqd to be delayed while
+the patch is being applied.
 
-Well, linking using unique names is meant to be used always
-when available and livepatching is enabled, at least I hope so.
+So as to ensure that kallsyms_on_each_symbol() does not end up hogging the
+CPU, this patch adds a call to cond_resched() in kallsyms_on_each_symbol()
+and module_kallsyms_on_each_symbol(), which are invoked when doing a symbol
+lookup in vmlinux and a module respectively.  Without this patch, if a
+live-patch is applied on a 36-core Intel host with heavy TCP traffic, a
+~10x spike is observed in TCP retransmits while the patch is being applied.
+Additionally, collecting sched events with perf indicates that ksoftirqd is
+awakened ~1.3 seconds before it's eventually scheduled.  With the patch, no
+increase in TCP retransmit events is observed, and ksoftirqd is scheduled
+shortly after it's awakened.
 
-> 
-> > It fixes a commit dated 2014, thus Cc:stable. Although the
-> > remove_dot() might've been introduced for neverlanded GCC LTO, but
-> > in fact numeric suffixes are used a lot by the toolchains in regular
-> > builds as well. Just not for globals, that's why it's "well hidden".
-> 
-> Does "well hidden" warrant a stable backport then? Because if no
-> toolchain is using numeric suffixes for globals, then no need for the
-> stable tag, I'd say.
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ kernel/kallsyms.c | 1 +
+ kernel/module.c   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-Hmm, makes sense. The fact that I haven't seen any similar reports
-or issues (even on LTO builds) sorta says there are no benefits from
-backporting this.
-Ok, I'll drop the tag. It's never too late anyway to port this in
-case someone will face it.
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 0ba87982d017..2a9afe484aec 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -223,6 +223,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
+ 		if (ret != 0)
+ 			return ret;
++		cond_resched();
+ 	}
+ 	return 0;
+ }
+diff --git a/kernel/module.c b/kernel/module.c
+index 40ec9a030eec..c96160f7f3f5 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -4462,6 +4462,8 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+ 				 mod, kallsyms_symbol_value(sym));
+ 			if (ret != 0)
+ 				goto out;
++
++			cond_resched();
+ 		}
+ 	}
+ out:
+-- 
+2.30.2
 
-> 
-> > I thought it's a common saying in commit messages, isn't it?
-> 
-> Lemme give you my canned and a lot more eloquent explanation for that:
-> 
-> "Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
-> 
-> Also, pls read section "2) Describe your changes" in
-> Documentation/process/submitting-patches.rst for more details.
-> 
-> Also, see section "Changelog" in
-> Documentation/process/maintainer-tip.rst
-> 
-> Bottom line is: personal pronouns are ambiguous in text, especially with
-> so many parties/companies/etc developing the kernel so let's avoid them
-> please."
-> 
-> Thx.
-
-Ah, you're right. "Common used" doesn't mean "correct". I'll fix it
-in the next spin being published after accumulating a bunch more
-comments.
-Thanks!
-
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
-
-Al
