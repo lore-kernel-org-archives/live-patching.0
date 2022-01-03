@@ -2,28 +2,28 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CFD0C433FE
-	for <live-patching@archiver.kernel.org>; Mon,  3 Jan 2022 16:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB41C4332F
+	for <live-patching@archiver.kernel.org>; Mon,  3 Jan 2022 16:52:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbiACQwx (ORCPT
+        id S234911AbiACQwz (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 3 Jan 2022 11:52:53 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:53240 "EHLO
+        Mon, 3 Jan 2022 11:52:55 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:53278 "EHLO
         linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbiACQwu (ORCPT
+        with ESMTP id S234899AbiACQww (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 3 Jan 2022 11:52:50 -0500
+        Mon, 3 Jan 2022 11:52:52 -0500
 Received: from x64host.home (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id CE70320B7186;
-        Mon,  3 Jan 2022 08:52:48 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CE70320B7186
+        by linux.microsoft.com (Postfix) with ESMTPSA id CD79E20B718A;
+        Mon,  3 Jan 2022 08:52:50 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD79E20B718A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1641228769;
-        bh=bx33Z9TGjAIotITO/hUtroGQmWsHZP2ZOAiT/00Ga/w=;
+        s=default; t=1641228771;
+        bh=k0L/6HF0XSKKkYTWUToL3wE6EoMVilDa95cDIedw94E=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=myo2GkUADBptsn+WGGTBtrYijOeaPCgwn08mvcDN7sGkFyWbB+LVLp1V85b8BuFDd
-         XrX+IRxOxUZIehAfywNZ6GT70k7utPbWlO8SIcALKf+UXHFbZjNdrXQ6S5+AwtXf+I
-         O/hEQmmnf8J3GckFsq6MYIQStWSeytes5P+q36H8=
+        b=pY92LoKgoXa2SoD4BwTeElCgeiSgs8onNLmiX4+ShFKPz7yM2gvTEcAEqQ0l2vUev
+         R+ApgO3xM78oO3lKMxJf3x7As3Cme4PjSaXoz5DMDWmbap0kwZg3hQWfBJvp1X65mK
+         qRB+Vtpt6MuRRyGQKed9jEI9QsDDXsxhZuaDz1B4=
 From:   madvenka@linux.microsoft.com
 To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
         ardb@kernel.org, nobuta.keiya@fujitsu.com,
@@ -31,9 +31,9 @@ To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
         jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [PATCH v12 05/10] arm64: Copy unwind arguments to unwind_state
-Date:   Mon,  3 Jan 2022 10:52:07 -0600
-Message-Id: <20220103165212.9303-6-madvenka@linux.microsoft.com>
+Subject: [PATCH v12 07/10] arm64: Introduce stack trace reliability checks in the unwinder
+Date:   Mon,  3 Jan 2022 10:52:09 -0600
+Message-Id: <20220103165212.9303-8-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220103165212.9303-1-madvenka@linux.microsoft.com>
 References: <0d0eb36f348fb5a6af6eb592c0525f6e94007328>
@@ -46,155 +46,105 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Copy the following arguments passed to arch_stack_walk() to unwind_state
-so that they can be passed to unwind functions via unwind_state rather
-than as separate arguments:
+There are some kernel features and conditions that make a stack trace
+unreliable. Callers may require the unwinder to detect these cases.
+E.g., livepatch.
 
-	- task
-	- regs
-	- consume_entry
-	- cookie
+Introduce a new function called unwind_check_reliability() that will
+detect these cases and set a flag in the stack frame. Call
+unwind_check_reliability() for every frame in unwind().
+
+Introduce the first reliability check in unwind_check_reliability() - If
+a return PC is not a valid kernel text address, consider the stack
+trace unreliable. It could be some generated code. Other reliability checks
+will be added in the future.
+
+Let unwind() return a boolean to indicate if the stack trace is
+reliable.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/arm64/include/asm/stacktrace.h | 12 ++++++++
- arch/arm64/kernel/stacktrace.c      | 45 ++++++++++++++++-------------
- 2 files changed, 37 insertions(+), 20 deletions(-)
+ arch/arm64/include/asm/stacktrace.h |  3 +++
+ arch/arm64/kernel/stacktrace.c      | 29 +++++++++++++++++++++++++++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
-index fc828c3c5dfd..322817d40a75 100644
+index 9d1fddc26586..47d4be69799a 100644
 --- a/arch/arm64/include/asm/stacktrace.h
 +++ b/arch/arm64/include/asm/stacktrace.h
-@@ -51,6 +51,14 @@ struct stack_info {
-  * @kr_cur:      When KRETPOLINES is selected, holds the kretprobe instance
-  *               associated with the most recently encountered replacement lr
-  *               value.
+@@ -63,6 +63,8 @@ struct stack_info {
+  * @final_fp	 Pointer to the final frame.
+  *
+  * @failed:      Unwind failed.
 + *
-+ * @task:        Pointer to the task structure.
-+ *
-+ * @regs:        Registers, if any.
-+ *
-+ * @consume_pc   Consume PC function pointer.
-+ *
-+ * @cookie       Argument to consume_pc().
++ * @reliable:    Stack trace is reliable.
   */
  struct unwind_state {
  	unsigned long fp;
-@@ -61,6 +69,10 @@ struct unwind_state {
- #ifdef CONFIG_KRETPROBES
- 	struct llist_node *kr_cur;
- #endif
-+	struct task_struct *task;
-+	struct pt_regs *regs;
-+	stack_trace_consume_fn consume_pc;
-+	void *cookie;
+@@ -79,6 +81,7 @@ struct unwind_state {
+ 	void *cookie;
+ 	unsigned long final_fp;
+ 	bool failed;
++	bool reliable;
  };
  
  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
 diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-index bd797e3f7789..3ecb8242caa5 100644
+index af0949f028c9..54c3396a65c3 100644
 --- a/arch/arm64/kernel/stacktrace.c
 +++ b/arch/arm64/kernel/stacktrace.c
-@@ -33,8 +33,17 @@
-  */
+@@ -18,6 +18,25 @@
+ #include <asm/stack_pointer.h>
+ #include <asm/stacktrace.h>
  
- 
--static void unwind_init_common(struct unwind_state *state)
-+static void unwind_init_common(struct unwind_state *state,
-+			       struct task_struct *task,
-+			       struct pt_regs *regs,
-+			       stack_trace_consume_fn consume_pc,
-+			       void *cookie)
- {
-+	state->task = task;
-+	state->regs = regs;
-+	state->consume_pc = consume_pc;
-+	state->cookie = cookie;
++/*
++ * Check the stack frame for conditions that make further unwinding unreliable.
++ */
++static void unwind_check_reliability(struct unwind_state *state)
++{
++	if (state->fp == state->final_fp) {
++		/* Final frame; no more unwind, no need to check reliability */
++		return;
++	}
 +
- #ifdef CONFIG_KRETPROBES
- 	state->kr_cur = NULL;
- #endif
-@@ -56,11 +65,10 @@ static void unwind_init_common(struct unwind_state *state)
++	/*
++	 * If the PC is not a known kernel text address, then we cannot
++	 * be sure that a subsequent unwind will be reliable, as we
++	 * don't know that the code follows our unwind requirements.
++	 */
++	if (!__kernel_text_address(state->pc))
++		state->reliable = false;
++}
++
  /*
-  * TODO: document requirements here.
-  */
--static inline void unwind_init_regs(struct unwind_state *state,
--				    struct pt_regs *regs)
-+static inline void unwind_init_regs(struct unwind_state *state)
- {
--	state->fp = regs->regs[29];
--	state->pc = regs->pc;
-+	state->fp = state->regs->regs[29];
-+	state->pc = state->regs->pc;
- }
- 
- /*
-@@ -80,11 +88,10 @@ static __always_inline void unwind_init_current(struct unwind_state *state)
+  * AArch64 PCS assigns the frame pointer to x29.
   *
-  * The caller guarantees that the task is not running.
-  */
--static inline void unwind_init_task(struct unwind_state *state,
--				    struct task_struct *task)
-+static inline void unwind_init_task(struct unwind_state *state)
- {
--	state->fp = thread_saved_fp(task);
--	state->pc = thread_saved_pc(task);
-+	state->fp = thread_saved_fp(state->task);
-+	state->pc = thread_saved_pc(state->task);
+@@ -64,6 +83,8 @@ static void unwind_init_common(struct unwind_state *state,
+ 
+ 	/* Stack trace terminates here. */
+ 	state->final_fp = (unsigned long)task_pt_regs(task)->stackframe;
++
++	state->reliable = true;
  }
  
  /*
-@@ -94,9 +101,9 @@ static inline void unwind_init_task(struct unwind_state *state,
-  * records (e.g. a cycle), determined based on the location and fp value of A
-  * and the location (but not the fp value) of B.
-  */
--static int notrace unwind_next(struct task_struct *tsk,
--			       struct unwind_state *state)
-+static int notrace unwind_next(struct unwind_state *state)
- {
-+	struct task_struct *tsk = state->task;
- 	unsigned long fp = state->fp;
- 	struct stack_info info;
- 
-@@ -170,16 +177,14 @@ static int notrace unwind_next(struct task_struct *tsk,
+@@ -202,10 +223,14 @@ static void notrace unwind_next(struct unwind_state *state)
  }
  NOKPROBE_SYMBOL(unwind_next);
  
--static void notrace unwind(struct task_struct *tsk,
--			   struct unwind_state *state,
--			   bool (*fn)(void *, unsigned long), void *data)
-+static void notrace unwind(struct unwind_state *state)
+-static void notrace unwind(struct unwind_state *state)
++static bool notrace unwind(struct unwind_state *state)
  {
- 	while (1) {
- 		int ret;
- 
--		if (!fn(data, state->pc))
-+		if (!state->consume_pc(state->cookie, state->pc))
- 			break;
--		ret = unwind_next(tsk, state);
-+		ret = unwind_next(state);
- 		if (ret < 0)
- 			break;
- 	}
-@@ -225,14 +230,14 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
- {
- 	struct unwind_state state;
- 
--	unwind_init_common(&state);
-+	unwind_init_common(&state, task, regs, consume_entry, cookie);
- 
- 	if (regs)
--		unwind_init_regs(&state, regs);
-+		unwind_init_regs(&state);
- 	else if (task == current)
- 		unwind_init_current(&state);
- 	else
--		unwind_init_task(&state, task);
-+		unwind_init_task(&state);
- 
--	unwind(task, &state, consume_entry, cookie);
-+	unwind(&state);
+-	while (unwind_continue(state))
++	unwind_check_reliability(state);
++	while (unwind_continue(state)) {
+ 		unwind_next(state);
++		unwind_check_reliability(state);
++	}
++	return !state->failed && state->reliable;
  }
+ NOKPROBE_SYMBOL(unwind);
+ 
 -- 
 2.25.1
 
