@@ -2,75 +2,86 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0154DC433F5
-	for <live-patching@archiver.kernel.org>; Fri,  7 Jan 2022 16:46:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6507C433FE
+	for <live-patching@archiver.kernel.org>; Mon, 10 Jan 2022 14:39:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbiAGQq5 (ORCPT
+        id S235641AbiAJOjC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 7 Jan 2022 11:46:57 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:35374 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240038AbiAGQq5 (ORCPT
+        Mon, 10 Jan 2022 09:39:02 -0500
+Received: from mail-qv1-f43.google.com ([209.85.219.43]:45844 "EHLO
+        mail-qv1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231196AbiAJOjB (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 7 Jan 2022 11:46:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F93161F63;
-        Fri,  7 Jan 2022 16:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B804C36AEF;
-        Fri,  7 Jan 2022 16:46:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641574016;
-        bh=uY8qyK5QY52TdDm0IBri989Ttzdm1zbibvJDDniXh4U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bpu/vrNhak7b95ZBgmQlriTRt7oaTeTtLK3MqWS3u0PIJ+gwLYn66cl5Ty8rQgJKg
-         9Jwezafy84yqyYTWUuXQ3KSJntANN/HkRsQdb7ENNaXmzdBiKAlp0rSwTPAPkvfF7L
-         Y33zr5gH1+AxB0UvHQyY/sYNkq3T4pN7MFjawZRz3CBMY6Q6so65iZaZ0ce+2Q35C9
-         INgINOdsNqXYXc/gr8M+UAArxOvJHmfdsz9zXkx8Rb4i1vL5RYbNNh3GmRHR3y/IDO
-         6ymHLl6r47EvDRhF2/p7AAP2/vz1kX+DFojRuBA7L15t1hHXjHAxlx6zXzvDEJSQ2k
-         8BqL492OFwUVw==
-Received: by mail-yb1-f175.google.com with SMTP id d201so18310206ybc.7;
-        Fri, 07 Jan 2022 08:46:55 -0800 (PST)
-X-Gm-Message-State: AOAM533Vwze6CJuc0D5AFe5+rnuyw6MMr9DTzOgOGFWkmb3CiO4CfSw4
-        8Eth6HPWRLIbLdKO8N0dgoU+U3/zmiKV2EMJVDU=
-X-Google-Smtp-Source: ABdhPJxPBE7HCwAiCj6POan6TNgTerrP9DAYS4LQmDmyoY4KD1kUjFNihbISjMKwJL06bWBbmkh5TO4TFUeO1A6blX0=
-X-Received: by 2002:a5b:c01:: with SMTP id f1mr84256178ybq.47.1641574015121;
- Fri, 07 Jan 2022 08:46:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20211229215646.830451-1-void@manifault.com> <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
-In-Reply-To: <1f1b9b01-cfab-8a84-f35f-c21172e5d64d@redhat.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 7 Jan 2022 08:46:44 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
-Message-ID: <CAPhsuW4Ua2hDs5WMtF0s_CQki-ZdYMvkU2s+Nc7Rvs=-D6WL=Q@mail.gmail.com>
+        Mon, 10 Jan 2022 09:39:01 -0500
+Received: by mail-qv1-f43.google.com with SMTP id a9so14599906qvd.12;
+        Mon, 10 Jan 2022 06:39:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pO7pYeF0q/KOlSDXskK/am/odc2RYkvEzSsdTjA4sWM=;
+        b=gRTbjgJmxjdCUi7JMQk7WGmiyclPZeWwmgoeu2VyXeCHGgJ9Vz7o/Dk5ijtymrXntb
+         g3M65jKF9TnEdtGpgstLScFbD4OBJfzVwHaHynhg6OUOW2zpVqM+fKYFocDJyUuHeoDz
+         HPsQlsqJihg/rjA2LxB7MUL03k/IavUEby7njHPZa/Ve/31HezB6CLE2qMPxgZ7Z2SwP
+         2tSJtiFZ4XzqzojNTd78hDXNo6bCETKkNsOlyT9wcKu1Zh4EUITJrZjnJhkzUQaLtFTm
+         9JILxMwCgKBv4A89KFQtI1cE1QRvWGn6reomc2kuoOhD6l0QzYx/HFeZcy463gNcMCbF
+         g1Fw==
+X-Gm-Message-State: AOAM533vUXmtCoff9+QHKY+wIY/A0NkDKQMHKO7qVIqr9G7UD4S426mP
+        SwOybfGK2YepZxnpwxHmPsTtROvv6fmNxg==
+X-Google-Smtp-Source: ABdhPJym7QBoq8Zjc+aKSJ0iSTaFS10mpRbgvEa+KZAl3mkEJk7GZpOWuY2DnxGzvLYA1H/MIZou1A==
+X-Received: by 2002:a05:6214:2a88:: with SMTP id jr8mr69282684qvb.18.1641825540470;
+        Mon, 10 Jan 2022 06:39:00 -0800 (PST)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-006.fbsv.net. [2a03:2880:20ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k8sm4931234qtx.35.2022.01.10.06.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 06:39:00 -0800 (PST)
+Date:   Mon, 10 Jan 2022 06:38:58 -0800
+From:   David Vernet <void@manifault.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, linux-modules@vger.kernel.org,
+        mcgrof@kernel.org, jeyu@kernel.org, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, memxor@gmail.com, clm@fb.com
 Subject: Re: [PATCH] livepatch: Avoid CPU hogging with cond_resched
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     David Vernet <void@manifault.com>, live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>, jpoimboe@redhat.com,
-        pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <YdxFAshozmxfiLd/@dev0025.ash9.facebook.com>
+References: <Yc0yskk0m2bePLu6@dev0025.ash9.facebook.com>
+ <YdMej8L0bqe+XetW@alley>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdMej8L0bqe+XetW@alley>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 6:13 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> On 12/29/21 4:56 PM, David Vernet wrote:
-> > For example, under certain workloads, enabling a KLP patch with
-> > many objects or functions may cause ksoftirqd to be starved, and thus for
-> > interrupts to be backlogged and delayed.
->
-> Just curious, approximately how many objects/functions does it take to
-> hit this condition?  While the livepatching kselftests are more about
-> API and kernel correctness, this sounds like an interesting test case
-> for some of the other (out of tree) test suites.
+Apologies all for the delayed response -- I was still on holiday last week.
 
-Not many patched functions. We only do small fixes at the moment. In the recent
-example, we hit the issue with ~10 patched functions. Another version
-with 2 to 3
-patched function seems fine.
+Petr Mladek <pmladek@suse.com> wrote on Mon [2022-Jan-03 17:04:31 +0100]:
+> > > It turns out that symbol lookups often take up the most CPU time when
+> > > enabling and disabling a patch, and may hog the CPU and cause other tasks
+> > > on that CPU's runqueue to starve -- even in paths where interrupts are
+> > > enabled.  For example, under certain workloads, enabling a KLP patch with
+> > > many objects or functions may cause ksoftirqd to be starved, and thus for
+>     ^^^^^^^^^^^^^^^^^^^^^^^^^
+> This suggests that a single kallsyms_on_each_symbol() is not a big
+> problem. cond_resched() might be called non-necessarily often there.
+> I wonder if it would be enough to add cond_resched() into the two
+> loops calling klp_find_object_symbol().
 
-Yes, I think this is an important test case.
+In the initial version of the patch I was intending to send out, I actually
+had the cond_resched() in klp_find_object_symbol(). Having it there did
+appear to fix the ksoftirqd starvation issue, but I elected to put it in
+klp_find_object_symbol() after Chris (cc'd) suggested it because
+cond_resched() is so lightweight, and it didn't affect the runtime for
+livepatching in my experiments.
 
-Song
+> That said, kallsyms_on_each_symbol() is a slow path and there might
+> be many symbols. So, it might be the right place.
+
+Yes, my thinking was that because it didn't seem to affect throughput, and
+because it would could potentially cause the same ssue to occur if it were
+ever called elsewhere, that this was the correct place for it.
