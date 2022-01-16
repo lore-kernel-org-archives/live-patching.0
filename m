@@ -2,79 +2,69 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80E8DC433F5
-	for <live-patching@archiver.kernel.org>; Fri, 14 Jan 2022 15:57:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 770FCC433F5
+	for <live-patching@archiver.kernel.org>; Sun, 16 Jan 2022 08:22:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243012AbiANP5a (ORCPT
+        id S234659AbiAPIWa (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 14 Jan 2022 10:57:30 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:55650 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbiANP52 (ORCPT
+        Sun, 16 Jan 2022 03:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234688AbiAPIWa (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 14 Jan 2022 10:57:28 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 85F81218FB;
-        Fri, 14 Jan 2022 15:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1642175847; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=iTHPqAaPHBaWNDnBdcn/c29Xaw95onlPSiC6tvTEjVg=;
-        b=d/1b0hwr76ngfgGgR9+TL/BavD6Urq78TKKSIMXkqfs7yJze+oLgCI+5QXGndhk14D9kCA
-        Z2cU/yYW7dnFfqepHJ43qYPszFcMiUee2MDiDWDUIdm7XQIFYtfxl3Tupx3HI/sV8jdkrB
-        v9xcKEtuh97MrdzvvdcztIx3R24y/rQ=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        Sun, 16 Jan 2022 03:22:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F45C061574;
+        Sun, 16 Jan 2022 00:22:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 7283BA3B85;
-        Fri, 14 Jan 2022 15:57:27 +0000 (UTC)
-Date:   Fri, 14 Jan 2022 16:57:27 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Subject: [GIT PULL] livepatching for 5.17
-Message-ID: <20220114155727.GA17419@pathway.suse.cz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170912 (1.9.0)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BACF60DD9;
+        Sun, 16 Jan 2022 08:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0C99EC36AEC;
+        Sun, 16 Jan 2022 08:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642321349;
+        bh=Yrvpbuod0RygtyS4mkrxsscJP7cfOB6nMZf6I5/H6Es=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=rjQbzy3Wxh/srDtH6DX5CHpBW/ZdwOe5ktYdiXQ9h0A/4NnTU5KjWX0UdETZmKdYb
+         5U+jbbVKney6XlQITlmbqQUGXAphh2oHfDGimOTAhc89q7FdmPwX6FswkvBudV7THv
+         LUFgtsPH+UydOZ6HVWOaMnv4d5qMMOh7SVJctM61l6p5KGdVao643EhjJgtVolahET
+         rxtgR3jsSGoMS9l8zPvXLC1tW1lRHSDjjH2O+VtNaCTi4oEEu2jGNJHap71Gl+zX9+
+         4l4dl2oh7SrzQXnr+CPwiUo7OlCPVwpGM6eblD1Pgn+Mi+aNqRxQYI+MRfGTKowQtN
+         5XFDelZB9ZD/Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EF6C1F60794;
+        Sun, 16 Jan 2022 08:22:28 +0000 (UTC)
+Subject: Re: [GIT PULL] livepatching for 5.17
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220114155727.GA17419@pathway.suse.cz>
+References: <20220114155727.GA17419@pathway.suse.cz>
+X-PR-Tracked-List-Id: <live-patching.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220114155727.GA17419@pathway.suse.cz>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.17
+X-PR-Tracked-Commit-Id: b2dfc3fe73b5b305b13467e39386f77133590ea8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 77dbd72b982ca648b42b4feac5f8b2ea55e4ed09
+Message-Id: <164232134896.9530.10751707727863195985.pr-tracker-bot@kernel.org>
+Date:   Sun, 16 Jan 2022 08:22:28 +0000
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Fri, 14 Jan 2022 16:57:27 +0100:
 
-please pull the latest livepatching changes from
+> git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.17
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-5.17
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/77dbd72b982ca648b42b4feac5f8b2ea55e4ed09
 
-====================================
+Thank you!
 
-+ Correctly handle kobjects when a livepatch init fails.
-
-+ Avoid CPU hogging when searching for many livepatched symbols.
-
-+ Add livepatch API page into documentation.
-
-----------------------------------------------------------------
-David Vernet (3):
-      Documentation: livepatch: Add livepatch API page
-      livepatch: Fix kobject refcount bug on klp_init_patch_early failure path
-      livepatch: Avoid CPU hogging with cond_resched
-
-Petr Mladek (1):
-      Merge branch 'for-5.17/kallsyms' into for-linus
-
-Yang Yingliang (1):
-      livepatch: Fix missing unlock on error in klp_enable_patch()
-
- Documentation/livepatch/api.rst          | 30 ++++++++++++++++++++++++++++++
- Documentation/livepatch/index.rst        |  1 +
- Documentation/livepatch/shadow-vars.rst  |  4 ++--
- Documentation/livepatch/system-state.rst |  4 ++--
- kernel/kallsyms.c                        |  1 +
- kernel/livepatch/core.c                  | 29 +++++++++++++----------------
- kernel/livepatch/shadow.c                |  6 +++---
- kernel/module.c                          |  2 ++
- 8 files changed, 54 insertions(+), 23 deletions(-)
- create mode 100644 Documentation/livepatch/api.rst
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
