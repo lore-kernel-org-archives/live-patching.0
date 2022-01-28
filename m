@@ -2,57 +2,57 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 550D1C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA068C43219
 	for <live-patching@archiver.kernel.org>; Fri, 28 Jan 2022 20:39:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344409AbiA1Ujp (ORCPT
+        id S1344367AbiA1Ujr (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 28 Jan 2022 15:39:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38562 "EHLO
+        Fri, 28 Jan 2022 15:39:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21742 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238399AbiA1Ujm (ORCPT
+        by vger.kernel.org with ESMTP id S1344402AbiA1Ujp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 28 Jan 2022 15:39:42 -0500
+        Fri, 28 Jan 2022 15:39:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643402381;
+        s=mimecast20190719; t=1643402384;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CKFHu1mwRyMCd3tE6xfYJyy3RgbH1D0nAbWrHT5RWOU=;
-        b=WMi+/MT5XJI9b5vDaBNciYr8ui7eX9co0PPNI2QhRnu9Qwvj+s6sGT4GI+nsy4HJpO2Vu/
-        Ub+LrYyHQvRLKcApDO9IoBt5fQUkB9GxAEknfaV/AG+hjW5Piw5wmdRm5xAgapwndvq1sM
-        dgn72d47/EeKrK+zwUO+PAijTwhBYGY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=u3+US9coizvidEZ8omLRER4gflB6ywCQZcnY38EWjAY=;
+        b=BMSJY2Yqel5h7eEsIfU5l73Ztd+U1QF660N6FDGbBJWmeU+qmT6ztU2nwgcZuxTHccjv+Z
+        pxyHS+f1MafwmLcr0pYcOJjcjmx0B0lwRSYF2BpcOEdXjBAm2p0RRd+1LVE9g7DASHeNW1
+        vvha406374fUQ8ttCtX7vGw7wV6nK7E=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-Y9t0gvL1Pq67vRKIMz3niw-1; Fri, 28 Jan 2022 15:39:40 -0500
-X-MC-Unique: Y9t0gvL1Pq67vRKIMz3niw-1
-Received: by mail-wr1-f72.google.com with SMTP id c9-20020adfa709000000b001dde29c3202so2607650wrd.22
-        for <live-patching@vger.kernel.org>; Fri, 28 Jan 2022 12:39:39 -0800 (PST)
+ us-mta-308-1bfduZ7qNAieRzkyEeBWPA-1; Fri, 28 Jan 2022 15:39:43 -0500
+X-MC-Unique: 1bfduZ7qNAieRzkyEeBWPA-1
+Received: by mail-wm1-f72.google.com with SMTP id s1-20020a1ca901000000b0034ece94dd8cso6436965wme.5
+        for <live-patching@vger.kernel.org>; Fri, 28 Jan 2022 12:39:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CKFHu1mwRyMCd3tE6xfYJyy3RgbH1D0nAbWrHT5RWOU=;
-        b=IrdxdjpuLAj/RiEWecZUY1+PaB1U+z3l6MT1n8T/Bso9BpQhEEzkNAW7IPENFWdEHj
-         N6zBVYzLqJuDes5YWfFEY2El4AwNCRSLVhzFSule7RC+ZnJ+cnti3P7gmQIwTcb8Vgch
-         FfylNVcIHidWuhJADshROWQQgPgCIQR4pf4ezhn41qo+Ypp/5UwWUbFlWtKC+bgOFpXA
-         HeljHQaMK6Ywd6lHMkxwNgUhVuOFjyXG5Ek/oL43s2NS31tOyHrL6Tu7Ltdy3ikv7y6a
-         /87yDRpx6XyqqTbPXPcy0gGnh9JQ9NLBFR2OalBbvsrjOy3BfoZ0o6E9M53ezSzMqt12
-         tHEA==
-X-Gm-Message-State: AOAM532Chdw09c+cNHoCfKbJIKxukI4fKS+2lI2GfSFfxIx/6sSCOTs3
-        LJYhJ2SAHP+8Lma92A7ga2PtrLaRSK4McfxDI1JbPZ92WcGLY8M8GwX/dx2dWPrBOqEakBoj7XT
-        pRqzC3qo8OKPhUQqRwA5Ym0qH
-X-Received: by 2002:a05:600c:1ca0:: with SMTP id k32mr7305024wms.62.1643402378588;
-        Fri, 28 Jan 2022 12:39:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx071r+pfGCf25/UPxmKSKMz79BwnrKoE01zXclK8LWdr1k4TAP66d3QLFEJ4AAKM2Umk5oMg==
-X-Received: by 2002:a05:600c:1ca0:: with SMTP id k32mr7305003wms.62.1643402378384;
-        Fri, 28 Jan 2022 12:39:38 -0800 (PST)
+        bh=u3+US9coizvidEZ8omLRER4gflB6ywCQZcnY38EWjAY=;
+        b=pZ7Ju0ifydeZq2TIAkwpm4ML8yacn36wm67g8JDRShBqIk8fPUtrWSw7LSzFrp65SW
+         ckzVXyYmDJKQ+hEweOTQaEgn0mc12GFQAHiTiYQp2bak1zGJGXy7pe7MAqvztjq3qLk8
+         qO0KnnBQ4C0uzYCJZJa6vRVN0yDyeoV+SwZm8Uzmby+M+w1N0NHoGXC7XB8Zid4ZXWPX
+         neUd/p8IPd45Y1lEbaN5fxO/gs5zjx8ukxXW5Y3rJ/BJOEL9hN3rFSKmxJUG9R217DkA
+         RzpD411XPCxN6q3dEF5R2j3ZPpFlkWmDAAhwRNnpt/BzahghPOHweeaZNfMtppyCCeBx
+         vZDA==
+X-Gm-Message-State: AOAM532laQgwGHLvs4mTM5PkbqgeTey5VfWvtcQPnoSLFpqpj10of9JK
+        Vhc0Wt3Ja1uM8i5tHJMPzIzm216iE+Wkbyas3OQUDR1qYyCWcVqVDZNDXctVEsVrh4uraffGaJn
+        SqzmL+KVfeu3VTLAoBjpVvuXJ
+X-Received: by 2002:a1c:f404:: with SMTP id z4mr17591241wma.165.1643402382401;
+        Fri, 28 Jan 2022 12:39:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZ7M4+0Z0YuutTQvNS99n1rlW4eDZQBH7wns2B4hDMixRhvlHyXE3/qo/1nbvJhWwiuWq9ag==
+X-Received: by 2002:a1c:f404:: with SMTP id z4mr17591233wma.165.1643402382224;
+        Fri, 28 Jan 2022 12:39:42 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id f13sm6960199wry.77.2022.01.28.12.39.37
+        by smtp.gmail.com with ESMTPSA id f5sm5280239wrq.87.2022.01.28.12.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 12:39:37 -0800 (PST)
+        Fri, 28 Jan 2022 12:39:41 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -60,9 +60,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
         live-patching@vger.kernel.org, atomlin@atomlin.com,
         ghalat@redhat.com, allen.lkml@gmail.com
-Subject: [RFC PATCH v3 02/13] module: Simple refactor in preparation for split
-Date:   Fri, 28 Jan 2022 20:39:23 +0000
-Message-Id: <20220128203934.600247-3-atomlin@redhat.com>
+Subject: [RFC PATCH v3 05/13] module: Move arch strict rwx support to a separate file
+Date:   Fri, 28 Jan 2022 20:39:26 +0000
+Message-Id: <20220128203934.600247-6-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220128203934.600247-1-atomlin@redhat.com>
 References: <20220128203934.600247-1-atomlin@redhat.com>
@@ -74,117 +74,182 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 No functional change.
 
-This patch makes it possible to move non-essential code
-out of core module code.
+This patch migrates applicable architecture code
+that support strict module rwx from core module code
+into kernel/module/arch_strict_rwx.c
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/internal.h | 22 ++++++++++++++++++++++
- kernel/module/main.c     | 23 ++---------------------
- 2 files changed, 24 insertions(+), 21 deletions(-)
+ include/linux/module.h          | 17 +++++++++++
+ kernel/module/Makefile          |  1 +
+ kernel/module/arch_strict_rwx.c | 44 ++++++++++++++++++++++++++++
+ kernel/module/main.c            | 51 ---------------------------------
+ 4 files changed, 62 insertions(+), 51 deletions(-)
+ create mode 100644 kernel/module/arch_strict_rwx.c
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 8c381c99062f..e3c593f8767f 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -7,6 +7,28 @@
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 377bdb9952cf..35552164830d 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -339,6 +339,23 @@ struct module_layout {
+ #endif
+ };
  
- #include <linux/elf.h>
- #include <asm/module.h>
-+#include <linux/mutex.h>
++/*
++ * Modules' sections will be aligned on page boundaries
++ * to ensure complete separation of code and data, but
++ * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
++ */
++#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
++# define debug_align(X) ALIGN(X, PAGE_SIZE)
 +
-+#ifndef ARCH_SHF_SMALL
-+#define ARCH_SHF_SMALL 0
-+#endif
++extern void frob_text(const struct module_layout *layout,
++		      int (*set_memory)(unsigned long start, int num_pages));
++extern void module_enable_x(const struct module *mod);
++#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
++# define debug_align(X) (X)
 +
-+/* If this is set, the section belongs in the init part of the module */
-+#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
-+/* Maximum number of characters written by module_flags() */
-+#define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
-+#define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
++static void module_enable_x(const struct module *mod) { }
++#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
 +
-+extern struct mutex module_mutex;
-+extern struct list_head modules;
+ #ifdef CONFIG_MODULES_TREE_LOOKUP
+ struct mod_tree_root {
+ 	struct latch_tree_root root;
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index 5990d2e4566d..71341f30c3f2 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -9,3 +9,4 @@ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
+ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
++obj-$(CONFIG_ARCH_HAS_STRICT_MODULE_RWX) += arch_strict_rwx.o
+diff --git a/kernel/module/arch_strict_rwx.c b/kernel/module/arch_strict_rwx.c
+new file mode 100644
+index 000000000000..9801cb4fef36
+--- /dev/null
++++ b/kernel/module/arch_strict_rwx.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module arch strict rwx
++ *
++ * Copyright (C) 2015 Rusty Russell
++ */
 +
-+/* Provided by the linker */
-+extern const struct kernel_symbol __start___ksymtab[];
-+extern const struct kernel_symbol __stop___ksymtab[];
-+extern const struct kernel_symbol __start___ksymtab_gpl[];
-+extern const struct kernel_symbol __stop___ksymtab_gpl[];
-+extern const s32 __start___kcrctab[];
-+extern const s32 __start___kcrctab_gpl[];
- 
- struct load_info {
- 	const char *name;
++#include <linux/module.h>
++#include <linux/set_memory.h>
++
++/*
++ * LKM RO/NX protection: protect module's text/ro-data
++ * from modification and any data from execution.
++ *
++ * General layout of module is:
++ *          [text] [read-only-data] [ro-after-init] [writable data]
++ * text_size -----^                ^               ^               ^
++ * ro_size ------------------------|               |               |
++ * ro_after_init_size -----------------------------|               |
++ * size -----------------------------------------------------------|
++ *
++ * These values are always page-aligned (as is base)
++ */
++
++/*
++ * Since some arches are moving towards PAGE_KERNEL module allocations instead
++ * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
++ * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
++ * whether we are strict.
++ */
++void frob_text(const struct module_layout *layout,
++		      int (*set_memory)(unsigned long start, int num_pages))
++{
++	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
++	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
++	set_memory((unsigned long)layout->base,
++		   layout->text_size >> PAGE_SHIFT);
++}
++
++void module_enable_x(const struct module *mod)
++{
++	frob_text(&mod->core_layout, set_memory_x);
++	frob_text(&mod->init_layout, set_memory_x);
++}
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d8c6269af6cf..fee64c4957f3 100644
+index 5c7c3201b5b4..fbac043b07d7 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -63,10 +63,6 @@
+@@ -13,7 +13,6 @@
+ #include <linux/trace_events.h>
+ #include <linux/init.h>
+ #include <linux/kallsyms.h>
+-#include <linux/buildid.h>
+ #include <linux/file.h>
+ #include <linux/fs.h>
+ #include <linux/sysfs.h>
+@@ -63,17 +62,6 @@
  #define CREATE_TRACE_POINTS
  #include <trace/events/module.h>
  
--#ifndef ARCH_SHF_SMALL
--#define ARCH_SHF_SMALL 0
+-/*
+- * Modules' sections will be aligned on page boundaries
+- * to ensure complete separation of code and data, but
+- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
+- */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-# define debug_align(X) ALIGN(X, PAGE_SIZE)
+-#else
+-# define debug_align(X) (X)
 -#endif
--
- /*
-  * Modules' sections will be aligned on page boundaries
-  * to ensure complete separation of code and data, but
-@@ -78,9 +74,6 @@
- # define debug_align(X) (X)
- #endif
- 
--/* If this is set, the section belongs in the init part of the module */
--#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
 -
  /*
   * Mutex protects:
   * 1) List of modules (also safely readable with preempt_disable),
-@@ -88,8 +81,8 @@
-  * 3) module_addr_min/module_addr_max.
-  * (delete and add uses RCU list operations).
-  */
--static DEFINE_MUTEX(module_mutex);
--static LIST_HEAD(modules);
-+DEFINE_MUTEX(module_mutex);
-+LIST_HEAD(modules);
- 
- /* Work queue for freeing init sections in success case */
- static void do_free_init(struct work_struct *w);
-@@ -408,14 +401,6 @@ static __maybe_unused void *any_section_objs(const struct load_info *info,
- 	return (void *)info->sechdrs[sec].sh_addr;
+@@ -1785,45 +1773,6 @@ static void mod_sysfs_teardown(struct module *mod)
+ 	mod_sysfs_fini(mod);
  }
  
--/* Provided by the linker */
--extern const struct kernel_symbol __start___ksymtab[];
--extern const struct kernel_symbol __stop___ksymtab[];
--extern const struct kernel_symbol __start___ksymtab_gpl[];
--extern const struct kernel_symbol __stop___ksymtab_gpl[];
--extern const s32 __start___kcrctab[];
--extern const s32 __start___kcrctab_gpl[];
+-/*
+- * LKM RO/NX protection: protect module's text/ro-data
+- * from modification and any data from execution.
+- *
+- * General layout of module is:
+- *          [text] [read-only-data] [ro-after-init] [writable data]
+- * text_size -----^                ^               ^               ^
+- * ro_size ------------------------|               |               |
+- * ro_after_init_size -----------------------------|               |
+- * size -----------------------------------------------------------|
+- *
+- * These values are always page-aligned (as is base)
+- */
 -
- #ifndef CONFIG_MODVERSIONS
- #define symversion(base, idx) NULL
- #else
-@@ -1490,7 +1475,6 @@ struct module_sect_attrs {
- 	struct module_sect_attr attrs[];
- };
- 
--#define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
- static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
- 				struct bin_attribute *battr,
- 				char *buf, loff_t pos, size_t count)
-@@ -4555,9 +4539,6 @@ static void cfi_cleanup(struct module *mod)
- #endif
- }
- 
--/* Maximum number of characters written by module_flags() */
--#define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
+-/*
+- * Since some arches are moving towards PAGE_KERNEL module allocations instead
+- * of PAGE_KERNEL_EXEC, keep frob_text() and module_enable_x() outside of the
+- * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
+- * whether we are strict.
+- */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-static void frob_text(const struct module_layout *layout,
+-		      int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
+-	set_memory((unsigned long)layout->base,
+-		   layout->text_size >> PAGE_SHIFT);
+-}
 -
- /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
- static char *module_flags(struct module *mod, char *buf)
- {
+-static void module_enable_x(const struct module *mod)
+-{
+-	frob_text(&mod->core_layout, set_memory_x);
+-	frob_text(&mod->init_layout, set_memory_x);
+-}
+-#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-static void module_enable_x(const struct module *mod) { }
+-#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-
+ #ifdef CONFIG_STRICT_MODULE_RWX
+ static void frob_rodata(const struct module_layout *layout,
+ 			int (*set_memory)(unsigned long start, int num_pages))
 -- 
 2.34.1
 
