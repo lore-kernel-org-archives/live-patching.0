@@ -2,46 +2,46 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 870FAC43217
-	for <live-patching@archiver.kernel.org>; Wed,  9 Feb 2022 19:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D99C43219
+	for <live-patching@archiver.kernel.org>; Wed,  9 Feb 2022 19:01:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241622AbiBITBx (ORCPT
+        id S241583AbiBITBw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 9 Feb 2022 14:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34194 "EHLO
+        Wed, 9 Feb 2022 14:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241982AbiBITAp (ORCPT
+        with ESMTP id S241892AbiBITAn (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:00:45 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411E5C03C19D;
-        Wed,  9 Feb 2022 11:00:36 -0800 (PST)
+        Wed, 9 Feb 2022 14:00:43 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73AFC0613C9;
+        Wed,  9 Feb 2022 11:00:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644433236; x=1675969236;
+  t=1644433206; x=1675969206;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=3TFoJ8hml7DfFEwN1MeCftGLxN9fAc0FL9jRFOXIT44=;
-  b=iY3BbgsG9rBd08M2OkWr5HiRdpN7sRL89OQ1Ycj1kYMbTokO//Hg/bi8
-   djm+x+5+OjUKdZRfKLbFvBc0kh5JgcEy7tRBREWCZtuwkR+vBQiRaNGVX
-   mGZ4RX7egvS6AXw4tBwFz60XQDz2BHubi3dTsG3MmfpIXlE9MT8N7UtEI
-   gNYgdAToX77bcTcogrdS2SUuXFMGPx0GOcoStgqujJr69rG1+hE3AMlqi
-   Peg6lPrGmthtRR0ajHb8je/7QkUtIxNfVbbEcSriSTHB5kAaCkZxH4YuA
-   dS1Yu/mClY9RB4E2gPPi6OTk1dCWcutj6bGsMiFxHqiNfLcdjQ+uO5z0G
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232869378"
+  bh=0aNNbbOIO8oCl2L/symLxvLv9Zx7Xic4udN3gqOpiJ0=;
+  b=iWvCeLVSAsZPkKsP83qEJdogfaKrsfeTk1Q/KEs/nWzA2tFLoAF5B2IZ
+   T0YUrpEJqUah75UhPgzmbi6H2gI1dvG0ajeseg5dzjWVof9Dwwj4MAeHg
+   DH3drfJ5CfqSf/xuXwVKvomxgvQT5TUyLlysfDltSJrERwpHjG0FqLLjJ
+   Bwumir0YEJCr70oN+NI0hN1XlG2ZU78Pe0IaK6wUhpt7C87RxZub42Y2v
+   OoZUDhJ/Z2wP051RgldgQDIdZe14IrpHRYkoAov70L80jPZqOIVyfviYx
+   F9+CG4/Oz91i1yVzGXVBEp00lMTwg038AviC2edYPHzqA1rwD2Mgpe+wY
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249062925"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="232869378"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:04 -0800
+   d="scan'208";a="249062925"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:05 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="541248491"
+   d="scan'208";a="633343853"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 09 Feb 2022 10:58:52 -0800
+  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2022 10:58:57 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQP031082;
-        Wed, 9 Feb 2022 18:58:50 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQR031082;
+        Wed, 9 Feb 2022 18:58:54 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -80,9 +80,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v10 02/15] livepatch: avoid position-based search if `-z unique-symbol` is available
-Date:   Wed,  9 Feb 2022 19:57:39 +0100
-Message-Id: <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+Subject: [PATCH v10 04/15] arch: introduce asm function sections
+Date:   Wed,  9 Feb 2022 19:57:41 +0100
+Message-Id: <20220209185752.1226407-5-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
@@ -92,179 +92,415 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Position-based search, which means that if there are several symbols
-with the same name, the user needs to additionally provide the
-"index" of a desired symbol, is fragile. For example, it breaks
-when two symbols with the same name are located in different
-sections.
+Sometimes it can be useful to create a separate section for every
+function (symbol in general) to be able then to selectively merge
+them back into one or several others. This is how Dead Code
+Elimination (DCE, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) and a part
+of Link-Time Optimization (LTO, currently CONFIG_LTO_CLANG) work.
+Currently, this can only be done for C functions as the compilers
+are able to do this automatically when `-ffunction-sections` is
+specified.
 
-Since a while, LD has a flag `-z unique-symbol` which appends
-numeric suffixes to the functions with the same name (in symtab
-and strtab). It can be used to effectively prevent from having
-any ambiguity when referring to a symbol by its name.
-Check for its availability and always prefer when the livepatching
-is on. It can be used unconditionally later on after broader testing
-on a wide variety of machines, but for now let's stick to the actual
-CONFIG_LIVEPATCH=y case, which is true for most of distro configs
-anyways.
-This needs a little adjustment to the modpost to make it strip
-suffixes before adding exports. depmod needs some treatment as well,
-tho its false-positive warnings about unknown symbols are harmless
-and don't alter the return code.
+Add a basic infra for supporting asm function sections, which means
+support for putting functions written in assembly into separate
+sections. If any of the required build options (DCE, LTO, FG-KASLR
+later) is on and the target architecture claims it supports them,
+all asm functions and "code" will be placed into separate so-named
+("current_section.function_name") sections by default.
+This is achieved using `--sectname-subst` GAS flag which will then
+substitute "%S" in a .pushsection or .section directive with the
+name of the current section. So,
 
-There is probably a bunch more livepatch code to optimize-out after
-introducing this, leave it for later as well.
+.section .entry.text      # current section is .entry.text
+SYM_FUNC_START(foo)
+ -> .pushsection %S.foo   # now the section is .entry.text.foo
+do_something
+SYM_FUNC_END(foo)
+ -> .popsection           # back to .entry.text
 
-Suggested-by: H.J. Lu <hjl.tools@gmail.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Suggested-by: Miroslav Benes <mbenes@suse.cz>
+Now the function "foo" is placed into .entry.text.foo and can be
+garbage-collected if there are no consumers for it.
+Otherwise, the linker script will merge it back into .entry.text.
+
+Since modpost is being run on vmlinux.o, i.e. before the final
+linking, expand its okay-list to cover new potential sections
+(which will get processed afterwards).
+
+Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do, then merge
+Suggested-by: Nicolas Pitre <nico@fluxnic.net> # --sectname-subst flag
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- Makefile                |  6 ++++++
- init/Kconfig            |  3 +++
- kernel/livepatch/core.c | 17 +++++++++++++----
- scripts/mod/modpost.c   | 42 ++++++++++++++++++++++-------------------
- 4 files changed, 45 insertions(+), 23 deletions(-)
+ Makefile                          |  18 +++++
+ arch/Kconfig                      |   6 ++
+ include/asm-generic/vmlinux.lds.h |  21 +++---
+ include/linux/linkage.h           | 119 +++++++++++++++++++++++++++++-
+ init/Kconfig                      |  10 +++
+ scripts/mod/modpost.c             |   6 +-
+ 6 files changed, 167 insertions(+), 13 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index ceb987e5c87b..fa9f947c9839 100644
+index fa9f947c9839..fbe2d13028f4 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -871,6 +871,12 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
- KBUILD_CFLAGS += -fno-inline-functions-called-once
+@@ -877,6 +877,24 @@ ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
+ KBUILD_LDFLAGS += -z unique-symbol
  endif
  
-+# Prefer linking with the `-z unique-symbol` if available, this eliminates
-+# position-based search
-+ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
-+KBUILD_LDFLAGS += -z unique-symbol
++# Allow ASM code to generate separate sections for each function. See
++# `include/linux/linkage.h` for explanation. This flag is to enable GAS to
++# insert the name of the previous section instead of `%S` inside .pushsection
++ifdef CONFIG_HAVE_ASM_FUNCTION_SECTIONS
++ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_LTO_CLANG),)
++SECSUBST_AFLAGS := -Wa,--sectname-subst
++KBUILD_AFLAGS_KERNEL += $(SECSUBST_AFLAGS)
++KBUILD_CFLAGS_KERNEL += $(SECSUBST_AFLAGS)
++export SECSUBST_AFLAGS
 +endif
++
++# Same for modules. LD DCE doesn't work for them, thus not checking for it
++ifneq ($(CONFIG_LTO_CLANG),)
++KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
++KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
++endif
++endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
 +
  ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
  KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
  LDFLAGS_vmlinux += --gc-sections
-diff --git a/init/Kconfig b/init/Kconfig
-index e9119bf54b1f..8e900d17d42b 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -86,6 +86,9 @@ config CC_HAS_ASM_INLINE
- config CC_HAS_NO_PROFILE_FN_ATTR
- 	def_bool $(success,echo '__attribute__((no_profile_instrument_function)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
- 
-+config LD_HAS_Z_UNIQUE_SYMBOL
-+	def_bool $(ld-option,-z unique-symbol)
-+
- config CONSTRUCTORS
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..550f0599e211 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1322,6 +1322,12 @@ config DYNAMIC_SIGFRAME
+ config HAVE_ARCH_NODE_DEV_GROUP
  	bool
  
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 585494ec464f..7a330465a8c7 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
- 	args->count++;
- 
- 	/*
--	 * Finish the search when the symbol is found for the desired position
--	 * or the position is not defined for a non-unique symbol.
-+	 * Finish the search when unique symbol names are enabled
-+	 * or the symbol is found for the desired position or the
-+	 * position is not defined for a non-unique symbol.
- 	 */
--	if ((args->pos && (args->count == args->pos)) ||
--	    (!args->pos && (args->count > 1)))
-+	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-+	    (args->pos && args->count == args->pos) ||
-+	    (!args->pos && args->count > 1))
- 		return 1;
- 
- 	return 0;
-@@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 	else
- 		kallsyms_on_each_symbol(klp_find_callback, &args);
- 
-+	/*
-+	 * If the LD's `-z unique-symbol` flag is available and enabled,
-+	 * sympos checks are not relevant.
-+	 */
-+	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
-+		sympos = 0;
++config ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
++	bool
++	help
++	  An arch should select this if it can be built and run with its
++	  asm functions placed into separate sections to improve DCE and LTO.
 +
- 	/*
- 	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
- 	 * otherwise ensure the symbol position count matches sympos.
+ source "kernel/gcov/Kconfig"
+ 
+ source "scripts/gcc-plugins/Kconfig"
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..e7b8a84e0e64 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -84,6 +84,9 @@
+ /* Align . to a 8 byte boundary equals to maximum function alignment. */
+ #define ALIGN_FUNCTION()  . = ALIGN(8)
+ 
++/* This is useful for collecting individual sections back into one main */
++#define SECT_WILDCARD(sect)	sect sect.[0-9a-zA-Z_]*
++
+ /*
+  * LD_DEAD_CODE_DATA_ELIMINATION option enables -fdata-sections, which
+  * generates .data.identifier sections, which need to be pulled in with
+@@ -97,12 +100,12 @@
+  * sections to be brought in with rodata.
+  */
+ #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
+-#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+-#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
+-#define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+-#define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+-#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+-#define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
++#define TEXT_MAIN SECT_WILDCARD(.text)
++#define DATA_MAIN SECT_WILDCARD(.data) .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
++#define SDATA_MAIN SECT_WILDCARD(.sdata)
++#define RODATA_MAIN SECT_WILDCARD(.rodata) .rodata..L*
++#define BSS_MAIN SECT_WILDCARD(.bss) .bss..compoundliteral*
++#define SBSS_MAIN SECT_WILDCARD(.sbss)
+ #else
+ #define TEXT_MAIN .text
+ #define DATA_MAIN .data
+@@ -564,7 +567,7 @@
+ #define NOINSTR_TEXT							\
+ 		ALIGN_FUNCTION();					\
+ 		__noinstr_text_start = .;				\
+-		*(.noinstr.text)					\
++		*(SECT_WILDCARD(.noinstr.text))				\
+ 		__noinstr_text_end = .;
+ 
+ /*
+@@ -621,7 +624,7 @@
+ #define ENTRY_TEXT							\
+ 		ALIGN_FUNCTION();					\
+ 		__entry_text_start = .;					\
+-		*(.entry.text)						\
++		*(SECT_WILDCARD(.entry.text))				\
+ 		__entry_text_end = .;
+ 
+ #define IRQENTRY_TEXT							\
+@@ -643,7 +646,7 @@
+ 		__static_call_text_end = .;
+ 
+ /* Section used for early init (in .S files) */
+-#define HEAD_TEXT  KEEP(*(.head.text))
++#define HEAD_TEXT  KEEP(*(SECT_WILDCARD(.head.text)))
+ 
+ #define HEAD_TEXT_SECTION							\
+ 	.head.text : AT(ADDR(.head.text) - LOAD_OFFSET) {		\
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index dbf8506decca..f3b966a6427e 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -73,6 +73,38 @@
+ #define __ALIGN_STR	".align 4,0x90"
+ #endif
+ 
++/*
++ * Allow ASM symbols to have their own unique sections if they are being
++ * generated by the compiler for C functions (DCE, LTO). Correlates with
++ * the presence of the `-ffunction-section` in KBUILD_CFLAGS.
++ */
++#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
++    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
++     (defined(CONFIG_LTO_CLANG)))
++
++#define SYM_PUSH_SECTION(name)				\
++	.pushsection %S.name, "ax"
++
++#define SYM_POP_SECTION()				\
++	.popsection
++
++#define __ASM_PUSH_SECTION(name)			\
++	".pushsection %S." name ", \"ax\""
++
++#else /* !(CONFIG_HAVE_ASM_FUNCTION_SECTIONS && (DCE || LTO)) */
++
++#define SYM_PUSH_SECTION(name)
++#define SYM_POP_SECTION()
++#define __ASM_PUSH_SECTION(name)
++
++#endif /* !(CONFIG_HAVE_ASM_FUNCTION_SECTIONS && (DCE || LTO)) */
++
++#define ASM_PUSH_SECTION(name)				\
++	__ASM_PUSH_SECTION(__stringify(name))
++
++#define ASM_POP_SECTION()				\
++	__stringify(SYM_POP_SECTION())
++
+ #ifdef __ASSEMBLY__
+ 
+ /* SYM_T_FUNC -- type used by assembler to mark functions */
+@@ -209,6 +241,15 @@
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
++/*
++ * SYM_FUNC_START_WEAK_ALIAS -- use where there are two global names for one
++ * function, and one of them is weak
++ */
++#ifndef SYM_FUNC_START_WEAK_ALIAS
++#define SYM_FUNC_START_WEAK_ALIAS(name)			\
++	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
++#endif
++
+ /*
+  * SYM_FUNC_START_ALIAS -- use where there are two global names for one
+  * function
+@@ -225,12 +266,24 @@
+  * later.
+  */
+ #define SYM_FUNC_START(name)				\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
++ * placed into a section specified in the second argument
++ */
++#ifndef SYM_FUNC_START_SECT
++#define SYM_FUNC_START_SECT(name, sect)			\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
+ #ifndef SYM_FUNC_START_NOALIGN
+ #define SYM_FUNC_START_NOALIGN(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+ #endif
+ 
+@@ -238,24 +291,38 @@
+ #ifndef SYM_FUNC_START_LOCAL
+ /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
+ #define SYM_FUNC_START_LOCAL(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
+ #ifndef SYM_FUNC_START_LOCAL_NOALIGN
+ #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
++ * will be conditionally placed into a section specified in the second argument
++ */
++#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
++#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, sect)	\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_FUNC_START_WEAK -- use for weak functions */
+ #ifndef SYM_FUNC_START_WEAK
+ #define SYM_FUNC_START_WEAK(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
+ #ifndef SYM_FUNC_START_WEAK_NOALIGN
+ #define SYM_FUNC_START_WEAK_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)
+ #endif
+ 
+@@ -272,24 +339,59 @@
+ #ifndef SYM_FUNC_END
+ /* the same as SYM_FUNC_END_ALIAS, see comment near SYM_FUNC_START */
+ #define SYM_FUNC_END(name)				\
+-	SYM_END(name, SYM_T_FUNC)
++	SYM_END(name, SYM_T_FUNC) ASM_NL		\
++	SYM_POP_SECTION()
+ #endif
+ 
+ /* SYM_CODE_START -- use for non-C (special) functions */
+ #ifndef SYM_CODE_START
+ #define SYM_CODE_START(name)				\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_CODE_START_SECT -- use for non-C (special) functions, will be
++ * conditionally placed into a section specified in the second argument
++ */
++#ifndef SYM_CODE_START_SECT
++#define SYM_CODE_START_SECT(name, sect)			\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_CODE_START_NOALIGN -- use for non-C (special) functions, w/o alignment */
+ #ifndef SYM_CODE_START_NOALIGN
+ #define SYM_CODE_START_NOALIGN(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_CODE_START_NOALIGN_SECT -- use for non-C (special) functions,
++ * w/o alignment, will be conditionally placed into a section specified
++ * in the second argument
++ */
++#ifndef SYM_CODE_START_NOALIGN_SECT
++#define SYM_CODE_START_NOALIGN_SECT(name, sect)		\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_CODE_START_LOCAL -- use for local non-C (special) functions */
+ #ifndef SYM_CODE_START_LOCAL
+ #define SYM_CODE_START_LOCAL(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_CODE_START_LOCAL -- use for local non-C (special) functions, will
++ * be conditionally placing into a section specified in the second argument
++ */
++#ifndef SYM_CODE_START_LOCAL_SECT
++#define SYM_CODE_START_LOCAL_SECT(name, sect)		\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
+@@ -299,13 +401,26 @@
+  */
+ #ifndef SYM_CODE_START_LOCAL_NOALIGN
+ #define SYM_CODE_START_LOCAL_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_CODE_START_LOCAL_NOALIGN_SECT -- use for local non-C (special)
++ * functions, w/o alignment, will be conditionally placed into a section
++ * specified in the second argument
++ */
++#ifndef SYM_CODE_START_LOCAL_NOALIGN_SECT
++#define SYM_CODE_START_LOCAL_NOALIGN_SECT(name, sect)	\
++	SYM_PUSH_SECTION(sect) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_CODE_END -- the end of SYM_CODE_START_LOCAL, SYM_CODE_START, ... */
+ #ifndef SYM_CODE_END
+ #define SYM_CODE_END(name)				\
+-	SYM_END(name, SYM_T_NONE)
++	SYM_END(name, SYM_T_NONE) ASM_NL		\
++	SYM_POP_SECTION()
+ #endif
+ 
+ /* === data annotations === */
+diff --git a/init/Kconfig b/init/Kconfig
+index 8e900d17d42b..4acfc80f22df 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1386,6 +1386,16 @@ config CC_OPTIMIZE_FOR_SIZE
+ 
+ endchoice
+ 
++config HAVE_ASM_FUNCTION_SECTIONS
++	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
++	depends on $(cc-option,-Wa$(comma)--sectname-subst)
++	def_bool y
++	help
++	  This enables asm function sections if both architecture and
++	  toolchain support it. It allows creating a separate section
++	  for each function written in assembly in order to improve DCE
++	  and LTO (works the same way as -ffunction-sections for C code).
++
+ config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	bool
+ 	help
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 4648b7afe5cc..ec521ccebea6 100644
+index ec521ccebea6..84d2c44f9383 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -689,11 +689,28 @@ static void handle_modversion(const struct module *mod,
- 	sym_set_crc(symname, crc);
- }
+@@ -960,7 +960,9 @@ static void check_section(const char *modname, struct elf_info *elf,
+ 		".kprobes.text", ".cpuidle.text", ".noinstr.text"
+ #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
+ 		".fixup", ".entry.text", ".exception.text", ".text.*", \
+-		".coldtext", ".softirqentry.text"
++		".coldtext", ".softirqentry.text", ".text.unlikely.*", \
++		".noinstr.text.*", ".head.text.*", ".fixup.*", \
++		".entry.text.*"
  
-+static char *remove_dot(char *s)
-+{
-+	size_t n = strcspn(s, ".");
-+
-+	if (n && s[n]) {
-+		size_t m = strspn(s + n + 1, "0123456789");
-+
-+		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-+			s[n] = 0;
-+
-+		/* strip trailing .lto */
-+		if (strends(s, ".lto"))
-+			s[strlen(s) - 4] = '\0';
-+	}
-+
-+	return s;
-+}
-+
- static void handle_symbol(struct module *mod, struct elf_info *info,
- 			  const Elf_Sym *sym, const char *symname)
- {
- 	enum export export;
--	const char *name;
- 
- 	if (strstarts(symname, "__ksymtab"))
- 		export = export_from_secname(info, get_secindex(info, sym));
-@@ -734,8 +751,11 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
- 	default:
- 		/* All exported symbols */
- 		if (strstarts(symname, "__ksymtab_")) {
--			name = symname + strlen("__ksymtab_");
--			sym_add_exported(name, mod, export);
-+			char *name;
-+
-+			name = NOFAIL(strdup(symname + strlen("__ksymtab_")));
-+			sym_add_exported(remove_dot(name), mod, export);
-+			free(name);
- 		}
- 		if (strcmp(symname, "init_module") == 0)
- 			mod->has_init = 1;
-@@ -1980,22 +2000,6 @@ static void check_sec_ref(struct module *mod, const char *modname,
- 	}
- }
- 
--static char *remove_dot(char *s)
--{
--	size_t n = strcspn(s, ".");
--
--	if (n && s[n]) {
--		size_t m = strspn(s + n + 1, "0123456789");
--		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
--			s[n] = 0;
--
--		/* strip trailing .lto */
--		if (strends(s, ".lto"))
--			s[strlen(s) - 4] = '\0';
--	}
--	return s;
--}
--
- static void read_symbols(const char *modname)
- {
- 	const char *symname;
+ #define INIT_SECTIONS      ".init.*"
+ #define MEM_INIT_SECTIONS  ".meminit.*"
+@@ -1041,7 +1043,7 @@ enum mismatch {
+ struct sectioncheck {
+ 	const char *fromsec[20];
+ 	const char *bad_tosec[20];
+-	const char *good_tosec[20];
++	const char *good_tosec[25];
+ 	enum mismatch mismatch;
+ 	const char *symbol_white_list[20];
+ 	void (*handler)(const char *modname, struct elf_info *elf,
 -- 
 2.34.1
 
