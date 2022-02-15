@@ -2,97 +2,82 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 729F6C433F5
-	for <live-patching@archiver.kernel.org>; Tue, 15 Feb 2022 14:38:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16F54C433EF
+	for <live-patching@archiver.kernel.org>; Tue, 15 Feb 2022 15:06:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238710AbiBOOjF (ORCPT
+        id S239586AbiBOPGL (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 15 Feb 2022 09:39:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47900 "EHLO
+        Tue, 15 Feb 2022 10:06:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiBOOjF (ORCPT
+        with ESMTP id S239560AbiBOPGL (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 15 Feb 2022 09:39:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E9E10240E;
-        Tue, 15 Feb 2022 06:38:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D2E92B81A64;
-        Tue, 15 Feb 2022 14:38:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DDAC340EB;
-        Tue, 15 Feb 2022 14:38:50 +0000 (UTC)
-Date:   Tue, 15 Feb 2022 09:38:49 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jiri Kosina <jikos@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
+        Tue, 15 Feb 2022 10:06:11 -0500
+Received: from p3plsmtpa09-10.prod.phx3.secureserver.net (p3plsmtpa09-10.prod.phx3.secureserver.net [173.201.193.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BF9108571
+        for <live-patching@vger.kernel.org>; Tue, 15 Feb 2022 07:06:00 -0800 (PST)
+Received: from localhost ([82.17.115.212])
+        by :SMTPAUTH: with ESMTPA
+        id JzOvneUB7ApSlJzOxnv8kp; Tue, 15 Feb 2022 08:05:59 -0700
+X-CMAE-Analysis: v=2.4 cv=G8PZr/o5 c=1 sm=1 tr=0 ts=620bc157
+ a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
+ a=IkcTkHD0fZMA:10 a=eRuHl9Be23FFiiB-UZwA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: atomlin@atomlin.com
+Date:   Tue, 15 Feb 2022 15:05:57 +0000
+From:   Aaron Tomlin <atomlin@atomlin.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "cl@linux.com" <cl@linux.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jeyu@kernel.org" <jeyu@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
         "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v2 09/13] powerpc/ftrace: Implement
- CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-Message-ID: <20220215093849.556d5444@gandalf.local.home>
-In-Reply-To: <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
-        <5831f711a778fcd6eb51eb5898f1faae4378b35b.1640017960.git.christophe.leroy@csgroup.eu>
-        <1644852011.qg7ud9elo2.naveen@linux.ibm.com>
-        <1b28f52a-f8b7-6b5c-e726-feac4123517d@csgroup.eu>
-        <875ypgo0f3.fsf@mpe.ellerman.id.au>
-        <1644930705.g64na2kgvd.naveen@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        "ghalat@redhat.com" <ghalat@redhat.com>,
+        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
+        "void@manifault.com" <void@manifault.com>,
+        "joe@perches.com" <joe@perches.com>,
+        "msuchanek@suse.de" <msuchanek@suse.de>,
+        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+Subject: Re: [PATCH v5 13/13] module: Move version support into a separate
+ file
+Message-ID: <20220215150557.g7mvx47ibhjgweyo@ava.usersys.com>
+References: <20220209171118.3269581-1-atomlin@redhat.com>
+ <20220209171118.3269581-3-atomlin@redhat.com>
+ <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu>
+ <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
+ <d3d87e3e-e13f-252a-1c06-f18a78af5d98@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d3d87e3e-e13f-252a-1c06-f18a78af5d98@csgroup.eu>
+X-CMAE-Envelope: MS4xfE6u2n9DvFiGsYMeR3knNtd1Uva+OFrVy9oEyo66zu27ZGI/MXq9RjqzQsM7JLBsAGQrHziUfDdZ7PdUHEDucW7KYBpPGXdMA/s8RfiJnGF60yp5OQYQ
+ 34/DADYiivZZnSXdDmDZacjYodnY31fPUWCaK3qKjfCC/vsG0fCkkBDofkzoDMhdkqppdsgwwMPmR/Bdtyad0GIOiI/dFI/FiLsnQqQmirhgLcu931KyiKwj
+ SlvzCVK19hmmJJQpNKfjg5Yr1yN70RRQZlxrhJp4L8kCi981iCR4BD8dPGNMonpNkobC83Ao7/y9NrV23L/CfXW7lAlCvrM3CfFmBy03x8hxADWskgR4dmje
+ XQMt+oVaFTySOqjuoLn1TEJRvtiUiD9wKcknPxlG1e8SRkMLOfcY/Iv31YpgV0RF6tR/bZYv3/WnRDs+Mp+3atcCwI+LrTQQahfVPVTXmWiB1ctlrMUi0M9r
+ /k9O/7j3TceeRL9hUZkWQiPtXognSDh4GSoqPybHOm3CLj/HtrnRsKG7HoR4xpx6mEknNrOTsvJECi1pWr2/Oeznfld1mJLvjR+r7KMrNtBFKzWpwZGpr+9Z
+ a8LD96SgYe1oEx0N3cWMiQiZgdp5vvnLrdhbDs6uKS/qKsN5jytzrRXnWi/Da74X2T/yKdrhm8GJ1GR4wejhOSAKOpTIFaVDVYO1UZ49HJcbyg==
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, 15 Feb 2022 19:06:48 +0530
-"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+On Sun 2022-02-13 18:29 +0000, Christophe Leroy wrote:
+> I'm not sure you can do that.
+> 
+>  From commit 8c8ef42aee8f ("module: include other structures in module 
+> version check") I understand that module_layout is there for some signature.
 
-> As I understand it, the reason ftrace_get_regs() was introduced was to 
-> be able to only return the pt_regs, if _all_ registers were saved into 
-> it, which we don't do when coming in through ftrace_caller(). See the 
-> x86 implementation (commit 02a474ca266a47 ("ftrace/x86: Allow for 
-> arguments to be passed in to ftrace_regs by default"), which returns 
-> pt_regs conditionally.
+Hi Christophe,
 
-I can give you the history of ftrace_caller and ftrace_regs_caller.
+I see. In which case, if I understand correctly, we'd have to ignore the
+report from Sparse. I will add a comment to hopefully suggest against
+removal.
 
-ftrace_caller saved just enough as was denoted for gcc mcount trampolines.
-The new fentry which happens at the start of the function, whereas mcount
-happens after the stack frame is set up, may change the rules on some
-architectures.
 
-As for ftrace_regs_caller, that was created for kprobes. As the majority of
-kprobes were added at the start of the function, it made sense to hook into
-ftrace as the ftrace trampoline call is much faster than taking a
-breakpoint interrupt. But to keep compatibility with breakpoint
-interrupts, we needed to fill in all the registers, and make it act just
-like a breakpoint interrupt.
+Kind regards,
 
-I've been wanting to record function parameters, and because the ftrace
-trampoline must at a minimum save the function parameters before calling
-the ftrace callbacks, all the information for those parameters were being
-saved but were never exposed to the ftrace callbacks. I created the the
-DYNAMIC_FTRACE_WITH_ARGS to expose them. I first just used pt_regs with
-just the parameters filled in, but that was criticized as it could be
-confusing where the non filled in pt_regs might be used and thinking they
-are legitimate. So I created ftrace_regs that would give you just the
-function arguments (if DYNAMIC_FTRACE_WITH_ARGS is defined), or it will
-give you a full pt_regs, if the caller came from the ftrace_regs_caller. If
-not, it will give you a NULL pointer.
-
-The first user to use the args was live kernel patching, as they only need
-that and the return pointer.
-
--- Steve
+-- 
+Aaron Tomlin
