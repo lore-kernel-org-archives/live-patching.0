@@ -2,49 +2,49 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E281C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ADD2C4167B
 	for <live-patching@archiver.kernel.org>; Wed, 16 Feb 2022 16:39:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbiBPQkH (ORCPT
+        id S236543AbiBPQkI (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 16 Feb 2022 11:40:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41806 "EHLO
+        Wed, 16 Feb 2022 11:40:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236528AbiBPQkG (ORCPT
+        with ESMTP id S236542AbiBPQkH (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 16 Feb 2022 11:40:06 -0500
+        Wed, 16 Feb 2022 11:40:07 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AB0B25D259
-        for <live-patching@vger.kernel.org>; Wed, 16 Feb 2022 08:39:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72FA025D27D
+        for <live-patching@vger.kernel.org>; Wed, 16 Feb 2022 08:39:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645029590;
+        s=mimecast20190719; t=1645029591;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TKJ0p6wUHLeEpT+OPHGiZq/Luk+QYBrrNwkFch9ANdQ=;
-        b=Pp++ldWOeQTM2l9vtJ8AO9teinBeKifjRoSKTBXiUJoGrkZ4CmjRJpaS+4D353tir0Bi0u
-        sFvO5w460JcEWTwMv617NWlRct+2ORLwACMC1lJYEFt/6bO5NT7cMrpxx7cjxRcJWCdlvE
-        hBVjccWqclrXPVWMjl/GdX58htPrMO4=
+        bh=Y9oOSEJ5x2sTWWOBykqS0vc76o858L+uCeeYQfjYi5M=;
+        b=fXcngqy+nBtIHhDXfavHmplzNVx6xzJv7iVS56QT3xSoT339Ftv3hGO0tB77AFAWqekaxL
+        Se77LOGFYyiPu7zIPFl4kyxNtG5luB3KbiZBWNYNE2qmRVJoq09Vpzy6ihzAznlzROom4n
+        rfboyRmf5lr7jfa+H1T1N1cZh4WmLOA=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-24erS44XMJKgxa43zlJSXA-1; Wed, 16 Feb 2022 11:39:46 -0500
-X-MC-Unique: 24erS44XMJKgxa43zlJSXA-1
+ us-mta-493-zgXjTCnKMK2TWhWUpkDjVg-1; Wed, 16 Feb 2022 11:39:48 -0500
+X-MC-Unique: zgXjTCnKMK2TWhWUpkDjVg-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C70331800D50;
-        Wed, 16 Feb 2022 16:39:45 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1240814754;
+        Wed, 16 Feb 2022 16:39:47 +0000 (UTC)
 Received: from jlaw-desktop.redhat.com (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54FAB753D3;
-        Wed, 16 Feb 2022 16:39:45 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 948BC753CD;
+        Wed, 16 Feb 2022 16:39:46 +0000 (UTC)
 From:   Joe Lawrence <joe.lawrence@redhat.com>
 To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [RFC PATCH v6 05/12] modpost: Integrate klp-convert
-Date:   Wed, 16 Feb 2022 11:39:33 -0500
-Message-Id: <20220216163940.228309-6-joe.lawrence@redhat.com>
+Subject: [RFC PATCH v6 07/12] documentation: Update on livepatch elf format
+Date:   Wed, 16 Feb 2022 11:39:35 -0500
+Message-Id: <20220216163940.228309-8-joe.lawrence@redhat.com>
 In-Reply-To: <20220216163940.228309-1-joe.lawrence@redhat.com>
 References: <20220216163940.228309-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
@@ -54,259 +54,99 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: Josh Poimboeuf <jpoimboe@redhat.com>
+From: Joao Moreira <jmoreira@suse.de>
 
-Create cmd_klp_convert and hook it into scripts/Makefile.modpost.
-cmd_klp_convert invokes klp-convert with the right arguments for the
-conversion of unresolved symbols inside a livepatch.
+Add a section to Documentation/livepatch/module-elf-format.rst
+describing how klp-convert works for fixing relocations.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
 Signed-off-by: Joao Moreira <jmoreira@suse.de>
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- .gitignore                |  1 +
- Makefile                  | 18 ++----------------
- scripts/Makefile.modfinal | 38 +++++++++++++++++++++++++++++++++++++-
- scripts/Makefile.modpost  |  5 +++++
- scripts/mod/modpost.c     | 28 ++++++++++++++++++++++++++--
- scripts/mod/modpost.h     |  1 +
- 6 files changed, 72 insertions(+), 19 deletions(-)
+ Documentation/livepatch/livepatch.rst         |  3 ++
+ Documentation/livepatch/module-elf-format.rst | 42 +++++++++++++++++--
+ 2 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index 50638a15a527..eb0179d00260 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -48,6 +48,7 @@
- *.xz
- *.zst
- Module.symvers
-+modules.livepatch
- modules.order
+diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatch/livepatch.rst
+index 68e3651e8af9..6b317a57c276 100644
+--- a/Documentation/livepatch/livepatch.rst
++++ b/Documentation/livepatch/livepatch.rst
+@@ -261,6 +261,9 @@ into three levels:
+     absolute position in the database, but rather the order it has been found
+     only for a particular object ( vmlinux or a kernel module ). Note that
+     kallsyms allows for searching symbols according to the object name.
++    Uniquely named symbols may use a symbol position of 0.  Non-unique
++    symbols need to specify their object / kallsyms position, starting
++    at position 1.
  
- #
-diff --git a/Makefile b/Makefile
-index 64ec4bc8172c..31d5b6f608d9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1089,6 +1089,7 @@ PHONY += prepare0
- export extmod_prefix = $(if $(KBUILD_EXTMOD),$(KBUILD_EXTMOD)/)
- export MODORDER := $(extmod_prefix)modules.order
- export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
-+export MODULES_LIVEPATCH := $(extmod-prefix)modules.livepatch
+   - struct klp_object defines an array of patched functions (struct
+     klp_func) in the same object. Where the object is either vmlinux
+diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
+index dbe9b400e39f..38cf94dd35c2 100644
+--- a/Documentation/livepatch/module-elf-format.rst
++++ b/Documentation/livepatch/module-elf-format.rst
+@@ -2,7 +2,8 @@
+ Livepatch module Elf format
+ ===========================
  
- ifeq ($(KBUILD_EXTMOD),)
- core-y			+= kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
-@@ -1485,7 +1486,7 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json .thinlto-cache
-+	       compile_commands.json .thinlto-cache modules.livepatch
- 
- # Directories & files removed with 'make mrproper'
- MRPROPER_FILES += include/config include/generated          \
-@@ -1747,22 +1748,7 @@ PHONY += modules modules_install
- 
- ifdef CONFIG_MODULES
- 
--quiet_cmd_klp_map = KLP     symbols.klp
--
--define cmd_klp_map
--	$(shell echo "klp-convert-symbol-data.0.1" > $(objtree)/symbols.klp)				\
--	$(shell echo "*vmlinux" >> $(objtree)/symbols.klp)						\
--	$(shell nm -f posix $(objtree)/vmlinux | cut -d\  -f1 >> $(objtree)/symbols.klp)		\
--	$(foreach ko, $(sort $(shell cat modules.order)),						\
--		$(eval mod = $(patsubst %.ko,%.mod,$(ko)))						\
--		$(eval obj = $(patsubst %.ko,%.o,$(ko)))						\
--		$(if $(shell grep -o LIVEPATCH $(mod)),,						\
--			$(shell echo "*$(shell basename -s .ko $(ko))" >> $(objtree)/symbols.klp)	\
--			$(shell nm -f posix $(obj) | cut -d\  -f1 >> $(objtree)/symbols.klp)))
--endef
--
- modules: modules_check
--	$(if $(CONFIG_LIVEPATCH), $(call cmd,klp_map))
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
- 
- PHONY += modules_check
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 7f39599e9fae..cb31262436ba 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -14,6 +14,8 @@ include $(srctree)/scripts/Makefile.lib
- 
- # find all modules listed in modules.order
- modules := $(sort $(shell cat $(MODORDER)))
-+modules-klp := $(sort $(shell cat $(MODULES_LIVEPATCH)))
-+modules-no-klp := $(filter-out $(modules-klp), $(modules))
- 
- __modfinal: $(modules)
- 	@:
-@@ -56,7 +58,7 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+-This document outlines the Elf format requirements that livepatch modules must follow.
++This document outlines the Elf format requirements that livepatch modules must
++follow.
  
  
- # Re-generate module BTFs if either module's .ko or vmlinux changed
--$(modules): %.ko: %$(mod-prelink-ext).o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
-+$(modules-no-klp): %.ko: %$(mod-prelink-ext).o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
- 	+$(call if_changed_except,ld_ko_o,vmlinux)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-@@ -64,6 +66,40 @@ endif
+ .. Table of Contents
+@@ -259,7 +260,8 @@ Livepatch symbol names must conform to the following format::
+   The position of the symbol in the object (as according to kallsyms)
+   This is used to differentiate duplicate symbols within the same
+   object. The symbol position is expressed numerically (0, 1, 2...).
+-  The symbol position of a unique symbol is 0.
++  The symbol position of a unique symbol is 0.  The symbol position of
++  the first non-unique symbol is 1, the second is 2, etc.
  
- targets += $(modules) $(modules:.ko=.mod.o)
+ Examples:
+ ---------
+@@ -291,7 +293,41 @@ Examples:
+   Note that the 'Ndx' (Section index) for these symbols is SHN_LIVEPATCH (0xff20).
+   "OS" means OS-specific.
  
-+# Live Patch
-+# ---------------------------------------------------------------------------
+-5. Symbol table and Elf section access
++5. Automatic conversion of unresolved relocations
++=================================================
++Sometimes livepatches may operate on symbols which are not self-contained nor
++exported. When this happens, these symbols remain unresolved in the elf object
++and will trigger an error during the livepatch instantiation.
 +
-+%.tmp.ko: %.o %.mod.o symbols.klp FORCE
-+	+$(call if_changed,ld_ko_o)
++Whenever possible, the kernel building infrastructure solves this problem
++automatically. First, a symbol database containing information on all compiled
++objects is built. Second, this database - a file named symbols.klp, placed in
++the kernel source root directory - is used to identify targets for unresolved
++relocations, converting them in the livepatch elf accordingly to the
++specifications above-described. While the first stage is fully handled by the
++building system, the second is done by a tool called klp-convert, which can be
++found in "scripts/livepatch".
 +
-+quiet_cmd_klp_convert = KLP     $@
-+      cmd_klp_convert = scripts/livepatch/klp-convert symbols.klp $< $@
++When an unresolved relocation has as target a symbol whose name is also used by
++different symbols throughout the kernel, the relocation cannot be resolved
++automatically. In these cases, the livepatch developer must add annotations to
++the livepatch, making it possible for the system to identify which is the
++correct target amongst multiple homonymous symbols. Such annotations must be
++done through a data structure as follows:::
 +
-+$(modules-klp): %.ko: %.tmp.ko FORCE
-+	$(call if_changed,klp_convert)
++	struct KLP_MODULE_RELOC(object) data_structure_name[] = {
++		KLP_SYMPOS(symbol, pos)
++	};
 +
-+targets += $(modules-klp:.ko=.tmp.ko)
++In the above example, object refers to the object file which contains the
++symbol, being vmlinux or a module; symbol refers to the symbol name that will
++be relocated and pos is its position in the object.
 +
-+ifeq ($(KBUILD_EXTMOD),)
-+# Read out modules.{order,livepatch} instead of expanding $(modules-no-klp).
-+# Otherwise, allmodconfig would fail with "Argument list too long".
-+filechk_klp_map = \
-+	echo "klp-convert-symbol-data.0.1";		\
-+	echo "*vmlinux";				\
-+	$(NM) -f posix vmlinux | cut -d\  -f1;		\
-+	sort $(MODORDER) $(MODULES_LIVEPATCH) |		\
-+	uniq -u |					\
-+	sed 's/\.ko$$//' |    			  	\
-+	while read o;					\
-+	do						\
-+		echo "*$$(basename $$o)";		\
-+		$(NM) -f posix $$o.o | cut -d\  -f1;	\
-+	done
++When a data structure like this is added to the livepatch, the resulting elf
++will hold symbols that will be identified by klp-convert and used to solve name
++ambiguities.
 +
-+symbols.klp: FORCE
-+	$(call filechk,klp_map)
-+endif
-+
- # Add FORCE to the prequisites of a target to force it to be always rebuilt.
- # ---------------------------------------------------------------------------
++6. Symbol table and Elf section access
+ ======================================
+ A livepatch module's symbol table is accessible through module->symtab.
  
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 48585c4d04ad..c5df629de7b2 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -48,6 +48,7 @@ MODPOST = scripts/mod/modpost								\
- 	$(if $(CONFIG_MODVERSIONS),-m)							\
- 	$(if $(CONFIG_MODULE_SRCVERSION_ALL),-a)					\
- 	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)					\
-+	$(if $(CONFIG_LIVEPATCH),-l $(MODULES_LIVEPATCH))				\
- 	-o $@
- 
- ifdef MODPOST_VMLINUX
-@@ -136,6 +137,10 @@ $(output-symdump): $(MODORDER) $(input-symdump) $(modules:.ko=$(mod-prelink-ext)
- targets += $(output-symdump)
- 
- __modpost: $(output-symdump)
-+ifndef CONFIG_LIVEPATCH
-+	$(Q)rm -f $(MODULES_LIVEPATCH)
-+	$(Q)touch $(MODULES_LIVEPATCH)
-+endif
- ifneq ($(KBUILD_MODPOST_NOFINAL),1)
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
- endif
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 6bfa33217914..1034b673c95c 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -2051,6 +2051,10 @@ static void read_symbols(const char *modname)
- 		handle_moddevtable(mod, &info, sym, symname);
- 	}
- 
-+	/* Livepatch modules have unresolved symbols resolved by klp-convert */
-+	if (get_modinfo(&info, "livepatch"))
-+		mod->livepatch = 1;
-+
- 	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
- 		symname = remove_dot(info.strtab + sym->st_name);
- 
-@@ -2170,7 +2174,7 @@ static void check_exports(struct module *mod)
- 		const char *basename;
- 		exp = find_symbol(s->name);
- 		if (!exp || exp->module == mod) {
--			if (!s->weak && nr_unresolved++ < MAX_UNRESOLVED_REPORTS)
-+			if (!s->weak && !mod->livepatch && nr_unresolved++ < MAX_UNRESOLVED_REPORTS)
- 				modpost_log(warn_unresolved ? LOG_WARN : LOG_ERROR,
- 					    "\"%s\" [%s.ko] undefined!\n",
- 					    s->name, mod->name);
-@@ -2502,6 +2506,20 @@ static void write_namespace_deps_files(const char *fname)
- 	free(ns_deps_buf.p);
- }
- 
-+static void write_livepatch_modules(const char *fname)
-+{
-+	struct buffer buf = { };
-+	struct module *mod;
-+
-+	for (mod = modules; mod; mod = mod->next) {
-+		if (mod->livepatch)
-+			buf_printf(&buf, "%s.ko\n", mod->name);
-+	}
-+
-+	write_if_changed(&buf, fname);
-+	free(buf.p);
-+}
-+
- struct dump_list {
- 	struct dump_list *next;
- 	const char *file;
-@@ -2513,12 +2531,13 @@ int main(int argc, char **argv)
- 	struct buffer buf = { };
- 	char *missing_namespace_deps = NULL;
- 	char *dump_write = NULL, *files_source = NULL;
-+	char *livepatch_modules = NULL;
- 	int opt;
- 	int n;
- 	struct dump_list *dump_read_start = NULL;
- 	struct dump_list **dump_read_iter = &dump_read_start;
- 
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ei:l:mnT:o:awENd:")) != -1) {
- 		switch (opt) {
- 		case 'e':
- 			external_module = 1;
-@@ -2529,6 +2548,9 @@ int main(int argc, char **argv)
- 			(*dump_read_iter)->file = optarg;
- 			dump_read_iter = &(*dump_read_iter)->next;
- 			break;
-+		case 'l':
-+			livepatch_modules = optarg;
-+			break;
- 		case 'm':
- 			modversions = 1;
- 			break;
-@@ -2605,6 +2627,8 @@ int main(int argc, char **argv)
- 
- 	if (dump_write)
- 		write_dump(dump_write);
-+	if (livepatch_modules)
-+		write_livepatch_modules(livepatch_modules);
- 	if (sec_mismatch_count && !sec_mismatch_warn_only)
- 		error("Section mismatches detected.\n"
- 		      "Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.\n");
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 0c47ff95c0e2..8c7e7e546158 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -123,6 +123,7 @@ struct module {
- 	int seen;
- 	int has_init;
- 	int has_cleanup;
-+	int livepatch;
- 	struct buffer dev_table_buf;
- 	char	     srcversion[25];
- 	// Missing namespace dependencies
 -- 
 2.26.3
 
