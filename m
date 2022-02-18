@@ -2,60 +2,60 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC018C4167D
-	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:25:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B84BAC433EF
+	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:25:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239804AbiBRV0B (ORCPT
+        id S239808AbiBRV0C (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 18 Feb 2022 16:26:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52070 "EHLO
+        Fri, 18 Feb 2022 16:26:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239862AbiBRVZu (ORCPT
+        with ESMTP id S239875AbiBRVZw (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:25:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50D4E23F0BD
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:32 -0800 (PST)
+        Fri, 18 Feb 2022 16:25:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D80EE4CD53
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645219531;
+        s=mimecast20190719; t=1645219534;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t4YkvwtbfB22VP8TPxgmMroXlY648sAStQ0/hZSRZew=;
-        b=f8qu4bbPUsRJEDkWb+cnWZbGq4oG1Y86yw9RMzE3hHvDJnt3AqRVVGgWCjR2P1ebyea3Js
-        98QFMaIfwiqAFJX3XkOPKwqiTqNEyGJ2WY7aJoMJ0I0zV6BJTRrpo7Sn7gifTLMq/5gudO
-        LbIX5FLRhIBItNQKWfMQlG0kn6HFOnY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=hPDODXaR8/3AGDN8QUDZ31HR9/DK1gkzEtjlaYiIfVA=;
+        b=K4lzqFqzOvDsMbsIPWM26JeCBOvkK6XKEKblMXQhzttUfcYfu+3MPPoI3NuUTna/OGPjyT
+        i5lT3sLzaz7uC2FSkWVUlvGDMV2vNGr/gmCiUJF9LYC7fX9pmNHY1hioNAiQ2sH458Xagg
+        Y2xMAN1Snci41cHO92nJNI9ZgM4t9mY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-658-C2oB9kl4M2WQkXpyfWWHug-1; Fri, 18 Feb 2022 16:25:29 -0500
-X-MC-Unique: C2oB9kl4M2WQkXpyfWWHug-1
-Received: by mail-wr1-f71.google.com with SMTP id g17-20020adfa591000000b001da86c91c22so4083196wrc.5
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:29 -0800 (PST)
+ us-mta-407-yHsTyEmrPuCEoXTEhQLizQ-1; Fri, 18 Feb 2022 16:25:19 -0500
+X-MC-Unique: yHsTyEmrPuCEoXTEhQLizQ-1
+Received: by mail-wm1-f72.google.com with SMTP id h82-20020a1c2155000000b003552c13626cso6473697wmh.3
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=t4YkvwtbfB22VP8TPxgmMroXlY648sAStQ0/hZSRZew=;
-        b=zyEeTDKQWxdYG7MxFIBGdWklHm+NG4vTRmCvyFRgKCGCXdE/7M9vHpq+ZYOz8HJFDn
-         BUNjyNTIVF7+qC8D/t9eWLPrvNdXJZDrx0YIt8HZqG4QQGqY59+9kLfmbodU+fyWLjoo
-         9Lx0RNQueNHxg5iKLBuBdCsDSlXVMnW6vNUg61gv8W+UxUtTEhbItra+7edn87PfBZP+
-         Wl9gOwCqOMCq/JKba/+DQKAwv/OAG5hU/gG4clXYhi5r32YPpgIso38UikaFuhpg9ior
-         i7RTLNG8t6oHRn2b9g5r3QW6tLqYwyna/4SVW2JRuqFWaZbt0fR82TA/e11li+IAAavv
-         EbSw==
-X-Gm-Message-State: AOAM533u82Mx0FOQj8AHe1iw+lNQTYaIThmrzx6X2kVFjII7NjnJ9rxx
-        +5fPdhpEIRitB0CCbt9TWbAIWd/xvTbWw0p7a2b6kYh24Ejdf0+C3v5Hl/+KkadVYwOwMkbBkOr
-        o5ctY0XTmpjsXJATYl22SqNVT
-X-Received: by 2002:adf:dd87:0:b0:1e4:b8e2:2793 with SMTP id x7-20020adfdd87000000b001e4b8e22793mr7498288wrl.382.1645219527001;
-        Fri, 18 Feb 2022 13:25:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZLDYJLO1/nZQ+C1BCov2W9Qb5EJfSUyLiu7Xv5aQQQZEEjZ1GP0K5B+qK4NVhMsLxqwfpVw==
-X-Received: by 2002:adf:dd87:0:b0:1e4:b8e2:2793 with SMTP id x7-20020adfdd87000000b001e4b8e22793mr7498260wrl.382.1645219526717;
-        Fri, 18 Feb 2022 13:25:26 -0800 (PST)
+        bh=hPDODXaR8/3AGDN8QUDZ31HR9/DK1gkzEtjlaYiIfVA=;
+        b=XTJov6hCo6lJkT6GRsS0JY8jvxlxA86DxfZ52BHnCAUId8tbHSG/IA9kJUNf99aPsO
+         DMczSU3EzLFgbaawCjzoWA88xgdvcOn9JW40qs6Yywuv5j+i+8zEebbouifihub5aKS0
+         RGGGzYLOtvOswqZ+VKEwyYKXOudqhZpqTj/lQPEUszw83lEJVkWwiCwm/SxEtdmSRTOe
+         I0LV1TcitsDTarzOH9oDQ9nBfRDU9FajP5kWdu8ZkVigE9mscpIc4PBrJEwquDPBUzYB
+         jfWAiqEQnEhIAOjULF0BYX1NjXnxcBVM2nNaPsdNkCQoctHpsNsBP4lhlEzddBRDRFeg
+         S12Q==
+X-Gm-Message-State: AOAM53347TbIUr58s2tbkYKOBGtqer+aNci+LKCyJyipWSCtVcD9rSfA
+        Oq6PyrE6wapZgUhRDwEJlmVUq5gj7V+JZ1d9FlQY+7tprHDMt+FZnb3orYtBc8uiLHiThzK1AKQ
+        kRfUOQFfNhm+A4uRioRvhltzX
+X-Received: by 2002:a5d:4ccc:0:b0:1e3:222b:40fc with SMTP id c12-20020a5d4ccc000000b001e3222b40fcmr7087018wrt.296.1645219518202;
+        Fri, 18 Feb 2022 13:25:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzqme855dEAUGl23LY67f9MJyl8g1VKrcxsCOhX5MZPi4XlnoMw1fBOdo1a8apdoYozJ9eC8A==
+X-Received: by 2002:a5d:4ccc:0:b0:1e3:222b:40fc with SMTP id c12-20020a5d4ccc000000b001e3222b40fcmr7087007wrt.296.1645219518004;
+        Fri, 18 Feb 2022 13:25:18 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id bk5sm29207920wrb.10.2022.02.18.13.25.26
+        by smtp.gmail.com with ESMTPSA id 14sm12854628wrb.34.2022.02.18.13.25.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 13:25:26 -0800 (PST)
+        Fri, 18 Feb 2022 13:25:17 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
         christophe.leroy@csgroup.eu, msuchanek@suse.de,
         oleksandr@natalenko.name
-Subject: [PATCH v6 10/13] module: Move procfs support into a separate file
-Date:   Fri, 18 Feb 2022 21:25:08 +0000
-Message-Id: <20220218212511.887059-11-atomlin@redhat.com>
+Subject: [PATCH v6 04/13] module: Move livepatch support to a separate file
+Date:   Fri, 18 Feb 2022 21:25:02 +0000
+Message-Id: <20220218212511.887059-5-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218212511.887059-1-atomlin@redhat.com>
 References: <20220218212511.887059-1-atomlin@redhat.com>
@@ -79,359 +79,295 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 No functional change.
 
-This patch migrates code that allows one to generate a
-list of loaded/or linked modules via /proc when procfs
-support is enabled into kernel/module/procfs.c.
+This patch migrates livepatch support (i.e. used during module
+add/or load and remove/or deletion) from core module code into
+kernel/module/livepatch.c. At the moment it contains code to
+persist Elf information about a given livepatch module, only.
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/Makefile   |   1 +
- kernel/module/internal.h |   1 +
- kernel/module/main.c     | 131 +-----------------------------------
- kernel/module/procfs.c   | 142 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 145 insertions(+), 130 deletions(-)
- create mode 100644 kernel/module/procfs.c
+ include/linux/module.h    |   9 ++--
+ kernel/module/Makefile    |   1 +
+ kernel/module/internal.h  |  22 ++++++++
+ kernel/module/livepatch.c |  74 +++++++++++++++++++++++++++
+ kernel/module/main.c      | 102 ++++----------------------------------
+ 5 files changed, 110 insertions(+), 98 deletions(-)
+ create mode 100644 kernel/module/livepatch.c
 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 1e135fd5c076..7ec9715de7dc 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -663,17 +663,14 @@ static inline bool module_requested_async_probing(struct module *module)
+ 	return module && module->async_probe_requested;
+ }
+ 
+-#ifdef CONFIG_LIVEPATCH
+ static inline bool is_livepatch_module(struct module *mod)
+ {
++#ifdef CONFIG_LIVEPATCH
+ 	return mod->klp;
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static inline bool is_livepatch_module(struct module *mod)
+-{
++#else
+ 	return false;
++#endif
+ }
+-#endif /* CONFIG_LIVEPATCH */
+ 
+ bool is_module_sig_enforced(void);
+ void set_module_sig_enforced(void);
 diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index a5a0963ba481..f66fda0b41cc 100644
+index 2902fc7d0ef1..ba3ebdb7055b 100644
 --- a/kernel/module/Makefile
 +++ b/kernel/module/Makefile
-@@ -13,4 +13,5 @@ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
- obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
- obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
- obj-$(CONFIG_KALLSYMS) += kallsyms.o
-+obj-$(CONFIG_PROC_FS) += procfs.o
- endif
+@@ -7,3 +7,4 @@ obj-$(CONFIG_MODULES) += main.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
++obj-$(CONFIG_LIVEPATCH) += livepatch.o
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 99b88e2eb479..ddb37024a0d6 100644
+index e0775e66bcf7..ad7a444253ed 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -72,6 +72,7 @@ struct module *find_module_all(const char *name, size_t len, bool even_unformed)
- int cmp_name(const void *name, const void *sym);
- long module_get_offset(struct module *mod, unsigned int *size, Elf_Shdr *sechdr,
- 		       unsigned int section);
-+char *module_flags(struct module *mod, char *buf);
+@@ -57,6 +57,28 @@ struct load_info {
  
- static inline unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
- {
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 952079987ea4..44b6fd1acc44 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -22,7 +22,6 @@
- #include <linux/slab.h>
- #include <linux/vmalloc.h>
- #include <linux/elf.h>
--#include <linux/proc_fs.h>
- #include <linux/seq_file.h>
- #include <linux/syscalls.h>
- #include <linux/fcntl.h>
-@@ -805,31 +804,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	return ret;
- }
+ int mod_verify_sig(const void *mod, struct load_info *info);
  
--static inline void print_unload_info(struct seq_file *m, struct module *mod)
--{
--	struct module_use *use;
--	int printed_something = 0;
--
--	seq_printf(m, " %i ", module_refcount(mod));
--
--	/*
--	 * Always include a trailing , so userspace can differentiate
--	 * between this and the old multi-field proc format.
--	 */
--	list_for_each_entry(use, &mod->source_list, source_list) {
--		printed_something = 1;
--		seq_printf(m, "%s,", use->source->name);
--	}
--
--	if (mod->init != NULL && mod->exit == NULL) {
--		printed_something = 1;
--		seq_puts(m, "[permanent],");
--	}
--
--	if (!printed_something)
--		seq_puts(m, "-");
--}
--
- void __symbol_put(const char *symbol)
- {
- 	struct find_symbol_arg fsa = {
-@@ -919,12 +893,6 @@ void module_put(struct module *module)
- EXPORT_SYMBOL(module_put);
- 
- #else /* !CONFIG_MODULE_UNLOAD */
--static inline void print_unload_info(struct seq_file *m, struct module *mod)
--{
--	/* We don't know the usage count, or what modules are using. */
--	seq_puts(m, " - -");
--}
--
- static inline void module_unload_free(struct module *mod)
- {
- }
-@@ -3596,7 +3564,7 @@ static void cfi_cleanup(struct module *mod)
- }
- 
- /* Keep in sync with MODULE_FLAGS_BUF_SIZE !!! */
--static char *module_flags(struct module *mod, char *buf)
-+char *module_flags(struct module *mod, char *buf)
- {
- 	int bx = 0;
- 
-@@ -3619,103 +3587,6 @@ static char *module_flags(struct module *mod, char *buf)
- 	return buf;
- }
- 
--#ifdef CONFIG_PROC_FS
--/* Called by the /proc file system to return a list of modules. */
--static void *m_start(struct seq_file *m, loff_t *pos)
--{
--	mutex_lock(&module_mutex);
--	return seq_list_start(&modules, *pos);
--}
--
--static void *m_next(struct seq_file *m, void *p, loff_t *pos)
--{
--	return seq_list_next(p, &modules, pos);
--}
--
--static void m_stop(struct seq_file *m, void *p)
--{
--	mutex_unlock(&module_mutex);
--}
--
--static int m_show(struct seq_file *m, void *p)
--{
--	struct module *mod = list_entry(p, struct module, list);
--	char buf[MODULE_FLAGS_BUF_SIZE];
--	void *value;
--
--	/* We always ignore unformed modules. */
--	if (mod->state == MODULE_STATE_UNFORMED)
--		return 0;
--
--	seq_printf(m, "%s %u",
--		   mod->name, mod->init_layout.size + mod->core_layout.size);
--	print_unload_info(m, mod);
--
--	/* Informative for users. */
--	seq_printf(m, " %s",
--		   mod->state == MODULE_STATE_GOING ? "Unloading" :
--		   mod->state == MODULE_STATE_COMING ? "Loading" :
--		   "Live");
--	/* Used by oprofile and other similar tools. */
--	value = m->private ? NULL : mod->core_layout.base;
--	seq_printf(m, " 0x%px", value);
--
--	/* Taints info */
--	if (mod->taints)
--		seq_printf(m, " %s", module_flags(mod, buf));
--
--	seq_puts(m, "\n");
--	return 0;
--}
--
--/*
-- * Format: modulename size refcount deps address
-- *
-- * Where refcount is a number or -, and deps is a comma-separated list
-- * of depends or -.
-- */
--static const struct seq_operations modules_op = {
--	.start	= m_start,
--	.next	= m_next,
--	.stop	= m_stop,
--	.show	= m_show
--};
--
--/*
-- * This also sets the "private" pointer to non-NULL if the
-- * kernel pointers should be hidden (so you can just test
-- * "m->private" to see if you should keep the values private).
-- *
-- * We use the same logic as for /proc/kallsyms.
-- */
--static int modules_open(struct inode *inode, struct file *file)
--{
--	int err = seq_open(file, &modules_op);
--
--	if (!err) {
--		struct seq_file *m = file->private_data;
--		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
--	}
--
--	return err;
--}
--
--static const struct proc_ops modules_proc_ops = {
--	.proc_flags	= PROC_ENTRY_PERMANENT,
--	.proc_open	= modules_open,
--	.proc_read	= seq_read,
--	.proc_lseek	= seq_lseek,
--	.proc_release	= seq_release,
--};
--
--static int __init proc_modules_init(void)
--{
--	proc_create("modules", 0, NULL, &modules_proc_ops);
--	return 0;
--}
--module_init(proc_modules_init);
--#endif
--
- /* Given an address, look for it in the module exception tables. */
- const struct exception_table_entry *search_module_extables(unsigned long addr)
- {
-diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
++#ifdef CONFIG_LIVEPATCH
++int copy_module_elf(struct module *mod, struct load_info *info);
++void free_module_elf(struct module *mod);
++#else /* !CONFIG_LIVEPATCH */
++static inline int copy_module_elf(struct module *mod, struct load_info *info)
++{
++	return 0;
++}
++
++static inline void free_module_elf(struct module *mod) { }
++#endif /* CONFIG_LIVEPATCH */
++
++static inline bool set_livepatch_module(struct module *mod)
++{
++#ifdef CONFIG_LIVEPATCH
++	mod->klp = true;
++	return true;
++#else
++	return false;
++#endif
++}
++
+ #ifdef CONFIG_MODULE_DECOMPRESS
+ int module_decompress(struct load_info *info, const void *buf, size_t size);
+ void module_decompress_cleanup(struct load_info *info);
+diff --git a/kernel/module/livepatch.c b/kernel/module/livepatch.c
 new file mode 100644
-index 000000000000..2717e130788e
+index 000000000000..486d4ff92719
 --- /dev/null
-+++ b/kernel/module/procfs.c
-@@ -0,0 +1,142 @@
++++ b/kernel/module/livepatch.c
+@@ -0,0 +1,74 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Module proc support
++ * Module livepatch support
 + *
-+ * Copyright (C) 2008 Alexey Dobriyan
++ * Copyright (C) 2016 Jessica Yu <jeyu@redhat.com>
 + */
 +
 +#include <linux/module.h>
-+#include <linux/kallsyms.h>
-+#include <linux/mutex.h>
-+#include <linux/seq_file.h>
-+#include <linux/proc_fs.h>
++#include <linux/string.h>
++#include <linux/slab.h>
 +#include "internal.h"
 +
-+#ifdef CONFIG_MODULE_UNLOAD
-+static inline void print_unload_info(struct seq_file *m, struct module *mod)
++/*
++ * Persist Elf information about a module. Copy the Elf header,
++ * section header table, section string table, and symtab section
++ * index from info to mod->klp_info.
++ */
++int copy_module_elf(struct module *mod, struct load_info *info)
 +{
-+	struct module_use *use;
-+	int printed_something = 0;
++	unsigned int size, symndx;
++	int ret;
 +
-+	seq_printf(m, " %i ", module_refcount(mod));
++	size = sizeof(*mod->klp_info);
++	mod->klp_info = kmalloc(size, GFP_KERNEL);
++	if (!mod->klp_info)
++		return -ENOMEM;
++
++	/* Elf header */
++	size = sizeof(mod->klp_info->hdr);
++	memcpy(&mod->klp_info->hdr, info->hdr, size);
++
++	/* Elf section header table */
++	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
++	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
++	if (!mod->klp_info->sechdrs) {
++		ret = -ENOMEM;
++		goto free_info;
++	}
++
++	/* Elf section name string table */
++	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
++	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
++	if (!mod->klp_info->secstrings) {
++		ret = -ENOMEM;
++		goto free_sechdrs;
++	}
++
++	/* Elf symbol section index */
++	symndx = info->index.sym;
++	mod->klp_info->symndx = symndx;
 +
 +	/*
-+	 * Always include a trailing , so userspace can differentiate
-+	 * between this and the old multi-field proc format.
++	 * For livepatch modules, core_kallsyms.symtab is a complete
++	 * copy of the original symbol table. Adjust sh_addr to point
++	 * to core_kallsyms.symtab since the copy of the symtab in module
++	 * init memory is freed at the end of do_init_module().
 +	 */
-+	list_for_each_entry(use, &mod->source_list, source_list) {
-+		printed_something = 1;
-+		seq_printf(m, "%s,", use->source->name);
-+	}
++	mod->klp_info->sechdrs[symndx].sh_addr = (unsigned long)mod->core_kallsyms.symtab;
 +
-+	if (mod->init && !mod->exit) {
-+		printed_something = 1;
-+		seq_puts(m, "[permanent],");
-+	}
++	return 0;
 +
-+	if (!printed_something)
-+		seq_puts(m, "-");
-+}
-+#else /* !CONFIG_MODULE_UNLOAD */
-+static inline void print_unload_info(struct seq_file *m, struct module *mod)
-+{
-+	/* We don't know the usage count, or what modules are using. */
-+	seq_puts(m, " - -");
-+}
-+#endif /* CONFIG_MODULE_UNLOAD */
-+
-+/* Called by the /proc file system to return a list of modules. */
-+static void *m_start(struct seq_file *m, loff_t *pos)
-+{
-+	mutex_lock(&module_mutex);
-+	return seq_list_start(&modules, *pos);
++free_sechdrs:
++	kfree(mod->klp_info->sechdrs);
++free_info:
++	kfree(mod->klp_info);
++	return ret;
 +}
 +
-+static void *m_next(struct seq_file *m, void *p, loff_t *pos)
++void free_module_elf(struct module *mod)
 +{
-+	return seq_list_next(p, &modules, pos);
++	kfree(mod->klp_info->sechdrs);
++	kfree(mod->klp_info->secstrings);
++	kfree(mod->klp_info);
 +}
-+
-+static void m_stop(struct seq_file *m, void *p)
-+{
-+	mutex_unlock(&module_mutex);
-+}
-+
-+static int m_show(struct seq_file *m, void *p)
-+{
-+	struct module *mod = list_entry(p, struct module, list);
-+	char buf[MODULE_FLAGS_BUF_SIZE];
-+	void *value;
-+
-+	/* We always ignore unformed modules. */
-+	if (mod->state == MODULE_STATE_UNFORMED)
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5f5e21f972dd..3596ebf3a6c3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2043,81 +2043,6 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ }
+ #endif /*  CONFIG_STRICT_MODULE_RWX */
+ 
+-#ifdef CONFIG_LIVEPATCH
+-/*
+- * Persist Elf information about a module. Copy the Elf header,
+- * section header table, section string table, and symtab section
+- * index from info to mod->klp_info.
+- */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	unsigned int size, symndx;
+-	int ret;
+-
+-	size = sizeof(*mod->klp_info);
+-	mod->klp_info = kmalloc(size, GFP_KERNEL);
+-	if (mod->klp_info == NULL)
+-		return -ENOMEM;
+-
+-	/* Elf header */
+-	size = sizeof(mod->klp_info->hdr);
+-	memcpy(&mod->klp_info->hdr, info->hdr, size);
+-
+-	/* Elf section header table */
+-	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
+-	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
+-	if (mod->klp_info->sechdrs == NULL) {
+-		ret = -ENOMEM;
+-		goto free_info;
+-	}
+-
+-	/* Elf section name string table */
+-	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
+-	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
+-	if (mod->klp_info->secstrings == NULL) {
+-		ret = -ENOMEM;
+-		goto free_sechdrs;
+-	}
+-
+-	/* Elf symbol section index */
+-	symndx = info->index.sym;
+-	mod->klp_info->symndx = symndx;
+-
+-	/*
+-	 * For livepatch modules, core_kallsyms.symtab is a complete
+-	 * copy of the original symbol table. Adjust sh_addr to point
+-	 * to core_kallsyms.symtab since the copy of the symtab in module
+-	 * init memory is freed at the end of do_init_module().
+-	 */
+-	mod->klp_info->sechdrs[symndx].sh_addr = \
+-		(unsigned long) mod->core_kallsyms.symtab;
+-
+-	return 0;
+-
+-free_sechdrs:
+-	kfree(mod->klp_info->sechdrs);
+-free_info:
+-	kfree(mod->klp_info);
+-	return ret;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-	kfree(mod->klp_info->sechdrs);
+-	kfree(mod->klp_info->secstrings);
+-	kfree(mod->klp_info);
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	return 0;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-}
+-#endif /* CONFIG_LIVEPATCH */
+-
+ void __weak module_memfree(void *module_region)
+ {
+ 	/*
+@@ -3092,30 +3017,23 @@ static int copy_chunked_from_user(void *dst, const void __user *usrc, unsigned l
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_LIVEPATCH
+ static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+ {
+-	if (get_modinfo(info, "livepatch")) {
+-		mod->klp = true;
++	if (!get_modinfo(info, "livepatch"))
++		/* Nothing more to do */
 +		return 0;
 +
-+	seq_printf(m, "%s %u",
-+		   mod->name, mod->init_layout.size + mod->core_layout.size);
-+	print_unload_info(m, mod);
-+
-+	/* Informative for users. */
-+	seq_printf(m, " %s",
-+		   mod->state == MODULE_STATE_GOING ? "Unloading" :
-+		   mod->state == MODULE_STATE_COMING ? "Loading" :
-+		   "Live");
-+	/* Used by oprofile and other similar tools. */
-+	value = m->private ? NULL : mod->core_layout.base;
-+	seq_printf(m, " 0x%px", value);
-+
-+	/* Taints info */
-+	if (mod->taints)
-+		seq_printf(m, " %s", module_flags(mod, buf));
-+
-+	seq_puts(m, "\n");
-+	return 0;
-+}
-+
-+/*
-+ * Format: modulename size refcount deps address
-+ *
-+ * Where refcount is a number or -, and deps is a comma-separated list
-+ * of depends or -.
-+ */
-+static const struct seq_operations modules_op = {
-+	.start	= m_start,
-+	.next	= m_next,
-+	.stop	= m_stop,
-+	.show	= m_show
-+};
-+
-+/*
-+ * This also sets the "private" pointer to non-NULL if the
-+ * kernel pointers should be hidden (so you can just test
-+ * "m->private" to see if you should keep the values private).
-+ *
-+ * We use the same logic as for /proc/kallsyms.
-+ */
-+static int modules_open(struct inode *inode, struct file *file)
-+{
-+	int err = seq_open(file, &modules_op);
-+
-+	if (!err) {
-+		struct seq_file *m = file->private_data;
-+
-+		m->private = kallsyms_show_value(file->f_cred) ? NULL : (void *)8ul;
-+	}
-+
-+	return err;
-+}
-+
-+static const struct proc_ops modules_proc_ops = {
-+	.proc_flags	= PROC_ENTRY_PERMANENT,
-+	.proc_open	= modules_open,
-+	.proc_read	= seq_read,
-+	.proc_lseek	= seq_lseek,
-+	.proc_release	= seq_release,
-+};
-+
-+static int __init proc_modules_init(void)
-+{
-+	proc_create("modules", 0, NULL, &modules_proc_ops);
-+	return 0;
-+}
-+module_init(proc_modules_init);
++	if (set_livepatch_module(mod)) {
+ 		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
+ 		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
+-			       mod->name);
+-	}
+-
+-	return 0;
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+-{
+-	if (get_modinfo(info, "livepatch")) {
+-		pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
+-		       mod->name);
+-		return -ENOEXEC;
++				mod->name);
++		return 0;
+ 	}
+ 
+-	return 0;
++	pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
++	       mod->name);
++	return -ENOEXEC;
+ }
+-#endif /* CONFIG_LIVEPATCH */
+ 
+ static void check_modinfo_retpoline(struct module *mod, struct load_info *info)
+ {
 -- 
 2.34.1
 
