@@ -2,60 +2,60 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA5CFC433EF
-	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:25:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D37FC43219
+	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:25:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238946AbiBRVZ6 (ORCPT
+        id S239789AbiBRV0A (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 18 Feb 2022 16:25:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51418 "EHLO
+        Fri, 18 Feb 2022 16:26:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbiBRVZm (ORCPT
+        with ESMTP id S239828AbiBRVZo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:25:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CF97243112
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:24 -0800 (PST)
+        Fri, 18 Feb 2022 16:25:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A169E23F0A3
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645219523;
+        s=mimecast20190719; t=1645219526;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BJ8v4efM2N4chZkPCn9ko+wk6+9o/1ayB9nO/iF+hOY=;
-        b=QRXmV+sgvvH2QU2xxhSEa8i3j6T9PQCB/ZLoKTyu1FjnqxFcCWiVvZ2Ksua98VeVvQ2iLD
-        pm4TULL4t1MzMkM9r9y7vGUuCwp2kpPcomxr99ZP64+pYyt2Z0V11wjpYUyxq2pZwA/oGv
-        dONfDvVQDMuxb8ddT0NO9Q+OCPTudcM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qMJDJDbPZoWcP+nDdAgNVL7FhXeZbcGM7cb6CcLOEx0=;
+        b=RZ7gMet2pOhylZfUU9X5sHA+MLwmY4rKHokmsWWMkxhSMV9HH2kN7cFyTPObZKn82V3XSQ
+        +hVOL5y0hDnM8kLhXY3QtQWurxTDQ6ySUCiaMvL6gzPgGfYWYhHoU7SI3z+Rc81RFpyADF
+        XkU0emZrbKNb614qd2CwhzAyLo/E7ok=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-531-uksZgjPHNcS9iUHwau-snw-1; Fri, 18 Feb 2022 16:25:22 -0500
-X-MC-Unique: uksZgjPHNcS9iUHwau-snw-1
-Received: by mail-wr1-f69.google.com with SMTP id e1-20020adfa741000000b001e2e74c3d4eso4052535wrd.12
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:22 -0800 (PST)
+ us-mta-572-e7sbR25rM7-bnosl8kaxHg-1; Fri, 18 Feb 2022 16:25:25 -0500
+X-MC-Unique: e7sbR25rM7-bnosl8kaxHg-1
+Received: by mail-wr1-f72.google.com with SMTP id p18-20020adfba92000000b001e8f7697cc7so2053135wrg.20
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BJ8v4efM2N4chZkPCn9ko+wk6+9o/1ayB9nO/iF+hOY=;
-        b=ccXWPP7ifrzSvKnZAIdjnr71Ju0uAZVfCCEG6CIxoYQEQ4a1Dow7X3jeLj89teKBT2
-         HeMBlwH5lV9x6OSUBY72FL3F/s6xWGYc7CGrdfYwMVS0M14VOkEZFi2/zHVeQNQIO3kE
-         Azlx6WIwUpv6vt/4b4O2GVIuAX9mTD3ftPOAwTD4WDYWh39ZYd63npKqF6H/N4FKbLz8
-         uotQ4H3ScvgHzAP2+yVFp92z0GO+gBuRoYo3Gzvwi+I5LWL1SYo4Op+Q4x5YabSoMgo7
-         qfO+hD+MjOJ1REjwRrmOfoqUTZNXxx7EHP9nzbRbpoyUbgL52oo803dQg/pxUZBvwBsW
-         E2vQ==
-X-Gm-Message-State: AOAM531cXslXS2IHJk23mu6W3tRCbm868O0WihK9UxeXoXeSZa2regso
-        3TdHXeSn4S7tgxthTO0LzI2NGbMWhxL7YfqEjQr6niZfjzyTAXnyA59GLF4WyTwcste+HIComKt
-        DjZzyM8u0ClQZSC7QprdhAHdR
-X-Received: by 2002:adf:e28f:0:b0:1e7:cf02:2d28 with SMTP id v15-20020adfe28f000000b001e7cf022d28mr7709012wri.232.1645219520934;
-        Fri, 18 Feb 2022 13:25:20 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz75WwBwl753v4poDpdux4TITfI6KzYtUDxdN4PGJ/hKxP8K4kr0B5XZsfvMeUUwC3mZDz6KA==
-X-Received: by 2002:adf:e28f:0:b0:1e7:cf02:2d28 with SMTP id v15-20020adfe28f000000b001e7cf022d28mr7708990wri.232.1645219520665;
-        Fri, 18 Feb 2022 13:25:20 -0800 (PST)
+        bh=qMJDJDbPZoWcP+nDdAgNVL7FhXeZbcGM7cb6CcLOEx0=;
+        b=4i+KkgRW6skv6353ykVec9iX4vrRNEjxIN8ccbYqYSwohQMlV7cS7zVQuz3apT0lyr
+         sEUwLIYNlA4/sR6BKqJzIabCPDY+8NruNQd+6UsJCuenRPCEQXw5fcRv+XvmTUtzglyU
+         zSaejx6HR0wkdGcIaxI1+ItOTUk0DhTbNrkiG9aYQMatW1PrFDm1L3u2pw/zsDOrbb6x
+         t621+VKSrUnXTHecwiJx48OSs2gH5Ou4zZ68edptduOZQ77nDvfUYybFXRQUeIzmTCPo
+         Q/x3CzzxTHfFt+DsyZ9D61g4dsmriyFSFulQJlzSFxvvlyBvDMhwh/nPBdofYpkr1yvG
+         U+AA==
+X-Gm-Message-State: AOAM530vf6390Dyz8Ks9g5IGFN/Pwmw8Jk/AJtVtNTskZFsjCy67v184
+        ctViV846aP1S9hGp/xyIKeaAxlthf/R3i8DBT32eo9S20oJ0kgbMSWGhTfkssy+GVLvsTZjquNb
+        q6oU6mJxkwxjVh0RdPl8KhPUV
+X-Received: by 2002:a5d:518d:0:b0:1e5:8cc9:5aa4 with SMTP id k13-20020a5d518d000000b001e58cc95aa4mr7083317wrv.119.1645219524293;
+        Fri, 18 Feb 2022 13:25:24 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytk7rliwaFZmS4M0Lmnrr4rsw5hxE0HoGbsbz2eWWA2lrj7q0a/S/r6F9p6yml0YV4jKPMqA==
+X-Received: by 2002:a5d:518d:0:b0:1e5:8cc9:5aa4 with SMTP id k13-20020a5d518d000000b001e58cc95aa4mr7083306wrv.119.1645219524097;
+        Fri, 18 Feb 2022 13:25:24 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05600c338600b0037c322d1425sm472350wmp.8.2022.02.18.13.25.19
+        by smtp.gmail.com with ESMTPSA id r11sm498151wmb.19.2022.02.18.13.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 13:25:20 -0800 (PST)
+        Fri, 18 Feb 2022 13:25:23 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
         christophe.leroy@csgroup.eu, msuchanek@suse.de,
         oleksandr@natalenko.name
-Subject: [PATCH v6 06/13] module: Move strict rwx support to a separate file
-Date:   Fri, 18 Feb 2022 21:25:04 +0000
-Message-Id: <20220218212511.887059-7-atomlin@redhat.com>
+Subject: [PATCH v6 08/13] module: Move kmemleak support to a separate file
+Date:   Fri, 18 Feb 2022 21:25:06 +0000
+Message-Id: <20220218212511.887059-9-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218212511.887059-1-atomlin@redhat.com>
 References: <20220218212511.887059-1-atomlin@redhat.com>
@@ -79,297 +79,117 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 No functional change.
 
-This patch migrates code that makes module text
-and rodata memory read-only and non-text memory
-non-executable from core module code into
-kernel/module/strict_rwx.c.
+This patch migrates kmemleak code out of core module
+code into kernel/module/debug_kmemleak.c
 
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/Makefile     |  1 +
- kernel/module/internal.h   | 38 +++++++++++++++
- kernel/module/main.c       | 99 +-------------------------------------
- kernel/module/strict_rwx.c | 84 ++++++++++++++++++++++++++++++++
- 4 files changed, 125 insertions(+), 97 deletions(-)
- create mode 100644 kernel/module/strict_rwx.c
+ kernel/module/Makefile         |  1 +
+ kernel/module/debug_kmemleak.c | 30 ++++++++++++++++++++++++++++++
+ kernel/module/internal.h       |  7 +++++++
+ kernel/module/main.c           | 27 ---------------------------
+ 4 files changed, 38 insertions(+), 27 deletions(-)
+ create mode 100644 kernel/module/debug_kmemleak.c
 
 diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-index 6fb21ebe1aa3..3f48343636ff 100644
+index 3f48343636ff..e2a5ae0264f9 100644
 --- a/kernel/module/Makefile
 +++ b/kernel/module/Makefile
-@@ -10,4 +10,5 @@ obj-$(CONFIG_MODULE_SIG_FORMAT) += signature.o
- obj-$(CONFIG_LIVEPATCH) += livepatch.o
+@@ -11,4 +11,5 @@ obj-$(CONFIG_LIVEPATCH) += livepatch.o
  ifdef CONFIG_MODULES
  obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
-+obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
++obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
  endif
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 57a715454c9e..f4b7e123d625 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -20,6 +20,17 @@
- /* Maximum number of characters written by module_flags() */
- #define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
- 
-+/*
-+ * Modules' sections will be aligned on page boundaries
-+ * to ensure complete separation of code and data, but
-+ * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-+ */
-+#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-+# define debug_align(X) PAGE_ALIGN(X)
-+#else
-+# define debug_align(X) (X)
-+#endif
-+
- extern struct mutex module_mutex;
- extern struct list_head modules;
- 
-@@ -126,3 +137,30 @@ static inline struct module *mod_find(unsigned long addr)
- 	return NULL;
- }
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
-+
-+#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-+void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
-+								     int num_pages));
-+#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
-+
-+#ifdef CONFIG_STRICT_MODULE_RWX
-+void frob_rodata(const struct module_layout *layout,
-+		 int (*set_memory)(unsigned long start, int num_pages));
-+void frob_ro_after_init(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages));
-+void frob_writable_data(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages));
-+void module_enable_ro(const struct module *mod, bool after_init);
-+void module_enable_nx(const struct module *mod);
-+int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				char *secstrings, struct module *mod);
-+
-+#else /* !CONFIG_STRICT_MODULE_RWX */
-+static void module_enable_nx(const struct module *mod) { }
-+static void module_enable_ro(const struct module *mod, bool after_init) {}
-+static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				       char *secstrings, struct module *mod)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_STRICT_MODULE_RWX */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 76b53880ad91..5cd63f14b1ef 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -63,17 +63,6 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/module.h>
- 
--/*
-- * Modules' sections will be aligned on page boundaries
-- * to ensure complete separation of code and data, but
-- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
-- */
--#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
--# define debug_align(X) ALIGN(X, PAGE_SIZE)
--#else
--# define debug_align(X) (X)
--#endif
--
- /*
-  * Mutex protects:
-  * 1) List of modules (also safely readable with preempt_disable),
-@@ -1819,8 +1808,8 @@ static void mod_sysfs_teardown(struct module *mod)
-  * whether we are strict.
-  */
- #ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
--static void frob_text(const struct module_layout *layout,
--		      int (*set_memory)(unsigned long start, int num_pages))
-+void frob_text(const struct module_layout *layout,
-+	       int (*set_memory)(unsigned long start, int num_pages))
- {
- 	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
- 	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
-@@ -1837,90 +1826,6 @@ static void module_enable_x(const struct module *mod)
- static void module_enable_x(const struct module *mod) { }
- #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
- 
--#ifdef CONFIG_STRICT_MODULE_RWX
--static void frob_rodata(const struct module_layout *layout,
--			int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->text_size,
--		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
--}
--
--static void frob_ro_after_init(const struct module_layout *layout,
--				int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_size,
--		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
--}
--
--static void frob_writable_data(const struct module_layout *layout,
--			       int (*set_memory)(unsigned long start, int num_pages))
--{
--	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
--	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
--	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
--		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
--}
--
--static void module_enable_ro(const struct module *mod, bool after_init)
--{
--	if (!rodata_enabled)
--		return;
--
--	set_vm_flush_reset_perms(mod->core_layout.base);
--	set_vm_flush_reset_perms(mod->init_layout.base);
--	frob_text(&mod->core_layout, set_memory_ro);
--
--	frob_rodata(&mod->core_layout, set_memory_ro);
--	frob_text(&mod->init_layout, set_memory_ro);
--	frob_rodata(&mod->init_layout, set_memory_ro);
--
--	if (after_init)
--		frob_ro_after_init(&mod->core_layout, set_memory_ro);
--}
--
--static void module_enable_nx(const struct module *mod)
--{
--	frob_rodata(&mod->core_layout, set_memory_nx);
--	frob_ro_after_init(&mod->core_layout, set_memory_nx);
--	frob_writable_data(&mod->core_layout, set_memory_nx);
--	frob_rodata(&mod->init_layout, set_memory_nx);
--	frob_writable_data(&mod->init_layout, set_memory_nx);
--}
--
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
--	int i;
--
--	for (i = 0; i < hdr->e_shnum; i++) {
--		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
--			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
--				mod->name, secstrings + sechdrs[i].sh_name, i);
--			return -ENOEXEC;
--		}
--	}
--
--	return 0;
--}
--
--#else /* !CONFIG_STRICT_MODULE_RWX */
--static void module_enable_nx(const struct module *mod) { }
--static void module_enable_ro(const struct module *mod, bool after_init) {}
--static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
--				       char *secstrings, struct module *mod)
--{
--	return 0;
--}
--#endif /*  CONFIG_STRICT_MODULE_RWX */
--
- void __weak module_memfree(void *module_region)
- {
- 	/*
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+diff --git a/kernel/module/debug_kmemleak.c b/kernel/module/debug_kmemleak.c
 new file mode 100644
-index 000000000000..c642889f8e77
+index 000000000000..12a569d361e8
 --- /dev/null
-+++ b/kernel/module/strict_rwx.c
-@@ -0,0 +1,84 @@
++++ b/kernel/module/debug_kmemleak.c
+@@ -0,0 +1,30 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Module strict rwx
++ * Module kmemleak support
 + *
-+ * Copyright (C) 2015 Rusty Russell
++ * Copyright (C) 2009 Catalin Marinas
 + */
 +
 +#include <linux/module.h>
-+#include <linux/vmalloc.h>
-+#include <linux/set_memory.h>
++#include <linux/kmemleak.h>
 +#include "internal.h"
 +
-+void frob_rodata(const struct module_layout *layout,
-+		 int (*set_memory)(unsigned long start, int num_pages))
++void kmemleak_load_module(const struct module *mod,
++			  const struct load_info *info)
 +{
-+	BUG_ON(!PAGE_ALIGNED(layout->base));
-+	BUG_ON(!PAGE_ALIGNED(layout->text_size));
-+	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-+	set_memory((unsigned long)layout->base + layout->text_size,
-+		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
-+}
++	unsigned int i;
 +
-+void frob_ro_after_init(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON(!PAGE_ALIGNED(layout->base));
-+	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
-+	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
-+	set_memory((unsigned long)layout->base + layout->ro_size,
-+		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
-+}
++	/* only scan the sections containing data */
++	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
 +
-+void frob_writable_data(const struct module_layout *layout,
-+			int (*set_memory)(unsigned long start, int num_pages))
-+{
-+	BUG_ON(!PAGE_ALIGNED(layout->base));
-+	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
-+	BUG_ON(!PAGE_ALIGNED(layout->size));
-+	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
-+		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
-+}
++	for (i = 1; i < info->hdr->e_shnum; i++) {
++		/* Scan all writable sections that's not executable */
++		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
++		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
++		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
++			continue;
 +
-+void module_enable_ro(const struct module *mod, bool after_init)
-+{
-+	if (!rodata_enabled)
-+		return;
-+
-+	set_vm_flush_reset_perms(mod->core_layout.base);
-+	set_vm_flush_reset_perms(mod->init_layout.base);
-+	frob_text(&mod->core_layout, set_memory_ro);
-+
-+	frob_rodata(&mod->core_layout, set_memory_ro);
-+	frob_text(&mod->init_layout, set_memory_ro);
-+	frob_rodata(&mod->init_layout, set_memory_ro);
-+
-+	if (after_init)
-+		frob_ro_after_init(&mod->core_layout, set_memory_ro);
-+}
-+
-+void module_enable_nx(const struct module *mod)
-+{
-+	frob_rodata(&mod->core_layout, set_memory_nx);
-+	frob_ro_after_init(&mod->core_layout, set_memory_nx);
-+	frob_writable_data(&mod->core_layout, set_memory_nx);
-+	frob_rodata(&mod->init_layout, set_memory_nx);
-+	frob_writable_data(&mod->init_layout, set_memory_nx);
-+}
-+
-+int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-+				char *secstrings, struct module *mod)
-+{
-+	const unsigned long shf_wx = SHF_WRITE | SHF_EXECINSTR;
-+	int i;
-+
-+	for (i = 0; i < hdr->e_shnum; i++) {
-+		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
-+			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
-+			       mod->name, secstrings + sechdrs[i].sh_name, i);
-+			return -ENOEXEC;
-+		}
++		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
++				   info->sechdrs[i].sh_size, GFP_KERNEL);
 +	}
-+
-+	return 0;
 +}
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 0fdd9c0cd77d..1c9604443e2f 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -173,3 +173,10 @@ static inline int module_sig_check(struct load_info *info, int flags)
+ 	return 0;
+ }
+ #endif /* !CONFIG_MODULE_SIG */
++
++#ifdef CONFIG_DEBUG_KMEMLEAK
++void kmemleak_load_module(const struct module *mod, const struct load_info *info);
++#else /* !CONFIG_DEBUG_KMEMLEAK */
++static inline void kmemleak_load_module(const struct module *mod,
++					const struct load_info *info) { }
++#endif /* CONFIG_DEBUG_KMEMLEAK */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c63e10c61694..7dd283959c5c 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2519,33 +2519,6 @@ bool __weak module_exit_section(const char *name)
+ 	return strstarts(name, ".exit");
+ }
+ 
+-#ifdef CONFIG_DEBUG_KMEMLEAK
+-static void kmemleak_load_module(const struct module *mod,
+-				 const struct load_info *info)
+-{
+-	unsigned int i;
+-
+-	/* only scan the sections containing data */
+-	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
+-
+-	for (i = 1; i < info->hdr->e_shnum; i++) {
+-		/* Scan all writable sections that's not executable */
+-		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
+-		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
+-		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
+-			continue;
+-
+-		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
+-				   info->sechdrs[i].sh_size, GFP_KERNEL);
+-	}
+-}
+-#else
+-static inline void kmemleak_load_module(const struct module *mod,
+-					const struct load_info *info)
+-{
+-}
+-#endif
+-
+ static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
+ {
+ #if defined(CONFIG_64BIT)
 -- 
 2.34.1
 
