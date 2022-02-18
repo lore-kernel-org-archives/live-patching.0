@@ -2,60 +2,60 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 005E5C433F5
-	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24258C4332F
+	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 21:27:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbiBRV1i (ORCPT
+        id S237456AbiBRV1j (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 18 Feb 2022 16:27:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51504 "EHLO
+        Fri, 18 Feb 2022 16:27:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239797AbiBRVZm (ORCPT
+        with ESMTP id S239819AbiBRVZn (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 18 Feb 2022 16:25:42 -0500
+        Fri, 18 Feb 2022 16:25:43 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A07134CD53
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EB4E2402D7
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645219522;
+        s=mimecast20190719; t=1645219525;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
-        b=gbe275ZDM4N85yNhwimLLWLY7OJDnHDUA/MHBqQIvfe6akFL9YjBTKYDJUQVYUnd2R/06C
-        BCRMB/Wrrhq+c7kXbNDaPpLJkdEWprkfFCdmSFqDm07KRMGZ7/t+O0chk2FsWTABNthpc8
-        zYv2Bq10ki7mEw/f5G0y8FFA+jdSvnM=
+        bh=Z5IqDksxnanH0T8Ec4A7XO1FHLTibsIpOj59su0De6E=;
+        b=Kr8psRz4TUME0CB9hOFdDCIfXUxhG4NggIKwaIqXb1AFfg/eFyZYcKd7qF5B4W+8qerX2W
+        ft1yD+vl7JKl6G5iHy0hn1jpGqRJ1uqlcPP2mQgl8lar7DLRIX3IyGLnREWEnjz+NsheFK
+        /E4eb685mx1QJQmclrhiBQ/Fml7zGqg=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-YxpC4s4oOxqGK4lgZjcX_Q-1; Fri, 18 Feb 2022 16:25:18 -0500
-X-MC-Unique: YxpC4s4oOxqGK4lgZjcX_Q-1
-Received: by mail-wm1-f69.google.com with SMTP id b17-20020a05600c4e1100b0037cc0d56524so6481763wmq.2
-        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:18 -0800 (PST)
+ us-mta-583-yxTLtzfyM6-xxvPbyLw9sA-1; Fri, 18 Feb 2022 16:25:23 -0500
+X-MC-Unique: yxTLtzfyM6-xxvPbyLw9sA-1
+Received: by mail-wm1-f69.google.com with SMTP id k30-20020a05600c1c9e00b0037d1bee4847so6453949wms.9
+        for <live-patching@vger.kernel.org>; Fri, 18 Feb 2022 13:25:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wTqJ9ZbJUCgx8VrF++WoBF0cwmRu2Y/rNRNUF4x8BCg=;
-        b=4YzVIQo2XwR4G+IC3cpoGXNfKKpbB86oyYdknlPuAfIqeMK/vsG4tH/M3z+cQw78hQ
-         +nz1VyJNg96EGNv0t93yFN9CsgJu5MILRY01vse2S5BvmnI3YwQ4CsbzisvV6FblNje8
-         cUwqV1iZ0YPTiVe/qGV294M4dzvFf95Vr0WP8Bxc36r5cYf3O0iRLydfxkLpG8FXnUex
-         g28Tw0kWUQx2zCegyRJI0HgtdoaglaLBUD1UYBzisfSVWB/9+NdZ0ucHwBaO7JZEGkVg
-         znpgdEay1pDHsDmJ9hEdMuJoYsX/77+CRqQHkGWbI0CeKo8IMt1d4KDWDP2q/PTjd8Hg
-         /otA==
-X-Gm-Message-State: AOAM5308Z+3sKrvt/M9KWI5qo80qchBAX4C/ykT1mjnTXsy5PdRjefSp
-        z/SFnSr2tZTQoSLUND9543GAxLqJ7HaakZrurnwTDQlZbPhGUBhW0JySZGC7gBBi4l0cvRfo7rw
-        KpWNWBDJkYisvj6lsjj79PA5U
-X-Received: by 2002:a05:6000:1813:b0:1e7:6ac7:d6be with SMTP id m19-20020a056000181300b001e76ac7d6bemr7502146wrh.54.1645219517038;
-        Fri, 18 Feb 2022 13:25:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw22CPgUBXuOIWwUF4Vs7kU+E/iFFGVYUTwCba+1kpLI1JYsMJISA7h2h1doT5as8bFZQJxAw==
-X-Received: by 2002:a05:6000:1813:b0:1e7:6ac7:d6be with SMTP id m19-20020a056000181300b001e76ac7d6bemr7502137wrh.54.1645219516801;
-        Fri, 18 Feb 2022 13:25:16 -0800 (PST)
+        bh=Z5IqDksxnanH0T8Ec4A7XO1FHLTibsIpOj59su0De6E=;
+        b=mFR2IfNhpoCXCRsxww8KfHg5+iBQSguWLWj5DAsg3wgT8p5eYbS8ambTpLinFAAKdm
+         7EcuCmWjHIad3idG9ZjxXeWCzdABCPLCyODPn+o6MCxnyP7xfHVd0g2OvgtxyWaNPEwy
+         yfY/EHsv6jrCnmp4bxE4FSmjOPDvd4/vTLljt4M0VjQz4EDQdy+kGgN2zcgSzf/srk/O
+         povFV2YO4SUxl1lrIbQGJhLKtNgP5CV1G00OeLS+4fPKwsjiSpcYglZ0FOAoJd70cHaG
+         XZtFxsD7F64qicx8cqMUvrTavUapI1p5JmTaPxBGvdRR2SiHyikHqbP6hE7G8ZVMiiiv
+         fjxQ==
+X-Gm-Message-State: AOAM531A08/XkIWQkbXf7FafSwHU3p/s5EKimb9rZK37hL1wo3Xhv/0p
+        DGuBKh0jWnq4xauSQY+KromROINVucgWxOy9qFbl89MYW/JVou/fQ7zSkgzcbxch60t9ML9E0ba
+        lfv+v0sgFq2K3NgOXxe+oOt6n
+X-Received: by 2002:a7b:c756:0:b0:37b:f0f3:ed71 with SMTP id w22-20020a7bc756000000b0037bf0f3ed71mr11941159wmk.16.1645219522308;
+        Fri, 18 Feb 2022 13:25:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxtqQ7Wvewe3HcQC7SZVtQGdd0D2N0Dcu8lTrvtDWFeRDbY235jQZ9b6bU8zUYzHnDVJj8vJw==
+X-Received: by 2002:a7b:c756:0:b0:37b:f0f3:ed71 with SMTP id w22-20020a7bc756000000b0037bf0f3ed71mr11941145wmk.16.1645219522032;
+        Fri, 18 Feb 2022 13:25:22 -0800 (PST)
 Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b0037bf902737esm560539wmc.9.2022.02.18.13.25.16
+        by smtp.gmail.com with ESMTPSA id a18sm39460178wrg.13.2022.02.18.13.25.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 13:25:16 -0800 (PST)
+        Fri, 18 Feb 2022 13:25:21 -0800 (PST)
 From:   Aaron Tomlin <atomlin@redhat.com>
 To:     mcgrof@kernel.org
 Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
@@ -65,9 +65,9 @@ Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
         ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
         christophe.leroy@csgroup.eu, msuchanek@suse.de,
         oleksandr@natalenko.name
-Subject: [PATCH v6 03/13] module: Make internal.h and decompress.c more compliant
-Date:   Fri, 18 Feb 2022 21:25:01 +0000
-Message-Id: <20220218212511.887059-4-atomlin@redhat.com>
+Subject: [PATCH v6 07/13] module: Move extra signature support out of core code
+Date:   Fri, 18 Feb 2022 21:25:05 +0000
+Message-Id: <20220218212511.887059-8-atomlin@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220218212511.887059-1-atomlin@redhat.com>
 References: <20220218212511.887059-1-atomlin@redhat.com>
@@ -77,112 +77,242 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-This patch will address the following warning and style violations
-generated by ./scripts/checkpatch.pl in strict mode:
+No functional change.
 
-  WARNING: Use #include <linux/module.h> instead of <asm/module.h>
-  #10: FILE: kernel/module/internal.h:10:
-  +#include <asm/module.h>
+This patch migrates additional module signature check
+code from core module code into kernel/module/signing.c.
 
-  CHECK: spaces preferred around that '-' (ctx:VxV)
-  #18: FILE: kernel/module/internal.h:18:
-  +#define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
-
-  CHECK: Please use a blank line after function/struct/union/enum declarations
-  #69: FILE: kernel/module/internal.h:69:
-  +}
-  +static inline void module_decompress_cleanup(struct load_info *info)
-						   ^
-  CHECK: extern prototypes should be avoided in .h files
-  #84: FILE: kernel/module/internal.h:84:
-  +extern int mod_verify_sig(const void *mod, struct load_info *info);
-
-  WARNING: Missing a blank line after declarations
-  #116: FILE: kernel/module/decompress.c:116:
-  +               struct page *page = module_get_next_page(info);
-  +               if (!page) {
-
-  WARNING: Missing a blank line after declarations
-  #174: FILE: kernel/module/decompress.c:174:
-  +               struct page *page = module_get_next_page(info);
-  +               if (!page) {
-
-  CHECK: Please use a blank line after function/struct/union/enum declarations
-  #258: FILE: kernel/module/decompress.c:258:
-  +}
-  +static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
-
-Note: Fortunately, the multiple-include optimisation found in
-include/linux/module.h will prevent duplication/or inclusion more than
-once.
-
-Fixes: f314dfea16a ("modsign: log module name in the event of an error")
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- kernel/module/decompress.c | 3 +++
- kernel/module/internal.h   | 6 ++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ kernel/module/internal.h |  9 +++++
+ kernel/module/main.c     | 87 ----------------------------------------
+ kernel/module/signing.c  | 77 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 86 insertions(+), 87 deletions(-)
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index d14d6443225a..2fc7081dd7c1 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -113,6 +113,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
- 
- 	do {
- 		struct page *page = module_get_next_page(info);
-+
- 		if (!page) {
- 			retval = -ENOMEM;
- 			goto out_inflate_end;
-@@ -171,6 +172,7 @@ static ssize_t module_xz_decompress(struct load_info *info,
- 
- 	do {
- 		struct page *page = module_get_next_page(info);
-+
- 		if (!page) {
- 			retval = -ENOMEM;
- 			goto out;
-@@ -256,6 +258,7 @@ static ssize_t compression_show(struct kobject *kobj,
- {
- 	return sysfs_emit(buf, "%s\n", __stringify(MODULE_COMPRESSION));
- }
-+
- static struct kobj_attribute module_compression_attr = __ATTR_RO(compression);
- 
- static int __init module_decompress_sysfs_init(void)
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index ea8c4c02614c..e0775e66bcf7 100644
+index f4b7e123d625..0fdd9c0cd77d 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -6,7 +6,8 @@
-  */
- 
+@@ -164,3 +164,12 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ 	return 0;
+ }
+ #endif /* CONFIG_STRICT_MODULE_RWX */
++
++#ifdef CONFIG_MODULE_SIG
++int module_sig_check(struct load_info *info, int flags);
++#else /* !CONFIG_MODULE_SIG */
++static inline int module_sig_check(struct load_info *info, int flags)
++{
++	return 0;
++}
++#endif /* !CONFIG_MODULE_SIG */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5cd63f14b1ef..c63e10c61694 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -23,7 +23,6 @@
+ #include <linux/vmalloc.h>
  #include <linux/elf.h>
--#include <asm/module.h>
-+#include <linux/compiler.h>
-+#include <linux/module.h>
- #include <linux/mutex.h>
+ #include <linux/proc_fs.h>
+-#include <linux/security.h>
+ #include <linux/seq_file.h>
+ #include <linux/syscalls.h>
+ #include <linux/fcntl.h>
+@@ -127,28 +126,6 @@ static void module_assert_mutex_or_preempt(void)
+ #endif
+ }
  
- #ifndef ARCH_SHF_SMALL
-@@ -54,7 +55,7 @@ struct load_info {
- 	} index;
- };
+-#ifdef CONFIG_MODULE_SIG
+-static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+-module_param(sig_enforce, bool_enable_only, 0644);
+-
+-void set_module_sig_enforced(void)
+-{
+-	sig_enforce = true;
+-}
+-#else
+-#define sig_enforce false
+-#endif
+-
+-/*
+- * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
+- * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
+- */
+-bool is_module_sig_enforced(void)
+-{
+-	return sig_enforce;
+-}
+-EXPORT_SYMBOL(is_module_sig_enforced);
+-
+ /* Block module loading/unloading? */
+ int modules_disabled = 0;
+ core_param(nomodule, modules_disabled, bint, 0);
+@@ -2569,70 +2546,6 @@ static inline void kmemleak_load_module(const struct module *mod,
+ }
+ #endif
  
--extern int mod_verify_sig(const void *mod, struct load_info *info);
-+int mod_verify_sig(const void *mod, struct load_info *info);
- 
- #ifdef CONFIG_MODULE_DECOMPRESS
- int module_decompress(struct load_info *info, const void *buf, size_t size);
-@@ -65,6 +66,7 @@ static inline int module_decompress(struct load_info *info,
+-#ifdef CONFIG_MODULE_SIG
+-static int module_sig_check(struct load_info *info, int flags)
+-{
+-	int err = -ENODATA;
+-	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+-	const char *reason;
+-	const void *mod = info->hdr;
+-	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+-				       MODULE_INIT_IGNORE_VERMAGIC);
+-	/*
+-	 * Do not allow mangled modules as a module with version information
+-	 * removed is no longer the module that was signed.
+-	 */
+-	if (!mangled_module &&
+-	    info->len > markerlen &&
+-	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+-		/* We truncate the module to discard the signature */
+-		info->len -= markerlen;
+-		err = mod_verify_sig(mod, info);
+-		if (!err) {
+-			info->sig_ok = true;
+-			return 0;
+-		}
+-	}
+-
+-	/*
+-	 * We don't permit modules to be loaded into the trusted kernels
+-	 * without a valid signature on them, but if we're not enforcing,
+-	 * certain errors are non-fatal.
+-	 */
+-	switch (err) {
+-	case -ENODATA:
+-		reason = "unsigned module";
+-		break;
+-	case -ENOPKG:
+-		reason = "module with unsupported crypto";
+-		break;
+-	case -ENOKEY:
+-		reason = "module with unavailable key";
+-		break;
+-
+-	default:
+-		/*
+-		 * All other errors are fatal, including lack of memory,
+-		 * unparseable signatures, and signature check failures --
+-		 * even if signatures aren't required.
+-		 */
+-		return err;
+-	}
+-
+-	if (is_module_sig_enforced()) {
+-		pr_notice("Loading of %s is rejected\n", reason);
+-		return -EKEYREJECTED;
+-	}
+-
+-	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+-}
+-#else /* !CONFIG_MODULE_SIG */
+-static int module_sig_check(struct load_info *info, int flags)
+-{
+-	return 0;
+-}
+-#endif /* !CONFIG_MODULE_SIG */
+-
+ static int validate_section_offset(struct load_info *info, Elf_Shdr *shdr)
  {
- 	return -EOPNOTSUPP;
+ #if defined(CONFIG_64BIT)
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index 8aeb6d2ee94b..85c8999dfecf 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -11,9 +11,29 @@
+ #include <linux/module_signature.h>
+ #include <linux/string.h>
+ #include <linux/verification.h>
++#include <linux/security.h>
+ #include <crypto/public_key.h>
++#include <uapi/linux/module.h>
+ #include "internal.h"
+ 
++static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
++module_param(sig_enforce, bool_enable_only, 0644);
++
++/*
++ * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
++ * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
++ */
++bool is_module_sig_enforced(void)
++{
++	return sig_enforce;
++}
++EXPORT_SYMBOL(is_module_sig_enforced);
++
++void set_module_sig_enforced(void)
++{
++	sig_enforce = true;
++}
++
+ /*
+  * Verify the signature on a module.
+  */
+@@ -43,3 +63,60 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+ 				      VERIFYING_MODULE_SIGNATURE,
+ 				      NULL, NULL);
  }
 +
- static inline void module_decompress_cleanup(struct load_info *info)
- {
- }
++int module_sig_check(struct load_info *info, int flags)
++{
++	int err = -ENODATA;
++	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
++	const char *reason;
++	const void *mod = info->hdr;
++	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
++				       MODULE_INIT_IGNORE_VERMAGIC);
++	/*
++	 * Do not allow mangled modules as a module with version information
++	 * removed is no longer the module that was signed.
++	 */
++	if (!mangled_module &&
++	    info->len > markerlen &&
++	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
++		/* We truncate the module to discard the signature */
++		info->len -= markerlen;
++		err = mod_verify_sig(mod, info);
++		if (!err) {
++			info->sig_ok = true;
++			return 0;
++		}
++	}
++
++	/*
++	 * We don't permit modules to be loaded into the trusted kernels
++	 * without a valid signature on them, but if we're not enforcing,
++	 * certain errors are non-fatal.
++	 */
++	switch (err) {
++	case -ENODATA:
++		reason = "unsigned module";
++		break;
++	case -ENOPKG:
++		reason = "module with unsupported crypto";
++		break;
++	case -ENOKEY:
++		reason = "module with unavailable key";
++		break;
++
++	default:
++		/*
++		 * All other errors are fatal, including lack of memory,
++		 * unparseable signatures, and signature check failures --
++		 * even if signatures aren't required.
++		 */
++		return err;
++	}
++
++	if (is_module_sig_enforced()) {
++		pr_notice("Loading of %s is rejected\n", reason);
++		return -EKEYREJECTED;
++	}
++
++	return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
++}
 -- 
 2.34.1
 
