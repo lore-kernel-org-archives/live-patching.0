@@ -2,100 +2,79 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14BC6C433EF
-	for <live-patching@archiver.kernel.org>; Thu, 17 Feb 2022 16:26:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D67B0C433EF
+	for <live-patching@archiver.kernel.org>; Fri, 18 Feb 2022 08:20:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242935AbiBQQ1F (ORCPT
+        id S231318AbiBRIVG (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 17 Feb 2022 11:27:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57898 "EHLO
+        Fri, 18 Feb 2022 03:21:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242893AbiBQQ1E (ORCPT
+        with ESMTP id S230221AbiBRIVD (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 17 Feb 2022 11:27:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 805029BB8A
-        for <live-patching@vger.kernel.org>; Thu, 17 Feb 2022 08:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645115208;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hCGdZ67U7n7QTxmEpkXTMre/CxFj1dLb8EpsB9Wt9NU=;
-        b=GezvIP/FDCuCmOONL2/N+znUrvSlf3Dn1YzdVsR8UGtqHkUlHeHjrzXvZ4uMgpgTxfZdQB
-        5Fdi+oNp1g9Pot3OTRH3VRqxQNJxihltcVv0Bw7qEyr0U+qAbCIbXMp9h+usElW1+8fgAH
-        yT1qx1qbo0kM/mYTRrQVGvDci7EE68E=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-q2LwCrooOJaUNBhdbbX56w-1; Thu, 17 Feb 2022 11:26:47 -0500
-X-MC-Unique: q2LwCrooOJaUNBhdbbX56w-1
-Received: by mail-lj1-f197.google.com with SMTP id i8-20020a2ea228000000b002449296c787so43864ljm.18
-        for <live-patching@vger.kernel.org>; Thu, 17 Feb 2022 08:26:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hCGdZ67U7n7QTxmEpkXTMre/CxFj1dLb8EpsB9Wt9NU=;
-        b=ZlPhms35BhKeREkZNCSy7TqnRo1LeuoimD5fLufm2SeItaLPfU0iVMoj9yEUG9A7iN
-         tL1klGGjM1aclGX0HyE+e05BAauyUdMBhF2prQhGz5lK0lzmVWIzcE6GMsR2M4qIb0qa
-         /RX9iJy3nTKvZQiDjKltsuVxNIE6dE3Yvx4p2QAcWiE7NdnjgzXdDFzyPeHl36C6grtY
-         Of8pWyuiAZPdSEseMi0Ol4uivRkoxGfzJu7amuuoH373YjdF5Mh/6e5qssRs++Z6meax
-         NJIBfSIb/5hxX54k3fmLWRFKtTuOU1rqPmwCj1hfGFVQX/ISBDzerNkckvbnrrTiWOJa
-         CbDQ==
-X-Gm-Message-State: AOAM532OfcdN2ce7rJmYlii1zH6aH79lFCu/yEGskgUcoalHOaSAXS7k
-        e6IiIdDlp48FCWfTkwm8MjQ3bEvH8GeT4npn59sXOAgPdhxvRlyylndFXNXKdDz3Z5N0SGOfex8
-        6lJdQaKJLjNflblgwsSJdOfNypuxUl3oklP/S9q8u
-X-Received: by 2002:a05:6512:150d:b0:442:aad5:2550 with SMTP id bq13-20020a056512150d00b00442aad52550mr2567903lfb.678.1645115205793;
-        Thu, 17 Feb 2022 08:26:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzLZ9H9RgrFT61tMlkFrlaF/ED3Z9gDTXl+XfGnohcx4TPIGO+mRgxBZFxuaJb0yee8DvwIgmsS16CP6ZukixU=
-X-Received: by 2002:a05:6512:150d:b0:442:aad5:2550 with SMTP id
- bq13-20020a056512150d00b00442aad52550mr2567879lfb.678.1645115205613; Thu, 17
- Feb 2022 08:26:45 -0800 (PST)
+        Fri, 18 Feb 2022 03:21:03 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB82E25B2F7;
+        Fri, 18 Feb 2022 00:20:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645172446; x=1676708446;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ejHrB5B466U6W+fI4GxsWg/8qpDAbd2bstCAFg1MpY=;
+  b=DesFvz0AAfxYpo6A+wazO9ViMVpCMtIHCj1JdwxvlrAtsy0eUxAKnK4F
+   IBtT6QHvmG26x/5RwHAAtGkHRDIIMcRPX4YJUB7VVlaOXLv9KH2LDVq3n
+   +qrQ5H5+jCSjmcdIwT1zNojTZeLZFzlHLq47Gt/Zf1o0pMzClZyoTSL/b
+   ++xBBTjlKepEMH+63dwB1jnZuVv8KvaIYERQzJCWXxbViMr0z+pccBf18
+   zzBZRV8lNF4oSQwVGj0dYeNHDS6fxN298X9JX4RhA48Uguf2CpfOCGkmY
+   o/YCKamHNNro54raPMJIgv+SR29OqXcn5IR63E2+JAoZW+wEIq/poHM39
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10261"; a="275675307"
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="275675307"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 00:20:46 -0800
+X-IronPort-AV: E=Sophos;i="5.88,378,1635231600"; 
+   d="scan'208";a="505115448"
+Received: from svaddara-mobl.amr.corp.intel.com (HELO ldmartin-desk2) ([10.212.147.37])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2022 00:20:45 -0800
+Date:   Fri, 18 Feb 2022 00:20:46 -0800
+From:   Lucas De Marchi <lucas.demarchi@intel.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        live-patching@vger.kernel.org, fstests@vger.kernel.org,
+        linux-block@vger.kernel.org, hare@suse.de, dgilbert@interlog.com,
+        Jessica Yu <jeyu@kernel.org>, osandov@fb.com,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] kmod: add patient module removal support
+Message-ID: <20220218082046.c33zz64owau3oiln@ldmartin-desk2>
+X-Patchwork-Hint: comment
+References: <20210810051602.3067384-1-mcgrof@kernel.org>
+ <YUIwKUXc7YbVAqut@bombadil.infradead.org>
+ <CAKi4VAKbN31hqfg5EHZO=T_Hdkv3uhzarFLuEZO4b5Zm+TF77Q@mail.gmail.com>
+ <Yg4Djc+vqRbMFRto@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20220209171118.3269581-1-atomlin@redhat.com> <20220209171118.3269581-3-atomlin@redhat.com>
- <14a1678f-0c56-1237-c5c7-4ca1bac4b42a@csgroup.eu> <CANfR36gVY+1k7YJy0fn1z+mGv-LqEmZJSvSHXn_BFR4WC+oJrQ@mail.gmail.com>
- <alpine.LSU.2.21.2202171648590.29121@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2202171648590.29121@pobox.suse.cz>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Thu, 17 Feb 2022 16:26:33 +0000
-Message-ID: <CANfR36hExnjBM1=529Ae6EvETx7XiPFDSmZCTOV2MLS_YEfoCQ@mail.gmail.com>
-Subject: Re: [PATCH v5 13/13] module: Move version support into a separate file
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "void@manifault.com" <void@manifault.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Yg4Djc+vqRbMFRto@bombadil.infradead.org>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu 2022-02-17 16:51 +0100, Miroslav Benes wrote:
-> It is not, but "struct find_symbol_arg", which you moved, uses "enum
-> mod_license" defined above, so you can either leave it as it is, or carve
-> "enum mod_license" definition out.
+On Thu, Feb 17, 2022 at 12:13:01AM -0800, Luis Chamberlain wrote:
+>On Mon, Sep 20, 2021 at 10:51:46PM -0700, Lucas De Marchi wrote:
+>> On Wed, Sep 15, 2021 at 10:41 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>> >
+>> > *Friendly poke*
+>>
+>> Sorry for the delay. Let me take a look in detail tomorrow.
+>
+>*Friendly poke*
 
-Hi Miroslav,
+oh, I dropped the ball here, sorry. Then I got busy with i915 and other
+projects. Let me take a look again at your implementation and respin it
 
-I've done this already for v6. I hope to share the latest version for
-review shortly.
-
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+Lucas De Marchi
+>
+>  Luis
