@@ -2,124 +2,103 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6042C433EF
-	for <live-patching@archiver.kernel.org>; Mon, 21 Feb 2022 08:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE3DC433EF
+	for <live-patching@archiver.kernel.org>; Mon, 21 Feb 2022 09:48:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343790AbiBUIfc (ORCPT
+        id S1351346AbiBUJsw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 21 Feb 2022 03:35:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51264 "EHLO
+        Mon, 21 Feb 2022 04:48:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiBUIfb (ORCPT
+        with ESMTP id S1353188AbiBUJsP (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:35:31 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08F2BF5D;
-        Mon, 21 Feb 2022 00:35:07 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K2Fwn6wDpz9sSH;
-        Mon, 21 Feb 2022 09:35:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LuaZJkiB-gI2; Mon, 21 Feb 2022 09:35:05 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K2Fwn63tHz9sSG;
-        Mon, 21 Feb 2022 09:35:05 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD2788B76E;
-        Mon, 21 Feb 2022 09:35:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id bxoRSNtyKq7s; Mon, 21 Feb 2022 09:35:05 +0100 (CET)
-Received: from [192.168.7.34] (unknown [192.168.7.34])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C85818B765;
-        Mon, 21 Feb 2022 09:35:04 +0100 (CET)
-Message-ID: <0ea89614-9bab-99f5-47a8-2a2996c38966@csgroup.eu>
-Date:   Mon, 21 Feb 2022 09:35:06 +0100
+        Mon, 21 Feb 2022 04:48:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3CCBDEF3
+        for <live-patching@vger.kernel.org>; Mon, 21 Feb 2022 01:22:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645435344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ad6pMafFuKoh5sHuoaKN4WCBkg6hpge8kEYbZzG0l/U=;
+        b=BShNKK4/BRPPO07L0KZiROY5AvXts06ccZyVVVCYlDtLuKnZ0uj/j5yXaQ1ZLDzJfhJCJD
+        AP4xFGruoa8Y+E8Pw4Fi8UHj7knkM12CD/560yvT4BqDwwt1CDJSOCmJMgybVCN6J8MPH0
+        EZEdT8w5snYH6EFlwMaMEguCzZ9Ul3U=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-ZPRzHNh_PROBAWAJxiANSQ-1; Mon, 21 Feb 2022 04:22:22 -0500
+X-MC-Unique: ZPRzHNh_PROBAWAJxiANSQ-1
+Received: by mail-lj1-f200.google.com with SMTP id q17-20020a2e7511000000b0023c95987502so3769531ljc.16
+        for <live-patching@vger.kernel.org>; Mon, 21 Feb 2022 01:22:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ad6pMafFuKoh5sHuoaKN4WCBkg6hpge8kEYbZzG0l/U=;
+        b=6b3OmdCuLaptvQEPslzqmur2CHjE3oHDEHRAaIIKLUtL72NwYzZLpkKLE7foXhDR6w
+         Y7l2AreHvnWXxpE1IjGQTjk23CdiwlQP8jbuNDP7TA2cTfgfkSKQ3gUHhGjegPapQUeu
+         vgP0xEF350tjOSAcU3sa1fYppIp3iyaQbUG1vTTJorFpt0G9he/r3y2/dHt7OYRQq1OW
+         IzyLOi1M4QyS8HyNgOf6jRr8cioFtiuI49h9HZT3Lzquo7srdypPOmYf1r7aj2Zb5PMt
+         69k2v8F7h7xf1hzElGZWFSHjQOY9qgFnCeTaZsVXGE2f3eHXb0w8msvDgZDIGiJagY2/
+         AQiQ==
+X-Gm-Message-State: AOAM530EO/Z2S1JVFlpnZKo1/Zl62820dXMhjIeLllv465HKpCp2YMQj
+        iGptXeC4krOwf5pSbMQ0pOk3DX41uTgJgzGvCeP3GQw8sKWrRnI615FFrZeQ0U7AUSChi2XmhWn
+        zFFmXbK5SIlfKMe+rljuMe4FzLVHdus+0S5wpcXfO
+X-Received: by 2002:a2e:8856:0:b0:246:3bfd:dfc8 with SMTP id z22-20020a2e8856000000b002463bfddfc8mr4005589ljj.405.1645435341125;
+        Mon, 21 Feb 2022 01:22:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwqqElMWCPmmeG9e4i5Pf9cAy5vbIeUUzK6mO8pXI5G7HWPoGAJ9x/Nr5EHYWLmz2n3K18txAXAxXAugY7cAS4=
+X-Received: by 2002:a2e:8856:0:b0:246:3bfd:dfc8 with SMTP id
+ z22-20020a2e8856000000b002463bfddfc8mr4005570ljj.405.1645435340975; Mon, 21
+ Feb 2022 01:22:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6 09/13] module: Move kallsyms support into a separate
- file
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Aaron Tomlin <atomlin@redhat.com>, mcgrof@kernel.org
-Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
-        msuchanek@suse.de, oleksandr@natalenko.name
-References: <20220218212511.887059-1-atomlin@redhat.com>
- <20220218212511.887059-10-atomlin@redhat.com>
- <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu>
-In-Reply-To: <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20220218212511.887059-1-atomlin@redhat.com> <20220218212511.887059-10-atomlin@redhat.com>
+ <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu> <0ea89614-9bab-99f5-47a8-2a2996c38966@csgroup.eu>
+In-Reply-To: <0ea89614-9bab-99f5-47a8-2a2996c38966@csgroup.eu>
+From:   Aaron Tomlin <atomlin@redhat.com>
+Date:   Mon, 21 Feb 2022 09:22:09 +0000
+Message-ID: <CANfR36iGqX93rvv1M6AwGdR=C-Ev314iKCMpEzHOO0-LXAzJig@mail.gmail.com>
+Subject: Re: [PATCH v6 09/13] module: Move kallsyms support into a separate file
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        "Lameter, Christoph" <cl@linux.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Grzegorz Halat <ghalat@redhat.com>,
+        Allen <allen.lkml@gmail.com>, Joe Perches <joe@perches.com>,
+        Michal Suchanek <msuchanek@suse.de>, oleksandr@natalenko.name
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
+On Mon 2022-02-21 09:35 +0100, Christophe Leroy wrote:
+> Fixup:
+>
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index 6c8f1f390cf5..2ee8d2e67068 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -171,8 +171,7 @@ void add_kallsyms(struct module *mod, const struct
+> load_info *info)
+>      Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
+>
+>      /* Set up to point into init section. */
+> -    mod->kallsyms = (struct mod_kallsyms __rcu *)mod->init_layout.base +
+> -        info->mod_kallsyms_init_off;
+> +    mod->kallsyms = (void __rcu *)mod->init_layout.base +
+> info->mod_kallsyms_init_off;
+>
+>      /* The following is safe since this pointer cannot change */
+>      rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
 
+Agreed.
 
-Le 21/02/2022 à 09:15, Christophe Leroy a écrit :
-> 
-> 
-> Le 18/02/2022 à 22:25, Aaron Tomlin a écrit :
->> No functional change.
->>
->> This patch migrates kallsyms code out of core module
->> code kernel/module/kallsyms.c
->>
->> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> 
-> With this patch I get an Oops:
-> 
-> [   36.421711] BUG: Unable to handle kernel data access on write at 
-> 0xbe79bb40
-> [   36.428435] Faulting instruction address: 0xc008b74c
-> [   36.433342] Oops: Kernel access of bad area, sig: 11 [#1]
-> [   36.438672] BE PAGE_SIZE=16K PREEMPT CMPC885
-> [   36.442947] SAF3000 DIE NOTIFICATION
-> [   36.446421] Modules linked in:
-> [   36.449436] CPU: 0 PID: 374 Comm: insmod Not tainted 
-> 5.17.0-rc4-s3k-dev-02274-g7d4ec8831803 #1016
-> [   36.458211] NIP:  c008b74c LR: c00897ac CTR: c001145c
-> [   36.463200] REGS: caf8bcf0 TRAP: 0300   Not tainted 
-> (5.17.0-rc4-s3k-dev-02274-g7d4ec8831803)
-> [   36.471633] MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 24002842  XER: 00000000
-> [   36.478261] DAR: be79bb40 DSISR: c2000000
-> [   36.478261] GPR00: c00899a0 caf8bdb0 c230a980 be74c000 caf8beb8 
-> 00000008 00000000 c035629c
-> [   36.478261] GPR08: be75c000 caf9c9fc be79bb40 00000004 24002842 
-> 100d166a 00000290 00000000
-> [   36.478261] GPR16: c0747320 caf9c9fc c11ff918 caf9b2a7 be75c290 
-> 00000550 00000022 c0747210
-> [   36.478261] GPR24: c11ff8e8 be74c000 c11ff8fc 100b8820 00000000 
-> 00000000 be74c000 caf8beb8
-> [   36.516729] NIP [c008b74c] add_kallsyms+0x48/0x30c
-> [   36.521465] LR [c00897ac] load_module+0x16f8/0x2504
+-- 
+Aaron Tomlin
 
-Fixup:
-
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 6c8f1f390cf5..2ee8d2e67068 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -171,8 +171,7 @@ void add_kallsyms(struct module *mod, const struct 
-load_info *info)
-  	Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
-
-  	/* Set up to point into init section. */
--	mod->kallsyms = (struct mod_kallsyms __rcu *)mod->init_layout.base +
--		info->mod_kallsyms_init_off;
-+	mod->kallsyms = (void __rcu *)mod->init_layout.base + 
-info->mod_kallsyms_init_off;
-
-  	/* The following is safe since this pointer cannot change */
-  	rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
-
-
-Christophe
