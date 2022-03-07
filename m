@@ -2,172 +2,116 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 672EAC433F5
-	for <live-patching@archiver.kernel.org>; Fri,  4 Mar 2022 15:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D6AA4C433EF
+	for <live-patching@archiver.kernel.org>; Mon,  7 Mar 2022 16:51:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240137AbiCDPPQ (ORCPT
+        id S241148AbiCGQwf (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 4 Mar 2022 10:15:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        Mon, 7 Mar 2022 11:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240158AbiCDPPP (ORCPT
+        with ESMTP id S232809AbiCGQwe (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 4 Mar 2022 10:15:15 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCDE1C3D0D
-        for <live-patching@vger.kernel.org>; Fri,  4 Mar 2022 07:14:26 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id w37so7763908pga.7
-        for <live-patching@vger.kernel.org>; Fri, 04 Mar 2022 07:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xhFNSR/yOd/Vz2Wc1wvXRDHBYyMuBGWniHzjkl431mo=;
-        b=hZqCZVGG2Aw1yowZxJka1HJssTZXGRCsk53g2yvR0SODyOvwf/Elxr1eAcI0NP8w/P
-         BRDWVY2OXYvTkI05nb6CaZLDi8M4tfwFREo8tfWo3RcBYvU+nRJwzoMrogAapw+XAFqt
-         ucRdR6ma6mQtKOLch8k2c7d6q7eppyhx/GjM/pMapljT1kyYVlvGRVUEbw/Y/J2GAIAQ
-         H/W8p3rXzvOKbhlwBWE6s2bCCkFbZSO+ltnQ/DM81ItTC/ICR85g0BdzMn5vGbPGb1Tm
-         Llm+qe/OCV86hyLcMmc4t6rH03ovFSYNvLF56nIuv2jRARRe5rozks826lfRrlnriH3X
-         OzOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xhFNSR/yOd/Vz2Wc1wvXRDHBYyMuBGWniHzjkl431mo=;
-        b=odnJyhbdbPq3fZRXu3pgEZhnYarQWPwHi/VoTej76zVDlbZsp082vlZS6dd896q4K0
-         mwJfITtwtb8bKVVOKG2mD/6Ue1vtNPsVZ3E4Vv/W6VRzOQpuvreVFl1xHTicbHiSyIL5
-         zORNLYVKgjEFTv8pZeqjbH30gjTKHRsmWYz1W3doh1jjHE+cKu+AOs2/wpQgPpKEnyqW
-         WvXHNpTOqbOYDN490ot/VHzPNyP71SuRiUNilo76y9rw0nZHHRAb7WRLfMvKAm6uLvVF
-         8pFzI+5v9hWqQ7IQSsCGZOnBP+//bmKKKvVNeV90rc4SwOMYtbVFW3oZyg30FqVnu8gH
-         JhPA==
-X-Gm-Message-State: AOAM532bcXLWOdC4l9Rc/4wDG69oBNIIn+CFYni4bR7yPBfTn8FxmNJr
-        +7Q0ahU+/iaMMnR9A6UARlKq4hw7x5VYtQ==
-X-Google-Smtp-Source: ABdhPJzb5cC534BnnexfsDG8sjS4Ey8TsFio0KuvhUEFwq3AjNNBbWTwq1gSZOU15bdx3t7INixUwA==
-X-Received: by 2002:a05:6a00:1593:b0:4f6:6c38:f75d with SMTP id u19-20020a056a00159300b004f66c38f75dmr9260095pfk.81.1646406865430;
-        Fri, 04 Mar 2022 07:14:25 -0800 (PST)
-Received: from ?IPV6:2409:8a28:e6d:cc00:d089:89fd:5c33:f12? ([2409:8a28:e6d:cc00:d089:89fd:5c33:f12])
-        by smtp.gmail.com with ESMTPSA id on18-20020a17090b1d1200b001b9cfbfbf00sm4958261pjb.40.2022.03.04.07.14.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 07:14:25 -0800 (PST)
-Message-ID: <306a5d51-25e5-b7ce-cbdd-ca7e2f3a3ad5@bytedance.com>
-Date:   Fri, 4 Mar 2022 23:14:15 +0800
+        Mon, 7 Mar 2022 11:52:34 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2ED3F66FB4;
+        Mon,  7 Mar 2022 08:51:40 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0B8AA20B7178;
+        Mon,  7 Mar 2022 08:51:38 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0B8AA20B7178
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1646671899;
+        bh=JQmaJ6+1WVAcZ6MJzqpqjZ1DNV3GaZkH13UClOQhBpg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ue1hmS3Gsyah9sI5cZDAOXzVc5lVCKCI8ifJyo6A/0g7bAQHQzeRQieWTOBWf6i4u
+         Xd9FVWGerNtpa5E5BfK3JVqgrU3Pdw34AV8f+mXk6C9/wsDgp6EqQyG8cuajqr7bMI
+         eO6K7351xZTqISQNNQpDI2p/XgP6mm2BsyrTJuuQ=
+Message-ID: <845e4589-97d9-5371-3a0e-f6e05919f32d@linux.microsoft.com>
+Date:   Mon, 7 Mar 2022 10:51:38 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [External] Re: [PATCH] livepatch: Only block the removal of
- KLP_UNPATCHED forced transition patch
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 06/11] arm64: Use stack_trace_consume_fn and rename
+ args to unwind()
 Content-Language: en-US
-To:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, qirui.001@bytedance.com
-References: <20220301140840.29345-1-zhouchengming@bytedance.com>
- <alpine.LSU.2.21.2203021052470.5895@pobox.suse.cz>
- <fe2b9225-44c3-2041-f8a3-6f17f9d1be40@bytedance.com>
- <alpine.LSU.2.21.2203030847430.704@pobox.suse.cz>
- <1929669c-7674-035b-8cf1-5b5007ecccec@bytedance.com>
- <c1ab3333-7fea-d2d5-272d-850f4c7afb74@redhat.com>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <c1ab3333-7fea-d2d5-272d-850f4c7afb74@redhat.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-7-madvenka@linux.microsoft.com>
+ <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YgutJKqYe8ss8LLd@FVFF77S0Q05N>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On 2022/3/3 11:43 下午, Joe Lawrence wrote:
-> On 3/3/22 5:33 AM, Chengming Zhou wrote:
->> On 2022/3/3 3:51 下午, Miroslav Benes wrote:
->>> On Thu, 3 Mar 2022, Chengming Zhou wrote:
->>>
->>>> Hi,
->>>>
->>>> On 2022/3/2 5:55 下午, Miroslav Benes wrote:
->>>>> Hi,
->>>>>
->>>>> On Tue, 1 Mar 2022, Chengming Zhou wrote:
->>>>>
->>>>>> module_put() is currently never called for a patch with forced flag, to block
->>>>>> the removal of that patch module that might still be in use after a forced
->>>>>> transition.
->>>>>>
->>>>>> But klp_force_transition() will flag all patches on the list to be forced, since
->>>>>> commit d67a53720966 ("livepatch: Remove ordering (stacking) of the livepatches")
->>>>>> has removed stack ordering of the livepatches, it will cause all other patches can't
->>>>>> be unloaded after disabled even if they have completed the KLP_UNPATCHED transition.
->>>>>>
->>>>>> In fact, we don't need to flag a patch to forced if it's a KLP_PATCHED forced
->>>>>> transition. It can still be unloaded only if it has passed through the consistency
->>>>>> model in KLP_UNPATCHED transition.
->>>>>>
->>>>>> So this patch only set forced flag and block the removal of a KLP_UNPATCHED forced
->>>>>> transition livepatch.
->>>>>>
->>>>>> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
->>>>>> ---
->>>>>>  kernel/livepatch/transition.c | 4 ++--
->>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
->>>>>> index 5683ac0d2566..8b296ad9e407 100644
->>>>>> --- a/kernel/livepatch/transition.c
->>>>>> +++ b/kernel/livepatch/transition.c
->>>>>> @@ -641,6 +641,6 @@ void klp_force_transition(void)
->>>>>>  	for_each_possible_cpu(cpu)
->>>>>>  		klp_update_patch_state(idle_task(cpu));
->>>>>>  
->>>>>> -	klp_for_each_patch(patch)
->>>>>> -		patch->forced = true;
->>>>>> +	if (klp_target_state == KLP_UNPATCHED)
->>>>>> +		klp_transition_patch->forced = true;
->>>>>
->>>>> I do not think this would interact nicely with the atomic replace feature. 
->>>>> If you force the transition of a patch with ->replace set to true, no 
->>>>> existing patch would get ->forced set with this change, which means all 
->>>>> patches will be removed at the end of klp_try_complete_transition(). And 
->>>>> that is something we want to prevent.
->>>>
->>>> Good point, I should check if it's an atomic replace livepatch in the else
->>>> branch, in which case we have to set all existing patches to forced.
->>>
->>> Yes, but that leads to a question if it then brings any value. Forcing a 
->>> transition should be exceptional. If it is needed, there may be other 
->>> issues involved which should probably be fixed. Have you come across a 
->>> practical situation where the patch helped?
->>
->> Yes, you're right, the correct way is to find and fix the issues that
->> make us to use this "force" transition interface, until we don't need
->> to use it.
->>
->> Apart from this reason, another reason we may use "force" transition
->> is that we want to speed up the transition process of some patches
->> when load them, and we can make sure these patches are safe to do so.
->> (just like a consistency model check disable option when load a patch)
->>
-> 
-> Interesting use case.  Can you share any example livepatches where the
-> transition time was exceptionally long and that lead to requiring this
-> patch?
+Hey Mark Rutland, Mark Brown,
 
-Sorry, I haven't easy reproducible testcase on hand, maybe I could try to
-make one to simulate the production environment later.
+Could you please review the rest of the patches in the series when you can?
 
-> 
-> From a kpatch developer's perspective, it would be interesting to read
-> how you go about ensuring forced livepatch safety.  We don't generally
-> build forced livepatches, so I'm curious how the dev/review process goes.
-
-We also use kpatch-build for some patches too, but for some other patches,
-which need to add new members to some struct type, or fix some kernel function
-bugs, we may need to rewrite the source patch to make a livepatch module.
-
-There are some types that don't need per-task consistency or even can replace
-the old functions when tasks stack in the old functions. We may want to use
-"force" transition in case load process timeout.
+Also, many of the patches have received a Reviewed-By from you both. So, after I send the next version out, can we upstream those ones?
 
 Thanks.
 
+Madhavan
+
+On 2/15/22 07:39, Mark Rutland wrote:
+> On Mon, Jan 17, 2022 at 08:56:03AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Rename the arguments to unwind() for better consistency. Also, use the
+>> typedef stack_trace_consume_fn for the consume_entry function as it is
+>> already defined in linux/stacktrace.h.
+>>
+>> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 > 
-> Thanks,
+> How about: 
+> 
+> | arm64: align with common stracktrace naming
+> |
+> | For historical reasons, the naming of parameters and their types in the arm64
+> | stacktrace code differs from that used in generic code and other
+> | architectures, even though the types are equivalent.
+> |
+> | For consistency and clarity, use the generic names.
+> 
+> Either way:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Mark.
+> 
+>> ---
+>>  arch/arm64/kernel/stacktrace.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+>> index 1b32e55735aa..f772dac78b11 100644
+>> --- a/arch/arm64/kernel/stacktrace.c
+>> +++ b/arch/arm64/kernel/stacktrace.c
+>> @@ -181,12 +181,12 @@ static int notrace unwind_next(struct unwind_state *state)
+>>  NOKPROBE_SYMBOL(unwind_next);
+>>  
+>>  static void notrace unwind(struct unwind_state *state,
+>> -			   bool (*fn)(void *, unsigned long), void *data)
+>> +			   stack_trace_consume_fn consume_entry, void *cookie)
+>>  {
+>>  	while (1) {
+>>  		int ret;
+>>  
+>> -		if (!fn(data, state->pc))
+>> +		if (!consume_entry(cookie, state->pc))
+>>  			break;
+>>  		ret = unwind_next(state);
+>>  		if (ret < 0)
+>> -- 
+>> 2.25.1
+>>
