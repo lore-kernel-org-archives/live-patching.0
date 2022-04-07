@@ -2,87 +2,524 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F3BC433FE
-	for <live-patching@archiver.kernel.org>; Tue, 29 Mar 2022 11:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 731C9C433F5
+	for <live-patching@archiver.kernel.org>; Thu,  7 Apr 2022 20:38:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbiC2LYp (ORCPT
+        id S230070AbiDGUj7 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 29 Mar 2022 07:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        Thu, 7 Apr 2022 16:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiC2LYo (ORCPT
+        with ESMTP id S230116AbiDGUjo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 29 Mar 2022 07:24:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6398818B258;
-        Tue, 29 Mar 2022 04:23:02 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0422A1F87C;
-        Tue, 29 Mar 2022 11:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1648552981; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SIv5uXYMR0opeIvGmNdx5Nx23cUrlYA4mD5vDaH6REM=;
-        b=a4pa12+asB0UvvOL2t6C7VRrhoYKwHDo9Jo1k1K7cQSVeCHRBqAxNEzdFkHj6Jx/cJvJMv
-        xzTboGQJtPnMz32eX6bxd6a+dUtVbcvzrMkj7YY00wEBN+JYWlhoLgnAXmqUso50y5Sdu2
-        ycRjhpo8VdscO15NjnBedEdqe8bBlGE=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C099FA3B82;
-        Tue, 29 Mar 2022 11:23:00 +0000 (UTC)
-Date:   Tue, 29 Mar 2022 13:22:57 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH] livepatch: Remove klp_arch_set_pc() and asm/livepatch.h
-Message-ID: <YkLsEUgxJkYbLZ7Z@alley>
-References: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
+        Thu, 7 Apr 2022 16:39:44 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 830DA3542AB;
+        Thu,  7 Apr 2022 13:26:02 -0700 (PDT)
+Received: from x64host.home (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8655420B9CEF;
+        Thu,  7 Apr 2022 13:26:01 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8655420B9CEF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1649363162;
+        bh=nVQ+gSE19+X//O4Sk/QNhBvnuZzB5LkL5Rb13i7ZcgM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=OWvphc47b+i0m2hrrF/YK+J97hpiVwg11oPGOgHp+WyQ/kxYXSDdyvxPpRSF3QlLF
+         Ha3DE7NTMcK093by8SoU3mv+gvHEDxUl4hmEGjYbJLaxGXxjxRrPLI0x/WWIYMThKF
+         Ld6a1GspxHld3r2DbDCzm0GGq+b2AbEB/pyQxydM=
+From:   madvenka@linux.microsoft.com
+To:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [RFC PATCH v1 2/9] objtool: Generate DWARF rules and place them in a special section
+Date:   Thu,  7 Apr 2022 15:25:11 -0500
+Message-Id: <20220407202518.19780-3-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220407202518.19780-1-madvenka@linux.microsoft.com>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e029c7cfde436f6bbf99148ab14dc2da99add503.1648447981.git.christophe.leroy@csgroup.eu>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon 2022-03-28 08:26:48, Christophe Leroy wrote:
-> All three versions of klp_arch_set_pc() do exactly the same: they
-> call ftrace_instruction_pointer_set().
-> 
-> Call ftrace_instruction_pointer_set() directly and remove
-> klp_arch_set_pc().
-> 
-> As klp_arch_set_pc() was the only thing remaining in asm/livepatch.h
-> on x86 and s390, remove asm/livepatch.h
-> 
-> livepatch.h remains on powerpc but its content is exclusively used
-> by powerpc specific code.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+Convert the DWARF Call Frame Information parsed by dwarf_parse() into
+compact DWARF rules that are usable by the kernel. Place the rules in a
+special section called .dwarf_rules. Also, place the PCs for the rules in
+a special section called .dwarf_pcs. In addition, define relocation
+entries for the PCs as they will change during linking.
 
-I am going to take it via livepatch/livepatch.git for 5.19. We are
-already in the middle of the merge window and this is not critical.
+An entry in .dwarf_rules and its corresponding entry in .dwarf_pcs together
+describe a code range and DWARF rules for the code range. In the future,
+the kernel will use the rules to compute the frame pointer at a given
+instruction address. The unwinder can use the computed frame pointer to
+validate the actual frame pointer for a reliable stack trace.
 
-Best Regards,
-Petr
+During rule generation, eliminate null offset rules and merge adjacent rules
+that are identical to minimize the number of rules.
+
+Also add an objtool option to dump the DWARF rules for debugging purposes.
+It is invoked as follows:
+
+	objtool dwarf dump <object-file>
+
+Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+---
+ include/linux/dwarf.h                     |  43 +++++
+ tools/include/linux/dwarf.h               |  43 +++++
+ tools/objtool/builtin-dwarf.c             |  22 ++-
+ tools/objtool/dwarf_rules.c               | 181 +++++++++++++++++++++-
+ tools/objtool/include/objtool/dwarf_def.h |  12 ++
+ tools/objtool/include/objtool/objtool.h   |   2 +
+ tools/objtool/sync-check.sh               |   6 +
+ tools/objtool/weak.c                      |  11 ++
+ 8 files changed, 311 insertions(+), 9 deletions(-)
+ create mode 100644 include/linux/dwarf.h
+ create mode 100644 tools/include/linux/dwarf.h
+
+diff --git a/include/linux/dwarf.h b/include/linux/dwarf.h
+new file mode 100644
+index 000000000000..16e9dd8c60c8
+--- /dev/null
++++ b/include/linux/dwarf.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * dwarf.h - DWARF data structures used by the unwinder.
++ *
++ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
++ *
++ * Copyright (c) 2022 Microsoft Corporation
++ */
++
++#ifndef _LINUX_DWARF_H
++#define _LINUX_DWARF_H
++
++#include <linux/types.h>
++
++/*
++ * objtool generates two special sections that contain DWARF information that
++ * will be used by the reliable unwinder to validate the frame pointer in every
++ * frame:
++ *
++ * .dwarf_rules:
++ *	This contains an array of struct dwarf_rule. Each rule contains the
++ *	size of a code range. In addition, a rule contains the offsets that
++ *	must be used to compute the frame pointer at any of the instructions
++ *	within the code range. The computation is:
++ *
++ *		CFA = %sp + sp_offset
++ *		FP = CFA + fp_offset
++ *
++ *	where %sp is the stack pointer at the instruction address and FP is
++ *	the frame pointer.
++ *
++ * .dwarf_pcs:
++ *	This contains an array of starting PCs, one for each rule.
++ */
++struct dwarf_rule {
++	unsigned int	size:30;
++	unsigned int	sp_saved:1;
++	unsigned int	fp_saved:1;
++	short		sp_offset;
++	short		fp_offset;
++};
++
++#endif /* _LINUX_DWARF_H */
+diff --git a/tools/include/linux/dwarf.h b/tools/include/linux/dwarf.h
+new file mode 100644
+index 000000000000..16e9dd8c60c8
+--- /dev/null
++++ b/tools/include/linux/dwarf.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * dwarf.h - DWARF data structures used by the unwinder.
++ *
++ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
++ *
++ * Copyright (c) 2022 Microsoft Corporation
++ */
++
++#ifndef _LINUX_DWARF_H
++#define _LINUX_DWARF_H
++
++#include <linux/types.h>
++
++/*
++ * objtool generates two special sections that contain DWARF information that
++ * will be used by the reliable unwinder to validate the frame pointer in every
++ * frame:
++ *
++ * .dwarf_rules:
++ *	This contains an array of struct dwarf_rule. Each rule contains the
++ *	size of a code range. In addition, a rule contains the offsets that
++ *	must be used to compute the frame pointer at any of the instructions
++ *	within the code range. The computation is:
++ *
++ *		CFA = %sp + sp_offset
++ *		FP = CFA + fp_offset
++ *
++ *	where %sp is the stack pointer at the instruction address and FP is
++ *	the frame pointer.
++ *
++ * .dwarf_pcs:
++ *	This contains an array of starting PCs, one for each rule.
++ */
++struct dwarf_rule {
++	unsigned int	size:30;
++	unsigned int	sp_saved:1;
++	unsigned int	fp_saved:1;
++	short		sp_offset;
++	short		fp_offset;
++};
++
++#endif /* _LINUX_DWARF_H */
+diff --git a/tools/objtool/builtin-dwarf.c b/tools/objtool/builtin-dwarf.c
+index f44b35eb3f55..1b451e830140 100644
+--- a/tools/objtool/builtin-dwarf.c
++++ b/tools/objtool/builtin-dwarf.c
+@@ -25,6 +25,10 @@ static const char * const dwarf_usage[] = {
+ 	 * information.
+ 	 */
+ 	"objtool dwarf generate file",
++	/*
++	 * Dump DWARF rules for debugging purposes.
++	 */
++	"objtool dwarf dump file",
+ 
+ 	NULL,
+ };
+@@ -37,6 +41,7 @@ int cmd_dwarf(int argc, const char **argv)
+ {
+ 	const char		*object;
+ 	struct objtool_file	*file;
++	int			ret;
+ 
+ 	argc--; argv++;
+ 	if (argc != 2)
+@@ -48,8 +53,21 @@ int cmd_dwarf(int argc, const char **argv)
+ 	if (!file)
+ 		return 1;
+ 
+-	if (!strncmp(argv[0], "gen", 3))
+-		return dwarf_parse(file);
++	if (!strncmp(argv[0], "gen", 3)) {
++		ret = dwarf_parse(file);
++		if (!ret)
++			ret = dwarf_write(file);
++		if (!ret && file->elf->changed)
++			ret = elf_write(file->elf);
++		return ret;
++	}
++
++	if (!strcmp(argv[0], "dump")) {
++		ret = dwarf_parse(file);
++		if (!ret)
++			dwarf_dump();
++		return ret;
++	}
+ 
+ 	usage_with_options(dwarf_usage, dwarf_options);
+ 
+diff --git a/tools/objtool/dwarf_rules.c b/tools/objtool/dwarf_rules.c
+index 9cf201de392a..a118b392aac8 100644
+--- a/tools/objtool/dwarf_rules.c
++++ b/tools/objtool/dwarf_rules.c
+@@ -13,25 +13,192 @@
+ #include <objtool/dwarf_def.h>
+ #include <linux/compiler.h>
+ 
+-/*
+- * The following are stubs for now. Later, they will be filled to create
+- * DWARF rules that the kernel can use to compute the frame pointer at
+- * a given instruction address.
+- */
++struct section			*dwarf_rules_sec;
++struct section			*dwarf_pcs_sec;
++
++static struct fde_entry		*cur_entry;
++static int			nentries;
++
++static int dwarf_rule_insert(struct fde *fde, unsigned long addr,
++			     struct rule *sp_rule, struct rule *fp_rule);
++
+ void dwarf_rule_start(struct fde *fde)
+ {
++	fde->head = NULL;
++	fde->tail = NULL;
++	cur_entry = NULL;
+ }
+ 
+ int dwarf_rule_add(struct fde *fde, unsigned long addr,
+-	     struct rule *sp_rule, struct rule *fp_rule)
++		   struct rule *sp_rule, struct rule *fp_rule)
+ {
+-	return 0;
++	if (cur_entry) {
++		struct rule		*esp_rule = &cur_entry->sp_rule;
++		struct rule		*efp_rule = &cur_entry->fp_rule;
++
++		/*
++		 * If the rules have not changed, there is nothing to do.
++		 */
++		if (esp_rule->offset == sp_rule->offset &&
++		    efp_rule->offset == fp_rule->offset &&
++		    esp_rule->saved == sp_rule->saved &&
++		    efp_rule->saved == fp_rule->saved) {
++			return 0;
++		}
++		/* Close out the current range. */
++		cur_entry->size = addr - cur_entry->addr;
++	}
++	return dwarf_rule_insert(fde, addr, sp_rule, fp_rule);
+ }
+ 
+ void dwarf_rule_next(struct fde *fde, unsigned long addr)
+ {
++	if (cur_entry) {
++		/* Close out the current range. */
++		cur_entry->size = addr - cur_entry->addr;
++		cur_entry = NULL;
++	}
+ }
+ 
+ void dwarf_rule_reset(struct fde *fde)
+ {
++	struct fde_entry	*entry;
++
++	while (fde->head) {
++		entry = fde->head;
++		fde->head = entry->next;
++		free(entry);
++		nentries--;
++	}
++	fde->tail = NULL;
++	cur_entry = NULL;
++}
++
++static int dwarf_rule_insert(struct fde *fde, unsigned long addr,
++			     struct rule *sp_rule, struct rule *fp_rule)
++{
++	struct fde_entry	*entry;
++
++	entry = dwarf_alloc(sizeof(*entry));
++	if (!entry)
++		return -1;
++
++	/* Add the entry to the FDE list. */
++	if (fde->tail)
++		fde->tail->next = entry;
++	else
++		fde->head = entry;
++	fde->tail = entry;
++	entry->next = NULL;
++
++	/*
++	 * Record the starting address of the code range here. The size of
++	 * the range will be known only when the next rule comes in. At that
++	 * time, we will close out this range.
++	 */
++	entry->addr = addr;
++
++	/* Copy the rules. */
++	entry->sp_rule = *sp_rule;
++	entry->fp_rule = *fp_rule;
++
++	cur_entry = entry;
++	nentries++;
++	return 0;
++}
++
++static int dwarf_rule_write(struct elf *elf, struct fde *fde,
++			    struct fde_entry *entry, unsigned int index)
++{
++	struct dwarf_rule	rule, *drule;
++
++	/*
++	 * Encode the SP and FP rules from the entry into a single dwarf_rule
++	 * for the kernel's benefit. Copy it into .dwarf_rules.
++	 */
++	rule.size = entry->size;
++	rule.sp_saved = entry->sp_rule.saved;
++	rule.fp_saved = entry->fp_rule.saved;
++	rule.sp_offset = entry->sp_rule.offset;
++	rule.fp_offset = entry->fp_rule.offset;
++
++	drule = (struct dwarf_rule *) dwarf_rules_sec->data->d_buf + index;
++	memcpy(drule, &rule, sizeof(rule));
++
++	/* Add relocation information for the code range. */
++	if (elf_add_reloc_to_insn(elf, dwarf_pcs_sec,
++				  index * sizeof(unsigned long),
++				  R_AARCH64_ABS64,
++				  fde->section, entry->addr)) {
++		return -1;
++	}
++	return 0;
++}
++
++int dwarf_write(struct objtool_file *file)
++{
++	struct elf		*elf = file->elf;
++	struct fde		*fde;
++	struct fde_entry	*entry;
++	int			index;
++
++	/*
++	 * Check if .dwarf_rules already exists. If it doesn't, we will
++	 * assume that .dwarf_pcs doesn't exist either.
++	 */
++	if (find_section_by_name(elf, ".dwarf_rules")) {
++		WARN("file already has .dwarf_rules section");
++		return -1;
++	}
++
++	/* Create .dwarf_rules. */
++	dwarf_rules_sec = elf_create_section(elf, ".dwarf_rules", 0,
++					     sizeof(struct dwarf_rule),
++					     nentries);
++	if (!dwarf_rules_sec) {
++		WARN("Unable to create .dwarf_rules");
++		return -1;
++	}
++
++	/* Create .dwarf_pcs. */
++	dwarf_pcs_sec = elf_create_section(elf, ".dwarf_pcs", 0,
++					   sizeof(unsigned long), nentries);
++	if (!dwarf_pcs_sec) {
++		WARN("Unable to create .dwarf_pcs");
++		return -1;
++	}
++
++	/* Write DWARF rules to sections. */
++	index = 0;
++	for (fde = fdes; fde != NULL; fde = fde->next) {
++		for (entry = fde->head; entry != NULL; entry = entry->next) {
++			if (dwarf_rule_write(elf, fde, entry, index))
++				return -1;
++			index++;
++		}
++	}
++
++	return 0;
++}
++
++void dwarf_dump(void)
++{
++	struct fde		*fde;
++	struct fde_entry	*entry;
++	struct rule		*sp_rule, *fp_rule;
++	int			index = 0;
++
++	for (fde = fdes; fde != NULL; fde = fde->next) {
++		for (entry = fde->head; entry != NULL; entry = entry->next) {
++			sp_rule = &entry->sp_rule;
++			fp_rule = &entry->fp_rule;
++
++			printf("addr=%lx size=%lx:",
++			       entry->addr, entry->size);
++			printf("\tsp=%ld sp_saved=%d fp=%ld fp_saved=%d\n",
++			       sp_rule->offset, sp_rule->saved,
++			       fp_rule->offset, fp_rule->saved);
++			index++;
++		}
++	}
+ }
+diff --git a/tools/objtool/include/objtool/dwarf_def.h b/tools/objtool/include/objtool/dwarf_def.h
+index 7a0a18480d2b..af56ccb52fff 100644
+--- a/tools/objtool/include/objtool/dwarf_def.h
++++ b/tools/objtool/include/objtool/dwarf_def.h
+@@ -10,6 +10,8 @@
+ #ifndef _OBJTOOL_DWARF_DEF_H
+ #define _OBJTOOL_DWARF_DEF_H
+ 
++#include <linux/dwarf.h>
++
+ /*
+  * The DWARF Call Frame Information (CFI) is encoded in a self-contained
+  * section called .debug_frame.
+@@ -228,6 +230,14 @@ struct cie {
+ 	bool			unusable;
+ };
+ 
++struct fde_entry {
++	struct fde_entry	*next;
++	unsigned long		addr;
++	size_t			size;
++	struct rule		sp_rule;
++	struct rule		fp_rule;
++};
++
+ /*
+  * Frame Description Entry (FDE):
+  *
+@@ -290,6 +300,8 @@ struct fde {
+ 	struct section		*section;
+ 	unsigned long		offset;
+ 	unsigned long		sp_offset;
++	struct fde_entry	*head;
++	struct fde_entry	*tail;
+ };
+ 
+ /*
+diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
+index 0344e89a10e8..93e62639ab01 100644
+--- a/tools/objtool/include/objtool/objtool.h
++++ b/tools/objtool/include/objtool/objtool.h
+@@ -42,5 +42,7 @@ int check(struct objtool_file *file);
+ int orc_dump(const char *objname);
+ int orc_create(struct objtool_file *file);
+ int dwarf_parse(struct objtool_file *file);
++void dwarf_dump(void);
++int dwarf_write(struct objtool_file *file);
+ 
+ #endif /* _OBJTOOL_H */
+diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-check.sh
+index 105a291ff8e7..345c259a115c 100755
+--- a/tools/objtool/sync-check.sh
++++ b/tools/objtool/sync-check.sh
+@@ -27,6 +27,12 @@ arch/x86/lib/insn.c
+ '
+ fi
+ 
++if [ "$SRCARCH" = "arm64" ]; then
++FILES="$FILES
++include/linux/dwarf.h
++"
++fi
++
+ check_2 () {
+   file1=$1
+   file2=$2
+diff --git a/tools/objtool/weak.c b/tools/objtool/weak.c
+index 67b5016a8327..9d89d4fad8a1 100644
+--- a/tools/objtool/weak.c
++++ b/tools/objtool/weak.c
+@@ -38,6 +38,17 @@ int __weak dwarf_parse(struct objtool_file *file)
+ 	return -EOPNOTSUPP;
+ }
+ 
++int __weak dwarf_write(struct objtool_file *file)
++{
++	fprintf(stderr, "error: objtool: %s not implemented\n", __func__);
++	return -1;
++}
++
++void __weak dwarf_dump(void)
++{
++	fprintf(stderr, "error: objtool: %s not implemented\n", __func__);
++}
++
+ int __weak arch_dwarf_fde_reloc(struct fde *fde)
+ {
+ 	fprintf(stderr, "error: objtool: %s not implemented\n", __func__);
+-- 
+2.25.1
+
