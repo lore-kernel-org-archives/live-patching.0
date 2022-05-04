@@ -2,139 +2,300 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA1EC433F5
-	for <live-patching@archiver.kernel.org>; Wed,  4 May 2022 14:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD3B8C433F5
+	for <live-patching@archiver.kernel.org>; Wed,  4 May 2022 14:58:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351481AbiEDPBL (ORCPT
+        id S1351604AbiEDPC0 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 4 May 2022 11:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        Wed, 4 May 2022 11:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240868AbiEDPBK (ORCPT
+        with ESMTP id S240868AbiEDPCZ (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 4 May 2022 11:01:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585771A816;
-        Wed,  4 May 2022 07:57:34 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 13BC91F745;
-        Wed,  4 May 2022 14:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651676253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qyasICj/5JSCOXA5cYimIBnYtjDZxXjrA99Ky5I1g2E=;
-        b=r4k5ERPAeu7SFF3HNQ31NTb2paZ2Ea6oMcWqgL/xYLEoeC+sEQ4K64/T2QaipXscit25Fc
-        XnTLKhq3umhrtDFP5ZOZp7VU7/hNtppJEbMvhtXNfeTdj0EijNEoHHIWN+ccIJ0KrTM638
-        biVIblYdc1vQeTBbSrkqQZj6s+yfiWg=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E8CED2C141;
-        Wed,  4 May 2022 14:57:32 +0000 (UTC)
-Date:   Wed, 4 May 2022 16:57:32 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Seth Forshee <sforshee@digitalocean.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Wed, 4 May 2022 11:02:25 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33B71A816;
+        Wed,  4 May 2022 07:58:48 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:52804)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmFoX-003bD1-UG; Wed, 04 May 2022 08:17:13 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36906 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmFoW-00DS5o-Ew; Wed, 04 May 2022 08:17:13 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Seth Forshee <sforshee@digitalocean.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andy Lutomirski <luto@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
         Jens Axboe <axboe@kernel.dk>,
         Sean Christopherson <seanjc@google.com>,
         linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
         kvm@vger.kernel.org
+References: <20220503174934.2641605-1-sforshee@digitalocean.com>
+        <20220504130753.GB8069@pathway.suse.cz>
+Date:   Wed, 04 May 2022 09:16:46 -0500
+In-Reply-To: <20220504130753.GB8069@pathway.suse.cz> (Petr Mladek's message of
+        "Wed, 4 May 2022 15:07:53 +0200")
+Message-ID: <87r159fkmp.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1nmFoW-00DS5o-Ew;;;mid=<87r159fkmp.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/PsYWhFWPq0Ll6mfLUge9ag9Wd5++oPJw=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 Subject: Re: [PATCH v2] entry/kvm: Make vCPU tasks exit to userspace when a
  livepatch is pending
-Message-ID: <20220504145732.GD8069@pathway.suse.cz>
-References: <20220503174934.2641605-1-sforshee@digitalocean.com>
- <20220504130753.GB8069@pathway.suse.cz>
- <YnKEnqfxSyVmSGYx@do-x1extreme>
- <20220504142809.GC8069@pathway.suse.cz>
- <YnKRN1zXKuh/gIMl@do-x1extreme>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YnKRN1zXKuh/gIMl@do-x1extreme>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed 2022-05-04 09:44:07, Seth Forshee wrote:
-> On Wed, May 04, 2022 at 04:28:09PM +0200, Petr Mladek wrote:
-> > On Wed 2022-05-04 08:50:22, Seth Forshee wrote:
-> > > On Wed, May 04, 2022 at 03:07:53PM +0200, Petr Mladek wrote:
-> > > > On Tue 2022-05-03 12:49:34, Seth Forshee wrote:
-> > > > > A task can be livepatched only when it is sleeping or it exits to
-> > > > > userspace. This may happen infrequently for a heavily loaded vCPU task,
-> > > > > leading to livepatch transition failures.
-> > > > 
-> > > > The problem was solved by sending a fake signal, see the commit
-> > > > 0b3d52790e1cfd6b80b826 ("livepatch: Remove signal sysfs attribute").
-> > > > It was achieved by calling signal_wake_up(). It set TIF_SIGPENDING
-> > > > and woke the task. It interrupted the syscall and the task was
-> > > > transitioned when leaving to the userspace.
-> > > > 
-> > > > signal_wake_up() was later replaced by set_notify_signal(),
-> > > > see the commit 8df1947c71ee53c7e21 ("livepatch: Replace
-> > > > the fake signal sending with TIF_NOTIFY_SIGNAL infrastructure").
-> > > > The difference is that set_notify_signal() uses TIF_NOTIFY_SIGNAL
-> > > > instead of TIF_SIGPENDING.
-> > > > 
-> > > > The effect is the same when running on a real hardware. The syscall
-> > > > gets interrupted and exit_to_user_mode_loop() is called where
-> > > > the livepatch state is updated (task migrated).
-> > > > 
-> > > > But it works a different way in kvm where the task works are
-> > > > called in the guest mode and the task does not return into
-> > > > the user space in the host mode.
-> > > 
-> > > > > --- a/kernel/entry/kvm.c
-> > > > > +++ b/kernel/entry/kvm.c
-> > > > > @@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
-> > > > >  				task_work_run();
-> > > > >  		}
-> > > > >  
-> > > > > -		if (ti_work & _TIF_SIGPENDING) {
-> > > > > +		/*
-> > > > > +		 * When a livepatch is pending, force an exit to userspace
-> > > > > +		 * as though a signal is pending to allow the task to be
-> > > > > +		 * patched.
-> > > > > +		 */
-> > > > > +		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
-> > > > >  			kvm_handle_signal_exit(vcpu);
-> > 
-> > Another problem. Is it safe to call kvm_handle_signal_exit(vcpu)
-> > for kthreads?
-> > 
-> > kthreads have _TIF_PATCH_PENDING when they need the livepatch transition.
-> > But kthreads never leave kernel so we do not send the fake signal
-> > signals to them.
-> 
-> xfer_to_guest_mode_handle_work() should only be getting called on user
-> threads running ioctl(KVM_RUN).
+Petr Mladek <pmladek@suse.com> writes:
 
-Great!
+> On Tue 2022-05-03 12:49:34, Seth Forshee wrote:
+>> A task can be livepatched only when it is sleeping or it exits to
+>> userspace. This may happen infrequently for a heavily loaded vCPU task,
+>> leading to livepatch transition failures.
+>
+> This is misleading.
+>
+> First, the problem is not a loaded CPU. The problem is that the
+> task might spend very long time in the kernel when handling
+> some syscall.
+>
+> Second, there is no timeout for the transition in the kernel code.
+> It might take very long time but it will not fail.
+>
+>> Fake signals will be sent to tasks which fail patching via stack
+>> checking. This will cause running vCPU tasks to exit guest mode, but
+>> since no signal is pending they return to guest execution without
+>> exiting to userspace. Fix this by treating a pending livepatch migration
+>> like a pending signal, exiting to userspace with EINTR. This allows the
+>> task to be patched, and userspace should re-excecute KVM_RUN to resume
+>> guest execution.
+>
+> It seems that the patch works as expected but it is far from clear.
+> And the above description helps only partially. Let me try to
+> explain it for dummies like me ;-)
+>
+> <explanation>
+> The problem was solved by sending a fake signal, see the commit
+> 0b3d52790e1cfd6b80b826 ("livepatch: Remove signal sysfs attribute").
+> It was achieved by calling signal_wake_up(). It set TIF_SIGPENDING
+> and woke the task. It interrupted the syscall and the task was
+> transitioned when leaving to the userspace.
+>
+> signal_wake_up() was later replaced by set_notify_signal(),
+> see the commit 8df1947c71ee53c7e21 ("livepatch: Replace
+> the fake signal sending with TIF_NOTIFY_SIGNAL infrastructure").
+> The difference is that set_notify_signal() uses TIF_NOTIFY_SIGNAL
+> instead of TIF_SIGPENDING.
+>
+> The effect is the same when running on a real hardware. The syscall
+> gets interrupted and exit_to_user_mode_loop() is called where
+> the livepatch state is updated (task migrated).
+>
+> But it works a different way in kvm where the task works are
+> called in the guest mode and the task does not return into
+> the user space in the host mode.
+> </explanation>
+>
+> The solution provided by this patch is a bit weird, see below.
+>
+>
+>> In my testing, systems where livepatching would timeout after 60 seconds
+>> were able to load livepatches within a couple of seconds with this
+>> change.
+>> 
+>> Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+>> ---
+>> Changes in v2:
+>>  - Added _TIF_SIGPENDING to XFER_TO_GUEST_MODE_WORK
+>>  - Reworded commit message and comments to avoid confusion around the
+>>    term "migrate"
+>> 
+>>  include/linux/entry-kvm.h | 4 ++--
+>>  kernel/entry/kvm.c        | 7 ++++++-
+>>  2 files changed, 8 insertions(+), 3 deletions(-)
+>> 
+>> diff --git a/include/linux/entry-kvm.h b/include/linux/entry-kvm.h
+>> index 6813171afccb..bf79e4cbb5a2 100644
+>> --- a/include/linux/entry-kvm.h
+>> +++ b/include/linux/entry-kvm.h
+>> @@ -17,8 +17,8 @@
+>>  #endif
+>>  
+>>  #define XFER_TO_GUEST_MODE_WORK						\
+>> -	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL |	\
+>> -	 _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
+>> +	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |	\
+>> +	 _TIF_NOTIFY_SIGNAL | _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
+>>  
+>>  struct kvm_vcpu;
+>>  
+>> diff --git a/kernel/entry/kvm.c b/kernel/entry/kvm.c
+>> index 9d09f489b60e..98439dfaa1a0 100644
+>> --- a/kernel/entry/kvm.c
+>> +++ b/kernel/entry/kvm.c
+>> @@ -14,7 +14,12 @@ static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
+>>  				task_work_run();
+>>  		}
+>>  
+>> -		if (ti_work & _TIF_SIGPENDING) {
+>> +		/*
+>> +		 * When a livepatch is pending, force an exit to userspace
+>> +		 * as though a signal is pending to allow the task to be
+>> +		 * patched.
+>> +		 */
+>> +		if (ti_work & (_TIF_SIGPENDING | _TIF_PATCH_PENDING)) {
+>>  			kvm_handle_signal_exit(vcpu);
+>>  			return -EINTR;
+>>  		}
+>
+> This looks strange:
+>
+>   + klp_send_signals() calls set_notify_signal(task) that sets
+>     TIF_NOTIFY_SIGNAL
+>
+>   + xfer_to_guest_mode_work() handles TIF_NOTIFY_SIGNAL by calling
+>     task_work_run().
+>
+>   + This patch calls kvm_handle_signal_exit(vcpu) when
+>     _TIF_PATCH_PENDING is set. It probably causes the guest
+>     to call exit_to_user_mode_loop() because TIF_PATCH_PENDING
+>     bit is set. But neither TIF_NOTIFY_SIGNAL not TIF_NOTIFY_SIGNAL
+>     is set so that it works different way than on the real hardware.
+>
+>
+> Question:
+>
+> Does xfer_to_guest_mode_work() interrupts the syscall running
+> on the guest?
 
-> > In this case, we should revert the commit 8df1947c71ee53c7e21
-> > ("livepatch: Replace the fake signal sending with TIF_NOTIFY_SIGNAL
-> > infrastructure"). The flag TIF_NOTIFY_SIGNAL clearly does not guarantee
-> > restarting the syscall or exiting to the user space with -EINTR.
-> > 
-> > It should solve this problem. And it looks like a cleaner solution
-> > to me.
-> 
-> It looks like that should fix the issue. I'll test to confirm.
+It looks like xfer_to_guest_mode_work runs like exit_to_user_mode_loop,
+just before guest mode is invoked.
 
-Even better solution would be what Eric suggested, see
-https://lore.kernel.org/r/87r159fkmp.fsf@email.froward.int.ebiederm.org
+> If "yes" then we do not need to call kvm_handle_signal_exit(vcpu).
+> It will be enough to call:
+>
+> 		if (ti_work & _TIF_PATCH_PENDING)
+> 			klp_update_patch_state(current);
+>
+> If "no" then I do not understand why TIF_NOTIFY_SIGNAL interrupts
+> the syscall on the real hardware and not in kvm.
+>
+> Anyway, we either should make sure that TIF_NOTIFY_SIGNAL has the same
+> effect on the real hardware and in kvm. Or we need another interface
+> for the fake signal used by livepatching.
 
-But we need to make sure that the syscall really gets restarted
-when the livepatch state is updated.
+The point of TIF_NOTIFY_SIGNAL is to break out of interruptible kernel
+loops.  Once out of the interruptible kernel loop the expectation is the
+returns to user space and on it's way runs the exit_to_user_mode_loop or
+is architecture specific equivalent.
 
-Best Regards,
-Petr
+
+> Adding Jens Axboe and Eric into Cc.
+
+
+Yes.  This is interesting.
+
+Reading through the history of kernel/entry/kvm.c I believe
+I made ``conservative'' changes that has not helped this situation.
+
+Long story short at one point it was thought that _TIF_SIGPENDING
+and _TIF_NOTIFY_SIGNAL could be separated and they could not.
+Unfortunately the work to separate their handling has not been
+completely undone.
+
+In this case it appears that the only reason xfer_to_guest_mode_work
+touches task_work_run is because of the separation work done by Jens
+Axboe.  I don't see any kvm specific reason for _TIF_NOTIFY_SIGNAL
+and _TIF_SIGPENDING to be treated differently.  Meanwhile my cleanups
+elsewhere have made the unnecessary _TIF_NOTIFY_SIGNAL special case
+bigger in xfer_to_guest_mode_work.
+
+I suspect the first step in fixing things really should be just handling
+_TIF_SIGPENDING and _TIF_NOTIFY_SIGNAL the same.
+
+static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
+{
+	do {
+		int ret;
+
+		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
+			kvm_handle_signal_exit(vcpu);
+			return -EINTR;
+		}
+
+		if (ti_work & _TIF_NEED_RESCHED)
+			schedule();
+
+		if (ti_work & _TIF_NOTIFY_RESUME)
+			resume_user_mode_work(NULL);
+
+		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
+		if (ret)
+			return ret;
+
+		ti_work = read_thread_flags();
+	} while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched());
+	return 0;
+}
+
+That said I do expect adding support for the live patching into
+xfer_to_guest_mode_work, like there is in exit_to_user_mode_loop, is
+probably a good idea.  That should prevent the live patching code from
+needing to set TIF_NOTIFY_SIGNAL.
+
+Something like:
+
+Thomas Gleixner's patch to make _TIF_PATCH_PENDING always available.
+
+#define XFER_TO_GUEST_MODE_WORK						\
+	(_TIF_NEED_RESCHED | _TIF_SIGPENDING | _TIF_PATCH_PENDING |	\
+	 _TIF_NOTIFY_SIGNAL | _TIF_NOTIFY_RESUME | ARCH_XFER_TO_GUEST_MODE_WORK)
+
+
+static int xfer_to_guest_mode_work(struct kvm_vcpu *vcpu, unsigned long ti_work)
+{
+	do {
+		int ret;
+
+		if (ti_work & _TIF_PATCH_PENDING)
+			klp_update_patch_state(current);
+
+		if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL)) {
+			kvm_handle_signal_exit(vcpu);
+			return -EINTR;
+		}
+
+		if (ti_work & _TIF_NEED_RESCHED)
+			schedule();
+
+		if (ti_work & _TIF_NOTIFY_RESUME)
+			resume_user_mode_work(NULL);
+
+		ret = arch_xfer_to_guest_mode_handle_work(vcpu, ti_work);
+		if (ret)
+			return ret;
+
+		ti_work = read_thread_flags();
+	} while (ti_work & XFER_TO_GUEST_MODE_WORK || need_resched());
+	return 0;
+}
+
+If the kvm and the live patching folks could check my thinking that
+would be great.
+
+Eric
