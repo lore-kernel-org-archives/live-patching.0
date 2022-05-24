@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10874C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92BDEC4332F
 	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiEXARK (ORCPT
+        id S231881AbiEXARL (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58448 "EHLO
+        Mon, 23 May 2022 20:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbiEXAQy (ORCPT
+        with ESMTP id S231866AbiEXARG (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:16:54 -0400
+        Mon, 23 May 2022 20:17:06 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6ECD16D3BD;
-        Mon, 23 May 2022 17:16:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BA0F7356E;
+        Mon, 23 May 2022 17:16:57 -0700 (PDT)
 Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7D75F20B8952;
-        Mon, 23 May 2022 17:16:51 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D75F20B8952
+        by linux.microsoft.com (Postfix) with ESMTPSA id 840BF20B8961;
+        Mon, 23 May 2022 17:16:56 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 840BF20B8961
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351412;
-        bh=hqr6+5sz0cEVD673vwUEknaY+FCv/C1YhbsmJe+cR/0=;
+        s=default; t=1653351417;
+        bh=R+hlXlIgmzD2z81ekWg5REk7Zg6/92uCUr3rLRNg/rg=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Tidu8vH+9Sk9BPmnSd6r6Kbv01dR+ZMc57shs+77Gq+m8Nddy+etACMw9hnl6/pbU
-         QZDbPyT4cNEetQyQRPgRMKFw9z0bjkC0zxdLx87y74sGiOmP7Bi9/hBaqLiAW8DAKZ
-         5NAKXbjelI6neqbPUVHYuzE8w/m8s2dYfvBTvjt8=
+        b=QAAfP8w12GLVb9uPNNedsIVKNCQj6aLqSkeHejW1GXkuc4iLXRtACFewvA5oBKo+/
+         d/uWxOfrtdguU0ytD3rjVxdOpumo2FbWjhfnqCwQLdqUaBe1mPIBbH42pQ5uVK0CGL
+         rmuUO+gvuvU2BmRtg5gtEOMec8dRs6SzyF7EwiuM=
 From:   madvenka@linux.microsoft.com
 To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 05/20] objtool: Reorganize ORC types
-Date:   Mon, 23 May 2022 19:16:22 -0500
-Message-Id: <20220524001637.1707472-6-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 10/20] objtool: arm64: Compute destinations for call and jump instructions
+Date:   Mon, 23 May 2022 19:16:27 -0500
+Message-Id: <20220524001637.1707472-11-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
@@ -49,264 +49,96 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-The ORC code needs to be reorganized into arch-specific and generic parts
-so that architectures other than X86 can use the generic parts.
-
-orc_types.h contains the following ORC definitions shared between objtool
-and the kernel:
-
-	- ORC register definitions which are arch-specific.
-	- orc_entry structure which is generic.
-
-Move orc_entry into a new file include/linux/orc_entry.h. Also, the field
-names bp_reg and bp_offset in struct orc_entry are x86-specific. Change
-them to fp_reg and fp_offset. FP stands for frame pointer.
-
-Currently, the type field in orc_entry is only 2 bits. For other
-architectures, we will need more. So, expand this to 3 bits.
+Compute the destination address of each call and jump instruction after
+decoding all the instructions.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/x86/include/asm/orc_types.h       | 37 +++++-------------------
- include/linux/orc_entry.h              | 39 ++++++++++++++++++++++++++
- tools/arch/x86/include/asm/orc_types.h | 37 +++++-------------------
- tools/include/linux/orc_entry.h        | 39 ++++++++++++++++++++++++++
- tools/objtool/orc_gen.c                |  4 +--
- tools/objtool/sync-check.sh            |  1 +
- 6 files changed, 95 insertions(+), 62 deletions(-)
- create mode 100644 include/linux/orc_entry.h
- create mode 100644 tools/include/linux/orc_entry.h
+ tools/objtool/arch/arm64/decode.c | 12 ++++++++
+ tools/objtool/fpv.c               | 47 ++++++++++++++++++++++++++++++-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/orc_types.h b/arch/x86/include/asm/orc_types.h
-index 5a2baf28a1dc..851c9fb9f695 100644
---- a/arch/x86/include/asm/orc_types.h
-+++ b/arch/x86/include/asm/orc_types.h
-@@ -8,6 +8,13 @@
+diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
+index 8a9ff030085d..f9df8b321659 100644
+--- a/tools/objtool/arch/arm64/decode.c
++++ b/tools/objtool/arch/arm64/decode.c
+@@ -33,6 +33,18 @@ struct decode {
+ 				s64 *imm, struct list_head *stack_ops);
+ };
  
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <linux/orc_entry.h>
++/* --------------------- arch support functions ------------------------- */
 +
++unsigned long arch_dest_reloc_offset(int addend)
++{
++	return addend;
++}
++
++unsigned long arch_jump_destination(struct instruction *insn)
++{
++	return insn->offset + insn->immediate;
++}
++
+ /* --------------------- miscellaneous functions --------------------------- */
+ 
+ static void reg_check(unsigned int sp_check, unsigned int fp_check,
+diff --git a/tools/objtool/fpv.c b/tools/objtool/fpv.c
+index 76f0f2e611a8..92ad0d0aac8e 100644
+--- a/tools/objtool/fpv.c
++++ b/tools/objtool/fpv.c
+@@ -13,7 +13,52 @@
+ #include <objtool/insn.h>
+ #include <objtool/warn.h>
+ 
 +/*
-+ * For x86, use the appripriate name for the frame pointer in orc_entry.
++ * Find the destination instructions for all jumps.
 + */
-+#define bp_offset	fp_offset
-+#define bp_reg		fp_reg
- 
- /*
-  * The ORC_REG_* registers are base registers which are used to find other
-@@ -39,34 +46,4 @@
- #define ORC_REG_SP_INDIRECT		9
- #define ORC_REG_MAX			15
- 
--#ifndef __ASSEMBLY__
--#include <asm/byteorder.h>
--
--/*
-- * This struct is more or less a vastly simplified version of the DWARF Call
-- * Frame Information standard.  It contains only the necessary parts of DWARF
-- * CFI, simplified for ease of access by the in-kernel unwinder.  It tells the
-- * unwinder how to find the previous SP and BP (and sometimes entry regs) on
-- * the stack for a given code address.  Each instance of the struct corresponds
-- * to one or more code locations.
-- */
--struct orc_entry {
--	s16		sp_offset;
--	s16		bp_offset;
--#if defined(__LITTLE_ENDIAN_BITFIELD)
--	unsigned	sp_reg:4;
--	unsigned	bp_reg:4;
--	unsigned	type:2;
--	unsigned	end:1;
--#elif defined(__BIG_ENDIAN_BITFIELD)
--	unsigned	bp_reg:4;
--	unsigned	sp_reg:4;
--	unsigned	unused:5;
--	unsigned	end:1;
--	unsigned	type:2;
--#endif
--} __packed;
--
--#endif /* __ASSEMBLY__ */
--
- #endif /* _ORC_TYPES_H */
-diff --git a/include/linux/orc_entry.h b/include/linux/orc_entry.h
-new file mode 100644
-index 000000000000..3d49e3b9dabe
---- /dev/null
-+++ b/include/linux/orc_entry.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
-+ */
++static void add_jump_destinations(struct objtool_file *file)
++{
++	struct instruction *insn;
++	struct reloc *reloc;
++	struct section *dest_sec;
++	unsigned long dest_off;
 +
-+#ifndef _ORC_ENTRY_H
-+#define _ORC_ENTRY_H
++	for_each_insn(file, insn) {
++		if (insn->type != INSN_CALL &&
++		    insn->type != INSN_JUMP_CONDITIONAL &&
++		    insn->type != INSN_JUMP_UNCONDITIONAL) {
++			continue;
++		}
 +
-+#ifndef __ASSEMBLY__
-+#include <asm/byteorder.h>
++		reloc = insn_reloc(file, insn);
++		if (!reloc) {
++			dest_sec = insn->sec;
++			dest_off = arch_jump_destination(insn);
++		} else if (reloc->sym->type == STT_SECTION) {
++			dest_sec = reloc->sym->sec;
++			dest_off = arch_dest_reloc_offset(reloc->addend);
++		} else if (reloc->sym->sec->idx) {
++			dest_sec = reloc->sym->sec;
++			dest_off = reloc->sym->sym.st_value +
++				   arch_dest_reloc_offset(reloc->addend);
++		} else {
++			/* non-func asm code jumping to another file */
++			continue;
++		}
 +
-+/*
-+ * This struct is more or less a vastly simplified version of the DWARF Call
-+ * Frame Information standard.  It contains only the necessary parts of DWARF
-+ * CFI, simplified for ease of access by the in-kernel unwinder.  It tells the
-+ * unwinder how to find the previous SP and BP (and sometimes entry regs) on
-+ * the stack for a given code address.  Each instance of the struct corresponds
-+ * to one or more code locations.
-+ */
-+struct orc_entry {
-+	s16		sp_offset;
-+	s16		fp_offset;
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	unsigned	sp_reg:4;
-+	unsigned	fp_reg:4;
-+	unsigned	type:3;
-+	unsigned	end:1;
-+#elif defined(__BIG_ENDIAN_BITFIELD)
-+	unsigned	fp_reg:4;
-+	unsigned	sp_reg:4;
-+	unsigned	unused:4;
-+	unsigned	end:1;
-+	unsigned	type:3;
-+#endif
-+} __packed;
++		insn->jump_dest = find_insn(file, dest_sec, dest_off);
++	}
++}
 +
-+#endif /* __ASSEMBLY__ */
+ int fpv_decode(struct objtool_file *file)
+ {
+-	return decode_instructions(file);
++	int ret;
 +
-+#endif /* _ORC_ENTRY_H */
-diff --git a/tools/arch/x86/include/asm/orc_types.h b/tools/arch/x86/include/asm/orc_types.h
-index 5a2baf28a1dc..851c9fb9f695 100644
---- a/tools/arch/x86/include/asm/orc_types.h
-+++ b/tools/arch/x86/include/asm/orc_types.h
-@@ -8,6 +8,13 @@
- 
- #include <linux/types.h>
- #include <linux/compiler.h>
-+#include <linux/orc_entry.h>
++	ret = decode_instructions(file);
++	if (ret)
++		return ret;
 +
-+/*
-+ * For x86, use the appripriate name for the frame pointer in orc_entry.
-+ */
-+#define bp_offset	fp_offset
-+#define bp_reg		fp_reg
- 
- /*
-  * The ORC_REG_* registers are base registers which are used to find other
-@@ -39,34 +46,4 @@
- #define ORC_REG_SP_INDIRECT		9
- #define ORC_REG_MAX			15
- 
--#ifndef __ASSEMBLY__
--#include <asm/byteorder.h>
--
--/*
-- * This struct is more or less a vastly simplified version of the DWARF Call
-- * Frame Information standard.  It contains only the necessary parts of DWARF
-- * CFI, simplified for ease of access by the in-kernel unwinder.  It tells the
-- * unwinder how to find the previous SP and BP (and sometimes entry regs) on
-- * the stack for a given code address.  Each instance of the struct corresponds
-- * to one or more code locations.
-- */
--struct orc_entry {
--	s16		sp_offset;
--	s16		bp_offset;
--#if defined(__LITTLE_ENDIAN_BITFIELD)
--	unsigned	sp_reg:4;
--	unsigned	bp_reg:4;
--	unsigned	type:2;
--	unsigned	end:1;
--#elif defined(__BIG_ENDIAN_BITFIELD)
--	unsigned	bp_reg:4;
--	unsigned	sp_reg:4;
--	unsigned	unused:5;
--	unsigned	end:1;
--	unsigned	type:2;
--#endif
--} __packed;
--
--#endif /* __ASSEMBLY__ */
--
- #endif /* _ORC_TYPES_H */
-diff --git a/tools/include/linux/orc_entry.h b/tools/include/linux/orc_entry.h
-new file mode 100644
-index 000000000000..3d49e3b9dabe
---- /dev/null
-+++ b/tools/include/linux/orc_entry.h
-@@ -0,0 +1,39 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
-+ */
++	add_jump_destinations(file);
 +
-+#ifndef _ORC_ENTRY_H
-+#define _ORC_ENTRY_H
-+
-+#ifndef __ASSEMBLY__
-+#include <asm/byteorder.h>
-+
-+/*
-+ * This struct is more or less a vastly simplified version of the DWARF Call
-+ * Frame Information standard.  It contains only the necessary parts of DWARF
-+ * CFI, simplified for ease of access by the in-kernel unwinder.  It tells the
-+ * unwinder how to find the previous SP and BP (and sometimes entry regs) on
-+ * the stack for a given code address.  Each instance of the struct corresponds
-+ * to one or more code locations.
-+ */
-+struct orc_entry {
-+	s16		sp_offset;
-+	s16		fp_offset;
-+#if defined(__LITTLE_ENDIAN_BITFIELD)
-+	unsigned	sp_reg:4;
-+	unsigned	fp_reg:4;
-+	unsigned	type:3;
-+	unsigned	end:1;
-+#elif defined(__BIG_ENDIAN_BITFIELD)
-+	unsigned	fp_reg:4;
-+	unsigned	sp_reg:4;
-+	unsigned	unused:4;
-+	unsigned	end:1;
-+	unsigned	type:3;
-+#endif
-+} __packed;
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ORC_ENTRY_H */
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index dd3c64af9db2..68c317daadbf 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -98,7 +98,7 @@ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
- 	orc = (struct orc_entry *)orc_sec->data->d_buf + idx;
- 	memcpy(orc, o, sizeof(*orc));
- 	orc->sp_offset = bswap_if_needed(orc->sp_offset);
--	orc->bp_offset = bswap_if_needed(orc->bp_offset);
-+	orc->fp_offset = bswap_if_needed(orc->fp_offset);
- 
- 	/* populate reloc for ip */
- 	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_X86_64_PC32,
-@@ -149,7 +149,7 @@ int orc_create(struct objtool_file *file)
- 
- 	struct orc_entry null = {
- 		.sp_reg  = ORC_REG_UNDEFINED,
--		.bp_reg  = ORC_REG_UNDEFINED,
-+		.fp_reg  = ORC_REG_UNDEFINED,
- 		.type    = UNWIND_HINT_TYPE_CALL,
- 	};
- 
-diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-check.sh
-index ee49b4e9e72c..ef1acb064605 100755
---- a/tools/objtool/sync-check.sh
-+++ b/tools/objtool/sync-check.sh
-@@ -18,6 +18,7 @@ arch/x86/include/asm/unwind_hints.h
- arch/x86/lib/x86-opcode-map.txt
- arch/x86/tools/gen-insn-attr-x86.awk
- include/linux/static_call_types.h
-+include/linux/orc_entry.h
- "
- 
- SYNC_CHECK_FILES='
++	return 0;
+ }
 -- 
 2.25.1
 
