@@ -2,268 +2,171 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB6EAC4332F
-	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EFBEC433FE
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 11:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbiEXARw (ORCPT
+        id S236718AbiEXLep (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
+        Tue, 24 May 2022 07:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiEXARM (ORCPT
+        with ESMTP id S236604AbiEXLeo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:17:12 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75BF87CB76;
-        Mon, 23 May 2022 17:17:04 -0700 (PDT)
-Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8601F20B87F6;
-        Mon, 23 May 2022 17:17:03 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8601F20B87F6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351424;
-        bh=TQ/XlAh2pJ/fVzbjSjvKssRRUWTo6FGCftijB4Zl7Mo=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jJGo7xvKQqkBA7IhJFiWZkUNsWh4P/aCvBW0LfJ1s5E++6pqNlCQIinQQufRHbJ/R
-         JFKvvdos2IVRf5OiQTK3IWfUkwGAPd5kdrLoRUXUyQ7+38ETsMFFE5YASUA7Lj66H4
-         z9tF0wuxsuTgupj5+HIRtvglb3vUj4imzq612COw=
-From:   madvenka@linux.microsoft.com
-To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 17/20] arm64: Build the kernel with ORC information
-Date:   Mon, 23 May 2022 19:16:34 -0500
-Message-Id: <20220524001637.1707472-18-madvenka@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
-References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
- <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+        Tue, 24 May 2022 07:34:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D448BD36;
+        Tue, 24 May 2022 04:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653392084; x=1684928084;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dqryofZxF2pFV6kkTP1H9GJ1NQVHZ92x9MysfmWCcAg=;
+  b=DX5QLJUoPEx7bCULQnV0/9GVDT09IhzQeBVBcXeEe96kpLzNxYachsxH
+   S74UiPiooFqdm71f+Fr3TMgZkeWADg83vBu6POg5sslap6Z/BENze8X0Z
+   GUGTiGwYNEeHPPoitHLvB/tPNQ/U9y8EPScROq9LRsXsqTiUktTyz8T9p
+   N/A5gz8cfc3BanNt+I1DGJlr8RZVG0d+tPphKKK+XZdax5jldxsFmSfKH
+   lizNufrUKNl4gedhmf2Iq4mTTPCdcaXiXm4MuvVXM62Sq9Xrepdog2M4k
+   Jrha3YVwG3bH76WJZZHwAWmRs9CTRrz4U2gPcP99TudZk9xZzoIMm+QP1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253378256"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="253378256"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="559086967"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 04:34:34 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OBYVcZ004315;
+        Tue, 24 May 2022 12:34:31 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
+Date:   Tue, 24 May 2022 13:33:37 +0200
+Message-Id: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 24 May 2022 03:04:00 +0900
 
-Define CONFIG_UNWINDER_ORC - to include ORC lookup code in the kernel.
-Define CONFIG_FRAME_POINTER_VALIDATION - to enable ORC based FP validation.
-Select CONFIG_HAVE_STACK_VALIDATION if CONFIG_FRAME_POINTER_VALIDATION is
-       present.
+> On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
+> > to simplify livepatching (hopefully globally later on) triggers the
+> > following:
+> >
+> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> >
+> > The reason is that for now the condition from remove_dot():
+> >
+> > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> >
+> > which was designed to test if it's a dot or a '\0' after the suffix
+> > is never satisfied.
+> > This is due to that `s[n + m]` always points to the last digit of a
+> > numeric suffix, not on the symbol next to it (from a custom debug
+> > print added to modpost):
+> >
+> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> >
+> > So it's off-by-one and was like that since 2014.
+> > Fix this for the sake of upcoming features, but don't bother
+> > stable-backporting, as it's well hidden -- apart from that LD flag,
+> > can be triggered only by GCC LTO which never landed upstream.
+> >
+> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
+> >  scripts/mod/modpost.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 6bfa33217914..4648b7afe5cc 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
+> >
+> >         if (n && s[n]) {
+> >                 size_t m = strspn(s + n + 1, "0123456789");
+> > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+> >                         s[n] = 0;
+> >
+> >                 /* strip trailing .lto */
+> > --
+> > 2.34.1
+> >
+> 
+> This trivial patch has not been picked up yet.
+> 
+> I can apply this to my tree, if you want.
 
-Add code to scripts/Makefile.build to define objtool options to generate
-ORC data for frame pointer validation.
+It's a good idea, I'd like to!
+I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
+is not directly related to it and can be taken independently.
+Should I change the commit message or it's ok to take it as it is?
 
-When these configs are enabled, CONFIG_STACK_VALIDATION can be enabled.
-When that is done, invoke objtool on relocatable files during the kernel
-build with the following command:
+> 
+> Please let me know your thoughts.
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
 
-	objtool fpv generate <object-file>
+* I'm planning to submit a new rev of FG-KASLR series soon, but
+since I'm too busy with XDP for now, it will happen no sooner than
+in a couple months =\
 
-Objtool creates special sections in the object files:
-
-.orc_unwind_ip	PC array.
-.orc_unwind	ORC structure table.
-.orc_lookup	ORC lookup table.
-
-Change arch/arm64/kernel/vmlinux.lds.S to include ORC_UNWIND_TABLE in
-the data section so that the special sections get included there. For
-modules, these sections will be added to the kernel during module load.
-
-In the future, the kernel can use these sections to find the ORC for a
-given instruction address. The unwinder can then compute the FP at an
-instruction address and validate the actual FP with that.
-
-NOTE: CONFIG_STACK_VALIDATION needs to be turned on here. Otherwise, objtool
-will not be invoked during the kernel build process. The actual stack
-validation code will be added separately. This is harmless.
-
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/Kconfig                    |  4 +++-
- arch/arm64/Kconfig              |  2 ++
- arch/arm64/Kconfig.debug        | 21 +++++++++++++++++++++
- arch/arm64/include/asm/module.h | 10 +++++++++-
- arch/arm64/kernel/vmlinux.lds.S |  3 +++
- scripts/Makefile                |  4 +++-
- scripts/Makefile.build          |  4 ++++
- scripts/link-vmlinux.sh         |  7 +++++++
- 8 files changed, 52 insertions(+), 3 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 29b0167c088b..16eb5ad1f83e 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1032,7 +1032,9 @@ config HAVE_STACK_VALIDATION
- 	bool
- 	help
- 	  Architecture supports the 'objtool check' host tool command, which
--	  performs compile-time stack metadata validation.
-+	  performs compile-time stack metadata validation. Or, on architectures
-+	  that use dynamic frame pointer validation, it supports the
-+	  'objtool fpv generate' host tool command.
- 
- config HAVE_RELIABLE_STACKTRACE
- 	bool
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..e6a7bfc85ff9 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -223,6 +223,8 @@ config ARM64
- 	select SWIOTLB
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
-+	select HAVE_STACK_VALIDATION	if FRAME_POINTER_VALIDATION
-+	select STACK_VALIDATION		if HAVE_STACK_VALIDATION
- 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
- 	select TRACE_IRQFLAGS_SUPPORT
- 	help
-diff --git a/arch/arm64/Kconfig.debug b/arch/arm64/Kconfig.debug
-index 265c4461031f..37a7a90331d0 100644
---- a/arch/arm64/Kconfig.debug
-+++ b/arch/arm64/Kconfig.debug
-@@ -20,4 +20,25 @@ config ARM64_RELOC_TEST
- 	depends on m
- 	tristate "Relocation testing module"
- 
-+config UNWINDER_ORC
-+	bool "ORC unwinder"
-+	depends on FRAME_POINTER_VALIDATION
-+	select HAVE_MOD_ARCH_SPECIFIC
-+	help
-+	  This option enables ORC (Oops Rewind Capability) for ARM64. This
-+	  allows the unwinder to look up ORC data for an instruction address
-+	  and compute the frame pointer at that address. The computed frame
-+	  pointer is used to validate the actual frame pointer.
-+
-+config FRAME_POINTER_VALIDATION
-+	bool "Dynamic Frame pointer validation"
-+	depends on FRAME_POINTER
-+	select UNWINDER_ORC
-+	help
-+		This invokes objtool on every object file causing it to
-+		generate ORC data for the object file. ORC data is in a custom
-+		data format which is a simplified version of the DWARF
-+		Call Frame Information standard. See UNWINDER_ORC for more
-+		details.
-+
- source "drivers/hwtracing/coresight/Kconfig"
-diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
-index 4e7fa2623896..a15cddf11224 100644
---- a/arch/arm64/include/asm/module.h
-+++ b/arch/arm64/include/asm/module.h
-@@ -6,6 +6,7 @@
- #define __ASM_MODULE_H
- 
- #include <asm-generic/module.h>
-+#include <asm/orc_types.h>
- 
- #ifdef CONFIG_ARM64_MODULE_PLTS
- struct mod_plt_sec {
-@@ -13,15 +14,22 @@ struct mod_plt_sec {
- 	int			plt_num_entries;
- 	int			plt_max_entries;
- };
-+#endif
- 
- struct mod_arch_specific {
-+#ifdef CONFIG_ARM64_MODULE_PLTS
- 	struct mod_plt_sec	core;
- 	struct mod_plt_sec	init;
- 
- 	/* for CONFIG_DYNAMIC_FTRACE */
- 	struct plt_entry	*ftrace_trampolines;
--};
- #endif
-+#ifdef CONFIG_UNWINDER_ORC
-+	unsigned int num_orcs;
-+	int *orc_unwind_ip;
-+	struct orc_entry *orc_unwind;
-+#endif
-+};
- 
- u64 module_emit_plt_entry(struct module *mod, Elf64_Shdr *sechdrs,
- 			  void *loc, const Elf64_Rela *rela,
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index edaf0faf766f..7a4fa5404541 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -61,6 +61,7 @@
- #define RUNTIME_DISCARD_EXIT
- 
- #include <asm-generic/vmlinux.lds.h>
-+#include <asm-generic/orc_lookup.h>
- #include <asm/cache.h>
- #include <asm/kernel-pgtable.h>
- #include <asm/kexec.h>
-@@ -291,6 +292,8 @@ SECTIONS
- 		__mmuoff_data_end = .;
- 	}
- 
-+	ORC_UNWIND_TABLE
-+
- 	PECOFF_EDATA_PADDING
- 	__pecoff_data_rawsize = ABSOLUTE(. - __initdata_begin);
- 	_edata = .;
-diff --git a/scripts/Makefile b/scripts/Makefile
-index ce5aa9030b74..abcda21c1bb9 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -20,8 +20,10 @@ HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo
- ifdef CONFIG_UNWINDER_ORC
- ifeq ($(ARCH),x86_64)
- ARCH := x86
--endif
- HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
-+else
-+HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/$(ARCH)/include
-+endif
- HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
- endif
- 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 9717e6f6fb31..7d370b498a6b 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -226,6 +226,9 @@ ifdef CONFIG_STACK_VALIDATION
- 
- objtool := $(objtree)/tools/objtool/objtool
- 
-+ifdef CONFIG_FRAME_POINTER_VALIDATION
-+objtool_args = fpv generate
-+else
- objtool_args =								\
- 	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
- 	$(if $(part-of-module), --module)				\
-@@ -236,6 +239,7 @@ objtool_args =								\
- 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
- 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
- 	$(if $(CONFIG_SLS), --sls)
-+endif
- 
- cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
- cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 20f44504a644..ea0a85370e0f 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -108,6 +108,13 @@ objtool_link()
- 	local objtoolcmd;
- 	local objtoolopt;
- 
-+	if is_enabled CONFIG_STACK_VALIDATION && \
-+	   is_enabled CONFIG_FRAME_POINTER_VALIDATION && \
-+	   is_enabled CONFIG_LTO_CLANG; then
-+		tools/objtool/objtool fpv generate ${1}
-+		return
-+	fi
-+
- 	if is_enabled CONFIG_STACK_VALIDATION && \
- 	   ( is_enabled CONFIG_LTO_CLANG || is_enabled CONFIG_X86_KERNEL_IBT ); then
- 
--- 
-2.25.1
-
+Thanks!
+Al
