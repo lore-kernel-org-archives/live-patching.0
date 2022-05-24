@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3DEC43217
-	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BFCFC433F5
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiEXARM (ORCPT
+        id S232047AbiEXARN (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        Mon, 23 May 2022 20:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiEXAQ5 (ORCPT
+        with ESMTP id S231886AbiEXARH (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:16:57 -0400
+        Mon, 23 May 2022 20:17:07 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 741016D1BA;
-        Mon, 23 May 2022 17:16:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77A0C74DE7;
+        Mon, 23 May 2022 17:16:58 -0700 (PDT)
 Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7E3B320B895E;
-        Mon, 23 May 2022 17:16:55 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7E3B320B895E
+        by linux.microsoft.com (Postfix) with ESMTPSA id 831E120B8964;
+        Mon, 23 May 2022 17:16:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 831E120B8964
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351416;
-        bh=YG6KQOAJyGOL922olQKuoXPzwcII9DtE7DpLrKl5nFA=;
+        s=default; t=1653351418;
+        bh=3KNu2SqTulpI6MsZJqxj2nDgr1mSyJJSrp9yO31aXUY=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=rB6vq+eaexXeXKlEiEyPMzkVQcdNXoz1Ho/8mJ0EDHSarAy9/cFPKftW0GVjp4dQb
-         qKlHQoWRsBJMW6rv/QaiguC/s+1qauw4KDmQGAKaoWEtDKq47wIVN4MLIQ2SkJGtc/
-         OI7+yk41BA3C46ueOP9X3cP6w7uxttnYDLIhnOlw=
+        b=IFXCPTA6/D2mLlhEwmbRiLgn3+2MF4BeYPolu/uQdlODAqJxuvl0WObdOZw9ComZ3
+         b4RyDxpiQJpjqKMjoWCHrbAULt15XQZhwhhYV6Hh2YCYQ1343HOerzGwwR+Ii5Ubm3
+         P9HmqW1QNCv5g6KDbqfvxHUurSknmww/CIAyirHg=
 From:   madvenka@linux.microsoft.com
 To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 09/20] objtool: arm64: Implement command to invoke the decoder
-Date:   Mon, 23 May 2022 19:16:26 -0500
-Message-Id: <20220524001637.1707472-10-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 11/20] objtool: arm64: Walk instructions and compute CFI for each instruction
+Date:   Mon, 23 May 2022 19:16:28 -0500
+Message-Id: <20220524001637.1707472-12-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
@@ -49,225 +49,277 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Implement a built-in command called cmd_fpv() that can be invoked as
-follows:
+Implement arch_initial_func_cfi_state() to initialize the CFI for a
+function.
 
-	objtool fpv generate file.o
+Add code to fpv_decode() to walk the instructions in every function and
+compute the CFI information for each instruction.
 
-The built-in command invokes decode_instructions() to walk each function
-and decode the instructions of the function.
+Implement special handling for cases like jump tables.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- tools/objtool/Build                     |  5 ++
- tools/objtool/Makefile                  |  6 ++-
- tools/objtool/builtin-fpv.c             | 71 +++++++++++++++++++++++++
- tools/objtool/fpv.c                     | 19 +++++++
- tools/objtool/include/objtool/builtin.h |  1 +
- tools/objtool/include/objtool/objtool.h |  1 +
- tools/objtool/objtool.c                 | 12 ++++-
- tools/objtool/weak.c                    |  5 ++
- 8 files changed, 117 insertions(+), 3 deletions(-)
- create mode 100644 tools/objtool/builtin-fpv.c
- create mode 100644 tools/objtool/fpv.c
+ tools/objtool/arch/arm64/decode.c |  15 +++
+ tools/objtool/fpv.c               | 204 ++++++++++++++++++++++++++++++
+ 2 files changed, 219 insertions(+)
 
-diff --git a/tools/objtool/Build b/tools/objtool/Build
-index 9c2a332f61f3..a491f51c40b4 100644
---- a/tools/objtool/Build
-+++ b/tools/objtool/Build
-@@ -15,9 +15,14 @@ objtool-$(SUBCMD_ORC) += decode.o
- objtool-$(SUBCMD_ORC) += unwind_hints.o
- objtool-$(SUBCMD_ORC) += orc_gen.o
- objtool-$(SUBCMD_ORC) += orc_dump.o
-+objtool-$(SUBCMD_FPV) += fpv.o
-+objtool-$(SUBCMD_FPV) += cfi.o
-+objtool-$(SUBCMD_FPV) += insn.o
-+objtool-$(SUBCMD_FPV) += decode.o
+diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
+index f9df8b321659..93ef7c0811f1 100644
+--- a/tools/objtool/arch/arm64/decode.c
++++ b/tools/objtool/arch/arm64/decode.c
+@@ -35,6 +35,21 @@ struct decode {
  
- objtool-y += builtin-check.o
- objtool-y += builtin-orc.o
-+objtool-y += builtin-fpv.o
- objtool-y += elf.o
- objtool-y += objtool.o
+ /* --------------------- arch support functions ------------------------- */
  
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 0dbd397f319d..2511053245bc 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -47,7 +47,11 @@ ifeq ($(SRCARCH),x86)
- 	SUBCMD_ORC := y
- endif
- 
--export SUBCMD_CHECK SUBCMD_ORC
-+ifeq ($(SRCARCH),arm64)
-+	SUBCMD_FPV := y
-+endif
-+
-+export SUBCMD_CHECK SUBCMD_ORC SUBCMD_FPV
- export srctree OUTPUT CFLAGS SRCARCH AWK
- include $(srctree)/tools/build/Makefile.include
- 
-diff --git a/tools/objtool/builtin-fpv.c b/tools/objtool/builtin-fpv.c
-new file mode 100644
-index 000000000000..ff57dde39587
---- /dev/null
-+++ b/tools/objtool/builtin-fpv.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
-+ *
-+ * Copyright (C) 2022 Microsoft Corporation
-+ */
-+
-+/*
-+ * objtool fp validation:
-+ *
-+ * This command analyzes a .o file and adds .orc_unwind and .orc_unwind_ip
-+ * sections to it. The sections are used by the frame pointer-based in-kernel
-+ * unwinder to validate the frame pointer.
-+ */
-+
-+#include <string.h>
-+#include <objtool/builtin.h>
-+#include <objtool/objtool.h>
-+
-+static const char * const fpv_usage[] = {
-+	"objtool fpv generate file.o",
-+	NULL,
-+};
-+
-+const struct option fpv_options[] = {
-+	OPT_END(),
-+};
-+
-+int cmd_fpv(int argc, const char **argv)
++void arch_initial_func_cfi_state(struct cfi_init_state *state)
 +{
-+	const char *objname;
-+	struct objtool_file *file;
-+	int ret;
++	int i;
 +
-+	argc--; argv++;
-+	if (argc <= 0)
-+		usage_with_options(fpv_usage, fpv_options);
-+
-+	objname = argv[1];
-+
-+	file = objtool_open_read(objname);
-+	if (!file)
-+		return 1;
-+
-+	/* Supported architectures. */
-+	switch (file->elf->ehdr.e_machine) {
-+	case EM_AARCH64:
-+		break;
-+
-+	default:
-+		return 1;
++	for (i = 0; i < CFI_NUM_REGS; i++) {
++		state->regs[i].base = CFI_UNDEFINED;
++		state->regs[i].offset = 0;
 +	}
++	state->regs[CFI_FP].base = CFI_CFA;
 +
-+	if (!strncmp(argv[0], "gen", 3)) {
-+		ret = fpv_decode(file);
-+		if (ret)
-+			return ret;
-+
-+		if (list_empty(&file->insn_list))
-+			return 0;
-+
-+		if (!file->elf->changed)
-+			return 0;
-+
-+		return elf_write(file->elf);
-+	}
-+
-+	usage_with_options(fpv_usage, fpv_options);
-+
-+	return 0;
++	/* initial CFA (call frame address) */
++	state->cfa.base = CFI_SP;
++	state->cfa.offset = 0;
 +}
-diff --git a/tools/objtool/fpv.c b/tools/objtool/fpv.c
-new file mode 100644
-index 000000000000..76f0f2e611a8
---- /dev/null
-+++ b/tools/objtool/fpv.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
-+ *
-+ * Copyright (C) 2022 Microsoft Corporation
-+ */
 +
-+#include <string.h>
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+
-+#include <objtool/builtin.h>
-+#include <objtool/insn.h>
-+#include <objtool/warn.h>
-+
-+int fpv_decode(struct objtool_file *file)
-+{
-+	return decode_instructions(file);
-+}
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index c39dbfaef6dc..bfd99e08c33b 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -16,5 +16,6 @@ extern int cmd_parse_options(int argc, const char **argv, const char * const usa
- 
- extern int cmd_check(int argc, const char **argv);
- extern int cmd_orc(int argc, const char **argv);
-+extern int cmd_fpv(int argc, const char **argv);
- 
- #endif /* _BUILTIN_H */
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index 7a5c13a78f87..e00c8dcc6885 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -45,5 +45,6 @@ void objtool_pv_add(struct objtool_file *file, int idx, struct symbol *func);
- int check(struct objtool_file *file);
- int orc_dump(const char *objname);
- int orc_create(struct objtool_file *file);
-+int fpv_decode(struct objtool_file *file);
- 
- #endif /* _OBJTOOL_H */
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index b09946f4e1d6..974a9bc384e8 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -35,9 +35,17 @@ struct cmd_struct {
- static const char objtool_usage_string[] =
- 	"objtool COMMAND [ARGS]";
- 
-+static const char check_help[] =
-+	"Perform stack metadata validation on an object file";
-+static const char orc_help[] =
-+	"Generate in-place ORC unwind tables for an object file";
-+static const char fpv_help[] =
-+	"Generate in-place FP validation tables for an object file";
-+
- static struct cmd_struct objtool_cmds[] = {
--	{"check",	cmd_check,	"Perform stack metadata validation on an object file" },
--	{"orc",		cmd_orc,	"Generate in-place ORC unwind tables for an object file" },
-+	{"check",	cmd_check,	check_help },
-+	{"orc",		cmd_orc,	orc_help },
-+	{"fpv",		cmd_fpv,	fpv_help },
- };
- 
- bool help;
-diff --git a/tools/objtool/weak.c b/tools/objtool/weak.c
-index 8314e824db4a..5e56ad5fe0fe 100644
---- a/tools/objtool/weak.c
-+++ b/tools/objtool/weak.c
-@@ -29,3 +29,8 @@ int __weak orc_create(struct objtool_file *file)
+ unsigned long arch_dest_reloc_offset(int addend)
  {
- 	UNSUPPORTED("orc");
- }
+ 	return addend;
+diff --git a/tools/objtool/fpv.c b/tools/objtool/fpv.c
+index 92ad0d0aac8e..52f613ae998f 100644
+--- a/tools/objtool/fpv.c
++++ b/tools/objtool/fpv.c
+@@ -13,6 +13,8 @@
+ #include <objtool/insn.h>
+ #include <objtool/warn.h>
+ 
++static bool	fill;
 +
-+int __weak fpv_decode(struct objtool_file *file)
+ /*
+  * Find the destination instructions for all jumps.
+  */
+@@ -50,15 +52,217 @@ static void add_jump_destinations(struct objtool_file *file)
+ 	}
+ }
+ 
++static void update_cfi_state(struct cfi_state *cfi, struct stack_op *op)
 +{
-+	UNSUPPORTED("fpv");
++	struct cfi_reg *cfa = &cfi->cfa;
++	struct cfi_reg *regs = cfi->regs;
++
++	if (op->src.reg == CFI_SP) {
++		if (op->dest.reg == CFI_SP)
++			cfa->offset -= op->src.offset;
++		else
++			regs[CFI_FP].offset = -cfa->offset + op->src.offset;
++	} else {
++		if (op->dest.reg == CFI_SP)
++			cfa->offset = -(regs[CFI_FP].offset + op->src.offset);
++		else
++			regs[CFI_FP].offset += op->src.offset;
++	}
++
++	if (cfa->offset < -regs[CFI_FP].offset)
++		regs[CFI_FP].offset = 0;
 +}
++
++static void do_stack_ops(struct instruction *insn, struct insn_state *state)
++{
++	struct stack_op *op;
++
++	list_for_each_entry(op, &insn->stack_ops, list) {
++		update_cfi_state(&state->cfi, op);
++	}
++}
++
++static void walk_code(struct objtool_file *file, struct section *sec,
++		      struct symbol *func,
++		      struct instruction *insn, struct insn_state *state)
++{
++	struct symbol *insn_func = insn->func;
++	struct instruction *dest;
++	struct cfi_state save_cfi;
++	unsigned long start, end;
++
++	for (; insn; insn = next_insn_same_sec(file, insn)) {
++
++		if (insn->func != insn_func)
++			return;
++
++		if (insn->cfi) {
++			if (fill) {
++				/* CFI is present. Nothing to fill. */
++				return;
++			}
++			if (insn->cfi->regs[CFI_FP].offset ||
++			    !state->cfi.regs[CFI_FP].offset) {
++				return;
++			}
++			/*
++			 * The new CFI contains a valid frame and the existing
++			 * CFI doesn't. Replace the existing CFI with the new
++			 * one.
++			 */
++		}
++		insn->cfi = cfi_hash_find_or_add(&state->cfi);
++		dest = insn->jump_dest;
++
++		do_stack_ops(insn, state);
++
++		switch (insn->type) {
++		case INSN_BUG:
++		case INSN_RETURN:
++		case INSN_UNRELIABLE:
++			return;
++
++		case INSN_CALL:
++		case INSN_CALL_DYNAMIC:
++			start = func->offset;
++			end = start + func->len;
++			/*
++			 * Treat intra-function calls as jumps and fall
++			 * through.
++			 */
++			if (!dest || dest->sec != sec ||
++			    dest->offset <= start || dest->offset >= end) {
++				break;
++			}
++			/* fallthrough */
++
++		case INSN_JUMP_UNCONDITIONAL:
++		case INSN_JUMP_CONDITIONAL:
++		case INSN_JUMP_DYNAMIC:
++			if (dest) {
++				save_cfi = state->cfi;
++				walk_code(file, sec, func, dest, state);
++				state->cfi = save_cfi;
++			}
++			if (insn->type == INSN_JUMP_UNCONDITIONAL ||
++			    insn->type == INSN_JUMP_DYNAMIC) {
++				return;
++			}
++			break;
++
++		default:
++			break;
++		}
++	}
++}
++
++static void walk_function(struct objtool_file *file, struct section *sec,
++			  struct symbol *func)
++{
++	struct instruction *insn = find_insn(file, sec, func->offset);
++	struct insn_state state;
++
++	init_insn_state(&state, sec);
++	set_func_state(&state.cfi);
++
++	walk_code(file, sec, func, insn, &state);
++}
++
++/*
++ * This function addresses cases like jump tables where there is an array
++ * of unconditional branches. The normal walk would not have visited these
++ * instructions and established CFIs for them. Find those instructions. For
++ * each such instruction, copy the CFI from the branch instruction and
++ * propagate it down.
++ */
++static void fill_function(struct objtool_file *file, struct section *sec,
++			  struct symbol *func)
++{
++	struct instruction *insn, *prev;
++	struct insn_state state;
++
++	func_for_each_insn(file, func, insn) {
++
++		if (insn->cfi) {
++			/* Instruction already has a CFI. */
++			continue;
++		}
++
++		prev = list_prev_entry(insn, list);
++		if (!prev || !prev->cfi) {
++			/*
++			 * Previous instruction does not have a CFI that can
++			 * be used for this instruction.
++			 */
++			continue;
++		}
++
++		if (prev->type != INSN_JUMP_UNCONDITIONAL &&
++		    prev->type != INSN_JUMP_DYNAMIC) {
++			/* Only copy CFI from unconditional branches. */
++			continue;
++		}
++
++		/*
++		 * Propagate the CFI to all the instructions that can be
++		 * visited from the current instruction that don't already
++		 * have a CFI.
++		 */
++		state.cfi = *prev->cfi;
++		walk_code(file, insn->sec, insn->func, insn, &state);
++	}
++}
++
++static void walk_section(struct objtool_file *file, struct section *sec)
++{
++	struct symbol *func;
++
++	list_for_each_entry(func, &sec->symbol_list, list) {
++
++		if (func->type != STT_FUNC || !func->len ||
++		    func->pfunc != func || func->alias != func) {
++			/* No CFI generated for this function. */
++			continue;
++		}
++
++		if (!fill)
++			walk_function(file, sec, func);
++		else
++			fill_function(file, sec, func);
++	}
++}
++
++static void walk_sections(struct objtool_file *file)
++{
++	struct section *sec;
++
++	for_each_sec(file, sec) {
++		if (sec->sh.sh_flags & SHF_EXECINSTR)
++			walk_section(file, sec);
++	}
++}
++
+ int fpv_decode(struct objtool_file *file)
+ {
+ 	int ret;
+ 
++	arch_initial_func_cfi_state(&initial_func_cfi);
++
++	if (!cfi_hash_alloc(1UL << (file->elf->symbol_bits - 3)))
++		return -1;
++
+ 	ret = decode_instructions(file);
+ 	if (ret)
+ 		return ret;
+ 
+ 	add_jump_destinations(file);
+ 
++	if (!list_empty(&file->insn_list)) {
++		fill = false;
++		walk_sections(file);
++		fill = true;
++		walk_sections(file);
++	}
++
+ 	return 0;
+ }
 -- 
 2.25.1
 
