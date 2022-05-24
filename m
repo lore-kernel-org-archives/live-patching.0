@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE5E9C433EF
-	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:16:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E90FC433EF
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:16:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiEXAQu (ORCPT
+        id S229453AbiEXAQw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        Mon, 23 May 2022 20:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiEXAQu (ORCPT
+        with ESMTP id S231405AbiEXAQw (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:16:50 -0400
+        Mon, 23 May 2022 20:16:52 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B8B36BFE2;
-        Mon, 23 May 2022 17:16:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D11B6CF4E;
+        Mon, 23 May 2022 17:16:50 -0700 (PDT)
 Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 69AFD20B6C7C;
-        Mon, 23 May 2022 17:16:47 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69AFD20B6C7C
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7A49E20B87F6;
+        Mon, 23 May 2022 17:16:49 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A49E20B87F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351408;
-        bh=/tONLk1QXRDCTsXJLk+T4mjehc+6vK0E7p5YrpSTPtk=;
+        s=default; t=1653351410;
+        bh=PrjM6sNWCbaOpnfA+c2bSGMaKIm9RjxL72wTSFxI6qc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=NtS0Q9D8QbZiGnNIvmshLwN+aeWRo/Unp38H0DrQs7OH58PS0FtYYPCjwFgHliFnp
-         YRh9KMzz+qaWjpyB6+aDgGoXPMC9H1DdzQIfj8RDD9Tdf8DZvEY7DMmj49rpiWPT6E
-         M9R40O6YRiI6c3DNueI5Lnw/B3tngTedfG2cNVhg=
+        b=N5oJapbEd2k+mIf2MT3PqvMssXV2Hg5mEIlndw3toTXfRJIqSFIq8DFKNsEdXLRmA
+         NaQd7x4nC43KjAcSSYr3lhrX4iSOmcQkNxWsaxLDP4octNv5y2mcSSXufmzLw6RNdl
+         RaK+pdtWBUqFBdG54tIPJpI5LN0kSv1iiGTwfFAM=
 From:   madvenka@linux.microsoft.com
 To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 01/20] objtool: Reorganize CFI code
-Date:   Mon, 23 May 2022 19:16:18 -0500
-Message-Id: <20220524001637.1707472-2-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 03/20] objtool: Move decode_instructions() to a separate file
+Date:   Mon, 23 May 2022 19:16:20 -0500
+Message-Id: <20220524001637.1707472-4-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
@@ -49,297 +49,269 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-check.c implements static stack validation. But the CFI code that it
-contains can be shared with other types of validation. E.g., dynamic FP
-validation. Move the CFI code to its own files - cfi.h and cfi.c.
+check.c implements static stack validation. But decode_instructions() which
+resides in it can be shared with other types of validation. E.g., dynamic
+FP validation. Move the function to its own file - decode.c.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- tools/objtool/Build                 |   2 +
- tools/objtool/cfi.c                 | 108 ++++++++++++++++++++++++++++
- tools/objtool/check.c               |  96 -------------------------
- tools/objtool/include/objtool/cfi.h |  12 ++++
- 4 files changed, 122 insertions(+), 96 deletions(-)
- create mode 100644 tools/objtool/cfi.c
+ tools/objtool/Build                  |   2 +
+ tools/objtool/check.c                |  96 ------------------------
+ tools/objtool/decode.c               | 106 +++++++++++++++++++++++++++
+ tools/objtool/include/objtool/insn.h |   1 +
+ 4 files changed, 109 insertions(+), 96 deletions(-)
+ create mode 100644 tools/objtool/decode.c
 
 diff --git a/tools/objtool/Build b/tools/objtool/Build
-index b7222d5cc7bc..695cfee5cfde 100644
+index 52ed2f710d2a..199561f86c1e 100644
 --- a/tools/objtool/Build
 +++ b/tools/objtool/Build
-@@ -3,8 +3,10 @@ objtool-y += arch/$(SRCARCH)/
- objtool-y += weak.o
- 
+@@ -5,10 +5,12 @@ objtool-y += weak.o
  objtool-$(SUBCMD_CHECK) += check.o
-+objtool-$(SUBCMD_CHECK) += cfi.o
+ objtool-$(SUBCMD_CHECK) += cfi.o
+ objtool-$(SUBCMD_CHECK) += insn.o
++objtool-$(SUBCMD_CHECK) += decode.o
  objtool-$(SUBCMD_CHECK) += special.o
  objtool-$(SUBCMD_ORC) += check.o
-+objtool-$(SUBCMD_ORC) += cfi.o
+ objtool-$(SUBCMD_ORC) += cfi.o
+ objtool-$(SUBCMD_ORC) += insn.o
++objtool-$(SUBCMD_ORC) += decode.o
  objtool-$(SUBCMD_ORC) += orc_gen.o
  objtool-$(SUBCMD_ORC) += orc_dump.o
  
-diff --git a/tools/objtool/cfi.c b/tools/objtool/cfi.c
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 78168e0ad2bf..334ddc737bf9 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -163,104 +163,8 @@ static bool dead_end_function(struct objtool_file *file, struct symbol *func)
+ 	return __dead_end_function(file, func, 0);
+ }
+ 
+-static unsigned long nr_insns;
+ static unsigned long nr_insns_visited;
+ 
+-/*
+- * Call the arch-specific instruction decoder for all the instructions and add
+- * them to the global instruction list.
+- */
+-static int decode_instructions(struct objtool_file *file)
+-{
+-	struct section *sec;
+-	struct symbol *func;
+-	unsigned long offset;
+-	struct instruction *insn;
+-	int ret;
+-
+-	for_each_sec(file, sec) {
+-
+-		if (!(sec->sh.sh_flags & SHF_EXECINSTR))
+-			continue;
+-
+-		if (strcmp(sec->name, ".altinstr_replacement") &&
+-		    strcmp(sec->name, ".altinstr_aux") &&
+-		    strncmp(sec->name, ".discard.", 9))
+-			sec->text = true;
+-
+-		if (!strcmp(sec->name, ".noinstr.text") ||
+-		    !strcmp(sec->name, ".entry.text"))
+-			sec->noinstr = true;
+-
+-		for (offset = 0; offset < sec->sh.sh_size; offset += insn->len) {
+-			insn = malloc(sizeof(*insn));
+-			if (!insn) {
+-				WARN("malloc failed");
+-				return -1;
+-			}
+-			memset(insn, 0, sizeof(*insn));
+-			INIT_LIST_HEAD(&insn->alts);
+-			INIT_LIST_HEAD(&insn->stack_ops);
+-			INIT_LIST_HEAD(&insn->call_node);
+-
+-			insn->sec = sec;
+-			insn->offset = offset;
+-
+-			ret = arch_decode_instruction(file, sec, offset,
+-						      sec->sh.sh_size - offset,
+-						      &insn->len, &insn->type,
+-						      &insn->immediate,
+-						      &insn->stack_ops);
+-			if (ret)
+-				goto err;
+-
+-			/*
+-			 * By default, "ud2" is a dead end unless otherwise
+-			 * annotated, because GCC 7 inserts it for certain
+-			 * divide-by-zero cases.
+-			 */
+-			if (insn->type == INSN_BUG)
+-				insn->dead_end = true;
+-
+-			hash_add(file->insn_hash, &insn->hash, sec_offset_hash(sec, insn->offset));
+-			list_add_tail(&insn->list, &file->insn_list);
+-			nr_insns++;
+-		}
+-
+-		list_for_each_entry(func, &sec->symbol_list, list) {
+-			if (func->type != STT_FUNC || func->alias != func)
+-				continue;
+-
+-			if (!find_insn(file, sec, func->offset)) {
+-				WARN("%s(): can't find starting instruction",
+-				     func->name);
+-				return -1;
+-			}
+-
+-			sym_for_each_insn(file, func, insn) {
+-				insn->func = func;
+-				if (insn->type == INSN_ENDBR && list_empty(&insn->call_node)) {
+-					if (insn->offset == insn->func->offset) {
+-						list_add_tail(&insn->call_node, &file->endbr_list);
+-						file->nr_endbr++;
+-					} else {
+-						file->nr_endbr_int++;
+-					}
+-				}
+-			}
+-		}
+-	}
+-
+-	if (stats)
+-		printf("nr_insns: %lu\n", nr_insns);
+-
+-	return 0;
+-
+-err:
+-	free(insn);
+-	return ret;
+-}
+-
+ /*
+  * Read the pv_ops[] .data table to find the static initialized values.
+  */
+diff --git a/tools/objtool/decode.c b/tools/objtool/decode.c
 new file mode 100644
-index 000000000000..d5de6df59d72
+index 000000000000..4ed438ccc07f
 --- /dev/null
-+++ b/tools/objtool/cfi.c
-@@ -0,0 +1,108 @@
++++ b/tools/objtool/decode.c
+@@ -0,0 +1,106 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
 + */
++#include <linux/objtool.h>
 +
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+
-+#include <objtool/cfi.h>
 +#include <objtool/builtin.h>
++#include <objtool/insn.h>
 +#include <objtool/warn.h>
 +
-+unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
++static unsigned long nr_insns;
 +
-+struct cfi_init_state initial_func_cfi;
-+struct cfi_state init_cfi;
-+struct cfi_state func_cfi;
-+
-+void init_cfi_state(struct cfi_state *cfi)
++/*
++ * Call the arch-specific instruction decoder for all the instructions and add
++ * them to the global instruction list.
++ */
++int decode_instructions(struct objtool_file *file)
 +{
-+	int i;
++	struct section *sec;
++	struct symbol *func;
++	unsigned long offset;
++	struct instruction *insn;
++	int ret;
 +
-+	for (i = 0; i < CFI_NUM_REGS; i++) {
-+		cfi->regs[i].base = CFI_UNDEFINED;
-+		cfi->vals[i].base = CFI_UNDEFINED;
-+	}
-+	cfi->cfa.base = CFI_UNDEFINED;
-+	cfi->drap_reg = CFI_UNDEFINED;
-+	cfi->drap_offset = -1;
-+}
++	for_each_sec(file, sec) {
 +
-+static struct cfi_state *cfi_alloc(void)
-+{
-+	struct cfi_state *cfi = calloc(sizeof(struct cfi_state), 1);
++		if (!(sec->sh.sh_flags & SHF_EXECINSTR))
++			continue;
 +
-+	if (!cfi) {
-+		WARN("calloc failed");
-+		exit(1);
-+	}
-+	nr_cfi++;
-+	return cfi;
-+}
++		if (strcmp(sec->name, ".altinstr_replacement") &&
++		    strcmp(sec->name, ".altinstr_aux") &&
++		    strncmp(sec->name, ".discard.", 9))
++			sec->text = true;
 +
-+static int cfi_bits;
-+static struct hlist_head *cfi_hash;
++		if (!strcmp(sec->name, ".noinstr.text") ||
++		    !strcmp(sec->name, ".entry.text"))
++			sec->noinstr = true;
 +
-+bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2)
-+{
-+	return memcmp((void *)cfi1 + sizeof(cfi1->hash),
-+		      (void *)cfi2 + sizeof(cfi2->hash),
-+		      sizeof(struct cfi_state) - sizeof(struct hlist_node));
-+}
++		for (offset = 0; offset < sec->sh.sh_size; offset += insn->len) {
++			insn = malloc(sizeof(*insn));
++			if (!insn) {
++				WARN("malloc failed");
++				return -1;
++			}
++			memset(insn, 0, sizeof(*insn));
++			INIT_LIST_HEAD(&insn->alts);
++			INIT_LIST_HEAD(&insn->stack_ops);
++			INIT_LIST_HEAD(&insn->call_node);
 +
-+static inline u32 cfi_key(struct cfi_state *cfi)
-+{
-+	return jhash((void *)cfi + sizeof(cfi->hash),
-+		     sizeof(*cfi) - sizeof(cfi->hash), 0);
-+}
++			insn->sec = sec;
++			insn->offset = offset;
 +
-+struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi)
-+{
-+	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
-+	struct cfi_state *obj;
++			ret = arch_decode_instruction(file, sec, offset,
++						      sec->sh.sh_size - offset,
++						      &insn->len, &insn->type,
++						      &insn->immediate,
++						      &insn->stack_ops);
++			if (ret)
++				goto err;
 +
-+	hlist_for_each_entry(obj, head, hash) {
-+		if (!cficmp(cfi, obj)) {
-+			nr_cfi_cache++;
-+			return obj;
++			/*
++			 * By default, "ud2" is a dead end unless otherwise
++			 * annotated, because GCC 7 inserts it for certain
++			 * divide-by-zero cases.
++			 */
++			if (insn->type == INSN_BUG)
++				insn->dead_end = true;
++
++			hash_add(file->insn_hash, &insn->hash, sec_offset_hash(sec, insn->offset));
++			list_add_tail(&insn->list, &file->insn_list);
++			nr_insns++;
++		}
++
++		list_for_each_entry(func, &sec->symbol_list, list) {
++			if (func->type != STT_FUNC || func->alias != func)
++				continue;
++
++			if (!find_insn(file, sec, func->offset)) {
++				WARN("%s(): can't find starting instruction",
++				     func->name);
++				return -1;
++			}
++
++			sym_for_each_insn(file, func, insn) {
++				insn->func = func;
++				if (insn->type == INSN_ENDBR && list_empty(&insn->call_node)) {
++					if (insn->offset == insn->func->offset) {
++						list_add_tail(&insn->call_node, &file->endbr_list);
++						file->nr_endbr++;
++					} else {
++						file->nr_endbr_int++;
++					}
++				}
++			}
 +		}
 +	}
 +
-+	obj = cfi_alloc();
-+	*obj = *cfi;
-+	hlist_add_head(&obj->hash, head);
++	if (stats)
++		printf("nr_insns: %lu\n", nr_insns);
 +
-+	return obj;
++	return 0;
++
++err:
++	free(insn);
++	return ret;
 +}
-+
-+void cfi_hash_add(struct cfi_state *cfi)
-+{
-+	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
-+
-+	hlist_add_head(&cfi->hash, head);
-+}
-+
-+void *cfi_hash_alloc(unsigned long size)
-+{
-+	cfi_bits = max(10, ilog2(size));
-+	cfi_hash = mmap(NULL, sizeof(struct hlist_head) << cfi_bits,
-+			PROT_READ|PROT_WRITE,
-+			MAP_PRIVATE|MAP_ANON, -1, 0);
-+	if (cfi_hash == (void *)-1L) {
-+		WARN("mmap fail cfi_hash");
-+		cfi_hash = NULL;
-+	}  else if (stats) {
-+		printf("cfi_bits: %d\n", cfi_bits);
-+	}
-+
-+	return cfi_hash;
-+}
-+
-+void set_func_state(struct cfi_state *state)
-+{
-+	state->cfa = initial_func_cfi.cfa;
-+	memcpy(&state->regs, &initial_func_cfi.regs,
-+	       CFI_NUM_REGS * sizeof(struct cfi_reg));
-+	state->stack_size = initial_func_cfi.cfa.offset;
-+}
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 6de5085e3e5a..12acc9d329de 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -27,12 +27,6 @@ struct alternative {
- 	bool skip_orig;
- };
+diff --git a/tools/objtool/include/objtool/insn.h b/tools/objtool/include/objtool/insn.h
+index 1b9fce586679..5f01fd0ce8ed 100644
+--- a/tools/objtool/include/objtool/insn.h
++++ b/tools/objtool/include/objtool/insn.h
+@@ -83,6 +83,7 @@ struct reloc *insn_reloc(struct objtool_file *file, struct instruction *insn);
+ bool insn_cfi_match(struct instruction *insn, struct cfi_state *cfi2);
+ bool same_function(struct instruction *insn1, struct instruction *insn2);
+ bool is_first_func_insn(struct instruction *insn);
++int decode_instructions(struct objtool_file *file);
  
--static unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
--
--static struct cfi_init_state initial_func_cfi;
--static struct cfi_state init_cfi;
--static struct cfi_state func_cfi;
--
- struct instruction *find_insn(struct objtool_file *file,
- 			      struct section *sec, unsigned long offset)
- {
-@@ -249,19 +243,6 @@ static bool dead_end_function(struct objtool_file *file, struct symbol *func)
- 	return __dead_end_function(file, func, 0);
- }
- 
--static void init_cfi_state(struct cfi_state *cfi)
--{
--	int i;
--
--	for (i = 0; i < CFI_NUM_REGS; i++) {
--		cfi->regs[i].base = CFI_UNDEFINED;
--		cfi->vals[i].base = CFI_UNDEFINED;
--	}
--	cfi->cfa.base = CFI_UNDEFINED;
--	cfi->drap_reg = CFI_UNDEFINED;
--	cfi->drap_offset = -1;
--}
--
- static void init_insn_state(struct insn_state *state, struct section *sec)
- {
- 	memset(state, 0, sizeof(*state));
-@@ -276,75 +257,6 @@ static void init_insn_state(struct insn_state *state, struct section *sec)
- 		state->noinstr = sec->noinstr;
- }
- 
--static struct cfi_state *cfi_alloc(void)
--{
--	struct cfi_state *cfi = calloc(sizeof(struct cfi_state), 1);
--	if (!cfi) {
--		WARN("calloc failed");
--		exit(1);
--	}
--	nr_cfi++;
--	return cfi;
--}
--
--static int cfi_bits;
--static struct hlist_head *cfi_hash;
--
--static inline bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2)
--{
--	return memcmp((void *)cfi1 + sizeof(cfi1->hash),
--		      (void *)cfi2 + sizeof(cfi2->hash),
--		      sizeof(struct cfi_state) - sizeof(struct hlist_node));
--}
--
--static inline u32 cfi_key(struct cfi_state *cfi)
--{
--	return jhash((void *)cfi + sizeof(cfi->hash),
--		     sizeof(*cfi) - sizeof(cfi->hash), 0);
--}
--
--static struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi)
--{
--	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
--	struct cfi_state *obj;
--
--	hlist_for_each_entry(obj, head, hash) {
--		if (!cficmp(cfi, obj)) {
--			nr_cfi_cache++;
--			return obj;
--		}
--	}
--
--	obj = cfi_alloc();
--	*obj = *cfi;
--	hlist_add_head(&obj->hash, head);
--
--	return obj;
--}
--
--static void cfi_hash_add(struct cfi_state *cfi)
--{
--	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
--
--	hlist_add_head(&cfi->hash, head);
--}
--
--static void *cfi_hash_alloc(unsigned long size)
--{
--	cfi_bits = max(10, ilog2(size));
--	cfi_hash = mmap(NULL, sizeof(struct hlist_head) << cfi_bits,
--			PROT_READ|PROT_WRITE,
--			MAP_PRIVATE|MAP_ANON, -1, 0);
--	if (cfi_hash == (void *)-1L) {
--		WARN("mmap fail cfi_hash");
--		cfi_hash = NULL;
--	}  else if (stats) {
--		printf("cfi_bits: %d\n", cfi_bits);
--	}
--
--	return cfi_hash;
--}
--
- static unsigned long nr_insns;
- static unsigned long nr_insns_visited;
- 
-@@ -1866,14 +1778,6 @@ static int add_jump_table_alts(struct objtool_file *file)
- 	return 0;
- }
- 
--static void set_func_state(struct cfi_state *state)
--{
--	state->cfa = initial_func_cfi.cfa;
--	memcpy(&state->regs, &initial_func_cfi.regs,
--	       CFI_NUM_REGS * sizeof(struct cfi_reg));
--	state->stack_size = initial_func_cfi.cfa.offset;
--}
--
- static int read_unwind_hints(struct objtool_file *file)
- {
- 	struct cfi_state cfi = init_cfi;
-diff --git a/tools/objtool/include/objtool/cfi.h b/tools/objtool/include/objtool/cfi.h
-index f11d1ac1dadf..7d54f1058655 100644
---- a/tools/objtool/include/objtool/cfi.h
-+++ b/tools/objtool/include/objtool/cfi.h
-@@ -37,4 +37,16 @@ struct cfi_state {
- 	bool end;
- };
- 
-+void init_cfi_state(struct cfi_state *cfi);
-+struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi);
-+void cfi_hash_add(struct cfi_state *cfi);
-+void *cfi_hash_alloc(unsigned long size);
-+bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2);
-+void set_func_state(struct cfi_state *state);
-+
-+extern unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
-+extern struct cfi_init_state initial_func_cfi;
-+extern struct cfi_state init_cfi;
-+extern struct cfi_state func_cfi;
-+
- #endif /* _OBJTOOL_CFI_H */
+ #define for_each_insn(file, insn)					\
+ 	list_for_each_entry(insn, &file->insn_list, list)
 -- 
 2.25.1
 
