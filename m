@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96279C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB6EAC4332F
 	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiEXARv (ORCPT
+        id S231915AbiEXARw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        Mon, 23 May 2022 20:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbiEXAR3 (ORCPT
+        with ESMTP id S232034AbiEXARM (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:17:29 -0400
+        Mon, 23 May 2022 20:17:12 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89A1E95DC0;
-        Mon, 23 May 2022 17:17:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75BF87CB76;
+        Mon, 23 May 2022 17:17:04 -0700 (PDT)
 Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 861EF20B8952;
-        Mon, 23 May 2022 17:17:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 861EF20B8952
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8601F20B87F6;
+        Mon, 23 May 2022 17:17:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8601F20B87F6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351426;
-        bh=W+kmmdWYfiBwaaGDXXPjvGV5/gA5GGveaxkzrHm/ZVs=;
+        s=default; t=1653351424;
+        bh=TQ/XlAh2pJ/fVzbjSjvKssRRUWTo6FGCftijB4Zl7Mo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jRvS00IvG4gtA8YIpC6RWC8bSYDRRjmfL4vLqLYf2/ydDSDLS0PCBoYu0pfmvGR9L
-         vEW0prNJHP8P2Nns+JNS7mMiuIMB7TUO3JXJvmdUlPdwnnft3eMYz1Pxt7r1h46vXh
-         7pGFMc1xoaAVrp5whBjOG+WSNAjmkKv6bwpyC0Mo=
+        b=jJGo7xvKQqkBA7IhJFiWZkUNsWh4P/aCvBW0LfJ1s5E++6pqNlCQIinQQufRHbJ/R
+         JFKvvdos2IVRf5OiQTK3IWfUkwGAPd5kdrLoRUXUyQ7+38ETsMFFE5YASUA7Lj66H4
+         z9tF0wuxsuTgupj5+HIRtvglb3vUj4imzq612COw=
 From:   madvenka@linux.microsoft.com
 To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 19/20] arm64: Miscellaneous changes required for enabling livepatch
-Date:   Mon, 23 May 2022 19:16:36 -0500
-Message-Id: <20220524001637.1707472-20-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 17/20] arm64: Build the kernel with ORC information
+Date:   Mon, 23 May 2022 19:16:34 -0500
+Message-Id: <20220524001637.1707472-18-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
@@ -49,120 +49,220 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-	- Create arch/arm64/include/asm/livepatch.h and define
-	  klp_arch_set_pc() and klp_get_ftrace_location() which
-	  are required for livepatch.
+Define CONFIG_UNWINDER_ORC - to include ORC lookup code in the kernel.
+Define CONFIG_FRAME_POINTER_VALIDATION - to enable ORC based FP validation.
+Select CONFIG_HAVE_STACK_VALIDATION if CONFIG_FRAME_POINTER_VALIDATION is
+       present.
 
-	- Define TIF_PATCH_PENDING in arch/arm64/include/asm/thread_info.h
-	  for livepatch.
+Add code to scripts/Makefile.build to define objtool options to generate
+ORC data for frame pointer validation.
 
-	- Check TIF_PATCH_PENDING in do_notify_resume() to patch the
-	  current task for livepatch.
+When these configs are enabled, CONFIG_STACK_VALIDATION can be enabled.
+When that is done, invoke objtool on relocatable files during the kernel
+build with the following command:
 
-Signed-off-by: Suraj Jitindar Singh <sjitindarsingh@gmail.com>
+	objtool fpv generate <object-file>
+
+Objtool creates special sections in the object files:
+
+.orc_unwind_ip	PC array.
+.orc_unwind	ORC structure table.
+.orc_lookup	ORC lookup table.
+
+Change arch/arm64/kernel/vmlinux.lds.S to include ORC_UNWIND_TABLE in
+the data section so that the special sections get included there. For
+modules, these sections will be added to the kernel during module load.
+
+In the future, the kernel can use these sections to find the ORC for a
+given instruction address. The unwinder can then compute the FP at an
+instruction address and validate the actual FP with that.
+
+NOTE: CONFIG_STACK_VALIDATION needs to be turned on here. Otherwise, objtool
+will not be invoked during the kernel build process. The actual stack
+validation code will be added separately. This is harmless.
+
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/arm64/include/asm/livepatch.h   | 42 ++++++++++++++++++++++++++++
- arch/arm64/include/asm/thread_info.h |  4 ++-
- arch/arm64/kernel/signal.c           |  4 +++
- 3 files changed, 49 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/include/asm/livepatch.h
+ arch/Kconfig                    |  4 +++-
+ arch/arm64/Kconfig              |  2 ++
+ arch/arm64/Kconfig.debug        | 21 +++++++++++++++++++++
+ arch/arm64/include/asm/module.h | 10 +++++++++-
+ arch/arm64/kernel/vmlinux.lds.S |  3 +++
+ scripts/Makefile                |  4 +++-
+ scripts/Makefile.build          |  4 ++++
+ scripts/link-vmlinux.sh         |  7 +++++++
+ 8 files changed, 52 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/include/asm/livepatch.h b/arch/arm64/include/asm/livepatch.h
-new file mode 100644
-index 000000000000..72d7cd86f158
---- /dev/null
-+++ b/arch/arm64/include/asm/livepatch.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0
-+ *
-+ * livepatch.h - arm64-specific Kernel Live Patching Core
-+ */
-+#ifndef _ASM_ARM64_LIVEPATCH_H
-+#define _ASM_ARM64_LIVEPATCH_H
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 29b0167c088b..16eb5ad1f83e 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1032,7 +1032,9 @@ config HAVE_STACK_VALIDATION
+ 	bool
+ 	help
+ 	  Architecture supports the 'objtool check' host tool command, which
+-	  performs compile-time stack metadata validation.
++	  performs compile-time stack metadata validation. Or, on architectures
++	  that use dynamic frame pointer validation, it supports the
++	  'objtool fpv generate' host tool command.
+ 
+ config HAVE_RELIABLE_STACKTRACE
+ 	bool
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 57c4c995965f..e6a7bfc85ff9 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -223,6 +223,8 @@ config ARM64
+ 	select SWIOTLB
+ 	select SYSCTL_EXCEPTION_TRACE
+ 	select THREAD_INFO_IN_TASK
++	select HAVE_STACK_VALIDATION	if FRAME_POINTER_VALIDATION
++	select STACK_VALIDATION		if HAVE_STACK_VALIDATION
+ 	select HAVE_ARCH_USERFAULTFD_MINOR if USERFAULTFD
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	help
+diff --git a/arch/arm64/Kconfig.debug b/arch/arm64/Kconfig.debug
+index 265c4461031f..37a7a90331d0 100644
+--- a/arch/arm64/Kconfig.debug
++++ b/arch/arm64/Kconfig.debug
+@@ -20,4 +20,25 @@ config ARM64_RELOC_TEST
+ 	depends on m
+ 	tristate "Relocation testing module"
+ 
++config UNWINDER_ORC
++	bool "ORC unwinder"
++	depends on FRAME_POINTER_VALIDATION
++	select HAVE_MOD_ARCH_SPECIFIC
++	help
++	  This option enables ORC (Oops Rewind Capability) for ARM64. This
++	  allows the unwinder to look up ORC data for an instruction address
++	  and compute the frame pointer at that address. The computed frame
++	  pointer is used to validate the actual frame pointer.
 +
-+#include <linux/ftrace.h>
++config FRAME_POINTER_VALIDATION
++	bool "Dynamic Frame pointer validation"
++	depends on FRAME_POINTER
++	select UNWINDER_ORC
++	help
++		This invokes objtool on every object file causing it to
++		generate ORC data for the object file. ORC data is in a custom
++		data format which is a simplified version of the DWARF
++		Call Frame Information standard. See UNWINDER_ORC for more
++		details.
 +
-+static inline void klp_arch_set_pc(struct ftrace_regs *fregs, unsigned long ip)
-+{
-+	struct pt_regs *regs = ftrace_get_regs(fregs);
-+
-+	regs->pc = ip;
-+}
-+
-+/*
-+ * klp_get_ftrace_location is expected to return the address of the BL to the
-+ * relevant ftrace handler in the callsite. The location of this can vary based
-+ * on several compilation options.
-+ * CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+ *	- Inserts 2 nops on function entry the second of which is the BL
-+ *	  referenced above. (See ftrace_init_nop() for the callsite sequence)
-+ *	  (this is required by livepatch and must be selected)
-+ * CONFIG_ARM64_BTI_KERNEL:
-+ *	- Inserts a hint #0x22 on function entry if the function is called
-+ *	  indirectly (to satisfy BTI requirements), which is inserted before
-+ *	  the two nops from above.
-+ */
-+#define klp_get_ftrace_location klp_get_ftrace_location
-+static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
-+{
-+	unsigned long addr = faddr + AARCH64_INSN_SIZE;
-+
-+#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
-+	addr = ftrace_location_range(addr, addr + AARCH64_INSN_SIZE);
+ source "drivers/hwtracing/coresight/Kconfig"
+diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
+index 4e7fa2623896..a15cddf11224 100644
+--- a/arch/arm64/include/asm/module.h
++++ b/arch/arm64/include/asm/module.h
+@@ -6,6 +6,7 @@
+ #define __ASM_MODULE_H
+ 
+ #include <asm-generic/module.h>
++#include <asm/orc_types.h>
+ 
+ #ifdef CONFIG_ARM64_MODULE_PLTS
+ struct mod_plt_sec {
+@@ -13,15 +14,22 @@ struct mod_plt_sec {
+ 	int			plt_num_entries;
+ 	int			plt_max_entries;
+ };
 +#endif
+ 
+ struct mod_arch_specific {
++#ifdef CONFIG_ARM64_MODULE_PLTS
+ 	struct mod_plt_sec	core;
+ 	struct mod_plt_sec	init;
+ 
+ 	/* for CONFIG_DYNAMIC_FTRACE */
+ 	struct plt_entry	*ftrace_trampolines;
+-};
+ #endif
++#ifdef CONFIG_UNWINDER_ORC
++	unsigned int num_orcs;
++	int *orc_unwind_ip;
++	struct orc_entry *orc_unwind;
++#endif
++};
+ 
+ u64 module_emit_plt_entry(struct module *mod, Elf64_Shdr *sechdrs,
+ 			  void *loc, const Elf64_Rela *rela,
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index edaf0faf766f..7a4fa5404541 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -61,6 +61,7 @@
+ #define RUNTIME_DISCARD_EXIT
+ 
+ #include <asm-generic/vmlinux.lds.h>
++#include <asm-generic/orc_lookup.h>
+ #include <asm/cache.h>
+ #include <asm/kernel-pgtable.h>
+ #include <asm/kexec.h>
+@@ -291,6 +292,8 @@ SECTIONS
+ 		__mmuoff_data_end = .;
+ 	}
+ 
++	ORC_UNWIND_TABLE
 +
-+	return addr;
-+}
+ 	PECOFF_EDATA_PADDING
+ 	__pecoff_data_rawsize = ABSOLUTE(. - __initdata_begin);
+ 	_edata = .;
+diff --git a/scripts/Makefile b/scripts/Makefile
+index ce5aa9030b74..abcda21c1bb9 100644
+--- a/scripts/Makefile
++++ b/scripts/Makefile
+@@ -20,8 +20,10 @@ HOSTLDLIBS_sign-file = $(shell pkg-config --libs libcrypto 2> /dev/null || echo
+ ifdef CONFIG_UNWINDER_ORC
+ ifeq ($(ARCH),x86_64)
+ ARCH := x86
+-endif
+ HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
++else
++HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/$(ARCH)/include
++endif
+ HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
+ endif
+ 
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 9717e6f6fb31..7d370b498a6b 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -226,6 +226,9 @@ ifdef CONFIG_STACK_VALIDATION
+ 
+ objtool := $(objtree)/tools/objtool/objtool
+ 
++ifdef CONFIG_FRAME_POINTER_VALIDATION
++objtool_args = fpv generate
++else
+ objtool_args =								\
+ 	$(if $(CONFIG_UNWINDER_ORC),orc generate,check)			\
+ 	$(if $(part-of-module), --module)				\
+@@ -236,6 +239,7 @@ objtool_args =								\
+ 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+ 	$(if $(CONFIG_SLS), --sls)
++endif
+ 
+ cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+ cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 20f44504a644..ea0a85370e0f 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -108,6 +108,13 @@ objtool_link()
+ 	local objtoolcmd;
+ 	local objtoolopt;
+ 
++	if is_enabled CONFIG_STACK_VALIDATION && \
++	   is_enabled CONFIG_FRAME_POINTER_VALIDATION && \
++	   is_enabled CONFIG_LTO_CLANG; then
++		tools/objtool/objtool fpv generate ${1}
++		return
++	fi
 +
-+#endif /* _ASM_ARM64_LIVEPATCH_H */
-diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-index e1317b7c4525..a1d8999dbdcc 100644
---- a/arch/arm64/include/asm/thread_info.h
-+++ b/arch/arm64/include/asm/thread_info.h
-@@ -68,6 +68,7 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define TIF_UPROBE		4	/* uprobe breakpoint or singlestep */
- #define TIF_MTE_ASYNC_FAULT	5	/* MTE Asynchronous Tag Check Fault */
- #define TIF_NOTIFY_SIGNAL	6	/* signal notifications exist */
-+#define TIF_PATCH_PENDING	7	/* pending live patching update */
- #define TIF_SYSCALL_TRACE	8	/* syscall trace active */
- #define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
- #define TIF_SYSCALL_TRACEPOINT	10	/* syscall tracepoint for ftrace */
-@@ -98,11 +99,12 @@ int arch_dup_task_struct(struct task_struct *dst,
- #define _TIF_SVE		(1 << TIF_SVE)
- #define _TIF_MTE_ASYNC_FAULT	(1 << TIF_MTE_ASYNC_FAULT)
- #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
-+#define _TIF_PATCH_PENDING	(1 << TIF_PATCH_PENDING)
- 
- #define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_SIGPENDING | \
- 				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
- 				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT | \
--				 _TIF_NOTIFY_SIGNAL)
-+				 _TIF_NOTIFY_SIGNAL | _TIF_PATCH_PENDING)
- 
- #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
- 				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index 4a4122ef6f39..cbec9597349f 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -17,6 +17,7 @@
- #include <linux/sizes.h>
- #include <linux/string.h>
- #include <linux/resume_user_mode.h>
-+#include <linux/livepatch.h>
- #include <linux/ratelimit.h>
- #include <linux/syscalls.h>
- 
-@@ -938,6 +939,9 @@ void do_notify_resume(struct pt_regs *regs, unsigned long thread_flags)
- 					       (void __user *)NULL, current);
- 			}
- 
-+			if (thread_flags & _TIF_PATCH_PENDING)
-+				klp_update_patch_state(current);
-+
- 			if (thread_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
- 				do_signal(regs);
+ 	if is_enabled CONFIG_STACK_VALIDATION && \
+ 	   ( is_enabled CONFIG_LTO_CLANG || is_enabled CONFIG_X86_KERNEL_IBT ); then
  
 -- 
 2.25.1
