@@ -2,221 +2,344 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03547C433F5
-	for <live-patching@archiver.kernel.org>; Mon, 23 May 2022 20:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE5E9C433EF
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:16:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbiEWUdN (ORCPT
+        id S229626AbiEXAQu (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 16:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        Mon, 23 May 2022 20:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233079AbiEWUdM (ORCPT
+        with ESMTP id S229453AbiEXAQu (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 16:33:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D9D3888;
-        Mon, 23 May 2022 13:33:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A846614C5;
-        Mon, 23 May 2022 20:33:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76106C385AA;
-        Mon, 23 May 2022 20:33:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653337991;
-        bh=VNVQzR9kS5xu6l5roSausKAujCRxQKGSD7vdR797KGE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hIJVMVPO4q0ZiGjXpeP/mp4WoS7qMOycauFqdeUAuUGM43xRdfvgUY8U5T6wMqW1L
-         zMPwuEAUOEXE75o6b8ynAoLKUQhYAvGJ0ymtZ1WAwPxNpjZO0V49qzIyyFprsl1zAP
-         8s3OG0kh5AngMWZjGcnxwNJOMNzDrPepOl+1DPt7XkAqz8gfKLlqQg516vupKzVIL/
-         TxUEMRRj8+CXre1EU5IRDttOTfc7nBok6vfvfW8mHhpuDbK2eizWsbWMngOCKATCwz
-         Z7SOdDnPK8DfSpFWHOsq5M8fXFUT+49SGHKfi6/C6UAT0Y+OZE+EuW5lBjz53bDXLM
-         LW3NXhYYO/qPA==
-Date:   Mon, 23 May 2022 23:31:29 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v7 03/25] kallsyms: increase maximum kernel symbol length
- to 512
-Message-ID: <YovvIQeN3lmOYzJO@kernel.org>
-References: <20220523020209.11810-1-ojeda@kernel.org>
- <20220523020209.11810-4-ojeda@kernel.org>
+        Mon, 23 May 2022 20:16:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B8B36BFE2;
+        Mon, 23 May 2022 17:16:48 -0700 (PDT)
+Received: from x64host.home (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 69AFD20B6C7C;
+        Mon, 23 May 2022 17:16:47 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 69AFD20B6C7C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1653351408;
+        bh=/tONLk1QXRDCTsXJLk+T4mjehc+6vK0E7p5YrpSTPtk=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=NtS0Q9D8QbZiGnNIvmshLwN+aeWRo/Unp38H0DrQs7OH58PS0FtYYPCjwFgHliFnp
+         YRh9KMzz+qaWjpyB6+aDgGoXPMC9H1DdzQIfj8RDD9Tdf8DZvEY7DMmj49rpiWPT6E
+         M9R40O6YRiI6c3DNueI5Lnw/B3tngTedfG2cNVhg=
+From:   madvenka@linux.microsoft.com
+To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com
+Subject: [RFC PATCH v2 01/20] objtool: Reorganize CFI code
+Date:   Mon, 23 May 2022 19:16:18 -0500
+Message-Id: <20220524001637.1707472-2-madvenka@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
+ <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523020209.11810-4-ojeda@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon, May 23, 2022 at 04:01:16AM +0200, Miguel Ojeda wrote:
-> Rust symbols can become quite long due to namespacing introduced
-> by modules, types, traits, generics, etc. For instance,
-> the following code:
-> 
->     pub mod my_module {
->         pub struct MyType;
->         pub struct MyGenericType<T>(T);
-> 
->         pub trait MyTrait {
->             fn my_method() -> u32;
->         }
-> 
->         impl MyTrait for MyGenericType<MyType> {
->             fn my_method() -> u32 {
->                 42
->             }
->         }
->     }
-> 
-> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
-> 
->     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
-> 
-> At the moment, Rust symbols may reach up to 300 in length.
-> Setting 512 as the maximum seems like a reasonable choice to
-> keep some headroom.
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-There's no description what the patch does.
+check.c implements static stack validation. But the CFI code that it
+contains can be shared with other types of validation. E.g., dynamic FP
+validation. Move the CFI code to its own files - cfi.h and cfi.c.
 
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
-> This is a prerequisite patch, independently submitted at:
-> 
->     https://lore.kernel.org/lkml/20220506203443.24721-4-ojeda@kernel.org/
-> 
->  include/linux/kallsyms.h            | 2 +-
->  kernel/livepatch/core.c             | 4 ++--
->  scripts/kallsyms.c                  | 4 ++--
->  tools/include/linux/kallsyms.h      | 2 +-
->  tools/lib/perf/include/perf/event.h | 2 +-
->  tools/lib/symbol/kallsyms.h         | 2 +-
->  6 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index ce1bd2fbf23e..e5ad6e31697d 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -15,7 +15,7 @@
->  
->  #include <asm/sections.h>
->  
-> -#define KSYM_NAME_LEN 128
-> +#define KSYM_NAME_LEN 512
->  #define KSYM_SYMBOL_LEN (sizeof("%s+%#lx/%#lx [%s %s]") + \
->  			(KSYM_NAME_LEN - 1) + \
->  			2*(BITS_PER_LONG*3/10) + (MODULE_NAME_LEN - 1) + \
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index bc475e62279d..ec06ce59d728 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -213,7 +213,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  	 * we use the smallest/strictest upper bound possible (56, based on
->  	 * the current definition of MODULE_NAME_LEN) to prevent overflows.
->  	 */
-> -	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 128);
-> +	BUILD_BUG_ON(MODULE_NAME_LEN < 56 || KSYM_NAME_LEN != 512);
->  
->  	relas = (Elf_Rela *) relasec->sh_addr;
->  	/* For each rela in this klp relocation section */
-> @@ -227,7 +227,7 @@ static int klp_resolve_symbols(Elf_Shdr *sechdrs, const char *strtab,
->  
->  		/* Format: .klp.sym.sym_objname.sym_name,sympos */
->  		cnt = sscanf(strtab + sym->st_name,
-> -			     ".klp.sym.%55[^.].%127[^,],%lu",
-> +			     ".klp.sym.%55[^.].%511[^,],%lu",
->  			     sym_objname, sym_name, &sympos);
->  		if (cnt != 3) {
->  			pr_err("symbol %s has an incorrectly formatted name\n",
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 7e99799aa7b9..275044b840dc 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -30,10 +30,10 @@
->  #define _stringify_1(x)	#x
->  #define _stringify(x)	_stringify_1(x)
->  
-> -#define KSYM_NAME_LEN		128
-> +#define KSYM_NAME_LEN		512
->  
->  /* A substantially bigger size than the current maximum. */
-> -#define KSYM_NAME_LEN_BUFFER	512
-> +#define KSYM_NAME_LEN_BUFFER	2048
->  _Static_assert(
->  	KSYM_NAME_LEN_BUFFER == KSYM_NAME_LEN * 4,
->  	"Please keep KSYM_NAME_LEN_BUFFER in sync with KSYM_NAME_LEN"
-> diff --git a/tools/include/linux/kallsyms.h b/tools/include/linux/kallsyms.h
-> index efb6c3f5f2a9..5a37ccbec54f 100644
-> --- a/tools/include/linux/kallsyms.h
-> +++ b/tools/include/linux/kallsyms.h
-> @@ -6,7 +6,7 @@
->  #include <stdio.h>
->  #include <unistd.h>
->  
-> -#define KSYM_NAME_LEN 128
-> +#define KSYM_NAME_LEN 512
->  
->  struct module;
->  
-> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
-> index e7758707cadd..116a80c31675 100644
-> --- a/tools/lib/perf/include/perf/event.h
-> +++ b/tools/lib/perf/include/perf/event.h
-> @@ -95,7 +95,7 @@ struct perf_record_throttle {
->  };
->  
->  #ifndef KSYM_NAME_LEN
-> -#define KSYM_NAME_LEN 256
-> +#define KSYM_NAME_LEN 512
->  #endif
->  
->  struct perf_record_ksymbol {
-> diff --git a/tools/lib/symbol/kallsyms.h b/tools/lib/symbol/kallsyms.h
-> index 72ab9870454b..542f9b059c3b 100644
-> --- a/tools/lib/symbol/kallsyms.h
-> +++ b/tools/lib/symbol/kallsyms.h
-> @@ -7,7 +7,7 @@
->  #include <linux/types.h>
->  
->  #ifndef KSYM_NAME_LEN
-> -#define KSYM_NAME_LEN 256
-> +#define KSYM_NAME_LEN 512
->  #endif
->  
->  static inline u8 kallsyms2elf_binding(char type)
-> -- 
-> 2.36.1
-> 
+Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+---
+ tools/objtool/Build                 |   2 +
+ tools/objtool/cfi.c                 | 108 ++++++++++++++++++++++++++++
+ tools/objtool/check.c               |  96 -------------------------
+ tools/objtool/include/objtool/cfi.h |  12 ++++
+ 4 files changed, 122 insertions(+), 96 deletions(-)
+ create mode 100644 tools/objtool/cfi.c
 
-BR, Jarkko
+diff --git a/tools/objtool/Build b/tools/objtool/Build
+index b7222d5cc7bc..695cfee5cfde 100644
+--- a/tools/objtool/Build
++++ b/tools/objtool/Build
+@@ -3,8 +3,10 @@ objtool-y += arch/$(SRCARCH)/
+ objtool-y += weak.o
+ 
+ objtool-$(SUBCMD_CHECK) += check.o
++objtool-$(SUBCMD_CHECK) += cfi.o
+ objtool-$(SUBCMD_CHECK) += special.o
+ objtool-$(SUBCMD_ORC) += check.o
++objtool-$(SUBCMD_ORC) += cfi.o
+ objtool-$(SUBCMD_ORC) += orc_gen.o
+ objtool-$(SUBCMD_ORC) += orc_dump.o
+ 
+diff --git a/tools/objtool/cfi.c b/tools/objtool/cfi.c
+new file mode 100644
+index 000000000000..d5de6df59d72
+--- /dev/null
++++ b/tools/objtool/cfi.c
+@@ -0,0 +1,108 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
++ */
++
++#include <stdlib.h>
++#include <sys/mman.h>
++
++#include <objtool/cfi.h>
++#include <objtool/builtin.h>
++#include <objtool/warn.h>
++
++unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
++
++struct cfi_init_state initial_func_cfi;
++struct cfi_state init_cfi;
++struct cfi_state func_cfi;
++
++void init_cfi_state(struct cfi_state *cfi)
++{
++	int i;
++
++	for (i = 0; i < CFI_NUM_REGS; i++) {
++		cfi->regs[i].base = CFI_UNDEFINED;
++		cfi->vals[i].base = CFI_UNDEFINED;
++	}
++	cfi->cfa.base = CFI_UNDEFINED;
++	cfi->drap_reg = CFI_UNDEFINED;
++	cfi->drap_offset = -1;
++}
++
++static struct cfi_state *cfi_alloc(void)
++{
++	struct cfi_state *cfi = calloc(sizeof(struct cfi_state), 1);
++
++	if (!cfi) {
++		WARN("calloc failed");
++		exit(1);
++	}
++	nr_cfi++;
++	return cfi;
++}
++
++static int cfi_bits;
++static struct hlist_head *cfi_hash;
++
++bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2)
++{
++	return memcmp((void *)cfi1 + sizeof(cfi1->hash),
++		      (void *)cfi2 + sizeof(cfi2->hash),
++		      sizeof(struct cfi_state) - sizeof(struct hlist_node));
++}
++
++static inline u32 cfi_key(struct cfi_state *cfi)
++{
++	return jhash((void *)cfi + sizeof(cfi->hash),
++		     sizeof(*cfi) - sizeof(cfi->hash), 0);
++}
++
++struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi)
++{
++	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
++	struct cfi_state *obj;
++
++	hlist_for_each_entry(obj, head, hash) {
++		if (!cficmp(cfi, obj)) {
++			nr_cfi_cache++;
++			return obj;
++		}
++	}
++
++	obj = cfi_alloc();
++	*obj = *cfi;
++	hlist_add_head(&obj->hash, head);
++
++	return obj;
++}
++
++void cfi_hash_add(struct cfi_state *cfi)
++{
++	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
++
++	hlist_add_head(&cfi->hash, head);
++}
++
++void *cfi_hash_alloc(unsigned long size)
++{
++	cfi_bits = max(10, ilog2(size));
++	cfi_hash = mmap(NULL, sizeof(struct hlist_head) << cfi_bits,
++			PROT_READ|PROT_WRITE,
++			MAP_PRIVATE|MAP_ANON, -1, 0);
++	if (cfi_hash == (void *)-1L) {
++		WARN("mmap fail cfi_hash");
++		cfi_hash = NULL;
++	}  else if (stats) {
++		printf("cfi_bits: %d\n", cfi_bits);
++	}
++
++	return cfi_hash;
++}
++
++void set_func_state(struct cfi_state *state)
++{
++	state->cfa = initial_func_cfi.cfa;
++	memcpy(&state->regs, &initial_func_cfi.regs,
++	       CFI_NUM_REGS * sizeof(struct cfi_reg));
++	state->stack_size = initial_func_cfi.cfa.offset;
++}
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 6de5085e3e5a..12acc9d329de 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -27,12 +27,6 @@ struct alternative {
+ 	bool skip_orig;
+ };
+ 
+-static unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
+-
+-static struct cfi_init_state initial_func_cfi;
+-static struct cfi_state init_cfi;
+-static struct cfi_state func_cfi;
+-
+ struct instruction *find_insn(struct objtool_file *file,
+ 			      struct section *sec, unsigned long offset)
+ {
+@@ -249,19 +243,6 @@ static bool dead_end_function(struct objtool_file *file, struct symbol *func)
+ 	return __dead_end_function(file, func, 0);
+ }
+ 
+-static void init_cfi_state(struct cfi_state *cfi)
+-{
+-	int i;
+-
+-	for (i = 0; i < CFI_NUM_REGS; i++) {
+-		cfi->regs[i].base = CFI_UNDEFINED;
+-		cfi->vals[i].base = CFI_UNDEFINED;
+-	}
+-	cfi->cfa.base = CFI_UNDEFINED;
+-	cfi->drap_reg = CFI_UNDEFINED;
+-	cfi->drap_offset = -1;
+-}
+-
+ static void init_insn_state(struct insn_state *state, struct section *sec)
+ {
+ 	memset(state, 0, sizeof(*state));
+@@ -276,75 +257,6 @@ static void init_insn_state(struct insn_state *state, struct section *sec)
+ 		state->noinstr = sec->noinstr;
+ }
+ 
+-static struct cfi_state *cfi_alloc(void)
+-{
+-	struct cfi_state *cfi = calloc(sizeof(struct cfi_state), 1);
+-	if (!cfi) {
+-		WARN("calloc failed");
+-		exit(1);
+-	}
+-	nr_cfi++;
+-	return cfi;
+-}
+-
+-static int cfi_bits;
+-static struct hlist_head *cfi_hash;
+-
+-static inline bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2)
+-{
+-	return memcmp((void *)cfi1 + sizeof(cfi1->hash),
+-		      (void *)cfi2 + sizeof(cfi2->hash),
+-		      sizeof(struct cfi_state) - sizeof(struct hlist_node));
+-}
+-
+-static inline u32 cfi_key(struct cfi_state *cfi)
+-{
+-	return jhash((void *)cfi + sizeof(cfi->hash),
+-		     sizeof(*cfi) - sizeof(cfi->hash), 0);
+-}
+-
+-static struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi)
+-{
+-	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
+-	struct cfi_state *obj;
+-
+-	hlist_for_each_entry(obj, head, hash) {
+-		if (!cficmp(cfi, obj)) {
+-			nr_cfi_cache++;
+-			return obj;
+-		}
+-	}
+-
+-	obj = cfi_alloc();
+-	*obj = *cfi;
+-	hlist_add_head(&obj->hash, head);
+-
+-	return obj;
+-}
+-
+-static void cfi_hash_add(struct cfi_state *cfi)
+-{
+-	struct hlist_head *head = &cfi_hash[hash_min(cfi_key(cfi), cfi_bits)];
+-
+-	hlist_add_head(&cfi->hash, head);
+-}
+-
+-static void *cfi_hash_alloc(unsigned long size)
+-{
+-	cfi_bits = max(10, ilog2(size));
+-	cfi_hash = mmap(NULL, sizeof(struct hlist_head) << cfi_bits,
+-			PROT_READ|PROT_WRITE,
+-			MAP_PRIVATE|MAP_ANON, -1, 0);
+-	if (cfi_hash == (void *)-1L) {
+-		WARN("mmap fail cfi_hash");
+-		cfi_hash = NULL;
+-	}  else if (stats) {
+-		printf("cfi_bits: %d\n", cfi_bits);
+-	}
+-
+-	return cfi_hash;
+-}
+-
+ static unsigned long nr_insns;
+ static unsigned long nr_insns_visited;
+ 
+@@ -1866,14 +1778,6 @@ static int add_jump_table_alts(struct objtool_file *file)
+ 	return 0;
+ }
+ 
+-static void set_func_state(struct cfi_state *state)
+-{
+-	state->cfa = initial_func_cfi.cfa;
+-	memcpy(&state->regs, &initial_func_cfi.regs,
+-	       CFI_NUM_REGS * sizeof(struct cfi_reg));
+-	state->stack_size = initial_func_cfi.cfa.offset;
+-}
+-
+ static int read_unwind_hints(struct objtool_file *file)
+ {
+ 	struct cfi_state cfi = init_cfi;
+diff --git a/tools/objtool/include/objtool/cfi.h b/tools/objtool/include/objtool/cfi.h
+index f11d1ac1dadf..7d54f1058655 100644
+--- a/tools/objtool/include/objtool/cfi.h
++++ b/tools/objtool/include/objtool/cfi.h
+@@ -37,4 +37,16 @@ struct cfi_state {
+ 	bool end;
+ };
+ 
++void init_cfi_state(struct cfi_state *cfi);
++struct cfi_state *cfi_hash_find_or_add(struct cfi_state *cfi);
++void cfi_hash_add(struct cfi_state *cfi);
++void *cfi_hash_alloc(unsigned long size);
++bool cficmp(struct cfi_state *cfi1, struct cfi_state *cfi2);
++void set_func_state(struct cfi_state *state);
++
++extern unsigned long nr_cfi, nr_cfi_reused, nr_cfi_cache;
++extern struct cfi_init_state initial_func_cfi;
++extern struct cfi_state init_cfi;
++extern struct cfi_state func_cfi;
++
+ #endif /* _OBJTOOL_CFI_H */
+-- 
+2.25.1
+
