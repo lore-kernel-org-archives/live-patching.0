@@ -2,193 +2,95 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39F11C433EF
-	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 13:46:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327BFC433F5
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 14:10:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbiEXNqF (ORCPT
+        id S238048AbiEXOKC (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 24 May 2022 09:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        Tue, 24 May 2022 10:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237943AbiEXNp5 (ORCPT
+        with ESMTP id S230209AbiEXOKA (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 24 May 2022 09:45:57 -0400
-Received: from condef-06.nifty.com (condef-06.nifty.com [202.248.20.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0A795A05
-        for <live-patching@vger.kernel.org>; Tue, 24 May 2022 06:45:56 -0700 (PDT)
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-06.nifty.com with ESMTP id 24ODghXu006073
-        for <live-patching@vger.kernel.org>; Tue, 24 May 2022 22:42:43 +0900
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 24ODgDUG022736;
-        Tue, 24 May 2022 22:42:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 24ODgDUG022736
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1653399734;
-        bh=aNLlIgPVqKG5chGBjgSqnkX4433JxjcWB7yJEVQZ+Gg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vXA8HrUWNsrcMbb4jjxlOaE1UOW4nzjC8LOPdbOMXac6+lkDf8ercmWRWQ6PntFhp
-         lbAfJ7j+CQ2UH7nNTb2juSxDe9MRJtGGZ6aySjIrlfVlcX9sJSj0BVCm/FTEkEAEbw
-         A3FQPgOVjUU/yzKOkS2SqKMP52kVy5IEdmzSXSipe+inDpK4wNAA2xuR9MR32X2bYd
-         de/lBb9qz4JB5gK5mtbgS7x4URxRknF7H6BevFWGGucM4329GlHTvZRGpAN6u/qHt5
-         jRTks2KxEk9Lxq4w8hPRb/lid7BQBgy9Fo/YcgPj+aV9bw+6GW5vkSONg8kGGvsLzU
-         PIUGgvvPbp5RQ==
-X-Nifty-SrcIP: [209.85.214.175]
-Received: by mail-pl1-f175.google.com with SMTP id n8so15901205plh.1;
-        Tue, 24 May 2022 06:42:13 -0700 (PDT)
-X-Gm-Message-State: AOAM532fDD7fTgrP2PSZWbA+u73O7vrxW/J+2a+2RkvgM1c2OOfz5JLb
-        SyP6IgYnglXAMWGxmPBxAYDepk5z1FlvutCIXJo=
-X-Google-Smtp-Source: ABdhPJyTdv6DT7AK41vY70QzhcMH2A38iaGQn1upGmFmPJo+2BcK+NmA7eL9uIW06HJVa028vlOfajtpPNm4sy2hH34=
-X-Received: by 2002:a17:90a:e004:b0:1e0:7a66:fb3a with SMTP id
- u4-20020a17090ae00400b001e07a66fb3amr2891041pjy.119.1653399732689; Tue, 24
- May 2022 06:42:12 -0700 (PDT)
+        Tue, 24 May 2022 10:10:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745B622BD9;
+        Tue, 24 May 2022 07:09:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C35CB818F8;
+        Tue, 24 May 2022 14:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EDFC385AA;
+        Tue, 24 May 2022 14:09:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653401396;
+        bh=JSvnpXphnJVhQGLmr4fRzu2m32BHhsihRMGPZ44KA/0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pxv/k92VTewMWk1kEI3FhNrWFC+/fjrBwAr6w2jhhvYpFmn1xHQx36moo5NORa/Qa
+         mSx9qx1yw/VoprUhnfCHuzpfBR4uNnGbWKefyOQtjRpTi/eC3z/q7eM5whgrFne+tz
+         DLv5fwgLRMZlCdxZJm7mStTZa5zNxnDe6ZxPpC2HI1HzOW3qXptQkQWemtSokkyj4B
+         C4zCbsFdAj60aWqcJP8Upvsug9yh6K4yDU9J5+FFAgvulN34YO3TnYXUCAOFBP3+3P
+         njyoAu1jivnufeNgrDf39SIkrpvYUVgAfl+i4A0qKUra0mQW175RfczXJrNKWo4O+U
+         I1N2xAbQEE8FA==
+Date:   Tue, 24 May 2022 15:09:49 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     madvenka@linux.microsoft.com
+Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        mark.rutland@arm.com, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 09/20] objtool: arm64: Implement command to invoke
+ the decoder
+Message-ID: <YoznLR30T+03Ea08@sirena.org.uk>
+References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
+ <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+ <20220524001637.1707472-10-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
- <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 24 May 2022 22:40:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
-Message-ID: <CAK7LNAQus0vcWLCgSdMZNcYKam4fKYj9c8Zrb3HggZ7dTBUrxQ@mail.gmail.com>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XOjh9GBsKRkCZwof"
+Content-Disposition: inline
+In-Reply-To: <20220524001637.1707472-10-madvenka@linux.microsoft.com>
+X-Cookie: A man's best friend is his dogma.
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, May 24, 2022 at 8:34 PM Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Date: Tue, 24 May 2022 03:04:00 +0900
->
-> > On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-> > <alexandr.lobakin@intel.com> wrote:
-> > >
-> > > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> > > to simplify livepatching (hopefully globally later on) triggers the
-> > > following:
-> > >
-> > > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> > >
-> > > The reason is that for now the condition from remove_dot():
-> > >
-> > > if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > >
-> > > which was designed to test if it's a dot or a '\0' after the suffix
-> > > is never satisfied.
-> > > This is due to that `s[n + m]` always points to the last digit of a
-> > > numeric suffix, not on the symbol next to it (from a custom debug
-> > > print added to modpost):
-> > >
-> > > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> > >
-> > > So it's off-by-one and was like that since 2014.
-> > > Fix this for the sake of upcoming features, but don't bother
-> > > stable-backporting, as it's well hidden -- apart from that LD flag,
-> > > can be triggered only by GCC LTO which never landed upstream.
-> > >
-> > > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> > > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > > ---
-> > >  scripts/mod/modpost.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > > index 6bfa33217914..4648b7afe5cc 100644
-> > > --- a/scripts/mod/modpost.c
-> > > +++ b/scripts/mod/modpost.c
-> > > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
-> > >
-> > >         if (n && s[n]) {
-> > >                 size_t m = strspn(s + n + 1, "0123456789");
-> > > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-> > >                         s[n] = 0;
-> > >
-> > >                 /* strip trailing .lto */
-> > > --
-> > > 2.34.1
-> > >
-> >
-> > This trivial patch has not been picked up yet.
-> >
-> > I can apply this to my tree, if you want.
->
-> It's a good idea, I'd like to!
-> I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
-> is not directly related to it and can be taken independently.
-> Should I change the commit message or it's ok to take it as it is?
 
+--XOjh9GBsKRkCZwof
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am fine with either way.
+On Mon, May 23, 2022 at 07:16:26PM -0500, madvenka@linux.microsoft.com wrot=
+e:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>=20
+> Implement a built-in command called cmd_fpv() that can be invoked as
+> follows:
+>=20
+> 	objtool fpv generate file.o
+>=20
+> The built-in command invokes decode_instructions() to walk each function
+> and decode the instructions of the function.
 
-If you want to resubmit this with a fresh commit log,
-please send it to:
-  linux-kbuild@vger.kernel.org
+In commit b51277eb9775ce91 ("objtool: Ditch subcommands") Josh removed
+subcommands so this interface is going to need a rethink.
 
-Then, I will take care of it in this MW.
+--XOjh9GBsKRkCZwof
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKM5y0ACgkQJNaLcl1U
+h9BLywf8DgDILXDJ1Omp3W4aQd53XxP43eT/TCF/QNejM1EVAPhUHwuRYgkvHZgG
+bICv+JnXHRCGs1okzLhhCnfBbLYzF5pe5IOO6Pd8hX42JXryThS0S30ozNfiAD4Z
+2fqxPwbDWbLSuA+DT7rHUpI3ejB+yKlErsuDyUDwIEnOOQdK/jf+TnX6/xhrkS7L
+ei584kKqsXgq8sXLC2A8DS3Bw2bUXdnWrFf1+tKjztt4LSylTe9pJij1AsouZLlV
+CRj2yNRMvjz7ybRyd9IFJFE8EKMfuYoX0Q2nOLlNEn1+8JYqPRWZdDHwhfPDwIOa
+itEUQIjjN8Dtlr6Xl5lk+3+W4U3mKg==
+=Xi99
+-----END PGP SIGNATURE-----
 
-
-
-> >
-> > Please let me know your thoughts.
-> >
-> >
-> > --
-> > Best Regards
-> > Masahiro Yamada
->
-> * I'm planning to submit a new rev of FG-KASLR series soon, but
-> since I'm too busy with XDP for now, it will happen no sooner than
-> in a couple months =\
->
-> Thanks!
-> Al
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+--XOjh9GBsKRkCZwof--
