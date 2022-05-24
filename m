@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 327F7C4332F
-	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C469C433FE
+	for <live-patching@archiver.kernel.org>; Tue, 24 May 2022 00:17:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiEXAQz (ORCPT
+        id S231905AbiEXARH (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 May 2022 20:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        Mon, 23 May 2022 20:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbiEXAQx (ORCPT
+        with ESMTP id S231737AbiEXAQ5 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 May 2022 20:16:53 -0400
+        Mon, 23 May 2022 20:16:57 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 840EB6D1BA;
-        Mon, 23 May 2022 17:16:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7221A6D4CB;
+        Mon, 23 May 2022 17:16:55 -0700 (PDT)
 Received: from x64host.home (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7D5EE20B894E;
-        Mon, 23 May 2022 17:16:50 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7D5EE20B894E
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7F2F220B895B;
+        Mon, 23 May 2022 17:16:54 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7F2F220B895B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1653351411;
-        bh=6K1f7gtO5pFA0H990GU3QXDIIsrQWqqHKexvfsHsLu0=;
+        s=default; t=1653351415;
+        bh=NA16KWlQPMN0HiA+DBPspnlFwB3chkl/e0Ulkr5UDdA=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cmMTbX/hfEn/x/ZGQ9MMZljReSKrjJ818UryE5soz/YdfwGh6TLFrR4rHbMvBK9jm
-         qU51OEWFkkzObIOVdn/5NFm6gA72u0Bj3cAAkZf5SdPUDrRaGJ07Gi5km65MSyJnqN
-         UmW+9JWMD+vqfwgDzYoE6Jnms5RRU6htOiRCUiMA=
+        b=P/8Udr7JPl0jloM1OqtLgmnqIxrhl6BjF9tfhWnx5/slYQnE74waDWn2D96EQPP/X
+         TyLxBMTcgWc6ZPLr/Nci9GakGN/DruUa59Y3DQKaD/ep3oR4502o1EjyLDUM6i9FSO
+         Mlq1iVAkglieO/HQ9jXw5EUaz3fyKb4tr1kIau3Y=
 From:   madvenka@linux.microsoft.com
 To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
@@ -34,9 +34,9 @@ To:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
         jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
         live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         madvenka@linux.microsoft.com
-Subject: [RFC PATCH v2 04/20] objtool: Reorganize Unwind hint code
-Date:   Mon, 23 May 2022 19:16:21 -0500
-Message-Id: <20220524001637.1707472-5-madvenka@linux.microsoft.com>
+Subject: [RFC PATCH v2 08/20] objtool: arm64: Implement decoder for FP validation
+Date:   Mon, 23 May 2022 19:16:25 -0500
+Message-Id: <20220524001637.1707472-9-madvenka@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220524001637.1707472-1-madvenka@linux.microsoft.com>
 References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
@@ -49,728 +49,425 @@ X-Mailing-List: live-patching@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-Unwind hint macros and struct unwind_hint are arch-specific. Move them
-into the arch-specific file asm/unwind_hints.h. But the unwind hint
-types are generic. Retain them in linux/objtool.h.
+Implement arch_decode_instruction() for ARM64. For dynamic FP validation,
+we need to walk each function's code and determine the stack and frame
+offsets at each instruction. So, the following instructions are completely
+decoded:
 
-Unwind hints can be used with static stack validation as well as other
-forms of validation such as dynamic FP validation. Move the function
-read_unwind_hints() from check.c to a new file unwind_hints.c so that
-it can be shared across validation schemes.
+	Instructions that affect the SP and FP:
+
+	- Load-Store instructions
+	- Add/Sub/Mov instructions
+
+	Instructions that affect control flow:
+
+	- Branch instructions
+	- Call instructions
+	- Return instructions
+
+The rest of the instructions are either dont-care from an unwind
+perspective or unexpected from the compiler. Add checks for the unexpected
+ones to catch them if the compiler ever generates them.
+
+Define CFI registers used by ARM64 in arch-specific cfi_regs.h. This is a
+small subset of the ones used in x86.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/x86/include/asm/unwind_hints.h       |  85 +++++++++++++
- arch/x86/kernel/unwind_orc.c              |   2 +-
- include/linux/objtool.h                   |  67 ----------
- tools/arch/x86/include/asm/unwind_hints.h | 147 ++++++++++++++++++++++
- tools/include/linux/objtool.h             |  67 ----------
- tools/objtool/Build                       |   2 +
- tools/objtool/check.c                     |  77 ------------
- tools/objtool/include/objtool/insn.h      |   1 +
- tools/objtool/sync-check.sh               |   1 +
- tools/objtool/unwind_hints.c              |  87 +++++++++++++
- 10 files changed, 324 insertions(+), 212 deletions(-)
- create mode 100644 tools/arch/x86/include/asm/unwind_hints.h
- create mode 100644 tools/objtool/unwind_hints.c
+ tools/objtool/arch/arm64/Build                |   1 +
+ tools/objtool/arch/arm64/decode.c             | 342 ++++++++++++++++++
+ .../arch/arm64/include/arch/cfi_regs.h        |  12 +
+ tools/objtool/include/objtool/arch.h          |   1 +
+ 4 files changed, 356 insertions(+)
+ create mode 100644 tools/objtool/arch/arm64/Build
+ create mode 100644 tools/objtool/arch/arm64/decode.c
+ create mode 100644 tools/objtool/arch/arm64/include/arch/cfi_regs.h
 
-diff --git a/arch/x86/include/asm/unwind_hints.h b/arch/x86/include/asm/unwind_hints.h
-index 8b33674288ea..d5a33561a64e 100644
---- a/arch/x86/include/asm/unwind_hints.h
-+++ b/arch/x86/include/asm/unwind_hints.h
-@@ -1,10 +1,95 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
- #ifndef _ASM_X86_UNWIND_HINTS_H
- #define _ASM_X86_UNWIND_HINTS_H
- 
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/types.h>
-+
-+/*
-+ * This struct is used by asm and inline asm code to manually annotate the
-+ * location of registers on the stack.
-+ */
-+struct unwind_hint {
-+	u32		ip;
-+	s16		sp_offset;
-+	u8		sp_reg;
-+	u8		type;
-+	u8		end;
-+};
-+#endif
-+
- #include <linux/objtool.h>
- 
- #include "orc_types.h"
- 
-+#ifdef CONFIG_STACK_VALIDATION
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
-+	"987: \n\t"						\
-+	".pushsection .discard.unwind_hints\n\t"		\
-+	/* struct unwind_hint */				\
-+	".long 987b - .\n\t"					\
-+	".short " __stringify(sp_offset) "\n\t"			\
-+	".byte " __stringify(sp_reg) "\n\t"			\
-+	".byte " __stringify(type) "\n\t"			\
-+	".byte " __stringify(end) "\n\t"			\
-+	".balign 4 \n\t"					\
-+	".popsection\n\t"
-+
-+#else /* __ASSEMBLY__ */
-+
-+/*
-+ * In asm, there are two kinds of code: normal C-type callable functions and
-+ * the rest.  The normal callable functions can be called by other code, and
-+ * don't do anything unusual with the stack.  Such normal callable functions
-+ * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-+ * category.  In this case, no special debugging annotations are needed because
-+ * objtool can automatically generate the ORC data for the ORC unwinder to read
-+ * at runtime.
-+ *
-+ * Anything which doesn't fall into the above category, such as syscall and
-+ * interrupt handlers, tends to not be called directly by other functions, and
-+ * often does unusual non-C-function-type things with the stack pointer.  Such
-+ * code needs to be annotated such that objtool can understand it.  The
-+ * following CFI hint macros are for this type of code.
-+ *
-+ * These macros provide hints to objtool about the state of the stack at each
-+ * instruction.  Objtool starts from the hints and follows the code flow,
-+ * making automatic CFI adjustments when it sees pushes and pops, filling out
-+ * the debuginfo as necessary.  It will also warn if it sees any
-+ * inconsistencies.
-+ */
-+.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
-+.Lunwind_hint_ip_\@:
-+	.pushsection .discard.unwind_hints
-+		/* struct unwind_hint */
-+		.long .Lunwind_hint_ip_\@ - .
-+		.short \sp_offset
-+		.byte \sp_reg
-+		.byte \type
-+		.byte \end
-+		.balign 4
-+	.popsection
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* !CONFIG_STACK_VALIDATION */
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
-+	"\n\t"
-+#else
-+.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
-+.endm
-+#endif
-+
-+#endif /* CONFIG_STACK_VALIDATION */
-+
- #ifdef __ASSEMBLY__
- 
- .macro UNWIND_HINT_EMPTY
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 794fdef2501a..7cae5bfa56c7 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <linux/objtool.h>
-+#include <asm/unwind_hints.h>
- #include <linux/module.h>
- #include <linux/sort.h>
- #include <asm/ptrace.h>
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 586d35720f13..00bb449777d0 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -2,23 +2,6 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
- 
--#ifndef __ASSEMBLY__
--
--#include <linux/types.h>
--
--/*
-- * This struct is used by asm and inline asm code to manually annotate the
-- * location of registers on the stack.
-- */
--struct unwind_hint {
--	u32		ip;
--	s16		sp_offset;
--	u8		sp_reg;
--	u8		type;
--	u8		end;
--};
--#endif
--
- /*
-  * UNWIND_HINT_TYPE_CALL: Indicates that sp_reg+sp_offset resolves to PREV_SP
-  * (the caller's SP right before it made the call).  Used for all callable
-@@ -42,18 +25,6 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
--	"987: \n\t"						\
--	".pushsection .discard.unwind_hints\n\t"		\
--	/* struct unwind_hint */				\
--	".long 987b - .\n\t"					\
--	".short " __stringify(sp_offset) "\n\t"			\
--	".byte " __stringify(sp_reg) "\n\t"			\
--	".byte " __stringify(type) "\n\t"			\
--	".byte " __stringify(end) "\n\t"			\
--	".balign 4 \n\t"					\
--	".popsection\n\t"
--
- /*
-  * This macro marks the given function's stack frame as "non-standard", which
-  * tells objtool to ignore the function when doing stack metadata validation.
-@@ -101,40 +72,6 @@ struct unwind_hint {
- 	.long 999b;						\
- 	.popsection;
- 
--/*
-- * In asm, there are two kinds of code: normal C-type callable functions and
-- * the rest.  The normal callable functions can be called by other code, and
-- * don't do anything unusual with the stack.  Such normal callable functions
-- * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-- * category.  In this case, no special debugging annotations are needed because
-- * objtool can automatically generate the ORC data for the ORC unwinder to read
-- * at runtime.
-- *
-- * Anything which doesn't fall into the above category, such as syscall and
-- * interrupt handlers, tends to not be called directly by other functions, and
-- * often does unusual non-C-function-type things with the stack pointer.  Such
-- * code needs to be annotated such that objtool can understand it.  The
-- * following CFI hint macros are for this type of code.
-- *
-- * These macros provide hints to objtool about the state of the stack at each
-- * instruction.  Objtool starts from the hints and follows the code flow,
-- * making automatic CFI adjustments when it sees pushes and pops, filling out
-- * the debuginfo as necessary.  It will also warn if it sees any
-- * inconsistencies.
-- */
--.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
--.Lunwind_hint_ip_\@:
--	.pushsection .discard.unwind_hints
--		/* struct unwind_hint */
--		.long .Lunwind_hint_ip_\@ - .
--		.short \sp_offset
--		.byte \sp_reg
--		.byte \type
--		.byte \end
--		.balign 4
--	.popsection
--.endm
--
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
- 		.long \func - .
-@@ -161,16 +98,12 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
--	"\n\t"
- #define STACK_FRAME_NON_STANDARD(func)
- #define STACK_FRAME_NON_STANDARD_FP(func)
- #define ANNOTATE_NOENDBR
- #define ASM_REACHABLE
- #else
- #define ANNOTATE_INTRA_FUNCTION_CALL
--.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
--.endm
- .macro STACK_FRAME_NON_STANDARD func:req
- .endm
- .macro ANNOTATE_NOENDBR
-diff --git a/tools/arch/x86/include/asm/unwind_hints.h b/tools/arch/x86/include/asm/unwind_hints.h
+diff --git a/tools/objtool/arch/arm64/Build b/tools/objtool/arch/arm64/Build
 new file mode 100644
-index 000000000000..d5a33561a64e
+index 000000000000..3ff1f00c6a47
 --- /dev/null
-+++ b/tools/arch/x86/include/asm/unwind_hints.h
-@@ -0,0 +1,147 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _ASM_X86_UNWIND_HINTS_H
-+#define _ASM_X86_UNWIND_HINTS_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/types.h>
-+
-+/*
-+ * This struct is used by asm and inline asm code to manually annotate the
-+ * location of registers on the stack.
-+ */
-+struct unwind_hint {
-+	u32		ip;
-+	s16		sp_offset;
-+	u8		sp_reg;
-+	u8		type;
-+	u8		end;
-+};
-+#endif
-+
-+#include <linux/objtool.h>
-+
-+#include "orc_types.h"
-+
-+#ifdef CONFIG_STACK_VALIDATION
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
-+	"987: \n\t"						\
-+	".pushsection .discard.unwind_hints\n\t"		\
-+	/* struct unwind_hint */				\
-+	".long 987b - .\n\t"					\
-+	".short " __stringify(sp_offset) "\n\t"			\
-+	".byte " __stringify(sp_reg) "\n\t"			\
-+	".byte " __stringify(type) "\n\t"			\
-+	".byte " __stringify(end) "\n\t"			\
-+	".balign 4 \n\t"					\
-+	".popsection\n\t"
-+
-+#else /* __ASSEMBLY__ */
-+
-+/*
-+ * In asm, there are two kinds of code: normal C-type callable functions and
-+ * the rest.  The normal callable functions can be called by other code, and
-+ * don't do anything unusual with the stack.  Such normal callable functions
-+ * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-+ * category.  In this case, no special debugging annotations are needed because
-+ * objtool can automatically generate the ORC data for the ORC unwinder to read
-+ * at runtime.
-+ *
-+ * Anything which doesn't fall into the above category, such as syscall and
-+ * interrupt handlers, tends to not be called directly by other functions, and
-+ * often does unusual non-C-function-type things with the stack pointer.  Such
-+ * code needs to be annotated such that objtool can understand it.  The
-+ * following CFI hint macros are for this type of code.
-+ *
-+ * These macros provide hints to objtool about the state of the stack at each
-+ * instruction.  Objtool starts from the hints and follows the code flow,
-+ * making automatic CFI adjustments when it sees pushes and pops, filling out
-+ * the debuginfo as necessary.  It will also warn if it sees any
-+ * inconsistencies.
-+ */
-+.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
-+.Lunwind_hint_ip_\@:
-+	.pushsection .discard.unwind_hints
-+		/* struct unwind_hint */
-+		.long .Lunwind_hint_ip_\@ - .
-+		.short \sp_offset
-+		.byte \sp_reg
-+		.byte \type
-+		.byte \end
-+		.balign 4
-+	.popsection
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* !CONFIG_STACK_VALIDATION */
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
-+	"\n\t"
-+#else
-+.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
-+.endm
-+#endif
-+
-+#endif /* CONFIG_STACK_VALIDATION */
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT sp_reg=ORC_REG_UNDEFINED type=UNWIND_HINT_TYPE_CALL end=1
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=%rsp offset=0 indirect=0 extra=1 partial=0
-+	.if \base == %rsp
-+		.if \indirect
-+			.set sp_reg, ORC_REG_SP_INDIRECT
-+		.else
-+			.set sp_reg, ORC_REG_SP
-+		.endif
-+	.elseif \base == %rbp
-+		.set sp_reg, ORC_REG_BP
-+	.elseif \base == %rdi
-+		.set sp_reg, ORC_REG_DI
-+	.elseif \base == %rdx
-+		.set sp_reg, ORC_REG_DX
-+	.elseif \base == %r10
-+		.set sp_reg, ORC_REG_R10
-+	.else
-+		.error "UNWIND_HINT_REGS: bad base register"
-+	.endif
-+
-+	.set sp_offset, \offset
-+
-+	.if \partial
-+		.set type, UNWIND_HINT_TYPE_REGS_PARTIAL
-+	.elseif \extra == 0
-+		.set type, UNWIND_HINT_TYPE_REGS_PARTIAL
-+		.set sp_offset, \offset + (16*8)
-+	.else
-+		.set type, UNWIND_HINT_TYPE_REGS
-+	.endif
-+
-+	UNWIND_HINT sp_reg=sp_reg sp_offset=sp_offset type=type
-+.endm
-+
-+.macro UNWIND_HINT_IRET_REGS base=%rsp offset=0
-+	UNWIND_HINT_REGS base=\base offset=\offset partial=1
-+.endm
-+
-+.macro UNWIND_HINT_FUNC
-+	UNWIND_HINT sp_reg=ORC_REG_SP sp_offset=8 type=UNWIND_HINT_TYPE_FUNC
-+.endm
-+
-+#else
-+
-+#define UNWIND_HINT_FUNC \
-+	UNWIND_HINT(ORC_REG_SP, 8, UNWIND_HINT_TYPE_FUNC, 0)
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ASM_X86_UNWIND_HINTS_H */
-diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
-index 586d35720f13..00bb449777d0 100644
---- a/tools/include/linux/objtool.h
-+++ b/tools/include/linux/objtool.h
-@@ -2,23 +2,6 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
- 
--#ifndef __ASSEMBLY__
--
--#include <linux/types.h>
--
--/*
-- * This struct is used by asm and inline asm code to manually annotate the
-- * location of registers on the stack.
-- */
--struct unwind_hint {
--	u32		ip;
--	s16		sp_offset;
--	u8		sp_reg;
--	u8		type;
--	u8		end;
--};
--#endif
--
- /*
-  * UNWIND_HINT_TYPE_CALL: Indicates that sp_reg+sp_offset resolves to PREV_SP
-  * (the caller's SP right before it made the call).  Used for all callable
-@@ -42,18 +25,6 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, end)		\
--	"987: \n\t"						\
--	".pushsection .discard.unwind_hints\n\t"		\
--	/* struct unwind_hint */				\
--	".long 987b - .\n\t"					\
--	".short " __stringify(sp_offset) "\n\t"			\
--	".byte " __stringify(sp_reg) "\n\t"			\
--	".byte " __stringify(type) "\n\t"			\
--	".byte " __stringify(end) "\n\t"			\
--	".balign 4 \n\t"					\
--	".popsection\n\t"
--
- /*
-  * This macro marks the given function's stack frame as "non-standard", which
-  * tells objtool to ignore the function when doing stack metadata validation.
-@@ -101,40 +72,6 @@ struct unwind_hint {
- 	.long 999b;						\
- 	.popsection;
- 
--/*
-- * In asm, there are two kinds of code: normal C-type callable functions and
-- * the rest.  The normal callable functions can be called by other code, and
-- * don't do anything unusual with the stack.  Such normal callable functions
-- * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-- * category.  In this case, no special debugging annotations are needed because
-- * objtool can automatically generate the ORC data for the ORC unwinder to read
-- * at runtime.
-- *
-- * Anything which doesn't fall into the above category, such as syscall and
-- * interrupt handlers, tends to not be called directly by other functions, and
-- * often does unusual non-C-function-type things with the stack pointer.  Such
-- * code needs to be annotated such that objtool can understand it.  The
-- * following CFI hint macros are for this type of code.
-- *
-- * These macros provide hints to objtool about the state of the stack at each
-- * instruction.  Objtool starts from the hints and follows the code flow,
-- * making automatic CFI adjustments when it sees pushes and pops, filling out
-- * the debuginfo as necessary.  It will also warn if it sees any
-- * inconsistencies.
-- */
--.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
--.Lunwind_hint_ip_\@:
--	.pushsection .discard.unwind_hints
--		/* struct unwind_hint */
--		.long .Lunwind_hint_ip_\@ - .
--		.short \sp_offset
--		.byte \sp_reg
--		.byte \type
--		.byte \end
--		.balign 4
--	.popsection
--.endm
--
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
- 		.long \func - .
-@@ -161,16 +98,12 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, end)	\
--	"\n\t"
- #define STACK_FRAME_NON_STANDARD(func)
- #define STACK_FRAME_NON_STANDARD_FP(func)
- #define ANNOTATE_NOENDBR
- #define ASM_REACHABLE
- #else
- #define ANNOTATE_INTRA_FUNCTION_CALL
--.macro UNWIND_HINT sp_reg:req sp_offset=0 type:req end=0
--.endm
- .macro STACK_FRAME_NON_STANDARD func:req
- .endm
- .macro ANNOTATE_NOENDBR
-diff --git a/tools/objtool/Build b/tools/objtool/Build
-index 199561f86c1e..9c2a332f61f3 100644
---- a/tools/objtool/Build
-+++ b/tools/objtool/Build
-@@ -6,11 +6,13 @@ objtool-$(SUBCMD_CHECK) += check.o
- objtool-$(SUBCMD_CHECK) += cfi.o
- objtool-$(SUBCMD_CHECK) += insn.o
- objtool-$(SUBCMD_CHECK) += decode.o
-+objtool-$(SUBCMD_CHECK) += unwind_hints.o
- objtool-$(SUBCMD_CHECK) += special.o
- objtool-$(SUBCMD_ORC) += check.o
- objtool-$(SUBCMD_ORC) += cfi.o
- objtool-$(SUBCMD_ORC) += insn.o
- objtool-$(SUBCMD_ORC) += decode.o
-+objtool-$(SUBCMD_ORC) += unwind_hints.o
- objtool-$(SUBCMD_ORC) += orc_gen.o
- objtool-$(SUBCMD_ORC) += orc_dump.o
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 334ddc737bf9..43f3d7819277 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1541,83 +1541,6 @@ static int add_jump_table_alts(struct objtool_file *file)
- 	return 0;
- }
- 
--static int read_unwind_hints(struct objtool_file *file)
--{
--	struct cfi_state cfi = init_cfi;
--	struct section *sec, *relocsec;
--	struct unwind_hint *hint;
--	struct instruction *insn;
--	struct reloc *reloc;
--	int i;
--
--	sec = find_section_by_name(file->elf, ".discard.unwind_hints");
--	if (!sec)
--		return 0;
--
--	relocsec = sec->reloc;
--	if (!relocsec) {
--		WARN("missing .rela.discard.unwind_hints section");
--		return -1;
--	}
--
--	if (sec->sh.sh_size % sizeof(struct unwind_hint)) {
--		WARN("struct unwind_hint size mismatch");
--		return -1;
--	}
--
--	file->hints = true;
--
--	for (i = 0; i < sec->sh.sh_size / sizeof(struct unwind_hint); i++) {
--		hint = (struct unwind_hint *)sec->data->d_buf + i;
--
--		reloc = find_reloc_by_dest(file->elf, sec, i * sizeof(*hint));
--		if (!reloc) {
--			WARN("can't find reloc for unwind_hints[%d]", i);
--			return -1;
--		}
--
--		insn = find_insn(file, reloc->sym->sec, reloc->addend);
--		if (!insn) {
--			WARN("can't find insn for unwind_hints[%d]", i);
--			return -1;
--		}
--
--		insn->hint = true;
--
--		if (ibt && hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
--			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
--
--			if (sym && sym->bind == STB_GLOBAL &&
--			    insn->type != INSN_ENDBR && !insn->noendbr) {
--				WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
--					  insn->sec, insn->offset);
--			}
--		}
--
--		if (hint->type == UNWIND_HINT_TYPE_FUNC) {
--			insn->cfi = &func_cfi;
--			continue;
--		}
--
--		if (insn->cfi)
--			cfi = *(insn->cfi);
--
--		if (arch_decode_hint_reg(hint->sp_reg, &cfi.cfa.base)) {
--			WARN_FUNC("unsupported unwind_hint sp base reg %d",
--				  insn->sec, insn->offset, hint->sp_reg);
--			return -1;
--		}
--
--		cfi.cfa.offset = bswap_if_needed(hint->sp_offset);
--		cfi.type = hint->type;
--		cfi.end = hint->end;
--
--		insn->cfi = cfi_hash_find_or_add(&cfi);
--	}
--
--	return 0;
--}
--
- static int read_noendbr_hints(struct objtool_file *file)
- {
- 	struct section *sec;
-diff --git a/tools/objtool/include/objtool/insn.h b/tools/objtool/include/objtool/insn.h
-index 5f01fd0ce8ed..0b5596f8b12f 100644
---- a/tools/objtool/include/objtool/insn.h
-+++ b/tools/objtool/include/objtool/insn.h
-@@ -84,6 +84,7 @@ bool insn_cfi_match(struct instruction *insn, struct cfi_state *cfi2);
- bool same_function(struct instruction *insn1, struct instruction *insn2);
- bool is_first_func_insn(struct instruction *insn);
- int decode_instructions(struct objtool_file *file);
-+int read_unwind_hints(struct objtool_file *file);
- 
- #define for_each_insn(file, insn)					\
- 	list_for_each_entry(insn, &file->insn_list, list)
-diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-check.sh
-index 105a291ff8e7..ee49b4e9e72c 100755
---- a/tools/objtool/sync-check.sh
-+++ b/tools/objtool/sync-check.sh
-@@ -14,6 +14,7 @@ arch/x86/include/asm/nops.h
- arch/x86/include/asm/inat_types.h
- arch/x86/include/asm/orc_types.h
- arch/x86/include/asm/emulate_prefix.h
-+arch/x86/include/asm/unwind_hints.h
- arch/x86/lib/x86-opcode-map.txt
- arch/x86/tools/gen-insn-attr-x86.awk
- include/linux/static_call_types.h
-diff --git a/tools/objtool/unwind_hints.c b/tools/objtool/unwind_hints.c
++++ b/tools/objtool/arch/arm64/Build
+@@ -0,0 +1 @@
++objtool-y += decode.o
+diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
 new file mode 100644
-index 000000000000..d4e41c67403b
+index 000000000000..8a9ff030085d
 --- /dev/null
-+++ b/tools/objtool/unwind_hints.c
-@@ -0,0 +1,87 @@
++++ b/tools/objtool/arch/arm64/decode.c
+@@ -0,0 +1,342 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
-+ * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
++ * decode.c - ARM64 instruction decoder for dynamic FP validation. Only a
++ *            small subset of the instructions need to be decoded.
++ *
++ * Author: Madhavan T. Venkataraman (madvenka@linux.microsoft.com)
++ *
++ * Copyright (C) 2022 Microsoft Corporation
 + */
-+#include <asm/unwind_hints.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
 +
-+#include <objtool/builtin.h>
-+#include <objtool/endianness.h>
 +#include <objtool/insn.h>
++#include <objtool/elf.h>
 +#include <objtool/warn.h>
++#include <arch/cfi_regs.h>
 +
-+int read_unwind_hints(struct objtool_file *file)
++/* ARM64 instructions are all 4 bytes wide. */
++#define INSN_SIZE	4
++
++/* --------------------- instruction decode struct ------------------------- */
++
++struct decode {
++	unsigned long	opmask;
++	unsigned long	op;
++	unsigned int	shift;
++	unsigned int	bits;
++	unsigned int	size;
++	unsigned int	sign_extend;
++	void		(*func)(struct decode *decode,
++				u32 insn, enum insn_type *type,
++				s64 *imm, struct list_head *stack_ops);
++};
++
++/* --------------------- miscellaneous functions --------------------------- */
++
++static void reg_check(unsigned int sp_check, unsigned int fp_check,
++		      u32 insn, enum insn_type *type)
 +{
-+	struct cfi_state cfi = init_cfi;
-+	struct section *sec, *relocsec;
-+	struct unwind_hint *hint;
-+	struct instruction *insn;
-+	struct reloc *reloc;
-+	int i;
++	unsigned int	rd = insn & 0x1F;
 +
-+	sec = find_section_by_name(file->elf, ".discard.unwind_hints");
-+	if (!sec)
-+		return 0;
-+
-+	relocsec = sec->reloc;
-+	if (!relocsec) {
-+		WARN("missing .rela.discard.unwind_hints section");
-+		return -1;
-+	}
-+
-+	if (sec->sh.sh_size % sizeof(struct unwind_hint)) {
-+		WARN("struct unwind_hint size mismatch");
-+		return -1;
-+	}
-+
-+	file->hints = true;
-+
-+	for (i = 0; i < sec->sh.sh_size / sizeof(struct unwind_hint); i++) {
-+		hint = (struct unwind_hint *)sec->data->d_buf + i;
-+
-+		reloc = find_reloc_by_dest(file->elf, sec, i * sizeof(*hint));
-+		if (!reloc) {
-+			WARN("can't find reloc for unwind_hints[%d]", i);
-+			return -1;
-+		}
-+
-+		insn = find_insn(file, reloc->sym->sec, reloc->addend);
-+		if (!insn) {
-+			WARN("can't find insn for unwind_hints[%d]", i);
-+			return -1;
-+		}
-+
-+		insn->hint = true;
-+
-+		if (ibt && hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
-+			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
-+
-+			if (sym && sym->bind == STB_GLOBAL &&
-+			    insn->type != INSN_ENDBR && !insn->noendbr) {
-+				WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
-+					  insn->sec, insn->offset);
-+			}
-+		}
-+
-+		if (hint->type == UNWIND_HINT_TYPE_FUNC) {
-+			insn->cfi = &func_cfi;
-+			continue;
-+		}
-+
-+		if (insn->cfi)
-+			cfi = *(insn->cfi);
-+
-+		if (arch_decode_hint_reg(hint->sp_reg, &cfi.cfa.base)) {
-+			WARN_FUNC("unsupported unwind_hint sp base reg %d",
-+				  insn->sec, insn->offset, hint->sp_reg);
-+			return -1;
-+		}
-+
-+		cfi.cfa.offset = bswap_if_needed(hint->sp_offset);
-+		cfi.type = hint->type;
-+		cfi.end = hint->end;
-+
-+		insn->cfi = cfi_hash_find_or_add(&cfi);
-+	}
-+
-+	return 0;
++	if ((sp_check && rd == CFI_SP) || (fp_check && rd == CFI_FP))
++		*type = INSN_UNRELIABLE;
 +}
++
++static void add_stack_op(unsigned char src, unsigned char dest, s64 offset,
++			 struct list_head *stack_ops)
++{
++	struct stack_op *op;
++
++	op = calloc(1, sizeof(*op));
++	if (!op) {
++		WARN("calloc failed");
++		return;
++	}
++
++	op->src.reg = src;
++	op->src.type = OP_SRC_ADD;
++	op->src.offset = offset;
++	op->dest.reg = dest;
++	op->dest.type = OP_DEST_REG;
++
++	list_add_tail(&op->list, stack_ops);
++}
++
++/* ------------------------ decode functions ------------------------------- */
++
++#define STP_SOFF	0x29000000	/* STP signed offset */
++#define STR_SOFF	0xB9000000	/* STR signed offset */
++#define LDP_SOFF	0x29400000	/* LDP signed offset */
++#define LDR_SOFF	0xB9400000	/* LDR signed offset */
++
++/* Load-Store instructions. */
++static void ld_st(struct decode *decode,
++		       u32 insn, enum insn_type *type,
++		       s64 *imm, struct list_head *stack_ops)
++{
++	unsigned int	rn = (insn >> 5) & 0x1F;
++
++	if (decode->op == LDP_SOFF || decode->op == LDR_SOFF ||
++	    decode->op == STP_SOFF || decode->op == STR_SOFF)
++		return;
++	if (rn == CFI_SP)
++		add_stack_op(CFI_SP, CFI_SP, *imm, stack_ops);
++	else if (rn == CFI_FP)
++		add_stack_op(CFI_FP, CFI_FP, *imm, stack_ops);
++}
++
++/* Load-Store instructions. */
++static void ld_st_chk(struct decode *decode,
++			     u32 insn, enum insn_type *type,
++			     s64 *imm, struct list_head *stack_ops)
++{
++	ld_st(decode, insn, type, imm, stack_ops);
++	reg_check(0, 1, insn, type);
++}
++
++#define CMN_OP		0x31000000	/* Alias of ADDS imm */
++#define CMP_OP		0x71000000	/* Alias of SUBS imm */
++
++/* Add instructions. */
++static void add(struct decode *decode,
++		u32 insn, enum insn_type *type,
++		s64 *imm, struct list_head *stack_ops)
++{
++	unsigned int	rd = insn & 0x1F;
++	unsigned int	rn = (insn >> 5) & 0x1F;
++	unsigned int	shift = (insn >> 22) & 1;
++
++	if (shift)
++		*imm <<= 12;
++
++	if (rd == CFI_SP) {
++		if (rn == CFI_SP)
++			add_stack_op(CFI_SP, CFI_SP, *imm, stack_ops);
++		else if (rn == CFI_FP)
++			add_stack_op(CFI_FP, CFI_SP, *imm, stack_ops);
++		else if (decode->op != CMN_OP && decode->op != CMP_OP)
++			*type = INSN_UNRELIABLE;
++	} else if (rd == CFI_FP) {
++		if (rn == CFI_SP)
++			add_stack_op(CFI_SP, CFI_FP, *imm, stack_ops);
++		else if (rn == CFI_FP)
++			add_stack_op(CFI_FP, CFI_FP, *imm, stack_ops);
++		else
++			*type = INSN_UNRELIABLE;
++	}
++}
++
++/* Subtract instructions. */
++static void sub(struct decode *decode,
++		u32 insn, enum insn_type *type,
++		s64 *imm, struct list_head *stack_ops)
++{
++	*imm = -(*imm);
++	return add(decode, insn, type, imm, stack_ops);
++}
++
++#define BR_UNCONDITIONAL		0x14000000
++
++/* Branch and Return instructions. */
++static void branch(struct decode *decode,
++		   u32 insn, enum insn_type *type,
++		   s64 *imm, struct list_head *stack_ops)
++{
++	if (*imm) {
++		if (decode->op == BR_UNCONDITIONAL)
++			*type = INSN_JUMP_UNCONDITIONAL;
++		else
++			*type = INSN_JUMP_CONDITIONAL;
++	} else {
++		*type = INSN_JUMP_DYNAMIC;
++	}
++}
++
++static void call(struct decode *decode,
++		   u32 insn, enum insn_type *type,
++		   s64 *imm, struct list_head *stack_ops)
++{
++	*type = *imm ? INSN_CALL : INSN_CALL_DYNAMIC;
++}
++
++static void ret(struct decode *decode,
++		u32 insn, enum insn_type *type,
++		s64 *imm, struct list_head *stack_ops)
++{
++	*type = INSN_RETURN;
++}
++
++static void bug(struct decode *decode,
++		u32 insn, enum insn_type *type,
++		s64 *imm, struct list_head *stack_ops)
++{
++	*type = INSN_BUG;
++}
++
++/*
++ * Other instructions are not decoded. They don't generate any stack_ops.
++ * Only checks are done to make sure that the compiler does not generate
++ * any instructions to clobber the SP and FP registers in unexpected ways.
++ */
++static void sp_check(struct decode *decode,
++		     u32 insn, enum insn_type *type,
++		     s64 *imm, struct list_head *stack_ops)
++{
++	reg_check(1, 1, insn, type);
++}
++
++static void fp_check(struct decode *decode,
++		  u32 insn, enum insn_type *type,
++		  s64 *imm, struct list_head *stack_ops)
++{
++	reg_check(0, 1, insn, type);
++}
++
++static void ignore(struct decode *decode,
++		   u32 insn, enum insn_type *type,
++		   s64 *imm, struct list_head *stack_ops)
++{
++}
++
++/* ------------------------ Instruction decode ----------------------------- */
++
++struct decode	decode_array[] = {
++/* =============================== INSTRUCTIONS =============================*/
++/* operation           mask        opcode      shift bits size sign func     */
++/* ==========================================================================*/
++/* LDP pre */        { 0x7FC00000, 0x29C00000, 15,   7,   8,   1,   ld_st },
++/* LDP post */       { 0x7FC00000, 0x28C00000, 15,   7,   8,   1,   ld_st },
++/* LDP off */        { 0x7FC00000, 0x29400000, 15,   7,   8,   1,   ld_st },
++/* LDPSW pre */      { 0xFFC00000, 0x69C00000, 15,   7,   4,   1,   ld_st_chk },
++/* LDPSW post */     { 0xFFC00000, 0x68C00000, 15,   7,   4,   1,   ld_st_chk },
++/* LDR imm pre */    { 0xBFE00C00, 0xB8400C00, 12,   9,   1,   1,   ld_st },
++/* LDR imm post */   { 0xBFE00C00, 0xB8400400, 12,   9,   1,   1,   ld_st },
++/* LDR off */        { 0xBFC00000, 0xB9400000, 12,   9,   1,   1,   ld_st },
++/* LDRB imm pre */   { 0xFFE00C00, 0x38400C00, 12,   9,   1,   1,   ld_st_chk },
++/* LDRB imm post */  { 0xFFE00C00, 0x38400400, 12,   9,   1,   1,   ld_st_chk },
++/* LDRH imm pre */   { 0xFFE00C00, 0x78400C00, 12,   9,   1,   1,   ld_st_chk },
++/* LDRH imm post */  { 0xFFE00C00, 0x78400400, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSB imm pre */  { 0xFF800C00, 0x38800C00, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSB imm post */ { 0xFF800C00, 0x38800400, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSH imm pre */  { 0xFF800C00, 0x78800C00, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSH imm post */ { 0xFF800C00, 0x78800400, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSW imm pre */  { 0xFFE00C00, 0xB8800C00, 12,   9,   1,   1,   ld_st_chk },
++/* LDRSW imm post */ { 0xFFE00C00, 0xB8800400, 12,   9,   1,   1,   ld_st_chk },
++/* STP pre */        { 0x7FC00000, 0x29800000, 15,   7,   8,   1,   ld_st },
++/* STP post */       { 0x7FC00000, 0x28800000, 15,   7,   8,   1,   ld_st },
++/* STP off */        { 0x7FC00000, 0x29000000, 15,   7,   8,   1,   ld_st },
++/* STGP imm pre */   { 0xFFC00000, 0x69800000, 15,   7,  16,   1,   ld_st },
++/* STGP imm post */  { 0xFFC00000, 0x68800000, 15,   7,  16,   1,   ld_st },
++/* STR imm pre */    { 0xBFC00C00, 0xB8000C00, 12,   9,   1,   1,   ld_st },
++/* STR imm post */   { 0xBFC00C00, 0xB8000400, 12,   9,   1,   1,   ld_st },
++/* STR off */        { 0xBFC00000, 0xB9000000, 10,  12,   1,   1,   ld_st },
++/* STG imm pre */    { 0xFFC00C00, 0xD9000C00, 12,   9,  16,   1,   ld_st },
++/* STG imm post */   { 0xFFC00C00, 0xD9000400, 12,   9,  16,   1,   ld_st },
++/* ST2G imm pre */   { 0xFFE00C00, 0xD9A00C00, 12,   9,  16,   1,   ld_st },
++/* ST2G imm post */  { 0xFFE00C00, 0xD9A00400, 12,   9,  16,   1,   ld_st },
++/* ADD imm */        { 0x7F800000, 0x11000000, 10,  12,   1,   0,   add },
++/* ADDS imm */       { 0x7F800000, 0x31000000, 10,  12,   1,   0,   add },
++/* ADD ext reg */    { 0x7FE00000, 0x0B200000,  0,   0,   1,   0,   sp_check },
++/* SUB imm */        { 0x7F800000, 0x51000000, 10,  12,   1,   0,   sub },
++/* SUBS imm */       { 0x7F800000, 0x71000000, 10,  12,   1,   0,   sub },
++/* SUB ext reg */    { 0x7FE00000, 0x4B200000,  0,   0,   1,   0,   sp_check },
++/* ORR imm */        { 0x7F800000, 0x32000000,  0,   0,   1,   0,   sp_check },
++/* B */              { 0xFC000000, 0x14000000,  0,  26,   4,   1,   branch },
++/* B.cond */         { 0xFF000010, 0x54000000,  5,  19,   4,   1,   branch },
++/* BC.cond */        { 0xFF000010, 0x54000010,  5,  19,   4,   1,   branch },
++/* BR */             { 0xFFFFFC00, 0xD61F0000,  0,   0,   4,   0,   branch },
++/* BRA */            { 0xFEFFF800, 0xD61F0800,  0,   0,   4,   0,   branch },
++/* CBZ */            { 0x7F000000, 0x34000000,  5,  19,   4,   1,   branch },
++/* CBNZ */           { 0x7F000000, 0x35000000,  5,  19,   4,   1,   branch },
++/* TBZ */            { 0x7F000000, 0x36000000,  5,  14,   4,   1,   branch },
++/* TBNZ */           { 0x7F000000, 0x37000000,  5,  14,   4,   1,   branch },
++/* BL */             { 0xFC000000, 0x94000000,  0,  26,   4,   1,   call },
++/* BLR */            { 0xFFFFFC00, 0xD63F0000,  0,   0,   4,   1,   call },
++/* BLRA */           { 0xFEFFF800, 0xD63F0800,  0,   0,   4,   1,   call },
++/* RET */            { 0xFFFFFC1F, 0xD65F0000,  0,   0,   1,   0,   ret },
++/* RETA */           { 0xFFFFFBFF, 0xD65F0BFF,  0,   0,   1,   0,   ret },
++/* ERET */           { 0xFFFFFFFF, 0xD69F03E0,  0,   0,   1,   0,   ret },
++/* ERETA */          { 0xFFFFFBFF, 0xD69F0BFF,  0,   0,   1,   0,   ret },
++/* BRK */            { 0xFFE00000, 0xD4200000,  0,   0,   1,   0,   bug },
++
++/* =========================== INSTRUCTION CLASSES ==========================*/
++/* operation           mask        opcode      shift bits size sign func     */
++/* ==========================================================================*/
++/* RSVD_00 */        { 0x1E000000, 0x00000000,  0,   0,   1,   0,   ignore },
++/* UNALLOC_01 */     { 0x1E000000, 0x02000000,  0,   0,   1,   0,   ignore },
++/* SVE_02 */         { 0x1E000000, 0x04000000,  0,   0,   1,   0,   ignore },
++/* UNALLOC_03 */     { 0x1E000000, 0x06000000,  0,   0,   1,   0,   ignore },
++/* LOAD_STORE_04 */  { 0x1E000000, 0x08000000,  0,   0,   1,   0,   fp_check },
++/* DP_REGISTER_05 */ { 0x1E000000, 0x0A000000,  0,   0,   1,   0,   fp_check },
++/* LOAD_STORE_06 */  { 0x1E000000, 0x0C000000,  0,   0,   1,   0,   ignore },
++/* SIMD_FP_07 */     { 0x1E000000, 0x0E000000,  0,   0,   1,   0,   ignore },
++/* DP_IMMEDIATE_08 */{ 0x1E000000, 0x10000000,  0,   0,   1,   0,   fp_check },
++/* DP_IMMEDIATE_09 */{ 0x1E000000, 0x12000000,  0,   0,   1,   0,   fp_check },
++/* BR_SYS_10 */      { 0x1E000000, 0x14000000,  0,   0,   1,   0,   fp_check },
++/* BR_SYS_11 */      { 0x1E000000, 0x16000000,  0,   0,   1,   0,   fp_check },
++/* LOAD_STORE_12 */  { 0x1E000000, 0x18000000,  0,   0,   1,   0,   fp_check },
++/* DP_REGISTER_13 */ { 0x1E000000, 0x1A000000,  0,   0,   1,   0,   ignore },
++/* LOAD_STORE_14 */  { 0x1E000000, 0x1C000000,  0,   0,   1,   0,   fp_check },
++/* SIMD_FP_15 */     { 0x1E000000, 0x1E000000,  0,   0,   1,   0,   ignore },
++};
++unsigned int	ndecode = ARRAY_SIZE(decode_array);
++
++static inline s64 sign_extend(s64 imm, unsigned int bits)
++{
++	return (imm << (64 - bits)) >> (64 - bits);
++}
++
++/*
++ * This decoder is only for generating stack ops for instructions that
++ * affect the SP and FP. The instructions that involve only immediate
++ * operands can be evaluated in this decoder. But instructions that
++ * involve other registers cannot be evaluated because the contents of
++ * those registers are known only at runtime. There are checks to catch
++ * it if the compiler generates these for the FP and SP. Such instructions
++ * are marked as unreliable.
++ */
++int arch_decode_instruction(struct objtool_file *file,
++			    const struct section *sec,
++			    unsigned long offset, unsigned int maxlen,
++			    unsigned int *len, enum insn_type *type,
++			    unsigned long *immediate,
++			    struct list_head *stack_ops)
++{
++	struct decode		*decode;
++	s64			imm;
++	u32			insn;
++	unsigned int		mask, i;
++
++	if (maxlen < INSN_SIZE)
++		return -1;
++
++	insn = *(u32 *)(sec->data->d_buf + offset);
++	*type = INSN_OTHER;
++	*len = INSN_SIZE;
++
++	/*
++	 * Find the decode structure for the specific instruction,
++	 * if listed.
++	 */
++	for (i = 0; i < ndecode; i++) {
++		decode = &decode_array[i];
++		if ((insn & decode->opmask) == decode->op) {
++			/*
++			 * Decode the instruction.
++			 */
++			mask = (1 << decode->bits) - 1;
++			imm = (insn >> decode->shift) & mask;
++			if (decode->sign_extend)
++				imm = sign_extend(imm, decode->bits);
++			imm *= decode->size;
++
++			decode->func(decode, insn, type, &imm, stack_ops);
++			*immediate = imm;
++			return 0;
++		}
++	}
++	/* Cannot happen. */
++	return -1;
++}
+diff --git a/tools/objtool/arch/arm64/include/arch/cfi_regs.h b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+new file mode 100644
+index 000000000000..a3df37fe5290
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _OBJTOOL_CFI_REGS_H
++#define _OBJTOOL_CFI_REGS_H
++
++#define CFI_FP			29
++#define CFI_RA			30
++#define CFI_SP			31
++
++#define CFI_NUM_REGS		32
++
++#endif /* _OBJTOOL_CFI_REGS_H */
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
+index 9b19cc304195..e23d5746daf0 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -29,6 +29,7 @@ enum insn_type {
+ 	INSN_TRAP,
+ 	INSN_ENDBR,
+ 	INSN_OTHER,
++	INSN_UNRELIABLE,
+ };
+ 
+ enum op_dest_type {
 -- 
 2.25.1
 
