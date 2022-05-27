@@ -2,84 +2,113 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A009C433FE
-	for <live-patching@archiver.kernel.org>; Fri, 27 May 2022 00:32:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1CC9C433F5
+	for <live-patching@archiver.kernel.org>; Fri, 27 May 2022 16:27:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbiE0Acx (ORCPT
+        id S1354114AbiE0Q1s (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 26 May 2022 20:32:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        Fri, 27 May 2022 12:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234393AbiE0Acv (ORCPT
+        with ESMTP id S232903AbiE0Q1q (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 26 May 2022 20:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D7913F7D;
-        Thu, 26 May 2022 17:32:51 -0700 (PDT)
+        Fri, 27 May 2022 12:27:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D046B340F1;
+        Fri, 27 May 2022 09:27:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 875FC61D2D;
-        Fri, 27 May 2022 00:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 970CAC385A9;
-        Fri, 27 May 2022 00:32:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8920AB824C9;
+        Fri, 27 May 2022 16:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C57C385A9;
+        Fri, 27 May 2022 16:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653611569;
-        bh=EJ+M0UolvZcc5eCQAgbviCxSXBshGpflKucWZ7mnGQo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=tHo3LrnI51gUIj/ZnfKNKaFaNtt0PdZ5Fe3c16jpOyAlouTJfPNwrhsg+ap52uevN
-         d2xTlqYYM/sxFABChVLYEyRRy2bNElZ7GMVeedGsBo4uwp+WCV48mGHDmuGsIapUD4
-         UJkjTdmDWsGsJyZck+IBl6tjr3Q7iByptjIjUf1/YL5To7FiSBmJoLnGfSjLzhplK2
-         IlP1mklaWfR4i4boxw+YOvyamklaE8u6HnRnUEBNfC/CDLxAUEoZFysCzI9iqCUwzw
-         ddip7kmvhE3bZP0CHgBk39ji6KDePoNGULCSh3/rnITh+ZZn7nNezEUAnXelgER76p
-         QGXYQg7VV0ybg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 81278F0394B;
-        Fri, 27 May 2022 00:32:49 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v5.19-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-References: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <Yo6kboq8M8nUwy45@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc1
-X-PR-Tracked-Commit-Id: 7390b94a3c2d93272d6da4945b81a9cf78055b7b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ef98f9cfe20d8ca063365d46d4ab2b85eeeb324f
-Message-Id: <165361156952.27205.7644773907998918342.pr-tracker-bot@kernel.org>
-Date:   Fri, 27 May 2022 00:32:49 +0000
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        s=k20201202; t=1653668863;
+        bh=PRaPi35zkOUa2ee/LGAevmhlOaftEQU94uTYvSbtIYs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=AUdwYQFnQL+oIJZpQBq82jSSk/heA2LObEFqnWPTzgh2mrOIXni7GDPG92ZByPDAk
+         CXin4Wfey4ZAbnSrcb4b9JF9zdlkzUnIJyGTlytzZNg9j35uWmSLNL0n6xTt1iHWX6
+         GN5QE2cHwLcpHdl8DWmcaC6mP3HldR9n21UzSajhcjyB7DZ8b7ZNP81SzbRcaPyaK1
+         otrfDC0N16l12UKtoxCh5N87Wq41JO+dF94S0HDlIXuHW93p74TPJNaWaYVXufzCts
+         UNreNLMeRwR0EM7IHX0B9C9lArH3Anry9wqsz4BPdA9v+MFBr9rL8X0o5TOhCO2ktv
+         bWLDU2W0wVVPA==
+Message-ID: <459385ee7ccf4fcf3e22d4a11b4f438d648422bf.camel@kernel.org>
+Subject: Re: [PATCH v7 03/25] kallsyms: increase maximum kernel symbol
+ length to 512
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        patches@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>, mcgrof@kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Aaron Tomlin <atomlin@redhat.com>,
-        Keith Busch <kbusch@kernel.org>, live-patching@vger.kernel.org,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        linux-modules@vger.kernel.org
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+Date:   Fri, 27 May 2022 19:25:57 +0300
+In-Reply-To: <CANiq72m6ttD9QpB3nW-5B+M1seknv0GZ4-DqtF85qTg6Lvxnhg@mail.gmail.com>
+References: <20220523020209.11810-1-ojeda@kernel.org>
+         <20220523020209.11810-4-ojeda@kernel.org> <YovvIQeN3lmOYzJO@kernel.org>
+         <CANiq72m6ttD9QpB3nW-5B+M1seknv0GZ4-DqtF85qTg6Lvxnhg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The pull request you sent on Wed, 25 May 2022 14:49:34 -0700:
+On Tue, 2022-05-24 at 20:07 +0200, Miguel Ojeda wrote:
+> On Mon, May 23, 2022 at 10:33 PM Jarkko Sakkinen <jarkko@kernel.org> wrot=
+e:
+> >=20
+> > There's no description what the patch does.
+>=20
+> I am not sure what you mean. Both the subject and the last paragraph
+> describe what the patch does, while the rest gives the rationale
+> behind it.
+>=20
+> Cheers,
+> Miguel
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-5.19-rc1
+The honest answer: I don't actually remember what I was thinking=C2=A0
+(other stuff stole my focus) but my comment neither makes much
+sense to me. Please just ignore it, and apologies for causing
+confusion.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ef98f9cfe20d8ca063365d46d4ab2b85eeeb324f
+There's something I'm looking into in my spare time right now.
+I'm experimenting with interfacing keyring types to Rust. The
+first step, I guess, is to provide a Rust abstraction for
+assoc_array.
 
-Thank you!
+I've skimmed through the patch set and have now *rough* idea of
+patterns and techniques. My opens are more on the process side
+of things since there's no yet mainline subtree.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+If I send a patch or patch sets, would this be a good workflow:
+
+1. RFC tag.
+2. In the cover letter denote the patch set version, which was
+   used the baseline.
+
+Linux keyring is without argument a kind of subsystem that would
+hugely benefit of the Rust work, as it is both user space facing=C2=A0
+nd handling a vast amount of user's confidential data.=20
+
+BR, Jarkko
