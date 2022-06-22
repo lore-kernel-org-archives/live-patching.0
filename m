@@ -2,83 +2,101 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E03C43334
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0122C433EF
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 17:19:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359663AbiFVPzV (ORCPT
+        id S1377337AbiFVRTz (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jun 2022 11:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
+        Wed, 22 Jun 2022 13:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359752AbiFVPxe (ORCPT
+        with ESMTP id S1376532AbiFVRTy (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:53:34 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68868BF7F;
-        Wed, 22 Jun 2022 08:53:03 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnr21Sq8zSh5v;
-        Wed, 22 Jun 2022 23:49:22 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:46 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:46 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>
-CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
-        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
-        <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
-        <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 24/33] arm64: proc: Mark constant as data
-Date:   Wed, 22 Jun 2022 23:49:11 +0800
-Message-ID: <20220622154920.95075-25-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
+        Wed, 22 Jun 2022 13:19:54 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504BA1EC41
+        for <live-patching@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id e5so9633600wma.0
+        for <live-patching@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
+        b=Dsp3eLP695OxhLmAxgCpTladrks0d9cl3c4pqEG8IsiuYRxlbmyT9zMcfK+VdJOEhP
+         vqcEAnywIUG3D4hOvDO4vgW7mTKDWa4FOUacvv0rZZ1u/SO4iaTUMJT1YLVZARqV4UnP
+         VVaOZc6pGpqsRfWobvfoyII6hejsz2rE4brC494B2LoC31jIRjDfn1jZaLdHctRIJGTs
+         eYVx6Mr13FW6Ezg18RcNdgljwra6zUmgwIfkDvEWL26pByjsiHrTuzgpz4XG6qL9VH6q
+         2R9XZ6ufukStzJFEMcZ2MrXmX7/nzP3kY80P4OPxqAvqF9i9lBRjwSybCsaRqRMoajR9
+         c2mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
+        b=8BBG7A04Hpl9KqdInMfr+Cv9Iz9BJyiO/mYRmXCkUDveT9lB6z7MB4zXbR6xjAVJhd
+         R63f3QHO93uIKws54jExlar0V/3VFHJ735ter1lH1mBdHQOiu4GVLUvqso4yAVWzpFp+
+         WEug8AI2YeGQQLqZ+LCUj4ucy5lcwJq3lYo1vp7bMChXvLv+o/pdq6+wZ0hh/RUphUZB
+         kR6I/yhyZsECVqAcCwYsf4k1HIigiVlWbiy1t0WQAoqrzf4VAW7MLnBkHGe82bX/Q4kA
+         0LQbpuwoE1etYG7ooH7OS3rFxSLzBzOApMqcPv0g4m1coPYPoWoN1qvmunPijDN9tNo2
+         48tw==
+X-Gm-Message-State: AOAM532hcOZXp0DcZPOIcF4wXCWmjnMBRsNWQgZI1KLz90hqwVmY7+jf
+        K0WbFJ3eVChnu7Z2XgIwWJ5vbA==
+X-Google-Smtp-Source: ABdhPJzonljILXzP/YeUVGmI5wxNQjklVcp+NVX87qobxoQHEtny1OoVzedlkPsbhH9Zvj4Jv4dkKA==
+X-Received: by 2002:a05:600c:3229:b0:39c:65b2:8935 with SMTP id r41-20020a05600c322900b0039c65b28935mr48023528wmp.155.1655918390841;
+        Wed, 22 Jun 2022 10:19:50 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c42d200b003a02b9c47e4sm26041wme.27.2022.06.22.10.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 10:19:49 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 18:19:46 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        live-patching@vger.kernel.org, jpoimboe@kernel.org,
+        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, mark.rutland@arm.com,
+        pasha.tatashin@soleen.com, broonie@kernel.org,
+        rmk+kernel@armlinux.org.uk, madvenka@linux.microsoft.com,
+        christophe.leroy@csgroup.eu
+Subject: Re: [PATCH v5 00/33] objtool: add base support for arm64
+Message-ID: <20220622171946.mc3cd375fy4fou3b@maple.lan>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Label __idmap_kpti_flag represents the location of a constant.
-Mark it as data symbol.
+On Wed, Jun 22, 2022 at 11:48:47PM +0800, Chen Zhongjin wrote:
+> This series enables objtool to start doing stack validation and orc
+> generation on arm64 kernel builds.
+> 
+> Based on Julien's previous work(1)(2), Now I have finished most of work
+> for objtool enable on arm64. This series includes objtool part [1-13]
+> and arm64 support part [14-33], the second part is to make objtool run
+> correctly with no warning on arm64 so if necessary it can be taken apart
+> as two series.
+> 
+> ORC generation feature is implemented but not used because we don't have
+> an unwinder_orc on arm64, now it only be used to check whether objtool
+> has correct validation.
+> 
+> This series depends on (https://lkml.org/lkml/2022/6/22/463)
+> I moved some changes which work for all architectures to that series
+> because this one becomes too big now.
+> And it is rebased to tip/objtool/core branch.
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- arch/arm64/mm/proc.S | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+What is the sha1 of the base?
 
-diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-index 50bbed947bec..c34ea1778b1e 100644
---- a/arch/arm64/mm/proc.S
-+++ b/arch/arm64/mm/proc.S
-@@ -222,8 +222,8 @@ SYM_FUNC_END(idmap_cpu_replace_ttbr1)
-  *
-  * Called exactly once from stop_machine context by each CPU found during boot.
-  */
--__idmap_kpti_flag:
--	.long	1
-+SYM_DATA_LOCAL(__idmap_kpti_flag, .long	1)
-+
- SYM_FUNC_START(idmap_kpti_install_ng_mappings)
- 	cpu		.req	w0
- 	num_cpus	.req	w1
--- 
-2.17.1
+With b4 and git am the patch series is derailing at patch 6 and I'm even
+after a bit of fixup (had to use rediff) I'm still getting a cascade of
+errors in later patches to decode.c .
 
+
+Daniel.
