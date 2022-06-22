@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E23C3CCA489
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC011CCA494
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:54:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359643AbiFVPyT (ORCPT
+        id S1376490AbiFVPyU (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jun 2022 11:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52724 "EHLO
+        Wed, 22 Jun 2022 11:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357518AbiFVPxO (ORCPT
+        with ESMTP id S1359685AbiFVPxG (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:53:14 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBF1B46;
-        Wed, 22 Jun 2022 08:52:52 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnr14GrszSh5g;
-        Wed, 22 Jun 2022 23:49:21 +0800 (CST)
+        Wed, 22 Jun 2022 11:53:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3639685;
+        Wed, 22 Jun 2022 08:52:50 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSntb4cNMzkWg4;
+        Wed, 22 Jun 2022 23:51:35 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:45 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:45 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>,
@@ -39,9 +39,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 21/33] arm64: kvm: Annotate unwind_hint for hyp entry
-Date:   Wed, 22 Jun 2022 23:49:08 +0800
-Message-ID: <20220622154920.95075-22-chenzhongjin@huawei.com>
+Subject: [PATCH v5 33/33] objtool: revert c_file fallthrough detection for arm64
+Date:   Wed, 22 Jun 2022 23:49:20 +0800
+Message-ID: <20220622154920.95075-34-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -55,92 +55,68 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Symbol __guest_enter and kvm_hyp_vector saved x0, x1 on stack.
+'commit 08feafe8d195 ("objtool: Fix function fallthrough detection for vmlinux")'
+This commit canceled c_file which used to make fallthrough detection
+only works on C objects.
 
-Symbol __guest_exit and __guest_exit_panic is reached when resuming
-EL2 execution, and the previous stack pointer gets restored.
+However in arm64/crypto/aes-mods.S, there are cases that JUMP at the
+end of function which make objtool wrongly detected them as fall through.
 
-Add adequate unwind hints.
+Revert c_file before this is fixed.
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/kvm/hyp/entry.S     | 5 +++++
- arch/arm64/kvm/hyp/hyp-entry.S | 3 +++
- 2 files changed, 8 insertions(+)
+ tools/objtool/check.c                   | 3 +--
+ tools/objtool/include/objtool/objtool.h | 2 +-
+ tools/objtool/objtool.c                 | 1 +
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/entry.S b/arch/arm64/kvm/hyp/entry.S
-index 045d4481c820..81e30d56bf28 100644
---- a/arch/arm64/kvm/hyp/entry.S
-+++ b/arch/arm64/kvm/hyp/entry.S
-@@ -15,6 +15,7 @@
- #include <asm/kvm_mmu.h>
- #include <asm/kvm_mte.h>
- #include <asm/kvm_ptrauth.h>
-+#include <asm/unwind_hints.h>
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 54b736e94ede..8b8a4ef81d96 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -540,7 +540,6 @@ static struct instruction *find_last_insn(struct objtool_file *file,
+ 	struct instruction *insn = NULL;
+ 	unsigned int offset;
+ 	unsigned int end = (sec->sh.sh_size > 10) ? sec->sh.sh_size - 10 : 0;
+-
+ 	for (offset = sec->sh.sh_size - 1; offset >= end && !insn; offset--)
+ 		insn = find_insn(file, sec, offset);
  
- 	.text
+@@ -3219,7 +3218,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+ 	while (1) {
+ 		next_insn = next_insn_to_validate(file, insn);
  
-@@ -22,6 +23,7 @@
-  * u64 __guest_enter(struct kvm_vcpu *vcpu);
-  */
- SYM_CODE_START(__guest_enter)
-+	UNWIND_HINT_FUNC
- 	// x0: vcpu
- 	// x1-x17: clobbered by macros
- 	// x29: guest context
-@@ -88,6 +90,7 @@ SYM_INNER_LABEL(__guest_exit_panic, SYM_L_GLOBAL)
- 	// vcpu x0-x1 on the stack
+-		if (func && insn->func && func != insn->func->pfunc) {
++		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
+ 			WARN("%s() falls through to next function %s()",
+ 			     func->name, insn->func->name);
+ 			return 1;
+diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
+index a6e72d916807..7a5c13a78f87 100644
+--- a/tools/objtool/include/objtool/objtool.h
++++ b/tools/objtool/include/objtool/objtool.h
+@@ -27,7 +27,7 @@ struct objtool_file {
+ 	struct list_head static_call_list;
+ 	struct list_head mcount_loc_list;
+ 	struct list_head endbr_list;
+-	bool ignore_unreachables, hints, rodata;
++	bool ignore_unreachables, c_file, hints, rodata;
  
- 	// If the hyp context is loaded, go straight to hyp_panic
-+	UNWIND_HINT_FUNC
- 	get_loaded_vcpu x0, x1
- 	cbnz	x0, 1f
- 	b	hyp_panic
-@@ -110,6 +113,7 @@ SYM_INNER_LABEL(__guest_exit, SYM_L_GLOBAL)
- 	// x1: vcpu
- 	// x2-x29,lr: vcpu regs
- 	// vcpu x0-x1 on the stack
-+	UNWIND_HINT_FUNC sp_offset=16
+ 	unsigned int nr_endbr;
+ 	unsigned int nr_endbr_int;
+diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
+index 512669ce064c..d33620b1392d 100644
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -105,6 +105,7 @@ struct objtool_file *objtool_open_read(const char *_objname)
+ 	INIT_LIST_HEAD(&file.static_call_list);
+ 	INIT_LIST_HEAD(&file.mcount_loc_list);
+ 	INIT_LIST_HEAD(&file.endbr_list);
++	file.c_file = !opts.link && find_section_by_name(file.elf, ".comment");
+ 	file.ignore_unreachables = opts.no_unreachable;
+ 	file.hints = false;
  
- 	add	x1, x1, #VCPU_CONTEXT
- 
-@@ -199,6 +203,7 @@ abort_guest_exit_end:
- 	msr	daifset, #4	// Mask aborts
- 	ret
- 
-+	UNWIND_HINT_FUNC
- 	_kvm_extable	abort_guest_exit_start, 9997f
- 	_kvm_extable	abort_guest_exit_end, 9997f
- 9997:
-diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
-index 4a65262a4f3a..d72143c59707 100644
---- a/arch/arm64/kvm/hyp/hyp-entry.S
-+++ b/arch/arm64/kvm/hyp/hyp-entry.S
-@@ -151,6 +151,7 @@ SYM_CODE_END(\label)
- 
- .macro valid_vect target
- 	.align 7
-+	UNWIND_HINT_FUNC
- 661:
- 	esb
- 	stp	x0, x1, [sp, #-16]!
-@@ -162,6 +163,7 @@ check_preamble_length 661b, 662b
- 
- .macro invalid_vect target
- 	.align 7
-+	UNWIND_HINT_FUNC
- 661:
- 	nop
- 	stp	x0, x1, [sp, #-16]!
-@@ -209,6 +211,7 @@ SYM_CODE_END(__kvm_hyp_vector)
- .macro hyp_ventry	indirect, spectrev2
- 	.align	7
- 1:	esb
-+	UNWIND_HINT_FUNC
- 	.if \spectrev2 != 0
- 	spectrev2_smccc_wa1_smc
- 	.else
 -- 
 2.17.1
 
