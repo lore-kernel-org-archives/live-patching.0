@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01F10C433EF
-	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EF82CCA488
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:54:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359008AbiFVPyQ (ORCPT
+        id S230476AbiFVPyR (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jun 2022 11:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        Wed, 22 Jun 2022 11:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358909AbiFVPxF (ORCPT
+        with ESMTP id S1359681AbiFVPxG (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:53:05 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5484A32EEC;
-        Wed, 22 Jun 2022 08:52:50 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSnsW3LfnzhYdM;
-        Wed, 22 Jun 2022 23:50:39 +0800 (CST)
+        Wed, 22 Jun 2022 11:53:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF5B23F;
+        Wed, 22 Jun 2022 08:52:51 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnr363QWzSh6d;
+        Wed, 22 Jun 2022 23:49:23 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
  dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:47 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:46 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:47 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>,
@@ -39,9 +39,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 27/33] arm64: Set intra-function call annotations
-Date:   Wed, 22 Jun 2022 23:49:14 +0800
-Message-ID: <20220622154920.95075-28-chenzhongjin@huawei.com>
+Subject: [PATCH v5 32/33] arm64: irq-gic: Replace unreachable() with -EINVAL
+Date:   Wed, 22 Jun 2022 23:49:19 +0800
+Message-ID: <20220622154920.95075-33-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -55,79 +55,74 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Stack validation requires BL instructions to an address,
-within the symbol containing the BL should be annotated as intra-function
-calls.
+Using unreachable() at default of switch generates an extra branch at
+end of the function, and compiler won't generate a ret to close this
+branch because it knows it's unreachable.
 
-Make __pmull_p8_core normally set frame because there's a intra-function
-call destinating middle of it and the caller have set the frame. When
-analyzing the insns there will be a cfi state mismatch between normal-call
-and intra-call.
+If there's no instruction in this branch, compiler will generate a NOP,
+And it will confuse objtool to warn this NOP as a fall through branch.
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
+In fact these branches are actually unreachable, so we can replace
+unreachable() with returning a -EINVAL value.
+
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/crypto/crct10dif-ce-core.S | 5 +++++
- arch/arm64/kernel/entry.S             | 2 ++
- 2 files changed, 7 insertions(+)
+ arch/arm64/kvm/hyp/vgic-v3-sr.c | 7 +++----
+ drivers/irqchip/irq-gic-v3.c    | 2 +-
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/crypto/crct10dif-ce-core.S b/arch/arm64/crypto/crct10dif-ce-core.S
-index dce6dcebfca1..b3b8e56cb87d 100644
---- a/arch/arm64/crypto/crct10dif-ce-core.S
-+++ b/arch/arm64/crypto/crct10dif-ce-core.S
-@@ -63,6 +63,7 @@
- //
+diff --git a/arch/arm64/kvm/hyp/vgic-v3-sr.c b/arch/arm64/kvm/hyp/vgic-v3-sr.c
+index 4fb419f7b8b6..f3cee92c3038 100644
+--- a/arch/arm64/kvm/hyp/vgic-v3-sr.c
++++ b/arch/arm64/kvm/hyp/vgic-v3-sr.c
+@@ -6,7 +6,6 @@
  
- #include <linux/linkage.h>
-+#include <linux/objtool.h>
- #include <asm/assembler.h>
+ #include <hyp/adjust_pc.h>
  
- 	.text
-@@ -132,6 +133,8 @@
- 	.endm
+-#include <linux/compiler.h>
+ #include <linux/irqchip/arm-gic-v3.h>
+ #include <linux/kvm_host.h>
  
- SYM_FUNC_START_LOCAL(__pmull_p8_core)
-+	stp		x29, x30, [sp, #-16]!
-+	mov		x29, sp
- .L__pmull_p8_core:
- 	ext		t4.8b, ad.8b, ad.8b, #1			// A1
- 	ext		t5.8b, ad.8b, ad.8b, #2			// A2
-@@ -193,6 +196,7 @@ SYM_FUNC_START_LOCAL(__pmull_p8_core)
+@@ -55,7 +54,7 @@ static u64 __gic_v3_get_lr(unsigned int lr)
+ 		return read_gicreg(ICH_LR15_EL2);
+ 	}
  
- 	eor		t4.16b, t4.16b, t5.16b
- 	eor		t6.16b, t6.16b, t3.16b
-+	ldp		x29, x30, [sp], #16
- 	ret
- SYM_FUNC_END(__pmull_p8_core)
+-	unreachable();
++	return -EINVAL;
+ }
  
-@@ -207,6 +211,7 @@ SYM_FUNC_END(__pmull_p8_core)
- 	pmull2		\rq\().8h, \ad\().16b, \bd\().16b	// D = A*B
- 	.endif
+ static void __gic_v3_set_lr(u64 val, int lr)
+@@ -166,7 +165,7 @@ static u32 __vgic_v3_read_ap0rn(int n)
+ 		val = read_gicreg(ICH_AP0R3_EL2);
+ 		break;
+ 	default:
+-		unreachable();
++		val = -EINVAL;
+ 	}
  
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl		.L__pmull_p8_core\i
+ 	return val;
+@@ -190,7 +189,7 @@ static u32 __vgic_v3_read_ap1rn(int n)
+ 		val = read_gicreg(ICH_AP1R3_EL2);
+ 		break;
+ 	default:
+-		unreachable();
++		val = -EINVAL;
+ 	}
  
- 	eor		\rq\().16b, \rq\().16b, t4.16b
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index bbc440379304..d49bfbe81a0d 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -10,6 +10,7 @@
- #include <linux/arm-smccc.h>
- #include <linux/init.h>
- #include <linux/linkage.h>
-+#include <linux/objtool.h>
+ 	return val;
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index b252d5534547..2ef98e32d257 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -475,7 +475,7 @@ static u32 __gic_get_ppi_index(irq_hw_number_t hwirq)
+ 	case EPPI_RANGE:
+ 		return hwirq - EPPI_BASE_INTID + 16;
+ 	default:
+-		unreachable();
++		return -EINVAL;
+ 	}
+ }
  
- #include <asm/alternative.h>
- #include <asm/assembler.h>
-@@ -694,6 +695,7 @@ alternative_else_nop_endif
- 	 * entry onto the return stack and using a RET instruction to
- 	 * enter the full-fat kernel vectors.
- 	 */
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	2f
- 	UNWIND_HINT_EMPTY
- 	b	.
 -- 
 2.17.1
 
