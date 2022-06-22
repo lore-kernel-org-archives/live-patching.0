@@ -2,376 +2,363 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5697C433EF
-	for <live-patching@archiver.kernel.org>; Fri, 17 Jun 2022 21:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52972CCA47D
+	for <live-patching@archiver.kernel.org>; Wed, 22 Jun 2022 15:52:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235423AbiFQVRb (ORCPT
+        id S1359539AbiFVPws (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Jun 2022 17:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        Wed, 22 Jun 2022 11:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiFQVRb (ORCPT
+        with ESMTP id S1358390AbiFVPwr (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Jun 2022 17:17:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFD1E22BDC
-        for <live-patching@vger.kernel.org>; Fri, 17 Jun 2022 14:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655500648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pRGM3eCM2TVyTh8eKkLCwBJv4tVgFarHtFdgBbpbMvw=;
-        b=H0VvG5UM4z4XhkYMvG1NcoHHfC+IwuyBjze9wVgQsY6Oehw6ByLXisoqHsth/U+xLtxSAa
-        aF53PPIkXFL/yj1s8nKrRK4Jk8CdWL4uEO18pT1YHEyuJvip5lXaw1KDnr2BQNWRAXR9FH
-        v5f+wXzFlvIuKtRnBWG1eaXQZ7tlgYc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-AKmPiZPkNTePDOE-39LfxA-1; Fri, 17 Jun 2022 17:17:25 -0400
-X-MC-Unique: AKmPiZPkNTePDOE-39LfxA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D623A802C17;
-        Fri, 17 Jun 2022 21:17:24 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.8.184])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 70EEF4010E4D;
-        Fri, 17 Jun 2022 21:17:24 +0000 (UTC)
-Date:   Fri, 17 Jun 2022 17:17:23 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        pmladek@suse.com
-Subject: Re: [PATCH 2/2] selftests: livepatch: Test livepatching a heavily
- called syscall
-Message-ID: <YqzvY37fI0GzHoIH@redhat.com>
-References: <20220603143242.870-1-mpdesouza@suse.com>
- <20220603143242.870-3-mpdesouza@suse.com>
+        Wed, 22 Jun 2022 11:52:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDC310D4;
+        Wed, 22 Jun 2022 08:52:44 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LSnvD5W9HzDsH1;
+        Wed, 22 Jun 2022 23:52:08 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:42 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:42 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>
+CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
+        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
+        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
+        <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
+        <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
+Subject: [PATCH v5 02/33] objtool: arm64: Add base definition for arm64 backend
+Date:   Wed, 22 Jun 2022 23:48:49 +0800
+Message-ID: <20220622154920.95075-3-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
+References: <20220622154920.95075-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603143242.870-3-mpdesouza@suse.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 11:32:42AM -0300, Marcos Paulo de Souza wrote:
-> Syscalls are called a tricky way. Test that it is possible and works.
+Provide needed definitions for a new architecture instruction decoder.
+No proper decoding is done yet.
 
-"Tricky" may be accurate, but short on details.  If the full story is
-too much for the commit log, maybe just handwave about the
-__SYSCALL_DEFINEx preprocessor wrappers, etc.  :)
+Signed-off-by: Julien Thierry <jthierry@redhat.com>
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ tools/objtool/Makefile                        |   4 +
+ tools/objtool/arch/arm64/Build                |   8 +
+ tools/objtool/arch/arm64/decode.c             | 138 ++++++++++++++++++
+ .../arch/arm64/include/arch/cfi_regs.h        |  14 ++
+ tools/objtool/arch/arm64/include/arch/elf.h   |  12 ++
+ .../arch/arm64/include/arch/endianness.h      |   9 ++
+ .../objtool/arch/arm64/include/arch/special.h |  22 +++
+ tools/objtool/arch/arm64/special.c            |  21 +++
+ 8 files changed, 228 insertions(+)
+ create mode 100644 tools/objtool/arch/arm64/Build
+ create mode 100644 tools/objtool/arch/arm64/decode.c
+ create mode 100644 tools/objtool/arch/arm64/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/endianness.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/special.h
+ create mode 100644 tools/objtool/arch/arm64/special.c
 
-> 
-> This new test creates one userspace process per online cpu calling getpid
-> continuously and tries to livepatch the getpid function.
-> 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> ---
->  tools/testing/selftests/livepatch/Makefile    | 12 +++-
->  .../selftests/livepatch/test-syscall.sh       | 46 ++++++++++++++
->  .../test_binaries/test_klp-call_getpid.c      | 48 +++++++++++++++
->  .../selftests/livepatch/test_modules/Makefile |  3 +-
->  .../livepatch/test_modules/test_klp_syscall.c | 60 +++++++++++++++++++
->  5 files changed, 165 insertions(+), 4 deletions(-)
->  create mode 100755 tools/testing/selftests/livepatch/test-syscall.sh
->  create mode 100644 tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
->  create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> 
-> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-> index 5ef492b87bb1..35014197184e 100644
-> --- a/tools/testing/selftests/livepatch/Makefile
-> +++ b/tools/testing/selftests/livepatch/Makefile
-> @@ -1,10 +1,14 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +include ../../../build/Build.include
-> +include ../../../scripts/Makefile.arch
-> +include ../../../scripts/Makefile.include
->  
->  TEST_FILES := settings \
->  		test_modules
->  
->  # We need the test_modules dir in order to make gen_tar and install to work
-> -TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
-> +TEST_GEN_PROGS_EXTENDED := test_binaries/test_klp-call_getpid \
-> +			test_modules/test_klp_atomic_replace.ko \
->  			test_modules/test_klp_callbacks_busy.ko \
->  			test_modules/test_klp_callbacks_demo.ko \
->  			test_modules/test_klp_callbacks_demo2.ko \
-> @@ -13,7 +17,8 @@ TEST_GEN_PROGS_EXTENDED := test_modules/test_klp_atomic_replace.ko \
->  			test_modules/test_klp_state.ko \
->  			test_modules/test_klp_state2.ko \
->  			test_modules/test_klp_state3.ko \
-> -			test_modules/test_klp_shadow_vars.ko
-> +			test_modules/test_klp_shadow_vars.ko \
-> +			test_modules/test_klp_syscall.ko
->  
->  TEST_PROGS_EXTENDED := functions.sh
->  TEST_PROGS := \
-> @@ -21,7 +26,8 @@ TEST_PROGS := \
->  	test-callbacks.sh \
->  	test-shadow-vars.sh \
->  	test-state.sh \
-> -	test-ftrace.sh
-> +	test-ftrace.sh \
-> +	test-syscall.sh
->  
->  # override lib.mk's default rules
->  OVERRIDE_TARGETS := 1
-> diff --git a/tools/testing/selftests/livepatch/test-syscall.sh b/tools/testing/selftests/livepatch/test-syscall.sh
-> new file mode 100755
-> index 000000000000..f1d49e6ce2ee
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test-syscall.sh
-> @@ -0,0 +1,46 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2022 SUSE
-> +# Author: Marcos Paulo de Souza <mpdesouza@suse.com>
-> +
-> +. $(dirname $0)/functions.sh
-> +
-> +MOD_SYSCALL=test_klp_syscall
-> +
-> +setup_config
-> +
-> +# - Start _NRPROC processes calling getpid and load a livepatch to patch the
-> +#   getpid syscall
-> +
-> +start_test "patch getpid syscall while being heavily hammered"
-> +
-> +declare -a pids
-> +for i in $(seq 1 $(getconf _NPROCESSORS_ONLN)); do
-> +	./test_klp-call_getpid &
-> +	pids[${#pids[*]}]="$!"
-             ^^^^^^^^^^^
-This looks fancy, would it be more approachable to use something like
-this:
-
-  for i in $(seq 0 $(( $(getconf _NPROCESSORS_ONLN) - 1 )) ); do
-  	./test_klp-call_getpid &
-  	pids[$i]="$!"
-  done
-
-or is there some strange race condition that requires using the method
-in the patch?
-
-> +done
-> +
-> +load_lp $MOD_SYSCALL
-> +# Success, getpid syscall was livepatched
-
-I don't think we need this comment as success is implied, otherwise
-load_lp would have pulled the die() ripcord.
-
-> +
-> +for pid in ${pids[@]}; do
-> +	kill $pid || true
-> +done
-> +
-> +disable_lp $MOD_SYSCALL
-> +unload_lp $MOD_SYSCALL
-> +
-> +check_result "% insmod test_modules/$MOD_SYSCALL.ko
-> +livepatch: enabling patch '$MOD_SYSCALL'
-> +livepatch: '$MOD_SYSCALL': initializing patching transition
-> +livepatch: '$MOD_SYSCALL': starting patching transition
-> +livepatch: '$MOD_SYSCALL': completing patching transition
-> +livepatch: '$MOD_SYSCALL': patching complete
-> +% echo 0 > /sys/kernel/livepatch/$MOD_SYSCALL/enabled
-> +livepatch: '$MOD_SYSCALL': initializing unpatching transition
-> +livepatch: '$MOD_SYSCALL': starting unpatching transition
-> +livepatch: '$MOD_SYSCALL': completing unpatching transition
-> +livepatch: '$MOD_SYSCALL': unpatching complete
-> +% rmmod $MOD_SYSCALL"
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
-> new file mode 100644
-> index 000000000000..be9d3110687d
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test_binaries/test_klp-call_getpid.c
-> @@ -0,0 +1,48 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2017 SUSE
-> + * Author: Libor Pechacek <lpechacek@suse.cz>
-> + */
-> +
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <sys/syscall.h>
-> +#include <sys/types.h>
-> +#include <signal.h>
-> +
-> +static int run = 1;
-> +static int sig_int;
-> +
-> +void hup_handler(int signum)
-> +{
-> +	run = 0;
-> +}
-> +
-> +void int_handler(int signum)
-> +{
-> +	run = 0;
-> +	sig_int = 1;
-> +}
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	pid_t orig_pid, pid;
-> +	long count = 0;
-> +
-> +	signal(SIGHUP, &hup_handler);
-> +	signal(SIGINT, &int_handler);
-> +
-> +	orig_pid = syscall(SYS_getpid);
-> +
-> +	while(run) {
-
-nit: could do s/run/stop/g and flip the assignment and check here so it
-matches the sig_int flag, ie, 0 by default and 1 on HUP / INT.
-
-> +		pid = syscall(SYS_getpid);
-> +		if (pid != orig_pid)
-> +			return 1;
-> +		count++;
-> +	}
-> +
-> +	if (sig_int)
-> +		printf("%d iterations done\n", count);
-
-nit: %ld for long
-
-> +
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-> index 375180bc1b16..288c65ccd080 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> @@ -15,7 +15,8 @@ obj-m += test_klp_atomic_replace.o \
->  	test_klp_state.o \
->  	test_klp_state2.o \
->  	test_klp_state3.o \
-> -	test_klp_shadow_vars.o
-> +	test_klp_shadow_vars.o \
-> +	test_klp_syscall.o
->  
->  %.ko:
->  	make -C $(KDIR) M=$(TESTMODS_DIR) $@
-> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> new file mode 100644
-> index 000000000000..e170accfb10c
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-> @@ -0,0 +1,60 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2017-2022 SUSE
-> + * Authors: Libor Pechacek <lpechacek@suse.cz>
-> + *          Nicolai Stange <nstange@suse.de>
-> + *          Marcos Paulo de Souza <mpdesouza@suse.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/sched.h>
-> +#include <linux/livepatch.h>
-> +
-> +#if defined(__x86_64__)
-> +#define FN_PREFIX __x64_
-> +#elif defined(__s390x__)
-> +#define FN_PREFIX __s390x_
-> +#elif defined(__PPC64__)
-> +#define FN_PREFIX __ppc64_
-> +#else
-> +#error "livepatch not supported"
-
-What about 32-bit powerpc [1]?  Would this cause the selftests to fail
-on that hardware?
-
-[1] https://lore.kernel.org/live-patching/cover.1640017960.git.christophe.leroy@csgroup.eu/
-
-> +#endif
-> +
-> +asmlinkage long lp_sys_getpid(void)
-> +{
-> +	return task_tgid_vnr(current);
-> +}
-> +
-> +static struct klp_func vmlinux_funcs[] = {
-> +	{
-> +		.old_name = __stringify(FN_PREFIX) "sys_getpid",
-> +		.new_func = lp_sys_getpid,
-> +	}, {}
-> +};
-> +
-> +static struct klp_object objs[] = {
-> +	{
-> +		/* name being NULL means vmlinux */
-> +		.funcs = vmlinux_funcs,
-> +	}, {}
-> +};
-> +
-> +static struct klp_patch patch = {
-> +	.mod = THIS_MODULE,
-> +	.objs = objs,
-> +};
-> +
-> +static int livepatch_init(void)
-> +{
-> +	return klp_enable_patch(&patch);
-> +}
-> +
-> +static void livepatch_exit(void)
-> +{
-> +}
-> +
-> +module_init(livepatch_init);
-> +module_exit(livepatch_exit);
-> +MODULE_LICENSE("GPL");
-> +MODULE_INFO(livepatch, "Y");
-> -- 
-> 2.35.3
->
-
-Hi Marcos,
-
-A few comments and small nits found inline above.
-
-First, the test is pretty straightforward and a reasonable one to run,
-particularly putting the system under some load while patching.
-
-What do you think about the following tweaks:
-
-test_klp_syscall:
-- only calls the new syscall behavior for a list of known PIDs
-- PID list supplied via module parameter
-- when calling new syscall, PID is removed from list,
-  PIDs-left-to-patch counter (exposed to sysfs) decremented
-
-test-syscall.sh:
-- loads test_klp_syscall with test_klp-call_getpid PIDs that it spawned
-- before killing the test_klp-call_getpid PIDs, checks that
-  test_klp_syscall's sysfs PIDs-left-to-patch counter == 0
-
-I think this would ensure a few things:
-
-  1. Restrict the getpid syscall change to only callers expecting new
-     behavior
-  2. Force test_klp_syscall to patch each test_klp-call_getpid
-  3. Force all test_klp-call_getpid to hang around long enough for (2)
-
-Maybe this is too defensive, but I think could be handled without adding
-too much complexity.
-
-Regards,
-
---
-Joe 
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 2b97720ab608..3f7c7b54c741 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -45,6 +45,10 @@ ifeq ($(SRCARCH),x86)
+ 	BUILD_ORC := y
+ endif
+ 
++ifeq ($(SRCARCH),arm64)
++	CFLAGS  += -Wno-nested-externs
++endif
++
+ export BUILD_ORC
+ export srctree OUTPUT CFLAGS SRCARCH AWK
+ include $(srctree)/tools/build/Makefile.include
+diff --git a/tools/objtool/arch/arm64/Build b/tools/objtool/arch/arm64/Build
+new file mode 100644
+index 000000000000..f3de3a50d541
+--- /dev/null
++++ b/tools/objtool/arch/arm64/Build
+@@ -0,0 +1,8 @@
++objtool-y += special.o
++objtool-y += decode.o
++
++objtool-y += libhweight.o
++
++$(OUTPUT)arch/arm64/libhweight.o: ../lib/hweight.c FORCE
++	$(call rule_mkdir)
++	$(call if_changed_dep,cc_o_c)
+diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
+new file mode 100644
+index 000000000000..afe22c4593c8
+--- /dev/null
++++ b/tools/objtool/arch/arm64/decode.c
+@@ -0,0 +1,138 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++
++#include <asm/insn.h>
++
++#include <objtool/check.h>
++#include <objtool/arch.h>
++#include <objtool/elf.h>
++#include <objtool/warn.h>
++#include <objtool/builtin.h>
++#include <arch/cfi_regs.h>
++
++#include "../../../arch/arm64/lib/insn.c"
++
++bool arch_callee_saved_reg(unsigned char reg)
++{
++	switch (reg) {
++	case AARCH64_INSN_REG_19:
++	case AARCH64_INSN_REG_20:
++	case AARCH64_INSN_REG_21:
++	case AARCH64_INSN_REG_22:
++	case AARCH64_INSN_REG_23:
++	case AARCH64_INSN_REG_24:
++	case AARCH64_INSN_REG_25:
++	case AARCH64_INSN_REG_26:
++	case AARCH64_INSN_REG_27:
++	case AARCH64_INSN_REG_28:
++	case AARCH64_INSN_REG_FP:
++	case AARCH64_INSN_REG_LR:
++		return true;
++	default:
++		return false;
++	}
++}
++
++void arch_initial_func_cfi_state(struct cfi_init_state *state)
++{
++	int i;
++
++	for (i = 0; i < CFI_NUM_REGS; i++) {
++		state->regs[i].base = CFI_UNDEFINED;
++		state->regs[i].offset = 0;
++	}
++
++	/* initial CFA (call frame address) */
++	state->cfa.base = CFI_SP;
++	state->cfa.offset = 0;
++}
++
++unsigned long arch_dest_reloc_offset(int addend)
++{
++	return addend;
++}
++
++unsigned long arch_jump_destination(struct instruction *insn)
++{
++	return insn->offset + insn->immediate;
++}
++
++const char *arch_nop_insn(int len)
++{
++	static u32 nop;
++
++	if (len != AARCH64_INSN_SIZE)
++		WARN("invalid NOP size: %d\n", len);
++
++	if (!nop)
++		nop = aarch64_insn_gen_nop();
++
++	return (const char *)&nop;
++}
++
++const char *arch_ret_insn(int len)
++{
++	static u32 ret;
++
++	if (len != AARCH64_INSN_SIZE)
++		WARN("invalid RET size: %d\n", len);
++
++	if (!ret) {
++		ret = aarch64_insn_gen_branch_reg(AARCH64_INSN_REG_LR,
++				AARCH64_INSN_BRANCH_RETURN);
++	}
++
++	return (const char *)&ret;
++}
++
++static int is_arm64(const struct elf *elf)
++{
++	switch (elf->ehdr.e_machine) {
++	case EM_AARCH64: //0xB7
++		return 1;
++	default:
++		WARN("unexpected ELF machine type %x",
++		     elf->ehdr.e_machine);
++		return 0;
++	}
++}
++
++int arch_decode_hint_reg(u8 sp_reg, int *base)
++{
++	return -1;
++}
++
++int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
++			    unsigned long offset, unsigned int maxlen,
++			    unsigned int *len, enum insn_type *type,
++			    unsigned long *immediate,
++			    struct list_head *ops_list)
++{
++	const struct elf *elf = file->elf;
++	u32 insn;
++
++	if (!is_arm64(elf))
++		return -1;
++
++	if (maxlen < AARCH64_INSN_SIZE)
++		return 0;
++
++	*len = AARCH64_INSN_SIZE;
++	*immediate = 0;
++	*type = INSN_OTHER;
++
++	insn = *(u32 *)(sec->data->d_buf + offset);
++
++	switch (aarch64_get_insn_class(insn)) {
++	case AARCH64_INSN_CLS_UNKNOWN:
++		WARN("can't decode instruction at %s:0x%lx", sec->name, offset);
++		return -1;
++	default:
++		break;
++	}
++
++	return 0;
++}
+diff --git a/tools/objtool/arch/arm64/include/arch/cfi_regs.h b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+new file mode 100644
+index 000000000000..a5185649686b
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/cfi_regs.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _OBJTOOL_CFI_REGS_H
++#define _OBJTOOL_CFI_REGS_H
++
++#include <asm/insn.h>
++
++#define CFI_BP			AARCH64_INSN_REG_FP
++#define CFI_RA			AARCH64_INSN_REG_LR
++#define CFI_SP			AARCH64_INSN_REG_SP
++
++#define CFI_NUM_REGS		32
++
++#endif /* _OBJTOOL_CFI_REGS_H */
+diff --git a/tools/objtool/arch/arm64/include/arch/elf.h b/tools/objtool/arch/arm64/include/arch/elf.h
+new file mode 100644
+index 000000000000..a59888a906b5
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/elf.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0 */
++
++#ifndef _OBJTOOL_ARCH_ELF
++#define _OBJTOOL_ARCH_ELF
++
++#define R_NTYPE	-1
++#define R_NONE	R_AARCH64_NONE
++#define R_ABS64	R_AARCH64_ABS64
++#define R_REL32	R_AARCH64_PREL32
++#define R_PLT32	R_NTYPE
++
++#endif /* _OBJTOOL_ARCH_ELF */
+diff --git a/tools/objtool/arch/arm64/include/arch/endianness.h b/tools/objtool/arch/arm64/include/arch/endianness.h
+new file mode 100644
+index 000000000000..7c362527da20
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/endianness.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++#ifndef _ARCH_ENDIANNESS_H
++#define _ARCH_ENDIANNESS_H
++
++#include <endian.h>
++
++#define __TARGET_BYTE_ORDER __LITTLE_ENDIAN
++
++#endif /* _ARCH_ENDIANNESS_H */
+diff --git a/tools/objtool/arch/arm64/include/arch/special.h b/tools/objtool/arch/arm64/include/arch/special.h
+new file mode 100644
+index 000000000000..63a705c622a4
+--- /dev/null
++++ b/tools/objtool/arch/arm64/include/arch/special.h
+@@ -0,0 +1,22 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _ARM64_ARCH_SPECIAL_H
++#define _ARM64_ARCH_SPECIAL_H
++
++#define EX_ENTRY_SIZE		12
++#define EX_ORIG_OFFSET		0
++#define EX_NEW_OFFSET		4
++
++#define JUMP_ENTRY_SIZE		16
++#define JUMP_ORIG_OFFSET	0
++#define JUMP_NEW_OFFSET		4
++#define JUMP_KEY_OFFSET		8
++
++#define ALT_ENTRY_SIZE		12
++#define ALT_ORIG_OFFSET		0
++#define ALT_NEW_OFFSET		4
++#define ALT_FEATURE_OFFSET	8
++#define ALT_ORIG_LEN_OFFSET	10
++#define ALT_NEW_LEN_OFFSET	11
++
++#endif /* _ARM64_ARCH_SPECIAL_H */
+diff --git a/tools/objtool/arch/arm64/special.c b/tools/objtool/arch/arm64/special.c
+new file mode 100644
+index 000000000000..45f283283091
+--- /dev/null
++++ b/tools/objtool/arch/arm64/special.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <objtool/special.h>
++
++void arch_handle_alternative(unsigned short feature, struct special_alt *alt)
++{
++}
++
++bool arch_support_alt_relocation(struct special_alt *special_alt,
++				 struct instruction *insn,
++				 struct reloc *reloc)
++{
++	return false;
++}
++
++
++struct reloc *arch_find_switch_table(struct objtool_file *file,
++				     struct instruction *insn)
++{
++	return NULL;
++}
+-- 
+2.17.1
 
