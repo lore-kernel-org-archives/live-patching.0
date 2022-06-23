@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74CF8CCA491
-	for <live-patching@archiver.kernel.org>; Thu, 23 Jun 2022 01:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07782CCA48A
+	for <live-patching@archiver.kernel.org>; Thu, 23 Jun 2022 01:53:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377965AbiFWBxG (ORCPT
+        id S1377971AbiFWBxH (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 22 Jun 2022 21:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        Wed, 22 Jun 2022 21:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377397AbiFWBwH (ORCPT
+        with ESMTP id S1377606AbiFWBwW (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 22 Jun 2022 21:52:07 -0400
+        Wed, 22 Jun 2022 21:52:22 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B7F43ACF;
-        Wed, 22 Jun 2022 18:51:51 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LT38j0dc9zhYgX;
-        Thu, 23 Jun 2022 09:49:41 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2073D43AF4;
+        Wed, 22 Jun 2022 18:51:53 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LT39p1QfDzkWk6;
+        Thu, 23 Jun 2022 09:50:38 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 09:51:49 +0800
+ 15.1.2375.24; Thu, 23 Jun 2022 09:51:51 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 09:51:49 +0800
+ 15.1.2375.24; Thu, 23 Jun 2022 09:51:51 +0800
 From:   Chen Zhongjin <chenzhongjin@huawei.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>,
@@ -40,9 +40,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>,
         <daniel.thompson@linaro.org>
-Subject: [PATCH v6 17/33] objtool: arm64: Add unwind_hint support
-Date:   Thu, 23 Jun 2022 09:49:01 +0800
-Message-ID: <20220623014917.199563-18-chenzhongjin@huawei.com>
+Subject: [PATCH v6 27/33] arm64: Set intra-function call annotations
+Date:   Thu, 23 Jun 2022 09:49:11 +0800
+Message-ID: <20220623014917.199563-28-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220623014917.199563-1-chenzhongjin@huawei.com>
 References: <20220623014917.199563-1-chenzhongjin@huawei.com>
@@ -56,114 +56,79 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Provide unwind hint defines for arm64 and objtool hint decoding.
+Stack validation requires BL instructions to an address,
+within the symbol containing the BL should be annotated as intra-function
+calls.
+
+Make __pmull_p8_core normally set frame because there's a intra-function
+call destinating middle of it and the caller have set the frame. When
+analyzing the insns there will be a cfi state mismatch between normal-call
+and intra-call.
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/include/asm/unwind_hints.h       | 26 +++++++++++++++++++++
- tools/arch/arm64/include/asm/unwind_hints.h | 26 +++++++++++++++++++++
- tools/objtool/arch/arm64/decode.c           | 14 ++++++++++-
- 3 files changed, 65 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/include/asm/unwind_hints.h
- create mode 100644 tools/arch/arm64/include/asm/unwind_hints.h
+ arch/arm64/crypto/crct10dif-ce-core.S | 5 +++++
+ arch/arm64/kernel/entry.S             | 2 ++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/arch/arm64/include/asm/unwind_hints.h b/arch/arm64/include/asm/unwind_hints.h
-new file mode 100644
-index 000000000000..ffee9472b30d
---- /dev/null
-+++ b/arch/arm64/include/asm/unwind_hints.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_UNWIND_HINTS_H
-+#define __ASM_UNWIND_HINTS_H
-+
+diff --git a/arch/arm64/crypto/crct10dif-ce-core.S b/arch/arm64/crypto/crct10dif-ce-core.S
+index dce6dcebfca1..b3b8e56cb87d 100644
+--- a/arch/arm64/crypto/crct10dif-ce-core.S
++++ b/arch/arm64/crypto/crct10dif-ce-core.S
+@@ -63,6 +63,7 @@
+ //
+ 
+ #include <linux/linkage.h>
 +#include <linux/objtool.h>
-+
-+#include "orc_types.h"
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT sp_reg=ORC_REG_UNDEFINED type=UNWIND_HINT_TYPE_CALL end=1
-+.endm
-+
-+.macro UNWIND_HINT_FUNC sp_offset=0
-+	UNWIND_HINT sp_reg=ORC_REG_SP sp_offset=\sp_offset type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=ORC_REG_SP offset=0
-+	UNWIND_HINT sp_reg=\base sp_offset=\offset type=UNWIND_HINT_TYPE_REGS
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* __ASM_UNWIND_HINTS_H */
-diff --git a/tools/arch/arm64/include/asm/unwind_hints.h b/tools/arch/arm64/include/asm/unwind_hints.h
-new file mode 100644
-index 000000000000..ffee9472b30d
---- /dev/null
-+++ b/tools/arch/arm64/include/asm/unwind_hints.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_UNWIND_HINTS_H
-+#define __ASM_UNWIND_HINTS_H
-+
+ #include <asm/assembler.h>
+ 
+ 	.text
+@@ -132,6 +133,8 @@
+ 	.endm
+ 
+ SYM_FUNC_START_LOCAL(__pmull_p8_core)
++	stp		x29, x30, [sp, #-16]!
++	mov		x29, sp
+ .L__pmull_p8_core:
+ 	ext		t4.8b, ad.8b, ad.8b, #1			// A1
+ 	ext		t5.8b, ad.8b, ad.8b, #2			// A2
+@@ -193,6 +196,7 @@ SYM_FUNC_START_LOCAL(__pmull_p8_core)
+ 
+ 	eor		t4.16b, t4.16b, t5.16b
+ 	eor		t6.16b, t6.16b, t3.16b
++	ldp		x29, x30, [sp], #16
+ 	ret
+ SYM_FUNC_END(__pmull_p8_core)
+ 
+@@ -207,6 +211,7 @@ SYM_FUNC_END(__pmull_p8_core)
+ 	pmull2		\rq\().8h, \ad\().16b, \bd\().16b	// D = A*B
+ 	.endif
+ 
++	ANNOTATE_INTRA_FUNCTION_CALL
+ 	bl		.L__pmull_p8_core\i
+ 
+ 	eor		\rq\().16b, \rq\().16b, t4.16b
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index bbc440379304..d49bfbe81a0d 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -10,6 +10,7 @@
+ #include <linux/arm-smccc.h>
+ #include <linux/init.h>
+ #include <linux/linkage.h>
 +#include <linux/objtool.h>
-+
-+#include "orc_types.h"
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT sp_reg=ORC_REG_UNDEFINED type=UNWIND_HINT_TYPE_CALL end=1
-+.endm
-+
-+.macro UNWIND_HINT_FUNC sp_offset=0
-+	UNWIND_HINT sp_reg=ORC_REG_SP sp_offset=\sp_offset type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=ORC_REG_SP offset=0
-+	UNWIND_HINT sp_reg=\base sp_offset=\offset type=UNWIND_HINT_TYPE_REGS
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* __ASM_UNWIND_HINTS_H */
-diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
-index 771d37d872c8..21a7f8315465 100644
---- a/tools/objtool/arch/arm64/decode.c
-+++ b/tools/objtool/arch/arm64/decode.c
-@@ -5,6 +5,7 @@
- #include <stdint.h>
  
- #include <asm/insn.h>
-+#include <asm/unwind_hints.h>
- 
- #include <objtool/check.h>
- #include <objtool/arch.h>
-@@ -176,7 +177,18 @@ static int is_arm64(const struct elf *elf)
- 
- int arch_decode_hint_reg(u8 sp_reg, int *base)
- {
--	return -1;
-+	switch (sp_reg) {
-+	case ORC_REG_UNDEFINED:
-+		*base = CFI_UNDEFINED;
-+		break;
-+	case ORC_REG_SP:
-+		*base = CFI_SP;
-+		break;
-+	default:
-+		return -1;
-+	}
-+
-+	return 0;
- }
- 
- static inline void make_add_op(enum aarch64_insn_register dest,
+ #include <asm/alternative.h>
+ #include <asm/assembler.h>
+@@ -694,6 +695,7 @@ alternative_else_nop_endif
+ 	 * entry onto the return stack and using a RET instruction to
+ 	 * enter the full-fat kernel vectors.
+ 	 */
++	ANNOTATE_INTRA_FUNCTION_CALL
+ 	bl	2f
+ 	UNWIND_HINT_EMPTY
+ 	b	.
 -- 
 2.17.1
 
