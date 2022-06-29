@@ -2,81 +2,117 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13B06C433EF
-	for <live-patching@archiver.kernel.org>; Mon, 27 Jun 2022 17:06:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EAC3CCA480
+	for <live-patching@archiver.kernel.org>; Wed, 29 Jun 2022 17:47:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239294AbiF0RGX (ORCPT
+        id S231767AbiF2Rrz (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 27 Jun 2022 13:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
+        Wed, 29 Jun 2022 13:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235619AbiF0RGW (ORCPT
+        with ESMTP id S229635AbiF2Rrz (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 27 Jun 2022 13:06:22 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D080C18B23;
-        Mon, 27 Jun 2022 10:06:21 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D5D4020CD15E;
-        Mon, 27 Jun 2022 10:06:20 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D5D4020CD15E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1656349581;
-        bh=5zYBrlNIUudUdqQqiRpxFOq8tdUweJZQW6d/b/T6x2s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Zt6t15rkvzx3wKjGM6F5N/ExJs15T9HqLE5L6XwX3ZtMcDoor/c16k9dECQWThedH
-         TQLWVo68I0VVeghqY4Kw+g4x6o6eDzPD3MUoffkiYmiXmK+ShdOrBcJ+aL/WXAaG6x
-         GPwAGZgCKugsgtmeUiKgfcIhimpWsiq8HY8b+OZA=
-Message-ID: <af83e538-fc7c-03d7-a11e-a5b257b65837@linux.microsoft.com>
-Date:   Mon, 27 Jun 2022 12:06:19 -0500
+        Wed, 29 Jun 2022 13:47:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9278B3D1EE;
+        Wed, 29 Jun 2022 10:47:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DBDB61E95;
+        Wed, 29 Jun 2022 17:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09DBC34114;
+        Wed, 29 Jun 2022 17:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656524873;
+        bh=V3NiNsBcMZHTm4MZ/mGYgmF4F0lBLTpyGX8FhxIQa2Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IMOpHA3y8dcD+7fwzHMEX/O8YiPB7pCyyOsIF82euERziVPngaXWEEmoYWc8EBkIz
+         lAY8jAcfNPjU3BQcToZ0A5kdMJhR5sEn0iZNB1D3JT71ZT3HCXR5wzxOCiEaL8mDOU
+         Ay52XukcdG7Ohbx+xY1Ex2j1dWJrva7urobJjrrrvuxje/Ufo2itTCkeupso8E/l+0
+         W1MiVBgy59CtIHfzs5Y1RZ1r8yJYbblZGaOO1r742V1GlutWT2aUrSeJ0rP/t0Bfma
+         ndInlhgtwxkMmUUA1F+Esfreu/3UypT4YPpHCoBNUf4bvWjeHHB5WKMPIlT3zp8LGG
+         Dx4YnuN9wZI1w==
+Date:   Wed, 29 Jun 2022 18:47:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        live-patching@vger.kernel.org, jpoimboe@kernel.org,
+        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, mark.rutland@arm.com,
+        pasha.tatashin@soleen.com, rmk+kernel@armlinux.org.uk,
+        madvenka@linux.microsoft.com, christophe.leroy@csgroup.eu,
+        daniel.thompson@linaro.org
+Subject: Re: [PATCH v6 18/33] arm64: Change symbol type annotations
+Message-ID: <YryQQlQga2wtWqv9@sirena.org.uk>
+References: <20220623014917.199563-1-chenzhongjin@huawei.com>
+ <20220623014917.199563-19-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v15 0/6] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
-Content-Language: en-US
-To:     Will Deacon <will@kernel.org>, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, ardb@kernel.org, mark.rutland@arm.com,
-        jamorris@linux.microsoft.com, jpoimboe@redhat.com,
-        nobuta.keiya@fujitsu.com, live-patching@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-team@android.com
-References: <ff68fb850d42e1adaa6a0a6c9c258acabb898b24>
- <20220617180219.20352-1-madvenka@linux.microsoft.com>
- <165632350271.638103.10773612881829908260.b4-ty@kernel.org>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <165632350271.638103.10773612881829908260.b4-ty@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZpDaJFJQME505rUf"
+Content-Disposition: inline
+In-Reply-To: <20220623014917.199563-19-chenzhongjin@huawei.com>
+X-Cookie: Booths for two or more.
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
 
+--ZpDaJFJQME505rUf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 6/27/22 08:00, Will Deacon wrote:
-> On Fri, 17 Jun 2022 13:02:13 -0500, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> I have synced this patch series to v5.19-rc2.
->> I have also removed the following patch.
->>
->> 	[PATCH v14 7/7] arm64: Select HAVE_RELIABLE_STACKTRACE
->>
->> [...]
-> 
-> Applied first two patches to arm64 (for-next/stacktrace), thanks!
-> 
-> [1/6] arm64: Split unwind_init()
->       https://git.kernel.org/arm64/c/a019d8a2cc82
-> [2/6] arm64: Copy the task argument to unwind_state
->       https://git.kernel.org/arm64/c/82a592c13b0a
-> 
-> Cheers,
+On Thu, Jun 23, 2022 at 09:49:02AM +0800, Chen Zhongjin wrote:
+> Code symbols not following the aarch64 procedure call convention should
+> be annotated with SYM_CODE_* instead of SYM_FUNC_*
+>=20
+> Mark relevant symbols as generic code symbols.
 
-Great!
+> -SYM_CODE_START(tramp_exit_native)
+> +SYM_CODE_START_LOCAL(tramp_exit_native)
+>  	tramp_exit
+>  SYM_CODE_END(tramp_exit_native)
+> =20
+> -SYM_CODE_START(tramp_exit_compat)
+> +SYM_CODE_START_LOCAL(tramp_exit_compat)
 
-Thanks!
+The commit log says this is fixing things mistakenly lablelld SYM_FUNC
+but this bit of the actual change is making some symbols local.
 
-Madhavan
+> -SYM_FUNC_START_LOCAL(__create_page_tables)
+> +SYM_CODE_START_LOCAL(__create_page_tables)
+>  	mov	x28, lr
+> =20
+>  	/*
+> @@ -389,7 +389,7 @@ SYM_FUNC_START_LOCAL(__create_page_tables)
+>  	bl	dcache_inval_poc
+> =20
+>  	ret	x28
+> -SYM_FUNC_END(__create_page_tables)
+> +SYM_CODE_END(__create_page_tables)
+
+This is removed by Ard's recent refactoring, the others that are still
+present look valid enough (for things that don't use the stack IIRC they
+could be seen as conforming but equally this is all running in non
+standard environments).
+
+--ZpDaJFJQME505rUf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmK8kEEACgkQJNaLcl1U
+h9AGMAf+JHAAJDfJo61ZFJglFeCtkipmbBLs8jW0KplnUBrU3Imx5m43AH8w8mWn
+xbpZ5FoAVoIGkkpMrsi3V+FZ0CPLdoTWO+bsq9Un1N3VwjzjSSRjd8iuaMa0dEQ4
+sqhM4VH9ZVYIDbt4RVw0z5dcwPNgIEO157D2sGMcPTG0shsbzHXnZtLgZ6Sr/EE1
+35Y4kRTYprFpjfc0b7fPQKSaJ7HpqrjOSiaFLlD24EKKueEotB03suT67wVaGYOs
+XVkFGA+XYW5l1FN+SDzobyVBQo+li/aLFgKbnjt4TSYmP3fEmqQ0FWaNpNncxqps
+PZ7yT8RtfHUN8Qv5eNYa7G+v+O5Wkw==
+=mASi
+-----END PGP SIGNATURE-----
+
+--ZpDaJFJQME505rUf--
