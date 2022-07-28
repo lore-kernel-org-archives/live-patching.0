@@ -2,85 +2,58 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B48AC04A68
-	for <live-patching@archiver.kernel.org>; Thu, 28 Jul 2022 15:37:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FA92C04A68
+	for <live-patching@archiver.kernel.org>; Thu, 28 Jul 2022 16:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiG1Phb (ORCPT
+        id S232140AbiG1Q6s (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 28 Jul 2022 11:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        Thu, 28 Jul 2022 12:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiG1Ph3 (ORCPT
+        with ESMTP id S232075AbiG1Q6r (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 28 Jul 2022 11:37:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477ED5465C;
-        Thu, 28 Jul 2022 08:37:28 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 05A3C35137;
-        Thu, 28 Jul 2022 15:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1659022647; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PZ1g1iDmzg1vUkpBJi42fPN29v6W/qAuH8HEq7Piwls=;
-        b=G9nzwH5RUiRv3tYNjRHP3cdU+Ak7QsO/RBbwasjI/2ZJfEN3zvbQzgIhQ6QS2AQEet4sCh
-        lCfj/UETvZF+Vr6JrwGN2ndJvVj1feIoL4kc/fqtE1apgMhlgcazmYJ5U4QScu23PhKNUC
-        DsCnK/XLGA9Vg6o9zsKdUeZdefYg3K0=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D636E2C141;
-        Thu, 28 Jul 2022 15:37:26 +0000 (UTC)
-Date:   Thu, 28 Jul 2022 17:37:26 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Rik van Riel <riel@surriel.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, kernel-team@fb.com,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Breno Leitao <leitao@debian.org>
-Subject: Re: [PATCH v4] livepatch: fix race between fork and KLP transition
-Message-ID: <YuKtNtOshtRfeMn7@alley>
-References: <20220720121023.043738bb@imladris.surriel.com>
- <YtrCqMLUqJlcoqIo@alley>
- <20220722150106.683f3704@imladris.surriel.com>
- <Yt6bZo5ztnVSjLLC@alley>
- <20220725094919.52bcde19@imladris.surriel.com>
- <20220727001040.vlqnnb4a3um46746@treble>
- <20220727102437.34530586@imladris.surriel.com>
+        Thu, 28 Jul 2022 12:58:47 -0400
+X-Greylist: delayed 531 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 28 Jul 2022 09:58:45 PDT
+Received: from sv8764.xserver.jp (sv8764.xserver.jp [183.181.85.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B2A61B0C
+        for <live-patching@vger.kernel.org>; Thu, 28 Jul 2022 09:58:45 -0700 (PDT)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/521/virusgw12007.xserver.jp)
+Received: from chu-rei.co.jp (sv8764.xserver.jp [183.181.85.125])
+        by sv8764.xserver.jp (Postfix) with ESMTPSA id BC5A6220B8FA0A
+        for <live-patching@vger.kernel.org>; Fri, 29 Jul 2022 01:49:52 +0900 (JST)
+Date:   Thu, 28 Jul 2022 16:49:52 +0000
+To:     live-patching@vger.kernel.org
+From:   =?UTF-8?B?5Lit5aSu5Ya35YeN55Sj5qWt5qCq5byP5Lya56S+?= 
+        <ice@chu-rei.co.jp>
+Reply-To: ice@chu-rei.co.jp
+Subject: =?UTF-8?B?5Lit5aSu5Ya35YeN55Sj5qWt5qCq5byP5Lya56S+ICLjgYrllY/jgYTlkIg=?=
+ =?UTF-8?B?44KP44Gb44KS5Y+X44GR5LuY44GR44G+44GX44GfIg==?=
+Message-ID: <F1GsC3KbNAKYn4KoELJSqTMRNlulBhlVg869jprfI@chu-rei.co.jp>
+X-Mailer: WPMailSMTP/Mailer/smtp 3.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220727102437.34530586@imladris.surriel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed 2022-07-27 10:24:37, Rik van Riel wrote:
-> v4: address changelog comments by Josh (thank you)
-> 
-> ---8<---
-> When a KLP fails to apply, klp_reverse_transition will clear the
-> TIF_PATCH_PENDING flag on all tasks, except for newly created tasks
-> which are not on the task list yet.
+yozk1r様
 
-It actually is not true. klp_reverse_transtion() clears TIF_PATCH_FLAG only
-temporary when it waits until all processes leave the ftrace
-handler. It sets TIF_PATCH_FLAG once again for all tasks by calling
-klp_start_transition().
+中央冷凍産業株式会社です。
+お問い合わせありがとうございます。
+担当者よりご連絡いたします。しばらくお待ちください。
 
-The difference is important. The WARN_ON_ONCE() in
-klp_complete_transition() will be printed when fork() copied
-TIF_PATCH_FLAG before it was set again.
+---以下の内容でメールを受け付けました。---
+会社名： 💛 Ruby want to play with you! Start Game: https://letsg0dancing.page.link/go?yzj 💛
+差出人: yozk1r
+メールアドレス： live-patching@vger.kernel.org
+電話番号: 966624155674
+お問い合わせ内容: 2al965
 
-Anyway, the important thing is that TIF_PATCH_FLAG and task->patch_state
-might be incompatible because fork() copies them at different times.
+-- 
+中央冷凍産業株式会社
+URL：http://chu-rei.co.jp
+Mail：ice@chu-rei.co.jp
+TEL：03-3516-3330
+Adress:〒103-0021　 東京都中央区日本橋本石町4-3-15
 
-klp_copy_process() must make sure that they are in sync. And
-it must be done under tasklist_lock when the child is added
-to the global task list.
-
-Best Regards,
-Petr
