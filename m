@@ -2,129 +2,96 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BEB3C00140
-	for <live-patching@archiver.kernel.org>; Mon,  8 Aug 2022 19:00:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60941C25B06
+	for <live-patching@archiver.kernel.org>; Thu, 11 Aug 2022 21:21:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244122AbiHHTAc (ORCPT
+        id S235976AbiHKVVv (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 8 Aug 2022 15:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        Thu, 11 Aug 2022 17:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244118AbiHHTA3 (ORCPT
+        with ESMTP id S234273AbiHKVVt (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 8 Aug 2022 15:00:29 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C50C204;
-        Mon,  8 Aug 2022 12:00:28 -0700 (PDT)
-Received: from [2603:3005:d05:2b00:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1oL7zA-0007FO-AO;
-        Mon, 08 Aug 2022 15:00:20 -0400
-Date:   Mon, 8 Aug 2022 15:00:19 -0400
-From:   Rik van Riel <riel@surriel.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, kernel-team@fb.com,
-        Jiri Kosina <jikos@kernel.org>,
+        Thu, 11 Aug 2022 17:21:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E09D9C203
+        for <live-patching@vger.kernel.org>; Thu, 11 Aug 2022 14:21:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660252907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OE49Bx/6b5Z5OCjJ/iaAetDXMbSvHfaw/2U0UjvSkCQ=;
+        b=C8U/X1bhtMJ5BjSJtKBfHW/gRAgImQ1+zNbSEpy4qyuffLlu4/fkWBuBZTUA/YnPBFE4Jf
+        tkoW+YHtgUW57PthkNABKFfYjM/qI2ns+CJPcK5LU2Ccp2noG13qkxosyDo8oPsp3y5dOK
+        sLh1/JDVwzTr7ZTJLAgHeZgrnWpHS2E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-423-hqI00qBSNDauxZ7ewUnFjQ-1; Thu, 11 Aug 2022 17:21:44 -0400
+X-MC-Unique: hqI00qBSNDauxZ7ewUnFjQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DB2501824602;
+        Thu, 11 Aug 2022 21:21:43 +0000 (UTC)
+Received: from jlaw-desktop.redhat.com (unknown [10.22.16.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7EF279459C;
+        Thu, 11 Aug 2022 21:21:43 +0000 (UTC)
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org
+Cc:     linux-kselftest@vger.kernel.org,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>
-Subject: [PATCH v5]  livepatch: fix race between fork and KLP transition
-Message-ID: <20220808150019.03d6a67b@imladris.surriel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Petr Mladek <pmladek@suse.com>,
+        Yannick Cote <ycote@redhat.com>, Dennis Li <denli@redhat.com>
+Subject: [PATCH] selftests/livepatch: normalize sysctl error message
+Date:   Thu, 11 Aug 2022 17:21:38 -0400
+Message-Id: <20220811212138.182575-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Sender: riel@shelob.surriel.com
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The KLP transition code depends on the TIF_PATCH_PENDING and
-the task->patch_state to stay in sync. On a normal (forward)
-transition, TIF_PATCH_PENDING will be set on every task in
-the system, while on a reverse transition (after a failed
-forward one) first TIF_PATCH_PENDING will be cleared from
-every task, followed by it being set on tasks that need to
-be transitioned back to the original code.
+The livepatch kselftests rely on comparing expected and actual output
+from such commands as sysctl.  A recent commit in procps-ng v4.0.0 [1]
+changed sysctl's output to emit key pathnames like:
 
-However, the fork code copies over the TIF_PATCH_PENDING flag
-from the parent to the child early on, in dup_task_struct and
-setup_thread_stack. Much later, klp_copy_process will set
-child->patch_state to match that of the parent.
+  sysctl: setting key "/proc/sys/kernel/ftrace_enabled": Device or resource busy
 
-However, the parent's patch_state may have been changed by KLP loading
-or unloading since it was initially copied over into the child.
+versus previous dotted output:
 
-This results in the KLP code occasionally hitting this warning in
-klp_complete_transition:
+  sysctl: setting key "kernel.ftrace_enabled": Device or resource busy
 
-        for_each_process_thread(g, task) {
-                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
-                task->patch_state = KLP_UNDEFINED;
-        }
+The modification in output was later reverted [2], but since the change
+has been tagged in procps-ng v4.0.0, update the livepatch kselftest to
+handle either case.
 
-Set, or clear, the TIF_PATCH_PENDING flag in the child task
-depending on whether or not it is needed at the time
-klp_copy_process is called, at a point in copy_process where the
-tasklist_lock is held exclusively, preventing races with the KLP
-code.
+[1] https://gitlab.com/procps-ng/procps/-/commit/6389deca5bf667f5fab5912acde78ba8e0febbc7
+[2] https://gitlab.com/procps-ng/procps/-/commit/b159c198c9160a8eb13254e2b631d0035b9b542c
 
-The KLP code does have a few places where the state is changed
-without the tasklist_lock held, but those should not cause
-problems because klp_update_patch_state(current) cannot be
-called while the current task is in the middle of fork,
-klp_check_and_switch_task() which is called under the pi_lock,
-which prevents rescheduling, and manipulation of the patch
-state of idle tasks, which do not fork.
-
-This should prevent this warning from triggering again in the
-future, and close the race for both normal and reverse transitions.
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
-Reported-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency model")
-Cc: stable@kernel.org
+Reported-by: Dennis(Zhuoheng) Li <denli@redhat.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
-v5: incorporate changelog suggestions by Petr (thank you)
+ tools/testing/selftests/livepatch/functions.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- kernel/livepatch/transition.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index 5d03a2ad1066..30187b1d8275 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -610,9 +610,23 @@ void klp_reverse_transition(void)
- /* Called from copy_process() during fork */
- void klp_copy_process(struct task_struct *child)
- {
--	child->patch_state = current->patch_state;
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 9230b869371d..d5001c9eb72e 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -86,7 +86,7 @@ function set_ftrace_enabled() {
  
--	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
-+	/*
-+	 * The parent process may have gone through a KLP transition since
-+	 * the thread flag was copied in setup_thread_stack earlier. Bring
-+	 * the task flag up to date with the parent here.
-+	 *
-+	 * The operation is serialized against all klp_*_transition()
-+	 * operations by the tasklist_lock. The only exception is
-+	 * klp_update_patch_state(current), but we cannot race with
-+	 * that because we are current.
-+	 */
-+	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
-+		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+	else
-+		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+
-+	child->patch_state = current->patch_state;
- }
+ 	if [[ "$result" != "$1" ]] ; then
+ 		if [[ $can_fail -eq 1 ]] ; then
+-			echo "livepatch: $err" > /dev/kmsg
++			echo "livepatch: $err" | sed 's#/proc/sys/kernel/#kernel.#' > /dev/kmsg
+ 			return
+ 		fi
  
- /*
 -- 
-2.37.1
-
+2.26.3
 
