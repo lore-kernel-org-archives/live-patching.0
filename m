@@ -2,38 +2,37 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4285AC3F6B0
-	for <live-patching@archiver.kernel.org>; Mon, 15 Aug 2022 23:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 264C1C25B0D
+	for <live-patching@archiver.kernel.org>; Tue, 16 Aug 2022 00:34:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354607AbiHOXzA (ORCPT
+        id S1348265AbiHPAeP (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 15 Aug 2022 19:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        Mon, 15 Aug 2022 20:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355356AbiHOXv5 (ORCPT
+        with ESMTP id S244187AbiHPAcw (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:51:57 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC64C915C8;
-        Mon, 15 Aug 2022 13:16:39 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b988d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:988d:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BB2E01EC02AD;
-        Mon, 15 Aug 2022 22:16:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660594593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KMD5ZZW0UGq2Obs996tfjGpJxzdAX0qHGDYWDHvQl+Q=;
-        b=L0QhKbmGsK+x7YnEkJO3Efs8BnoHyjMhN6fVG8HyEAb+v6OPMY5NRRmwfr1N+wTC4qwX+M
-        KR558BiStQ1xGsTbFHpB+zRz0BtpTb3YSrsxi+cGm36DHMlDsnCXuM26DderQLFaZ3r760
-        aF1onIFyJBQlok+JIWgrfndBo46rZbQ=
-Date:   Mon, 15 Aug 2022 22:16:29 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Johannes Erdfelt <johannes@erdfelt.com>,
+        Mon, 15 Aug 2022 20:32:52 -0400
+X-Greylist: delayed 432 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 Aug 2022 13:37:00 PDT
+Received: from out.bound.email (out.bound.email [141.193.244.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374F9186EB4;
+        Mon, 15 Aug 2022 13:37:00 -0700 (PDT)
+Received: from mail.sventech.com (localhost [127.0.0.1])
+        by out.bound.email (Postfix) with ESMTP id 1F2328A03AB;
+        Mon, 15 Aug 2022 13:29:47 -0700 (PDT)
+Received: by mail.sventech.com (Postfix, from userid 1000)
+        id 059F816006D1; Mon, 15 Aug 2022 13:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=erdfelt.com;
+        s=default; t=1660595387;
+        bh=a9t+6RNGLlnq/PvQKr+rFvGqP5Pb1q0DuTGheD0/zTY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dYkfrHqepJQerEQIuDq4P7SEZV1DMCF+s+4mksMat5gFAN6UQimvgkVfBAuSiBBu0
+         u6mfqSMhuSCfVskrsMzd1XYGAbR870sR4R0FL/q80uFnXAhtkeNF59EqdFqYhg11iD
+         vqectqARZvf5DdIn1v6tyA0PApviOBu05QkbYJzU=
+Date:   Mon, 15 Aug 2022 13:29:46 -0700
+From:   Johannes Erdfelt <johannes@erdfelt.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>, live-patching@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>,
         "x86@kernel.org" <x86@kernel.org>,
@@ -41,36 +40,41 @@ Cc:     Johannes Erdfelt <johannes@erdfelt.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>
 Subject: Re: ftrace regression with CONFIG_UNWINDER_FRAME_POINTER
-Message-ID: <YvqpnfM9ZdRO6oXa@zn.tnic>
+Message-ID: <20220815202946.GF3948@sventech.com>
 References: <20220815195828.GE3948@sventech.com>
  <20220815160646.0dca7227@gandalf.local.home>
+ <YvqpnfM9ZdRO6oXa@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815160646.0dca7227@gandalf.local.home>
+In-Reply-To: <YvqpnfM9ZdRO6oXa@zn.tnic>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 04:06:46PM -0400, Steven Rostedt wrote:
-> On Mon, 15 Aug 2022 12:58:28 -0700
-> Johannes Erdfelt <johannes@erdfelt.com> wrote:
-> 
-> > I recently ran across an oops with ftrace when using the frame pointer
-> > unwinder. It does not affect Linus' tree (tested 6.0-rc1), but it does
-> > affect 5.15.60 and 5.10.136 (at least, have not tested other kernels).
+On Mon, Aug 15, 2022, Borislav Petkov <bp@alien8.de> wrote:
+> On Mon, Aug 15, 2022 at 04:06:46PM -0400, Steven Rostedt wrote:
+> > On Mon, 15 Aug 2022 12:58:28 -0700
+> > Johannes Erdfelt <johannes@erdfelt.com> wrote:
 > > 
-> > It appears to be related to the recently merged retbleed mitigations,
+> > > I recently ran across an oops with ftrace when using the frame pointer
+> > > unwinder. It does not affect Linus' tree (tested 6.0-rc1), but it does
+> > > affect 5.15.60 and 5.10.136 (at least, have not tested other kernels).
+> > > 
+> > > It appears to be related to the recently merged retbleed mitigations,
+> > 
+> > If you believe this, then Cc those that are involved with those
+> > mitigations, which I did.
 > 
-> If you believe this, then Cc those that are involved with those
-> mitigations, which I did.
+> Sounds like this one:
+> 
+> https://lore.kernel.org/all/Yu2H%2FRdg%2FU4bHWaY@quatroqueijos/
 
-Sounds like this one:
+Ahh, I missed this in my search to see if this was posted already.
 
-https://lore.kernel.org/all/Yu2H%2FRdg%2FU4bHWaY@quatroqueijos/
+The patch in that post appears to solve the oops I'm seeing (at least
+on top of 5.15.60).
 
--- 
-Regards/Gruss,
-    Boris.
+JE
 
-https://people.kernel.org/tglx/notes-about-netiquette
