@@ -2,191 +2,215 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BCF4ECAA24
-	for <live-patching@archiver.kernel.org>; Thu, 25 Aug 2022 16:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D75A9ECAAA1
+	for <live-patching@archiver.kernel.org>; Tue, 30 Aug 2022 07:18:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243052AbiHYQ0c (ORCPT
+        id S230107AbiH3HSw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 25 Aug 2022 12:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        Tue, 30 Aug 2022 03:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243069AbiHYQ0b (ORCPT
+        with ESMTP id S229775AbiH3HSv (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 25 Aug 2022 12:26:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA15B67CA4
-        for <live-patching@vger.kernel.org>; Thu, 25 Aug 2022 09:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661444788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBP2+G42OMoMwnqdV2vMK60zYr6xOaGHcldEWnYhFNg=;
-        b=G3z/8zZuEA7w/iEz+cwnx3P5ggAG6YPEWYkr1HWkyxxA90AYC57DIehJXBbqI7PIDPzvB4
-        CZrPWtiovkBxGgaKIP9zNfd89TUz8cQf0Ln/CO3maElBsjdeRVXVLt0oRp/bjQCueTx1pg
-        FAmkVu/N4Gfa6j4dyGP2nlmyu/+kqQg=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-564-hcK5s9-QP66fyxoxiwmuXA-1; Thu, 25 Aug 2022 12:26:27 -0400
-X-MC-Unique: hcK5s9-QP66fyxoxiwmuXA-1
-Received: by mail-qv1-f70.google.com with SMTP id db3-20020a056214170300b00496c0aabfc9so11223145qvb.16
-        for <live-patching@vger.kernel.org>; Thu, 25 Aug 2022 09:26:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:subject:from:references:cc:to
-         :x-gm-message-state:from:to:cc;
-        bh=QBP2+G42OMoMwnqdV2vMK60zYr6xOaGHcldEWnYhFNg=;
-        b=GZexySQ4ca0+rkoRjJauWQXq8KuB5hdbWaoHNWPmykGjUlbiRIfLZqvttYXHRcNr5/
-         B5SvJReRDsS8OOAtwuaLhkpFbUDHpSThHvSTQO/RLRymSCSLo7Cf6/r/74QkqCbIvaCN
-         Cr2HZwsp/KlbBOZfunvWAp1TejZi9J54yqVeQNLW3rm+BASO1iByQFeWdr/Md6eAKlZ/
-         6CnGyijRq4ln95pbHIvYuiefCzF2z9EIpeKk1ZQhGi+YdjvaIvqhse/eOOW3m0icUWjx
-         9A8x0P4h2gM+9YOt+KY7hE1IabwOXEVoAbE84kXKzR9JJ7PRKdw4nUYurlwtyVcrmxwo
-         O1VQ==
-X-Gm-Message-State: ACgBeo02pvgcB7DZkuLM5EwwLpBZxi/fZcmJ7nWXDjpGlxBo1MURqmP6
-        SNFxzUkUmnEqTLfBJDUbzKVCrpJobEgWwLkOyIuhZWi76CUkBNpC/Y54BXUmfUO6MwqxshLdhzF
-        c7mFDuiOHHkRYX50AISPLUODXAQ==
-X-Received: by 2002:a05:622a:1909:b0:344:9f41:9477 with SMTP id w9-20020a05622a190900b003449f419477mr4251542qtc.619.1661444787017;
-        Thu, 25 Aug 2022 09:26:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR62RGiq2S68kTCuavDT7NSb7NgKOTzjHMBEZeS17J6JGsxz5uqWmWKqHiDKd7xSnfoU2KF8Fw==
-X-Received: by 2002:a05:622a:1909:b0:344:9f41:9477 with SMTP id w9-20020a05622a190900b003449f419477mr4251521qtc.619.1661444786728;
-        Thu, 25 Aug 2022 09:26:26 -0700 (PDT)
-Received: from [192.168.1.9] (pool-68-163-101-245.bstnma.fios.verizon.net. [68.163.101.245])
-        by smtp.gmail.com with ESMTPSA id u4-20020a05620a454400b006bbe7ded98csm14674408qkp.112.2022.08.25.09.26.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 09:26:26 -0700 (PDT)
-To:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org
-Cc:     jpoimboe@redhat.com, mbenes@suse.cz, pmladek@suse.com,
-        nstange@suse.de
-References: <20220701194817.24655-1-mpdesouza@suse.com>
- <20220701194817.24655-5-mpdesouza@suse.com>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH 4/4] livepatch/shadow: Add garbage collection of shadow
- variables
-Message-ID: <b5fc2891-2fb0-4aa7-01dd-861da22bb7ea@redhat.com>
-Date:   Thu, 25 Aug 2022 12:26:25 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 30 Aug 2022 03:18:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D55183079
+        for <live-patching@vger.kernel.org>; Tue, 30 Aug 2022 00:18:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07FE2B8168D
+        for <live-patching@vger.kernel.org>; Tue, 30 Aug 2022 07:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7FB3C433C1
+        for <live-patching@vger.kernel.org>; Tue, 30 Aug 2022 07:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661843927;
+        bh=ZBFGQgaHYPR5E/LnxCan0rzWGR/tx31iB/oBDF37r5w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VKpj5KyomHvphXzQdyOkupqgXVZWv0mC1JtCITme06Ck6pfeB36Ay5AlInS0nzWno
+         S2+NSdV+Z1H8TWHfonyHV9++k6wUyjPo/E7kUgxpEUZ6anOG39G5bAwfve13548XBW
+         hrbo5dLLoBsPBUpl9o1kQYAk376r18/gTk0mtXEJQrEP4ZbsXH7QZsl24Zcc/9ec74
+         HTZ43QHL1al8J6NlJ8zDKJUMZWPI7udIvaHGq2SJuxAUSApABPSB3izwrsB9uId42F
+         bi2xS0Re/i8AVX3igSt9Pwt6ZD28/IngPoBrspioz4EEIV70IcZ9Y6qSszuAqoHiGV
+         3xIDeWGwRoOoQ==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-33dc31f25f9so251458877b3.11
+        for <live-patching@vger.kernel.org>; Tue, 30 Aug 2022 00:18:47 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2HCUZy6kXjXoqSmKCR7MOkkTowsLFRmMGWuKBC2Y6uKpypBX4+
+        9u6oKFY7Wb/X59Sdveae1WIPWOx9JGxLI5eJnF0=
+X-Google-Smtp-Source: AA6agR43Xj9cAQDKqkjkHqGY5/hGmEOGkJVBI9rJBWsJXDBR43tSwWP7xLVVlxnbsYdNYY9BlcLPugEPXtIqq+oUae4=
+X-Received: by 2002:a25:2357:0:b0:696:56f4:356e with SMTP id
+ j84-20020a252357000000b0069656f4356emr9945962ybj.449.1661843926765; Tue, 30
+ Aug 2022 00:18:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220701194817.24655-5-mpdesouza@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20220801212129.2008177-1-song@kernel.org> <Yu2EYG0YjPLjiPk0@redhat.com>
+ <CAPhsuW4s2OiM6-toXqqfewnYmGDTQWjSa5R7vTQ2iq5WpYziOA@mail.gmail.com>
+In-Reply-To: <CAPhsuW4s2OiM6-toXqqfewnYmGDTQWjSa5R7vTQ2iq5WpYziOA@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 30 Aug 2022 00:18:35 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6Qu0O7VKqwhq4L=T4h7uLC=_2tF-y9uvsVACFH2Q105Q@mail.gmail.com>
+Message-ID: <CAPhsuW6Qu0O7VKqwhq4L=T4h7uLC=_2tF-y9uvsVACFH2Q105Q@mail.gmail.com>
+Subject: Re: [PATCH v4] livepatch: Clear relocation targets on a module removal
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Kernel Team <kernel-team@fb.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On 7/1/22 3:48 PM, Marcos Paulo de Souza wrote:
-> The life of shadow variables is not completely trivial to maintain.
-> They might be used by more livepatches and more livepatched objects.
-> They should stay as long as there is any user.
-> 
-> In practice, it requires to implement reference counting in callbacks
-> of all users. They should register all the user and remove the shadow
-> variables only when there is no user left.
-> 
-> This patch hides the reference counting into the klp_shadow API.
-> The counter is connected with the shadow variable @id. It requires
-> an API to take and release the reference. The release function also
-> calls the related dtor() when defined.
-> 
-> An easy solution would be to add some get_ref()/put_ref() API.
-> But it would need to get called from pre()/post_un() callbacks.
-> It might be easy to forget a callback and make it wrong.
-> 
-> A more safe approach is to associate the klp_shadow_type with
-> klp_objects that use the shadow variables. The livepatch core
-> code might then handle the reference counters on background.
-> 
-> The shadow variable type might then be added into a new @shadow_types
-> member of struct klp_object. They will get then automatically registered
-> and unregistered when the object is being livepatched. The registration
-> increments the reference count. Unregistration decreases the reference
-> count. All shadow variables of the given type are freed when the reference
-> count reaches zero.
-> 
-> All klp_shadow_alloc/get/free functions also checks whether the requested
-> type is registered. It will help to catch missing registration and might
-> also help to catch eventual races.
-> 
+On Fri, Aug 5, 2022 at 2:33 PM Song Liu <song@kernel.org> wrote:
+>
+> On Fri, Aug 5, 2022 at 1:58 PM Joe Lawrence <joe.lawrence@redhat.com> wro=
+te:
+> >
+> > On Mon, Aug 01, 2022 at 02:21:29PM -0700, Song Liu wrote:
+> > > From: Miroslav Benes <mbenes@suse.cz>
+> > >
+> > > Josh reported a bug:
+> > >
+> > >   When the object to be patched is a module, and that module is
+> > >   rmmod'ed and reloaded, it fails to load with:
+> > >
+> > >   module: x86/modules: Skipping invalid relocation target, existing v=
+alue is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module '=
+nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusin=
+g to load module 'nfsd'
+> > >
+> > >   The livepatch module has a relocation which references a symbol
+> > >   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >   tries to replace the old relocation with a new one, it sees that
+> > >   the previous one is nonzero and it errors out.
+> > >
+> > >   On ppc64le, we have a similar issue:
+> > >
+> > >   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at=
+ e_show+0x60/0x548 [livepatch_nfsd]
+> > >   livepatch: failed to initialize patch 'livepatch_nfsd' for module '=
+nfsd' (-8)
+> > >   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusin=
+g to load module 'nfsd'
+> > >
+> > > He also proposed three different solutions. We could remove the error
+> > > check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> > > ("x86/module: Detect and skip invalid relocations"). However the chec=
+k
+> > > is useful for detecting corrupted modules.
+> > >
+> > > We could also deny the patched modules to be removed. If it proved to=
+ be
+> > > a major drawback for users, we could still implement a different
+> > > approach. The solution would also complicate the existing code a lot.
+> > >
+> > > We thus decided to reverse the relocation patching (clear all relocat=
+ion
+> > > targets on x86_64). The solution is not
+> > > universal and is too much arch-specific, but it may prove to be simpl=
+er
+> > > in the end.
+> > >
+> > > Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> > > Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> > > Signed-off-by: Song Liu <song@kernel.org>
+> > >
+> > > ---
+> > >
+> > > NOTE: powerpc code has not be tested.
+> > >
+> >
+> > Hi Song,
+> >
+> > I just want to provide a quick check in on this patch...
+> >
+> > First -- what tree / commit should this be based on?  When I add this
+> > patch on top of a v5.19 based tree, I see:
+> >
+> > arch/powerpc/kernel/module_64.c: In function =E2=80=98clear_relocate_ad=
+d=E2=80=99:
+> > arch/powerpc/kernel/module_64.c:781:52: error: incompatible type for ar=
+gument 1 of =E2=80=98instr_is_relative_link_branch=E2=80=99
+> >   781 |                 if (!instr_is_relative_link_branch(*instruction=
+))
+> >       |                                                    ^~~~~~~~~~~~
+> >       |                                                    |
+> >       |                                                    u32 {aka uns=
+igned int}
+> > In file included from arch/powerpc/kernel/module_64.c:20:
+> > ./arch/powerpc/include/asm/code-patching.h:122:46: note: expected =E2=
+=80=98ppc_inst_t=E2=80=99 but argument is of type =E2=80=98u32=E2=80=99 {ak=
+a =E2=80=98unsigned int=E2=80=99}
+> >   122 | int instr_is_relative_link_branch(ppc_inst_t instr);
+> >       |                                   ~~~~~~~~~~~^~~~~
+> > arch/powerpc/kernel/module_64.c:785:32: error: =E2=80=98PPC_INST_NOP=E2=
+=80=99 undeclared (first use in this function); did you mean =E2=80=98PPC_I=
+NST_COPY=E2=80=99?
+> >   785 |                 *instruction =3D PPC_INST_NOP;
+> >       |                                ^~~~~~~~~~~~
+> >       |                                PPC_INST_COPY
+> > arch/powerpc/kernel/module_64.c:785:32: note: each undeclared identifie=
+r is reported only once for each function it appears in
+> > make[2]: *** [scripts/Makefile.build:249: arch/powerpc/kernel/module_64=
+.o] Error 1
+> > make[1]: *** [scripts/Makefile.build:466: arch/powerpc/kernel] Error 2
+> > make: *** [Makefile:1849: arch/powerpc] Error 2
+> >
 
-If I understand the patchset correctly, the last patch consolidated
-id/ctor/dtor into klp_shadow_type structure, then this one formally
-associates the new structure with a klp_object so that it bumps up /
-down a simple reference count automatically.  That count is now checked
-before calling the dtor/removal of any matching shadow variable.  So far
-so good.
+The following should make it build on powerpc64
 
-How does this play out for the following scenario:
+Shall I send it as v5? (I haven't tested powerpc64 other than cross compile=
+).
 
-- atomic replace livepatches, accumulative versions
-- livepatch v1 : registers a klp_shadow_type (id=1), creates a few
-shadow vars
-- livepatch v2 : also uses klp_shadow_type (id=1) and creates a few
-shadow vars
+Thanks,
+Song
 
-Since the first livepatch registered the klp_shadow_type, its ctor/dtor
-pair will be used for all id=1 shadow variables, including those created
-by the subsequent livepatches, right?
+diff --git i/arch/powerpc/kernel/module_64.c w/arch/powerpc/kernel/module_6=
+4.c
+index 1834dffc6795..6aaf5720070d 100644
+--- i/arch/powerpc/kernel/module_64.c
++++ w/arch/powerpc/kernel/module_64.c
+@@ -778,11 +778,11 @@ void clear_relocate_add(Elf64_Shdr *sechdrs,
+                if (is_mprofile_ftrace_call(symname))
+                        continue;
 
+-               if (!instr_is_relative_link_branch(*instruction))
++               if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
+                        continue;
 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> ---
->  include/linux/livepatch.h                 |  21 ++++
->  kernel/livepatch/core.c                   |  39 +++++++
->  kernel/livepatch/core.h                   |   1 +
->  kernel/livepatch/shadow.c                 | 124 ++++++++++++++++++++++
->  kernel/livepatch/transition.c             |   4 +-
->  lib/livepatch/test_klp_shadow_vars.c      |  18 +++-
->  samples/livepatch/livepatch-shadow-fix1.c |   8 +-
->  samples/livepatch/livepatch-shadow-fix2.c |   9 +-
->  8 files changed, 214 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-> index 79e7bf3b35f6..cb65de831684 100644
-> --- a/include/linux/livepatch.h
-> +++ b/include/linux/livepatch.h
-> @@ -100,11 +100,14 @@ struct klp_callbacks {
->  	bool post_unpatch_enabled;
->  };
->  
-> +struct klp_shadow_type;
-> +
->  /**
->   * struct klp_object - kernel object structure for live patching
->   * @name:	module name (or NULL for vmlinux)
->   * @funcs:	function entries for functions to be patched in the object
->   * @callbacks:	functions to be executed pre/post (un)patching
-> + * @shadow_types: shadow variable types used by the livepatch for the klp_object
->   * @kobj:	kobject for sysfs resources
->   * @func_list:	dynamic list of the function entries
->   * @node:	list node for klp_patch obj_list
-> @@ -118,6 +121,7 @@ struct klp_object {
->  	const char *name;
->  	struct klp_func *funcs;
->  	struct klp_callbacks callbacks;
-> +	struct klp_shadow_type **shadow_types;
->  
+                instruction +=3D 1;
+-               *instruction =3D PPC_INST_NOP;
++               *instruction =3D PPC_RAW_NOP();
+        }
 
-Hmm.  The implementation of shadow_types inside klp_object might be
-difficult to integrate into kpatch-build.  For kpatches, we do utilize
-the kernel's shadow variable API directly, but at kpatch author time we
-don't have any of klp_patch objects in hand -- those are generated by
-template after the binary before/after comparison is completed.
+ }
 
-My first thought is that kpatch-build might associate any shadow
-variables in foo.c with its parent object (vmlinux, foo.ko, etc.),
-however that may not always be 100% accurate.
-
-In fact, we have occasionally used shadow variables with <id, 0> to
-create one off variables not associated with specific code or data
-structures, but rather the presence of livepatch.  This is (too) briefly
-mentioned in "Other use-cases" section of the shadow variable Documentation.
-
--- 
-Joe
-
+>
+> I am sorry that I didn't build the PPC code. (I did fix some code, but
+> I guess that's
+> not enough. ) I was hoping kernel test bot to run build tests on the
+> patch, but I
+> guess the bot is not following live-patching mail list?
+>
+> The code was based Linus' tree, probably 5.19-rc7.
+>
+> >
+> > Second, I rebased the klp-convert-tree on top of v5.19 here:
+> > https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v7-de=
+vel
+> >
+> > and I can confirm that at least the x86_64 livepatching selftests
+> > (including the klp-relocation tests added by this tree) do pass.  I
+> > haven't had a chance to try writing new tests to verify this specific
+> > patch, but I'll take a look next week.
+>
+> I also got the selftests pass for another patch. Checking dmesg is
+> a little tricky, btw. I will take a look at klp-convert.
+>
+> Thanks,
+> Song
