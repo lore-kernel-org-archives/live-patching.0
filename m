@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B9AEC6FA82
-	for <live-patching@archiver.kernel.org>; Thu,  8 Sep 2022 13:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06E13C6FA8B
+	for <live-patching@archiver.kernel.org>; Thu,  8 Sep 2022 13:10:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232181AbiIHNKq (ORCPT
+        id S232236AbiIHNKs (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 8 Sep 2022 09:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        Thu, 8 Sep 2022 09:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbiIHNKc (ORCPT
+        with ESMTP id S232245AbiIHNKe (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:10:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82E55F20F;
-        Thu,  8 Sep 2022 06:10:11 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MNfX90jnXzjXLP;
-        Thu,  8 Sep 2022 21:06:33 +0800 (CST)
+        Thu, 8 Sep 2022 09:10:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB32F5FF69;
+        Thu,  8 Sep 2022 06:10:12 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNfWx1dTnz14QQB;
+        Thu,  8 Sep 2022 21:06:21 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:10:09 +0800
+ 15.1.2375.24; Thu, 8 Sep 2022 21:10:11 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:10:08 +0800
+ 15.1.2375.24; Thu, 8 Sep 2022 21:10:10 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -42,10 +42,12 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 0/7] kallsyms: Optimizes the performance of lookup symbols
-Date:   Thu, 8 Sep 2022 21:09:29 +0800
-Message-ID: <20220908130936.674-1-thunder.leizhen@huawei.com>
+Subject: [PATCH 2/7] scripts/kallsyms: rename build_initial_tok_table()
+Date:   Thu, 8 Sep 2022 21:09:31 +0800
+Message-ID: <20220908130936.674-3-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
+In-Reply-To: <20220908130936.674-1-thunder.leizhen@huawei.com>
+References: <20220908130936.674-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -57,40 +59,43 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently, to search for a symbol, we need to expand the symbols in
-'kallsyms_names' one by one, and then use the expanded string for
-comparison. This is very slow.
+Except for the function build_initial_tok_table(), no token abbreviation
+is used elsewhere.
 
-In fact, we can first compress the name being looked up and then use
-it for comparison when traversing 'kallsyms_names'.
+$ cat scripts/kallsyms.c | grep tok | wc -l
+33
+$ cat scripts/kallsyms.c | grep token | wc -l
+31
 
-This patch series optimizes the performance of function kallsyms_lookup_name(),
-and function klp_find_object_symbol() in the livepatch module. Based on the
-test results, the performance overhead is reduced to 5%. That is, the
-performance of these functions is improved by 20 times.
+Here, it would be clearer to use the full name.
 
-To avoid increasing the kernel size in non-debug mode, the optimization is only
-for the case CONFIG_KALLSYMS_ALL=y.
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ scripts/kallsyms.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-Zhen Lei (7):
-  scripts/kallsyms: don't compress symbol type when
-    CONFIG_KALLSYMS_ALL=y
-  scripts/kallsyms: rename build_initial_tok_table()
-  kallsyms: Adjust the types of some local variables
-  kallsyms: Improve the performance of kallsyms_lookup_name()
-  kallsyms: Add helper kallsyms_on_each_match_symbol()
-  livepatch: Use kallsyms_on_each_match_symbol() to improve performance
-  livepatch: Improve the search performance of
-    module_kallsyms_on_each_symbol()
-
- include/linux/kallsyms.h |   8 +++
- kernel/kallsyms.c        | 135 +++++++++++++++++++++++++++++++++++++--
- kernel/livepatch/core.c  |  25 ++++++--
- kernel/module/kallsyms.c |  13 +++-
- scripts/kallsyms.c       |  19 ++++--
- 5 files changed, 184 insertions(+), 16 deletions(-)
-
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index ab6fe7cd014efd1..678ebe7d4c1cc38 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -526,7 +526,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
+ }
+ 
+ /* do the initial token count */
+-static void build_initial_tok_table(void)
++static void build_initial_token_table(void)
+ {
+ 	unsigned int i;
+ 
+@@ -651,7 +651,7 @@ static void insert_real_symbols_in_table(void)
+ 
+ static void optimize_token_table(void)
+ {
+-	build_initial_tok_table();
++	build_initial_token_table();
+ 
+ 	insert_real_symbols_in_table();
+ 
 -- 
 2.25.1
 
