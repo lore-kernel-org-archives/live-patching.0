@@ -2,191 +2,79 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A565C6FA93
-	for <live-patching@archiver.kernel.org>; Thu,  8 Sep 2022 13:10:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0122EC6FA82
+	for <live-patching@archiver.kernel.org>; Fri,  9 Sep 2022 00:07:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiIHNKv (ORCPT
+        id S229913AbiIIAHq (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 8 Sep 2022 09:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
+        Thu, 8 Sep 2022 20:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiIHNKf (ORCPT
+        with ESMTP id S229831AbiIIAHp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 8 Sep 2022 09:10:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDB9719A7;
-        Thu,  8 Sep 2022 06:10:15 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MNfX01FB1z14QQD;
-        Thu,  8 Sep 2022 21:06:24 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:10:13 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 8 Sep 2022 21:10:12 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Thu, 8 Sep 2022 20:07:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DE198D01;
+        Thu,  8 Sep 2022 17:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8CnUe8YsCxH7jOeI9watXOlcGG2e1D+krl2jJdDsPKk=; b=EYgnrRin8PibVJ+ZEQZ5z6zTPP
+        gq73HpWP2Ug2/e94NggkDzYdAchDB6ycog5O2RKJPa0biNITSw3g+ON1FyQL3aOqDmMXIW1AS1Pt6
+        XlM9w5s1DFKUKd/Aq4w6S6yZ7180Oy1yoPjnR98K/3iGYwfSP+V5TE9jp0V9Fqfk6M94M8A5zPwee
+        V8aJjx8UuFiwHlXA35Bze6iq3Gb6NQYS4/RmB+j6OPNwMEGLRZ9I9owrujr1+Ra3HjsUdDC3avGyg
+        kM4JWpjc/0AZ7VyCOoaNlwnQRhwDJc6CGHAwxkvOAdVH09Zal4dQq2PFbsH9FOAMEvW7QNOEqkiDQ
+        eRU91X4g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWRYZ-00A8Ew-Dv; Fri, 09 Sep 2022 00:07:39 +0000
+Date:   Thu, 8 Sep 2022 17:07:39 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 5/7] kallsyms: Add helper kallsyms_on_each_match_symbol()
-Date:   Thu, 8 Sep 2022 21:09:34 +0800
-Message-ID: <20220908130936.674-6-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
-In-Reply-To: <20220908130936.674-1-thunder.leizhen@huawei.com>
+        linux-modules@vger.kernel.org
+Subject: Re: [PATCH 0/7] kallsyms: Optimizes the performance of lookup symbols
+Message-ID: <YxqDyyVwVUnqc8B1@bombadil.infradead.org>
 References: <20220908130936.674-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908130936.674-1-thunder.leizhen@huawei.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Function kallsyms_on_each_symbol() traverses all symbols and submits each
-symbol to the hook 'fn' for judgment and processing. For some cases, the
-hook actually only handles the matched symbol, such as livepatch.
+On Thu, Sep 08, 2022 at 09:09:29PM +0800, Zhen Lei wrote:
+> Currently, to search for a symbol, we need to expand the symbols in
+> 'kallsyms_names' one by one, and then use the expanded string for
+> comparison. This is very slow.
+> 
+> In fact, we can first compress the name being looked up and then use
+> it for comparison when traversing 'kallsyms_names'.
+> 
+> This patch series optimizes the performance of function kallsyms_lookup_name(),
+> and function klp_find_object_symbol() in the livepatch module. Based on the
+> test results, the performance overhead is reduced to 5%. That is, the
+> performance of these functions is improved by 20 times.
+> 
+> To avoid increasing the kernel size in non-debug mode, the optimization is only
+> for the case CONFIG_KALLSYMS_ALL=y.
 
-So that, we can first compress the name being looked up and then use
-it for comparison when traversing 'kallsyms_names', this greatly reduces
-the time consumed by traversing.
+WIthout having time yet to reveiw the implementation details, it would
+seem this is an area we may want to test for future improvements easily,
+so a selftest better yet a kunit test may be nice for this. Can you
+write one so we can easily gather a simple metric for "how long does
+this take"?
 
-This requires CONFIG_KALLSYMS_ALL=y, so that scripts/kallsyms does not
-compress that type character of each symbol.
-
-If CONFIG_KALLSYMS_ALL=n, the traversal of symbols is rolled back to the
-mode before optimization.
-
-The pseudo code of the test case is as follows:
-static int tst_find(void *data, const char *name,
-		    struct module *mod, unsigned long addr)
-{
-	if (strcmp(name, "vmap") == 0)
-		*(unsigned long *)data = addr;
-        return 0;
-}
-
-static int tst_match(void *data, unsigned long addr)
-{
-        *(unsigned long *)data = addr;
-        return 0;
-}
-
-start = sched_clock();
-kallsyms_on_each_match_symbol(tst_match, "vmap", &addr);
-end = sched_clock();
-
-start = sched_clock();
-kallsyms_on_each_symbol(tst_find, &addr);
-end = sched_clock();
-
-The test results are as follows (twice):
-kallsyms_on_each_match_symbol:  1058511,  1079288
-kallsyms_on_each_symbol      : 26097313, 24765180
-
-kallsyms_on_each_match_symbol() consumes only 4.2% of
-kallsyms_on_each_symbol()'s time.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- include/linux/kallsyms.h |  8 ++++++++
- kernel/kallsyms.c        | 41 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+)
-
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ad39636e0c3f122..f9f2cc084cab16b 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -69,6 +69,8 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 				      unsigned long),
- 			    void *data);
-+extern int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+					 const char *name, void *data);
- 
- /* Lookup the address for a symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name);
-@@ -168,6 +170,12 @@ static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct
- {
- 	return -EOPNOTSUPP;
- }
-+
-+static inline int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+						const char *name, void *data)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /*CONFIG_KALLSYMS*/
- 
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index e1cd7305aa5f548..9816a0ac30c8c48 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -316,6 +316,47 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 	return 0;
- }
- 
-+int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+				  const char *name, void *data)
-+{
-+	unsigned int i, off;
-+	int len, ret;
-+	char namebuf[KSYM_NAME_LEN];
-+
-+	len = kallsyms_name_to_tokens(name, namebuf);
-+	if (!len)
-+		goto slow_path;
-+
-+	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
-+		if ((i & 0xfff) == 0)
-+			cond_resched();
-+
-+		if ((kallsyms_names[off] == len + 1) &&
-+		    !memcmp(&kallsyms_names[off + 2], namebuf, len)) {
-+			ret = fn(data, kallsyms_sym_address(i));
-+			if (ret != 0)
-+				return ret;
-+			cond_resched();
-+		}
-+		off += kallsyms_names[off] + 1;
-+	}
-+
-+	return 0;
-+
-+slow_path:
-+	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
-+		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
-+		if (!strcmp(name, namebuf)) {
-+			ret = fn(data, kallsyms_sym_address(i));
-+			if (ret != 0)
-+				return ret;
-+		}
-+		cond_resched();
-+	}
-+
-+	return 0;
-+}
-+
- static unsigned long get_symbol_pos(unsigned long addr,
- 				    unsigned long *symbolsize,
- 				    unsigned long *offset)
--- 
-2.25.1
-
+  Luis
