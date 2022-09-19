@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40EFEECAAD3
-	for <live-patching@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AA7EC6FA96
+	for <live-patching@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiISPRG (ORCPT
+        id S230000AbiISPRG (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
         Mon, 19 Sep 2022 11:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiISPQp (ORCPT
+        with ESMTP id S230019AbiISPQo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 19 Sep 2022 11:16:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741D1401E;
-        Mon, 19 Sep 2022 08:16:31 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MWSpJ4rlSzlW0t;
-        Mon, 19 Sep 2022 23:12:24 +0800 (CST)
+        Mon, 19 Sep 2022 11:16:44 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2FC6388;
+        Mon, 19 Sep 2022 08:16:29 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWSpG6j0Hz14QfQ;
+        Mon, 19 Sep 2022 23:12:22 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:29 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:27 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:28 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:26 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -42,9 +42,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v3 4/8] kallsyms: Improve the performance of kallsyms_lookup_name()
-Date:   Mon, 19 Sep 2022 23:15:29 +0800
-Message-ID: <20220919151533.1734-5-thunder.leizhen@huawei.com>
+Subject: [PATCH v3 1/8] scripts/kallsyms: rename build_initial_tok_table()
+Date:   Mon, 19 Sep 2022 23:15:26 +0800
+Message-ID: <20220919151533.1734-2-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220919151533.1734-1-thunder.leizhen@huawei.com>
 References: <20220919151533.1734-1-thunder.leizhen@huawei.com>
@@ -59,155 +59,42 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently, to search for a symbol, we need to expand the symbols in
-'kallsyms_names' one by one, and then use the expanded string for
-comparison. This process can be optimized.
+Except for the function build_initial_tok_table(), no token abbreviation
+is used elsewhere.
 
-And now scripts/kallsyms no longer compresses the symbol types, each
-symbol type always occupies one byte. So we can first compress the
-searched symbol and then make a quick comparison based on the compressed
-length and content. In this way, for entries with mismatched lengths,
-there is no need to expand and compare strings. And for those matching
-lengths, there's no need to expand the symbol. This saves a lot of time.
-According to my test results, the average performance of
-kallsyms_lookup_name() can be improved by 20 to 30 times.
+$ cat scripts/kallsyms.c | grep tok | wc -l
+33
+$ cat scripts/kallsyms.c | grep token | wc -l
+31
 
-The pseudo code of the test case is as follows:
-static int stat_find_name(...)
-{
-	start = sched_clock();
-	(void)kallsyms_lookup_name(name);
-	end = sched_clock();
-	//Update min, max, cnt, sum
-}
-
-/*
- * Traverse all symbols in sequence and collect statistics on the time
- * taken by kallsyms_lookup_name() to lookup each symbol.
- */
-kallsyms_on_each_symbol(stat_find_name, NULL);
-
-The test results are as follows (twice):
-After : min=5250, max=  726560, avg= 302132
-After : min=5320, max=  726850, avg= 301978
-Before: min=170,  max=15949190, avg=7553906
-Before: min=160,  max=15877280, avg=7517784
-
-The average time consumed is only 4.01% and the maximum time consumed is
-only 4.57% of the time consumed before optimization.
+Here, it would be clearer to use the full name.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- kernel/kallsyms.c | 79 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 76 insertions(+), 3 deletions(-)
+ scripts/kallsyms.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 3e7e2c2ad2f75ef..2d76196cfe89f34 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -87,6 +87,71 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
- 	return off;
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index f18e6dfc68c5839..8caccc8f4a23703 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -525,7 +525,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
  }
  
-+static int kallsyms_name_to_tokens(const char *name, char *buf)
-+{
-+	int i, j, k, n;
-+	int len, token_len;
-+	const char *token;
-+	unsigned char token_idx[KSYM_NAME_LEN];
-+	unsigned char token_bak[KSYM_NAME_LEN];
-+
-+	/*
-+	 * n, number of tokens in the string name.
-+	 * token_idx[i], the start index of the ith token.
-+	 * token_idx[n] is used to calculate the length of the last token.
-+	 */
-+	n = strlen(name);
-+	if (n >= KSYM_NAME_LEN) {
-+		buf[0] = 0;
-+		return 0;
-+	}
-+	for (i = 0; i <= n; i++)
-+		token_idx[i] = (unsigned char)i;
-+
-+	/*
-+	 * For tokens whose token_len >= 2, a larger index value indicates
-+	 * a higher occurrence frequency. See scripts/kallsyms.c
-+	 */
-+	for (i = 255; i >= 0; i--) {
-+		token = &kallsyms_token_table[kallsyms_token_index[i]];
-+		token_len = strlen(token);
-+		if (token_len <= 1)
-+			continue;
-+
-+		/*
-+		 * Find and merge two tokens into one.
-+		 *
-+		 *                |<-- new_token -->|
-+		 *                | token1 | token2 |
-+		 * token_idx[]:   j       j+1      j+2
-+		 *
-+		 */
-+		for (j = 0; j < n - 1; j++) {
-+			len = token_idx[j + 2] - token_idx[j];
-+			if (len == token_len &&
-+			    !strncmp(name + token_idx[j], token, len)) {
-+				token_bak[token_idx[j]] = (unsigned char)i;
-+				for (k = j + 1; k < n; k++)
-+					token_idx[k] = token_idx[k + 1];
-+				n--;
-+			}
-+		}
-+	}
-+
-+	for (j = 0; j < n; j++) {
-+		len = token_idx[j + 1] - token_idx[j];
-+		if (len <= 1) {
-+			buf[j] = name[token_idx[j]];
-+			continue;
-+		}
-+
-+		buf[j] = token_bak[token_idx[j]];
-+	}
-+	buf[n] = 0;
-+
-+	return n;
-+}
-+
- /*
-  * Get symbol type information. This is encoded as a single char at the
-  * beginning of the symbol name.
-@@ -192,20 +257,28 @@ unsigned long kallsyms_lookup_name(const char *name)
- 	char namebuf[KSYM_NAME_LEN];
- 	unsigned long i;
- 	unsigned int off;
-+	int len;
+ /* do the initial token count */
+-static void build_initial_tok_table(void)
++static void build_initial_token_table(void)
+ {
+ 	unsigned int i;
  
- 	/* Skip the search for empty string. */
- 	if (!*name)
- 		return 0;
+@@ -650,7 +650,7 @@ static void insert_real_symbols_in_table(void)
  
-+	len = kallsyms_name_to_tokens(name, namebuf);
-+	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
-+		if (kallsyms_names[off] == len + 1 &&
-+		    !memcmp(&kallsyms_names[off + 2], namebuf, len))
-+			return kallsyms_sym_address(i);
-+
-+		off += kallsyms_names[off] + 1;
-+	}
-+
- 	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
- 		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+ static void optimize_token_table(void)
+ {
+-	build_initial_tok_table();
++	build_initial_token_table();
  
--		if (strcmp(namebuf, name) == 0)
--			return kallsyms_sym_address(i);
--
- 		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
- 			return kallsyms_sym_address(i);
- 	}
-+
- 	return module_kallsyms_lookup_name(name);
- }
+ 	insert_real_symbols_in_table();
  
 -- 
 2.25.1
