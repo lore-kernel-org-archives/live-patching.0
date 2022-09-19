@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F09DEC6FA92
-	for <live-patching@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7513DC6FA97
+	for <live-patching@archiver.kernel.org>; Mon, 19 Sep 2022 15:17:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiISPRE (ORCPT
+        id S229861AbiISPRF (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 19 Sep 2022 11:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        Mon, 19 Sep 2022 11:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiISPQo (ORCPT
+        with ESMTP id S229635AbiISPQo (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Mon, 19 Sep 2022 11:16:44 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A50B9C;
-        Mon, 19 Sep 2022 08:16:30 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWSpW5hg5zmVRr;
-        Mon, 19 Sep 2022 23:12:35 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065555FAD;
+        Mon, 19 Sep 2022 08:16:32 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MWSnd6Z7szMn26;
+        Mon, 19 Sep 2022 23:11:49 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:28 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:30 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 19 Sep 2022 23:16:28 +0800
+ 15.1.2375.31; Mon, 19 Sep 2022 23:16:29 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -42,9 +42,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v3 3/8] scripts/kallsyms: don't compress symbol types
-Date:   Mon, 19 Sep 2022 23:15:28 +0800
-Message-ID: <20220919151533.1734-4-thunder.leizhen@huawei.com>
+Subject: [PATCH v3 5/8] kallsyms: Add helper kallsyms_on_each_match_symbol()
+Date:   Mon, 19 Sep 2022 23:15:30 +0800
+Message-ID: <20220919151533.1734-6-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220919151533.1734-1-thunder.leizhen@huawei.com>
 References: <20220919151533.1734-1-thunder.leizhen@huawei.com>
@@ -59,104 +59,112 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently, to search for a symbol, we need to expand the symbols in
-'kallsyms_names' one by one, and then use the expanded string for
-comparison. Because we do not know the symbol type, and the symbol type
-may be combined with the following characters to form a token.
+Function kallsyms_on_each_symbol() traverses all symbols and submits each
+symbol to the hook 'fn' for judgment and processing. For some cases, the
+hook actually only handles the matched symbol, such as livepatch.
 
-So if we don't compress the symbol type, we can first compress the
-searched symbol and then make a quick comparison based on the compressed
-length and content. In this way, for entries with mismatched lengths,
-there is no need to expand and compare strings. And for those matching
-lengths, there's no need to expand the symbol. This saves a lot of time.
-According to my test results, the average performance of
-kallsyms_lookup_name() can be improved by 20 to 30 times.
+So that, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names', this greatly reduces
+the time consumed by traversing.
 
-Of course, because the symbol type is forcibly not compressed, the
-compression rate also decreases. Here are the test results with
-defconfig:
+The pseudo code of the test case is as follows:
+static int tst_find(void *data, const char *name,
+		    struct module *mod, unsigned long addr)
+{
+	if (strcmp(name, "vmap") == 0)
+		*(unsigned long *)data = addr;
+        return 0;
+}
 
-arm64: <<<<<<
-        ---------------------------------------------------------------
-       | ALL | nr_symbols | compressed size | original size | ratio(%) |
-        -----|---------------------------------------------------------|
-Before |  Y  |     174094 |       1884938   |      3750653  |  50.25   |
-After  |  Y  |     174099 |       1960154   |      3750756  |  52.26   |
-Before |  N  |      61744 |        725507   |      1222737  |  59.33   |
-After  |  N  |      61747 |        745733   |      1222801  |  60.98   |
-        ---------------------------------------------------------------
-The memory overhead is increased by:
-  73.5KiB and 4.0% if CONFIG_KALLSYMS_ALL=y.
-  19.8KiB and 2.8% if CONFIG_KALLSYMS_ALL=n.
+static int tst_match(void *data, unsigned long addr)
+{
+        *(unsigned long *)data = addr;
+        return 0;
+}
 
-x86: <<<<<<<<
-       ---------------------------------------------------------------
-       | ALL | nr_symbols | compressed size | original size | ratio(%) |
-        -----|---------------------------------------------------------|
-Before |  Y  |     131415 |       1697542   |      3161216  |  53.69   |
-After  |  Y  |     131540 |       1747769   |      3163933  |  55.24   |
-Before |  N  |      60695 |        737627   |      1283046  |  57.49   |
-After  |  N  |      60699 |        754797   |      1283149  |  58.82   |
-        ---------------------------------------------------------------
-The memory overhead is increased by:
-  49.0KiB and 3.0% if CONFIG_KALLSYMS_ALL=y.
-  16.8KiB and 2.3% if CONFIG_KALLSYMS_ALL=n.
+start = sched_clock();
+kallsyms_on_each_match_symbol(tst_match, "vmap", &addr);
+end = sched_clock();
 
-This additional memory overhead is worth it compared to the performance
-improvement, I think.
+start = sched_clock();
+kallsyms_on_each_symbol(tst_find, &addr);
+end = sched_clock();
+
+The test results are as follows (twice):
+kallsyms_on_each_match_symbol:   557400,   583900
+kallsyms_on_each_symbol      : 16659500, 16113950
+
+kallsyms_on_each_match_symbol() consumes only 3.48% of
+kallsyms_on_each_symbol()'s time.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- scripts/kallsyms.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ include/linux/kallsyms.h |  8 ++++++++
+ kernel/kallsyms.c        | 25 +++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 3319d9f38d7a5f2..1ae9ce773d2a31d 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -61,6 +61,15 @@ static int all_symbols;
- static int absolute_percpu;
- static int base_relative;
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index ad39636e0c3f122..f9f2cc084cab16b 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -69,6 +69,8 @@ static inline void *dereference_symbol_descriptor(void *ptr)
+ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 				      unsigned long),
+ 			    void *data);
++extern int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
++					 const char *name, void *data);
  
-+/*
-+ * Each entry in the symbol table consists of the symbol type and the symbol
-+ * itself. To optimize the performance of finding or traversing symbols in
-+ * kernel, do not compress the symbol type. In this way, when looking for a
-+ * symbol of unknown type, we can first compress the searched symbol and then
-+ * make a quick comparison based on the compressed length and content.
-+ */
-+static int sym_start_idx = 1;
+ /* Lookup the address for a symbol. Returns 0 if not found. */
+ unsigned long kallsyms_lookup_name(const char *name);
+@@ -168,6 +170,12 @@ static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct
+ {
+ 	return -EOPNOTSUPP;
+ }
 +
- static int token_profit[0x10000];
++static inline int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
++						const char *name, void *data)
++{
++	return -EOPNOTSUPP;
++}
+ #endif /*CONFIG_KALLSYMS*/
  
- /* the table that holds the result of the compression */
-@@ -511,7 +520,7 @@ static void learn_symbol(const unsigned char *symbol, int len)
- {
- 	int i;
- 
--	for (i = 0; i < len - 1; i++)
-+	for (i = sym_start_idx; i < len - 1; i++)
- 		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]++;
+ static inline void print_ip_sym(const char *loglvl, unsigned long ip)
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 2d76196cfe89f34..cbcc9c560f5c188 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -305,6 +305,31 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 	return 0;
  }
  
-@@ -520,7 +529,7 @@ static void forget_symbol(const unsigned char *symbol, int len)
- {
- 	int i;
- 
--	for (i = 0; i < len - 1; i++)
-+	for (i = sym_start_idx; i < len - 1; i++)
- 		token_profit[ symbol[i] + (symbol[i + 1] << 8) ]--;
- }
- 
-@@ -538,7 +547,7 @@ static unsigned char *find_token(unsigned char *str, int len,
- {
- 	int i;
- 
--	for (i = 0; i < len - 1; i++) {
-+	for (i = sym_start_idx; i < len - 1; i++) {
- 		if (str[i] == token[0] && str[i+1] == token[1])
- 			return &str[i];
- 	}
++int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
++				  const char *name, void *data)
++{
++	unsigned int i, off;
++	int len, ret;
++	char namebuf[KSYM_NAME_LEN];
++
++	len = kallsyms_name_to_tokens(name, namebuf);
++	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
++		if ((i & 0xfff) == 0)
++			cond_resched();
++
++		if ((kallsyms_names[off] == len + 1) &&
++		    !memcmp(&kallsyms_names[off + 2], namebuf, len)) {
++			ret = fn(data, kallsyms_sym_address(i));
++			if (ret != 0)
++				return ret;
++			cond_resched();
++		}
++		off += kallsyms_names[off] + 1;
++	}
++
++	return 0;
++}
++
+ static unsigned long get_symbol_pos(unsigned long addr,
+ 				    unsigned long *symbolsize,
+ 				    unsigned long *offset)
 -- 
 2.25.1
 
