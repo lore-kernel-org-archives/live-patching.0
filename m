@@ -2,145 +2,144 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E21C54EE9
-	for <live-patching@archiver.kernel.org>; Tue, 20 Sep 2022 03:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36C85C6FA82
+	for <live-patching@archiver.kernel.org>; Tue, 20 Sep 2022 06:13:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiITDPq (ORCPT
+        id S229918AbiITGNi (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 19 Sep 2022 23:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        Tue, 20 Sep 2022 02:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiITDPg (ORCPT
+        with ESMTP id S230210AbiITGNe (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 19 Sep 2022 23:15:36 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2C17A9C;
-        Mon, 19 Sep 2022 20:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663643719; x=1695179719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=noeQyLdjBrKJQycFgfbpDL26zbno8W35OivxmiAO9zE=;
-  b=Pj8iz5uugSLgTp6x//hZDvmjBLkljMUY0Mxej+yFnF68vRAP9hN3GqVR
-   W4Uayd9DOH6k9G5PTR+/kWYQDRGRmhZQmBd0WaZ+LFoGjkw/h2T1tfiqJ
-   O3rWVOW/U/Vk0HQ2pUWLRqsmgj6XGDEedcCuxksfFQkhqysNcO0oLBvJ5
-   UfHqLOArVYXzUc8YzfI9aN1vb9N5VmaeLI55/TJpCZcTUO25rmWKMO/HC
-   nyFf7KuirOpO8uLtoLA1dMJjKwbT9MIYEBD5cvLWTIgy4DYW1VKWey67c
-   1QS9R17G8nDawNBuM0pkcPQDDneQ/YGRDjBks6PRls10o8dsN/F4XEa8O
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10475"; a="363542108"
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="363542108"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2022 20:14:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,329,1654585200"; 
-   d="scan'208";a="707810406"
-Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Sep 2022 20:14:54 -0700
-Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oaTin-0002RQ-1U;
-        Tue, 20 Sep 2022 03:14:53 +0000
-Date:   Tue, 20 Sep 2022 11:14:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Tue, 20 Sep 2022 02:13:34 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710C243626;
+        Mon, 19 Sep 2022 23:13:32 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MWrjK1gR6z14QkD;
+        Tue, 20 Sep 2022 14:09:25 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 14:13:30 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 20 Sep 2022 14:13:29 +0800
+Subject: Re: [PATCH v3 8/8] kallsyms: Add self-test facility
+To:     kernel test robot <lkp@intel.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Subject: Re: [PATCH v3 8/8] kallsyms: Add self-test facility
-Message-ID: <202209201123.hihIfjo1-lkp@intel.com>
+        <linux-modules@vger.kernel.org>
+CC:     <llvm@lists.linux.dev>, <kbuild-all@lists.01.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>
 References: <20220919151533.1734-9-thunder.leizhen@huawei.com>
+ <202209201123.hihIfjo1-lkp@intel.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <6c02ff59-99f9-5a4b-9bf2-ab0ea12de2c8@huawei.com>
+Date:   Tue, 20 Sep 2022 14:13:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919151533.1734-9-thunder.leizhen@huawei.com>
+In-Reply-To: <202209201123.hihIfjo1-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Hi Zhen,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on mcgrof/modules-next]
-[also build test WARNING on linus/master v6.0-rc6 next-20220919]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
-config: i386-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201123.hihIfjo1-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
-        git checkout 26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> kernel/kallsyms.c:196:15: warning: no previous prototype for function 'kallsyms_sym_address' [-Wmissing-prototypes]
-   unsigned long kallsyms_sym_address(int idx)
-                 ^
-   kernel/kallsyms.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long kallsyms_sym_address(int idx)
-   ^
-   static 
-   kernel/kallsyms.c:668:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-              ^
-   kernel/kallsyms.c:668:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-   ^
-   static 
-   2 warnings generated.
 
 
-vim +/kallsyms_sym_address +196 kernel/kallsyms.c
+On 2022/9/20 11:14, kernel test robot wrote:
+> Hi Zhen,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on mcgrof/modules-next]
+> [also build test WARNING on linus/master v6.0-rc6 next-20220919]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+> config: i386-randconfig-a001-20220919 (https://download.01.org/0day-ci/archive/20220920/202209201123.hihIfjo1-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Zhen-Lei/kallsyms-Optimizes-the-performance-of-lookup-symbols/20220919-231916
+>         git checkout 26fdb8f3984ffbdb57da2d1fac7e32ae418bfa96
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> kernel/kallsyms.c:196:15: warning: no previous prototype for function 'kallsyms_sym_address' [-Wmissing-prototypes]
+>    unsigned long kallsyms_sym_address(int idx)
+>                  ^
+>    kernel/kallsyms.c:196:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    unsigned long kallsyms_sym_address(int idx)
+>    ^
 
-   195	
- > 196	unsigned long kallsyms_sym_address(int idx)
-   197	{
-   198		if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
-   199			return kallsyms_addresses[idx];
-   200	
-   201		/* values are unsigned offsets if --absolute-percpu is not in effect */
-   202		if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
-   203			return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
-   204	
-   205		/* ...otherwise, positive offsets are absolute values */
-   206		if (kallsyms_offsets[idx] >= 0)
-   207			return kallsyms_offsets[idx];
-   208	
-   209		/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
-   210		return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
-   211	}
-   212	
+Well, thanks. Because it's just for testing code, I'm thinking about not
+changing the header file, but it looks like I'll have to change it.
+
+>    static 
+>    kernel/kallsyms.c:668:12: warning: no previous prototype for function 'arch_get_kallsym' [-Wmissing-prototypes]
+>    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+>               ^
+>    kernel/kallsyms.c:668:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
+>    ^
+>    static 
+>    2 warnings generated.
+> 
+> 
+> vim +/kallsyms_sym_address +196 kernel/kallsyms.c
+> 
+>    195	
+>  > 196	unsigned long kallsyms_sym_address(int idx)
+>    197	{
+>    198		if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+>    199			return kallsyms_addresses[idx];
+>    200	
+>    201		/* values are unsigned offsets if --absolute-percpu is not in effect */
+>    202		if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
+>    203			return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
+>    204	
+>    205		/* ...otherwise, positive offsets are absolute values */
+>    206		if (kallsyms_offsets[idx] >= 0)
+>    207			return kallsyms_offsets[idx];
+>    208	
+>    209		/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
+>    210		return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
+>    211	}
+>    212	
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+  Zhen Lei
