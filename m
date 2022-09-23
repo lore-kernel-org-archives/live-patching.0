@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A2EC6FA92
-	for <live-patching@archiver.kernel.org>; Fri, 23 Sep 2022 11:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E049C6FA90
+	for <live-patching@archiver.kernel.org>; Fri, 23 Sep 2022 11:22:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiIWLWH (ORCPT
+        id S232196AbiIWLWI (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 23 Sep 2022 07:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        Fri, 23 Sep 2022 07:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiIWLWB (ORCPT
+        with ESMTP id S232163AbiIWLWD (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 23 Sep 2022 07:22:01 -0400
+        Fri, 23 Sep 2022 07:22:03 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F37137925;
-        Fri, 23 Sep 2022 04:21:57 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYqP45YBrzMpYl;
-        Fri, 23 Sep 2022 19:17:12 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465C612755C;
+        Fri, 23 Sep 2022 04:22:00 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MYqP70c8jzMpbD;
+        Fri, 23 Sep 2022 19:17:15 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:56 +0800
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:58 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:55 +0800
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:57 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -44,9 +44,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Steven Rostedt" <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v5 06/10] kallsyms: Add helper kallsyms_on_each_match_symbol()
-Date:   Fri, 23 Sep 2022 19:20:29 +0800
-Message-ID: <20220923112033.1958-7-thunder.leizhen@huawei.com>
+Subject: [PATCH v5 09/10] kallsyms: Delete an unused parameter related to kallsyms_on_each_symbol()
+Date:   Fri, 23 Sep 2022 19:20:32 +0800
+Message-ID: <20220923112033.1958-10-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220923112033.1958-1-thunder.leizhen@huawei.com>
 References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
@@ -61,156 +61,68 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Function kallsyms_on_each_symbol() traverses all symbols and submits each
-symbol to the hook 'fn' for judgment and processing. For some cases, the
-hook actually only handles the matched symbol, such as livepatch.
+The parameter 'struct module *' in the hook function associated with
+kallsyms_on_each_symbol() is no longer used. Delete it.
 
-So that, we can first compress the name being looked up and then use
-it for comparison when traversing 'kallsyms_names', this greatly reduces
-the time consumed by traversing.
-
-The pseudo code of the test case is as follows:
-static int tst_find(void *data, const char *name,
-		    struct module *mod, unsigned long addr)
-{
-	if (strcmp(name, "vmap") == 0)
-		*(unsigned long *)data = addr;
-        return 0;
-}
-
-static int tst_match(void *data, unsigned long addr)
-{
-        *(unsigned long *)data = addr;
-        return 0;
-}
-
-start = sched_clock();
-kallsyms_on_each_match_symbol(tst_match, "vmap", &addr);
-end = sched_clock();
-
-start = sched_clock();
-kallsyms_on_each_symbol(tst_find, &addr);
-end = sched_clock();
-
-The test results are as follows (twice):
-kallsyms_on_each_match_symbol:   557400,   583900
-kallsyms_on_each_symbol      : 16659500, 16113950
-
-kallsyms_on_each_match_symbol() consumes only 3.48% of
-kallsyms_on_each_symbol()'s time.
-
+Suggested-by: Petr Mladek <pmladek@suse.com>
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/kallsyms.h |  8 ++++++++
- kernel/kallsyms.c        | 44 ++++++++++++++++++++++++++++++++++++----
- 2 files changed, 48 insertions(+), 4 deletions(-)
+ include/linux/kallsyms.h | 3 +--
+ kernel/kallsyms.c        | 5 ++---
+ kernel/trace/ftrace.c    | 3 +--
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index ad39636e0c3f122..2138219ae0296e9 100644
+index 2138219ae0296e9..015c7685765978e 100644
 --- a/include/linux/kallsyms.h
 +++ b/include/linux/kallsyms.h
-@@ -69,6 +69,8 @@ static inline void *dereference_symbol_descriptor(void *ptr)
- int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 				      unsigned long),
- 			    void *data);
-+int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+				  const char *name, void *data);
- 
- /* Lookup the address for a symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name);
-@@ -168,6 +170,12 @@ static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct
- {
- 	return -EOPNOTSUPP;
+@@ -66,8 +66,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
  }
-+
-+static inline int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+						const char *name, void *data)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif /*CONFIG_KALLSYMS*/
  
- static inline void print_ip_sym(const char *loglvl, unsigned long ip)
+ #ifdef CONFIG_KALLSYMS
+-int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+-				      unsigned long),
++int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ 			    void *data);
+ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+ 				  const char *name, void *data);
 diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index dcf5bdc7309a6cc..398865f01360589 100644
+index 398865f01360589..69e040204ed4ebd 100644
 --- a/kernel/kallsyms.c
 +++ b/kernel/kallsyms.c
-@@ -266,14 +266,17 @@ static bool cleanup_symbol_name(char *s)
- 	return false;
- }
- 
--static int kallsyms_lookup_compressed_name(unsigned char *namebuf, int len,
--					   unsigned long *addr)
-+static int __kallsyms_lookup_compressed_name(unsigned char *namebuf, int len,
-+					     unsigned int *index,
-+					     unsigned int *offset,
-+					     unsigned long *addr)
+@@ -344,8 +344,7 @@ unsigned long kallsyms_lookup_name(const char *name)
+  * Iterate over all symbols in vmlinux.  For symbols from modules use
+  * module_kallsyms_on_each_symbol instead.
+  */
+-int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+-				      unsigned long),
++int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ 			    void *data)
  {
--	unsigned int i, off;
-+	unsigned int i = *index;
-+	unsigned int off = *offset;
- 	unsigned int name_len;
- 	const unsigned char *name;
+ 	char namebuf[KSYM_NAME_LEN];
+@@ -355,7 +354,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
  
--	for (i = 0, off = 0; len && i < kallsyms_num_syms; i++) {
-+	for (; len && i < kallsyms_num_syms; i++) {
- 		/*
- 		 * For each symbol entry, the storage format is:
- 		 *  ----------------------------
-@@ -290,6 +293,10 @@ static int kallsyms_lookup_compressed_name(unsigned char *namebuf, int len,
- 			continue;
+ 	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+ 		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+-		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
++		ret = fn(data, namebuf, kallsyms_sym_address(i));
+ 		if (ret != 0)
+ 			return ret;
+ 		cond_resched();
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 439e2ab6905ee1e..f135a0a334a3fcb 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -8250,8 +8250,7 @@ struct kallsyms_data {
+ 	size_t found;
+ };
  
- 		if (!memcmp(name, namebuf, len)) {
-+			/* Prepare for the next iteration */
-+			*index = i + 1;
-+			*offset = off;
-+
- 			*addr = kallsyms_sym_address(i);
- 			return 0;
- 		}
-@@ -298,6 +305,14 @@ static int kallsyms_lookup_compressed_name(unsigned char *namebuf, int len,
- 	return -ENOENT;
- }
- 
-+static int kallsyms_lookup_compressed_name(unsigned char *namebuf, int len,
-+					   unsigned long *addr)
-+{
-+	unsigned int i = 0, off = 0;
-+
-+	return __kallsyms_lookup_compressed_name(namebuf, len, &i, &off, addr);
-+}
-+
- /* Lookup the address for this symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name)
+-static int kallsyms_callback(void *data, const char *name,
+-			     struct module *mod, unsigned long addr)
++static int kallsyms_callback(void *data, const char *name, unsigned long addr)
  {
-@@ -348,6 +363,27 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
- 	return 0;
- }
- 
-+int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
-+				  const char *name, void *data)
-+{
-+	int ret, len;
-+	unsigned long addr;
-+	unsigned int i = 0, off = 0;
-+	char namebuf[KSYM_NAME_LEN];
-+
-+	len = kallsyms_compress_symbol_name(name, namebuf, ARRAY_SIZE(namebuf));
-+	do {
-+		ret = __kallsyms_lookup_compressed_name(namebuf, len, &i, &off, &addr);
-+		if (ret)
-+			return 0;	/* end of lookup */
-+
-+		ret = fn(data, addr);
-+		cond_resched();
-+	} while (!ret);
-+
-+	return ret;
-+}
-+
- static unsigned long get_symbol_pos(unsigned long addr,
- 				    unsigned long *symbolsize,
- 				    unsigned long *offset)
+ 	struct kallsyms_data *args = data;
+ 	const char **sym;
 -- 
 2.25.1
 
