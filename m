@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FBFCC6FA8E
-	for <live-patching@archiver.kernel.org>; Fri, 23 Sep 2022 11:22:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B6CEC6FA91
+	for <live-patching@archiver.kernel.org>; Fri, 23 Sep 2022 11:22:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232222AbiIWLWM (ORCPT
+        id S231361AbiIWLWO (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 23 Sep 2022 07:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
+        Fri, 23 Sep 2022 07:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiIWLWD (ORCPT
+        with ESMTP id S231831AbiIWLWD (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Fri, 23 Sep 2022 07:22:03 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C0813791C;
-        Fri, 23 Sep 2022 04:21:59 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYqRG5WjSzbmnM;
-        Fri, 23 Sep 2022 19:19:06 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039FA127576;
+        Fri, 23 Sep 2022 04:22:01 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MYqPn2fzqzlXWG;
+        Fri, 23 Sep 2022 19:17:49 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:57 +0800
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:59 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 23 Sep 2022 19:21:56 +0800
+ 15.1.2375.31; Fri, 23 Sep 2022 19:21:58 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -44,9 +44,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Steven Rostedt" <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v5 08/10] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-Date:   Fri, 23 Sep 2022 19:20:31 +0800
-Message-ID: <20220923112033.1958-9-thunder.leizhen@huawei.com>
+Subject: [PATCH v5 10/10] kallsyms: Add self-test facility
+Date:   Fri, 23 Sep 2022 19:20:33 +0800
+Message-ID: <20220923112033.1958-11-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 In-Reply-To: <20220923112033.1958-1-thunder.leizhen@huawei.com>
 References: <20220923112033.1958-1-thunder.leizhen@huawei.com>
@@ -61,138 +61,538 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently we traverse all symbols of all modules to find the specified
-function for the specified module. But in reality, we just need to find
-the given module and then traverse all the symbols in it.
+Added test cases for basic functions and performance of functions
+kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+kallsyms_on_each_match_symbol(). It also calculates the compression rate
+of the kallsyms compression algorithm for the current symbol set.
 
-In order to achieve this purpose, split the call to hook 'fn' into two
-phases:
-1. Finds the given module. Pass pointer 'mod'. Hook 'fn' directly returns
-   the comparison result of the module name without comparing the function
-   name.
-2. Finds the given function in that module. Pass pointer 'mod = NULL'.
-   Hook 'fn' skip the comparison of module name and directly compare
-   function names.
+The basic functions test begins by testing a set of symbols whose address
+values are known. Then, traverse all symbol addresses and find the
+corresponding symbol name based on the address. It's impossible to
+determine whether these addresses are correct, but we can use the above
+three functions along with the addresses to test each other. Due to the
+traversal operation of kallsyms_on_each_symbol() is too slow, only 60
+symbols can be tested in one second, so let it test on average once
+every 128 symbols. The other two functions validate all symbols.
 
-Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
-                |
-Phase2:          -->f1-->f2-->f3
+If the basic functions test is passed, print only performance test
+results. If the test fails, print error information, but do not perform
+subsequent performance tests.
+
+Start self-test automatically after system startup if
+CONFIG_KALLSYMS_SELFTEST=y.
+
+Example of output content: (prefix 'kallsyms_selftest:' is omitted)
+ start
+  ---------------------------------------------------------
+ | nr_symbols | compressed size | original size | ratio(%) |
+ |---------------------------------------------------------|
+ |     174099 |       1960154   |      3750756  |  52.26   |
+  ---------------------------------------------------------
+ kallsyms_lookup_name() looked up 174099 symbols
+ The time spent on each symbol is (ns): min=5250, max=726560, avg=302132
+ kallsyms_on_each_symbol() traverse all: 16659500 ns
+ kallsyms_on_each_match_symbol() traverse all: 557400 ns
+ finish
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/module.h   |  4 ++--
- kernel/livepatch/core.c  | 13 ++-----------
- kernel/module/kallsyms.c | 15 ++++++++++++---
- 3 files changed, 16 insertions(+), 16 deletions(-)
+ include/linux/kallsyms.h   |   1 +
+ init/Kconfig               |  13 ++
+ kernel/Makefile            |   1 +
+ kernel/kallsyms.c          |   2 +-
+ kernel/kallsyms_selftest.c | 421 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 437 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/kallsyms_selftest.c
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 518296ea7f73af6..6e1a531d78e7e8b 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
- }
- #endif	/* CONFIG_MODULE_SIG */
- 
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data);
- 
- #endif /* _LINUX_MODULE_H */
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 31b57ccf908017e..b02de4cb311c703 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index 015c7685765978e..c7219d74e29000c 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -66,6 +66,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
  }
  
- struct klp_find_arg {
--	const char *objname;
- 	const char *name;
- 	unsigned long addr;
- 	unsigned long count;
- 	unsigned long pos;
- };
+ #ifdef CONFIG_KALLSYMS
++unsigned long kallsyms_sym_address(int idx);
+ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ 			    void *data);
+ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+diff --git a/init/Kconfig b/init/Kconfig
+index 532362fcfe31fd3..60193fd185fb6e6 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1716,6 +1716,19 @@ config KALLSYMS
+ 	  symbolic stack backtraces. This increases the size of the kernel
+ 	  somewhat, as all symbols have to be loaded into the kernel image.
  
--static int klp_find_callback(void *data, const char *name,
--			     struct module *mod, unsigned long addr)
-+static int klp_find_callback(void *data, const char *name, unsigned long addr)
- {
- 	struct klp_find_arg *args = data;
- 
--	if ((mod && !args->objname) || (!mod && args->objname))
--		return 0;
--
- 	if (strcmp(args->name, name))
- 		return 0;
- 
--	if (args->objname && strcmp(args->objname, mod->name))
--		return 0;
--
- 	args->addr = addr;
- 	args->count++;
- 
-@@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 				  unsigned long sympos, unsigned long *addr)
- {
- 	struct klp_find_arg args = {
--		.objname = objname,
- 		.name = name,
- 		.addr = 0,
- 		.count = 0,
-@@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 	};
- 
- 	if (objname)
--		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-+		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
- 	else
- 		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
- 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index f5c5c9175333df7..329cef573675d49 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
++config KALLSYMS_SELFTEST
++	bool "Test the basic functions and performance of kallsyms"
++	depends on KALLSYMS
++	default n
++	help
++	  Test the basic functions and performance of some interfaces, such as
++	  kallsyms_lookup_name. It also calculates the compression rate of the
++	  kallsyms compression algorithm for the current symbol set.
++
++	  Start self-test automatically after system startup. Suggest executing
++	  "dmesg | grep kallsyms_selftest" to collect test results. "finish" is
++	  displayed in the last line, indicating that the test is complete.
++
+ config KALLSYMS_ALL
+ 	bool "Include all symbols in kallsyms"
+ 	depends on DEBUG_KERNEL && KALLSYMS
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 318789c728d3290..122a5fed457bd98 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -68,6 +68,7 @@ endif
+ obj-$(CONFIG_UID16) += uid16.o
+ obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
+ obj-$(CONFIG_KALLSYMS) += kallsyms.o
++obj-$(CONFIG_KALLSYMS_SELFTEST) += kallsyms_selftest.o
+ obj-$(CONFIG_BSD_PROCESS_ACCT) += acct.o
+ obj-$(CONFIG_CRASH_CORE) += crash_core.o
+ obj-$(CONFIG_KEXEC_CORE) += kexec_core.o
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 69e040204ed4ebd..19cd9c56df6aecc 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -208,7 +208,7 @@ static unsigned int get_symbol_offset(unsigned long pos)
+ 	return name - kallsyms_names;
  }
  
- #ifdef CONFIG_LIVEPATCH
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data)
+-static unsigned long kallsyms_sym_address(int idx)
++unsigned long kallsyms_sym_address(int idx)
  {
- 	struct module *mod;
-@@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
- 
-+		if (strcmp(modname, mod->name))
+ 	if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+ 		return kallsyms_addresses[idx];
+diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+new file mode 100644
+index 000000000000000..f7538a70d36c531
+--- /dev/null
++++ b/kernel/kallsyms_selftest.c
+@@ -0,0 +1,421 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Test the function and performance of kallsyms
++ *
++ * Copyright (C) Huawei Technologies Co., Ltd., 2022
++ *
++ * Authors: Zhen Lei <thunder.leizhen@huawei.com> Huawei
++ */
++
++#define pr_fmt(fmt) "kallsyms_selftest: " fmt
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/kallsyms.h>
++#include <linux/random.h>
++#include <linux/sched/clock.h>
++#include <linux/kthread.h>
++#include <linux/vmalloc.h>
++
++#include "kallsyms_internal.h"
++
++
++#define MAX_NUM_OF_RECORDS		64
++
++struct test_stat {
++	int min;
++	int max;
++	int save_cnt;
++	int real_cnt;
++	u64 sum;
++	char *name;
++	unsigned long addr;
++	unsigned long addrs[MAX_NUM_OF_RECORDS];
++};
++
++struct test_item {
++	char *name;
++	unsigned long addr;
++};
++
++#define ITEM_FUNC(s)				\
++	{					\
++		.name = #s,			\
++		.addr = (unsigned long)s,	\
++	}
++
++#define ITEM_DATA(s)				\
++	{					\
++		.name = #s,			\
++		.addr = (unsigned long)&s,	\
++	}
++
++static int test_var_bss_static;
++static int test_var_data_static = 1;
++int test_var_bss;
++int test_var_data = 1;
++
++static int test_func_static(void)
++{
++	test_var_bss_static++;
++	test_var_data_static++;
++
++	return 0;
++}
++
++int test_func(void)
++{
++	return test_func_static();
++}
++
++__weak int test_func_weak(void)
++{
++	test_var_bss++;
++	test_var_data++;
++	return 0;
++}
++
++static struct test_item test_items[] = {
++	ITEM_FUNC(test_func_static),
++	ITEM_FUNC(test_func),
++	ITEM_FUNC(test_func_weak),
++	ITEM_FUNC(vmalloc),
++	ITEM_FUNC(vfree),
++#ifdef CONFIG_KALLSYMS_ALL
++	ITEM_DATA(test_var_bss_static),
++	ITEM_DATA(test_var_data_static),
++	ITEM_DATA(test_var_bss),
++	ITEM_DATA(test_var_data),
++	ITEM_DATA(vmap_area_list),
++#endif
++};
++
++static char stub_name[KSYM_NAME_LEN];
++
++static int stat_symbol_len(void *data, const char *name, unsigned long addr)
++{
++	*(u32 *)data += strlen(name);
++
++	return 0;
++}
++
++static void test_kallsyms_compression_ratio(void)
++{
++	int i;
++	const u8 *name;
++	u32 pos;
++	u32 ratio, total_size, total_len = 0;
++
++	kallsyms_on_each_symbol(stat_symbol_len, &total_len);
++
++	/*
++	 * A symbol name cannot start with a number. This stub name helps us
++	 * traverse the entire symbol table without finding a match. It's used
++	 * for subsequent performance tests, and its length is the average
++	 * length of all symbol names.
++	 */
++	memset(stub_name, '4', sizeof(stub_name));
++	pos = total_len / kallsyms_num_syms;
++	stub_name[pos] = 0;
++
++	pos = kallsyms_num_syms - 1;
++	name = &kallsyms_names[kallsyms_markers[pos >> 8]];
++	for (i = 0; i <= (pos & 0xff); i++)
++		name = name + (*name) + 1;
++
++	/*
++	 * 1. The length fields is not counted
++	 * 2. The memory occupied by array kallsyms_token_table[] and
++	 *    kallsyms_token_index[] needs to be counted.
++	 */
++	total_size = (name - kallsyms_names) - kallsyms_num_syms;
++	pos = kallsyms_token_index[0xff];
++	total_size += pos + strlen(&kallsyms_token_table[pos]) + 1;
++	total_size += 0x100 * sizeof(u16);
++
++	pr_info(" ---------------------------------------------------------\n");
++	pr_info("| nr_symbols | compressed size | original size | ratio(%%) |\n");
++	pr_info("|---------------------------------------------------------|\n");
++	ratio = 10000ULL * total_size / total_len;
++	pr_info("| %10d |    %10d   |   %10d  |  %2d.%-2d   |\n",
++		kallsyms_num_syms, total_size, total_len, ratio / 100, ratio % 100);
++	pr_info(" ---------------------------------------------------------\n");
++}
++
++static int lookup_name(void *data, const char *name, unsigned long addr)
++{
++	u64 t0, t1, t;
++	unsigned long flags;
++	struct test_stat *stat = (struct test_stat *)data;
++
++	local_irq_save(flags);
++	t0 = sched_clock();
++	(void)kallsyms_lookup_name(name);
++	t1 = sched_clock();
++	local_irq_restore(flags);
++
++	t = t1 - t0;
++	if (t < stat->min)
++		stat->min = t;
++
++	if (t > stat->max)
++		stat->max = t;
++
++	stat->real_cnt++;
++	stat->sum += t;
++
++	return 0;
++}
++
++static void test_perf_kallsyms_lookup_name(void)
++{
++	struct test_stat stat;
++
++	memset(&stat, 0, sizeof(stat));
++	stat.min = INT_MAX;
++	kallsyms_on_each_symbol(lookup_name, &stat);
++	pr_info("kallsyms_lookup_name() looked up %d symbols\n", stat.real_cnt);
++	pr_info("The time spent on each symbol is (ns): min=%d, max=%d, avg=%lld\n",
++		stat.min, stat.max, stat.sum / stat.real_cnt);
++}
++
++static int find_symbol(void *data, const char *name, unsigned long addr)
++{
++	struct test_stat *stat = (struct test_stat *)data;
++
++	if (strcmp(name, stat->name) == 0) {
++		stat->real_cnt++;
++		stat->addr = addr;
++
++		if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
++			stat->addrs[stat->save_cnt] = addr;
++			stat->save_cnt++;
++		}
++
++		if (stat->real_cnt == stat->max)
++			return 1;
++	}
++
++	return 0;
++}
++
++static void test_perf_kallsyms_on_each_symbol(void)
++{
++	u64 t0, t1;
++	unsigned long flags;
++	struct test_stat stat;
++
++	memset(&stat, 0, sizeof(stat));
++	stat.max = INT_MAX;
++	stat.name = stub_name;
++	local_irq_save(flags);
++	t0 = sched_clock();
++	kallsyms_on_each_symbol(find_symbol, &stat);
++	t1 = sched_clock();
++	local_irq_restore(flags);
++	pr_info("kallsyms_on_each_symbol() traverse all: %lld ns\n", t1 - t0);
++}
++
++static int match_symbol(void *data, unsigned long addr)
++{
++	struct test_stat *stat = (struct test_stat *)data;
++
++	stat->real_cnt++;
++	stat->addr = addr;
++
++	if (stat->save_cnt < MAX_NUM_OF_RECORDS) {
++		stat->addrs[stat->save_cnt] = addr;
++		stat->save_cnt++;
++	}
++
++	if (stat->real_cnt == stat->max)
++		return 1;
++
++	return 0;
++}
++
++static void test_perf_kallsyms_on_each_match_symbol(void)
++{
++	u64 t0, t1;
++	unsigned long flags;
++	struct test_stat stat;
++
++	memset(&stat, 0, sizeof(stat));
++	stat.max = INT_MAX;
++	stat.name = stub_name;
++	local_irq_save(flags);
++	t0 = sched_clock();
++	kallsyms_on_each_match_symbol(match_symbol, stat.name, &stat);
++	t1 = sched_clock();
++	local_irq_restore(flags);
++	pr_info("kallsyms_on_each_match_symbol() traverse all: %lld ns\n", t1 - t0);
++}
++
++static int test_kallsyms_basic_function(void)
++{
++	int i, j, ret;
++	int next = 0, nr_failed = 0;
++	char *prefix;
++	unsigned short rand;
++	unsigned long addr;
++	char namebuf[KSYM_NAME_LEN];
++	struct test_stat stat, stat1, stat2;
++
++	prefix = "kallsyms_lookup_name() for";
++	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
++		addr = kallsyms_lookup_name(test_items[i].name);
++		if (addr != test_items[i].addr) {
++			nr_failed++;
++			pr_info("%s %s failed: addr=%lx, expect %lx\n",
++				prefix, test_items[i].name, addr, test_items[i].addr);
++		}
++	}
++
++	prefix = "kallsyms_on_each_symbol() for";
++	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
++		memset(&stat, 0, sizeof(stat));
++		stat.max = INT_MAX;
++		stat.name = test_items[i].name;
++		kallsyms_on_each_symbol(find_symbol, &stat);
++		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
++			nr_failed++;
++			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
++				prefix, test_items[i].name,
++				stat.real_cnt, stat.addr, test_items[i].addr);
++		}
++	}
++
++	prefix = "kallsyms_on_each_match_symbol() for";
++	for (i = 0; i < ARRAY_SIZE(test_items); i++) {
++		memset(&stat, 0, sizeof(stat));
++		stat.max = INT_MAX;
++		stat.name = test_items[i].name;
++		kallsyms_on_each_match_symbol(match_symbol, test_items[i].name, &stat);
++		if (stat.addr != test_items[i].addr || stat.real_cnt != 1) {
++			nr_failed++;
++			pr_info("%s %s failed: count=%d, addr=%lx, expect %lx\n",
++				prefix, test_items[i].name,
++				stat.real_cnt, stat.addr, test_items[i].addr);
++		}
++	}
++
++	if (nr_failed)
++		return -ESRCH;
++
++	for (i = 0; i < kallsyms_num_syms; i++) {
++		addr = kallsyms_sym_address(i);
++		if (!is_ksym_addr(addr))
 +			continue;
 +
- 		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
- 		preempt_disable();
- 		kallsyms = rcu_dereference_sched(mod->kallsyms);
-@@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 				continue;
- 
- 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
--				 mod, kallsyms_symbol_value(sym));
-+				 kallsyms_symbol_value(sym));
- 			if (ret != 0)
- 				goto out;
- 		}
++		ret = lookup_symbol_name(addr, namebuf);
++		if (unlikely(ret)) {
++			namebuf[0] = 0;
++			goto failed;
++		}
++
++		stat.addr = kallsyms_lookup_name(namebuf);
++
++		memset(&stat1, 0, sizeof(stat1));
++		stat1.max = INT_MAX;
++		kallsyms_on_each_match_symbol(match_symbol, namebuf, &stat1);
 +
 +		/*
-+		 * The given module is found, the subsequent modules do not
-+		 * need to be compared.
++		 * kallsyms_on_each_symbol() is too slow, randomly select some
++		 * symbols for test.
 +		 */
-+		break;
- 	}
- out:
- 	mutex_unlock(&module_mutex);
++		if (i >= next) {
++			memset(&stat2, 0, sizeof(stat2));
++			stat2.max = INT_MAX;
++			stat2.name = namebuf;
++			kallsyms_on_each_symbol(find_symbol, &stat2);
++
++			/*
++			 * kallsyms_on_each_symbol() and kallsyms_on_each_match_symbol()
++			 * need to get the same traversal result.
++			 */
++			if (stat1.addr != stat2.addr ||
++			    stat1.real_cnt != stat2.real_cnt ||
++			    memcmp(stat1.addrs, stat2.addrs,
++				   stat1.save_cnt * sizeof(stat1.addrs[0])))
++				goto failed;
++
++			/*
++			 * The average of random increments is 128, that is, one of
++			 * them is tested every 128 symbols.
++			 */
++			get_random_bytes(&rand, sizeof(rand));
++			next = i + (rand & 0xff) + 1;
++		}
++
++		/* Need to be found at least once */
++		if (!stat1.real_cnt)
++			goto failed;
++
++		/*
++		 * kallsyms_lookup_name() returns the address of the first
++		 * symbol found and cannot be NULL.
++		 */
++		if (!stat.addr || stat.addr != stat1.addrs[0])
++			goto failed;
++
++		/*
++		 * If the addresses of all matching symbols are recorded, the
++		 * target address needs to be exist.
++		 */
++		if (stat1.real_cnt <= MAX_NUM_OF_RECORDS) {
++			for (j = 0; j < stat1.save_cnt; j++) {
++				if (stat1.addrs[j] == addr)
++					break;
++			}
++
++			if (j == stat1.save_cnt)
++				goto failed;
++		}
++	}
++
++	return 0;
++
++failed:
++	pr_info("Test for %dth symbol failed: (%s) addr=%lx", i, namebuf, addr);
++	return -ESRCH;
++}
++
++static int test_entry(void *p)
++{
++	int ret;
++
++	do {
++		schedule_timeout(5 * HZ);
++	} while (system_state != SYSTEM_RUNNING);
++
++	pr_info("start\n");
++	ret = test_kallsyms_basic_function();
++	if (ret) {
++		pr_info("abort\n");
++		return 0;
++	}
++
++	test_kallsyms_compression_ratio();
++	test_perf_kallsyms_lookup_name();
++	test_perf_kallsyms_on_each_symbol();
++	test_perf_kallsyms_on_each_match_symbol();
++	pr_info("finish\n");
++
++	return 0;
++}
++
++static int __init kallsyms_test_init(void)
++{
++	struct task_struct *t;
++
++	t = kthread_create(test_entry, NULL, "kallsyms_test");
++	if (IS_ERR(t)) {
++		pr_info("Create kallsyms selftest task failed\n");
++		return PTR_ERR(t);
++	}
++	kthread_bind(t, 0);
++	wake_up_process(t);
++
++	return 0;
++}
++late_initcall(kallsyms_test_init);
 -- 
 2.25.1
 
