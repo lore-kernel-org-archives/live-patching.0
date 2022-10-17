@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B57DC4332F
-	for <live-patching@archiver.kernel.org>; Mon, 17 Oct 2022 06:53:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12CFCC43217
+	for <live-patching@archiver.kernel.org>; Mon, 17 Oct 2022 06:53:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiJQGxf (ORCPT
+        id S230165AbiJQGxg (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 17 Oct 2022 02:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        Mon, 17 Oct 2022 02:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiJQGxS (ORCPT
+        with ESMTP id S230187AbiJQGxT (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 17 Oct 2022 02:53:18 -0400
+        Mon, 17 Oct 2022 02:53:19 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC59C580A1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9F759261;
         Sun, 16 Oct 2022 23:52:11 -0700 (PDT)
 Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MrSJl6nMmzJn56;
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MrSJl5bwDzJn55;
         Mon, 17 Oct 2022 14:49:11 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
  dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 14:50:45 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 14:50:40 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 17 Oct 2022 14:50:44 +0800
+ 15.1.2375.31; Mon, 17 Oct 2022 14:50:39 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -44,9 +44,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Steven Rostedt" <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH v7 09/11] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-Date:   Mon, 17 Oct 2022 14:49:48 +0800
-Message-ID: <20221017064950.2038-10-thunder.leizhen@huawei.com>
+Subject: [PATCH v7 04/11] kallsyms: Add helper kallsyms_compress_symbol_name()
+Date:   Mon, 17 Oct 2022 14:49:43 +0800
+Message-ID: <20221017064950.2038-5-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221017064950.2038-1-thunder.leizhen@huawei.com>
 References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
@@ -61,134 +61,168 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently we traverse all symbols of all modules to find the specified
-function for the specified module. But in reality, we just need to find
-the given module and then traverse all the symbols in it.
+To speed up the lookup of a symbol in the kernel, we'd better compress
+the searched symbol first and then make a quick comparison based on the
+compressed length and content. But the tokens in kallsyms_token_table[]
+have been expanded, a more complex process is required to complete the
+compression of a symbol. So generate kallsyms_best_token_table[] helps
+us to compress a symbol in the kernel using a process similar to
+compress_symbol(). The implementation of kallsyms_compress_symbol_name()
+is almost the same as that of compress_symbols() in scripts/kallsyms.c.
 
-Let's add a new parameter 'const char *modname' to function
-module_kallsyms_on_each_symbol(), then we can compare the module names
-directly in this function and call hook 'fn' after matching. And the
-parameter 'struct module *' in the hook 'fn' can also be deleted.
+Some minor changes have been made to reduce memory usage and improve
+compression performance.
+1. Some entries in best_table[] are single characters, and most of them
+   are clustered together. such as a-z, A-Z, 0-9. These individual
+   characters are not used in the process of compressing a symbol. Let
+   kallsyms_best_token_table[i][0] = 0x00, [i][0] = number of consecutive
+   single characters (for exampe, a-z is 26). When [i][0] = 0x00 is
+   encountered, we can skip to the next token with two elements.
+2. Now ARRAY_SIZE(kallsyms_best_token_table) is not fixed, we store
+   the content of best_table[] to kallsyms_best_token_table[] in reverse
+   order. That is, the higher the frequency, the lower the index.
 
-Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
-                |
-Phase2:          -->f1-->f2-->f3
+The modifier '__maybe_unused' of kallsyms_compress_symbol_name() is
+temporary and will be removed in the next patch.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/module.h   |  4 ++--
- kernel/livepatch/core.c  | 13 ++-----------
- kernel/module/kallsyms.c | 15 ++++++++++++---
- 3 files changed, 16 insertions(+), 16 deletions(-)
+ kernel/kallsyms.c          | 80 ++++++++++++++++++++++++++++++++++++++
+ kernel/kallsyms_internal.h |  1 +
+ scripts/kallsyms.c         | 18 +++++++++
+ 3 files changed, 99 insertions(+)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index ec61fb53979a92a..0a3b44ff885a48c 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
- }
- #endif	/* CONFIG_MODULE_SIG */
- 
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data);
- 
- #endif /* _LINUX_MODULE_H */
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 60c20f301a6ba2c..f1fe404af184047 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -95,6 +95,86 @@ static unsigned int kallsyms_expand_symbol(unsigned int off,
+ 	return off;
  }
  
- struct klp_find_arg {
--	const char *objname;
- 	const char *name;
- 	unsigned long addr;
- 	unsigned long count;
- 	unsigned long pos;
- };
- 
--static int klp_find_callback(void *data, const char *name,
--			     struct module *mod, unsigned long addr)
-+static int klp_find_callback(void *data, const char *name, unsigned long addr)
- {
- 	struct klp_find_arg *args = data;
- 
--	if ((mod && !args->objname) || (!mod && args->objname))
--		return 0;
--
- 	if (strcmp(args->name, name))
- 		return 0;
- 
--	if (args->objname && strcmp(args->objname, mod->name))
--		return 0;
--
- 	args->addr = addr;
- 	args->count++;
- 
-@@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 				  unsigned long sympos, unsigned long *addr)
- {
- 	struct klp_find_arg args = {
--		.objname = objname,
- 		.name = name,
- 		.addr = 0,
- 		.count = 0,
-@@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 	};
- 
- 	if (objname)
--		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-+		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
- 	else
- 		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
- 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index f5c5c9175333df7..329cef573675d49 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
- }
- 
- #ifdef CONFIG_LIVEPATCH
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data)
- {
- 	struct module *mod;
-@@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
- 
-+		if (strcmp(modname, mod->name))
++static unsigned char *find_token(unsigned char *str, int len,
++				 const unsigned char *token)
++{
++	int i;
++
++	for (i = 0; i < len - 1; i++) {
++		if (str[i] == token[0] && str[i+1] == token[1])
++			return &str[i];
++	}
++	return NULL;
++}
++
++static int __maybe_unused kallsyms_compress_symbol_name(const char *name, char *buf, size_t size)
++{
++	int i, j, n, len;
++	unsigned char *p1, *p2;
++	const unsigned char *token;
++
++	len = strscpy(buf, name, size);
++	if (WARN_ON_ONCE(len <= 0))
++		return 0;
++
++	/*
++	 * For each entry in kallsyms_best_token_table[], the storage
++	 * format is:
++	 * 1. For tokens that cannot be used to compress characters, the value
++	 *    at [j] is 0, and the value at [j+1] is the number of consecutive
++	 *    tokens with this feature.
++	 * 2. For each token: the larger the token value, the higher the
++	 *    frequency, and the lower the index.
++	 *
++	 *  -------------------------------
++	 * |  j  |   [j]  [j+1]  |  token  |
++	 *  -----|---------------|---------|
++	 * |  0  |   ??    ??	 |   255   |
++	 * |  2  |   ??    ??    |   254   |
++	 * | ... |   ??    ??    |   ...   |
++	 * | n-2 |   ??    ??    |    x    |
++	 * |  n  |   00    len   |   x-1   |
++	 * | n+2 |   ??    ??    | x-1-len |
++	 *      above '??' is non-zero
++	 */
++	for (i = 255, j = 0; i >= 0; i--, j += 2) {
++		if (!kallsyms_best_token_table[j]) {
++			i -= kallsyms_best_token_table[j + 1];
++			if (i < 0)
++				break;
++			j += 2;
++		}
++		token = &kallsyms_best_token_table[j];
++
++		p1 = buf;
++
++		/* find the token on the symbol */
++		p2 = find_token(p1, len, token);
++		if (!p2)
 +			continue;
 +
- 		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
- 		preempt_disable();
- 		kallsyms = rcu_dereference_sched(mod->kallsyms);
-@@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 				continue;
- 
- 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
--				 mod, kallsyms_symbol_value(sym));
-+				 kallsyms_symbol_value(sym));
- 			if (ret != 0)
- 				goto out;
- 		}
++		n = len;
 +
-+		/*
-+		 * The given module is found, the subsequent modules do not
-+		 * need to be compared.
-+		 */
-+		break;
- 	}
- out:
- 	mutex_unlock(&module_mutex);
++		do {
++			*p2 = i;
++			p2++;
++			n -= (p2 - p1);
++			memmove(p2, p2 + 1, n);
++			p1 = p2;
++			len--;
++
++			if (n < 2)
++				break;
++
++			/* find the token on the symbol */
++			p2 = find_token(p1, n, token);
++
++		} while (p2);
++	}
++
++	return len;
++}
++
+ /*
+  * Get symbol type information. This is encoded as a single char at the
+  * beginning of the symbol name.
+diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+index 2d0c6f2f0243a28..d9672ede8cfc215 100644
+--- a/kernel/kallsyms_internal.h
++++ b/kernel/kallsyms_internal.h
+@@ -26,5 +26,6 @@ extern const char kallsyms_token_table[] __weak;
+ extern const u16 kallsyms_token_index[] __weak;
+ 
+ extern const unsigned int kallsyms_markers[] __weak;
++extern const unsigned char kallsyms_best_token_table[] __weak;
+ 
+ #endif // LINUX_KALLSYMS_INTERNAL_H_
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 60686094f665164..9864ce5e6c5bfc1 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -548,6 +548,24 @@ static void write_src(void)
+ 	for (i = 0; i < 256; i++)
+ 		printf("\t.short\t%d\n", best_idx[i]);
+ 	printf("\n");
++
++	output_label("kallsyms_best_token_table");
++	for (i = 255, k = 0; (int)i >= 0; i--) {
++		if (best_table_len[i] <= 1) {
++			k++;
++			continue;
++		}
++
++		if (k) {
++			printf("\t.byte 0x00, 0x%02x\n", k);
++			k = 0;
++		}
++
++		printf("\t.byte 0x%02x, 0x%02x\n", best_table[i][0], best_table[i][1]);
++	}
++	if (k)
++		printf("\t.byte 0x00, 0x%02x\n", k);
++	printf("\n");
+ }
+ 
+ 
 -- 
 2.25.1
 
