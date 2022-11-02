@@ -2,33 +2,36 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43191C4321E
-	for <live-patching@archiver.kernel.org>; Wed,  2 Nov 2022 08:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D33C4332F
+	for <live-patching@archiver.kernel.org>; Wed,  2 Nov 2022 09:20:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiKBIvb (ORCPT
+        id S231194AbiKBJUx (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 2 Nov 2022 04:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        Wed, 2 Nov 2022 05:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiKBIu7 (ORCPT
+        with ESMTP id S231463AbiKBJUi (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:50:59 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC4427DF1;
-        Wed,  2 Nov 2022 01:50:55 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2LFQ6RwhzHvbD;
-        Wed,  2 Nov 2022 16:50:34 +0800 (CST)
+        Wed, 2 Nov 2022 05:20:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEE3225;
+        Wed,  2 Nov 2022 02:18:28 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2LnT481WzpW9X;
+        Wed,  2 Nov 2022 17:14:53 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 16:50:26 +0800
-Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ 15.1.2375.31; Wed, 2 Nov 2022 17:18:26 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 16:50:25 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+ 15.1.2375.31; Wed, 2 Nov 2022 17:18:25 +0800
+Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
@@ -39,255 +42,68 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
         <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>,
-        David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH v8 2/9] kallsyms: Improve the performance of kallsyms_lookup_name()
-Date:   Wed, 2 Nov 2022 16:49:14 +0800
-Message-ID: <20221102084921.1615-3-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.37.3.windows.1
-In-Reply-To: <20221102084921.1615-1-thunder.leizhen@huawei.com>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+ <Y0/nEngJF6bbINEx@bombadil.infradead.org>
+ <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
+ <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
+ <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+ <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+ <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
+ <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
+ <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
+ <b7215b83-11ab-6db6-bd7f-9729725eaaeb@huawei.com>
+ <b30a540b-019d-4466-19d9-33900b1a89b1@huawei.com>
+Message-ID: <d059c054-1ef9-f89b-fcb2-7387770d2ec7@huawei.com>
+Date:   Wed, 2 Nov 2022 17:18:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+In-Reply-To: <b30a540b-019d-4466-19d9-33900b1a89b1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently, to search for a symbol, we need to expand the symbols in
-'kallsyms_names' one by one, and then use the expanded string for
-comparison. It's O(n).
 
-If we sort names in ascending order like addresses, we can also use
-binary search. It's O(log(n)).
 
-In order not to change the implementation of "/proc/kallsyms", the table
-kallsyms_names[] is still stored in a one-to-one correspondence with the
-address in ascending order.
+On 2022/10/31 23:04, Leizhen (ThunderTown) wrote:
+> Now, we need to make a decision. Choose one of the two:
+> 1. Continue with my current approach. Improve the average performance of
+>    kallsyms_lookup_name() by 20 to 30 times. The memory overhead is increased by:
+>    arm64 (defconfig):
+>      73.5KiB and 4.0% if CONFIG_KALLSYMS_ALL=y.
+>      19.8KiB and 2.8% if CONFIG_KALLSYMS_ALL=n.
+>    x86 (defconfig):
+>      49.0KiB and 3.0% if CONFIG_KALLSYMS_ALL=y.
+>      16.8KiB and 2.3% if CONFIG_KALLSYMS_ALL=n.
+> 2. Sort names, binary search (The static function causes duplicate names. Additional work is required）
+>    2^18=262144, only up to 18 symbol expansions and comparisons are required.
+>    The performance is definitely excellent, although I haven't tested it yet.
+>    The memory overhead is increased by: 6 * kallsyms_num_syms
+>    arm64 (defconfig):
+>        1MiB if CONFIG_KALLSYMS_ALL=y.
+>      362KiB if CONFIG_KALLSYMS_ALL=n.
+>    x86 (defconfig):
+>      770KiB if CONFIG_KALLSYMS_ALL=y.
+>      356KiB if CONFIG_KALLSYMS_ALL=n.
 
-Add array kallsyms_seqs_of_names[], it's indexed by the sequence number
-of the sorted names, and the corresponding content is the sequence number
-of the sorted addresses. For example:
-Assume that the index of NameX in array kallsyms_seqs_of_names[] is 'i',
-the content of kallsyms_seqs_of_names[i] is 'k', then the corresponding
-address of NameX is kallsyms_addresses[k]. The offset in kallsyms_names[]
-is get_symbol_offset(k).
+Hi, Luis:
+  I've implemented v8 based on method 2(Sort names, binary search).
+The memory overhead is increased by: 3 * kallsyms_num_syms.
+kallsyms_offsets_of_names[] is not added in v8 because it does not help
+much in performance improvement, so save (3 * kallsyms_num_syms) bytes.
+For details about the performance data, please see the commit message.
 
-Note that the memory usage will increase by (4 * kallsyms_num_syms)
-bytes, the next two patches will reduce (1 * kallsyms_num_syms) bytes
-and properly handle the case CONFIG_LTO_CLANG=y.
 
-Performance test results: (x86)
-Before:
-min=234, max=10364402, avg=5206926
-min=267, max=11168517, avg=5207587
-After:
-min=1016, max=90894, avg=7272
-min=1014, max=93470, avg=7293
-
-The average lookup performance of kallsyms_lookup_name() improved 715x.
-
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- kernel/kallsyms.c          | 86 +++++++++++++++++++++++++++++++++-----
- kernel/kallsyms_internal.h |  1 +
- scripts/kallsyms.c         | 37 ++++++++++++++++
- 3 files changed, 113 insertions(+), 11 deletions(-)
-
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 60c20f301a6ba2c..ba351dfa109b6ac 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -187,26 +187,90 @@ static bool cleanup_symbol_name(char *s)
- 	return false;
- }
- 
-+static int compare_symbol_name(const char *name, char *namebuf)
-+{
-+	int ret;
-+
-+	ret = strcmp(name, namebuf);
-+	if (!ret)
-+		return ret;
-+
-+	if (cleanup_symbol_name(namebuf) && !strcmp(name, namebuf))
-+		return 0;
-+
-+	return ret;
-+}
-+
-+static int kallsyms_lookup_names(const char *name,
-+				 unsigned int *start,
-+				 unsigned int *end)
-+{
-+	int ret;
-+	int low, mid, high;
-+	unsigned int seq, off;
-+	char namebuf[KSYM_NAME_LEN];
-+
-+	low = 0;
-+	high = kallsyms_num_syms - 1;
-+
-+	while (low <= high) {
-+		mid = low + (high - low) / 2;
-+		seq = kallsyms_seqs_of_names[mid];
-+		off = get_symbol_offset(seq);
-+		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
-+		ret = compare_symbol_name(name, namebuf);
-+		if (ret > 0)
-+			low = mid + 1;
-+		else if (ret < 0)
-+			high = mid - 1;
-+		else
-+			break;
-+	}
-+
-+	if (low > high)
-+		return -ESRCH;
-+
-+	low = mid;
-+	while (low) {
-+		seq = kallsyms_seqs_of_names[low - 1];
-+		off = get_symbol_offset(seq);
-+		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
-+		if (compare_symbol_name(name, namebuf))
-+			break;
-+		low--;
-+	}
-+	*start = low;
-+
-+	if (end) {
-+		high = mid;
-+		while (high < kallsyms_num_syms - 1) {
-+			seq = kallsyms_seqs_of_names[high + 1];
-+			off = get_symbol_offset(seq);
-+			kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
-+			if (compare_symbol_name(name, namebuf))
-+				break;
-+			high++;
-+		}
-+		*end = high;
-+	}
-+
-+	return 0;
-+}
-+
- /* Lookup the address for this symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name)
- {
--	char namebuf[KSYM_NAME_LEN];
--	unsigned long i;
--	unsigned int off;
-+	int ret;
-+	unsigned int i;
- 
- 	/* Skip the search for empty string. */
- 	if (!*name)
- 		return 0;
- 
--	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
--		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
--
--		if (strcmp(namebuf, name) == 0)
--			return kallsyms_sym_address(i);
-+	ret = kallsyms_lookup_names(name, &i, NULL);
-+	if (!ret)
-+		return kallsyms_sym_address(kallsyms_seqs_of_names[i]);
- 
--		if (cleanup_symbol_name(namebuf) && strcmp(namebuf, name) == 0)
--			return kallsyms_sym_address(i);
--	}
- 	return module_kallsyms_lookup_name(name);
- }
- 
-diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-index 2d0c6f2f0243a28..a04b7a5cb1e3eaf 100644
---- a/kernel/kallsyms_internal.h
-+++ b/kernel/kallsyms_internal.h
-@@ -26,5 +26,6 @@ extern const char kallsyms_token_table[] __weak;
- extern const u16 kallsyms_token_index[] __weak;
- 
- extern const unsigned int kallsyms_markers[] __weak;
-+extern const unsigned int kallsyms_seqs_of_names[] __weak;
- 
- #endif // LINUX_KALLSYMS_INTERNAL_H_
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index ab105bdde4efe4f..df2d93fb0e8d095 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -49,6 +49,7 @@ _Static_assert(
- struct sym_entry {
- 	unsigned long long addr;
- 	unsigned int len;
-+	unsigned int seq;
- 	unsigned int start_pos;
- 	unsigned int percpu_absolute;
- 	unsigned char sym[];
-@@ -410,6 +411,35 @@ static int symbol_absolute(const struct sym_entry *s)
- 	return s->percpu_absolute;
- }
- 
-+static int compare_names(const void *a, const void *b)
-+{
-+	int ret;
-+	char sa_namebuf[KSYM_NAME_LEN];
-+	char sb_namebuf[KSYM_NAME_LEN];
-+	const struct sym_entry *sa = *(const struct sym_entry **)a;
-+	const struct sym_entry *sb = *(const struct sym_entry **)b;
-+
-+	expand_symbol(sa->sym, sa->len, sa_namebuf);
-+	expand_symbol(sb->sym, sb->len, sb_namebuf);
-+	ret = strcmp(&sa_namebuf[1], &sb_namebuf[1]);
-+	if (!ret) {
-+		if (sa->addr > sb->addr)
-+			return 1;
-+		else if (sa->addr < sb->addr)
-+			return -1;
-+
-+		/* keep old order */
-+		return (int)(sa->seq - sb->seq);
-+	}
-+
-+	return ret;
-+}
-+
-+static void sort_symbols_by_name(void)
-+{
-+	qsort(table, table_cnt, sizeof(table[0]), compare_names);
-+}
-+
- static void write_src(void)
- {
- 	unsigned int i, k, off;
-@@ -495,6 +525,7 @@ static void write_src(void)
- 	for (i = 0; i < table_cnt; i++) {
- 		if ((i & 0xFF) == 0)
- 			markers[i >> 8] = off;
-+		table[i]->seq = i;
- 
- 		/* There cannot be any symbol of length zero. */
- 		if (table[i]->len == 0) {
-@@ -535,6 +566,12 @@ static void write_src(void)
- 
- 	free(markers);
- 
-+	sort_symbols_by_name();
-+	output_label("kallsyms_seqs_of_names");
-+	for (i = 0; i < table_cnt; i++)
-+		printf("\t.long\t%u\n", table[i]->seq);
-+	printf("\n");
-+
- 	output_label("kallsyms_token_table");
- 	off = 0;
- 	for (i = 0; i < 256; i++) {
 -- 
-2.25.1
-
+Regards,
+  Zhen Lei
