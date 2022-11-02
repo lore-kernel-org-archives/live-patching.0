@@ -2,31 +2,31 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 084EEC4321E
-	for <live-patching@archiver.kernel.org>; Wed,  2 Nov 2022 08:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 068A7C433FE
+	for <live-patching@archiver.kernel.org>; Wed,  2 Nov 2022 08:50:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiKBIux (ORCPT
+        id S231192AbiKBIuw (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 2 Nov 2022 04:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54092 "EHLO
+        Wed, 2 Nov 2022 04:50:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiKBIuu (ORCPT
+        with ESMTP id S230424AbiKBIud (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:50:50 -0400
+        Wed, 2 Nov 2022 04:50:33 -0400
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B7827CFA;
-        Wed,  2 Nov 2022 01:50:34 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2LFK2YjJz15MC9;
-        Wed,  2 Nov 2022 16:50:29 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150C27CFD;
+        Wed,  2 Nov 2022 01:50:31 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2LFG1g3fz15MF2;
+        Wed,  2 Nov 2022 16:50:26 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 16:50:32 +0800
+ 15.1.2375.31; Wed, 2 Nov 2022 16:50:28 +0800
 Received: from thunder-town.china.huawei.com (10.174.178.55) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 16:50:31 +0800
+ 15.1.2375.31; Wed, 2 Nov 2022 16:50:28 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -45,9 +45,9 @@ To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>,
         David Laight <David.Laight@ACULAB.COM>
-Subject: [PATCH v8 7/9] livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-Date:   Wed, 2 Nov 2022 16:49:19 +0800
-Message-ID: <20221102084921.1615-8-thunder.leizhen@huawei.com>
+Subject: [PATCH v8 4/9] kallsyms: Reduce the memory occupied by kallsyms_seqs_of_names[]
+Date:   Wed, 2 Nov 2022 16:49:16 +0800
+Message-ID: <20221102084921.1615-5-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.37.3.windows.1
 In-Reply-To: <20221102084921.1615-1-thunder.leizhen@huawei.com>
 References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
@@ -62,134 +62,103 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Currently we traverse all symbols of all modules to find the specified
-function for the specified module. But in reality, we just need to find
-the given module and then traverse all the symbols in it.
-
-Let's add a new parameter 'const char *modname' to function
-module_kallsyms_on_each_symbol(), then we can compare the module names
-directly in this function and call hook 'fn' after matching. And the
-parameter 'struct module *' in the hook 'fn' can also be deleted.
-
-Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
-                |
-Phase2:          -->f1-->f2-->f3
+kallsyms_seqs_of_names[] records the symbol index sorted by address, the
+maximum value in kallsyms_seqs_of_names[] is the number of symbols. And
+2^24 = 16777216, which means that three bytes are enough to store the
+index. This can help us save (1 * kallsyms_num_syms) bytes of memory.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- include/linux/module.h   |  4 ++--
- kernel/livepatch/core.c  | 13 ++-----------
- kernel/module/kallsyms.c | 15 ++++++++++++---
- 3 files changed, 16 insertions(+), 16 deletions(-)
+ kernel/kallsyms.c          | 18 ++++++++++++++----
+ kernel/kallsyms_internal.h |  2 +-
+ scripts/kallsyms.c         |  5 ++++-
+ 3 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index ec61fb53979a92a..0a3b44ff885a48c 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
- }
- #endif	/* CONFIG_MODULE_SIG */
- 
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data);
- 
- #endif /* _LINUX_MODULE_H */
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index ba351dfa109b6ac..48f36fd7e10b95e 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -201,6 +201,16 @@ static int compare_symbol_name(const char *name, char *namebuf)
+ 	return ret;
  }
  
- struct klp_find_arg {
--	const char *objname;
- 	const char *name;
- 	unsigned long addr;
- 	unsigned long count;
- 	unsigned long pos;
- };
- 
--static int klp_find_callback(void *data, const char *name,
--			     struct module *mod, unsigned long addr)
-+static int klp_find_callback(void *data, const char *name, unsigned long addr)
- {
- 	struct klp_find_arg *args = data;
- 
--	if ((mod && !args->objname) || (!mod && args->objname))
--		return 0;
--
- 	if (strcmp(args->name, name))
- 		return 0;
- 
--	if (args->objname && strcmp(args->objname, mod->name))
--		return 0;
--
- 	args->addr = addr;
- 	args->count++;
- 
-@@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 				  unsigned long sympos, unsigned long *addr)
- {
- 	struct klp_find_arg args = {
--		.objname = objname,
- 		.name = name,
- 		.addr = 0,
- 		.count = 0,
-@@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
- 	};
- 
- 	if (objname)
--		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-+		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
- 	else
- 		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
- 
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index f5c5c9175333df7..329cef573675d49 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
- }
- 
- #ifdef CONFIG_LIVEPATCH
--int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
--					     struct module *, unsigned long),
-+int module_kallsyms_on_each_symbol(const char *modname,
-+				   int (*fn)(void *, const char *, unsigned long),
- 				   void *data)
- {
- 	struct module *mod;
-@@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
- 
-+		if (strcmp(modname, mod->name))
-+			continue;
++static unsigned int get_symbol_seq(int index)
++{
++	unsigned int i, seq = 0;
 +
- 		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
- 		preempt_disable();
- 		kallsyms = rcu_dereference_sched(mod->kallsyms);
-@@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
- 				continue;
- 
- 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
--				 mod, kallsyms_symbol_value(sym));
-+				 kallsyms_symbol_value(sym));
- 			if (ret != 0)
- 				goto out;
- 		}
++	for (i = 0; i < 3; i++)
++		seq = (seq << 8) | kallsyms_seqs_of_names[3 * index + i];
 +
-+		/*
-+		 * The given module is found, the subsequent modules do not
-+		 * need to be compared.
-+		 */
-+		break;
- 	}
- out:
- 	mutex_unlock(&module_mutex);
++	return seq;
++}
++
+ static int kallsyms_lookup_names(const char *name,
+ 				 unsigned int *start,
+ 				 unsigned int *end)
+@@ -215,7 +225,7 @@ static int kallsyms_lookup_names(const char *name,
+ 
+ 	while (low <= high) {
+ 		mid = low + (high - low) / 2;
+-		seq = kallsyms_seqs_of_names[mid];
++		seq = get_symbol_seq(mid);
+ 		off = get_symbol_offset(seq);
+ 		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+ 		ret = compare_symbol_name(name, namebuf);
+@@ -232,7 +242,7 @@ static int kallsyms_lookup_names(const char *name,
+ 
+ 	low = mid;
+ 	while (low) {
+-		seq = kallsyms_seqs_of_names[low - 1];
++		seq = get_symbol_seq(low - 1);
+ 		off = get_symbol_offset(seq);
+ 		kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+ 		if (compare_symbol_name(name, namebuf))
+@@ -244,7 +254,7 @@ static int kallsyms_lookup_names(const char *name,
+ 	if (end) {
+ 		high = mid;
+ 		while (high < kallsyms_num_syms - 1) {
+-			seq = kallsyms_seqs_of_names[high + 1];
++			seq = get_symbol_seq(high + 1);
+ 			off = get_symbol_offset(seq);
+ 			kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+ 			if (compare_symbol_name(name, namebuf))
+@@ -269,7 +279,7 @@ unsigned long kallsyms_lookup_name(const char *name)
+ 
+ 	ret = kallsyms_lookup_names(name, &i, NULL);
+ 	if (!ret)
+-		return kallsyms_sym_address(kallsyms_seqs_of_names[i]);
++		return kallsyms_sym_address(get_symbol_seq(i));
+ 
+ 	return module_kallsyms_lookup_name(name);
+ }
+diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+index a04b7a5cb1e3eaf..27fabdcc40f5793 100644
+--- a/kernel/kallsyms_internal.h
++++ b/kernel/kallsyms_internal.h
+@@ -26,6 +26,6 @@ extern const char kallsyms_token_table[] __weak;
+ extern const u16 kallsyms_token_index[] __weak;
+ 
+ extern const unsigned int kallsyms_markers[] __weak;
+-extern const unsigned int kallsyms_seqs_of_names[] __weak;
++extern const u8 kallsyms_seqs_of_names[] __weak;
+ 
+ #endif // LINUX_KALLSYMS_INTERNAL_H_
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 07ecf7e5c49f616..04e04fbd9625caf 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -600,7 +600,10 @@ static void write_src(void)
+ 	sort_symbols_by_name();
+ 	output_label("kallsyms_seqs_of_names");
+ 	for (i = 0; i < table_cnt; i++)
+-		printf("\t.long\t%u\n", table[i]->seq);
++		printf("\t.byte 0x%02x, 0x%02x, 0x%02x\n",
++			(unsigned char)(table[i]->seq >> 16),
++			(unsigned char)(table[i]->seq >> 8),
++			(unsigned char)(table[i]->seq >> 0));
+ 	printf("\n");
+ 
+ 	output_label("kallsyms_token_table");
 -- 
 2.25.1
 
