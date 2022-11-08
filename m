@@ -2,107 +2,101 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2547C433FE
-	for <live-patching@archiver.kernel.org>; Mon,  7 Nov 2022 08:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D277C4332F
+	for <live-patching@archiver.kernel.org>; Tue,  8 Nov 2022 01:33:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbiKGIBd (ORCPT
+        id S233311AbiKHBda (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 7 Nov 2022 03:01:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        Mon, 7 Nov 2022 20:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbiKGIBc (ORCPT
+        with ESMTP id S233350AbiKHBdO (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 7 Nov 2022 03:01:32 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1270613E87;
-        Mon,  7 Nov 2022 00:01:30 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N5Nw1689NzHvjr;
-        Mon,  7 Nov 2022 16:01:05 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 16:01:28 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 16:01:28 +0800
-Subject: Re: [PATCH v8 4/9] kallsyms: Reduce the memory occupied by
- kallsyms_seqs_of_names[]
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ingo Molnar" <mingo@redhat.com>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-5-thunder.leizhen@huawei.com>
- <bd30cbc9b7594261a7b9da26e9c98da4@AcuMS.aculab.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <59edf022-45a7-3cee-a7e7-4b6480e9b679@huawei.com>
-Date:   Mon, 7 Nov 2022 16:01:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 7 Nov 2022 20:33:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA111A;
+        Mon,  7 Nov 2022 17:32:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A176B61374;
+        Tue,  8 Nov 2022 01:32:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC968C433C1;
+        Tue,  8 Nov 2022 01:32:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667871131;
+        bh=ED313/aaAI+lz49lB29Wmv20Z3nVuXhp1WXomGj7JMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YAIosAcx5ddEnbPE5VGv5y5o955A5t4+cQY/gyHGTJb2+jU4Xgk+ldbnQy+yCjVaE
+         5krArbp38G8pflcWUNemKsugI8PO9LdPYSMuz/+Gd2lSj/GfKQOto9bx8iq7j+JKXa
+         OYcGdSVe75nEOCI9UPNjwTNostb54PggF6ZUx9KclSfFXkad654d4ClVdjGkXMtnVU
+         jAGODql/ITbX5DrOVIRUYhciEP8BAqxrg3vGFSgEgJ7yPtcxORm+uh+sQG+3doZiiN
+         vQyXK/4Vap7NgMgsZiVAxqDFlJPezuHWO8ewYH+0ERYeRjdNRdR5QYqCBWqVhUwVYd
+         Mazsa0qZjMX2A==
+Date:   Mon, 7 Nov 2022 17:32:09 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Nicolai Stange <nstange@suse.de>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        jpoimboe@redhat.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of
+ shadow variables
+Message-ID: <20221108013209.eqrxs3xqtat6kksm@treble>
+References: <20221026194122.11761-1-mpdesouza@suse.com>
+ <20221026194122.11761-5-mpdesouza@suse.com>
+ <20221104010327.wa256pos75dczt4x@treble>
+ <Y2TooogxxLTIkBcj@alley>
 MIME-Version: 1.0
-In-Reply-To: <bd30cbc9b7594261a7b9da26e9c98da4@AcuMS.aculab.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y2TooogxxLTIkBcj@alley>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
+On Fri, Nov 04, 2022 at 11:25:38AM +0100, Petr Mladek wrote:
+> > I get the feeling the latter would be easier to implement (no reference
+> > counting; also maybe can be auto-detected with THIS_MODULE?) and harder
+> > for the patch author to mess up (by accidentally omitting an object
+> > which uses it).
+> 
+> I am not sure how you mean it. I guess that you suggest to store
+> the name of the livepatch module into the shadow variable.
+> And use the variable only when the livepatch module is still loaded.
+
+Actually I was thinking the klp_patch could have references to all the
+shadow variables (or shadow variable types?) it owns.
+
+Instead of reference counting, the livepatch atomic replace code could
+just migrate any previously owned shadow variables to the new klp_patch.
+
+This of course adds the restriction that such garbage-collected shadow
+variables couldn't be shared across non-replace livepatches.  But I
+wouldn't expect that to be much of a problem.
+
+Additionally, I was wondering if "which klp_patch owns which shadow
+variables" could be auto-detected somehow.
+
+For example:
+
+1) add 'struct module *owner' or 'struct klp_patch *owner' to klp_shadow
+
+2) add klp_shadow_alloc_gc() and klp_shadow_get_or_alloc_gc(), which are
+   similar to their non-gc counterparts, with a few additional
+   arguments: the klp module owner (THIS_MODULE for the caller); and a
+   destructor to be used later for the garbage collection
+
+3) When atomic replacing a patch, iterate through the klp_shadow_hash
+   and, for each klp_shadow which previously had an owner, change it to
+   be owned by the new patch
+
+4) When unloading/freeing a patch, free all its associated klp_shadows
+   (also calling destructors where applicable)
 
 
-On 2022/11/2 20:00, David Laight wrote:
-> From: Zhen Lei
->> Sent: 02 November 2022 08:49
->>
->> kallsyms_seqs_of_names[] records the symbol index sorted by address, the
->> maximum value in kallsyms_seqs_of_names[] is the number of symbols. And
->> 2^24 = 16777216, which means that three bytes are enough to store the
->> index. This can help us save (1 * kallsyms_num_syms) bytes of memory.
-> 
-> You can get the compiler to do the 'heavy lifting' for you.
-> 
-> struct uint24 {
->     unsigned int val24:24;
-> } __attribute__((packed));
-
-This method depends on byte order. If the byte order of the tool is
-different from that of the kernel, it's a problem. For example,
-cross-compile PowerPC kernel on x86.
-
-> 
-> struct uint24 table[1024];
-> 
-> works fine.
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
-> 
-> .
-> 
+I'm thinking this would be easier for the patch author, and also simpler
+overall.  I could work up a patch.
 
 -- 
-Regards,
-  Zhen Lei
+Josh
