@@ -2,170 +2,279 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F05E7C43217
-	for <live-patching@archiver.kernel.org>; Thu, 24 Nov 2022 13:05:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA28AC43217
+	for <live-patching@archiver.kernel.org>; Tue, 29 Nov 2022 01:57:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiKXNFy (ORCPT
+        id S234986AbiK2B5W (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 24 Nov 2022 08:05:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        Mon, 28 Nov 2022 20:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKXNFx (ORCPT
+        with ESMTP id S234527AbiK2B5V (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 24 Nov 2022 08:05:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3B412D32;
-        Thu, 24 Nov 2022 05:05:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 28 Nov 2022 20:57:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072573135D;
+        Mon, 28 Nov 2022 17:57:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 874F11F74A;
-        Thu, 24 Nov 2022 13:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669295151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v91GzwlaUPjJuAfOTl7gXRikD0EHCncjtrGWvP5ZMD0=;
-        b=ZEV0CVRRORp894sCNJUsBfBehybYtMM8av2KmRF6QxawMITaihrqkA/t4sI1kmPp1DCsZr
-        K22aZB6FsXl4mOPqIo5OMFA0bEWd1jaBW/hhmrxiXmzt9R+rPF0UQsIjuot51/PQfFHh78
-        bXPvMmSBd2Eqcva6nE6EdFZl5Jiz/Aw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669295151;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v91GzwlaUPjJuAfOTl7gXRikD0EHCncjtrGWvP5ZMD0=;
-        b=kisy9PlKnobjTxadB2sG32zOCmVNrUYaj/d/dEupCkeOMf0Ektuiq43GHvlAOIXNVI0o1O
-        FCyqLiqOAy89jJAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 363F713488;
-        Thu, 24 Nov 2022 13:05:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LzyCOyxsf2M6GgAAMHmgww
-        (envelope-from <mpdesouza@suse.de>); Thu, 24 Nov 2022 13:05:48 +0000
-Date:   Thu, 24 Nov 2022 10:05:45 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, jpoimboe@redhat.com, mbenes@suse.cz,
-        pmladek@suse.com
-Subject: Re: [PATCH v2 2/2] selftests: livepatch: Test livepatching a heavily
- called syscall
-Message-ID: <20221124130545.2f7cpc5xkzqiybsw@daedalus>
-References: <20220630141226.2802-1-mpdesouza@suse.com>
- <20220630141226.2802-3-mpdesouza@suse.com>
- <Ys2Li9ilYtpmJhN3@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9279661532;
+        Tue, 29 Nov 2022 01:57:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60C0C433D7;
+        Tue, 29 Nov 2022 01:57:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669687039;
+        bh=RR3l04y9mI6dUbLc2VgWj7KfTEgIhi84deXgt2t8g8I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bd+lP5H1ZonmaSTZAWSB4ReBy/DwkSVI6jWbHxgQNxSC0w50c7lnODTIzXYBDcQ7T
+         T/leNw/QTL63YtLQZJH5c7X1so28BCgBWNFj/MQZumtFY3gyHxM4YetPzhsywvdRi7
+         tUNZHknN83zWD+y6usiSTBnr+EnDPBwqk/Ma0ceVx9v0NZKHiy1aHROHSUylmyvXFu
+         rO16hrXiYEchzTaTLbhGQi0lCNRuXMwRi02q0jWAZe5T8hvKeMhQhtLz9+2Kx2w1VQ
+         nEvX3wGqHOhlgDslSPmGjDRBjjo2mh4lmP2aIOTQRpsfxxcMygRxhZA4sz8fDCwCc7
+         BErs3piClv6iw==
+Received: by mail-ej1-f49.google.com with SMTP id e27so30343924ejc.12;
+        Mon, 28 Nov 2022 17:57:19 -0800 (PST)
+X-Gm-Message-State: ANoB5pmIyiFRpnp/Gg08und5Sw7C0gGJnQXwpvLWQb2IS96ezQc05BjT
+        DEwkGyMjW3Gafh8Ok2UgyYJNue3b3X+RFPgrJhM=
+X-Google-Smtp-Source: AA0mqf7QPwy/gfx9+IQQdiRZ+nRvnL+Bi5qWVedX/jzBfS+m5qi3GdnOmGsm1gidpRnJ5G9t/0ENmzcMuZIq+IlBP8s=
+X-Received: by 2002:a17:906:3954:b0:7bf:852b:e23c with SMTP id
+ g20-20020a170906395400b007bf852be23cmr7332813eje.614.1669687038069; Mon, 28
+ Nov 2022 17:57:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ys2Li9ilYtpmJhN3@redhat.com>
+References: <20220901171252.2148348-1-song@kernel.org> <Y3expGRt4cPoZgHL@alley>
+In-Reply-To: <Y3expGRt4cPoZgHL@alley>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 28 Nov 2022 17:57:06 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+Message-ID: <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module removal
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        x86@kernel.org, joe.lawrence@redhat.com,
+        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 10:56:11AM -0400, Joe Lawrence wrote:
-> On Thu, Jun 30, 2022 at 11:12:26AM -0300, Marcos Paulo de Souza wrote:
-...
-> nit: no need to init global to 0
-> 
-> > +static int sig_int;
-> > +
-> > +void hup_handler(int signum)
+On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+[...]
+
+> >
+> > +#ifdef CONFIG_LIVEPATCH
+> > +void clear_relocate_add(Elf64_Shdr *sechdrs,
+> > +                    const char *strtab,
+> > +                    unsigned int symindex,
+> > +                    unsigned int relsec,
+> > +                    struct module *me)
 > > +{
-> > +	stop = 1;
+> > +     unsigned int i;
+> > +     Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
+> > +     Elf64_Sym *sym;
+> > +     unsigned long *location;
+> > +     const char *symname;
+> > +     u32 *instruction;
+> > +
+> > +     pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
+> > +              sechdrs[relsec].sh_info);
+> > +
+> > +     for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> > +             location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+> > +                     + rela[i].r_offset;
+> > +             sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
+> > +                     + ELF64_R_SYM(rela[i].r_info);
+> > +             symname = me->core_kallsyms.strtab
+> > +                     + sym->st_name;
+> > +
+> > +             if (ELF64_R_TYPE(rela[i].r_info) != R_PPC_REL24)
+> > +                     continue;
+> > +             /*
+> > +              * reverse the operations in apply_relocate_add() for case
+> > +              * R_PPC_REL24.
+> > +              */
+> > +             if (sym->st_shndx != SHN_UNDEF &&
+> > +                 sym->st_shndx != SHN_LIVEPATCH)
+> > +                     continue;
+> > +
+> > +             instruction = (u32 *)location;
+> > +             if (is_mprofile_ftrace_call(symname))
+> > +                     continue;
+> > +
+> > +             if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
+> > +                     continue;
+> > +
+> > +             instruction += 1;
+> > +             patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
+> > +     }
+> > +
 > > +}
+>
+> This looks like a lot of duplicated code. Isn't it?
+
+TBH, I think the duplicated code is not really bad.
+
+apply_relocate_add() is a much more complicated function, I would
+rather not mess it up to make this function a little simpler.
+
+[...]
+
+>
+> This duplicates a lot of code. Please, rename apply_relocate_add() the
+> same way as __apply_clear_relocate_add() and add the "apply" parameter.
+> Then add the wrappers for this:
+>
+> int write_relocate_add(Elf64_Shdr *sechdrs,
+>                        const char *strtab,
+>                        unsigned int symindex,
+>                        unsigned int relsec,
+>                        struct module *me,
+>                        bool apply)
+> {
+>         int ret;
+>         bool early = me->state == MODULE_STATE_UNFORMED;
+>         void *(*write)(void *, const void *, size_t) = memcpy;
+>
+>         if (!early) {
+>                 write = text_poke;
+>                 mutex_lock(&text_mutex);
+>         }
+
+How about we move the "early" logic into __write_relocate_add()?
+
+>
+>         ret = __write_relocate_add(sechdrs, strtab, symindex, relsec, me,
+>                                          write, apply);
+>
+>         if (!early) {
+>                 text_poke_sync();
+>                 mutex_unlock(&text_mutex);
+>         }
+>
+>         return ret;
+> }
+>
+> int apply_relocate_add(Elf64_Shdr *sechdrs,
+>                        const char *strtab,
+>                        unsigned int symindex,
+>                        unsigned int relsec,
+>                        struct module *me)
+> {
+>         return write_relocate_add(sechdrs, strtab, symindex, relsec, me, true);
+
+Then we just call __write_relocate_add() from here...
+
+> }
+>
+> #ifdef CONFIG_LIVEPATCH
+> void apply_relocate_add(Elf64_Shdr *sechdrs,
+>                         const char *strtab,
+>                         unsigned int symindex,
+>                         unsigned int relsec,
+>                         struct module *me)
+> {
+>         write_relocate_add(sechdrs, strtab, symindex, relsec, me, false);
+
+and here.
+
+
+> }
+> #endif
+>
+>
+> > +#endif
 > > +
-> > +void int_handler(int signum)
+> >  #endif
+> >
+> >  int module_finalize(const Elf_Ehdr *hdr,
+> > --- a/kernel/livepatch/core.c
+> > +++ b/kernel/livepatch/core.c
+> > @@ -316,6 +316,45 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+> >       return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
+> >  }
+> >
+> > +static void klp_clear_object_relocations(struct module *pmod,
+> > +                                     struct klp_object *obj)
 > > +{
-> > +	stop = 1;
-> > +	sig_int = 1;
+> > +     int i, cnt;
+> > +     const char *objname, *secname;
+> > +     char sec_objname[MODULE_NAME_LEN];
+> > +     Elf_Shdr *sec;
+> > +
+> > +     objname = klp_is_module(obj) ? obj->name : "vmlinux";
+> > +
+> > +     /* For each klp relocation section */
+> > +     for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
+> > +             sec = pmod->klp_info->sechdrs + i;
+> > +             secname = pmod->klp_info->secstrings + sec->sh_name;
+> > +             if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * Format: .klp.rela.sec_objname.section_name
+> > +              * See comment in klp_resolve_symbols() for an explanation
+> > +              * of the selected field width value.
+> > +              */
+> > +             secname = pmod->klp_info->secstrings + sec->sh_name;
+> > +             cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
+> > +             if (cnt != 1) {
+> > +                     pr_err("section %s has an incorrectly formatted name\n",
+> > +                            secname);
+> > +                     continue;
+> > +             }
+
+Actually, I think we don't need the cnt check here. Once it is removed,
+there isn't much duplicated logic.
+
+> > +
+> > +             if (strcmp(objname, sec_objname))
+> > +                     continue;
+> > +
+> > +             clear_relocate_add(pmod->klp_info->sechdrs,
+> > +                                pmod->core_kallsyms.strtab,
+> > +                                pmod->klp_info->symndx, i, pmod);
+> > +     }
 > > +}
-> > +
-> > +int main(int argc, char *argv[])
-> > +{
-> > +	pid_t orig_pid, pid;
-> > +	long count = 0;
-> > +
-> > +	signal(SIGHUP, &hup_handler);
-> > +	signal(SIGINT, &int_handler);
-> > +
-> > +	orig_pid = syscall(SYS_getpid);
-> > +
-> > +	while (!stop) {
-> > +		pid = syscall(SYS_getpid);
-> > +		if (pid != orig_pid)
-> > +			return 1;
-> 
-> This test doesn't care about the user program return code, but I wonder
-> if the status should be flipped -- this is the desired code path, not
-> the one at the end of main(), right?
-> 
-...
-> > +	 */
-> > +	mutex_lock(&kpid_mutex);
-> > +	list_for_each_entry_safe(kpid, temp, &klp_pid_list, list) {
-> > +		if (current->pid == kpid->pid) {
-> > +			list_del(&kpid->list);
-> > +			kfree(kpid);
-> > +			npids--;
-> > +			break;
-> 
-> I think it would be safer to return task_tgid_vnr() here, but ...
-> 
-> > +		}
-> > +	}
-> > +	mutex_unlock(&kpid_mutex);
-> > +
-> > +	return task_tgid_vnr(current);
-> 
-> task_pid_vnr() here.  That way we're only changing behavior for the
-> processes in the list and not all programs across the system.
+>
+> Huh, this duplicates a lot of tricky code.
+>
+> It is even worse because this squashed code from two functions
+> klp_apply_section_relocs() and klp_apply_object_relocs()
+> into a single function. As a result, the code duplication is not
+> even obvious.
+>
+> Also the suffix "_reloacations() does not match the suffix of
+> the related funciton:
+>
+>         + klp_apply_object_relocs()             (existing)
+>         + klp_clear_object_relocations()        (new)
+>
+> This all would complicate maintenance of the code.
+>
+> Please, implement a common:
+>
+> int klp_write_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+>                              const char *shstrtab, const char *strtab,
+>                              unsigned int symndx, unsigned int secndx,
+>                              const char *objname, bool apply);
+>
+> and
+>
+> int klp_write_object_relocs(struct klp_patch *patch,
+>                             struct klp_object *obj,
+>                             bool apply);
+>
+> and add the respective wrappers:
+>
+> int klp_apply_section_relocs();   /* also needed in module/main.c */
+> int klp_apply_object_relocs();
+> void klp_clear_object_relocs();
 
-I believe that these two suggestions can be linked per your answer. First of
-all, I didn't write the original test program, but I agree that we can make it
-better.
+With the above simplification (removing cnt check), do we still need
+all these wrappers? Personally, I think they will make the code more
+difficult to follow..
 
-My intent by upstreaming the test was to ensure that test programs
-would keep working even when livepatching getpid while having processes calling
-getpid nonstop. For the purpose of the test, the test module livepatches getpid,
-but keeping the same behavior as before. The only change is to keep track of the
-test programs that need to transition to livepatched state.
-
-Per your comment on the test program it seems that we expected to receive a
-different value from getpid, but it's not the case here. I believe the chec on
-test program is confusing and doesn't bring any benefit, so maybe it's better to
-remove it and keep the test even simpler:
-
-  --- a/tools/testing/selftests/livepatch/test_programs/test_klp-call_getpid.c
-  +++ b/tools/testing/selftests/livepatch/test_programs/test_klp-call_getpid.c
-  @@ -26,18 +26,13 @@ void int_handler(int signum)
-
-   int main(int argc, char *argv[])
-   {
-  -   pid_t orig_pid, pid;
-      long count = 0;
-
-      signal(SIGHUP, &hup_handler);
-      signal(SIGINT, &int_handler);
-
-  -   orig_pid = syscall(SYS_getpid);
-  -
-      while (!stop) {
-  -       pid = syscall(SYS_getpid);
-  -       if (pid != orig_pid)
-  -           return 1;
-  +       (void)syscall(SYS_getpid);
-          count++;
-      }
-
-As as only care about the processes transitioning to the livepatched state, we
-really don't care about the getpid return value (as it should be the same from patches
-and unpatched state).
-
-I believe this resolves both issues. What do you think?
+Thanks,
+Song
