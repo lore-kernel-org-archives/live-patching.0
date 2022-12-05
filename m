@@ -2,67 +2,64 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D035C47088
-	for <live-patching@archiver.kernel.org>; Fri,  2 Dec 2022 21:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C134C47089
+	for <live-patching@archiver.kernel.org>; Mon,  5 Dec 2022 17:30:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiLBVGQ (ORCPT
+        id S231939AbiLERa6 (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 2 Dec 2022 16:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        Mon, 5 Dec 2022 12:30:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbiLBVGP (ORCPT
+        with ESMTP id S232165AbiLERa5 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 2 Dec 2022 16:06:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68958EAB51
-        for <live-patching@vger.kernel.org>; Fri,  2 Dec 2022 13:05:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670015116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 5 Dec 2022 12:30:57 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810C821889;
+        Mon,  5 Dec 2022 09:30:56 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 40B3A1FDC4;
+        Mon,  5 Dec 2022 17:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670261455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
-        b=Z97EgXADZwa6PrU7do8DlVOEDgfUJ+dfNvmMu/okE9KnGtqQ4HAFDmOV/8AyBZkAvt/YTU
-        tbwy+NVyWmFAALCbCIEMm7+08L0RFEcBgBqBEZM4UikcRaiWD9BbdBnWBkBxr7ISxBy00N
-        zftoCW1PNhBw+MdGKkeQ832IFYuB6eI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-18-qEmT4WjzMyCgVOjzt6K1kw-1; Fri, 02 Dec 2022 16:05:15 -0500
-X-MC-Unique: qEmT4WjzMyCgVOjzt6K1kw-1
-Received: by mail-qv1-f69.google.com with SMTP id ng1-20020a0562143bc100b004bb706b3a27so20032518qvb.20
-        for <live-patching@vger.kernel.org>; Fri, 02 Dec 2022 13:05:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:subject:from:references:cc:to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cFFC8DQP235KAQhynGslmUAEiqukq9bbJSq7ImsePcg=;
-        b=5cMJaog5tPC0ypRf7VboS7bY3jElVQRU4dU6kZrbnNphNR4J8xjGVF90eFBZ5sVlvv
-         sQaYfpjO0Qw1qGtNWQP/l0Cqk4lTing5xeEom4nFRlB5ohHWeskrEVs7FK/nDWiZSnly
-         Dxa6PkKTH7EE67YvQ/1B2iFfjXuyGp9EhchDeMvyAJHU1XyO4m2hzdR00in+cqgBT/Ik
-         7Pixdu7yDRCvj1cefpu/O3mOxYOPy/pnwZGdyjO0GzPYbdNJdGm6egjoJ/O+uTTbbFmJ
-         3Dc1W5mVMyg3h0YngnTkrFitg9KUXqZTinvCo9wexezt3FmR+iubss+j5Pcr/jqw4D8h
-         c7Aw==
-X-Gm-Message-State: ANoB5pkTnEWwqTVb3NDNwFRtj6a4T1TDh/8siW3jWT7FnhVdRf81vHPM
-        zaEmG4t6x9lGj8uIIeZUeJDP2DuHWI8vX6WGkTKbV0AnHq5qGuYE1K572kNvyoE0RVPGIpxF9bk
-        SxZZsYYEbFruv6C4Exiy83fVndw==
-X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826956qtx.39.1670015114801;
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7vp3IqAgQ6ZMG3YOqX9iv6KuZoBk5uX+Ua75WkVAW8bb9j7DfCTCTUCSehg/cIXkMvDfHQgw==
-X-Received: by 2002:a05:622a:249:b0:39c:b5a2:5eb2 with SMTP id c9-20020a05622a024900b0039cb5a25eb2mr67826934qtx.39.1670015114551;
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm6305004qko.34.2022.12.02.13.05.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 13:05:14 -0800 (PST)
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>,
+        bh=XP2yXFvK7QD2Hx6ii/OrZTCxmC3WDL2ShgKRt5rncp0=;
+        b=Ri+NN332f/KKyePcz82OFU8wUVc4dWOzi2tNoEHJpQj+aFtWu82NmkO490PdVym5Sp17RI
+        XkeL+TPjPhyk/x9VHsG8yH81Glyy5G49eLRIak487q0YW+lZGShccKEsK2rdteJ1CiFE+n
+        66ARIMb9DPP9AM1PlTJW13c3TpaUCTU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670261455;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XP2yXFvK7QD2Hx6ii/OrZTCxmC3WDL2ShgKRt5rncp0=;
+        b=JlUtnvEujhtJpXKTrG9YN18kQuL1oaq0OB387IAdTZ72YkiiMKPnHUevps3roMfEg8jszt
+        KPq9iTopFNAmb0CQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 93F931348F;
+        Mon,  5 Dec 2022 17:30:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id hKrvFMwqjmOocwAAGKfGzw
+        (envelope-from <mpdesouza@suse.de>); Mon, 05 Dec 2022 17:30:52 +0000
+Date:   Mon, 5 Dec 2022 14:30:49 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Miroslav Benes <mbenes@suse.cz>,
         Marcos Paulo de Souza <mpdesouza@suse.com>,
         live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
         shuah@kernel.org, jpoimboe@redhat.com
+Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+Message-ID: <20221205173049.k66g7o5svtdwnw4w@daedalus>
 References: <20220630141226.2802-1-mpdesouza@suse.com>
  <3f9f91a3-4c08-52f4-1d3c-79f835271222@linuxfoundation.org>
  <alpine.LSU.2.21.2207010931270.13603@pobox.suse.cz>
@@ -72,46 +69,47 @@ References: <20220630141226.2802-1-mpdesouza@suse.com>
  <c5a6cb8a-7b99-249e-5ba4-732fc0ed2e30@linuxfoundation.org>
  <Y4nEhb7yPK5l54IX@alley>
  <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 0/2] livepatch: Move tests from lib/livepatch to
- selftests/livepatch
-Message-ID: <ed5a1f19-1e2e-7a04-7cc8-1a0324b2d508@redhat.com>
-Date:   Fri, 2 Dec 2022 16:05:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ <ed5a1f19-1e2e-7a04-7cc8-1a0324b2d508@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <21025073-0ed6-427e-219e-99e9731f6688@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed5a1f19-1e2e-7a04-7cc8-1a0324b2d508@redhat.com>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On 12/2/22 3:03 PM, Shuah Khan wrote:
-> On 12/2/22 02:25, Petr Mladek wrote:
->>
->> Yes, kABI is not backward compatible. But building the tests
->> modules out-of-tree way would allow to build test modules with
->> different kABI from the same sources.
->>
+On Fri, Dec 02, 2022 at 04:05:25PM -0500, Joe Lawrence wrote:
+> On 12/2/22 3:03 PM, Shuah Khan wrote:
+> > On 12/2/22 02:25, Petr Mladek wrote:
+> >>
+> >> Yes, kABI is not backward compatible. But building the tests
+> >> modules out-of-tree way would allow to build test modules with
+> >> different kABI from the same sources.
+> >>
+> > 
+> > Okay. This is a solid reason for livepatch modules to live under
+> > sefltests. Let's capture this in README and the other updates that
+> > need to be made to it in v3.
+> > 
 > 
-> Okay. This is a solid reason for livepatch modules to live under
-> sefltests. Let's capture this in README and the other updates that
-> need to be made to it in v3.
+> One additional benefit, however small, is that I think everyone is
+> building production livepatches, source based or via kpatch-build, as
+> out-of-tree modules.  (Miroslav/Petr/Marcos please correct me if I'm
+> wrong about source based.)
+
+You're correct. We construct our livepatches source based and build them
+as out-of-tree modules.
+
 > 
+> Having the livepatch selftests live under selftests/ would imply that
+> new subsystem (build) features would have to support the production
+> build use case from the get go.
 
-One additional benefit, however small, is that I think everyone is
-building production livepatches, source based or via kpatch-build, as
-out-of-tree modules.  (Miroslav/Petr/Marcos please correct me if I'm
-wrong about source based.)
+Agreed. This change makes the modules to be built as real world livepatches.
 
-Having the livepatch selftests live under selftests/ would imply that
-new subsystem (build) features would have to support the production
-build use case from the get go.
-
-Regards,
-
--- 
-Joe
-
+> 
+> Regards,
+> 
+> -- 
+> Joe
+> 
