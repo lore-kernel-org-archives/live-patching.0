@@ -2,78 +2,62 @@ Return-Path: <live-patching-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D07B4C4332F
-	for <live-patching@archiver.kernel.org>; Mon, 12 Dec 2022 08:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD04C4332F
+	for <live-patching@archiver.kernel.org>; Mon, 12 Dec 2022 14:58:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiLLIQC (ORCPT
+        id S232429AbiLLO6a (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 12 Dec 2022 03:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        Mon, 12 Dec 2022 09:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiLLIQB (ORCPT
+        with ESMTP id S232390AbiLLO62 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 12 Dec 2022 03:16:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357E7C745;
-        Mon, 12 Dec 2022 00:15:59 -0800 (PST)
+        Mon, 12 Dec 2022 09:58:28 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB222656C;
+        Mon, 12 Dec 2022 06:58:27 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9C10E337F2;
-        Mon, 12 Dec 2022 08:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670832958; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fkpn+tZcJeudANWrekmNzhJ9sWWRStUcNOk75TUGVOA=;
-        b=SJ/+WWdzMjwNVHUSzgOqB/oaFKfchvGfon2Thz64qkaYhD47mzXyBL4U+yxHRN4klzl0+B
-        1rUsmxeY/vPKxv9IZtKM/cmn+Yjl4+R9Krt9ssu3+AI9SnyImRzataysig3eXvO2zAJ9Yq
-        7ksf3UtdkMkA0dGmk40TEHXOdfTuvkQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670832958;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fkpn+tZcJeudANWrekmNzhJ9sWWRStUcNOk75TUGVOA=;
-        b=NWtmdhrlM4aNQ/hGXkEvMQzIyNYUxlqdwMKG7pGo9kSYOvG0zhzfbTl9AxBXhMIbsvLxb0
-        q3pFWmUqQYmxcPCw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 67D881F8B3;
+        Mon, 12 Dec 2022 14:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670857106; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=R/8X7O5xD4y0+p+ZS3irGgqXxUCtysr8GPX03Pzflvk=;
+        b=GvRp7/NKqUPWJyyhvLovYeDXQkt4oLI+qwyCimrzL2s3WtLUJ0Y8GVk1r7bpVYzRUS5c6X
+        JNFfyaeHk2cqlrubHLSM8WItVK886KBHVo9bX/sZOcq4310m1YCZfzJCZe61xbyoN399pq
+        ByXfGPQggzuEjf0rmpvoLXSwIebMpBk=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4CD622C141;
-        Mon, 12 Dec 2022 08:15:58 +0000 (UTC)
-Date:   Mon, 12 Dec 2022 09:16:01 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Song Liu <song@kernel.org>
-cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module
- removal
-In-Reply-To: <CAPhsuW53njtTrL=w33QBY5AiSftNxZ=UOQ1_qZ+qsp5VL1vU0g@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2212120912270.4964@pobox.suse.cz>
-References: <20220901171252.2148348-1-song@kernel.org> <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz> <CAPhsuW53njtTrL=w33QBY5AiSftNxZ=UOQ1_qZ+qsp5VL1vU0g@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by relay2.suse.de (Postfix) with ESMTPS id 44C742C141;
+        Mon, 12 Dec 2022 14:58:26 +0000 (UTC)
+Date:   Mon, 12 Dec 2022 15:58:23 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: [GIT PULL] livepatching for 6.2
+Message-ID: <Y5dBjz3g1V0exuIp@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170912 (1.9.0)
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-> > Petr has commented on the code aspects. I will just add that s390x was not
-> > dealt with at the time because there was no live patching support for
-> > s390x back then if I remember correctly and my notes do not lie. The same
-> > applies to powerpc32. I think that both should be fixed as well with this
-> > patch. It might also help to clean up the ifdeffery in the patch a bit.
-> 
-> I don't have test environments for s390 and powerpc, so I really don't know
-> whether I am doing something sane for them.
+Hi Linus,
 
-I would say that if you implement it, there are people here who would be 
-able help with the testing and reviewing the changes if CCed.
+please pull the latest livepatching changes from
 
-> Would you have time to finish these parts? (Or maybe the whole patch..)
+  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-6.2
 
-Unfortunately I cannot promise anything at the moment. I am really sorry 
-about that.
+======================================
 
-Miroslav
+- code cleanup
+
+----------------------------------------------------------------
+Zhen Lei (1):
+      livepatch: Move the result-invariant calculation out of the loop
+
+ kernel/livepatch/transition.c | 54 +++++++++++++++++++++----------------------
+ 1 file changed, 27 insertions(+), 27 deletions(-)
