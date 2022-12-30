@@ -1,142 +1,222 @@
-Return-Path: <live-patching-owner@kernel.org>
+Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA2F7C4167B
-	for <live-patching@archiver.kernel.org>; Sat, 17 Dec 2022 17:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17A60C4708E
+	for <live-patching@archiver.kernel.org>; Fri, 30 Dec 2022 11:29:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiLQRhW (ORCPT
+        id S234797AbiL3L3K (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Sat, 17 Dec 2022 12:37:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        Fri, 30 Dec 2022 06:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLQRhV (ORCPT
+        with ESMTP id S234874AbiL3L2x (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Sat, 17 Dec 2022 12:37:21 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06BB1144E
-        for <live-patching@vger.kernel.org>; Sat, 17 Dec 2022 09:37:19 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-180-orGdr5X-MxKcGNPDPyiq_g-1; Sat, 17 Dec 2022 17:37:16 +0000
-X-MC-Unique: orGdr5X-MxKcGNPDPyiq_g-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 17 Dec
- 2022 17:37:14 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.044; Sat, 17 Dec 2022 17:37:14 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Geert Uytterhoeven' <geert@linux-m68k.org>,
-        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Andreas Schwab <schwab@linux-m68k.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Fri, 30 Dec 2022 06:28:53 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D01A140C0;
+        Fri, 30 Dec 2022 03:28:52 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Nk2w02KdgzqTHX;
+        Fri, 30 Dec 2022 19:24:16 +0800 (CST)
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 30 Dec 2022 19:28:49 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Joe Lawrence <joe.lawrence@redhat.com>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Masahiro Yamada" <masahiroy@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        "Jiri Olsa" <jolsa@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: RE: [PATCH v9] kallsyms: Add self-test facility
-Thread-Topic: [PATCH v9] kallsyms: Add self-test facility
-Thread-Index: AQHZEWkbzV5WljPUpEGVjsixemOWL65wtOBggAAGFACAAAApIIAADHsSgAAbgaCAATN6O4AAPulA
-Date:   Sat, 17 Dec 2022 17:37:14 +0000
-Message-ID: <b673f98db7d14d53a6e1a1957ef81741@AcuMS.aculab.com>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
- <e81710a9-2c45-0724-ec5f-727977202858@huawei.com>
- <CAMuHMdWAAQNJd21fhodDONb40LFMae3V_517iT22FykCqG90Og@mail.gmail.com>
- <4aaede14-8bd3-6071-f17b-7efcb5f0de42@huawei.com>
- <66ec4021-b633-09ba-73ee-b24cdb3fa25a@huawei.com>
- <CAMuHMdVUvPRvEvGNmB9WO0yg=w04g4q2_1hfOypqEnrYkFr6YQ@mail.gmail.com>
- <06345dca-0afb-00a5-c9e9-5ba830d8ad05@huawei.com>
- <52450ec1da164d6d87587063c3b3d3d2@AcuMS.aculab.com>
- <592dce7a0de24c62bd31c29f86ce6c1b@AcuMS.aculab.com>
- <87pmcjidfe.fsf@igel.home>
- <1ba1fadb39994a4d91edabdfd9d69fa6@AcuMS.aculab.com>
- <87len7ibtt.fsf@igel.home>
- <c7cebe9da0474eb880ab14124ba290d0@AcuMS.aculab.com>
- <87fsdfib07.fsf@igel.home>
- <819801284eb745d9a4189759bad297f5@AcuMS.aculab.com>
- <20221216115314.6120beb7@gandalf.local.home>
- <ecf4939dbff84709a1782a8e8851b29f@AcuMS.aculab.com>
- <20221216121947.7d03b651@gandalf.local.home>
- <20221216123805.6eba002c@gandalf.local.home>
- <83701d57c0064c709669c03cecc38356@AcuMS.aculab.com>
- <066d4a61-3df9-b9c8-81a2-40dfcd3c73ef@huawei.com>
- <CAMuHMdXeusQbcfymQpKD4EWjBgKF4Wr8o2LyJhyaj3tS2MKTiQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXeusQbcfymQpKD4EWjBgKF4Wr8o2LyJhyaj3tS2MKTiQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        <linux-modules@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 3/3] kallsyms: Delete an unused parameter related to {module_}kallsyms_on_each_symbol()
+Date:   Fri, 30 Dec 2022 19:27:29 +0800
+Message-ID: <20221230112729.351-4-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
+In-Reply-To: <20221230112729.351-1-thunder.leizhen@huawei.com>
+References: <20221230112729.351-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuDQo+IFNlbnQ6IDE3IERlY2VtYmVyIDIwMjIgMTM6MzcN
-Ci4uLg0KPiA+IFNvIGl0J3MgcXVpdGUgcG9zc2libGUgKEkgZGlkbid0IGRpc2Fzc2VtYmxlIHZt
-bGludXgsIGJlY2F1c2UgSSBkaWRuJ3QgbGVhcm4gbTY4ayk6DQoNClByZXR0eSBlYXN5IHRvIHJl
-YWQgaXQuDQoNCi4uLg0KPiA+IC8vYmluYXJ5IHNlYXJjaA0KPiA+IHdoaWxlIChsb3cgPD0gaGln
-aCkgew0KPiA+ICAgICAuLi4NCj4gPiAgICAgcmV0ID0gY29tcGFyZV9zeW1ib2xfbmFtZShuYW1l
-LCBuYW1lYnVmKTsgICAtLS0tPiAoMSkNCj4gPiAgICAgaWYgKCFyZXQpDQo+ID4gICAgICAgICBi
-cmVhazsNCj4gPiB9DQo+ID4NCj4gPiBsb3cgPSBtaWQ7DQo+ID4gd2hpbGUgKGxvdykgew0KPiA+
-ICAgICAuLi4NCj4gPiAgICAgaWYgKGNvbXBhcmVfc3ltYm9sX25hbWUobmFtZSwgbmFtZWJ1Zikp
-ICAgICAtLS0tPiAoMikNCj4gPiAgICAgICAgIGJyZWFrOw0KPiA+ICAgICBsb3ctLTsNCj4gPiB9
-DQo+ID4NCj4gPiBUaGUgcG9pbnRlciAnbmFtZScgYW5kICduYW1lYnVmJyBvZiAoMSkgYW5kICgy
-KSBhcmUgdGhlIHNhbWUsDQo+ID4gc28gdGhlICdpZicgc3RhdGVtZW50IG9mICgyKSBtYXliZSBv
-bWl0dGVkIGJ5IGNvbXBpbGVyLg0KPiANCj4gQW5kIHRoYXQgaXMgZXhhY3RseSB3aGF0IGlzIGhh
-cHBlbmluZzogdGhlcmUgYXJlIDMgY2FsbHMgdG8gc3RyY21wKCkNCj4gd2l0aCB0aGUgZXhhY3Qg
-c2FtZSBwYXJhbWV0ZXJzLCBhbmQgZ2NjIG9taXRzIHR3byBvZiB0aGVtLCBiZWNhdXNlIGl0DQo+
-IGFzc3VtZXMgaXQgY2FuIHByZWRpY3QgdGhlIG91dGNvbWUsIGFzIHRoZSBwYXJhbWV0ZXJzIGhh
-dmVuJ3QgY2hhbmdlZC4NCg0KQWRkaXRpb25hbGx5IGlmIGthbGxzeW1zX2V4cGFuZF9zeW1ib2wo
-KSBpcyBpbmxpbmVkIGFsbCB0aGUgd3JpdGVzDQppdCBkb2VzIHRvIG5hbWVidWZbXSBjYW4gZ2V0
-IGRpc2NhcmRlZCAtIGJlY2F1c2UgdGhleSBhcmUgdXNlZC4NCldoaWNoIHByb2JhYmx5IGNhdXNl
-cyB0aGUgZW50aXJlIGZ1bmN0aW9uIHRvIGdldCBvcHRpbWlzZWQgYXdheS4NCk1vcmUgY29kZSBm
-b2xsb3dzIC0gdGhlcmUgY291bGQgZWFzaWx5IGJlIG5vdGhpbmcgbGVmdCBleGNlcHQNCnRoZSBi
-aW5hcnkgY2hvcCBpdHNlbGYgdGhhdCBlbnN1cmVzIHRoZSBsb29wIHRlcm1pbmF0ZXMuDQoNCj4g
-Tm93LCB3aHkgaGF2ZSB3ZSBuZXZlciBub3RpY2VkIHRoaXMgYmVmb3JlPyBJIGd1ZXNzIGJlY2F1
-c2UgaXQgaXMgdmVyeQ0KPiB1bmNvbW1vbiBmb3IgYSBmdW5jdGlvbiBjYWxsaW5nIHN0cmNtcCgp
-IG11bHRpcGxlIHRpbWVzIHdpdGggdGhlIGV4YWN0DQo+IHNhbWUgcG9pbnRlciBwYXJhbWV0ZXJz
-LiAgQ29tbW9uIHVzZXJzIGNoYW5nZSB0aGUgcG9pbnRlcnMgYmVmb3JlDQo+IGV2ZXJ5IGNhbGws
-IGluc3RlYWQgb2Yga2VlcGluZyB0aGUgcG9pbnRlciwgYnV0IGNoYW5naW5nIHRoZSBidWZmZXJz
-Jw0KPiBjb250ZW50cyB0aGUgcG9pbnRlcnMgcG9pbnQgdG8uDQo+IA0KPiA+IEJ5IHRoZSB3YXks
-IEkgdHJpZWQgbm8gdm9sYXRpbGUgYnV0IHdpdGgNCj4gPiArICAgICAgICAgICAgICAgOiA6ICJt
-ZW1vcnkiKTsNCj4gPiBJdCBhbHNvIHdvcmtzIHdlbGwuDQo+IA0KPiBJbmRlZWQsIGdjYyB2ZXJz
-aW9uIDkuNC4wIChVYnVudHUgOS40LjAtMXVidW50dTF+MjAuMDQpIGdlbmVyYXRlcyB0aGUNCj4g
-c2FtZSBjb2RlIGZvciBlaXRoZXIgYWRkaW5nIHRoZSB2b2xhdGlsZSBvciB0aGUgbWVtb3J5IGNs
-b2JiZXIuDQo+IA0KPiBOb3RlIHRoYXQgc3RyY21wKCkgaXMgdGhlIG9ubHkgZnVuY3Rpb24gaW4g
-YXJjaC9tNjhrL2luY2x1ZGUvYXNtL3N0cmluZy5oDQo+IHVzaW5nIGlubGluZSBhc20gd2l0aG91
-dCB0aGUgdm9sYXRpbGUga2V5d29yZC4gIEkgZ3Vlc3Mgd2Ugd291bGQNCj4gc2VlIHNpbWlsYXIg
-aXNzdWVzIHdpdGggc3RybmxlbigpICh3aGljaCBhbHNvIGRvZXNuJ3QgbW9kaWZ5IG1lbW9yeSkN
-Cj4gd2hlbiBkcm9wcGluZyB0aGUgdm9sYXRpbGUuDQoNClRoZSAndm9sYXRpbGUnIGVuc3VyZXMg
-dGhhdCBzdHJjbXAoKSBkb2Vzbid0IGdldCB0aHJvd24gYXdheS4NCkl0IGRvZXNuJ3QgZW5zdXJl
-IHRoYXQgdGhlIHdyaXRlcyB0byBuYW1lYnVmW10gYXJlbid0IG9wdGltaXNlZCBhd2F5Lg0KDQpP
-bmx5IHRoZSBtZW1vcnkgY2xvYmJlciBkb2VzIHRoYXQuDQoNClNvIGFsbCB0aG9zZSBhc20gZnVu
-Y3Rpb25zIG5lZWQgdGhlIG1lbW9yeSBjbG9iYmVyLg0KVGhleSBwcm9iYWJseSBkb24ndCBuZWVk
-IHZvbGF0aWxlIC0gc2luY2UgdGhlIGNhbGwgaGFzDQphIHJlc3VsdC4NCkluZGVlZCBzaW5jZSB0
-aGUgbWVtb3J5IGNsb2JiZXIgYWxzbyBzYXlzICd3cml0ZXMgdG8gbWVtb3J5Jw0KaXQgbWF5IG1h
-a2UgdGhlIHZvbGF0aWxlIHBvaW50bGVzcy4NCg0KSSdkIGFsc28gYWRkIHRoZSAnZWFybHkgY2xv
-YmJlcicgYW5ub3RhdGlvbiB0byB0aGUgcmVzdWx0Lg0KSXQgbWF5IG5vdCBtYXR0ZXIgc2luY2Ug
-dGhlIHBvaW50ZXJzIGFyZSBpbi1vdXQsIGJ1dCBzaW5jZQ0KdGhlIHBvaW50ZXIgb3V0cHV0cyBh
-cmUgZGlzY2FyZGVkIHNvbWUgJ2JyYWluLWRhbWFnZWQnDQpyZWdpc3RlciBhbGxvY2F0aW9uIG1p
-Z2h0IGFzc2lnbiB0aGUgc2FtZSByZWdpc3Rlci4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQg
-QWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVz
-LCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+The parameter 'struct module *' in the hook function associated with
+{module_}kallsyms_on_each_symbol() is no longer used. Delete it.
+
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ include/linux/kallsyms.h   | 3 +--
+ include/linux/module.h     | 6 ++----
+ kernel/kallsyms.c          | 5 ++---
+ kernel/kallsyms_selftest.c | 6 +++---
+ kernel/livepatch/core.c    | 3 +--
+ kernel/module/kallsyms.c   | 5 ++---
+ kernel/trace/ftrace.c      | 3 +--
+ 7 files changed, 12 insertions(+), 19 deletions(-)
+
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index 0065209cc00424b..d4079b3d951d1ef 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -67,8 +67,7 @@ static inline void *dereference_symbol_descriptor(void *ptr)
+ 
+ #ifdef CONFIG_KALLSYMS
+ unsigned long kallsyms_sym_address(int idx);
+-int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+-				      unsigned long),
++int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ 			    void *data);
+ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
+ 				  const char *name, void *data);
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 514bc81568c5220..39f928e9d9fed7e 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -880,13 +880,11 @@ static inline bool module_sig_ok(struct module *module)
+ 
+ #if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
+ int module_kallsyms_on_each_symbol(const char *modname,
+-				   int (*fn)(void *, const char *,
+-					     struct module *, unsigned long),
++				   int (*fn)(void *, const char *, unsigned long),
+ 				   void *data);
+ #else
+ static inline int module_kallsyms_on_each_symbol(const char *modname,
+-						 int (*fn)(void *, const char *,
+-						 struct module *, unsigned long),
++						 int (*fn)(void *, const char *, unsigned long),
+ 						 void *data)
+ {
+ 	return -EOPNOTSUPP;
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 83f499182c9aa31..77747391f49b66c 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -288,8 +288,7 @@ unsigned long kallsyms_lookup_name(const char *name)
+  * Iterate over all symbols in vmlinux.  For symbols from modules use
+  * module_kallsyms_on_each_symbol instead.
+  */
+-int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+-				      unsigned long),
++int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
+ 			    void *data)
+ {
+ 	char namebuf[KSYM_NAME_LEN];
+@@ -299,7 +298,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+ 
+ 	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+ 		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+-		ret = fn(data, namebuf, NULL, kallsyms_sym_address(i));
++		ret = fn(data, namebuf, kallsyms_sym_address(i));
+ 		if (ret != 0)
+ 			return ret;
+ 		cond_resched();
+diff --git a/kernel/kallsyms_selftest.c b/kernel/kallsyms_selftest.c
+index 9c94f06aa951971..1b6891a0a79052b 100644
+--- a/kernel/kallsyms_selftest.c
++++ b/kernel/kallsyms_selftest.c
+@@ -97,7 +97,7 @@ static struct test_item test_items[] = {
+ 
+ static char stub_name[KSYM_NAME_LEN];
+ 
+-static int stat_symbol_len(void *data, const char *name, struct module *mod, unsigned long addr)
++static int stat_symbol_len(void *data, const char *name, unsigned long addr)
+ {
+ 	*(u32 *)data += strlen(name);
+ 
+@@ -156,7 +156,7 @@ static void test_kallsyms_compression_ratio(void)
+ 	pr_info(" ---------------------------------------------------------\n");
+ }
+ 
+-static int lookup_name(void *data, const char *name, struct module *mod, unsigned long addr)
++static int lookup_name(void *data, const char *name, unsigned long addr)
+ {
+ 	u64 t0, t1, t;
+ 	unsigned long flags;
+@@ -212,7 +212,7 @@ static bool match_cleanup_name(const char *s, const char *name)
+ 	return !strncmp(s, name, len);
+ }
+ 
+-static int find_symbol(void *data, const char *name, struct module *mod, unsigned long addr)
++static int find_symbol(void *data, const char *name, unsigned long addr)
+ {
+ 	struct test_stat *stat = (struct test_stat *)data;
+ 
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index c973ed9e42f8177..bdb40a4b1f29845 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -142,8 +142,7 @@ static int klp_match_callback(void *data, unsigned long addr)
+ 	return 0;
+ }
+ 
+-static int klp_find_callback(void *data, const char *name,
+-			     struct module *mod, unsigned long addr)
++static int klp_find_callback(void *data, const char *name, unsigned long addr)
+ {
+ 	struct klp_find_arg *args = data;
+ 
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index ab2376a1be88e7e..c4fe856e5052ff7 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -495,8 +495,7 @@ unsigned long module_kallsyms_lookup_name(const char *name)
+ }
+ 
+ int module_kallsyms_on_each_symbol(const char *modname,
+-				   int (*fn)(void *, const char *,
+-					     struct module *, unsigned long),
++				   int (*fn)(void *, const char *, unsigned long),
+ 				   void *data)
+ {
+ 	struct module *mod;
+@@ -525,7 +524,7 @@ int module_kallsyms_on_each_symbol(const char *modname,
+ 				continue;
+ 
+ 			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+-				 mod, kallsyms_symbol_value(sym));
++				 kallsyms_symbol_value(sym));
+ 			if (ret != 0)
+ 				goto out;
+ 		}
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index d249a55d9005765..8f12524f8062686 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -8271,8 +8271,7 @@ struct kallsyms_data {
+  * and returns 1 in case we resolved all the requested symbols,
+  * 0 otherwise.
+  */
+-static int kallsyms_callback(void *data, const char *name,
+-			     struct module *mod, unsigned long addr)
++static int kallsyms_callback(void *data, const char *name, unsigned long addr)
+ {
+ 	struct kallsyms_data *args = data;
+ 	const char **sym;
+-- 
+2.25.1
 
