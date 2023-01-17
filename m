@@ -2,48 +2,56 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79C18C46467
-	for <live-patching@archiver.kernel.org>; Mon, 16 Jan 2023 10:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DBECC3DA78
+	for <live-patching@archiver.kernel.org>; Tue, 17 Jan 2023 14:47:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjAPKMv (ORCPT
+        id S229652AbjAQOrP (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 16 Jan 2023 05:12:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        Tue, 17 Jan 2023 09:47:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230225AbjAPKLM (ORCPT
+        with ESMTP id S231955AbjAQOrO (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:11:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEA91ABF0;
-        Mon, 16 Jan 2023 02:10:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 17 Jan 2023 09:47:14 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AD56A6C;
+        Tue, 17 Jan 2023 06:47:12 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 939CD688A3;
+        Tue, 17 Jan 2023 14:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1673966831; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X+KmcDJ3VMYAKIgRCSMWLz60BmNCLcIoLMlIb31IIdg=;
+        b=Yyeuba8Sn41i5l7DHG5FOkV9L3Jb2zofXMy5w/U42ojgqZeEP5baYXL4g/dFZBlT46TrDF
+        zssj9x7LrekODEDZGjEgAirHmQM11WpSp8XaHTRgvV8lJfrAoOEz5k+9ty+HC0u9QxMdsu
+        Av5lpu2BPFFpvTg5O7OPDv78SZMWL/c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1673966831;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X+KmcDJ3VMYAKIgRCSMWLz60BmNCLcIoLMlIb31IIdg=;
+        b=1Qt8sfGMaaEn8rqaJzLxBUigNExU7McMqhn+hh8wmGwpLDIt2Z0ub0UZxlbM5hj/0GQpXh
+        YkuUHwPSx2regxAA==
+Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEE4FB80B14;
-        Mon, 16 Jan 2023 10:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CB4C433F0;
-        Mon, 16 Jan 2023 10:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673863817;
-        bh=Aj54/H0x1pXEGgKMDyVJ8829D+rrZ/WP8KLwhEbUa+Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F1pN3VelIJx5yiDHdoTYDGP9q6uij53ygLuV+Cty5y2QXokctCA+nmzy9DdqqXVgU
-         js0P0XuliX0eYtfHSxVimTrx+TOmeoXBBZwEEU9ACiZkkkaupayahBDEFlExGsEchs
-         MOmTbmR4aNK/+OJPvtQOUKHflPEytEmmly7sZQxCY4LtGHpoINOp5lPO42PFkBdyqx
-         1FS8fGzxVm7CpWE0MBDBu+leVki/iYu1bVvRCTYvHlm3TLSZjNY9kNDaRk02TwOQzg
-         lZ6kMQSdglAPUGIakq5pGSF1WqaM5D6xRxxay2Pkht39Wi8sHR3YLoy1iC8ad30poY
-         IbpWAJ37akJSA==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        by relay2.suse.de (Postfix) with ESMTPS id D16282C141;
+        Tue, 17 Jan 2023 14:47:10 +0000 (UTC)
+Date:   Tue, 17 Jan 2023 15:47:15 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Jiri Olsa <jolsa@kernel.org>
+cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-modules@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Jiri Kosina <jikos@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-modules@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
@@ -54,48 +62,44 @@ Cc:     bpf@vger.kernel.org, live-patching@vger.kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCHv3 bpf-next 0/3] kallsyms: Optimize the search for module symbols by livepatch and bpf
-Date:   Mon, 16 Jan 2023 11:10:06 +0100
-Message-Id: <20230116101009.23694-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.39.0
+Subject: Re: [PATCHv3 bpf-next 1/3] livepatch: Improve the search performance
+ of module_kallsyms_on_each_symbol()
+In-Reply-To: <20230116101009.23694-2-jolsa@kernel.org>
+Message-ID: <alpine.LSU.2.21.2301171546520.24433@pobox.suse.cz>
+References: <20230116101009.23694-1-jolsa@kernel.org> <20230116101009.23694-2-jolsa@kernel.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-hi,
-sending new version of [1] patchset posted originally by Zhen Lei.
-It contains 2 changes that improove search performance for livepatch
-and bpf.
+On Mon, 16 Jan 2023, Jiri Olsa wrote:
 
-v3 changes:
-  - fixed off by 1 issue, simplified condition, added acks [Song]
-  - added module attach as subtest [Andrii]
+> From: Zhen Lei <thunder.leizhen@huawei.com>
+> 
+> Currently we traverse all symbols of all modules to find the specified
+> function for the specified module. But in reality, we just need to find
+> the given module and then traverse all the symbols in it.
+> 
+> Let's add a new parameter 'const char *modname' to function
+> module_kallsyms_on_each_symbol(), then we can compare the module names
+> directly in this function and call hook 'fn' after matching. If 'modname'
+> is NULL, the symbols of all modules are still traversed for compatibility
+> with other usage cases.
+> 
+> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+>                 |
+> Phase2:          -->f1-->f2-->f3
+> 
+> Assuming that there are m modules, each module has n symbols on average,
+> then the time complexity is reduced from O(m * n) to O(m) + O(n).
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> Acked-by: Song Liu <song@kernel.org>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-v2 changes:
-  - reworked the bpf change and meassured the performance
-  - adding new selftest to benchmark kprobe multi module attachment
-  - skipping patch 3 as requested by Zhen Lei
-  - added Reviewed-by for patch 1 [Petr Mladek]
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-thanks,
-jirka
-
-
-[1] https://lore.kernel.org/bpf/20221230112729.351-1-thunder.leizhen@huawei.com/
----
-Jiri Olsa (2):
-      selftests/bpf: Add serial_test_kprobe_multi_bench_attach_kernel/module tests
-      bpf: Change modules resolving for kprobe multi link
-
-Zhen Lei (1):
-      livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
-
- include/linux/module.h                                     |  6 ++++--
- kernel/livepatch/core.c                                    | 10 +---------
- kernel/module/kallsyms.c                                   | 13 ++++++++++++-
- kernel/trace/bpf_trace.c                                   | 93 +++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------
- kernel/trace/ftrace.c                                      |  2 +-
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 19 ++++++++++++++-----
- 6 files changed, 79 insertions(+), 64 deletions(-)
+M
