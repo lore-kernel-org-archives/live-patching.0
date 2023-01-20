@@ -2,61 +2,63 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE37AC27C76
-	for <live-patching@archiver.kernel.org>; Fri, 20 Jan 2023 22:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED44C38A23
+	for <live-patching@archiver.kernel.org>; Fri, 20 Jan 2023 22:12:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjATWMh (ORCPT
+        id S229999AbjATWMj (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 20 Jan 2023 17:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        Fri, 20 Jan 2023 17:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjATWMg (ORCPT
+        with ESMTP id S229973AbjATWMh (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 20 Jan 2023 17:12:36 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BF036449
-        for <live-patching@vger.kernel.org>; Fri, 20 Jan 2023 14:12:34 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id y69so3110852iof.3
-        for <live-patching@vger.kernel.org>; Fri, 20 Jan 2023 14:12:34 -0800 (PST)
+        Fri, 20 Jan 2023 17:12:37 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 262A8EFAC
+        for <live-patching@vger.kernel.org>; Fri, 20 Jan 2023 14:12:36 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id b127so3101271iof.8
+        for <live-patching@vger.kernel.org>; Fri, 20 Jan 2023 14:12:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=digitalocean.com; s=google;
-        h=cc:to:message-id:date:content-transfer-encoding:mime-version
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1Ao9NXaWgBOUiK+rj9v9X8Q1xZNi+V9uTD46WKKtdw=;
-        b=CP69oNJLnjiVV4tB0rYNSmBoYhq8zTAf5aeWGwBovXoy78p1YHNttTfFLpgUdkZt5y
-         CF6BkjRK5BXmetvzcOipE6ZWALHWD4fDKhxrzQDRZETLKzd8lYiiMlj8HPAiBZDkBq+1
-         Fjdww4iDsWbfzKLRwjC85+Yo6BGDTWL5y5Tv4=
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4THOFKr/oi12Lh9VLujYmInaKqJLT8dgCNKdQB2cfmk=;
+        b=T4T5wgg++tuZ/vEq0fZnEjrnICkN93HtNwM8BOci4baJ4tNoZUO7qzGEVTNBfA+zQu
+         n+V3DygwoipkiGcrdikPsPg9EX2QlA0RNlOvWazocCNMxG+ELMunhJNN2QxkSiTowOD9
+         0wWjNg+idMoxJJ1ObfK0zxrJuNMwQRT2ae9oY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:content-transfer-encoding:mime-version
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U1Ao9NXaWgBOUiK+rj9v9X8Q1xZNi+V9uTD46WKKtdw=;
-        b=16AXSckU+8K5kbk/Spw/MvDHGRGeYzOIRy2uiRV6Mgmt7A0Lgu52dqYT3zumQ1TPIr
-         rfaC79zqij/SWRNBBNMpuO13wwjEto1BVw23aGaeAWmjqbV5Q2IRA0wFHJ2duy6ku7fL
-         /Dx4sWzF3hyrAz88hNMlgmgodoz9HCC+jcUmQRqGPKnbwJwbdCoXsidagFgk19QDIj5h
-         Di6SowknVach2k8TSJ2IbEZv8bXyMe4wlEyrecfCmXtoesOdqkFCdyuWJkTl4TbzFtJH
-         miNJHX2qDfYpWd0vlN6TP9dFQtTrvpezzex+dGjJWT/Nx3lIpYhVXuswAx9vvVTlR0Ch
-         tgjg==
-X-Gm-Message-State: AFqh2krljOwOUsMEDNg9WEfMjiwT2l7J1xRpOF/pMqOHbtD4pw/RPoJ4
-        Yf/RhMfO2KBVl0XtC4sGyAdBig==
-X-Google-Smtp-Source: AMrXdXum9CTPzdCUTloBWrH1lZInZCJwTTZUYqpFqr+e9Y/2n3mTCcLg6hp+gsZAesCShxp7/GqsWA==
-X-Received: by 2002:a6b:500a:0:b0:705:5e1e:eb6e with SMTP id e10-20020a6b500a000000b007055e1eeb6emr9205488iob.11.1674252753715;
-        Fri, 20 Jan 2023 14:12:33 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4THOFKr/oi12Lh9VLujYmInaKqJLT8dgCNKdQB2cfmk=;
+        b=RytQ+VkYbxjGTJgAUKAA1vU30fwky6fpuOFt2ssOPIV1HVQCFdtdlxO5H8xONpUAFN
+         xEjSOKHJxYaAHgAK78n1MkT7ZdL4OWr638TRRmxeUVwiOBO0AkWXuhETSMwf0z2oJCTr
+         22YkrfzsuoeogJmkti+rjlJ9PoE/pwWUIoz/uh1rpwqOm7nQGVcf8xfzNOEH7DNBY1v9
+         ZMNS1bKwWZ4LJnSDe4cgbADRkl97Rh+oyZNC+3E0YHiZDlCGLW7YaSdUm5PBqo00/rWO
+         LCVJqevEJAimMStuYMa7tXeV+OwBjMYAQOdXAoMAFBIDZf7Sw2YQqhyvF0ImPKB/DwZg
+         K78g==
+X-Gm-Message-State: AFqh2kpS8NQ6PCOA2IiMW4XYsbQETEFFZHf1gz0qC3yIYDTby2V1cyIg
+        EBFlJlAE4vkWptDcvdK0Q1f/ug==
+X-Google-Smtp-Source: AMrXdXuYH0nZSV1qNftw1CzohAHNXptoGk5ziEa4Bpij01Z0mb6PK5Xk5Fi9HVzcgmqxNrAazaw+Lg==
+X-Received: by 2002:a5e:df08:0:b0:704:6e8d:4891 with SMTP id f8-20020a5edf08000000b007046e8d4891mr12238768ioq.3.1674252755532;
+        Fri, 20 Jan 2023 14:12:35 -0800 (PST)
 Received: from localhost ([136.37.131.79])
-        by smtp.gmail.com with ESMTPSA id cs8-20020a056638470800b003a7cadffda7sm1519487jab.2.2023.01.20.14.12.33
+        by smtp.gmail.com with ESMTPSA id j5-20020a5d93c5000000b006bba42f7822sm13342047ioo.52.2023.01.20.14.12.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Jan 2023 14:12:33 -0800 (PST)
+        Fri, 20 Jan 2023 14:12:35 -0800 (PST)
 From:   "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>
 X-Google-Original-From: "Seth Forshee (DigitalOcean)" <sforshee@kernel.org>
-Subject: [PATCH 0/2] vhost: improve livepatch switching for heavily loaded vhost worker kthreads
+Date:   Fri, 20 Jan 2023 16:12:22 -0600
+Subject: [PATCH 2/2] vhost: check for pending livepatches from vhost worker
+ kthreads
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAMQRy2MC/w3LOw6AIAwA0KuYzjZBWNTbFGykkVRD/QzGu8v4hveCcRU2mLsXKt9ismvD0HeQMu
- nKKEszeOeDG7zDO+924lYOtEfOlEVXjDRRIA5jHAnajGSMsZKm3K5epXzfD5ena69qAAAA
-Date:   Fri, 20 Jan 2023 16:12:20 -0600
-Message-Id: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+Message-Id: <20230120-vhost-klp-switching-v1-2-7c2b65519c43@kernel.org>
+References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
+In-Reply-To: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
 To:     Petr Mladek <pmladek@suse.com>, Jason Wang <jasowang@redhat.com>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
@@ -68,70 +70,57 @@ Cc:     virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
         netdev@vger.kernel.org, live-patching@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2416; i=sforshee@kernel.org;
- h=from:subject:message-id; bh=EZbjAIdznm3Oej+eWIGyRgmoqSdbR0GomfdbWyUvWuE=;
- b=owEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBjyxHK47dK5XiK+U7PMs1DUY+EH512EmtrWsinE62O
- st1NWfiJATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxyQUCY8sRygAKCRBTA5mu5fQxySm3B/
- 9RzhyLuYXteP+GKtAYPSH91mkV9to22qctt0HVI4O7jF/xfnsSaW4H0H02HzXQL4C8vk9TICOgCpWM
- pXpuuKMmpauwn5I88hvtmnChrAtfuwXV9F/UZOx/bcGLSB0XyBo6ZeZhGFtiBSptCzz8vAjY181OnP
- DAN50d3RjfNYScU+jrA3MfX9R0/PfKs71zuNpV02R961kdFFUwIS/tPPHJHkElpqV/jm9BLIkCYle/
- Bwg0bcI2xNiyjrSUqq5rr8jayRwWFBpLFlz3HgMSaIugOyfVtjr2ZTXwNjwmvhBPu7+KsrMWT/MUWO
- 5AS2iykCZxhYrlFLHs79+KNjXkreR5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1164; i=sforshee@kernel.org;
+ h=from:subject:message-id; bh=4/niAYH6EV14H83dRR2LugTxSHfcyLm3BmgkkAhqns4=;
+ b=owEBbQGS/pANAwAKAVMDma7l9DHJAcsmYgBjyxHO/ViIOpErIY20s4GDksHjnp6o0DAE12QlN8dK
+ hhzTEKaJATMEAAEKAB0WIQSQnt+rKAvnETy4Hc9TA5mu5fQxyQUCY8sRzgAKCRBTA5mu5fQxyfOWB/
+ 0WuOaZX+X5hCUgwSQTrkcv8eFNZr4ccIejTsTobwcs5msz5xGxh69uUHYc01UIvAoWd1KmcPNRwrUQ
+ L1d3KILMoPNtB9E1KUGutwyCKQ+II25ZpJEN4NwvS1ne/2RTuYLC3JAE/5KXJBPrgkYtamqmAlQigj
+ qPsmksCw5XYnJL8mlFNPnKi7mRUrO5wzG6Nvfklg6ueJJ0RjChqfxx7ihMiyz/i6NYxwnWrdb81ThR
+ bvCgejkYkOCxXGU141uIoNj8L/+LxSJt7V4fBLFhWS7StagI41mGFFMKQDYshldbxo3ni4dt209Pxc
+ r41Nzfigh02pcyKBNKotRlwsrmhIEy
 X-Developer-Key: i=sforshee@kernel.org; a=openpgp;
  fpr=2ABCA7498D83E1D32D51D3B5AB4800A62DB9F73A
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-We've fairly regularaly seen liveptches which cannot transition within kpatch's
-timeout period due to busy vhost worker kthreads. In looking for a solution the
-only answer I found was to call klp_update_patch_state() from a safe location.
-I tried adding this call to vhost_worker(), and it works, but this creates the
-potential for problems if a livepatch attempted to patch vhost_worker().
-Without a call to klp_update_patch_state() fully loaded vhost kthreads can
-never switch because vhost_worker() will always appear on the stack, but with
-the call these kthreads can switch but will still be running the old version of
-vhost_worker().
+Livepatch relies on stack checking of sleeping tasks to switch kthreads,
+so a busy kthread can block a livepatch transition indefinitely. We've
+seen this happen fairly often with busy vhost kthreads.
 
-To avoid this situation I've added a new function, klp_switch_current(), which
-switches the current task only if its stack does not include any function being
-patched. This allows kthreads to safely attempt switching themselves if a patch
-is pending. There is at least one downside, however. Since there's no way for
-the kthread to track whether it has already tried to switch for a pending patch
-it can end up calling klp_switch_current() repeatedly when it can never be
-safely switched.
+Add a check to call klp_switch_current() from vhost_worker() when a
+livepatch is pending. In testing this allowed vhost kthreads to switch
+immediately when they had previously blocked livepatch transitions for
+long periods of time.
 
-I don't know whether this is the right solution, and I'm happy to try out other
-suggestions. But in my testing these patches proved effective in consistently
-switching heavily loaded vhost kthreads almost immediately.
-
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>
-To: Miroslav Benes <mbenes@suse.cz>
-To: Petr Mladek <pmladek@suse.com>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-To: Jason Wang <jasowang@redhat.com>
-Cc: live-patching@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org
-Cc: virtualization@lists.linux-foundation.org
-Cc: netdev@vger.kernel.org
 Signed-off-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-
 ---
-Seth Forshee (DigitalOcean) (2):
-      livepatch: add an interface for safely switching kthreads
-      vhost: check for pending livepatches from vhost worker kthreads
+ drivers/vhost/vhost.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- drivers/vhost/vhost.c         |  4 ++++
- include/linux/livepatch.h     |  2 ++
- kernel/livepatch/transition.c | 11 +++++++++++
- 3 files changed, 17 insertions(+)
----
-base-commit: 5dc4c995db9eb45f6373a956eb1f69460e69e6d4
-change-id: 20230120-vhost-klp-switching-ba9a3ae38b8a
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index cbe72bfd2f1f..d8624f1f2d64 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -30,6 +30,7 @@
+ #include <linux/interval_tree_generic.h>
+ #include <linux/nospec.h>
+ #include <linux/kcov.h>
++#include <linux/livepatch.h>
+ 
+ #include "vhost.h"
+ 
+@@ -366,6 +367,9 @@ static int vhost_worker(void *data)
+ 			if (need_resched())
+ 				schedule();
+ 		}
++
++		if (unlikely(klp_patch_pending(current)))
++			klp_switch_current();
+ 	}
+ 	kthread_unuse_mm(dev->mm);
+ 	return 0;
 
-Best regards,
 -- 
-Seth Forshee (DigitalOcean) <sforshee@kernel.org>
+b4 0.10.1
