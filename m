@@ -2,117 +2,139 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5104DC05027
-	for <live-patching@archiver.kernel.org>; Mon, 23 Jan 2023 17:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91E96C38142
+	for <live-patching@archiver.kernel.org>; Tue, 24 Jan 2023 12:25:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjAWRfL (ORCPT
+        id S233907AbjAXMZO (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 23 Jan 2023 12:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
+        Tue, 24 Jan 2023 07:25:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233807AbjAWRe5 (ORCPT
+        with ESMTP id S233889AbjAXMZN (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 23 Jan 2023 12:34:57 -0500
+        Tue, 24 Jan 2023 07:25:13 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A4A2FCE3;
-        Mon, 23 Jan 2023 09:34:19 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5D8F62184F;
-        Mon, 23 Jan 2023 17:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1674495216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726D53C2A6;
+        Tue, 24 Jan 2023 04:24:36 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 06BAC2188B;
+        Tue, 24 Jan 2023 12:24:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674563058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ro2DBmNZbamdtWM6haiWhuRN1QfFV7RGG2FGjrIg8aM=;
-        b=B0E16fqLvDIZc49JKXgQL1KMe/ZMdDf1geh0eLDSJpgE3iehTOteBtRWNmQXNHlzAd9Mp5
-        upoZmIC2c+wQl86xCM15+ELwNdr4p39JB8fTf0UH+u+0ld2rb68Kv0tGEZydJ5HDT2JmG3
-        WQuLYBaDSDbr21G8huC3rX1XK8dR6fQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1674495216;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ro2DBmNZbamdtWM6haiWhuRN1QfFV7RGG2FGjrIg8aM=;
-        b=PCa+aAoeZfChR2FcxE8ZZmBB5qnvAlp26qjdtNHRr9bOHwHSWj3OrG3oOKdfw82sq9yTBL
-        mSeAqIzzTwEe47CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=LERYfcoY7Br0MatyvmWjDynukO2x4aKPQySf93qqKIo=;
+        b=nIiZa9SAETllTox4m0UfwaOLX6w+mxKxwAjE2q16uaA8yDXcvpo4inB1fMhhwIFjYuOHN0
+        DyH0+Pv7maDk+q3COtFKeeNhntCuIyQrLhuhvEiWstwMTPUNHZSp5Nl9LrCThczRb7xWHF
+        +Zdtp3MmgQjGf78cVU0cG2cMx8IaulM=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5845A1357F;
-        Mon, 23 Jan 2023 17:33:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qJNYB+7EzmOYHgAAMHmgww
-        (envelope-from <mpdesouza@suse.de>); Mon, 23 Jan 2023 17:33:34 +0000
-Date:   Mon, 23 Jan 2023 14:33:31 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Marcos Paulo de Souza <mpdesouza@suse.com>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        jpoimboe@redhat.com, joe.lawrence@redhat.com
-Subject: Re: [PATCH v2 0/4] livepatch: Add garbage collection for shadow
- variables
-Message-ID: <20230123173331.2rvelrrbkaitw56r@daedalus>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
- <Y2D4ZgWqB0E9viPy@alley>
+        by relay2.suse.de (Postfix) with ESMTPS id D3E172C141;
+        Tue, 24 Jan 2023 12:24:17 +0000 (UTC)
+Date:   Tue, 24 Jan 2023 13:24:15 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Song Liu <song@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        live-patching@vger.kernel.org, x86@kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH v10 2/2] livepatch,x86: Clear relocation targets on a
+ module removal
+Message-ID: <Y8/N7zMLUnMh259N@alley>
+References: <20230121004945.697003-1-song@kernel.org>
+ <20230121004945.697003-2-song@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2D4ZgWqB0E9viPy@alley>
+In-Reply-To: <20230121004945.697003-2-song@kernel.org>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 11:43:50AM +0100, Petr Mladek wrote:
-> On Wed 2022-10-26 16:41:18, Marcos Paulo de Souza wrote:
-> > Hello,
-> > 
-> > This is the v2 of the livepatch shadow GC patches. The changes are minor since
-> > nobody asked for for big code changes.
-> > 
-> > Changes from v1:
-> > * Reworked commit messages (Petr)
-> > * Added my SoB which was missing in some patches, or the ordering was wrong. (Josh)
-> > * Change __klp_shadow_get_or_use to __klp_shadow_get_or_add_locked and add a comment (Petr)
-> > * Add lockdep_assert_held on __klp_shadow_get_or_add_locked (Petr)
-> >   about it's meaning (Petr)
-> > * CCing LKML (Josh)
-> > 
-> > Some observations:
-> > * Petr has reviewed some of the patches that we created. I kept the Reviewed-by
-> >   tags since he wrote the patches some time ago and now he reviewed them again
-> >   on the ML.
-> > * There were questions about possible problems about using klp_shadow_types
-> >   instead of using ids, but Petr already explained that internally it still uses
-> >   the id to find the correct livepatch.
-> > * Regarding the possibility of multiple patches use the same ID, the problem
-> >   already existed before. Petr suggested using a "stringified" version using
-> >   name and id, but nobody has commented yet. I can implement such feature in a
-> >   v3 if necessary.
-> > 
-> > Marcos Paulo de Souza (2):
-> >   livepatch/shadow: Introduce klp_shadow_type structure
-> >   livepatch/shadow: Add garbage collection of shadow variables
-> > 
-> > Petr Mladek (2):
-> >   livepatch/shadow: Separate code to get or use pre-allocated shadow
-> >     variable
-> >   livepatch/shadow: Separate code removing all shadow variables for a
-> >     given id
+On Fri 2023-01-20 16:49:45, Song Liu wrote:
+> Josh reported a bug:
 > 
-> From my POV, the patchset is ready for pushing upstream.
+>   When the object to be patched is a module, and that module is
+>   rmmod'ed and reloaded, it fails to load with:
+> 
+>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> 
+>   The livepatch module has a relocation which references a symbol
+>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>   tries to replace the old relocation with a new one, it sees that
+>   the previous one is nonzero and it errors out.
+> 
+> He also proposed three different solutions. We could remove the error
+> check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> ("x86/module: Detect and skip invalid relocations"). However the check
+> is useful for detecting corrupted modules.
+> 
+> We could also deny the patched modules to be removed. If it proved to be
+> a major drawback for users, we could still implement a different
+> approach. The solution would also complicate the existing code a lot.
+> 
+> We thus decided to reverse the relocation patching (clear all relocation
+> targets on x86_64). The solution is not
+> universal and is too much arch-specific, but it may prove to be simpler
+> in the end.
+> 
+> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Originally-by: Miroslav Benes <mbenes@suse.cz>
+> Signed-off-by: Song Liu <song@kernel.org>
+> Acked-by: Miroslav Benes <mbenes@suse.cz>
+> 
+> --- a/arch/x86/kernel/module.c
+> +++ b/arch/x86/kernel/module.c
+> @@ -129,22 +129,27 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+>  	return 0;
+>  }
+>  #else /*X86_64*/
+> -static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+> +static int __write_relocate_add(Elf64_Shdr *sechdrs,
+>  		   const char *strtab,
+>  		   unsigned int symindex,
+>  		   unsigned int relsec,
+>  		   struct module *me,
+> -		   void *(*write)(void *dest, const void *src, size_t len))
+> +		   void *(*write)(void *dest, const void *src, size_t len),
+> +		   bool apply)
+>  {
+>  	unsigned int i;
+>  	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+>  	Elf64_Sym *sym;
+>  	void *loc;
+>  	u64 val;
+> +	u64 zero = 0ULL;
+>  
+> -	DEBUGP("Applying relocate section %u to %u\n",
+> +	DEBUGP("%s relocate section %u to %u\n",
+> +	       apply ? "Applying" : "Clearing",
+>  	       relsec, sechdrs[relsec].sh_info);
+>  	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
+> +		int size = 0;
 
-Petr, what do you think about merging the first two patches, since they just
-cleanups and simplifications?
+The value 0 should never be used. It is better to do not initialize
+it at all so that the compiler would warn when the variable might be
+used uninitialized.
 
-> 
-> Well, we need to get approval from kpatch-build users. Joe described
-> possible problems in replay for v3, see
-> https://lore.kernel.org/r/b5fc2891-2fb0-4aa7-01dd-861da22bb7ea@redhat.com
-> 
-> Best Regards,
-> Petr
+Note that this warning is not enabled by default. It can be enabled
+with 
+
+	$> make W=2 arch/x86/kernel/module.o
+
+> +
+>  		/* This is where to make the change */
+>  		loc = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
+>  			+ rel[i].r_offset;
+
+Otherwise, it looks good.
+
+With the removed initialization, feel free to use:
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
