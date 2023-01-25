@@ -2,68 +2,69 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F2C9C54EAA
-	for <live-patching@archiver.kernel.org>; Wed, 25 Jan 2023 03:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F66C54E94
+	for <live-patching@archiver.kernel.org>; Wed, 25 Jan 2023 05:54:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234571AbjAYDic (ORCPT
+        id S234005AbjAYFyP (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 24 Jan 2023 22:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        Wed, 25 Jan 2023 00:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbjAYDia (ORCPT
+        with ESMTP id S232753AbjAYFyO (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 24 Jan 2023 22:38:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4665C3EC59;
-        Tue, 24 Jan 2023 19:38:18 -0800 (PST)
+        Wed, 25 Jan 2023 00:54:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7194892;
+        Tue, 24 Jan 2023 21:54:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC62AB81893;
-        Wed, 25 Jan 2023 03:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392C0C433D2;
-        Wed, 25 Jan 2023 03:38:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07D476141D;
+        Wed, 25 Jan 2023 05:54:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9B4C433D2;
+        Wed, 25 Jan 2023 05:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674617891;
-        bh=4uS3feTw0NdsdG5j9CW0iXk86qPLpoPkIfhS+7MuwBk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FWTczkGqad6vrR5MnA61pukJK9ZQgmfUzqn5fhAfJ51yNdytxxJIXelAc7/0gt+Qz
-         P99aPLtECpEUIzZx5fKUhbF7sGzfIHEOeuW/dQWtgCZhMIheuOnq1BssJcaT6Abexo
-         cGeLvrBQIWls+CMQWfJ9XeRrgjIAZvr1vpYsXZ3lK2iXvrRgKJ/NptPayW0ORTKQVr
-         y9+F6n5AVq/ZPwD5m/fc/Q+cRhQ4kzw8aku3ESEB2uypkwdAMJz7x/B01ELedgrRV/
-         bBnipkAZn9ewYYG9tsZqJ0esbtKApmZlFEGfE0Hgx1qo8AGN+yqr2Ajf+SJMsn5XDd
-         rKmnRNNWwIcMg==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 0/2] powerpc: Fix livepatch module re-patching issue
-Date:   Tue, 24 Jan 2023 19:38:03 -0800
-Message-Id: <cover.1674617130.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.39.0
+        s=k20201202; t=1674626052;
+        bh=JIber7cTfE9ThxMrYyG/mxwkbRzILpS6h12Z6O1fhcs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MkZysPwqbD6HWPhFavr6Z+uZa5RCwE0rTC1iC87F4+bWo0kZ0wVUe/sLgSOEJuaJb
+         Pr4V8dbEiTwOXcMgUFWpZl02JaVM/N2ZHa+xvnmI9DKqdM/hj/r750X2oW4CdTOZPv
+         tnldu7QNioehfjwh3MKWekpzNFDYAEyg9RvCG10oYn5zXLV7twWU3YNgvxN67e3n8F
+         WdyLYrc7+N0/4yqMEirm9tB2wc39ccGkJT5BRyQL6hbjkU755zkP1pkY+pMm5sCFkD
+         Sm60X7pFWBazZGXpUkxJ/fPLqUHGinWytoN9YitlSO5Fhha+AYRZW5JA1Engy73NtU
+         zU1TCD2CeXZrA==
+Received: by mail-lj1-f175.google.com with SMTP id y9so15425304lji.2;
+        Tue, 24 Jan 2023 21:54:12 -0800 (PST)
+X-Gm-Message-State: AFqh2kpsgIcAwlcA4kP0sqYen79R6kpIasOiZY/ifoEMDx/4/EEgROmO
+        9chY1y2CaeSsWnr954dsYpIW26SYnLpnjsDb5jA=
+X-Google-Smtp-Source: AMrXdXvwTh3TnItQH+Of30p8yazMgU0vmxKOZ3BJ+NF7tXNDrhWd6Q3bd7TrD/6soqGyBgQ+RLdt+h4NEd3WVYVD+B8=
+X-Received: by 2002:a2e:a304:0:b0:287:14be:5d05 with SMTP id
+ l4-20020a2ea304000000b0028714be5d05mr1494540lje.495.1674626050411; Tue, 24
+ Jan 2023 21:54:10 -0800 (PST)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+References: <cover.1674617130.git.jpoimboe@kernel.org> <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+In-Reply-To: <15baf76c271a0ae09f7b8556e50f2b4251e7049d.1674617130.git.jpoimboe@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 24 Jan 2023 21:53:58 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6Ee+RT86MUffgS+4zvJjG3JFAz=qp=LHeTW=RWPhCYzw@mail.gmail.com>
+Message-ID: <CAPhsuW6Ee+RT86MUffgS+4zvJjG3JFAz=qp=LHeTW=RWPhCYzw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] powerpc/module_64: Improve restore_r2() return semantics
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Fix a livepatch bug seen when reloading a patched module.
+On Tue, Jan 24, 2023 at 7:38 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+>
+> restore_r2() returns 1 on success, which is surprising for a non-boolean
+> function.  Change it to return 0 on success and -errno on error to match
+> kernel coding convention.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-This is the powerpc counterpart to Song Liu's fix for a similar issue on
-x86:
-
-  https://lkml.kernel.org/lkml/20230121004945.697003-2-song@kernel.org
-
-Josh Poimboeuf (2):
-  powerpc/module_64: Improve restore_r2() return semantics
-  powerpc/module_64: Fix "expected nop" error on module re-patching
-
- arch/powerpc/kernel/module_64.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
-
--- 
-2.39.0
-
+Acked-by: Song Liu <song@kernel.org>
