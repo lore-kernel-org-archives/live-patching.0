@@ -2,86 +2,110 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93750C54E94
-	for <live-patching@archiver.kernel.org>; Tue, 24 Jan 2023 22:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327FAC54E94
+	for <live-patching@archiver.kernel.org>; Wed, 25 Jan 2023 03:38:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbjAXWdL (ORCPT
+        id S231281AbjAYDiX (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 24 Jan 2023 17:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        Tue, 24 Jan 2023 22:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbjAXWdA (ORCPT
+        with ESMTP id S233279AbjAYDiW (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:33:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6395593;
-        Tue, 24 Jan 2023 14:32:45 -0800 (PST)
+        Tue, 24 Jan 2023 22:38:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7085CCA26;
+        Tue, 24 Jan 2023 19:38:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79C3CB816E1;
-        Tue, 24 Jan 2023 22:32:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D82C433EF;
-        Tue, 24 Jan 2023 22:32:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED74D61444;
+        Wed, 25 Jan 2023 03:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1AAC433A0;
+        Wed, 25 Jan 2023 03:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674599563;
-        bh=O+TDDdp7SpLSIQghWRuuMhr8V3iv3q3uTu4o8VupFKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ivDKtTkxMPIyZnXHRYqe88giy94iZBNfT1PPK12c4EddjdYTRGd2diWyoPYIrl1wV
-         UuC80dSL1gTZxwArChhDeFlIobE2dIC2/nf0NsuZOyQV7MwMzzyAwPm2O3G61m6C5H
-         Ske2n2UrZemcmLdD7sCaf/QdtY/5ywjm7Q0wgb96t95JDeZhu61RUs/IO6xiKdxxpl
-         CM8v3VyaV/k/W9oVNyJvIqaL/+FDP+KU2qdfPHvBBafhsC3EbB00q8q6tvsF8TtTuJ
-         DOVRS5113cIpt6KZFYKy/hTBMELFhclgyVfBL5iuEn7SPQK0JLDYSjVAssp9ZInaPd
-         t3UHrto6SSGCg==
-Date:   Tue, 24 Jan 2023 14:32:41 -0800
+        s=k20201202; t=1674617892;
+        bh=7M3ieHPKjncgevNaIxm++BYHAAhc0S9LqYRA8tUI6Pc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=P9J1452odLsdx9doxYgTkxrLdCcOxbiWEcNN3c1SS4mdkU1oxRzvV4a4XV/0BbQ9l
+         SBxFaspcH9MniyYLQbBXgGXc/40u0BVnlosMkZ59hGsQD2ZtlCSgjxkQ6YRqMLPlSZ
+         PrGLsThlzNCrIgruY4wNOh2EKMnjXOqodtyk565vVkwRA9c3ZM9fgB+A5DldgqdSYt
+         tQw6v6Rp0lqJA5umtMy0jcsmp3utJc6DJPUHg7Qip/IOYG6z7+TqLVowgk8ynnZS3N
+         8r+3N4ZEqgI0VoBXDnvPlvm6BvZES1t+sHzbRcI1WtgVfxlZ53ysJD7yxDpif/2MR6
+         Y9i+Oqrub8C7Q==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, x86@kernel.org, jikos@kernel.org,
-        pmladek@suse.com, Miroslav Benes <mbenes@suse.cz>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     live-patching@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Song Liu <song@kernel.org>
-Subject: Re: [PATCH v9] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <20230124223241.ywbhxdrj26qfgtd6@treble>
-References: <20230118204728.1876249-1-song@kernel.org>
- <20230118220812.dvztwhlmliypefha@treble>
- <CAPhsuW6FyHLeG3XMMMJiNnhwzW3dPXKrj3ksyB-C_iK1PNk71Q@mail.gmail.com>
- <20230120064215.cdyfbjlas5noxam6@treble>
- <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
+Subject: [PATCH 2/2] powerpc/module_64: Fix "expected nop" error on module re-patching
+Date:   Tue, 24 Jan 2023 19:38:05 -0800
+Message-Id: <2f6329ffd9674df6ff57e03edeb2ca54414770ab.1674617130.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <cover.1674617130.git.jpoimboe@kernel.org>
+References: <cover.1674617130.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <57fa3069-8e7e-d204-4c78-05432156f044@redhat.com>
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 03:08:27PM -0500, Joe Lawrence wrote:
-> > +	/*
-> > +	 * For a livepatch relocation, the restore r2 instruction might have
-> > +	 * been previously written if the relocation references a symbol in a
-> > +	 * module which was unloaded and is now being reloaded.  In that case,
-> > +	 * skip the warning and instruction write.
-> > +	 */
-> > +	if (klp_sym && insn_val == PPC_INST_LD_TOC)
-> > +		return 0;
-> 
-> Hi Josh,
-> 
-> Nit: shouldn't this return 1?
-> 
-> And if you're willing to entertain a small refactor, wouldn't
-> restore_r2() be clearer if it returned -ESOMETHING on error?
-> 
-> Maybe converting to a boolean could work, but then I'd suggest a name
-> that clearly implies success/fail given true/false return.  Maybe
-> replace_nop_with_ld_toc() or replace_nop_to_restore_r2() ... still
-> -ESOMETHING is more intuitive to me as there are cases like this where
-> the function safely returns w/o replacing anything.
+When a module with a livepatched function is unloaded and then reloaded,
+klp attempts to dynamically re-patch it.  On ppc64, that fails with the
+following error:
 
-Indeed, and I actually already discovered that and made such changes,
-just need to get around to posting the patches.
+  module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
 
+The error happens because the restore r2 instruction had already
+previously been written into the klp module's replacement function when
+the original function was patched the first time.  So the instruction
+wasn't a nop as expected.
+
+When the restore r2 instruction has already been patched in, detect that
+and skip the warning and the instruction write.
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/powerpc/kernel/module_64.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 016e79bba531..bf1da99fff74 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -502,6 +502,7 @@ static unsigned long stub_for_addr(const Elf64_Shdr *sechdrs,
+ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+ {
+ 	u32 *prev_insn = instruction - 1;
++	u32 insn_val = *instruction;
+ 
+ 	if (is_mprofile_ftrace_call(name))
+ 		return 0;
+@@ -514,9 +515,18 @@ static int restore_r2(const char *name, u32 *instruction, struct module *me)
+ 	if (!instr_is_relative_link_branch(ppc_inst(*prev_insn)))
+ 		return 0;
+ 
+-	if (*instruction != PPC_RAW_NOP()) {
++	/*
++	 * For livepatch, the restore r2 instruction might have already been
++	 * written previously, if the referenced symbol is in a previously
++	 * unloaded module which is now being loaded again.  In that case, skip
++	 * the warning and the instruction write.
++	 */
++	if (insn_val == PPC_INST_LD_TOC)
++		return 0;
++
++	if (insn_val != PPC_RAW_NOP()) {
+ 		pr_err("%s: Expected nop after call, got %08x at %pS\n",
+-			me->name, *instruction, instruction);
++			me->name, insn_val, instruction);
+ 		return -ENOEXEC;
+ 	}
+ 
 -- 
-Josh
+2.39.0
+
