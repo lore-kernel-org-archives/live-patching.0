@@ -2,82 +2,77 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27E76C38142
-	for <live-patching@archiver.kernel.org>; Fri, 27 Jan 2023 04:44:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 983DDC636CC
+	for <live-patching@archiver.kernel.org>; Fri, 27 Jan 2023 06:40:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjA0EoC (ORCPT
+        id S232259AbjA0Gkn (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Thu, 26 Jan 2023 23:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        Fri, 27 Jan 2023 01:40:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjA0EoB (ORCPT
+        with ESMTP id S231846AbjA0GkU (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Thu, 26 Jan 2023 23:44:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E267F3E095;
-        Thu, 26 Jan 2023 20:44:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F444B81F87;
-        Fri, 27 Jan 2023 04:43:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5F7C433EF;
-        Fri, 27 Jan 2023 04:43:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674794637;
-        bh=+cJ1DsPBTY7CESz0OY4T0y5peEivaA4nsOSxTJ5WbAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pXopEucyjzxNXM0ayhwm7Yzc53TTvNjDLzg1dGAjt3VY+8ydct8GZqAgdECdAnc11
-         Md+v0wa7pHT44WB1twzVLlngxf8VmxbcZNichmq+jDTmyvR4m7+C1tomDhcqC8Lh6H
-         m4QAS5E8n6vIDpYdV9pEdFvd88yY8pfMIyNGvi3I+J8cutRHdQbF3YFkDtO7AnneBP
-         fuk/dwPovjDJ4Opvgs+TSfbvh2sJymHuxRCo3KA0NN9QFSRByd+QwGqRqWVqcbmq1b
-         2AhEd+5AQO6LO1eNyNTJN06cW7u+zSqDvZbliJH0RegXjVg3/iXsn8Q1a4NhWWQuad
-         6vsYpRxgOnO1w==
-Date:   Thu, 26 Jan 2023 20:43:55 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Seth Forshee (DigitalOcean)" <sforshee@digitalocean.com>
-Cc:     Petr Mladek <pmladek@suse.com>, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
+        Fri, 27 Jan 2023 01:40:20 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BE66ACAC;
+        Thu, 26 Jan 2023 22:40:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=wPxHhaRZN6bt7mo7Kmz71jMB8x1VOFtn9vL42DR9a2U=; b=mxoBxwohg4yqbWOJFYXx9b38gY
+        2kpxaQnim1yFeQhuR37mzgEhVicw93WcVMGpE29U8PXTxoGYm+FSR1Qp17bIRdGHUa7I/OQXwBfw8
+        iaadcRpEztqFTMt9PUh+UW2Nsdu/sqpiFdYKo31PD1I2EqOvwPu/Z1/eftpBjdTrzHctFF76R+/Fg
+        bCdYR/BxI9BzUIxF4HELxso7Mjbv0xwkZtgDNUkdLdrXBQniHHTDa7m0+/PbK6rmQKUvGrczUO55S
+        joHevykAF6jEKDldEa6t931njbF2/gAHOLv4A57+5hgR3kt9jMXrk0RipnSef1lAeLFAcb1QatQf1
+        PIwyZPXw==;
+Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pLIPJ-00DM0u-GF; Fri, 27 Jan 2023 06:40:17 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        netdev@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 0/2] vhost: improve livepatch switching for heavily
- loaded vhost worker kthreads
-Message-ID: <20230127044355.frggdswx424kd5dq@treble>
-References: <20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org>
- <Y9KyVKQk3eH+RRse@alley>
- <Y9LswwnPAf+nOVFG@do-x1extreme>
+        Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [PATCH 16/35] Documentation: livepatch: correct spelling
+Date:   Thu, 26 Jan 2023 22:39:46 -0800
+Message-Id: <20230127064005.1558-17-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230127064005.1558-1-rdunlap@infradead.org>
+References: <20230127064005.1558-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y9LswwnPAf+nOVFG@do-x1extreme>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 03:12:35PM -0600, Seth Forshee (DigitalOcean) wrote:
-> On Thu, Jan 26, 2023 at 06:03:16PM +0100, Petr Mladek wrote:
-> > On Fri 2023-01-20 16:12:20, Seth Forshee (DigitalOcean) wrote:
-> > > We've fairly regularaly seen liveptches which cannot transition within kpatch's
-> > > timeout period due to busy vhost worker kthreads.
-> > 
-> > I have missed this detail. Miroslav told me that we have solved
-> > something similar some time ago, see
-> > https://lore.kernel.org/all/20220507174628.2086373-1-song@kernel.org/
-> 
-> Interesting thread. I had thought about something along the lines of the
-> original patch, but there are some ideas in there that I hadn't
-> considered.
+Correct spelling problems for Documentation/livepatch/ as reported
+by codespell.
 
-Here's another idea, have we considered this?  Have livepatch set
-TIF_NEED_RESCHED on all kthreads to force them into schedule(), and then
-have the scheduler call klp_try_switch_task() if TIF_PATCH_PENDING is
-set.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: live-patching@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+---
+ Documentation/livepatch/reliable-stacktrace.rst |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not sure how scheduler folks would feel about that ;-)
-
--- 
-Josh
+diff -- a/Documentation/livepatch/reliable-stacktrace.rst b/Documentation/livepatch/reliable-stacktrace.rst
+--- a/Documentation/livepatch/reliable-stacktrace.rst
++++ b/Documentation/livepatch/reliable-stacktrace.rst
+@@ -40,7 +40,7 @@ Principally, the reliable stacktrace fun
+ .. note::
+    In some cases it is legitimate to omit specific functions from the trace,
+    but all other functions must be reported. These cases are described in
+-   futher detail below.
++   further detail below.
+ 
+ Secondly, the reliable stacktrace function must be robust to cases where
+ the stack or other unwind state is corrupt or otherwise unreliable. The
