@@ -2,48 +2,46 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10AECC7EE33
-	for <live-patching@archiver.kernel.org>; Wed,  1 Mar 2023 15:14:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 706A8C7EE2F
+	for <live-patching@archiver.kernel.org>; Wed,  1 Mar 2023 15:14:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCAPOt (ORCPT
+        id S230120AbjCAPOs (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Wed, 1 Mar 2023 10:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        Wed, 1 Mar 2023 10:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjCAPOr (ORCPT
+        with ESMTP id S229673AbjCAPOr (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
         Wed, 1 Mar 2023 10:14:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E493D0A1
-        for <live-patching@vger.kernel.org>; Wed,  1 Mar 2023 07:14:40 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B220E3D91B
+        for <live-patching@vger.kernel.org>; Wed,  1 Mar 2023 07:14:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9F38B81081
-        for <live-patching@vger.kernel.org>; Wed,  1 Mar 2023 15:14:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C40C433A4;
-        Wed,  1 Mar 2023 15:14:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6EFFB80EF8
+        for <live-patching@vger.kernel.org>; Wed,  1 Mar 2023 15:14:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C79C433EF;
+        Wed,  1 Mar 2023 15:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677683677;
-        bh=Rnt+TI16y2hPxUoK601ZHD46yqG2wtFz8qu5btMmC7U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BGh0AZc/nM3qppYbTgNvUGMAaCIoulW0EIUxq/W2HERjz+Vs9MLyUWGfYed7n4+R8
-         V2rzIUuyIcxSbyeuf17E2dRBMU8eicoqE5jWdKxx+1OPNUdScGUWAEUklGLg57zX42
-         a3MNxzyowX0bp22k75XUZ1bZM+b7NMHER3XlNuKx68pwNzmf/xe4SVFcnVTUUCsJ5i
-         ElzLx8TWn0LUFLIDIwFEvIC+Sp55pC5YuTZIeUFXsao7iesTeJxO+LR648iY3qA8uA
-         dnifPdXybGyxm+93ou1vIAbmDd1oehSIO3vSwAqYI7mxfAIRvIL+LfnaEqx0O3kGop
-         acqFftjYsJWBA==
+        s=k20201202; t=1677683676;
+        bh=cR4uFAjL40itItSF0Gerla53FzQmZfYt+kLnIfjtudI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SCSN4yP+fyQ9wNrN1cHDzThquJlPNN/gf08biYsdTCBLkwFReOMJ0HFpxtV03h0oP
+         iHrTnxgKtHWvVCP1I3TiK493LR4b/3HGswk+d13t7bQnc2n0eD5x+R4Eq8hH24gelg
+         8cJbRDjDXkLZT4uV+ofwkrW1GMn8IqsO0xrMqHKtH2EdNIKyvZmzF+fZGvWbWjPxgZ
+         e2BeL2M0HxVI9g0+9+jb5Gg3rNvFiP5l28a7evaolGFA7uyXiCLAKr/HQ/dTOpBNCB
+         DA5F/tCUWQKpvjEDOzjjL924OS37RVTbm64oqMsTl2riyP+OuldLQFozDvlz/JeW/h
+         JbCrUWhdAvv/Q==
 From:   Josh Poimboeuf <jpoimboe@kernel.org>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         live-patching@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 2/6] objtool: Use relative pointers for annotations
-Date:   Wed,  1 Mar 2023 07:13:08 -0800
-Message-Id: <bed05c64e28200220c9b1754a2f3ce71f73076ea.1677683419.git.jpoimboe@kernel.org>
+Subject: [PATCH 0/6] x86,objtool: Split UNWIND_HINT_EMPTY in two
+Date:   Wed,  1 Mar 2023 07:13:06 -0800
+Message-Id: <cover.1677683419.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <cover.1677683419.git.jpoimboe@kernel.org>
-References: <cover.1677683419.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -51,92 +49,55 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-They produce the needed relocations while using half the space.
+Based on tip/objtool/core.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- arch/x86/include/asm/nospec-branch.h |  6 +++---
- include/linux/objtool.h              | 12 ++++++------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+Mark reported that the ORC unwinder incorrectly marks an unwind as
+reliable when the unwind terminates prematurely in the dark corners of
+return_to_handler() due to lack of information about the next frame.
 
-diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
-index 3ef70e54a858..78ed1546b775 100644
---- a/arch/x86/include/asm/nospec-branch.h
-+++ b/arch/x86/include/asm/nospec-branch.h
-@@ -194,9 +194,9 @@
-  * builds.
-  */
- .macro ANNOTATE_RETPOLINE_SAFE
--	.Lannotate_\@:
-+.Lhere_\@:
- 	.pushsection .discard.retpoline_safe
--	_ASM_PTR .Lannotate_\@
-+	.long .Lhere_\@ - .
- 	.popsection
- .endm
- 
-@@ -318,7 +318,7 @@
- #define ANNOTATE_RETPOLINE_SAFE					\
- 	"999:\n\t"						\
- 	".pushsection .discard.retpoline_safe\n\t"		\
--	_ASM_PTR " 999b\n\t"					\
-+	".long 999b - .\n\t"					\
- 	".popsection\n\t"
- 
- typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 8375792acfc0..2b0258d273fc 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -49,7 +49,7 @@
- #define ANNOTATE_NOENDBR					\
- 	"986: \n\t"						\
- 	".pushsection .discard.noendbr\n\t"			\
--	_ASM_PTR " 986b\n\t"					\
-+	".long 986b - .\n\t"					\
- 	".popsection\n\t"
- 
- #define ASM_REACHABLE							\
-@@ -67,7 +67,7 @@
- #define ANNOTATE_INTRA_FUNCTION_CALL				\
- 	999:							\
- 	.pushsection .discard.intra_function_calls;		\
--	.long 999b;						\
-+	.long 999b - .;						\
- 	.popsection;
- 
- /*
-@@ -92,10 +92,10 @@
-  * inconsistencies.
-  */
- .macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
--.Lunwind_hint_ip_\@:
-+.Lhere_\@:
- 	.pushsection .discard.unwind_hints
- 		/* struct unwind_hint */
--		.long .Lunwind_hint_ip_\@ - .
-+		.long .Lhere_\@ - .
- 		.short \sp_offset
- 		.byte \sp_reg
- 		.byte \type
-@@ -107,7 +107,7 @@
- 
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
--	_ASM_PTR \func
-+	.long \func - .
- 	.popsection
- .endm
- 
-@@ -120,7 +120,7 @@
- .macro ANNOTATE_NOENDBR
- .Lhere_\@:
- 	.pushsection .discard.noendbr
--	.quad	.Lhere_\@
-+	.long	.Lhere_\@ - .
- 	.popsection
- .endm
- 
+The problem is UNWIND_HINT_EMPTY is used in two different situations:
+end-of-stack marker and undefined stack state.
+
+Split it up into UNWIND_HINT_END_OF_STACK and UNWIND_HINT_UNDEFINED.
+
+Josh Poimboeuf (6):
+  objtool: Add objtool_types.h
+  objtool: Use relative pointers for annotations
+  objtool: Change UNWIND_HINT() argument order
+  x86,objtool: Introduce ORC_TYPE_*
+  x86,objtool: Separate unret validation from unwind hints
+  x86,objtool: Split UNWIND_HINT_EMPTY in two
+
+ .../livepatch/reliable-stacktrace.rst         |   2 +-
+ MAINTAINERS                                   |   2 +-
+ arch/x86/entry/entry_64.S                     |  26 +--
+ arch/x86/include/asm/nospec-branch.h          |  14 +-
+ arch/x86/include/asm/orc_types.h              |  12 +-
+ arch/x86/include/asm/unwind_hints.h           |  18 +-
+ arch/x86/kernel/ftrace_64.S                   |   2 +-
+ arch/x86/kernel/head_64.S                     |  17 +-
+ arch/x86/kernel/relocate_kernel_64.S          |  10 +-
+ arch/x86/kernel/unwind_orc.c                  |  27 ++-
+ arch/x86/lib/retpoline.S                      |   6 +-
+ arch/x86/platform/pvh/head.S                  |   2 +-
+ arch/x86/xen/xen-asm.S                        |   4 +-
+ arch/x86/xen/xen-head.S                       |   4 +-
+ include/linux/objtool.h                       |  81 +++----
+ include/linux/objtool_types.h                 |  57 +++++
+ scripts/sorttable.h                           |   2 +-
+ tools/arch/x86/include/asm/orc_types.h        |  12 +-
+ tools/include/linux/objtool.h                 | 200 ------------------
+ tools/include/linux/objtool_types.h           |  57 +++++
+ tools/objtool/check.c                         |  69 ++++--
+ tools/objtool/include/objtool/check.h         |   4 +-
+ tools/objtool/orc_dump.c                      |  15 +-
+ tools/objtool/orc_gen.c                       |  43 ++--
+ tools/objtool/sync-check.sh                   |   2 +-
+ 25 files changed, 314 insertions(+), 374 deletions(-)
+ create mode 100644 include/linux/objtool_types.h
+ delete mode 100644 tools/include/linux/objtool.h
+ create mode 100644 tools/include/linux/objtool_types.h
+
 -- 
 2.39.1
 
