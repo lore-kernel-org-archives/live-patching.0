@@ -2,118 +2,224 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B360AC64EC4
-	for <live-patching@archiver.kernel.org>; Fri,  3 Mar 2023 14:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3EEC61DA4
+	for <live-patching@archiver.kernel.org>; Mon,  6 Mar 2023 14:12:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbjCCOAT (ORCPT
+        id S229591AbjCFOMr (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 3 Mar 2023 09:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        Mon, 6 Mar 2023 09:12:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCCOAS (ORCPT
+        with ESMTP id S231475AbjCFOMZ (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:00:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F3819F05;
-        Fri,  3 Mar 2023 06:00:17 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 233E022C28;
-        Fri,  3 Mar 2023 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677852016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TSPgcgYep19sTblrzTc534Psr8I1LCQa3PoV9+gaqwY=;
-        b=Js6lzoGRnwnC26dHJ38ZpYrqKV6zGXVayz47S60UXFrJiVG0Z1bubyjVPR2nJTdFDBzpN4
-        +Q0olmSqlXkKafI729qXr06A82ygwBMoP/mFTnYOLy8+e+CqXy+JsqBSmEfNWnRVvUNp0p
-        IFpl9OsqFmeM4yi1Ut03xJaLQ7Ik848=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Mar 2023 09:12:25 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06ABC2820A
+        for <live-patching@vger.kernel.org>; Mon,  6 Mar 2023 06:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678111709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=djmf7VYZwrWQPrKhg3rfMb09otmSQIVe2MqSC5L6dA0=;
+        b=IJ/DZD/Bbo/ox+nlmt3pCdNsTFA6lJK2pxnGoFaCk+/rsJC5r9bRHWFwvPv6IThkQNBxxi
+        RB98+DcKbXdOYlDFDZkDHmWnqqvhFlMsK/Xo7hMu7i/XRx2nSslx8te/5+aW3IL48xUkW9
+        hY6kPD1rnfnzMWw7uhnYZoP+u1XWExU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-202-wr7Yf1G2Oz6JWpOJG11CBQ-1; Mon, 06 Mar 2023 09:08:27 -0500
+X-MC-Unique: wr7Yf1G2Oz6JWpOJG11CBQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA6F02C141;
-        Fri,  3 Mar 2023 14:00:13 +0000 (UTC)
-Date:   Fri, 3 Mar 2023 15:00:13 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A5D281C05AD7;
+        Mon,  6 Mar 2023 14:08:26 +0000 (UTC)
+Received: from jlaw-desktop.redhat.com (unknown [10.22.17.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5A67840C1106;
+        Mon,  6 Mar 2023 14:08:26 +0000 (UTC)
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
-        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v3 2/3] livepatch,sched: Add livepatch task switching to
- cond_resched()
-Message-ID: <ZAH9baGIOVL4/OHM@alley>
-References: <cover.1677257135.git.jpoimboe@kernel.org>
- <4ae981466b7814ec221014fc2554b2f86f3fb70b.1677257135.git.jpoimboe@kernel.org>
- <Y/zSgw5LOpbp7e/A@alley>
- <20230228165608.kumgxziaietsjaz3@treble>
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: [PATCH v7 00/10] livepatch: klp-convert tool
+Date:   Mon,  6 Mar 2023 09:08:14 -0500
+Message-Id: <20230306140824.3858543-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228165608.kumgxziaietsjaz3@treble>
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Tue 2023-02-28 08:56:08, Josh Poimboeuf wrote:
-> On Mon, Feb 27, 2023 at 04:55:47PM +0100, Petr Mladek wrote:
-> > On Fri 2023-02-24 08:50:00, Josh Poimboeuf wrote:
-> > > There have been reports [1][2] of live patches failing to complete
-> > > within a reasonable amount of time due to CPU-bound kthreads.
-> > > 
-> > > Fix it by patching tasks in cond_resched().
-> > > 
-> > > There are four different flavors of cond_resched(), depending on the
-> > > kernel configuration.  Hook into all of them.
-> > > 
-> > > A more elegant solution might be to use a preempt notifier.  However,
-> > > non-ORC unwinders can't unwind a preempted task reliably.
-> > > 
-> > > [1] https://lore.kernel.org/lkml/20220507174628.2086373-1-song@kernel.org/
-> > > [2] https://lkml.kernel.org/lkml/20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org
-> > > 
-> > > Tested-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > 
-> > Just for record, I have double checked the changes against v2
-> > and everything looks good to me.
-> 
-> Whoops, so I found another little surprise:
-> 
-> static int klp_check_stack(struct task_struct *task, const char **oldname)
-> {
->         static unsigned long entries[MAX_STACK_ENTRIES];
-> 	^^^^^^
-> 
-> That entries array is shared between the klp_mutex owner and all
-> cond_resched() callers.
+Summary
+-------
 
-Huh, great catch!
+Livepatches may use symbols which are not contained in its own scope,
+and, because of that, may end up compiled with relocations that will
+only be resolved during module load. Yet, when the referenced symbols
+are not exported, solving this relocation requires information on the
+object that holds the symbol (either vmlinux or modules) and its
+position inside the object, as an object may contain multiple symbols
+with the same name.  Providing such information must be done accordingly
+to what is specified in Documentation/livepatch/module-elf-format.txt.
 
-> MAX_STACK_ENTRIES is 100, which seems excessive.  If we halved that, the
-> array would be "only" 400 bytes, which is *almost* reasonable to
-> allocate on the stack?
+Currently, there is no trivial way to embed the required information as
+requested in the final livepatch elf object. klp-convert solves this
+problem in two different forms: (i) by relying on a symbol map, which is
+built during kernel compilation, to automatically infer the relocation
+targeted symbol, and, when such inference is not possible (ii) by using
+annotations in the elf object to convert the relocation accordingly to
+the specification, enabling it to be handled by the livepatch loader.
 
-It is just for the stack in the process context. Right?
+Given the above, add support for symbol mapping in the form of a
+symbols.klp file; add klp-convert tool; integrate klp-convert tool into
+kbuild; make livepatch modules discernible during kernel compilation
+pipeline; add data-structure and macros to enable users to annotate
+livepatch source code; make modpost stage compatible with livepatches;
+update livepatch-sample and update documentation.
 
-I think that I have never seen a stack with over 50 entries. And in
-the worst case, a bigger amount of entries would "just" result in
-a non-reliable stack which might be acceptable.
+The patch was tested under three use-cases:
 
-It looks acceptable to me.
+use-case 1: There is a relocation in the lp that can be automatically
+resolved by klp-convert.  For example. see the saved_command_line
+variable in lib/livepatch/test_klp_convert2.c.
 
-> Alternatively we could have a percpu entries array... :-/
+use-case 2: There is a relocation in the lp that cannot be automatically
+resolved, as the name of the respective symbol appears in multiple
+objects. The livepatch contains an annotation to enable a correct
+relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
+in lib/livepatch/test_klp_convert{1,2}.c.
 
-That said, percpu entries would be fine as well. It sounds like
-a good price for the livepatching feature. I think that livepatching
-is used on big systems anyway.
+use-case 3: There is a relocation in the lp that cannot be automatically
+resolved similarly as 2, but no annotation was provided in the
+livepatch, triggering an error during compilation.  Reproducible by
+removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
+lib/livepatch/test_klp_convert{1,2}.c.
 
-I slightly prefer the per-cpu solution.
+Selftests have been added to exercise these klp-convert use-cases
+through several tests.
 
-Best Regards,
-Petr
+
+Testing
+-------
+
+The patchset selftests build and execute on x86_64, s390x, and ppc64le
+for both default config (with added livepatch dependencies) and a larger
+RHEL-9-ish config.
+
+Using the Intel's Linux Kernel Performance tests's make.cross,
+klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
+ppc32 s390 arm64 arches.
+
+
+Summary of changes in v7
+------------------------
+
+- rebase for v6.2
+- combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
+  klp-convert annotation helpers")
+- combine ("kbuild: Support for symbols.klp creation") with ("modpost:
+  Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
+- klp-convert: add safe_snprintf() (-Wsign-compare)
+- klp-convert: fix -Wsign-compare warnings
+- klp-convert: use calloc() where appropriate
+- klp-convert: copy ELF e_flags
+- selftests: fix various build warnings
+- klp-convert: WARN msg simplification, failed sanity checks, and sympos
+  comment [Marcos]
+- klp-convert: fix elf_write_file() error paths [Petr]
+
+
+Previous versions
+-----------------
+
+RFC:
+  https://lore.kernel.org/lkml/cover.1477578530.git.jpoimboe@redhat.com/
+v2:
+  https://lore.kernel.org/lkml/f52d29f7-7d1b-ad3d-050b-a9fa8878faf2@redhat.com/
+v3:
+  https://lore.kernel.org/lkml/20190410155058.9437-1-joe.lawrence@redhat.com/
+v4:
+  https://lore.kernel.org/lkml/20190509143859.9050-1-joe.lawrence@redhat.com/
+v5:
+  (not posted)
+  https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v5-devel
+v6:
+  https://lore.kernel.org/live-patching/20220216163940.228309-1-joe.lawrence@redhat.com/
+
+
+Joe Lawrence (10):
+  livepatch: Create and include UAPI headers
+  livepatch: Add klp-convert tool
+  kbuild/modpost: create symbols.klp and integrate klp-convert
+  livepatch: Add sample livepatch module
+  documentation: Update on livepatch elf format
+  livepatch/selftests: add klp-convert
+  livepatch/selftests: test multiple sections
+  livepatch/selftests: add __asm__ symbol renaming examples
+  livepatch/selftests: add data relocations test
+  livepatch/selftests: add static keys test
+
+ .gitignore                                    |   2 +
+ Documentation/dontdiff                        |   1 +
+ Documentation/livepatch/livepatch.rst         |   3 +
+ Documentation/livepatch/module-elf-format.rst |  42 +-
+ MAINTAINERS                                   |   2 +
+ Makefile                                      |  16 +-
+ include/linux/livepatch.h                     |  13 +
+ include/uapi/linux/livepatch.h                |  25 +
+ kernel/livepatch/core.c                       |   4 +-
+ lib/livepatch/Makefile                        |  12 +
+ lib/livepatch/test_klp_convert.h              |  45 +
+ lib/livepatch/test_klp_convert1.c             | 121 +++
+ lib/livepatch/test_klp_convert2.c             | 110 +++
+ lib/livepatch/test_klp_convert_data.c         | 190 ++++
+ lib/livepatch/test_klp_convert_keys.c         |  91 ++
+ lib/livepatch/test_klp_convert_keys_mod.c     |  52 +
+ lib/livepatch/test_klp_convert_mod_a.c        |  31 +
+ lib/livepatch/test_klp_convert_mod_b.c        |  19 +
+ lib/livepatch/test_klp_convert_mod_c.c        |  36 +
+ lib/livepatch/test_klp_convert_sections.c     | 120 +++
+ samples/livepatch/Makefile                    |   1 +
+ .../livepatch/livepatch-annotated-sample.c    |  93 ++
+ scripts/Makefile                              |   1 +
+ scripts/Makefile.modfinal                     |  33 +
+ scripts/Makefile.modpost                      |   5 +
+ scripts/livepatch/.gitignore                  |   1 +
+ scripts/livepatch/Makefile                    |   5 +
+ scripts/livepatch/elf.c                       | 817 ++++++++++++++++
+ scripts/livepatch/elf.h                       |  74 ++
+ scripts/livepatch/klp-convert.c               | 893 ++++++++++++++++++
+ scripts/livepatch/klp-convert.h               |  47 +
+ scripts/livepatch/list.h                      | 391 ++++++++
+ scripts/mod/modpost.c                         |  28 +-
+ scripts/mod/modpost.h                         |   1 +
+ .../selftests/livepatch/test-livepatch.sh     | 403 ++++++++
+ 35 files changed, 3716 insertions(+), 12 deletions(-)
+ create mode 100644 include/uapi/linux/livepatch.h
+ create mode 100644 lib/livepatch/test_klp_convert.h
+ create mode 100644 lib/livepatch/test_klp_convert1.c
+ create mode 100644 lib/livepatch/test_klp_convert2.c
+ create mode 100644 lib/livepatch/test_klp_convert_data.c
+ create mode 100644 lib/livepatch/test_klp_convert_keys.c
+ create mode 100644 lib/livepatch/test_klp_convert_keys_mod.c
+ create mode 100644 lib/livepatch/test_klp_convert_mod_a.c
+ create mode 100644 lib/livepatch/test_klp_convert_mod_b.c
+ create mode 100644 lib/livepatch/test_klp_convert_mod_c.c
+ create mode 100644 lib/livepatch/test_klp_convert_sections.c
+ create mode 100644 samples/livepatch/livepatch-annotated-sample.c
+ create mode 100644 scripts/livepatch/.gitignore
+ create mode 100644 scripts/livepatch/Makefile
+ create mode 100644 scripts/livepatch/elf.c
+ create mode 100644 scripts/livepatch/elf.h
+ create mode 100644 scripts/livepatch/klp-convert.c
+ create mode 100644 scripts/livepatch/klp-convert.h
+ create mode 100644 scripts/livepatch/list.h
+
+-- 
+2.39.2
+
