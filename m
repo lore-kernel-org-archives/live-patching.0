@@ -2,52 +2,52 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 768EEC678D4
-	for <live-patching@archiver.kernel.org>; Mon,  6 Mar 2023 14:14:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B6F1C678D4
+	for <live-patching@archiver.kernel.org>; Mon,  6 Mar 2023 14:17:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCFOOO (ORCPT
+        id S230194AbjCFORl (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 6 Mar 2023 09:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        Mon, 6 Mar 2023 09:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjCFONx (ORCPT
+        with ESMTP id S229677AbjCFORX (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:13:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD893252A
-        for <live-patching@vger.kernel.org>; Mon,  6 Mar 2023 06:10:55 -0800 (PST)
+        Mon, 6 Mar 2023 09:17:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B507930B32
+        for <live-patching@vger.kernel.org>; Mon,  6 Mar 2023 06:15:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678111713;
+        s=mimecast20190719; t=1678112079;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aTfeyHCszsMv9gyl7yv5PA648Uf9sQDoAl7w9f2+5CI=;
-        b=eKdWm2kA2iirgMw6nSYRfI4WurUZgNT+ivK2TwOIJRQSqQK19YW0KLBSdV2+eTn4m7Oerk
-        fptLlVRGRA0/MFIMk+zVtIAm1KdNRHbsmYUMqDLpY9XJ4pJ/sqPaUnMjqkiOE/At9lAawf
-        LSf1G/WNgbYLcouzTtWcB22EscIjZXw=
+        bh=C3T4cQVbWMtjxm03/QxVsrwc84RWdeJZN2OA0wo1jZE=;
+        b=XHf4QlBwWZEbWEn1kLZUeU9fyZA6BD5FFRLeMUI+Tm4V24AURwJldYkOnqqtrUUSTrvIUj
+        BhAFqAEl1VEtulJugYJEXYeyb/MZoYg4SUucd+Hne3ghWtzQN4R5AuURqVTwcF0N4/B38l
+        Qe/PY5MCHc+MlxUVdRkmr8pkpFrq2A0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-584-oAIwZ54WPPO-lO6noN_p_Q-1; Mon, 06 Mar 2023 09:08:28 -0500
-X-MC-Unique: oAIwZ54WPPO-lO6noN_p_Q-1
+ us-mta-608-z2XGW4OYNIyTGljoTBp9SQ-1; Mon, 06 Mar 2023 09:08:30 -0500
+X-MC-Unique: z2XGW4OYNIyTGljoTBp9SQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E81DB3810B0C;
-        Mon,  6 Mar 2023 14:08:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 698C73C02184;
+        Mon,  6 Mar 2023 14:08:30 +0000 (UTC)
 Received: from jlaw-desktop.redhat.com (unknown [10.22.17.104])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 97A0E40C10FA;
-        Mon,  6 Mar 2023 14:08:27 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1457E40C945A;
+        Mon,  6 Mar 2023 14:08:30 +0000 (UTC)
 From:   Joe Lawrence <joe.lawrence@redhat.com>
 To:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: [PATCH v7 03/10] kbuild/modpost: create symbols.klp and integrate klp-convert
-Date:   Mon,  6 Mar 2023 09:08:17 -0500
-Message-Id: <20230306140824.3858543-4-joe.lawrence@redhat.com>
+Subject: [PATCH v7 09/10] livepatch/selftests: add data relocations test
+Date:   Mon,  6 Mar 2023 09:08:23 -0500
+Message-Id: <20230306140824.3858543-10-joe.lawrence@redhat.com>
 In-Reply-To: <20230306140824.3858543-1-joe.lawrence@redhat.com>
 References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
@@ -58,296 +58,421 @@ Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-For automatic resolution of livepatch relocations, a file called
-symbols.klp is used. This file maps symbols within every compiled kernel
-object allowing the identification of symbols whose name is unique, thus
-relocation can be automatically inferred, or providing information that
-helps developers when code annotation is required for solving the
-matter.
+Add a test which creates a variety of klp-data-relocations.  Note that
+this test case exercises late-klp-relocations for references to data.
+For this, we only need to adjust pointer storage classes (and not the
+target data) to affect where the relocation ends up.
 
-Add support for creating symbols.klp in the main Makefile. First, ensure
-that built-in is compiled when CONFIG_LIVEPATCH is enabled (as required
-to achieve a complete symbols.klp file). Define the command to build
-symbols.klp (filechk_klp_map) and hook it in the modules rule. Save the
-list of livepatch modules in $(MODULES_LIVEPATCH).
-
-As it is undesirable to have symbols from livepatch objects inside
-symbols.klp, filechk_klp_map filters out modules.livepatch from
-modules.order: `sort $(MODORDER) $(MODULES_LIVEPATCH) | uniq -u`.
-
-The "clean" Makefile target may remove the modules.livepatch file,
-however, symbols.klp may be needed for building external modules, so
-defer its cleanup to the "mrproper" target.
-
-Finally, update the modpost program so that it does not warn about
-unresolved symbols resolved by klp-convert.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-Signed-off-by: Joao Moreira <jmoreira@suse.de>
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- .gitignore                |  2 ++
- Documentation/dontdiff    |  1 +
- Makefile                  | 16 +++++++++++-----
- scripts/Makefile.modfinal | 33 +++++++++++++++++++++++++++++++++
- scripts/Makefile.modpost  |  5 +++++
- scripts/mod/modpost.c     | 28 ++++++++++++++++++++++++++--
- scripts/mod/modpost.h     |  1 +
- 7 files changed, 79 insertions(+), 7 deletions(-)
+ lib/livepatch/Makefile                        |   4 +-
+ lib/livepatch/test_klp_convert.h              |  21 ++
+ lib/livepatch/test_klp_convert_data.c         | 190 ++++++++++++++++++
+ lib/livepatch/test_klp_convert_mod_c.c        |  36 ++++
+ .../selftests/livepatch/test-livepatch.sh     |  95 +++++++++
+ 5 files changed, 345 insertions(+), 1 deletion(-)
+ create mode 100644 lib/livepatch/test_klp_convert_data.c
+ create mode 100644 lib/livepatch/test_klp_convert_mod_c.c
 
-diff --git a/.gitignore b/.gitignore
-index 20dce5c3b9e0..fc9b2f13b049 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -53,6 +53,7 @@
- *.xz
- *.zst
- Module.symvers
-+modules.livepatch
- modules.order
+diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
+index 77e21317d4da..da39aaa5c8fc 100644
+--- a/lib/livepatch/Makefile
++++ b/lib/livepatch/Makefile
+@@ -9,6 +9,7 @@ obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
+ 				test_klp_callbacks_mod.o \
+ 				test_klp_convert1.o \
+ 				test_klp_convert2.o \
++				test_klp_convert_data.o \
+ 				test_klp_convert_sections.o \
+ 				test_klp_convert_mod.o \
+ 				test_klp_livepatch.o \
+@@ -19,4 +20,5 @@ obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
  
- #
-@@ -66,6 +67,7 @@ modules.order
- /vmlinux.symvers
- /vmlinux-gdb.py
- /vmlinuz
-+/symbols.klp
- /System.map
- /Module.markers
- /modules.builtin
-diff --git a/Documentation/dontdiff b/Documentation/dontdiff
-index 352ff53a2306..23c2a89fb791 100644
---- a/Documentation/dontdiff
-+++ b/Documentation/dontdiff
-@@ -76,6 +76,7 @@ Module.markers
- Module.symvers
- PENDING
- SCCS
-+symbols.klp
- System.map*
- TAGS
- aconf
-diff --git a/Makefile b/Makefile
-index 3f6628780eb2..dd5d6c258906 100644
---- a/Makefile
-+++ b/Makefile
-@@ -730,8 +730,13 @@ KBUILD_MODULES :=
- KBUILD_BUILTIN := 1
+ test_klp_convert_mod-y := \
+ 	test_klp_convert_mod_a.o \
+-	test_klp_convert_mod_b.o
++	test_klp_convert_mod_b.o \
++	test_klp_convert_mod_c.o
+diff --git a/lib/livepatch/test_klp_convert.h b/lib/livepatch/test_klp_convert.h
+index 42befbfd63cb..08c0f4b1dc6b 100644
+--- a/lib/livepatch/test_klp_convert.h
++++ b/lib/livepatch/test_klp_convert.h
+@@ -12,5 +12,26 @@ extern const char *get_homonym_string(void);
+ extern const char *test_klp_get_driver_name(void);
+ extern char klp_string_a[] __asm__("klp_string.12345");
+ extern char klp_string_b[] __asm__("klp_string.67890");
++extern int global_small;
++// .rela.data.rel.ro, .rela.rodata supported ???:
++extern int const_global_small;
++extern int static_small;
++extern int static_const_small;
++extern int global_large[];
++// .rela.data.rel.ro, .rela.rodata supported ???:
++extern int const_global_large[];
++extern int static_large[];
++extern int static_const_large[];
++extern int local_small;
++extern int const_local_small;
++extern int static_local_small;
++extern int static_const_local_small;
++extern int local_large[4];
++extern int const_local_large[4];
++extern int static_local_large[4];
++extern int static_const_local_large[4];
++// .rela.data..ro_after_init supported ???:
++extern int static_ro_after_init;
++extern int static_read_mostly;
  
- # If we have only "make modules", don't compile built-in objects.
-+# When we're building livepatch modules, we need to consider the
-+# built-in objects during the descend as well, as built-in objects may
-+# hold symbols which are referenced from livepatches and are required by
-+# klp-convert post-processing tool for resolving these cases.
+ #endif
+diff --git a/lib/livepatch/test_klp_convert_data.c b/lib/livepatch/test_klp_convert_data.c
+new file mode 100644
+index 000000000000..da94f7af272f
+--- /dev/null
++++ b/lib/livepatch/test_klp_convert_data.c
+@@ -0,0 +1,190 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2021 Joe Lawrence <joe.lawrence@redhat.com>
 +
- ifeq ($(MAKECMDGOALS),modules)
--  KBUILD_BUILTIN :=
-+  KBUILD_BUILTIN := $(if $(CONFIG_LIVEPATCH),1)
- endif
- 
- # If we have "make <whatever> modules", compile modules
-@@ -1183,6 +1188,7 @@ PHONY += prepare0
- export extmod_prefix = $(if $(KBUILD_EXTMOD),$(KBUILD_EXTMOD)/)
- export MODORDER := $(extmod_prefix)modules.order
- export MODULES_NSDEPS := $(extmod_prefix)modules.nsdeps
-+export MODULES_LIVEPATCH := $(extmod-prefix)modules.livepatch
- 
- ifeq ($(KBUILD_EXTMOD),)
- 
-@@ -1543,8 +1549,8 @@ endif
- #
- 
- # *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFOBTF_MODULES
--# is an exception.
--ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+# and CONFIG_LIVEPATCH are exceptions.
-+ifneq ($(or $(CONFIG_DEBUG_INFO_BTF_MODULES),$(CONFIG_LIVEPATCH)),)
- KBUILD_BUILTIN := 1
- modules: vmlinux
- endif
-@@ -1602,14 +1608,14 @@ endif # CONFIG_MODULES
- CLEAN_FILES += include/ksym vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
- 	       compile_commands.json .thinlto-cache rust/test rust/doc \
--	       .vmlinux.objs .vmlinux.export.c
-+	       modules.livepatch .vmlinux.objs .vmlinux.export.c
- 
- # Directories & files removed with 'make mrproper'
- MRPROPER_FILES += include/config include/generated          \
- 		  arch/$(SRCARCH)/include/generated .objdiff \
- 		  debian snap tar-install \
- 		  .config .config.old .version \
--		  Module.symvers \
-+		  Module.symvers symbols.klp \
- 		  certs/signing_key.pem \
- 		  certs/x509.genkey \
- 		  vmlinux-gdb.py \
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index a30d5b08eee9..a8901e4e98c5 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -14,6 +14,7 @@ include $(srctree)/scripts/Makefile.lib
- 
- # find all modules listed in modules.order
- modules := $(call read-file, $(MODORDER))
-+modules-klp := $(call read-file, $(MODULES_LIVEPATCH))
- 
- __modfinal: $(modules:%.o=%.ko)
- 	@:
-@@ -65,6 +66,38 @@ endif
- 
- targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o)
- 
-+# Livepatch
-+# ---------------------------------------------------------------------------
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+%.tmp.ko: %.o %.mod.o symbols.klp FORCE
-+	+$(call if_changed,ld_ko_o)
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/cache.h>
++#include <linux/livepatch.h>
++#include "test_klp_convert.h"
 +
-+quiet_cmd_klp_convert = KLP     $@
-+      cmd_klp_convert = scripts/livepatch/klp-convert symbols.klp $< $@
++/* Small global */
++int *p_global_small = &global_small;
 +
-+$(modules-klp:%.o=%.ko): %.ko: %.tmp.ko FORCE
-+	$(call if_changed,klp_convert)
++/* Small global (const) */
++// .rela.data.rel.ro, .rela.rodata supported ???:
++int * const p_const_global_small = &const_global_small;
 +
-+targets += $(modules-klp:.ko=.tmp.ko)
++/* Small file-static */
++static int *p_static_small = &static_small;
 +
-+ifeq ($(KBUILD_EXTMOD),)
-+filechk_klp_map = \
-+	echo "klp-convert-symbol-data.0.1";		\
-+	echo "*vmlinux";				\
-+	$(NM) -f posix vmlinux | cut -d\  -f1;		\
-+	sort $(MODORDER) $(MODULES_LIVEPATCH) |		\
-+	uniq -u |					\
-+	sed 's/\.o$$//' |    			  	\
-+	while read o;					\
-+	do						\
-+		echo "*$$(basename $$o)";		\
-+		$(NM) -f posix $$o.o | cut -d\  -f1;	\
-+	done
++/* Small file-static (constant) */
++static int * const p_static_const_small = &static_const_small;
 +
-+symbols.klp: FORCE
-+	$(call filechk,klp_map)
-+endif
++/* Large global */
++int *p_global_large[4] = {
++	&global_large[0], &global_large[1],
++	&global_large[2], &global_large[3],
++};
 +
- # Add FORCE to the prequisites of a target to force it to be always rebuilt.
- # ---------------------------------------------------------------------------
- 
-diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 43343e13c542..02f1354d4cff 100644
---- a/scripts/Makefile.modpost
-+++ b/scripts/Makefile.modpost
-@@ -47,6 +47,7 @@ modpost-args =										\
- 	$(if $(KBUILD_MODPOST_WARN),-w)							\
- 	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))					\
- 	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-N)	\
-+	$(if $(CONFIG_LIVEPATCH),-l $(MODULES_LIVEPATCH))				\
- 	-o $@
- 
- modpost-deps := $(MODPOST)
-@@ -138,6 +139,10 @@ $(output-symdump): $(modpost-deps) FORCE
- 	$(call if_changed,modpost)
- 
- __modpost: $(output-symdump)
-+ifndef CONFIG_LIVEPATCH
-+	$(Q)rm -f $(MODULES_LIVEPATCH)
-+	$(Q)touch $(MODULES_LIVEPATCH)
-+endif
- PHONY += FORCE
- FORCE:
- 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index efff8078e395..0a8f0ce75761 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1831,6 +1831,10 @@ static void read_symbols(const char *modname)
- 		handle_moddevtable(mod, &info, sym, symname);
- 	}
- 
-+	/* Livepatch modules have unresolved symbols resolved by klp-convert */
-+	if (get_modinfo(&info, "livepatch"))
-+		mod->is_livepatch = true;
++/* Large global (const) */
++// .rela.data.rel.ro, .rela.rodata supported ???:
++int * const p_const_global_large[4] = {
++	&const_global_large[0], &const_global_large[1],
++	&const_global_large[2], &const_global_large[3],
++};
 +
- 	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
- 		symname = remove_dot(info.strtab + sym->st_name);
- 
-@@ -1919,7 +1923,7 @@ static void check_exports(struct module *mod)
- 		const char *basename;
- 		exp = find_symbol(s->name);
- 		if (!exp) {
--			if (!s->weak && nr_unresolved++ < MAX_UNRESOLVED_REPORTS)
-+			if (!s->weak && !mod->is_livepatch && nr_unresolved++ < MAX_UNRESOLVED_REPORTS)
- 				modpost_log(warn_unresolved ? LOG_WARN : LOG_ERROR,
- 					    "\"%s\" [%s.ko] undefined!\n",
- 					    s->name, mod->name);
-@@ -2320,6 +2324,20 @@ static void write_namespace_deps_files(const char *fname)
- 	free(ns_deps_buf.p);
- }
- 
-+static void write_livepatch_modules(const char *fname)
++/* Large file-static global */
++static int *p_static_large[4] = {
++	&static_large[0], &static_large[1],
++	&static_large[2], &static_large[3],
++};
++
++/* Large file-static (const) */
++static int * const p_static_const_large[4] = {
++	&static_const_large[0], &static_const_large[1],
++	&static_const_large[2], &static_const_large[3],
++};
++
++// .rela.data.rel.ro, .rela.rodata supported ???:
++// static int * __ro_after_init p_static_ro_after_init = &static_ro_after_init;
++static int * __read_mostly p_static_read_mostly = &static_read_mostly;
++
++static void print_variables(void)
 +{
-+	struct buffer buf = { };
-+	struct module *mod;
++	/* Small local */
++	int *p_local_small = &local_small;
 +
-+	list_for_each_entry(mod, &modules, list) {
-+		if (mod->is_livepatch)
-+			buf_printf(&buf, "%s.o\n", mod->name);
-+	}
++	/* Small local (const) */
++	int * const p_const_local_small = &const_local_small;
 +
-+	write_if_changed(&buf, fname);
-+	free(buf.p);
++	/* Small static-local */
++	static int *p_static_local_small = &static_local_small;
++
++	/* Small static-local (const) */
++	static int * const p_static_const_local_small = &static_const_local_small;
++
++	/* Large local */
++	int *p_local_large[4] = {
++		&local_large[0], &local_large[1],
++		&local_large[2], &local_large[3],
++	};
++
++	/* Large local (const) */
++	int * const p_const_local_large[4] = {
++		&const_local_large[0], &const_local_large[1],
++		&const_local_large[2], &const_local_large[3],
++	};
++
++	/* Large static-local local */
++	static int *p_static_local_large[4] = {
++		&static_local_large[0], &static_local_large[1],
++		&static_local_large[2], &static_local_large[3],
++	};
++
++	/* Large static-local (const) */
++	static int * const p_static_const_local_large[4] = {
++		&static_const_local_large[0], &static_const_local_large[1],
++		&static_const_local_large[2], &static_const_local_large[3],
++	};
++
++	pr_info("local_small: %x\n", *p_local_small);
++	pr_info("const_local_small: %x\n", *p_const_local_small);
++	pr_info("static_local_small: %x\n", *p_static_local_small);
++	pr_info("static_const_local_small: %x\n", *p_static_const_local_small);
++	pr_info("local_large[0..3]: %x %x %x %x\n",
++		*p_local_large[0], *p_local_large[1],
++		*p_local_large[2], *p_local_large[3]);
++	pr_info("const_local_large[0..3]: %x %x %x %x\n",
++		*p_const_local_large[0], *p_const_local_large[1],
++		*p_const_local_large[2], *p_const_local_large[3]);
++	pr_info("static_local_large[0..3]: %x %x %x %x\n",
++		*p_static_local_large[0], *p_static_local_large[1],
++		*p_static_local_large[2], *p_static_local_large[3]);
++	pr_info("static_const_local_large[0..3]: %x %x %x %x\n",
++		*p_static_const_local_large[0], *p_static_const_local_large[1],
++		*p_static_const_local_large[2], *p_static_const_local_large[3]);
++
++	pr_info("global_small: %x\n", *p_global_small);
++	// .rela.data.rel.ro, .rela.rodata supported ???:
++	pr_info("const_global_small: %x\n", *p_const_global_small);
++	pr_info("static_small: %x\n", *p_static_small);
++	pr_info("static_const_small: %x\n", *p_static_const_small);
++	pr_info("global_large[0..3]: %x %x %x %x\n",
++		*p_global_large[0], *p_global_large[1],
++		*p_global_large[2], *p_global_large[3]);
++	// .rela.data.rel.ro, .rela.rodata supported ???:
++	pr_info("const_global_large[0..3]: %x %x %x %x\n",
++		*p_const_global_large[0], *p_const_global_large[1],
++		*p_const_global_large[2], *p_const_global_large[3]);
++	pr_info("static_large[0..3]: %x %x %x %x\n",
++		*p_static_large[0], *p_static_large[1],
++		*p_static_large[2], *p_static_large[3]);
++	pr_info("static_const_large[0..3]: %x %x %x %x\n",
++		*p_static_const_large[0], *p_static_const_large[1],
++		*p_static_const_large[2], *p_static_const_large[3]);
++
++	// .rela.data..ro_after_init supported ???:
++	// pr_info("static_ro_after_init: %x\n", *p_static_ro_after_init);
++	pr_info("static_read_mostly: %x\n", *p_static_read_mostly);
 +}
 +
- struct dump_list {
- 	struct list_head list;
- 	const char *file;
-@@ -2330,11 +2348,12 @@ int main(int argc, char **argv)
- 	struct module *mod;
- 	char *missing_namespace_deps = NULL;
- 	char *dump_write = NULL, *files_source = NULL;
-+	char *livepatch_modules = NULL;
- 	int opt;
- 	LIST_HEAD(dump_lists);
- 	struct dump_list *dl, *dl2;
++/* provide a sysfs handle to invoke debug functions */
++static int print_debug;
++static int print_debug_set(const char *val, const struct kernel_param *kp)
++{
++	print_variables();
++
++	return 0;
++}
++static const struct kernel_param_ops print_debug_ops = {
++	.set = print_debug_set,
++	.get = param_get_int,
++};
++module_param_cb(print_debug, &print_debug_ops, &print_debug, 0200);
++MODULE_PARM_DESC(print_debug, "print klp-convert debugging info");
++
++
++static struct klp_func funcs[] = {
++	{
++	}, { }
++};
++
++static struct klp_object objs[] = {
++	{
++		/* name being NULL means vmlinux */
++		.funcs = funcs,
++	},
++	{
++		.name = "test_klp_convert_mod",
++		.funcs = funcs,
++	}, { }
++};
++
++static struct klp_patch patch = {
++	.mod = THIS_MODULE,
++	.objs = objs,
++};
++
++static int test_klp_convert_init(void)
++{
++	int ret;
++
++	ret = klp_enable_patch(&patch);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static void test_klp_convert_exit(void)
++{
++}
++
++module_init(test_klp_convert_init);
++module_exit(test_klp_convert_exit);
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Joe Lawrence <joe.lawrence@redhat.com>");
++MODULE_DESCRIPTION("Livepatch test: klp-convert-data");
++MODULE_INFO(livepatch, "Y");
+diff --git a/lib/livepatch/test_klp_convert_mod_c.c b/lib/livepatch/test_klp_convert_mod_c.c
+new file mode 100644
+index 000000000000..8f94a313e651
+--- /dev/null
++++ b/lib/livepatch/test_klp_convert_mod_c.c
+@@ -0,0 +1,36 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (C) 2021 Joe Lawrence <joe.lawrence@redhat.com>
++
++#include <linux/types.h>
++
++/*
++ * test_klp_convert_data will create klp-relocations to these variables.
++ * They are named for the storage class of the variable that refers to
++ * the.  This makes it easier to correlate those symbols to the
++ * relocations that refer to them in readelf output.
++ */
++__used static int global_small = 0x1111;
++// .rela.data.rel.ro, .rela.rodata supported ???:
++__used static int const_global_small = 0x2222;
++__used static int static_small = 0x3333;
++__used static int static_const_small = 0x4444;
++
++__used static int global_large[4] = { 0x1111, 0x2222, 0x3333, 0x4444 };
++// .rela.data.rel.ro, .rela.rodata supported ???:
++__used static int const_global_large[4] = { 0x5555, 0x6666, 0x7777, 0x8888 };
++__used static int static_large[4] = { 0x9999, 0xaaaa, 0xbbbb, 0xcccc };
++__used static int static_const_large[4] = { 0xdddd, 0xeeee, 0xffff, 0x0000 };
++
++__used static int local_small = 0x1111;
++__used static int const_local_small = 0x2222;
++__used static int static_local_small = 0x3333;
++__used static int static_const_local_small = 0x4444;
++
++__used static int local_large[4] = { 0x1111, 0x2222, 0x3333, 0x4444 };
++__used static int const_local_large[4] = { 0x5555, 0x6666, 0x7777, 0x8888 };
++__used static int static_local_large[4] = { 0x9999, 0xaaaa, 0xbbbb, 0xcccc };
++__used static int static_const_local_large[4] = { 0xdddd, 0xeeee, 0xffff, 0x0000 };
++
++// .rela.data..ro_after_init supported ???:
++// __used static int static_ro_after_init = 0x1111;
++__used static int static_read_mostly = 0x2222;
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index ec3b6c919b01..5bda36b65bb5 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -9,6 +9,7 @@ MOD_REPLACE=test_klp_atomic_replace
+ MOD_KLP_CONVERT_MOD=test_klp_convert_mod
+ MOD_KLP_CONVERT1=test_klp_convert1
+ MOD_KLP_CONVERT2=test_klp_convert2
++MOD_KLP_CONVERT_DATA=test_klp_convert_data
+ MOD_KLP_CONVERT_SECTIONS=test_klp_convert_sections
  
--	while ((opt = getopt(argc, argv, "ei:mnT:o:awENd:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ei:l:mnT:o:awENd:")) != -1) {
- 		switch (opt) {
- 		case 'e':
- 			external_module = true;
-@@ -2344,6 +2363,9 @@ int main(int argc, char **argv)
- 			dl->file = optarg;
- 			list_add_tail(&dl->list, &dump_lists);
- 			break;
-+		case 'l':
-+			livepatch_modules = optarg;
-+			break;
- 		case 'm':
- 			modversions = true;
- 			break;
-@@ -2403,6 +2425,8 @@ int main(int argc, char **argv)
+ setup_config
+@@ -340,4 +341,98 @@ livepatch: '$MOD_KLP_CONVERT_SECTIONS': unpatching complete
+ % rmmod $MOD_KLP_CONVERT_SECTIONS
+ % rmmod $MOD_KLP_CONVERT_MOD"
  
- 	if (dump_write)
- 		write_dump(dump_write);
-+	if (livepatch_modules)
-+		write_livepatch_modules(livepatch_modules);
- 	if (sec_mismatch_count && !sec_mismatch_warn_only)
- 		error("Section mismatches detected.\n"
- 		      "Set CONFIG_SECTION_MISMATCH_WARN_ONLY=y to allow them.\n");
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 1178f40a73f3..9be9bf6fb7da 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -119,6 +119,7 @@ struct module {
- 	bool is_gpl_compatible;
- 	bool from_dump;		/* true if module was loaded from *.symvers */
- 	bool is_vmlinux;
-+	bool is_livepatch;
- 	bool seen;
- 	bool has_init;
- 	bool has_cleanup;
++
++# TEST: klp-convert data relocations
++
++start_test "klp-convert data relocations"
++
++load_mod $MOD_KLP_CONVERT_MOD
++load_lp $MOD_KLP_CONVERT_DATA
++
++echo 1 > /sys/module/$MOD_KLP_CONVERT_DATA/parameters/print_debug
++
++disable_lp $MOD_KLP_CONVERT_DATA
++unload_lp $MOD_KLP_CONVERT_DATA
++unload_mod $MOD_KLP_CONVERT_MOD
++
++check_result "% modprobe $MOD_KLP_CONVERT_MOD
++% modprobe $MOD_KLP_CONVERT_DATA
++livepatch: enabling patch '$MOD_KLP_CONVERT_DATA'
++livepatch: '$MOD_KLP_CONVERT_DATA': initializing patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': starting patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': completing patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': patching complete
++$MOD_KLP_CONVERT_DATA: local_small: 1111
++$MOD_KLP_CONVERT_DATA: const_local_small: 2222
++$MOD_KLP_CONVERT_DATA: static_local_small: 3333
++$MOD_KLP_CONVERT_DATA: static_const_local_small: 4444
++$MOD_KLP_CONVERT_DATA: local_large[0..3]: 1111 2222 3333 4444
++$MOD_KLP_CONVERT_DATA: const_local_large[0..3]: 5555 6666 7777 8888
++$MOD_KLP_CONVERT_DATA: static_local_large[0..3]: 9999 aaaa bbbb cccc
++$MOD_KLP_CONVERT_DATA: static_const_local_large[0..3]: dddd eeee ffff 0
++$MOD_KLP_CONVERT_DATA: global_small: 1111
++$MOD_KLP_CONVERT_DATA: const_global_small: 2222
++$MOD_KLP_CONVERT_DATA: static_small: 3333
++$MOD_KLP_CONVERT_DATA: static_const_small: 4444
++$MOD_KLP_CONVERT_DATA: global_large[0..3]: 1111 2222 3333 4444
++$MOD_KLP_CONVERT_DATA: const_global_large[0..3]: 5555 6666 7777 8888
++$MOD_KLP_CONVERT_DATA: static_large[0..3]: 9999 aaaa bbbb cccc
++$MOD_KLP_CONVERT_DATA: static_const_large[0..3]: dddd eeee ffff 0
++$MOD_KLP_CONVERT_DATA: static_read_mostly: 2222
++% echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT_DATA/enabled
++livepatch: '$MOD_KLP_CONVERT_DATA': initializing unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': starting unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': completing unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': unpatching complete
++% rmmod $MOD_KLP_CONVERT_DATA
++% rmmod $MOD_KLP_CONVERT_MOD"
++
++
++# TEST: klp-convert data relocations (late module patching)
++
++start_test "klp-convert data relocations (late module patching)"
++
++load_lp $MOD_KLP_CONVERT_DATA
++load_mod $MOD_KLP_CONVERT_MOD
++
++echo 1 > /sys/module/$MOD_KLP_CONVERT_DATA/parameters/print_debug
++
++disable_lp $MOD_KLP_CONVERT_DATA
++unload_lp $MOD_KLP_CONVERT_DATA
++unload_mod $MOD_KLP_CONVERT_MOD
++
++check_result "% modprobe $MOD_KLP_CONVERT_DATA
++livepatch: enabling patch '$MOD_KLP_CONVERT_DATA'
++livepatch: '$MOD_KLP_CONVERT_DATA': initializing patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': starting patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': completing patching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': patching complete
++% modprobe $MOD_KLP_CONVERT_MOD
++livepatch: applying patch '$MOD_KLP_CONVERT_DATA' to loading module '$MOD_KLP_CONVERT_MOD'
++$MOD_KLP_CONVERT_DATA: local_small: 1111
++$MOD_KLP_CONVERT_DATA: const_local_small: 2222
++$MOD_KLP_CONVERT_DATA: static_local_small: 3333
++$MOD_KLP_CONVERT_DATA: static_const_local_small: 4444
++$MOD_KLP_CONVERT_DATA: local_large[0..3]: 1111 2222 3333 4444
++$MOD_KLP_CONVERT_DATA: const_local_large[0..3]: 5555 6666 7777 8888
++$MOD_KLP_CONVERT_DATA: static_local_large[0..3]: 9999 aaaa bbbb cccc
++$MOD_KLP_CONVERT_DATA: static_const_local_large[0..3]: dddd eeee ffff 0
++$MOD_KLP_CONVERT_DATA: global_small: 1111
++$MOD_KLP_CONVERT_DATA: const_global_small: 2222
++$MOD_KLP_CONVERT_DATA: static_small: 3333
++$MOD_KLP_CONVERT_DATA: static_const_small: 4444
++$MOD_KLP_CONVERT_DATA: global_large[0..3]: 1111 2222 3333 4444
++$MOD_KLP_CONVERT_DATA: const_global_large[0..3]: 5555 6666 7777 8888
++$MOD_KLP_CONVERT_DATA: static_large[0..3]: 9999 aaaa bbbb cccc
++$MOD_KLP_CONVERT_DATA: static_const_large[0..3]: dddd eeee ffff 0
++$MOD_KLP_CONVERT_DATA: static_read_mostly: 2222
++% echo 0 > /sys/kernel/livepatch/$MOD_KLP_CONVERT_DATA/enabled
++livepatch: '$MOD_KLP_CONVERT_DATA': initializing unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': starting unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': completing unpatching transition
++livepatch: '$MOD_KLP_CONVERT_DATA': unpatching complete
++% rmmod $MOD_KLP_CONVERT_DATA
++% rmmod $MOD_KLP_CONVERT_MOD"
++
++
+ exit 0
 -- 
 2.39.2
 
