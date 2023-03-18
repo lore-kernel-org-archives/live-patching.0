@@ -2,94 +2,74 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 333ABC6FD1D
-	for <live-patching@archiver.kernel.org>; Fri, 17 Mar 2023 23:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CC9DC7619A
+	for <live-patching@archiver.kernel.org>; Sat, 18 Mar 2023 19:30:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCQXb1 (ORCPT
+        id S229737AbjCRTaG (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Fri, 17 Mar 2023 19:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        Sat, 18 Mar 2023 15:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCQXb0 (ORCPT
+        with ESMTP id S229550AbjCRTaF (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:31:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D74151FB0;
-        Fri, 17 Mar 2023 16:31:25 -0700 (PDT)
+        Sat, 18 Mar 2023 15:30:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13605BB0;
+        Sat, 18 Mar 2023 12:30:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24FD960B81;
-        Fri, 17 Mar 2023 23:31:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 316C3C433D2;
-        Fri, 17 Mar 2023 23:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679095884;
-        bh=BKv2lCgkapt88k5JeE6qHL3HDvWVl7vxGoYxVYQNE6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AZS77oFPc8vjt+NncTCzc4g5EY3J3gWnYeRoc2YSm+RS4YyFYLI8uZALE3Il4OSIU
-         COeo5BuUNlxyKdh0no6EKsx2h4/O0mGmXcBvUmxaUZLvoOtD8eaFEg4e+xcWb+9gfm
-         +EHeTbpFPV0M4xhcfEJZnAmfSMySgJcJaleWErkL5z3WfJPk6ZOBss195aDbL4PWB/
-         F3vCgvtdSe1u3WQyzINZxVvaRYchT7RtdfGlFn0+Dfcfwad73hANwBkKmsMv82e7AE
-         pFpqMhEjKrwMzkKdx72bZ1aUri4xedhOHvtzxG3wpo775n2w2TN/jF27Hz0+lbLEY4
-         oHKObMRWSyJ1Q==
-Date:   Fri, 17 Mar 2023 16:31:22 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
-        patches@lists.linux.dev, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: mod->klp set on copy ok ?
-Message-ID: <20230317233122.4vsewgrb3nq574fs@treble>
-References: <CAB=NE6Vo4AXVrn1GPEoZWVF3NkXRoPwWOuUEJqJ35S9VMGTM2Q@mail.gmail.com>
- <ZA8NBuXbVP+PRPp0@alley>
- <ZBOPP4YWWhJRk2yn@bombadil.infradead.org>
- <20230317161639.3de7yeek6ia4y7ul@treble>
- <ZBS42Lid+CX0h0fk@bombadil.infradead.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6635B60EEE;
+        Sat, 18 Mar 2023 19:30:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E99B9C4339C;
+        Sat, 18 Mar 2023 19:29:59 +0000 (UTC)
+Date:   Sat, 18 Mar 2023 15:29:58 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-trace-kernel@vger.kernel.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH] kallsyms: Delete an unused parameter related to
+ {module_}kallsyms_on_each_symbol()
+Message-ID: <20230318152958.16055098@rorschach.local.home>
+In-Reply-To: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+References: <20230308073846.1882-1-thunder.leizhen@huawei.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZBS42Lid+CX0h0fk@bombadil.infradead.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:00:40PM -0700, Luis Chamberlain wrote:
-> > I dug into that code years ago, and the above sounds right.
-> > 
-> > The .ko file has a .gnu.linkonce.this_module section whose data is just
-> > the original "struct module __this_module" which is created by the
-> > module build (from foo.mod.c).
-> > 
-> > At the beginning of the finit_module() syscall, the .ko file's ELF
-> > sections get copied (and optionally decompressed) into kernel memory.
-> > Then 'mod' just points to the copied __this_module struct.
-> > 
-> > Then mod->klp (and possibly mod->taint) get set.
-> > 
-> > Then in layout_and_allocate(), that 'mod' gets memcpy'd into the second
-> > (and final) in-kernel copy of 'struct module':
-> > 
-> >  		if (shdr->sh_type != SHT_NOBITS)
-> >  			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-> >  		/* Update sh_addr to point to copy in image. */
-> >  		shdr->sh_addr = (unsigned long)dest;
-> > 
-> > I suspect you don't see the size changing when you add to 'struct
-> > module' because it's ____cacheline_aligned.
-> > 
-> > It's all rather obtuse, but working as designed as far as I can tell.
-> 
-> Ah, well it is beyond a ____cacheline_aligned issue! It would seem our build
-> system does not incur a full re-build of $foo.mod.c if the size of struct module
-> changes. Doing a full rebuild does get the right drift size change in
-> struct module:
+On Wed, 8 Mar 2023 15:38:46 +0800
+Zhen Lei <thunder.leizhen@huawei.com> wrote:
 
-Ah, ok.  It sounds like build dependencies are broken for *.mod.c.
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 29baa97d0d53428..76caca8f496aaed 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -8391,8 +8391,7 @@ struct kallsyms_data {
+>   * and returns 1 in case we resolved all the requested symbols,
+>   * 0 otherwise.
+>   */
+> -static int kallsyms_callback(void *data, const char *name,
+> -			     struct module *mod, unsigned long addr)
+> +static int kallsyms_callback(void *data, const char *name, unsigned long addr)
+>  {
+>  	struct kallsyms_data *args = data;
+>  	const char **sym;
+> -- 
 
-The added validations in the patch look reasonable, though the broken
-build dependencies should also get fixed.
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
--- 
-Josh
+-- Steve
