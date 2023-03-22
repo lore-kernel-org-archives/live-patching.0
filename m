@@ -2,86 +2,111 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 782CEC6FD1D
-	for <live-patching@archiver.kernel.org>; Tue, 21 Mar 2023 08:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D737C6FD1C
+	for <live-patching@archiver.kernel.org>; Wed, 22 Mar 2023 15:41:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjCUIeY (ORCPT
+        id S229958AbjCVPlq (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 21 Mar 2023 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59534 "EHLO
+        Wed, 22 Mar 2023 11:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCUId6 (ORCPT
+        with ESMTP id S229549AbjCVPlp (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 21 Mar 2023 04:33:58 -0400
-Received: from mail.ptr1337.dev (mail.ptr1337.dev [202.61.224.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34234391C;
-        Tue, 21 Mar 2023 01:33:08 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C9F5F2800C1;
-        Tue, 21 Mar 2023 09:33:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-        t=1679387581; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references;
-        bh=ETMQewYqFOxyEeyfz++LRASMN6UldVLdJx3vLdRJ+U8=;
-        b=p1bxi7UdLGQgXoohfOEhj5UeH0nPUxhEjR6JNUfRnQ91T3hS+ISjInI6ZN+ahMEhsMVjrs
-        bbMhYeudtfLB5fThe7V3AyrTrYTSwgnTD6+yynQ9JAcM3dJ0ybmS5cEJkxRW5//vSUPCuA
-        nxt4iH5WvfcYZ2NxX95ez2DakRMZ9tn8l1RGBjtZeD+bgT5zWQ+Ggl1UL8GESk+JLXEp0g
-        BBrWrkY4aPDNtXlCEAU0hZGvLecHYNT18+b1ACO+GcgCaebOnpFoCrsSPmKAnwANUs10bI
-        dELABGj5PoQUnjn3xrd5UJJXaiw6/gqz2dpUnL0ePPpHVneNc+TDs6c0OSAgbQ==
-Message-ID: <c0217d44-b13b-7126-8291-b2e9ee8c4db2@cachyos.org>
-Date:   Tue, 21 Mar 2023 09:33:00 +0100
+        Wed, 22 Mar 2023 11:41:45 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C277618AD
+        for <live-patching@vger.kernel.org>; Wed, 22 Mar 2023 08:41:44 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y4so74766246edo.2
+        for <live-patching@vger.kernel.org>; Wed, 22 Mar 2023 08:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679499703;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JcaSHBOVM7lOp4H4ylkCBQXuh0C+r55dheOxQqbKNMM=;
+        b=HDRP6O3rT7SmtHM/3I9fGB1/ySn47HRKVsHKUHldO+yByVEuMruL1BEB5I7tqDRNgF
+         K0s///ue6xSbmrVIMmhdxEeBHr/iMuzJkcgrqZzBESBrdNDVVwlP4XTi29vkESo9oiY9
+         glEmx+cznacjHimHZCSdp7gEXr9/idZmb+e3ShKjiXba1jxLRhCcKORXfzRUa/kgKw1s
+         N4nW9Rzjm+TBbpX4gBzYWEvDTok4y4/Ugc/vJSahTSsedXt3gej+u17/2A8MY9c1ks8V
+         7e/uyDCJozbVzL1XsAcOSHkU9WH3UqXsuzu1Rx35CGg6BDNsAJ6hejB0NZUJ4pZhUFkH
+         0gfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679499703;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JcaSHBOVM7lOp4H4ylkCBQXuh0C+r55dheOxQqbKNMM=;
+        b=r7VHAS7qE9nwxeqw5ibXPuS8gJUUqZcW9jHl8l+742/K1LPfMCwgSSZbK8EMiXBP0x
+         epmQheEMarsLxtdOSIAEzAqjOQCJj0VyIXj6XL3i71LENEhND2/VhfaJZuJ2qz0mVBJ9
+         yoM+vIgcqME5siMu3UUW0EjrZH8YKz3Xt7QQHSrA0dpnGYAhN4jafGSp8JCkGOa7De0n
+         shr67CaN1AYzGe8mZViw3YFAU/Sd6Wj6cFcJRYA5OWwjB/FAEWVxLyMi7sqgMvuLKj+5
+         hPqWEIOR7ME7f6/G05OfHbC2yMIcylKRp6y6LeWs4OQlStD1MYcFyFxFG/O1uUiUEgx2
+         v1fQ==
+X-Gm-Message-State: AO0yUKWV3YWYaEBXJkKWt3lHmB3071XJo50H8+BKfbkCz8zdw91a7KBa
+        jd3TprBWi4mOc48TtW83mJiW10S9Yg==
+X-Google-Smtp-Source: AK7set9Fzj1TTWcMs9pgOGGVOAQeYKn29zLgjpwFBNEzTfL6XDjxPcpWw8i0tsR8SB/3hR0TrgU8JQ==
+X-Received: by 2002:a17:906:6408:b0:8bf:e95c:467b with SMTP id d8-20020a170906640800b008bfe95c467bmr6783215ejm.63.1679499702946;
+        Wed, 22 Mar 2023 08:41:42 -0700 (PDT)
+Received: from p183 ([46.53.253.128])
+        by smtp.gmail.com with ESMTPSA id e9-20020a17090681c900b008cf377e8795sm7388783ejx.199.2023.03.22.08.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 08:41:42 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 18:41:40 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     live-patching@vger.kernel.org
+Subject: question re klp_transition_work kickoff timeout
+Message-ID: <c84a0b0c-4232-451e-be0b-a6c29d69c1a8@p183>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] module/decompress: Never use kunmap() for local
- un-mappings
-To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        live-patching@vger.kernel.org, bpf@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-Content-Language: pl-PL, en-US
-From:   Piotr Gorski <piotrgorski@cachyos.org>
-In-Reply-To: <20230315125256.22772-1-fmdefrancesco@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-Reviewed-by: Piotr Gorski <piotrgorski@cachyos.org>
+Hi, Josh.
 
-W dniu 15.03.2023 o 13:52, Fabio M. De Francesco pisze:
-> Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
->
-> kunmap_local() must be called on the kernel virtual address returned by
-> kmap_local_page(), differently from how we use kunmap() which instead
-> expects the mapped page as its argument.
->
-> In module_zstd_decompress() we currently map with kmap_local_page() and
-> unmap with kunmap(). This breaks the code and so it should be fixed.
->
-> Cc: Piotr Gorski <piotrgorski@cachyos.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->   kernel/module/decompress.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> index bb79ac1a6d8f..7ddc87bee274 100644
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -267,7 +267,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
->   		zstd_dec.size = PAGE_SIZE;
->   
->   		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
-> -		kunmap(page);
-> +		kunmap_local(zstd_dec.dst);
->   		retval = zstd_get_error_code(ret);
->   		if (retval)
->   			break;
+I've been profiling how much time livepatching takes and I have a question
+regarding these lines:
+
+	void klp_try_complete_transition(void)
+	{
+		...
+		if (!complete) {
+			schedule_delayed_work(&klp_transition_work, round_jiffies_relative(HZ));
+			return;
+		}
+
+	}
+
+The problem here is that if the system is idle, then the previous loop
+checking idle tasks will reliably sets "complete = false" and then
+patching wastes time waiting for next second so that klp_transition_work
+will repeat the same code without reentering itself.
+
+I've created trivial patch which changes 2 functions and it takes
+~1.3 seconds to complete transition:
+
+	[   33.829506] livepatch: 'main': starting patching transition
+	[   35.190721] livepatch: 'main': patching complete
+
+I don't know what's the correct timeout to retry transition work
+but it can be made near-instant:
+
+	[  100.930758] livepatch: 'main': starting patching transition
+	[  100.956190] livepatch: 'main': patching complete
+
+
+	Alexey (CloudLinux)
+
+
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -435,8 +435,7 @@ void klp_try_complete_transition(void)
+ 		 * later and/or wait for other methods like kernel exit
+ 		 * switching.
+ 		 */
+-		schedule_delayed_work(&klp_transition_work,
+-				      round_jiffies_relative(HZ));
++		schedule_delayed_work(&klp_transition_work, msecs_to_jiffies(1));
+ 		return;
+ 	}
+ 
