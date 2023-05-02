@@ -2,69 +2,71 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D768C77B61
-	for <live-patching@archiver.kernel.org>; Tue, 25 Apr 2023 20:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EC3AC77B73
+	for <live-patching@archiver.kernel.org>; Tue,  2 May 2023 17:40:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjDYULM (ORCPT
+        id S231839AbjEBRkp (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 25 Apr 2023 16:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
+        Tue, 2 May 2023 13:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbjDYULL (ORCPT
+        with ESMTP id S233858AbjEBRko (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 25 Apr 2023 16:11:11 -0400
+        Tue, 2 May 2023 13:40:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8874CCC19;
-        Tue, 25 Apr 2023 13:11:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB54F114
+        for <live-patching@vger.kernel.org>; Tue,  2 May 2023 10:40:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E52C63173;
-        Tue, 25 Apr 2023 20:10:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B29FEC4339B;
-        Tue, 25 Apr 2023 20:10:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58509621CC
+        for <live-patching@vger.kernel.org>; Tue,  2 May 2023 17:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCBBC433EF
+        for <live-patching@vger.kernel.org>; Tue,  2 May 2023 17:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682453451;
-        bh=t7i5oLH3yrnFXi6q7mDqLvrBKRvuWzNtqXzEmuPgY2o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=N7plkgRSCHJGVIBtliTXdIAiucJlHHjrKUm77lJgss8ANiQev5Cg2StrEUSiDZO/M
-         ReeT7IKt6B+dHXvJMGWzlzzygIhg2HeONkhtpFeAOPNy8ZY9sDUP46Q8lcbB/IfRI/
-         phUIxh5fp6UTxJFSARd3bIC4siSgxIixjB76o+xbxJXy0f5uI1ty/tUN4Un2udss8/
-         vcP8lSxZSnCQsYCSGzNdoHI0RF4FaSoiPaotY3H3D5xydO5CRWllSa7ww22zd7zfS7
-         AjnJBIPQEh2+ZFif474fMflyLmsk1bvO56lvjZ+V6Tub+OLHpH/6Zt+9GBxEY2+ok7
-         7V/MeHAIDlFuw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9AC8CC395D8;
-        Tue, 25 Apr 2023 20:10:51 +0000 (UTC)
-Subject: Re: [GIT PULL] livepatching for 6.4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZEavnK8VfIXr-jsP@alley>
-References: <ZEavnK8VfIXr-jsP@alley>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZEavnK8VfIXr-jsP@alley>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching tags/livepatching-for-6.4
-X-PR-Tracked-Commit-Id: c9c8133080c75ce2440001d765dbe8c24f932ea2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 11704531dde45bc667a411e1c76de81d9f4481b8
-Message-Id: <168245345163.30863.9183901678333067129.pr-tracker-bot@kernel.org>
-Date:   Tue, 25 Apr 2023 20:10:51 +0000
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+        s=k20201202; t=1683049242;
+        bh=hSNlmZG34nJnElMIlu0ravnV4E2D4HAVe3MCXh8CaFY=;
+        h=From:Date:Subject:To:From;
+        b=EN6jL75+UCMSgGgpWZooPDzaMetBC+8ZQrUQt8wWWd762P9K0D5tFl0mKCN2b+7+C
+         uT1FvCLodXYWLaDggRawW7WCzibvxKpYZqssdLty8oKYsW89e6eYrcNXaAsy6dij2O
+         e4pZf24b5InlyD6Uw1tZxVa/CRKQ2NxUtcL6PFkOduyUNQ0zPYzLnVk+UK0YFAVGCS
+         MVL06qB5x2uajJqF+KGtYxbLUwz3VntBZE1Bkao2WjEiTYWHK590km+/zQs3qd1vd4
+         TkZGvLi/z1Ody5rfpXVbjUG+b26suz+uVMtzEHqWrRRtqb3jwHyoG7JbdM0cVVSaVd
+         2Dhk6izWRgklg==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2a8dd1489b0so39680751fa.3
+        for <live-patching@vger.kernel.org>; Tue, 02 May 2023 10:40:42 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwDHj/ab6AcGk6aCmclEINeRTZZyIf2IRz+yWd70qxpRt8OzY8o
+        OhNuy3+v1CIKdVV9J6oxLagWNy+9TqO/PQPRDO4=
+X-Google-Smtp-Source: ACHHUZ6YL1Is3DhVORaMM68IhPp36emUGa3h8O5RwDrGFZbjp6Yi/aWxvmM+YikY1EIdtYaDWLHrg42Z+FE5kiyTrSo=
+X-Received: by 2002:a05:6512:11e2:b0:4eb:401e:1b76 with SMTP id
+ p2-20020a05651211e200b004eb401e1b76mr169581lfs.52.1683049240720; Tue, 02 May
+ 2023 10:40:40 -0700 (PDT)
+MIME-Version: 1.0
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 2 May 2023 10:40:28 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW58LYU8iRCjoeChCyQ_7gqZvp6_U-fJr2Crf6gOniA51g@mail.gmail.com>
+Message-ID: <CAPhsuW58LYU8iRCjoeChCyQ_7gqZvp6_U-fJr2Crf6gOniA51g@mail.gmail.com>
+Subject: Question about inline, notrace, and livepatch
+To:     live-patching@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-The pull request you sent on Mon, 24 Apr 2023 18:34:36 +0200:
+We hit the following hiccup a couple times in the past few months:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching tags/livepatching-for-6.4
+A function is marked as "inline", but the compiler decided not to inline it.
+Since "inline" implies "notrace" since [1], this function doesn't have
+fentry/mcount. When we built livepatch for this function, kpatch-build
+failed with:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/11704531dde45bc667a411e1c76de81d9f4481b8
+   xxx.o: function yyy has no fentry/mcount call, unable to patch
 
-Thank you!
+This is not a deal breaker, as we can usually modify the patch to work
+around it. But I wonder whether we still need "inline" to imply "notrace".
+Can we remove this to make livepatch a little easier?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Song
+
+[1] 93b3cca1ccd3 ("ftrace: Make all inline tags also include notrace")
