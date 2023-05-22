@@ -2,129 +2,160 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2093EC77B75
-	for <live-patching@archiver.kernel.org>; Tue,  9 May 2023 20:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 207FEC77B73
+	for <live-patching@archiver.kernel.org>; Mon, 22 May 2023 18:42:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjEIUez (ORCPT
+        id S229576AbjEVSmo (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 9 May 2023 16:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        Mon, 22 May 2023 14:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjEIUey (ORCPT
+        with ESMTP id S229569AbjEVSmn (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 9 May 2023 16:34:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1239E10FE;
-        Tue,  9 May 2023 13:34:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E63D1F749;
-        Tue,  9 May 2023 20:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683664491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 22 May 2023 14:42:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EDAC4
+        for <live-patching@vger.kernel.org>; Mon, 22 May 2023 11:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684780923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=K3D8zA2tmAmIa323+7ZF/XLPZJO7JogZ7ToR1HtZFDM=;
-        b=0I8DhwtC7cuSTVHblvvoG/OReiK2L4AFZRelRMvJ2uoQMIB6Y6qLnvBiA1jityK88b9W7/
-        h7xhozNFf4FOIfajQRz+QVXKWApqTdPwVPfg9A/5nxCu3yZuT9rU6qWMwOu7Tfz/qn+T56
-        4dC1H/0CFpmohCdjxv2KWKGuzuB2eZk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683664491;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K3D8zA2tmAmIa323+7ZF/XLPZJO7JogZ7ToR1HtZFDM=;
-        b=xmiFJQDxWV48mWyA1idnEfNYHFeEYTbFAwbSkQBSpdzajM01VvE6m4M5IVdWqdg3Ovmy/0
-        5vbHjx/sDNnVmlBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D55E5139B3;
-        Tue,  9 May 2023 20:34:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ai+bJmquWmQjRgAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Tue, 09 May 2023 20:34:50 +0000
-Date:   Tue, 9 May 2023 17:34:48 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>,
-        Lukas Hruska <lhruska@suse.cz>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <coxl6y2ivnp6tqxclpm54m4fpbf3ansil3abftbj4nv76vuheq@sxvagra4almd>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230314202356.kal22jracaw5442y@daedalus>
- <ZBTNvEPrCcRj3F1C@redhat.com>
- <20230317232010.7uq6tt4ty35eo5hm@treble>
- <873556ag24.fsf@suse.de>
- <e41b041a-6a9e-210a-bf09-14db2b637e79@redhat.com>
+        bh=B3cak4dq5ZNrQmULyPGjX8GvQOT3hbmpyV3/2svt1tE=;
+        b=XAH7ICDIQuSNNn+lSdJAt3c2YBlXqrjk2lq8oQdw8PB/yICFAGbVcLCPPNol7rrDTwv+FW
+        TLdAPleA0ZsPikq23Lei/D2K35eeU2cOCeHhqEvkGqkvOPnnLRCrsZXTBi6ZyebVFIQrAm
+        CLoZV1XSLZ4DhJI/phkCwNnjql+Pyi0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-191-_70WDZ1wOYCuCcNBHEt18A-1; Mon, 22 May 2023 14:42:01 -0400
+X-MC-Unique: _70WDZ1wOYCuCcNBHEt18A-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62575b17444so12982866d6.2
+        for <live-patching@vger.kernel.org>; Mon, 22 May 2023 11:42:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684780921; x=1687372921;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B3cak4dq5ZNrQmULyPGjX8GvQOT3hbmpyV3/2svt1tE=;
+        b=QjttM6NuCv7O0a923CgZ6SD6kV1knyRDKndsekrVv/48mb1VIWw72thFsWacC41O78
+         5HHe+cdxunWkrByHA+Cezz9K5yaxe36iV4zAoK6Q7zQjcY/lDlOoD7spmNkuNUiZSwQd
+         Jv0j8TrXJdx+3oAcZAppbNkJs7GuXhX2IrRRHci7aY4RNKJu/+B4OcVzlpY3YAyOY80p
+         SY6nhlKHwK6BxeuU99MNKeOX+hfsU7CDX0xTTsJ2Hn48S+PI7F8zLfJ8gX1zOw7yJijX
+         G97Za4IVJTcGFNLE09Fg0KIAmpHCYSJ97eAd7f+d8ipRLTEG3UJFoEs3ZgH1Ap1oyB5f
+         92Sg==
+X-Gm-Message-State: AC+VfDxZuljBoau4Afq6PExWYIvaP5RtUgv+Uw53j8ZF/aykC/Sxd/yy
+        nzOSXmWMZjCPT9H7FRSvdFHMQTqvZPesKASis0m5rxYem5SIkeSmOB+KEd9NE819/Zq3KDeJo2m
+        430ZtSQtsqjmALxc6+/m9dam4Lw==
+X-Received: by 2002:a05:6214:224b:b0:623:557d:91c7 with SMTP id c11-20020a056214224b00b00623557d91c7mr23045705qvc.25.1684780920809;
+        Mon, 22 May 2023 11:42:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6OxVpNs7qRG4D5vuWTsqZTwamdWXGJ4cSufQdGroUsIraKcVDfMGEcX6wi1hHPUfUoWCUX6Q==
+X-Received: by 2002:a05:6214:224b:b0:623:557d:91c7 with SMTP id c11-20020a056214224b00b00623557d91c7mr23045687qvc.25.1684780920529;
+        Mon, 22 May 2023 11:42:00 -0700 (PDT)
+Received: from [192.168.1.30] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id t2-20020a0ce582000000b0062106d10b9bsm2124538qvm.82.2023.05.22.11.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 11:42:00 -0700 (PDT)
+Message-ID: <041b65c7-6016-e03b-106d-1ce793004e34@redhat.com>
+Date:   Mon, 22 May 2023 14:41:58 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e41b041a-6a9e-210a-bf09-14db2b637e79@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Miroslav Benes <mbenes@suse.cz>, jpoimboe@kernel.org,
+        jikos@kernel.org, pmladek@suse.com, nstange@suse.de,
+        mpdesouza@suse.de, mark.rutland@arm.com, broonie@kernel.org
+Cc:     live-patching@vger.kernel.org
+References: <alpine.LSU.2.21.2303291339090.21599@pobox.suse.cz>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: Live Patching Microconference at Linux Plumbers
+In-Reply-To: <alpine.LSU.2.21.2303291339090.21599@pobox.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Wed, May 03, 2023 at 03:54:47PM -0400, Joe Lawrence wrote:
-> On 4/11/23 06:06, Nicolai Stange wrote:
-> > Josh Poimboeuf <jpoimboe@kernel.org> writes:
-> > 
-> >> On Fri, Mar 17, 2023 at 04:29:48PM -0400, Joe Lawrence wrote:
-> >>> Have you tried retrofitting klp-convert into any real-world livepatch?
-> >>> I'm curious as to your observations on the overall experience, or
-> >>> thoughts on the sympos annotation style noted above.
-> >>
-> >> On a related note, the patch creation process (of which klp-convert
-> >> would be part of) needs to be documented.
-> >>
-> >> If I remember correctly, the proper safe usage of klp-convert requires a
-> >> kernel built with -flive-patching, plus some scripting and/or manual
-> >> processes.
-> > 
-> > Not always, I think: -flive-patching or IPA optimizations in general
-> > aren't a concern in the context of data symbols. From a quick glance, it
-> > seems like the selftests introduced as part of this patchset are
-> > all restricted to this usecase.
-> > 
+On 3/29/23 08:05, Miroslav Benes wrote:
+> Hi,
 > 
-> IIRC there is nothing currently stopping klp-convert from converting
-> function symbol relocations.  That may be dangerous when taking
-> optimizations like sibling functions (and their sharing of stack) into
-> consideration.  This is about the point I stopped to turn and see what
-> the real use cases may be.
+> we would like to organize Live Patching Microconference at Linux Plumbers 
+> 2023. The conference will take place in Richmond, VA, USA. 13-15 November. 
+> https://lpc.events/. The call for proposals has been opened so it is time 
+> to start the preparation on our side.
 > 
-> >> If nobody knows how to safely use it then there wouldn't be much value
-> >> in merging it.
-> > 
-> > I tend to agree, but would put it a bit differently: the current
-> > implementation of klp-convert features quite some convenience logic,
-> > which, until the question of a documented livepatch preparation process
-> > has been settled, is not known yet to ever be of any use.
-> > 
+> You can find the proposal below. Comments are welcome. The list of topics 
+> is open, so feel free to add more. I tried to add key people to discuss 
+> the topics, but the list is not exhaustive. I would like to submit the 
+> proposal soonish even though the deadline is on 1 June. I assume that we 
+> can update the topics later. My plan is to also organize a proper Call for 
+> Topics after the submission and advertise it also on LKML.
 > 
-> Good observation and perhaps something that Marcos could elaborate on
-> (pros and cons of klp-convert in his experiments).
+> Last but not least it would be nice to have a co-runner of the show. Josh, 
+> Joe, any volunteer? :)
+> 
+> Thank you
+> Miroslav
+> 
+> 
+> Proposal
+> --------
+> The Live Patching microconference at Linux Plumbers 2023 aims to gather
+> stakeholders and interested parties to discuss proposed features and
+> outstanding issues in live patching.
+> 
+> Live patching is a critical tool for maintaining system uptime and
+> security by enabling fixes to be applied to running systems without the
+> need for a reboot. The development of the infrastructure is an ongoing
+> effort and while many problems have been resolved and features
+> implemented, there are still open questions, some with already submitted
+> patch sets, which need to be discussed.
+> 
+> Live Patching microconferences at the previous Linux Plumbers
+> conferences proved to be useful in this regard and helped us to find
+> final solutions or at least promising directions to push the development
+> forward. It includes for example a support for several architectures
+> (ppc64le and s390x were added after x86_64), a late module patching and
+> module dependencies and user space live patching.
+> 
+> Currently proposed topics follow. The list is open though and more will
+> be added during the regular Call for Topics.
+> 
+>   - klp-convert (as means to fix CET IBT limitations) and its 
+>     upstreamability
+>   - shadow variables, global state transition
+>   - kselftests and the future direction of development
+>   - arm64 live patching
+> 
+> Key people
+> 
+>   - Josh Poimboeuf <jpoimboe@kernel.org>
+>   - Jiri Kosina <jikos@kernel.org>
+>   - Miroslav Benes <mbenes@suse.cz>
+>   - Petr Mladek <pmladek@suse.com>
+>   - Joe Lawrence <joe.lawrence@redhat.com>
+>   - Nicolai Stange <nstange@suse.de>
+>   - Marcos Paulo de Souza <mpdesouza@suse.de>
+>   - Mark Rutland <mark.rutland@arm.com>
+>   - Mark Brown <broonie@kernel.org>
+> 
+> We encourage all attendees to actively participate in the
+> microconference by sharing their ideas, experiences, and insights.
 > 
 
-In my tests, I took the exact code generated by klp-ccp, and adapted it to not
-rely on kallsyms anymore, removing the symbol lookups. For data symbols, I
-changed it to be a extern variable instead of a pointer to it. For the function
-symbols, also removed the pointer lookup, and left only the function prototype,
-and it worked as expected.
+Hi folks,
 
-I was quite surprised that it worked quite well. But I agree with
-Nicolai that the tool itself could be shrunk into a smaller version. In our
-usage, klp-ccp knows all unexported functions and to which modules they belong,
-as it's currently used for the symbol lookup. I believe that kpatch-build also
-has similar information so all the symbols.klp and other Kbuild machinery could be
-avoided, making the tool responsible to only generate the klp relocations based
-on the undefined symbols, just as proposed by Nicolai.
+Gentle bump and call for any late updates to the Live Patching
+Microconference Proposal.  I believe we have about a week left to edit
+the proposal for consideration at this year's LPC.
+
+See [1] for more info on LPC 2023 and [2] for the currently proposed
+microconferences.
+
+[1] https://lpc.events/event/17/
+[2[ https://lpc.events/event/17/page/200-proposed-microconferences
+
+-- 
+Joe
+
