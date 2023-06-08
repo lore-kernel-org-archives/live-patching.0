@@ -2,68 +2,135 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5FF0C7EE24
-	for <live-patching@archiver.kernel.org>; Mon,  5 Jun 2023 16:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9288C7EE2E
+	for <live-patching@archiver.kernel.org>; Thu,  8 Jun 2023 09:51:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjFEQjk (ORCPT
+        id S233490AbjFHJvA (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Mon, 5 Jun 2023 12:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        Thu, 8 Jun 2023 05:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjFEQjj (ORCPT
+        with ESMTP id S232759AbjFHJu7 (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Mon, 5 Jun 2023 12:39:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE549FA
-        for <live-patching@vger.kernel.org>; Mon,  5 Jun 2023 09:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BE9F618DC
-        for <live-patching@vger.kernel.org>; Mon,  5 Jun 2023 16:39:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 839F3C433D2;
-        Mon,  5 Jun 2023 16:39:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685983176;
-        bh=iZWMe3FUix/iValzRwJZJcHnZMQIXyaYgI/w4cDZe/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T8ixW+02usrGpOA5QG2wMWyOlc9O2acidtU0pjN+pdedwtxsNCGnmPyCgv4wfWZUT
-         9K2txMOGZwW2GZdLBny/RWIhGgSaEFUGoCWsj7rfyageZ5tNZVo6j0R1FZdzlzZb71
-         yXvDcBYgZjhda2+R6Gu4ixBvZG712j85iKUmOtyBAqvCTO6UoixKShmllC9xs7O/jz
-         lpgzY4grwTirCf7HeRv1vxU9JuxJnyaE00y0BIP6uxKY8eUpxVt63bVi/+dWzwh0RB
-         9u/uqgeH/KQcwnCeSPdJcm6FpkTI6daYuttp5QKHRoDPZUqcRZx6jIwjJnXmnCJRxF
-         VKFtm+nNtcyrg==
-Date:   Mon, 5 Jun 2023 09:39:34 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, joe.lawrence@redhat.com, kernel-team@meta.com
-Subject: Re: [PATCH] livepatch: match symbols exactly in
- klp_find_object_symbol()
-Message-ID: <20230605163934.sgowjnvpyqzcxamj@treble>
-References: <20230602232401.3938285-1-song@kernel.org>
+        Thu, 8 Jun 2023 05:50:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11B8C26B0;
+        Thu,  8 Jun 2023 02:50:57 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34FEAAB6;
+        Thu,  8 Jun 2023 02:51:42 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.24.103])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B0B0E3F71E;
+        Thu,  8 Jun 2023 02:50:54 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:50:51 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <song@kernel.org>, live-patching@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [PATCH] ftrace: Allow inline functions not inlined to be traced
+Message-ID: <ZIGkezEx87zehzJr@FVFF77S0Q05N>
+References: <20230502164102.1a51cdb4@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602232401.3938285-1-song@kernel.org>
+In-Reply-To: <20230502164102.1a51cdb4@gandalf.local.home>
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 04:24:01PM -0700, Song Liu wrote:
-> With CONFIG_LTO_CLANG, kallsyms.c:cleanup_symbol_name() removes symbols
-> suffixes during comparison. This is problematic for livepatch, as
-> kallsyms_on_each_match_symbol may find multiple matches for the same
-> symbol, and fail with:
+On Tue, May 02, 2023 at 04:41:02PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
->   livepatch: unresolvable ambiguity for symbol 'xxx' in object 'yyy'
+> Over 10 years ago there were many bugs that caused function tracing to
+> crash because some inlined function was not inlined and should not have
+> been traced. This made it hard to debug because when the developer tried
+> to reproduce it, if their compiler still inlined the function, the bug
+> would not trigger. The solution back then was simply to add "notrace" to
+> "inline" which would make sure all functions that are marked inline are
+> never traced even when the compiler decides to not inline them.
 > 
-> Fix this by using kallsyms_on_each_symbol instead, and matching symbols
-> exactly.
+> A lot has changed over the last 10 years.
 > 
-> Signed-off-by: Song Liu <song@kernel.org>
+> 1) ftrace_test_recursion_trylock() is now used by all ftrace hooks which
+>    will prevent the recursive crashes from happening that was caused by
+>    inlined functions being traced.
+> 
+> 2) noinstr is now used to mark pretty much all functions that would also
+>    cause problems if they are traced.
+> 
+> Today, it is no longer a problem if an inlined function is not inlined and
+> is traced. Removing notrace from inline has been requested several times
+> over the years. I believe it is now safe to do so.
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Unfortunately, from a quick build-test of arm64 there are a bunch of places
+that are currently inline that need to be __always_inline for this to be safe.
+Notably we have a few low-level helpers like is_kernel_in_hyp_mode() that are
+only inlines, and those get used in the bowels of our entry code before we've
+restored some HW state (e.g. in arch_nmi_enter()).
 
--- 
-Josh
+I'm happy to go audit and fixup arm64, but that will take some work.
+
+Maybe it's worth having something like:
+
+#ifdef ARCH_CAN_TRACE_INLINE
+#define __notrace_inline
+#else
+#define __notrace_inline	notrace
+#endif
+
+... so that we can opt-in where this is safe, (e.g. on x86)?
+
+Thanks,
+Mark.
+
+> ---
+>  include/linux/compiler_types.h | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index 547ea1ff806e..c8f23ba1c339 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -182,9 +182,8 @@ struct ftrace_likely_data {
+>   * externally visible function. This makes extern inline behave as per gnu89
+>   * semantics rather than c99. This prevents multiple symbol definition errors
+>   * of extern inline functions at link time.
+> - * A lot of inline functions can cause havoc with function tracing.
+>   */
+> -#define inline inline __gnu_inline __inline_maybe_unused notrace
+> +#define inline inline __gnu_inline __inline_maybe_unused
+>  
+>  /*
+>   * gcc provides both __inline__ and __inline as alternate spellings of
+> @@ -230,7 +229,7 @@ struct ftrace_likely_data {
+>   *     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67368
+>   * '__maybe_unused' allows us to avoid defined-but-not-used warnings.
+>   */
+> -# define __no_kasan_or_inline __no_sanitize_address notrace __maybe_unused
+> +# define __no_kasan_or_inline __no_sanitize_address __maybe_unused
+>  # define __no_sanitize_or_inline __no_kasan_or_inline
+>  #else
+>  # define __no_kasan_or_inline __always_inline
+> @@ -247,7 +246,7 @@ struct ftrace_likely_data {
+>   * disable all instrumentation. See Kconfig.kcsan where this is mandatory.
+>   */
+>  # define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumentation
+> -# define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
+> +# define __no_sanitize_or_inline __no_kcsan __maybe_unused
+>  #else
+>  # define __no_kcsan
+>  #endif
+> -- 
+> 2.39.2
+> 
