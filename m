@@ -2,614 +2,246 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF68EB64D7
-	for <live-patching@archiver.kernel.org>; Tue, 20 Jun 2023 07:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA20DEB64D7
+	for <live-patching@archiver.kernel.org>; Tue, 20 Jun 2023 08:16:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjFTHyK (ORCPT
+        id S231703AbjFTIQM (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 20 Jun 2023 03:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        Tue, 20 Jun 2023 04:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjFTHxj (ORCPT
+        with ESMTP id S229519AbjFTIQL (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:53:39 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D802810D0;
-        Tue, 20 Jun 2023 00:53:17 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxHuurWpFkLhwHAA--.14682S3;
-        Tue, 20 Jun 2023 15:52:11 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauWoWpFkdmghAA--.28374S3;
-        Tue, 20 Jun 2023 15:52:09 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Tue, 20 Jun 2023 04:16:11 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00F7186;
+        Tue, 20 Jun 2023 01:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1687248957;
+        bh=uvIMbSM8lUE4j4HkY3cfuFfDwHi9cXKCNP4lvXqC8EM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mHPtjgDwpGjJDTcWygYEtovN3PrUWxR3CR3S77sbdp4F4nTKJItA5HJnsfoB19GwT
+         vVzsh35nZhuWSC/d4KSIDktdFi6rWuih19zm2eCHLqtyoBmRPFmU5jIzaMSguoubpT
+         PDpQWS3c8nPbcwn4idMnlIpA4iw+n51QYS7qux1Y=
+Received: from [192.168.124.11] (unknown [113.140.11.4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id ADE2E66418;
+        Tue, 20 Jun 2023 04:15:54 -0400 (EDT)
+Message-ID: <bed4d386c16701d14a2ea395edeb0368cb3d04ad.camel@xry111.site>
+Subject: Re: [RFC PATCH v1 00/23] LoongArch: Add objtool and ORC unwinder
+ support
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Youling Tang <tangyouling@loongson.cn>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         madvenka@linux.microsoft.com
 Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        tangyouling00@gmail.com, youling.tang@outlook.com,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [RFC PATCH v1 16/23] LoongArch: Add ORC unwinder support
-Date:   Tue, 20 Jun 2023 15:52:03 +0800
-Message-Id: <1687247526-32258-2-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
-References: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8AxauWoWpFkdmghAA--.28374S3
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoWfJry3XFWfuF1xCr1UKFy7twc_yoW8WF45Wo
-        WayF4jgr48CrZxt3yYyr1UtFWjqr4jyF4DA3yavw43WF47A345XrWUKa9xtFyIqrn5KrWx
-        CFWSqrsYva1xJFn7l-sFpf9Il3svdjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf
-        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-        UjIYCTnIWjp_UUUOI7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-        67AKxVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804V
-        CY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AK
-        xVW8Xw0E3s1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y4
-        8IcxkI7VAKI48JM4x0Y40E4IxF1VCIxcxG6Fyj6r4UJwCY1x0262kKe7AKxVWUAVWUtwCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWDJVCq3wCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7IUYyMKtUUUUU==
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, tangyouling00@gmail.com,
+        youling.tang@outlook.com
+Date:   Tue, 20 Jun 2023 16:15:52 +0800
+In-Reply-To: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
+References: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.3 
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-With a blatant copy of some x86, we introduce the another unwinder named
-"orc unwinder" to unwind stack with custom data created by objtool.
-
-Before vmlinux created, we check all metadata, find the stack operation,
-note stack state and create orc data. Objtool insert two sections into
-vmlinux. '.orc_unwind_ip' and '.orc_unwind'. (For modules, insert
-'.rela.orc_unwind_ip' to relocate '.orc_unwind_ip'.) Each insn has only
-one stack state in .orc_unwind and orc_unwind_ip hint its pc address.
-Through unwinding orc data, we can get stack info both kernel and module.
-
-Do not like x86, we add ra_reg and ra_offset into orc_entry so that we
-can get ra info before ra saved into stack. At present, the unwind ability
-has not been fully reflected, because it has not been annotated in the
-assembly code.
-
-Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
- arch/loongarch/Kconfig.debug        |  11 +
- arch/loongarch/include/asm/module.h |   7 +
- arch/loongarch/include/asm/unwind.h |  17 +-
- arch/loongarch/kernel/Makefile      |   1 +
- arch/loongarch/kernel/module.c      |  11 +-
- arch/loongarch/kernel/setup.c       |   2 +
- arch/loongarch/kernel/stacktrace.c  |   1 +
- arch/loongarch/kernel/unwind_orc.c  | 301 ++++++++++++++++++++++++++++
- arch/loongarch/kernel/vmlinux.lds.S |   3 +
- 9 files changed, 351 insertions(+), 3 deletions(-)
- create mode 100644 arch/loongarch/kernel/unwind_orc.c
-
-diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
-index 8d36aab53008..98d60630c3d4 100644
---- a/arch/loongarch/Kconfig.debug
-+++ b/arch/loongarch/Kconfig.debug
-@@ -26,4 +26,15 @@ config UNWINDER_PROLOGUE
- 	  Some of the addresses it reports may be incorrect (but better than the
- 	  Guess unwinder).
- 
-+config UNWINDER_ORC
-+	bool "ORC unwinder"
-+	select OBJTOOL
-+	help
-+	  This option enables the ORC (Oops Rewind Capability) unwinder for
-+	  unwinding kernel stack traces.  It uses a custom data format which is
-+	  a simplified version of the DWARF Call Frame Information standard.
-+
-+	  Enabling this option will increase the kernel's runtime memory usage
-+	  by roughly 2-4MB, depending on your kernel config.
-+
- endchoice
-diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
-index 12a0f1e66916..0f654108d1ee 100644
---- a/arch/loongarch/include/asm/module.h
-+++ b/arch/loongarch/include/asm/module.h
-@@ -7,6 +7,7 @@
- 
- #include <asm/inst.h>
- #include <asm-generic/module.h>
-+#include <asm/orc_types.h>
- 
- #define RELA_STACK_DEPTH 16
- 
-@@ -23,6 +24,12 @@ struct mod_arch_specific {
- 
- 	/* For CONFIG_DYNAMIC_FTRACE */
- 	struct plt_entry *ftrace_trampolines;
-+
-+#ifdef CONFIG_UNWINDER_ORC
-+	unsigned int num_orcs;
-+	int *orc_unwind_ip;
-+	struct orc_entry *orc_unwind;
-+#endif
- };
- 
- struct got_entry {
-diff --git a/arch/loongarch/include/asm/unwind.h b/arch/loongarch/include/asm/unwind.h
-index b9dce87afd2e..da92211c8595 100644
---- a/arch/loongarch/include/asm/unwind.h
-+++ b/arch/loongarch/include/asm/unwind.h
-@@ -16,6 +16,7 @@
- enum unwinder_type {
- 	UNWINDER_GUESS,
- 	UNWINDER_PROLOGUE,
-+	UNWINDER_ORC,
- };
- 
- struct unwind_state {
-@@ -24,7 +25,7 @@ struct unwind_state {
- 	struct task_struct *task;
- 	bool first, error, reset;
- 	int graph_idx;
--	unsigned long sp, pc, ra;
-+	unsigned long sp, pc, ra, fp;
- };
- 
- bool default_next_frame(struct unwind_state *state);
-@@ -34,6 +35,12 @@ void unwind_start(struct unwind_state *state,
- bool unwind_next_frame(struct unwind_state *state);
- unsigned long unwind_get_return_address(struct unwind_state *state);
- 
-+#ifdef CONFIG_UNWINDER_ORC
-+void unwind_init(void);
-+#else
-+static inline void unwind_init(void) {}
-+#endif
-+
- static inline bool unwind_done(struct unwind_state *state)
- {
- 	return state->stack_info.type == STACK_TYPE_UNKNOWN;
-@@ -61,14 +68,17 @@ static __always_inline void __unwind_start(struct unwind_state *state,
- 		state->sp = regs->regs[3];
- 		state->pc = regs->csr_era;
- 		state->ra = regs->regs[1];
-+		state->fp = regs->regs[22];
- 	} else if (task && task != current) {
- 		state->sp = thread_saved_fp(task);
- 		state->pc = thread_saved_ra(task);
- 		state->ra = 0;
-+		state->fp = 0;
- 	} else {
- 		state->sp = (unsigned long)__builtin_frame_address(0);
- 		state->pc = (unsigned long)__builtin_return_address(0);
- 		state->ra = 0;
-+		state->fp = 0;
- 	}
- 	state->task = task;
- 	get_stack_info(state->sp, state->task, &state->stack_info);
-@@ -77,6 +87,9 @@ static __always_inline void __unwind_start(struct unwind_state *state,
- 
- static __always_inline unsigned long __unwind_get_return_address(struct unwind_state *state)
- {
--	return unwind_done(state) ? 0 : state->pc;
-+	if (unwind_done(state))
-+		return 0;
-+
-+	return __kernel_text_address(state->pc) ? state->pc : 0;
- }
- #endif /* _ASM_UNWIND_H */
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 78d4e3384305..fcbfa0f38b53 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -48,6 +48,7 @@ obj-$(CONFIG_CRASH_DUMP)	+= crash_dump.o
- 
- obj-$(CONFIG_UNWINDER_GUESS)	+= unwind_guess.o
- obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
-+obj-$(CONFIG_UNWINDER_ORC)	+= unwind_orc.o
- 
- obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o perf_regs.o
- obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+= hw_breakpoint.o
-diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
-index b8b86088b2dd..44f31b1958b1 100644
---- a/arch/loongarch/kernel/module.c
-+++ b/arch/loongarch/kernel/module.c
-@@ -20,6 +20,7 @@
- #include <linux/kernel.h>
- #include <asm/alternative.h>
- #include <asm/inst.h>
-+#include <asm-generic/orc_lookup.h>
- 
- static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t *rela_stack_top)
- {
-@@ -495,7 +496,7 @@ static void module_init_ftrace_plt(const Elf_Ehdr *hdr,
- int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs, struct module *mod)
- {
--	const Elf_Shdr *s, *se;
-+	const Elf_Shdr *s, *se, *orc = NULL, *orc_ip = NULL;
- 	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
- 
- 	for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
-@@ -503,7 +504,15 @@ int module_finalize(const Elf_Ehdr *hdr,
- 			apply_alternatives((void *)s->sh_addr, (void *)s->sh_addr + s->sh_size);
- 		if (!strcmp(".ftrace_trampoline", secstrs + s->sh_name))
- 			module_init_ftrace_plt(hdr, s, mod);
-+		if (!strcmp(".orc_unwind", secstrs + s->sh_name))
-+			orc = s;
-+		if (!strcmp(".orc_unwind_ip", secstrs + s->sh_name))
-+			orc_ip = s;
- 	}
- 
-+	if (orc && orc_ip)
-+		orc_lookup_module_init(mod, (void *)orc_ip->sh_addr, orc_ip->sh_size,
-+				       (void *)orc->sh_addr, orc->sh_size);
-+
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index bae84ccf6d36..698024922e09 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -48,6 +48,7 @@
- #include <asm/sections.h>
- #include <asm/setup.h>
- #include <asm/time.h>
-+#include <asm/unwind.h>
- 
- #define SMBIOS_BIOSSIZE_OFFSET		0x09
- #define SMBIOS_BIOSEXTERN_OFFSET	0x13
-@@ -568,6 +569,7 @@ static void __init prefill_possible_map(void)
- 
- void __init setup_arch(char **cmdline_p)
- {
-+	unwind_init();
- 	cpu_probe();
- 
- 	init_environ();
-diff --git a/arch/loongarch/kernel/stacktrace.c b/arch/loongarch/kernel/stacktrace.c
-index 3a690f96f00c..3872925375c4 100644
---- a/arch/loongarch/kernel/stacktrace.c
-+++ b/arch/loongarch/kernel/stacktrace.c
-@@ -29,6 +29,7 @@ void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
- 	}
- 
- 	regs->regs[1] = 0;
-+	regs->regs[22] = 0;
- 	for (unwind_start(&state, task, regs);
- 	      !unwind_done(&state); unwind_next_frame(&state)) {
- 		addr = unwind_get_return_address(&state);
-diff --git a/arch/loongarch/kernel/unwind_orc.c b/arch/loongarch/kernel/unwind_orc.c
-new file mode 100644
-index 000000000000..0cdf4a56a9ba
---- /dev/null
-+++ b/arch/loongarch/kernel/unwind_orc.c
-@@ -0,0 +1,301 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/objtool.h>
-+#include <linux/module.h>
-+#include <linux/sort.h>
-+#include <asm/ptrace.h>
-+#include <asm/setup.h>
-+#include <asm/stacktrace.h>
-+#include <asm/unwind.h>
-+#include <asm/orc_types.h>
-+#include <asm-generic/orc_lookup.h>
-+
-+extern asmlinkage void handle_ade(void);
-+extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_sys(void);
-+extern asmlinkage void handle_bp(void);
-+extern asmlinkage void handle_ri(void);
-+extern asmlinkage void handle_fpu(void);
-+extern asmlinkage void handle_fpe(void);
-+extern asmlinkage void handle_lbt(void);
-+extern asmlinkage void handle_lsx(void);
-+extern asmlinkage void handle_lasx(void);
-+extern asmlinkage void handle_reserved(void);
-+extern asmlinkage void handle_watch(void);
-+extern asmlinkage void handle_vint(void);
-+extern asmlinkage void handle_tlb_load(void);
-+extern asmlinkage void handle_tlb_store(void);
-+extern asmlinkage void handle_tlb_modify(void);
-+extern asmlinkage void handle_tlb_protect(void);
-+
-+/* Fake frame pointer entry -- used as a fallback for generated code */
-+static struct orc_entry orc_fp_entry = {
-+	.type		= UNWIND_HINT_TYPE_CALL,
-+	.sp_reg		= ORC_REG_BP,
-+	.sp_offset	= 16,
-+	.bp_reg		= ORC_REG_PREV_SP,
-+	.bp_offset	= -16,
-+	.ra_reg		= ORC_REG_PREV_SP,
-+	.ra_offset	= -8,
-+	.end		= 0,
-+};
-+
-+void __init unwind_init(void)
-+{
-+	orc_lookup_init();
-+}
-+
-+static inline bool on_stack(struct stack_info *info, unsigned long addr, size_t len)
-+{
-+	unsigned long begin = info->begin;
-+	unsigned long end   = info->end;
-+
-+	return (info->type != STACK_TYPE_UNKNOWN &&
-+		addr >= begin && addr < end &&
-+		addr + len > begin && addr + len <= end);
-+}
-+
-+static bool stack_access_ok(struct unwind_state *state, unsigned long addr,
-+			    size_t len)
-+{
-+	struct stack_info *info = &state->stack_info;
-+
-+	if (on_stack(info, addr, len))
-+		return true;
-+
-+	return !get_stack_info(addr, state->task, info) &&
-+		on_stack(info, addr, len);
-+}
-+
-+unsigned long unwind_get_return_address(struct unwind_state *state)
-+{
-+	return __unwind_get_return_address(state);
-+}
-+EXPORT_SYMBOL_GPL(unwind_get_return_address);
-+
-+void unwind_start(struct unwind_state *state, struct task_struct *task,
-+		    struct pt_regs *regs)
-+{
-+	__unwind_start(state, task, regs);
-+	if (!unwind_done(state) && !__kernel_text_address(state->pc))
-+		unwind_next_frame(state);
-+}
-+EXPORT_SYMBOL_GPL(unwind_start);
-+
-+
-+static bool is_entry_func(unsigned long addr)
-+{
-+	extern u32 kernel_entry;
-+	extern u32 kernel_entry_end;
-+
-+	return addr >= (unsigned long)&kernel_entry &&
-+		addr < (unsigned long)&kernel_entry_end;
-+}
-+
-+static inline unsigned long bt_address(unsigned long ra)
-+{
-+	extern unsigned long eentry;
-+
-+	if (__kernel_text_address(ra))
-+		return ra;
-+
-+	/* We are in preempt_disable() here */
-+	if (__module_text_address(ra))
-+		return ra;
-+
-+	if (ra >= eentry && ra < eentry +  EXCCODE_INT_END * VECSIZE) {
-+		unsigned long type = (ra - eentry) / VECSIZE;
-+		unsigned long offset = (ra - eentry) % VECSIZE;
-+		unsigned long func;
-+
-+		switch (type) {
-+		case EXCCODE_TLBL:
-+		case EXCCODE_TLBI:
-+			func = (unsigned long)handle_tlb_load;
-+			break;
-+		case EXCCODE_TLBS:
-+			func = (unsigned long)handle_tlb_store;
-+			break;
-+		case EXCCODE_TLBM:
-+			func = (unsigned long)handle_tlb_modify;
-+			break;
-+		case EXCCODE_TLBNR:
-+		case EXCCODE_TLBNX:
-+		case EXCCODE_TLBPE:
-+			func = (unsigned long)handle_tlb_protect;
-+			break;
-+		case EXCCODE_ADE:
-+			func = (unsigned long)handle_ade;
-+			break;
-+		case EXCCODE_ALE:
-+			func = (unsigned long)handle_ale;
-+			break;
-+		case EXCCODE_SYS:
-+			func = (unsigned long)handle_sys;
-+			break;
-+		case EXCCODE_BP:
-+			func = (unsigned long)handle_bp;
-+			break;
-+		case EXCCODE_INE:
-+		case EXCCODE_IPE:
-+			func = (unsigned long)handle_ri;
-+			break;
-+		case EXCCODE_FPDIS:
-+			func = (unsigned long)handle_fpu;
-+			break;
-+		case EXCCODE_LSXDIS:
-+			func = (unsigned long)handle_lsx;
-+			break;
-+		case EXCCODE_LASXDIS:
-+			func = (unsigned long)handle_lasx;
-+			break;
-+		case EXCCODE_FPE:
-+			func = (unsigned long)handle_fpe;
-+			break;
-+		case EXCCODE_BTDIS:
-+			func = (unsigned long)handle_lbt;
-+			break;
-+		case EXCCODE_WATCH:
-+			func = (unsigned long)handle_watch;
-+			break;
-+		case EXCCODE_INT_START ... EXCCODE_INT_END - 1:
-+			func = (unsigned long)handle_vint;
-+			break;
-+		default:
-+
-+			func = (unsigned long)handle_reserved;
-+			break;
-+		}
-+
-+		return func + offset;
-+	}
-+
-+	return ra;
-+}
-+
-+bool unwind_next_frame(struct unwind_state *state)
-+{
-+	struct stack_info *info = &state->stack_info;
-+	struct orc_entry *orc;
-+	struct pt_regs *regs;
-+	unsigned long *p, pc;
-+
-+	if (unwind_done(state))
-+		return false;
-+
-+	/* Don't let modules unload while we're reading their ORC data. */
-+	preempt_disable();
-+
-+	if (is_entry_func(state->pc))
-+		goto end;
-+
-+	orc = orc_find(state->pc);
-+	if (!orc) {
-+		orc = &orc_fp_entry;
-+		state->error = true;
-+	}
-+
-+	switch (orc->sp_reg) {
-+	case ORC_REG_SP:
-+		state->sp = state->sp + orc->sp_offset;
-+		break;
-+	case ORC_REG_BP:
-+		state->sp = state->fp;
-+		break;
-+	default:
-+		orc_warn("unknown SP base reg %d at %pB\n",
-+			orc->sp_reg, (void *)state->pc);
-+		goto err;
-+	}
-+
-+	switch (orc->bp_reg) {
-+	case ORC_REG_PREV_SP:
-+		p = (unsigned long *)(state->sp + orc->bp_offset);
-+		if (!stack_access_ok(state, (unsigned long)p, sizeof(unsigned long)))
-+			goto err;
-+
-+		state->fp = *p;
-+		break;
-+	case ORC_REG_UNDEFINED:
-+		/* Nothing. */
-+		break;
-+	default:
-+		orc_warn("unknown FP base reg %d at %pB\n",
-+			orc->bp_reg, (void *)state->pc);
-+		goto err;
-+	}
-+
-+	switch (orc->type) {
-+	case UNWIND_HINT_TYPE_CALL:
-+		if (orc->ra_reg == ORC_REG_PREV_SP) {
-+			p = (unsigned long *)(state->sp + orc->ra_offset);
-+			if (!stack_access_ok(state, (unsigned long)p, sizeof(unsigned long)))
-+				goto err;
-+
-+			pc = unwind_graph_addr(state, *p, state->sp);
-+			pc -= LOONGARCH_INSN_SIZE;
-+		} else if (orc->ra_reg == ORC_REG_UNDEFINED) {
-+			if (!state->ra || state->ra == state->pc)
-+				goto err;
-+
-+			pc = unwind_graph_addr(state, state->ra, state->sp);
-+			pc -=  LOONGARCH_INSN_SIZE;
-+			state->ra = 0;
-+		} else {
-+			orc_warn("unknown ra base reg %d at %pB\n",
-+				orc->ra_reg, (void *)state->pc);
-+			goto err;
-+		}
-+		break;
-+	case UNWIND_HINT_TYPE_REGS:
-+		if (state->stack_info.type == STACK_TYPE_IRQ && state->sp == info->end)
-+			regs = (struct pt_regs *)info->next_sp;
-+		else
-+			regs = (struct pt_regs *)state->sp;
-+
-+		if (!stack_access_ok(state, (unsigned long)regs, sizeof(*regs)))
-+			goto err;
-+
-+		if ((info->end == (unsigned long)regs + sizeof(*regs)) &&
-+		    !regs->regs[3] && !regs->regs[1])
-+			goto end;
-+
-+		if (user_mode(regs))
-+			goto end;
-+
-+		pc = regs->csr_era;
-+		if (!__kernel_text_address(pc))
-+			goto err;
-+
-+		state->sp = regs->regs[3];
-+		state->ra = regs->regs[1];
-+		state->fp = regs->regs[22];
-+		get_stack_info(state->sp, state->task, info);
-+
-+		break;
-+	default:
-+		orc_warn("unknown .orc_unwind entry type %d at %pB\n",
-+			 orc->type, (void *)state->pc);
-+		goto err;
-+	}
-+
-+	state->pc = bt_address(pc);
-+	if (!state->pc) {
-+		pr_err("cannot find unwind pc at %pK\n", (void *)pc);
-+		goto err;
-+	}
-+
-+	if (!__kernel_text_address(state->pc))
-+		goto err;
-+
-+	preempt_enable();
-+	return true;
-+
-+err:
-+	state->error = true;
-+
-+end:
-+	preempt_enable();
-+	state->stack_info.type = STACK_TYPE_UNKNOWN;
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(unwind_next_frame);
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 0c7b041be9d8..ca19b83a2c8b 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -13,6 +13,7 @@
- #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
- 
- #include <asm-generic/vmlinux.lds.h>
-+#include <asm-generic/orc_lookup.h>
- #include "image-vars.h"
- 
- /*
-@@ -74,6 +75,8 @@ SECTIONS
- 	}
- #endif
- 
-+	ORC_UNWIND_TABLE
-+
- 	.got : ALIGN(16) { *(.got) }
- 	.plt : ALIGN(16) { *(.plt) }
- 	.got.plt : ALIGN(16) { *(.got.plt) }
--- 
-2.39.2
+SXQgbG9va3MgbGlrZSBvbmx5IDE5IHBhdGNoZXMgYXJlIHN1Y2Nlc3NmdWxseSBkZWxpdmVyZWQs
+IG91dCBvZiAyMy4KCkFuZCBBRkFJSyBvYmp0b29sIG5lZWRzIGxpYmVsZiBmcm9tIGVsZnV0aWxz
+LCBhbmQgdGhlIExvb25nQXJjaCBzdXBwb3J0CmluIGVsZnV0aWxzIGlzIG5vdCBjb21wbGV0ZSAo
+dGhlcmUgYXJlIGFib3V0IHRlbiBmYWlsdXJlcyBpbiB0aGUgdGVzdApzdWl0ZSBhcyBhdCB0aGUg
+bGF0ZXN0IDAuMTg5IHJlbGVhc2UpLiAgRG8gd2UgbmVlZCB0byBhZGQgbW9yZSBMb29uZ0FyY2gK
+c3VwcG9ydCBpbnRvIGxpYmVsZiBhbmQvb3IgZGVjbGFyZSBhIG1pbmltYWwgbmVlZGVkIGxpYmVs
+ZiB2ZXJzaW9uIGZvcgpMb29uZ0FyY2ggb2JqdG9vbD8KCk9uIFR1ZSwgMjAyMy0wNi0yMCBhdCAx
+NTo0NiArMDgwMCwgWW91bGluZyBUYW5nIHdyb3RlOgo+IFRoaXMgc2VyaWVzIG9mIHBhdGNoZXMg
+YWRkcyBvYmp0b29sIGFuZCBPUkMgdW53aW5kZXIgc3VwcG9ydCBmb3IKPiBMb29uZ0FyY2guCj4g
+Cj4gUGF0Y2ggMDEgLSAwNyBhcmUgZnJvbSAiTWFkaGF2YW4gVC4gVmVua2F0YXJhbWFuIiBbMV0g
+d2l0aCBtaW5vcgo+IGNvZGUgdHdlYWtzLiBUaGUgIm9ianRvb2w6IFJlb3JnYW5pemUgT1JDIHR5
+cGVzIiBwYXRjaCB3YXMgbm90Cj4gYWRkZWQsIGJlY2F1c2UgTG9vbmdBcmNoIGNhbm5vdCBzaGFy
+ZSBgc3RyY3V0IG9yY19lbnRyeWAsIGl0IGFsc28KPiBuZWVkcyB0byBpbmNsdWRlIHJhX29mZnNl
+dCBhbmQgcmFfcmVnLgo+IAo+IFNpbmNlIHRoZSBjaGFuZ2VzIGluIFBhdGNoIDAxIC0gMDggaW4g
+WzFdIGFyZSBhcmNoaXRlY3R1cmUtCj4gaW5kZXBlbmRlbnQsCj4gaXQgbWlnaHQgYmUgYmV0dGVy
+IGlmIHRoZXkgY291bGQgYmUgc2VwYXJhdGVkIHNlcGFyYXRlbHkgZnJvbSB0aGUKPiBzZXJpZXMK
+PiBvZiBwYXRjaGVzLgo+IAo+IE9SQyB1bndpbmRlciBjYW4gZ2V0IGEgcmVsaWFibGUgc3RhY2sg
+dHJhY2UsIHdoaWNoIHByb3ZpZGVzIGEKPiBwcmVyZXF1aXNpdGUKPiBmb3IgdGhlIHN1YnNlcXVl
+bnQgYWRkaXRpb24gb2YgbGl2ZXBhdGNoIHN1cHBvcnQuCj4gCj4gCj4gSW5zdHJ1Y3Rpb24gZGVj
+b2Rlcgo+ID09PT09PT09PT09PT09PT09PT0KPiAKPiBUbyBkbyB0aGlzLCBhbiBpbnN0cnVjdGlv
+biBkZWNvZGVyIG5lZWRzIHRvIGJlIGltcGxlbWVudGVkLiBJIGhhdmUKPiBpbXBsZW1lbnRlZAo+
+IGEgc2ltcGxlLCB0YWJsZS1kcml2ZW4gZGVjb2RlciBmb3IgTG9vbmdBcmNoLiBPbmx5IGEgc3Vi
+c2V0IG9mIHRoZQo+IGluc3RydWN0aW9ucwo+IG5lZWRzIHRvIGJlIGZ1bGx5IGRlY29kZWQgZm9y
+IHRoaXMgcHVycG9zZToKPiAKPiDCoMKgwqDCoMKgwqDCoMKgLSBMb2FkLVN0b3JlIGluc3RydWN0
+aW9ucwo+IMKgwqDCoMKgwqDCoMKgwqAtIEFkZCBpbnN0cnVjdGlvbnMKPiDCoMKgwqDCoMKgwqDC
+oMKgLSBCcmFuY2ggaW5zdHJ1Y3Rpb25zCj4gwqDCoMKgwqDCoMKgwqDCoC0gQ2FsbCBpbnN0cnVj
+dGlvbnMKPiDCoMKgwqDCoMKgwqDCoMKgLSBSZXR1cm4gaW5zdHJ1Y3Rpb25zCj4gwqDCoMKgwqDC
+oMKgwqDCoC0gU3RhY2sgcG9pbnRlciBhdXRoZW50aWNhdGlvbiBpbnN0cnVjdGlvbgo+IAo+IAo+
+IFVud2luZCBoaW50cwo+ID09PT09PT09PT09PQo+IAo+IFVud2luZCBoaW50cyBhcmUgY29sbGVj
+dGVkIGluIGEgc3BlY2lhbCBzZWN0aW9uLiBPYmp0b29sIGNvbnZlcnRzCj4gdW53aW5kIGhpbnRz
+Cj4gdG8gT1JDIGRhdGEuIFRoZSB1bndpbmRlciBwcm9jZXNzZXMgdW53aW5kIGhpbnRzIHRvIGhh
+bmRsZSBzcGVjaWFsCj4gY2FzZXMKPiBtZW50aW9uZWQgYWJvdmUuCj4gCj4gCj4gT1JDIHVud2lu
+ZGVyCj4gPT09PT09PT09PT09Cj4gCj4gQmVmb3JlIHZtbGludXggY3JlYXRlZCwgd2UgY2hlY2sg
+YWxsIG1ldGFkYXRhLCBmaW5kIHRoZSBzdGFjawo+IG9wZXJhdGlvbiwKPiBub3RlIHN0YWNrIHN0
+YXRlIGFuZCBjcmVhdGUgb3JjIGRhdGEuIE9ianRvb2wgaW5zZXJ0IHR3byBzZWN0aW9ucyBpbnRv
+Cj4gdm1saW51eC4gJy5vcmNfdW53aW5kX2lwJyBhbmQgJy5vcmNfdW53aW5kJy4gKEZvciBtb2R1
+bGVzLCBpbnNlcnQKPiAnLnJlbGEub3JjX3Vud2luZF9pcCcgdG8gcmVsb2NhdGUgJy5vcmNfdW53
+aW5kX2lwJy4pIEVhY2ggaW5zbiBoYXMKPiBvbmx5Cj4gb25lIHN0YWNrIHN0YXRlIGluIC5vcmNf
+dW53aW5kIGFuZCBvcmNfdW53aW5kX2lwIGhpbnQgaXRzIHBjIGFkZHJlc3MuCj4gVGhyb3VnaCB1
+bndpbmRpbmcgb3JjIGRhdGEsIHdlIGNhbiBnZXQgc3RhY2sgaW5mbyBib3RoIGtlcm5lbCBhbmQK
+PiBtb2R1bGUuCj4gCj4gCj4gVGhpcyBpcyBhIHNlcmllcyBvZiBSRkMgcGF0Y2hlcywgd2hpY2gg
+bWF5IHJlcXVpcmUgbG9uZy10ZXJtCj4gZGlzY3Vzc2lvbnMKPiBhbmQgcmV2aXNpb25zLiBJdCBp
+cyBub3QgYmFzZWQgb24gdGhlIGxhdGVzdCBjb2RlIGJ1dCBiYXNlZCBvbiA2LjMtCj4gcmMzLgo+
+IEFueSBpZGVhcyBvciBzdWdnZXN0aW9ucyBhcmUgd2VsY29tZS4KPiAKPiBiYXNlLWNvbW1pdDog
+ZThkMDE4ZGQwMjU3Zjc0NGNhNTBhNzI5ZTNkMDQyY2YyZWM5ZGE2NSAoTGludXggNi4zLXJjMykK
+PiAKPiBMaW5rOgo+IFsxXToKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzIwMjMwMjAy
+MDc0MDM2LjUwNzI0OS0xLW1hZHZlbmthQGxpbnV4Lm1pY3Jvc29mdC5jb20vI3IKPiAKPiBNYWRo
+YXZhbiBULiBWZW5rYXRhcmFtYW4gKDcpOgo+IMKgIG9ianRvb2w6IFJlb3JnYW5pemUgQ0ZJIGNv
+ZGUKPiDCoCBvYmp0b29sOiBSZW9yZ2FuaXplIGluc3RydWN0aW9uLXJlbGF0ZWQgY29kZQo+IMKg
+IG9ianRvb2w6IE1vdmUgZGVjb2RlX2luc3RydWN0aW9ucygpIHRvIGEgc2VwYXJhdGUgZmlsZQo+
+IMKgIG9ianRvb2w6IFJlb3JnYW5pemUgVW53aW5kIGhpbnQgY29kZQo+IMKgIG9ianRvb2w6IFJl
+b3JnYW5pemUgT1JDIGNvZGUKPiDCoCBvYmp0b29sOiBSZW9yZ2FuaXplIE9SQyBrZXJuZWwgY29k
+ZQo+IMKgIG9ianRvb2w6IEludHJvZHVjZSBTVEFUSUNfQ0hFQ0sKPiAKPiBZb3VsaW5nIFRhbmcg
+KDE2KToKPiDCoCB0b29sczogTG9vbmdBcmNoOiBDb3B5IGluc3QuaCBhbmQgYXNtLmggdG8gdG9v
+bHMKPiDCoCBvYmp0b29sOiBMb29uZ0FyY2g6IEFkZCBiYXNlIGRlZmluaXRpb24gZm9yIExvb25n
+QXJjaAo+IMKgIG9ianRvb2w6IExvb25nQXJjaDogSW1wbGVtZW50IGRlY29kZXIKPiDCoCBvYmp0
+b29sOiBBZGQgYW5ub3RhdGVfcmVhY2hhYmxlKCkgZm9yIG9ianRvb2xzCj4gwqAgTG9vbmdBcmNo
+OiBidWc6IEFkZCByZWFjaGFibGUgYW5ub3RhdGlvbiB0byB3YXJuaW5nIG1hY3Jvcwo+IMKgIG9i
+anRvb2w6IEFkZCBuZXh0IG1lbWJlciBpbiBzdHJ1Y3QgcmVsb2MKPiDCoCBvYmp0b29sOiBBZGQg
+b3JjX3ByaW50X2R1bXAoKSBwYWNrYWdlCj4gwqAgb2JqdG9vbDogQWRkIE9SQyBzdXBwb3J0IGZv
+ciBMb29uZ0FyY2gKPiDCoCBMb29uZ0FyY2g6IEFkZCBPUkMgdW53aW5kZXIgc3VwcG9ydAo+IMKg
+IExvb25nQXJjaDogU3VwcG9ydCBSX0xBUkNIXzMyX1BDUkVMIHJlbG9jYXRpb24gdHlwZSBpbiBr
+ZXJuZWwgbW9kdWxlCj4gwqAgTG9vbmdBcmNoOiBGaXggZnB1LlMgb2JqdG9vbCB3YXJuaW5nCj4g
+wqAgTG9vbmdBcmNoOiBBbm5vdGF0ZSB1bndpbmRfaGludAo+IMKgIExvb25nQXJjaDogTW92ZSBz
+b21lIGRhdGEgZGVmaW5pdGlvbnMgaW50byB0aGUgLmRhdGEgc2VjdGlvbgo+IMKgIG9ianRvb2w6
+IEFkZCBhcmNoLXNwZWNpZmljICJub3JldHVybiIgZnVuY3Rpb24gaGFuZGxpbmcKPiDCoCBvYmp0
+b29sOiBNYWtlIHVwZGF0ZV9jZmlfc3RhdGUoKSBhcmNoLXNwZWNpZmljIGZ1bmN0aW9uCj4gwqAg
+TG9vbmdBcmNoOiBvYmp0b29sOiBNYXJrIG5vbi1zdGFuZGFyZCBvYmplY3QgZmlsZXMgYW5kIGRp
+cmVjdG9yaWVzCj4gCj4gwqBhcmNoL2xvb25nYXJjaC9LY29uZmlnwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAyICsKPiDCoGFyY2gvbG9vbmdhcmNo
+L0tjb25maWcuZGVidWfCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxMSAr
+Cj4gwqBhcmNoL2xvb25nYXJjaC9NYWtlZmlsZcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHzCoMKgIDQgKwo+IMKgYXJjaC9sb29uZ2FyY2gvaW5jbHVkZS9hc20v
+YnVnLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAxICsKPiDCoGFyY2gvbG9vbmdh
+cmNoL2luY2x1ZGUvYXNtL21vZHVsZS5owqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgNyArCj4g
+wqBhcmNoL2xvb25nYXJjaC9pbmNsdWRlL2FzbS9vcmNfdHlwZXMuaMKgwqDCoMKgwqDCoMKgIHzC
+oCA1OCArKwo+IMKgYXJjaC9sb29uZ2FyY2gvaW5jbHVkZS9hc20vc3RhY2tmcmFtZS5owqDCoMKg
+wqDCoMKgIHzCoMKgIDMgKwo+IMKgYXJjaC9sb29uZ2FyY2gvaW5jbHVkZS9hc20vdW53aW5kLmjC
+oMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMTcgKy0KPiDCoGFyY2gvbG9vbmdhcmNoL2luY2x1ZGUv
+YXNtL3Vud2luZF9oaW50cy5owqDCoMKgwqAgfCAxMTAgKysrCj4gwqBhcmNoL2xvb25nYXJjaC9r
+ZXJuZWwvTWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgMyArCj4g
+wqBhcmNoL2xvb25nYXJjaC9rZXJuZWwvZW50cnkuU8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHzCoMKgIDIgKwo+IMKgYXJjaC9sb29uZ2FyY2gva2VybmVsL2ZwdS5TwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxMSArLQo+IMKgYXJjaC9sb29uZ2FyY2gv
+a2VybmVsL2dlbmV4LlPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAyICsK
+PiDCoGFyY2gvbG9vbmdhcmNoL2tlcm5lbC9oZWFkLlPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHzCoMKgIDEgKwo+IMKgYXJjaC9sb29uZ2FyY2gva2VybmVsL21vZHVsZS5jwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAyMSArLQo+IMKgYXJjaC9sb29uZ2FyY2gv
+a2VybmVsL3JlbG9jYXRlX2tlcm5lbC5TwqDCoMKgwqDCoMKgIHzCoCAxMiArLQo+IMKgYXJjaC9s
+b29uZ2FyY2gva2VybmVsL3NldHVwLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8
+wqDCoCAyICsKPiDCoGFyY2gvbG9vbmdhcmNoL2tlcm5lbC9zdGFja3RyYWNlLmPCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHzCoMKgIDEgKwo+IMKgYXJjaC9sb29uZ2FyY2gva2VybmVsL3Vud2luZF9v
+cmMuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfCAzMDEgKysrKysrKysrCj4gwqBhcmNoL2xvb25n
+YXJjaC9rZXJuZWwvdm1saW51eC5sZHMuU8KgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDMgKwo+
+IMKgYXJjaC9sb29uZ2FyY2gvcG93ZXIvTWFrZWZpbGXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCB8wqDCoCAyICsKPiDCoGFyY2gvbG9vbmdhcmNoL3Zkc28vTWFrZWZpbGXCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDIgKwo+IMKgYXJjaC94ODYvaW5jbHVk
+ZS9hc20vdW53aW5kLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCA1IC0K
+PiDCoGFyY2gveDg2L2luY2x1ZGUvYXNtL3Vud2luZF9oaW50cy5owqDCoMKgwqDCoMKgwqDCoMKg
+wqAgfMKgIDg2ICsrKwo+IMKgYXJjaC94ODYva2VybmVsL21vZHVsZS5jwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDcgKy0KPiDCoGFyY2gveDg2L2tlcm5l
+bC91bndpbmRfb3JjLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMjY4ICst
+LS0tLS0tCj4gwqBhcmNoL3g4Ni9rZXJuZWwvdm1saW51eC5sZHMuU8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIHzCoMKgIDIgKy0KPiDCoC4uLi9hc20gPT4gaW5jbHVkZS9hc20tZ2Vu
+ZXJpY30vb3JjX2xvb2t1cC5owqAgfMKgIDQzICsrCj4gwqBpbmNsdWRlL2xpbnV4L2NvbXBpbGVy
+LmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgwqAgOSArCj4g
+wqBpbmNsdWRlL2xpbnV4L29ianRvb2wuaMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHzCoCA3MCAtLQo+IMKga2VybmVsL01ha2VmaWxlwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDIgKwo+
+IMKga2VybmVsL29yY19sb29rdXAuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgfCAyNjEgKysrKysrKysKPiDCoHNjcmlwdHMvTWFrZWZpbGXCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzC
+oMKgIDUgKy0KPiDCoHRvb2xzL2FyY2gvbG9vbmdhcmNoL2luY2x1ZGUvYXNtL2FzbS5owqDCoMKg
+wqDCoMKgwqAgfCAyMDEgKysrKysrCj4gwqB0b29scy9hcmNoL2xvb25nYXJjaC9pbmNsdWRlL2Fz
+bS9pbnN0LmjCoMKgwqDCoMKgwqAgfCA2MjkKPiArKysrKysrKysrKysrKysrKysKPiDCoHRvb2xz
+L2FyY2gvbG9vbmdhcmNoL2luY2x1ZGUvYXNtL29yY190eXBlcy5owqAgfMKgIDU4ICsrCj4gwqAu
+Li4vYXJjaC9sb29uZ2FyY2gvaW5jbHVkZS9hc20vdW53aW5kX2hpbnRzLmggfCAxMTAgKysrCj4g
+wqB0b29scy9hcmNoL3g4Ni9pbmNsdWRlL2FzbS91bndpbmRfaGludHMuaMKgwqDCoMKgIHwgMTYw
+ICsrKysrCj4gwqB0b29scy9pbmNsdWRlL2xpbnV4L2JpdG9wcy5owqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCB8wqAgMTAgKwo+IMKgdG9vbHMvaW5jbHVkZS9saW51eC9vYmp0b29s
+LmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNzAgLS0KPiDCoHRvb2xzL29i
+anRvb2wvQnVpbGTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHzCoMKgIDggKy0KPiDCoHRvb2xzL29ianRvb2wvTWFrZWZpbGXCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDkgKy0KPiDCoHRvb2xzL29i
+anRvb2wvYXJjaC9sb29uZ2FyY2gvQnVpbGTCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDMg
+Kwo+IMKgdG9vbHMvb2JqdG9vbC9hcmNoL2xvb25nYXJjaC9kZWNvZGUuY8KgwqDCoMKgwqDCoMKg
+wqAgfCAzNTIgKysrKysrKysrKwo+IMKgLi4uL2FyY2gvbG9vbmdhcmNoL2luY2x1ZGUvYXJjaC9j
+ZmlfcmVncy5owqDCoMKgIHzCoCAxNCArCj4gwqAuLi4vb2JqdG9vbC9hcmNoL2xvb25nYXJjaC9p
+bmNsdWRlL2FyY2gvZWxmLmggfMKgIDE1ICsKPiDCoC4uLi9hcmNoL2xvb25nYXJjaC9pbmNsdWRl
+L2FyY2gvc3BlY2lhbC5owqDCoMKgwqAgfMKgIDIxICsKPiDCoHRvb2xzL29ianRvb2wvYXJjaC9s
+b29uZ2FyY2gvb3JjLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTU1ICsrKysrCj4gwqB0b29s
+cy9vYmp0b29sL2FyY2gvbG9vbmdhcmNoL3NwZWNpYWwuY8KgwqDCoMKgwqDCoMKgIHzCoCAyNSAr
+Cj4gwqB0b29scy9vYmp0b29sL2FyY2gvcG93ZXJwYy9zcGVjaWFsLmPCoMKgwqDCoMKgwqDCoMKg
+wqAgfMKgwqAgMyArCj4gwqB0b29scy9vYmp0b29sL2FyY2gveDg2L0J1aWxkwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoCAxICsKPiDCoHRvb2xzL29ianRvb2wvYXJjaC94
+ODYvaW5jbHVkZS9hcmNoL2VsZi5owqDCoMKgwqAgfMKgwqAgMSArCj4gwqB0b29scy9vYmp0b29s
+L2FyY2gveDg2L29yYy5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE2NCAr
+KysrKwo+IMKgdG9vbHMvb2JqdG9vbC9hcmNoL3g4Ni9zcGVjaWFsLmPCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCB8wqDCoCA0ICsKPiDCoHRvb2xzL29ianRvb2wvY2ZpLmPCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTA4ICsrKwo+IMKgdG9v
+bHMvb2JqdG9vbC9jaGVjay5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgIHwgNTY4ICstLS0tLS0tLS0tLS0tLS0KPiDCoHRvb2xzL29ianRvb2wvZGVjb2Rl
+LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMTM2ICsr
+KysKPiDCoHRvb2xzL29ianRvb2wvZWxmLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxMSArLQo+IMKgdG9vbHMvb2JqdG9vbC9pbmNsdWRl
+L29ianRvb2wvYXJjaC5owqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDMgKwo+IMKgdG9vbHMvb2Jq
+dG9vbC9pbmNsdWRlL29ianRvb2wvY2ZpLmjCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMTIgKwo+
+IMKgdG9vbHMvb2JqdG9vbC9pbmNsdWRlL29ianRvb2wvY2hlY2suaMKgwqDCoMKgwqDCoMKgwqAg
+fMKgIDk3ICstLQo+IMKgdG9vbHMvb2JqdG9vbC9pbmNsdWRlL29ianRvb2wvZWxmLmjCoMKgwqDC
+oMKgwqDCoMKgwqDCoCB8wqDCoCAxICsKPiDCoHRvb2xzL29ianRvb2wvaW5jbHVkZS9vYmp0b29s
+L2luc24uaMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE2NiArKysrKwo+IMKgdG9vbHMvb2JqdG9vbC9p
+bmNsdWRlL29ianRvb2wvb2JqdG9vbC5owqDCoMKgwqDCoMKgIHzCoMKgIDMgKwo+IMKgdG9vbHMv
+b2JqdG9vbC9pbmNsdWRlL29ianRvb2wvb3JjLmjCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMTUg
+Kwo+IMKgdG9vbHMvb2JqdG9vbC9pbmNsdWRlL29ianRvb2wvc3BlY2lhbC5owqDCoMKgwqDCoMKg
+IHzCoMKgIDMgKwo+IMKgdG9vbHMvb2JqdG9vbC9pbnNuLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE5NSArKysrKysKPiDCoHRvb2xzL29ianRv
+b2wvb3JjX2R1bXAuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8
+wqAgNjcgKy0KPiDCoHRvb2xzL29ianRvb2wvb3JjX2dlbi5jwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDc5ICstLQo+IMKgdG9vbHMvb2JqdG9vbC9zeW5j
+LWNoZWNrLnNowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoMKgIDkgKwo+
+IMKgdG9vbHMvb2JqdG9vbC91bndpbmRfaGludHMuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgfCAxMDcgKysrCj4gwqA3MSBmaWxlcyBjaGFuZ2VkLCAzNzIxIGluc2VydGlvbnMo
+KyksIDEyMDYgZGVsZXRpb25zKC0pCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9sb29uZ2Fy
+Y2gvaW5jbHVkZS9hc20vb3JjX3R5cGVzLmgKPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL2xv
+b25nYXJjaC9pbmNsdWRlL2FzbS91bndpbmRfaGludHMuaAo+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0
+IGFyY2gvbG9vbmdhcmNoL2tlcm5lbC91bndpbmRfb3JjLmMKPiDCoHJlbmFtZSB7YXJjaC94ODYv
+aW5jbHVkZS9hc20gPT4gaW5jbHVkZS9hc20tZ2VuZXJpY30vb3JjX2xvb2t1cC5oCj4gKDUwJSkK
+PiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCBrZXJuZWwvb3JjX2xvb2t1cC5jCj4gwqBjcmVhdGUgbW9k
+ZSAxMDA2NDQgdG9vbHMvYXJjaC9sb29uZ2FyY2gvaW5jbHVkZS9hc20vYXNtLmgKPiDCoGNyZWF0
+ZSBtb2RlIDEwMDY0NCB0b29scy9hcmNoL2xvb25nYXJjaC9pbmNsdWRlL2FzbS9pbnN0LmgKPiDC
+oGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy9hcmNoL2xvb25nYXJjaC9pbmNsdWRlL2FzbS9vcmNf
+dHlwZXMuaAo+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL2FyY2gvbG9vbmdhcmNoL2luY2x1
+ZGUvYXNtL3Vud2luZF9oaW50cy5oCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgdG9vbHMvYXJjaC94
+ODYvaW5jbHVkZS9hc20vdW53aW5kX2hpbnRzLmgKPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29s
+cy9vYmp0b29sL2FyY2gvbG9vbmdhcmNoL0J1aWxkCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgdG9v
+bHMvb2JqdG9vbC9hcmNoL2xvb25nYXJjaC9kZWNvZGUuYwo+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0
+Cj4gdG9vbHMvb2JqdG9vbC9hcmNoL2xvb25nYXJjaC9pbmNsdWRlL2FyY2gvY2ZpX3JlZ3MuaAo+
+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wvYXJjaC9sb29uZ2FyY2gvaW5jbHVk
+ZS9hcmNoL2VsZi5oCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQKPiB0b29scy9vYmp0b29sL2FyY2gv
+bG9vbmdhcmNoL2luY2x1ZGUvYXJjaC9zcGVjaWFsLmgKPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0
+b29scy9vYmp0b29sL2FyY2gvbG9vbmdhcmNoL29yYy5jCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQg
+dG9vbHMvb2JqdG9vbC9hcmNoL2xvb25nYXJjaC9zcGVjaWFsLmMKPiDCoGNyZWF0ZSBtb2RlIDEw
+MDY0NCB0b29scy9vYmp0b29sL2FyY2gveDg2L29yYy5jCj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQg
+dG9vbHMvb2JqdG9vbC9jZmkuYwo+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wv
+ZGVjb2RlLmMKPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy9vYmp0b29sL2luY2x1ZGUvb2Jq
+dG9vbC9pbnNuLmgKPiDCoGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy9vYmp0b29sL2luY2x1ZGUv
+b2JqdG9vbC9vcmMuaAo+IMKgY3JlYXRlIG1vZGUgMTAwNjQ0IHRvb2xzL29ianRvb2wvaW5zbi5j
+Cj4gwqBjcmVhdGUgbW9kZSAxMDA2NDQgdG9vbHMvb2JqdG9vbC91bndpbmRfaGludHMuYwo+IAoK
+LS0gClhpIFJ1b3lhbyA8eHJ5MTExQHhyeTExMS5zaXRlPgpTY2hvb2wgb2YgQWVyb3NwYWNlIFNj
+aWVuY2UgYW5kIFRlY2hub2xvZ3ksIFhpZGlhbiBVbml2ZXJzaXR5Cg==
 
