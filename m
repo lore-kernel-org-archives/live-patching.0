@@ -2,26 +2,26 @@ Return-Path: <live-patching-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80505EB64D7
-	for <live-patching@archiver.kernel.org>; Tue, 20 Jun 2023 07:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE25EB64D7
+	for <live-patching@archiver.kernel.org>; Tue, 20 Jun 2023 07:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbjFTHvJ (ORCPT
+        id S231540AbjFTHxg (ORCPT
         <rfc822;live-patching@archiver.kernel.org>);
-        Tue, 20 Jun 2023 03:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50256 "EHLO
+        Tue, 20 Jun 2023 03:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjFTHut (ORCPT
+        with ESMTP id S231547AbjFTHxY (ORCPT
         <rfc822;live-patching@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:50:49 -0400
+        Tue, 20 Jun 2023 03:53:24 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57EF11981;
-        Tue, 20 Jun 2023 00:50:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4C2199E;
+        Tue, 20 Jun 2023 00:53:00 -0700 (PDT)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx8OhEWpFkuRsHAA--.12665S3;
-        Tue, 20 Jun 2023 15:50:28 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8DxDeurWpFkNhwHAA--.14649S3;
+        Tue, 20 Jun 2023 15:52:11 +0800 (CST)
 Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMo+WpFkp2chAA--.19067S6;
-        Tue, 20 Jun 2023 15:50:28 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauWoWpFkdmghAA--.28374S4;
+        Tue, 20 Jun 2023 15:52:10 +0800 (CST)
 From:   Youling Tang <tangyouling@loongson.cn>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -31,20 +31,20 @@ Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
         Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
         linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
         tangyouling00@gmail.com, youling.tang@outlook.com
-Subject: [RFC PATCH v1 14/23] objtool: Add orc_print_dump() package
-Date:   Tue, 20 Jun 2023 15:50:10 +0800
-Message-Id: <1687247415-32057-5-git-send-email-tangyouling@loongson.cn>
+Subject: [RFC PATCH v1 17/23] LoongArch: Support R_LARCH_32_PCREL relocation type in kernel module
+Date:   Tue, 20 Jun 2023 15:52:04 +0800
+Message-Id: <1687247526-32258-3-git-send-email-tangyouling@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1687247415-32057-1-git-send-email-tangyouling@loongson.cn>
-References: <1687247415-32057-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8AxPMo+WpFkp2chAA--.19067S6
+In-Reply-To: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
+References: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
+X-CM-TRANSID: AQAAf8AxauWoWpFkdmghAA--.28374S4
 X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw4DGw17Kw47Zw4UWr4xXwc_yoW5Zw48pr
-        nxGas7KrWUuF9xAw1kJanrC3y5Ganru34IkrnxC34Iyw1IqwnrXa1SyF1j9Fn5W3s5uasx
-        ZFZIqr1UKFs7tFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoW7uw48Kw4UGw1DWw4xJr43urX_yoW8CF4xpF
+        y5Cr13GF4rGFnFqFWYqw1DW3WrW3WkCay2qayrC34IyrnxJryDA3WIqr1DJayjqrn5Gr1F
+        qr1rt3WFqanrAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
         sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
         0xBIdaVrnRJUUUmIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
         e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
         0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
         14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
@@ -56,111 +56,55 @@ X-Coremail-Antispam: 1Uk129KBj93XoWxZw4DGw17Kw47Zw4UWr4xXwc_yoW5Zw48pr
         xVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26w1j6s0DMIIF0xvE2Ix0cI
         8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
         87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxU9zpBDUUUU
+        73UjIFyTuYvjxUvNB_UUUUU
 Precedence: bulk
 List-ID: <live-patching.vger.kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 
-There is no functional change, only operations such as orc_print_{sp,fp}
-are encapsulated into orc_print_dump(). It is convenient to add LoongArch
-support later (because it needs to add orc_print_ra()).
+Fix "unsupported relocation type" errors caused by adding ORC support,
+which generates unsupported relocation types.
+
+The reason is because the generated '.rela.orc_unwind_ip' section will
+contain the R_LARCH_32_PCCREL type.
+
+Relocation section '.rela.orc_unwind_ip' at offset 0x1fb58 contains 600 entries:
+  Offset          Info           Type           Sym. Value    Sym. Name + Addend
+000000000000  000300000063 R_LARCH_32_PCREL  0000000000000000 .text + 0
+000000000004  000300000063 R_LARCH_32_PCREL  0000000000000000 .text + 64
 
 Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 ---
- tools/objtool/arch/x86/orc.c        | 23 ++++++++++++++++++-----
- tools/objtool/include/objtool/orc.h |  5 +----
- tools/objtool/orc_dump.c            | 12 +-----------
- 3 files changed, 20 insertions(+), 20 deletions(-)
+ arch/loongarch/kernel/module.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/objtool/arch/x86/orc.c b/tools/objtool/arch/x86/orc.c
-index a0c00e136089..cf546b274a79 100644
---- a/tools/objtool/arch/x86/orc.c
-+++ b/tools/objtool/arch/x86/orc.c
-@@ -114,7 +114,7 @@ static const char *reg_name(unsigned int reg)
- 	}
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 44f31b1958b1..3cc31701c76a 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -368,6 +368,15 @@ static int apply_r_larch_got_pc(struct module *mod,
+ 	return apply_r_larch_pcala(mod, location, got, rela_stack, rela_stack_top, type);
  }
  
--const char *orc_type_name(unsigned int type)
-+static const char *orc_type_name(unsigned int type)
- {
- 	switch (type) {
- 	case UNWIND_HINT_TYPE_CALL:
-@@ -128,7 +128,7 @@ const char *orc_type_name(unsigned int type)
- 	}
- }
- 
--void orc_print_reg(unsigned int reg, int offset)
-+static void orc_print_reg(unsigned int reg, int offset)
- {
- 	if (reg == ORC_REG_BP_INDIRECT)
- 		printf("(bp%+d)", offset);
-@@ -140,12 +140,25 @@ void orc_print_reg(unsigned int reg, int offset)
- 		printf("%s%+d", reg_name(reg), offset);
- }
- 
--void orc_print_sp(void)
-+static void orc_print_sp(void)
- {
- 	printf(" sp:");
- }
--
--void orc_print_fp(void)
-+static void orc_print_fp(void)
- {
- 	printf(" bp:");
- }
-+
-+void orc_print_dump(struct elf *dummy_elf, struct orc_entry *orc, int i)
++static int apply_r_larch_32_pcrel(struct module *mod, u32 *location, Elf_Addr v,
++			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
 +{
-+	orc_print_sp();
++	ptrdiff_t offset = (void *)v - (void *)location;
 +
-+	orc_print_reg(orc[i].sp_reg, bswap_if_needed(dummy_elf, orc[i].sp_offset));
-+
-+	orc_print_fp();
-+
-+	orc_print_reg(orc[i].bp_reg, bswap_if_needed(dummy_elf, orc[i].bp_offset));
-+
-+	printf(" type:%s signal:%d end:%d\n",
-+	       orc_type_name(orc[i].type), orc[i].signal, orc[i].end);
++	*(u32 *)location = offset;
++	return 0;
 +}
-diff --git a/tools/objtool/include/objtool/orc.h b/tools/objtool/include/objtool/orc.h
-index bf141134c56f..53a037bdfc35 100644
---- a/tools/objtool/include/objtool/orc.h
-+++ b/tools/objtool/include/objtool/orc.h
-@@ -10,9 +10,6 @@
++
+ /*
+  * reloc_handlers_rela() - Apply a particular relocation to a module
+  * @mod: the module to apply the reloc to
+@@ -397,6 +406,7 @@ static reloc_rela_handler reloc_rela_handlers[] = {
+ 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] = apply_r_larch_sop_imm_field,
+ 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     = apply_r_larch_add_sub,
+ 	[R_LARCH_PCALA_HI20...R_LARCH_PCALA64_HI12]	     = apply_r_larch_pcala,
++	[R_LARCH_32_PCREL]				     = apply_r_larch_32_pcrel,
+ };
  
- int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
- 		   struct instruction *insn);
--const char *orc_type_name(unsigned int type);
--void orc_print_reg(unsigned int reg, int offset);
--void orc_print_sp(void);
--void orc_print_fp(void);
-+void orc_print_dump(struct elf *dummy_elf, struct orc_entry *orc, int i);
- 
- #endif /* _OBJTOOL_ORC_H */
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index 82bdd33dbc39..c274c0577427 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -151,17 +151,7 @@ int orc_dump(const char *_objname)
- 			printf("%llx:", (unsigned long long)(orc_ip_addr + (i * sizeof(int)) + orc_ip[i]));
- 		}
- 
--
--		orc_print_sp();
--
--		orc_print_reg(orc[i].sp_reg, bswap_if_needed(&dummy_elf, orc[i].sp_offset));
--
--		orc_print_fp();
--
--		orc_print_reg(orc[i].bp_reg, bswap_if_needed(&dummy_elf, orc[i].bp_offset));
--
--		printf(" type:%s signal:%d end:%d\n",
--		       orc_type_name(orc[i].type), orc[i].signal, orc[i].end);
-+		orc_print_dump(&dummy_elf, orc, i);
- 	}
- 
- 	elf_end(elf);
+ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
 -- 
 2.39.2
 
