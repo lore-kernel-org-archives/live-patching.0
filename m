@@ -1,160 +1,106 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H6kDyq0G"
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D6795;
-	Wed, 29 Nov 2023 04:47:24 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6cdd9c53270so251136b3a.1;
-        Wed, 29 Nov 2023 04:47:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fak4Gjx6"
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6B83;
+	Wed, 29 Nov 2023 05:25:35 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1d01c45ffebso3369455ad.1;
+        Wed, 29 Nov 2023 05:25:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701262044; x=1701866844; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ck25N5VyiEQfTTbq0IG09TED0gOeZimM+CSOPSlwR8=;
-        b=H6kDyq0G2Pb7eyULOZmj2rLPPlFzsOvKIdHlfZg0G9iskrRcLyvKlif3/Qd8bo0PmI
-         x9Mev5gADonPSbwoqit0antPTJJQsiuxzK6bPJW4k0bhaTlWL15+M1ltvbHv/GmKZUhu
-         W8nMpe4lN7+ckohfbMVXXghcIbRYC+P4fbOgnJTm7Qt9921ZMviZMSkWsno3xjMWqUXr
-         vTsWOQrcupdKCgrJtaSvXBVyC4ls6xLZvbl8v2JcWuPrhNu68Kt4NmMlghTxxkMpwAWP
-         zRxdN5Mr46nvzyOmQiTB9wkdBEj3mWxkKzs3O0W5VeR3lPAl2+ZLji6/TBXyC4gTCpX/
-         WYzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701262044; x=1701866844;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1701264335; x=1701869135; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2ck25N5VyiEQfTTbq0IG09TED0gOeZimM+CSOPSlwR8=;
-        b=rv6N7h+ccKNn7HW0cctejJ8gpQgHECYZYoOxvs8CYWsg+jt3GPjZE3/8LY5uThmZOJ
-         OWrnNLiicpjmaT9u6HXSa/rb6i+A7vKsy8TMX8IPfOM1K1y1hlBEYv2mc1zrL3lpUuyB
-         uBAhUVteOzyqgU2J4TSqMn46or6y0EFQ9p8ZWp3mDlqoU5EsacK+2n+NYS3++LYJxE0w
-         ftpNY4uxYQH1bYo1u9VHyJbtnpH1ddPweq4NAO6tqeJfgacNrFd4bo86jaiHBUDYV0zw
-         YDWelifPizKvRJdVyqp7ZvbgNKfkMugEKyLaf31UJG19z8AjDnZyCTcv2xAWQjUmr552
-         C8SQ==
-X-Gm-Message-State: AOJu0YyadhDOTGL0vh4pW+h5yqEwu3KXMB1G6Xf2C/EgXQDYc6LH6Tbd
-	c8p0fNl723BacSDnbhfvimMPFZ0+EICb+A==
-X-Google-Smtp-Source: AGHT+IE+WgaEguchuhj6YT9T+Hqkp5MU16WACMs1AQTZBoRAX1jHyhUK7k+YKvihMK9Ien4Kg8JZgQ==
-X-Received: by 2002:a05:6a20:e12a:b0:187:e646:4faf with SMTP id kr42-20020a056a20e12a00b00187e6464fafmr19379471pzb.14.1701262043767;
-        Wed, 29 Nov 2023 04:47:23 -0800 (PST)
+        bh=HWxBHhQIh0E6Mfd8BqEq+IhmKhUVNXmtyy9bRM7/+ak=;
+        b=Fak4Gjx6QN+9obeEFVbES+8etRzW3aH/agkUWjChgV87e8soIfx4M/OJMH3FkxyDCt
+         WWzKM/NLZ6IKO16iKVrJcKnK3YNREMUhSIVzOS8tQeHq9RG+QtXni/TqgcVjrc2L53+b
+         AGoik9H3Ycn3FSOLV8/Q7O5MsHRG52mkA7ENMxbH6SOQtw1OS5Zp8/I2JMOU4VTz6xQq
+         b1q3uzr1VOoWrVOTvucx0SCzsEFyxgGMuPHwGP1Ho5LnCCUCdOTBdVtwpZTit8vTZl1H
+         jF/T3g6aSY96px8tdxV8XnQ7u2X1hkriaKOuXbrE9G4lGVK5blszUbcJENkCKbKMDge9
+         D/bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701264335; x=1701869135;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HWxBHhQIh0E6Mfd8BqEq+IhmKhUVNXmtyy9bRM7/+ak=;
+        b=puRBp72J9/L8yTYpvtrWCQhq+GSs9t+AWXWYh1B7lQZO8uOySCHCQGIcO/k6QL7jes
+         YoudymLFxrkgFIIAWP+kjOTyVEMq03w2Cdt7NBMYf9cJ1nColruSzEepTeV77gf/ohJB
+         9pCz6FhjknxGxqsvGTgy8O6aUWeBmOQKrgUprWSmHBrOKJDP75c7rfLJvREkjBmt56lW
+         swBhtwDMYihKsyp0Pn/mU6CC9jMk99B/I/hXsAl++uOfQ438oiVa84odICUMhLWDsm3f
+         ugDLts83rF3xzAtuVSNFP5CkutQIaq/UQF6fIRkPjkeqRBcXuyHfvqRWRIZRhQGdmRjw
+         1mvQ==
+X-Gm-Message-State: AOJu0YzQX7f+/rfjhOd7mxxXAStA6MO/gNcEX29gtiFUr+l3U2BSAow2
+	/yr6roLYnttOZwC41FwuVpidFIE2UwvWrQ==
+X-Google-Smtp-Source: AGHT+IFawD9MTreUWBiosITpCXfxYZlbFOQ5638LVOT6Eozt2lwiaFWRUcYnFlVe+nzPnluxSfsPIA==
+X-Received: by 2002:a17:902:e88f:b0:1cf:cf40:3cef with SMTP id w15-20020a170902e88f00b001cfcf403cefmr9881616plg.64.1701264335246;
+        Wed, 29 Nov 2023 05:25:35 -0800 (PST)
 Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902d48100b001c9c8d761a3sm12100798plg.131.2023.11.29.04.47.22
+        by smtp.gmail.com with ESMTPSA id j1-20020a170902c08100b001ab39cd875csm10879553pld.133.2023.11.29.05.25.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 04:47:23 -0800 (PST)
+        Wed, 29 Nov 2023 05:25:33 -0800 (PST)
 Received: by archie.me (Postfix, from userid 1000)
-	id F1C4B10205C79; Wed, 29 Nov 2023 19:47:19 +0700 (WIB)
-Date: Wed, 29 Nov 2023 19:47:19 +0700
+	id 293C610205C7A; Wed, 29 Nov 2023 20:25:30 +0700 (WIB)
 From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Miroslav Benes <mbenes@suse.cz>, Randy Dunlap <rdunlap@infradead.org>
-Cc: Matthew Wilcox <willy@infradead.org>,
-	attreyee-muk <tintinm2017@gmail.com>, jpoimboe@kernel.org,
-	jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com,
-	corbet@lwn.net, live-patching@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Took care of some grammatical mistakes
-Message-ID: <ZWcy1wg68xKFOyDa@archie.me>
-References: <20231127155758.33070-1-tintinm2017@gmail.com>
- <202dbdf5-1adf-4ffa-a50d-0424967286ba@infradead.org>
- <ZWX1ZB5p5Vhz7WD2@casper.infradead.org>
- <0e7941d8-d9b2-4253-9ad5-0f7806e45e2e@infradead.org>
- <alpine.LSU.2.21.2311291105430.12159@pobox.suse.cz>
+To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Documentation <linux-doc@vger.kernel.org>,
+	Linux Kernel Livepatching <live-patching@vger.kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Attreyee Mukherjee <tintinm2017@gmail.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH 1/2] Documentation: livepatch: Correct "step on each other's toes" idiom
+Date: Wed, 29 Nov 2023 20:25:26 +0700
+Message-ID: <20231129132527.8078-2-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231129132527.8078-1-bagasdotme@gmail.com>
+References: <20231129132527.8078-1-bagasdotme@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yTYQjTtA5F/R5Chg"
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2311291105430.12159@pobox.suse.cz>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1603; i=bagasdotme@gmail.com; h=from:subject; bh=r13kOykwe03xSnUVHKSLktQXQYt9cEeFqfNfS0XI6+0=; b=kA0DAAoW9rmJSVVRTqMByyZiAGVnO8LIj4CCHyBqemw2srUrOSh6W1CQt8FOHrGD57E6TXUq/ 4h1BAAWCgAdFiEEkmEOgsu6MhTQh61B9rmJSVVRTqMFAmVnO8IACgkQ9rmJSVVRTqNrFQEA25/K xny8zgv3Fsl0FAjX2IBTR7P/9wy/4yWjHbfqhPAA/R+AEfEjgRt+9q7vsq2RYJRSDJsPaSn+ZVO Ps9monoQD
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 
+The idiom is written as "step over" instead, which means walking over
+something [1]; although it should have meant getting involved (interfere)
+in each other redirection method's effect [2], as implied in the
+surrounding context.
 
---yTYQjTtA5F/R5Chg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Correct the idiom.
 
-On Wed, Nov 29, 2023 at 11:08:46AM +0100, Miroslav Benes wrote:
-> On Tue, 28 Nov 2023, Randy Dunlap wrote:
->=20
-> >=20
-> >=20
-> > On 11/28/23 06:12, Matthew Wilcox wrote:
-> > > On Mon, Nov 27, 2023 at 11:41:31AM -0800, Randy Dunlap wrote:
-> > >> Hi,
-> > >>
-> > >> On 11/27/23 07:57, attreyee-muk wrote:
-> > >>> Respected Maintainers,=20
-> > >>>
-> > >>> I have made some grammatical changes in the livepatch.rst file wher=
-e I
-> > >>> felt that the sentence would have sounded more correct and would ha=
-ve become easy for
-> > >>> beginners to understand by reading.=20
-> > >>> Requesting review of my proposed changes from the mainatiners.=20
-> > >>>
-> > >>> Thank You
-> > >>> Attreyee Mukherjee
-> > >>>
-> > >>> Signed-off-by: attreyee-muk <tintinm2017@gmail.com>
-> > >>> ---
-> > >>>  Documentation/livepatch/livepatch.rst | 8 ++++----
-> > >>>  1 file changed, 4 insertions(+), 4 deletions(-)
-> > >>>
-> > >>> diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/=
-livepatch/livepatch.rst
-> > >>> index 68e3651e8af9..a2d2317b7d6b 100644
-> > >>> --- a/Documentation/livepatch/livepatch.rst
-> > >>> +++ b/Documentation/livepatch/livepatch.rst
-> > >>> @@ -35,11 +35,11 @@ and livepatching:
-> > >>> =20
-> > >>>  All three approaches need to modify the existing code at runtime. =
-Therefore
-> > >>> -they need to be aware of each other and not step over each other's=
- toes.
-> > >>> +they need to be aware of each other and not step over each others'=
- toes.
-> > >>
-> > >> I've never seen that written like that, so I disagree here. FWIW.
-> > >=20
-> > > "Step over" is new to me too.  I see "step on" much more often.
-> >=20
-> > Agreed.
->=20
-> Yes. Attreyee, please fix this instead.
-> =20
-> > > As far as placement of the apostrophe,
-> > > https://ludwig.guru/s/step+on+each+others+toes
-> > > suggests either omitting the apostrophe or placing it after the s,
-> > > as attreyee-muk has done is most common.
-> >=20
-> > Apparently you can find anything on the internet.  :)
-> >=20
-> > Here's the other side:
-> >=20
-> > https://jakubmarian.com/each-others-vs-each-others-in-english/
->=20
-> I am not a native speaker, but "step on each other's toe" sounds the best=
-=20
-> to me. Or perhaps even "they need to be aware of each other and not step=
-=20
-> on their toes" since it is then kind of implied? English is difficult :).
->=20
+Link: https://idioms.thefreedictionary.com/step+over [1]
+Link: https://dictionary.cambridge.org/dictionary/english/step-on-toes [2]
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+I choose to keep the singular version of 'each other' since it refers to
+individual redirection method (see [3] for grammatical explanation of why
+it is the case ).
 
-I agree with yours and Jakub's blogpost, since 'each other' refers to
-every single individual.
+[3]: https://jakubmarian.com/each-others-vs-each-others-in-english/
 
-Thanks.
+ Documentation/livepatch/livepatch.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
+diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatch/livepatch.rst
+index 68e3651e8af925..000059b3cbde49 100644
+--- a/Documentation/livepatch/livepatch.rst
++++ b/Documentation/livepatch/livepatch.rst
+@@ -39,7 +39,7 @@ and livepatching:
+     are in any way modified.
+ 
+ All three approaches need to modify the existing code at runtime. Therefore
+-they need to be aware of each other and not step over each other's toes.
++they need to be aware of each other and not step on each other's toes.
+ Most of these problems are solved by using the dynamic ftrace framework as
+ a base. A Kprobe is registered as a ftrace handler when the function entry
+ is probed, see CONFIG_KPROBES_ON_FTRACE. Also an alternative function from
+-- 
 An old man doll... just what I always wanted! - Clara
 
---yTYQjTtA5F/R5Chg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZWcy1wAKCRD2uYlJVVFO
-oyGpAP4kgfEso2+zbnQS0HyG60Q4+zjNQhE3A2TjFS57TzpBQgEAslKjk1drpxdh
-cMB6AHt0Id3vEQlacCw424M49hfpZQ4=
-=YaJg
------END PGP SIGNATURE-----
-
---yTYQjTtA5F/R5Chg--
