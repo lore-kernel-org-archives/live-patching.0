@@ -1,44 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5CE41C75;
-	Tue,  7 May 2024 02:35:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52D24A12;
+	Tue,  7 May 2024 02:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715049324; cv=none; b=rsl2bY9eIgBeXYrf71wPciMP2KjhWb/Be3ujIjnkffZKIJkbVdI2ulsgMbZ4DuUlVPXkarG2bucTnIRAVc0mcU924Gkov1xy1BcM/eSA/6lzwCxJ+bStjWAp0c2Iidg04qtcXVy+PpR9uofJDdmcqFM/mfERfW5zSLHxn8/FK4s=
+	t=1715049713; cv=none; b=N2dcn76dzMUcWW4BsUiqqYmQ7zjDTF7P55ZAlpcGK6v34THclnsl/J0nQwg3+MyLZmCE3KZBu5EOft0euzR8o2R/aF31IVsLytPVYZ8V3oMFUTZnYPEiL9qvvnvAsXn5hM9NNVs9ZHs1BaSIJ6Dl+H6ghapj+xT2W04YVK965GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715049324; c=relaxed/simple;
-	bh=d6O3dcC8wWUL2pYuEX03QsHXDZ+ynSU+4wXodxkTgJQ=;
+	s=arc-20240116; t=1715049713; c=relaxed/simple;
+	bh=5ZbJZ+MRgMQv8oPdoPolCY3a9EiStO8pBdLRaT33Z80=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DM9NJDN22DQSS6Lk52K/rrIt/Aljl/ylUC8ATUtFSActj/VARlX8ecceEpJ4Ds7wpdlC1K3lFHTqg2UngVANTmu8yRkXEg5eb+sIDPQBDRnBeLLI2EG6p7KfwWSt1RM6UnZatjaom3CDtgHg0MKsycKThaWyQARzEd4+eeyd/x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kVpqyXXv; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=smAjssC6bHmBP6HYi3xZd5j6GkrbT3hW/v5CcqYs02TgHp5lt624gssH6gSUHuL45wp16iZk18AQAIVnwOlQm4Nv36nXo/JtMiN7Tf7O5Jh6GJlGYKRGZHWtN2BDjd2PWCVNh9JliH6WLoo4ZUTTpAfBweNSvEC2cV0wmGaUZC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KfOM/Uz8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kVpqyXXv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A624C116B1;
-	Tue,  7 May 2024 02:35:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KfOM/Uz8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88D7C116B1;
+	Tue,  7 May 2024 02:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715049324;
-	bh=d6O3dcC8wWUL2pYuEX03QsHXDZ+ynSU+4wXodxkTgJQ=;
+	s=k20201202; t=1715049713;
+	bh=5ZbJZ+MRgMQv8oPdoPolCY3a9EiStO8pBdLRaT33Z80=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kVpqyXXvvbLId/WiNugidvbtyKQZxncCgTRQPVZ6oDDvKjX9E2nDhC59fol39qJoi
-	 Wx+d+ugyxkm/MyQcxhsw9IVwJAO9MaPkPi6+xNf31TggJei1cDnS6MzzmLLdopI92Q
-	 X8W3fAjlOp4iU2lXQsTXkrX4GMmgRzcQu7pthdTgl6TUolqkozeQ4ez4Vxe3BvAjxc
-	 fv20rwrJt3IZngyKcMR2itH54fbG+8kqQXO9lwviy3ZKbLN00/NeQfD+1C7cEwGneO
-	 0pCdeiX4S623FT5Y0HKt2n7rjxaZFYVopt5tYpK2vykDhvxoNFJ/niV/d781gWXhB0
-	 5CaV1Gs9RrX1Q==
-Date: Mon, 6 May 2024 19:35:22 -0700
+	b=KfOM/Uz8fc1oVzZbLOVKGH4oSHS+lpvtE2r/SffaTnqzIKzkIcdGTfMIgNZVEBCw3
+	 5V1hINuVVnZRW0tkyLNE1SbXy1gjxpwLTPuzpeKso5J7LZGnvzCrJb8EfVz5xSgIj5
+	 d2QhVTVreshqWrB06cQ0WAmddHzIdOWZfu7fROniQ0GGWUlfyyI5lQzcteJWCUB6hm
+	 vY0+Y1wGF+2E4FZUWNduEBSJYJxa0t/Bu2gz/mW5i1CiFSpnkIZxZITTOO59Yzezl8
+	 Zl7wrahmNZUT4mD0DmQv8gAxpJ4WgB3Wenc8jxq3Z7dhuoKvRqeGaw8ObNJ9o/oltN
+	 38YJKO6+tGndA==
+Date: Mon, 6 May 2024 19:41:51 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, mcgrof@kernel.org,
-	live-patching@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] livepatch: Delete the associated module of
- disabled livepatch
-Message-ID: <20240507023522.zk5xygvpac6gnxkh@treble>
-References: <20240407035730.20282-1-laoar.shao@gmail.com>
- <20240407035730.20282-3-laoar.shao@gmail.com>
- <20240503211434.wce2g4gtpwr73tya@treble>
- <Zji_w3dLEKMghMxr@pathway.suse.cz>
+To: zhang warden <zhangwarden@gmail.com>
+Cc: mbenes@suse.cz, jikos@kernel.org, Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/1] *** Replace KLP_* to KLP_TRANSITION_* ***
+Message-ID: <20240507024151.6jto4zraqfbqxcw2@treble>
+References: <20240507021714.29689-1-zhangwarden@gmail.com>
+ <0E399FCD-396E-448B-A974-6034F4CF2B53@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,33 +44,23 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Zji_w3dLEKMghMxr@pathway.suse.cz>
+In-Reply-To: <0E399FCD-396E-448B-A974-6034F4CF2B53@gmail.com>
 
-On Mon, May 06, 2024 at 01:32:19PM +0200, Petr Mladek wrote:
-> Also it would require adding an API to remove the sysfs files from the
-> module_exit callback.
+On Tue, May 07, 2024 at 10:21:40AM +0800, zhang warden wrote:
+> 
+> 
+> > 
+> > transition state. With this marcos renamed, comments are not 
+> > necessary at this point.
+> > 
+> Sorry for my careless, the comment still remains in the code. However,
+> comment in the code do no harms here. Maybe it can be kept.
 
-Could the sysfs removal be triggered from klp_module_going() or a module
-notifier?
+The comments aren't actually correct.
 
-> I do not see any reasonable reason to keep the replaced livepatch
-> module loaded. It is an unusable piece of code. IMHO, it would be
-> really convenient if the kernel removed it.
-
-User space needs to be polling for the transition to complete so it can
-reverse the patch if it stalls.  Otherwise the patch could stall forever
-and go unnoticed.
-
-Can't user space just unload the replaced module after it detects the
-completed transition?
-
-I'm not sure I see the benefit in complicating the kernel and possibly
-introducing bugs, when unloading the module from user space seems to be
-a perfectly valid option.
-
-Also, an error returned by delete_module() to the kernel would be
-ignored and the module might remain in memory forever without being
-noticed.
+For example, KLP_TRANSITION_UNPATCHED doesn't always mean "transitioning
+to unpatched state".  Sometimes it means "transitioning *from* unpatched
+state".
 
 -- 
 Josh
