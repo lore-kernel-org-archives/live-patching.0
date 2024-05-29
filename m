@@ -1,73 +1,70 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8C21F5F6;
-	Wed, 29 May 2024 14:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D261386A7;
+	Wed, 29 May 2024 14:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716991544; cv=none; b=s9R0k7CwJAP4XBnFGD3hZkaVD1/hOTMJ3ifz9GRmwufJfNLL6Vhg6VBKYD91qI5ZOq6lgRkIi4lu+7BgIOQFc9xhnijNSewm4TBnhyZ0ZznGr6uB4H7pEivl+IfdTxpr7E+PLpnBm9u5f3ePju9OA4E58qy0Tniu4n16SpvEp2U=
+	t=1716991998; cv=none; b=ESAQO5A0mIbTCZTCHBXOQRzsHtJiDsDXmx1y4aRqDCYJFXdNzmvT0mlZQqBm+3hrMvJytfONb87qYHOvtGaljwshx1cG4TE309q3+6a0566GbtSQ+WoeSCtOilWGkoQiQqPJTPG8X6kVRYuBI2yQv8WVPAKFWZciKF4KKqapN2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716991544; c=relaxed/simple;
-	bh=44DuED9EFhJ0GFgSWxyzBEOtcMqHHs3WgFTDn4hoJ6g=;
+	s=arc-20240116; t=1716991998; c=relaxed/simple;
+	bh=vhrBHK1oYqyYTQQ2KrX7GUmYkG+lYSlCKJrAJ9ciRt0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BO7DnLmqw69DBnGgzTGzacpMVacXfcQ27/EDjLc88b4Evnsw7wHqJ1noXa2rAVC1v7u71ZzAKReMuVYNPx3wrh01qFXkJ9BeuCqwBbijeQ7cTUzVJjdvaeKgP0oo+lpd9AdN9rrUI4+MEeafPpkUloF4Zc1ygQUwDzs+VdAdctE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=nVsGN4H5; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=nVsGN4H5; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version; b=BG5DISSfZAOU8ITqywzwEVoghWypWyLRKroKGGqEtGRCc04cpoxtYZY3wRiDttO7423FuEoyqZU+cBsRPN7Mddv5MTVy0WwCK5oTEkR7w/jFUIXGrzYb8B+g227F66SWQI7YIE6WHBTxpbO8sHReC77KahZgguL/V1mDPt2qjxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ZHebotvB; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ECZTtnEu; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="nVsGN4H5";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="nVsGN4H5"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ZHebotvB";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ECZTtnEu"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7B608336AF;
-	Wed, 29 May 2024 14:05:40 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id EDF1B336BB;
+	Wed, 29 May 2024 14:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1716991540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1716991995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=S7+lTfIl4GO+Abh7YhdGsCv7gLWnQXpzMH8I4JBF3MI=;
-	b=nVsGN4H5ifPGKbfG0TTRltiQ3UENeJocDNI/xhYt33Uu8/PJKORDtd83+Mf8aYNLt5Ofgv
-	9gU0ijoLi2bReJfhmQNb7FPdW2sbikbss8DJ/kVYPuukFUlAtTDtwBGhdzpNLAwsHCDDqi
-	N8P+JGhW3ePbzRpwd7LvmPBZNAr21xc=
+	bh=Obvm5kCvdEN1g3yJAksMyUYT29qKH1+PG1MggvgBEpc=;
+	b=ZHebotvBjTBb6ucKA+ydBuXs+AggyZZDheBcGKeOeGjbyOGDXHBHGvrndF4ROJsPxI+3eT
+	4iO7bs1BF8dSPGEA+N7ESs866pf70uQsDCUoD0b+Re0dPIysU9MzOmqmvxfqjWJWu/q1ol
+	dlbpuNn/gcm1+lJxt2oAQSOnWdrzfgA=
 Authentication-Results: smtp-out1.suse.de;
-	none
+	dkim=pass header.d=suse.com header.s=susede1 header.b=ECZTtnEu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1716991540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1716991994; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=S7+lTfIl4GO+Abh7YhdGsCv7gLWnQXpzMH8I4JBF3MI=;
-	b=nVsGN4H5ifPGKbfG0TTRltiQ3UENeJocDNI/xhYt33Uu8/PJKORDtd83+Mf8aYNLt5Ofgv
-	9gU0ijoLi2bReJfhmQNb7FPdW2sbikbss8DJ/kVYPuukFUlAtTDtwBGhdzpNLAwsHCDDqi
-	N8P+JGhW3ePbzRpwd7LvmPBZNAr21xc=
+	bh=Obvm5kCvdEN1g3yJAksMyUYT29qKH1+PG1MggvgBEpc=;
+	b=ECZTtnEunVD07ng06cHfL2A3+ArV5U2ynd6mv1GQ8i+fFkNtsWVaDKyKbi3O02mgiAodI5
+	jGwiclY1fMCYP15PzmVppJeHVP2RpbarCa7RBQJJULondhpgQhCf7qRCOB1rddYH2L7MrX
+	77+l+KC3zI2npr+B79ofBX4QoDb20js=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 161041372E;
-	Wed, 29 May 2024 14:05:39 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 89F461372E;
+	Wed, 29 May 2024 14:13:14 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id CtCHNTM2V2aRWAAAD6G6ig
-	(envelope-from <mpdesouza@suse.com>); Wed, 29 May 2024 14:05:39 +0000
+	id CP9UFvo3V2bvWgAAD6G6ig
+	(envelope-from <mpdesouza@suse.com>); Wed, 29 May 2024 14:13:14 +0000
 From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Lukas Hruska <lhruska@suse.cz>
+To: Miroslav Benes <mbenes@suse.cz>
 Cc: mpdesouza@suse.com,
-	pmladek@suse.com,
-	mbenes@suse.cz,
-	jpoimboe@kernel.org,
-	joe.lawrence@redhat.com,
+	Joe Lawrence <joe.lawrence@redhat.com>,
 	live-patching@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] livepatch: klp-convert tool - Minimal version
-Date: Wed, 29 May 2024 11:05:27 -0300
-Message-ID: <20240529140536.18137-1-mpdesouza@suse.com>
+	nstange@suse.de
+Subject: Re: [PATCH 1/2] docs/livepatch: Add new compiler considerations doc
+Date: Wed, 29 May 2024 11:12:44 -0300
+Message-ID: <20240529141309.18902-1-mpdesouza@suse.com>
 X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240516133009.20224-1-lhruska@suse.cz>
+In-Reply-To: <alpine.LSU.2.21.2009021452560.23200@pobox.suse.cz>
 References: 
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
@@ -77,152 +74,182 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Flag: NO
-X-Spam-Score: -2.80
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: EDF1B336BB
 X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	MX_GOOD(-0.01)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	FROM_HAS_DN(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.com:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_TLS_ALL(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.com:dkim,suse.com:email,suse.cz:email];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	DKIM_TRACE(0.00)[suse.com:+]
 
 From: mpdesouza@suse.com
 
-On Thu, 16 May 2024 15:30:03 +0200 Lukas Hruska <lhruska@suse.cz> wrote:
+On   Wed, 2 Sep 2020 15:45:33 +0200 (CEST)   Miroslav Benes <mbenes@suse.cz> wrote:
 
-> Summary
-> -------
+> Hi,
 > 
-> This is a significantly simplified version of the original klp-convert tool.
-> The klp-convert code has never got a proper review and also clean ups
-> were not easy. The last version was v7, see
-> https://lore.kernel.org/r/20230306140824.3858543-1-joe.lawrence@redhat.com
+> first, I'm sorry for the late reply. Thanks, Josh, for the reminder.
 > 
-> The main change is that the tool does not longer search for the
-> symbols which would need the livepatch specific relocation entry.
-> Also klp.symbols file is not longer needed.
+> CCing Nicolai. Nicolai, could you take a look at the proposed 
+> documentation too, please? You have more up-to-date experience.
 > 
-> Instead, the needed information is appended to the symbol declaration
-> via a new macro KLP_RELOC_SYMBOL(). It creates symbol with all needed
-> metadata. For example:
+> On Tue, 21 Jul 2020, Joe Lawrence wrote:
 > 
->   extern char *saved_command_line \
->                  KLP_RELOC_SYMBOL(vmlinux, vmlinux, saved_command_line, 0);
+> > +Examples
+> > +========
+> > +
+> > +Interprocedural optimization (IPA)
+> > +----------------------------------
+> > +
+> > +Function inlining is probably the most common compiler optimization that
+> > +affects livepatching.  In a simple example, inlining transforms the original
+> > +code::
+> > +
+> > +	foo() { ... [ foo implementation ] ... }
+> > +
+> > +	bar() { ...  foo() ...  }
+> > +
+> > +to::
+> > +
+> > +	bar() { ...  [ foo implementation ] ...  }
+> > +
+> > +Inlining is comparable to macro expansion, however the compiler may inline
+> > +cases which it determines worthwhile (while preserving original call/return
+> > +semantics in others) or even partially inline pieces of functions (see cold
+> > +functions in GCC function suffixes section below).
+> > +
+> > +To safely livepatch ``foo()`` from the previous example, all of its callers
+> > +need to be taken into consideration.  For those callers that the compiler had
+> > +inlined ``foo()``, a livepatch should include a new version of the calling
+> > +function such that it:
+> > +
+> > +  1. Calls a new, patched version of the inlined function, or
+> > +  2. Provides an updated version of the caller that contains its own inlined
+> > +     and updated version of the inlined function
 > 
-> would create symbol
+> I'm afraid the above could cause a confusion...
 > 
-> $>readelf -r -W <compiled livepatch module>:
-> Relocation section '.rela.text' at offset 0x32e60 contains 10 entries:
->     Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+> "1. Calls a new, patched version of the inlined function, or". The 
+> function is not inlined in this case. Would it be more understandable to 
+> use function names?
+> 
+> 1. Calls a new, patched version of function foo(), or
+> 2. Provides an updated version of bar() that contains its own inlined and 
+>    updated version of foo() (as seen in the example above).
+> 
+> Not to say that it is again a call of the compiler to decide that, so one 
+> usually prepares an updated version of foo() and updated version of bar() 
+> calling to it. Updated foo() has to be there for non-inlined cases anyway.
+> 
+> > +
+> > +Other interesting IPA examples include:
+> > +
+> > +- *IPA-SRA*: removal of unused parameters, replace parameters passed by
+> > +  referenced by parameters passed by value.  This optimization basically
+> 
+> s/referenced/reference/
+> 
+> > +  violates ABI.
+> > +
+> > +  .. note::
+> > +     GCC changes the name of function.  See GCC function suffixes
+> > +     section below.
+> > +
+> > +- *IPA-CP*: find values passed to functions are constants and then optimizes
+> > +  accordingly Several clones of a function are possible if a set is limited.
+> 
+> "...accordingly. Several..."
+> 
 > [...]
-> 0000000000000068  0000003c00000002 R_X86_64_PC32          0000000000000000 .klp.sym.rela.vmlinux.vmlinux.saved_command_line,0 - 4
+> 
+> > +  	void cdev_put(struct cdev *p)
+> > +  	{
+> > +  		if (p) {
+> > +  			struct module *owner = p->owner;
+> > +  			kobject_put(&p->kobj);
+> > +  			module_put(owner);
+> > +  		}
+> > +  	}
+> 
+> git am complained here about whitespace damage.
+> 
 > [...]
 > 
+> > +kgraft-analysis-tool
+> > +--------------------
+> > +
+> > +With the -fdump-ipa-clones flag, GCC will dump IPA clones that were created
+> > +by all inter-procedural optimizations in ``<source>.000i.ipa-clones`` files.
+> > +
+> > +kgraft-analysis-tool pretty-prints those IPA cloning decisions.  The full
+> > +list of affected functions provides additional updates that the source-based
+> > +livepatch author may need to consider.  For example, for the function
+> > +``scatterwalk_unmap()``:
+> > +
+> > +::
+> > +
+> > +  $ ./kgraft-ipa-analysis.py --symbol=scatterwalk_unmap aesni-intel_glue.i.000i.ipa-clones
+> > +  Function: scatterwalk_unmap/2930 (include/crypto/scatterwalk.h:81:60)
+> > +    isra: scatterwalk_unmap.isra.2/3142 (include/crypto/scatterwalk.h:81:60)
+> > +      inlining to: helper_rfc4106_decrypt/3007 (arch/x86/crypto/aesni-intel_glue.c:1016:12)
+> > +      inlining to: helper_rfc4106_decrypt/3007 (arch/x86/crypto/aesni-intel_glue.c:1016:12)
+> > +      inlining to: helper_rfc4106_encrypt/3006 (arch/x86/crypto/aesni-intel_glue.c:939:12)
+> > +
+> > +    Affected functions: 3
+> > +      scatterwalk_unmap.isra.2/3142 (include/crypto/scatterwalk.h:81:60)
+> > +      helper_rfc4106_decrypt/3007 (arch/x86/crypto/aesni-intel_glue.c:1016:12)
+> > +      helper_rfc4106_encrypt/3006 (arch/x86/crypto/aesni-intel_glue.c:939:12)
 > 
-> The simplified klp-convert tool just transforms symbols
-> created by KLP_RELOC_SYMBOL() to object specific rela sections
-> and rela entries which would later be proceed when the livepatch
-> or the livepatched object is loaded.
+> The example for the github is not up-to-date. The tool now expects 
+> file_list with *.ipa-clones files and the output is a bit different for 
+> the recent kernel.
 > 
-> For example, klp-convert would replace the above symbols with:
+> $ echo arch/x86/crypto/aesni-intel_glue.c.000i.ipa-clones | kgraft-ipa-analysis.py --symbol=scatterwalk_unmap /dev/stdin
+> Parsing file (1/1): arch/x86/crypto/aesni-intel_glue.c.000i.ipa-clones
+> Function: scatterwalk_unmap/3935 (./include/crypto/scatterwalk.h:59:20) [REMOVED] [object file: arch/x86/crypto/aesni-intel_glue.c.000i.ipa-clones]
+>   isra: scatterwalk_unmap.isra.8/4117 (./include/crypto/scatterwalk.h:59:20) [REMOVED]
+>     inlining to: gcmaes_crypt_by_sg/4019 (arch/x86/crypto/aesni-intel_glue.c:682:12) [REMOVED] [edges: 4]
+>       constprop: gcmaes_crypt_by_sg.constprop.13/4182 (arch/x86/crypto/aesni-intel_glue.c:682:12)
 > 
-> $> readelf -r -W <livepatch_module_proceed_by_klp_convert>
-> Relocation section '.klp.rela.vmlinux.text' at offset 0x5cb60 contains 1 entry:
->     Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-> 0000000000000068  0000003c00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.saved_command_line,0 - 4
-> 
-> 
-> Note that similar macro was needed also in the original version
-> to handle more symbols of the same name (sympos).
-> 
-> Given the above, add klp-convert tool; integrate klp-convert tool into
-> kbuild; add data-structure and macros to enable users to annotate
-> livepatch source code; make modpost stage compatible with livepatches;
-> update livepatch-sample and update documentation.
+>   Affected functions: 3
+>     scatterwalk_unmap.isra.8/4117 (./include/crypto/scatterwalk.h:59:20) [REMOVED]
+>     gcmaes_crypt_by_sg/4019 (arch/x86/crypto/aesni-intel_glue.c:682:12) [REMOVED]
+>     gcmaes_crypt_by_sg.constprop.13/4182 (arch/x86/crypto/aesni-intel_glue.c:682:12)
 > 
 > 
-> Testing
-> -------
 > 
-> The patchset selftests build and execute on x86_64, s390x, and ppc64le
-> for both default config (with added livepatch dependencies) and a larger
-> SLE-15-ish config.
-> 
-> 
-> Summary of changes in this minimal version v2
-> ------------------------
-> 
-> - rebase for v6.9
-> - cleaned-up SoB chains (suggested by pmladek)
-> - klp-convert: remove the symbol map auto-resolving solution
-> - klp-convert: add macro for flagging variables inside a LP src to be resolved by this tool
-> - klp-convert: code simplification
-> - selftests: add selftest livepatching function using an external symbol
+> The rest looks great. Thanks a lot, Joe, for putting it together.
 
-Thanks for sending this new version Lukas! It currently fails to apply on
-current Linux master, but the conflict is very simple to address (attached
-patch).
+I think that we should start provinding a "Livepatch creation how-to", something
+similar, but for now I believe that some documentation is better than no
+documentation. This document can evolve to reach such point in the future, but
+for now, with Miroslav suggestions applied:
 
-Joe, Josh, other people, can you also take a look in the patchset? It would be
-good we can move this forward.
-
-Thanks,
-  Marcos
-
-commit 1a1cf8b0967c26857b17e8ceb02f6a1bd854667d
-Author: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date:   Wed May 29 10:18:38 2024 -0300
-
-    Solve merge problem
-    
-    Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-
-diff --git a/Makefile b/Makefile
-index f975b6396328..579dfb46e691 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1491,7 +1491,7 @@ endif # CONFIG_MODULES
- # Directories & files removed with 'make clean'
- CLEAN_FILES += vmlinux.symvers modules-only.symvers \
- 	       modules.builtin modules.builtin.modinfo modules.nsdeps \
--	       compile_commands.json rust/test \
-+	       compile_commands.json .thinlto-cache rust/test \
- 	       rust-project.json .vmlinux.objs .vmlinux.export.c
- 
- # Directories & files removed with 'make mrproper'
+Acked-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
 > 
-> Previous versions
-> -----------------
-> 
-> RFC:
->   https://lore.kernel.org/r/cover.1477578530.git.jpoimboe@redhat.com/
-> v2:
->   https://lore.kernel.org/r/f52d29f7-7d1b-ad3d-050b-a9fa8878faf2@redhat.com/
-> v3:
->   https://lore.kernel.org/r/20190410155058.9437-1-joe.lawrence@redhat.com/
-> v4:
->   https://lore.kernel.org/r/20190509143859.9050-1-joe.lawrence@redhat.com/
-> v5:
->   (not posted)
->   https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v5-devel
-> v6:
->   https://lore.kernel.org/r/20220216163940.228309-1-joe.lawrence@redhat.com/
-> v7:
->   https://lore.kernel.org/r/20230306140824.3858543-1-joe.lawrence@redhat.com/
-> v1 minimal:
->   https://lore.kernel.org/r/20231106162513.17556-1-lhruska@suse.cz/
+> Miroslav
