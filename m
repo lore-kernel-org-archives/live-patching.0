@@ -1,125 +1,118 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629901EA84;
-	Tue, 13 Aug 2024 03:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559831C68C;
+	Tue, 13 Aug 2024 04:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723521235; cv=none; b=tN12urf80FQepBDElv8kJ6/RC66xEcjf9yJXb9Elqkirg2l88PHjrE0W/p3+YVijNW1IBg2IVihq0Wqfh2iK0bxyMLsKAwStmc1IdaDQzgablkrSoxkRIrpG8ddRZ7v0w81aBbgPROfmeylE/+Dw1TxcGww5cJh39fNZXDaUj/Y=
+	t=1723523354; cv=none; b=o1iVr+JOfsocOCCkXSnsvP1WWMtozt7CcSq+m829J4JcE6FQHJFsqj6US1UPqoMV0yv+LTH5Mo1/OjEWMzRqurJj6BOx4R9F1R7o/bJdBsariFbPl36hD/PeBP7GZnGBIu+jz0/JVJIssEsoorrnNy6ZIAhL6xCRzZsSzdrQPWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723521235; c=relaxed/simple;
-	bh=bzzkOdYjZnt3NwRR0zM1nV4+wHGZRcHbO0WP+1KwHyk=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=CxcB+1ZnDve1blS2Of6GilihoXfLwAV7Z8oem8cIzE7WI9jHEr8RelzXcH1hgCL+YTvOIES2oUeoz7hXVg7vn1U8NUIO3ghBll4irvC2o6bSyS41nrJlrfe5u5BrR01Lv9zFF/m0TnuHENZ9pVRLmJHMNELPVoCveCk9xeI9It8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JnJ2wQ59; arc=none smtp.client-ip=209.85.167.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723523354; c=relaxed/simple;
+	bh=5yRDZMRHZuD+/2KSqyv63RNLA87tSz/Y9Y0k+5NAKIc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=csRV//sW1ZrpWpaKnoNVfTyQhprwA3H36dVlw1mIjd+xBNo+lFrRUUz0JMKj2ovcSQiwlJwNng6boxbKLE0fFrPo4FTtwT+Eww/rBy6h49VXndc9NKBaBUduekiHW+gOPWEuKYuPt3tHkW8eootbQBckMwCbNCD8K5/LUFLhWn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9icMtwW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JnJ2wQ59"
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3db16a98d16so3109110b6e.0;
-        Mon, 12 Aug 2024 20:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723521233; x=1724126033; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tN/ZRWVHEHWYN/MyGgywTnPix3p+IROxtn8nqbPNIJA=;
-        b=JnJ2wQ590ktdeOLvytKXX1qlH8IkcpiBm0utYOJUOgHh2FgUMjAxTx7rZxT9QiTFDa
-         iTd/PQ/YKD6PFtaJKrKu+zyvi5xOW+5QMsyqyCQwsgXMIV6t4aJBcawUjm2xgHtn96vc
-         qjK0TkDqweizBWH0f3OMdDXP42aZ7Uo0Qn348OMESmNBVEB6o+P77Igwa3sy0IafXW21
-         aUHqHrEFZVFRUlafxNbnzp/WsAdXoY6SvtvAD5QSCmOvQ6FIzXB7PQ25+T1r8qVyo8dT
-         +AHxiLNZCpwsryX2Ud2VKjx+z1+BbH9Ejt7a5r//xxQgzbDLaL6WSM/AxXxowRAfqsLg
-         o/Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723521233; x=1724126033;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tN/ZRWVHEHWYN/MyGgywTnPix3p+IROxtn8nqbPNIJA=;
-        b=h7xC9iC2ghB/yt8r9TbqTrx1P3Rc5ZhBzmZJtqVRMlo7yk5zKphdiWB5990TTgTAHI
-         5L/1AK5umqaFYGSDbTsE/mMbpAuwNtGp4be4jHClFji4IjXXMzGI5hAhKuAFR9nqDDEV
-         ++8foGOvp2XBQnbPh/SWbgdZRGSE+Fpo9fvFrZht3qci4ku9SG8OSQbk3Ghold4Md/Kz
-         qiJwSOtNkEGNuRZ3EJts9M3GERGXChEM6+gd1zXHYnbAbXy7Vf/Eh/Ylvlsv1vTDwR+t
-         zg0R9db6mtcslyH413Ww9Vwv6UeaYmFFR8JBPRfuSLBzBbOwQ2HMEZl/SFWXy6O5F1YZ
-         6wyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVi7ZEdNfpZIUxeJBCdcsXKk2cwTnOWgvAmaitHPRf64oEE1u8jcA9cI9fP6/Pn5Flpv9Ug/fQK2yfRkMsbEA6zN0ZseKdpnM2n0dj3
-X-Gm-Message-State: AOJu0YyWNcJdPLD3sF9sXH/bmP1UqOCYTjp4DWJfreMsi5hoqn7g1KD+
-	VBAleG5nFpEmJGcU7w9GhysDxrQkycBknzGdEAdxLlhsdJdK1jQfPER8IykeMw0=
-X-Google-Smtp-Source: AGHT+IGSaYxy1mZueLxy1ybCQRdMXARaSDlaNa5WLDIyMssupYABKl5Y/uPucHwGpdXkDnkPPC+JUQ==
-X-Received: by 2002:a05:6808:3994:b0:3d9:303a:fc6d with SMTP id 5614622812f47-3dd1eede067mr3085010b6e.41.1723521233318;
-        Mon, 12 Aug 2024 20:53:53 -0700 (PDT)
-Received: from smtpclient.apple ([47.89.225.180])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c697a08f0dsm459800a12.44.2024.08.12.20.53.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2024 20:53:52 -0700 (PDT)
-Content-Type: text/plain;
-	charset=us-ascii
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9icMtwW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0E5C4AF11;
+	Tue, 13 Aug 2024 04:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723523353;
+	bh=5yRDZMRHZuD+/2KSqyv63RNLA87tSz/Y9Y0k+5NAKIc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=G9icMtwWdCjSXMe+1oYPqKm22QG6tmcl+25xu7j10bOW4VbnWBN9QAwkYLxElOVID
+	 +yGkC/lp8YJmwNGjAjNO7vDx15eQPFy9S8BzQxezpA6qd+sm92Ugyt6V355cawysgm
+	 Fuzmu0aaMwnzAnEjtKUILM4RlT/oZM4Y4Yb3JyKoiK8q1RYCRKXsZoIPU0MAj+dGGQ
+	 IvtzxKXqJ/AdXlVNM2XF2S6uHyax1SD+xG11qgm1IbNrsMvcZjvT7cx5lGhWfE5U6J
+	 yoUh6m+JmADrNBKZDTKz1CPYPEHpd17q8kEYK4iOqPTMk4bftayAjx1VuRjVq1/iqq
+	 VzJFJf/FI4kfQ==
+Date: Tue, 13 Aug 2024 13:29:07 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, jpoimboe@kernel.org, jikos@kernel.org,
+ mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ nathan@kernel.org, morbo@google.com, justinstitt@google.com,
+ mcgrof@kernel.org, thunder.leizhen@huawei.com, kees@kernel.org,
+ kernel-team@meta.com, mmaurer@google.com, samitolvanen@google.com,
+ mhiramat@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH v3 0/2] Fix kallsyms with CONFIG_LTO_CLANG
+Message-Id: <20240813132907.e6f392ec38bcc08e6796a014@kernel.org>
+In-Reply-To: <20240807220513.3100483-1-song@kernel.org>
+References: <20240807220513.3100483-1-song@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
-Subject: Re: [PATCH v2 1/1] livepatch: Add using attribute to klp_func for
- using function show
-From: zhang warden <zhangwarden@gmail.com>
-In-Reply-To: <20240805064656.40017-2-zhangyongde.zyd@alibaba-inc.com>
-Date: Tue, 13 Aug 2024 11:53:37 +0800
-Cc: live-patching@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <8743E498-1B7D-4E05-9B9D-4A243089BDD3@gmail.com>
-References: <20240805064656.40017-1-zhangyongde.zyd@alibaba-inc.com>
- <20240805064656.40017-2-zhangyongde.zyd@alibaba-inc.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>,
- Jiri Kosina <jikos@kernel.org>,
- Petr Mladek <pmladek@suse.com>,
- Joe Lawrence <joe.lawrence@redhat.com>
-X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
+On Wed,  7 Aug 2024 15:05:11 -0700
+Song Liu <song@kernel.org> wrote:
 
-
-> On Aug 5, 2024, at 14:46, zhangyongde.zyd <zhangwarden@gmail.com> wrote:
+> With CONFIG_LTO_CLANG, the compiler/linker adds .llvm.<hash> suffix to
+> local symbols to avoid duplications. Existing scripts/kallsyms sorts
+> symbols without .llvm.<hash> suffix. However, this causes quite some
+> issues later on. Some users of kallsyms, such as livepatch, have to match
+> symbols exactly.
 > 
-> From: Wardenjohn <zhangwarden@gmail.com>
-> 
-> One system may contains more than one livepatch module. We can see
-> which patch is enabled. If some patches applied to one system
-> modifing the same function, livepatch will use the function enabled
-> on top of the function stack. However, we can not excatly know
-> which function of which patch is now enabling.
-> 
-> This patch introduce one sysfs attribute of "using" to klp_func.
-> For example, if there are serval patches  make changes to function
-> "meminfo_proc_show", the attribute "enabled" of all the patch is 1.
-> With this attribute, we can easily know the version enabling belongs
-> to which patch.
-> 
-> The "using" is set as three state. 0 is disabled, it means that this
-> version of function is not used. 1 is running, it means that this
-> version of function is now running. -1 is unknown, it means that
-> this version of function is under transition, some task is still
-> chaning their running version of this function.
-> 
-> cat /sys/kernel/livepatch/<patch1>/<object1>/<function1,sympos>/using -> 0
-> means that the function1 of patch1 is disabled.
-> 
-> cat /sys/kernel/livepatch/<patchN>/<object1>/<function1,sympos>/using -> 1
-> means that the function1 of patchN is enabled.
-> 
-> cat /sys/kernel/livepatch/<patchN>/<object1>/<function1,sympos>/using -> -1
-> means that the function1 of patchN is under transition and unknown.
-> 
-> Signed-off-by: Wardenjohn <zhangwarden@gmail.com>
+> Address this by sorting full symbols at build time, and let kallsyms
+> lookup APIs to match the symbols exactly.
 > 
 
-Hi maintainers. How about your suggestions to patch V2?
+I've tested this series and confirmed it makes kprobes work with llvm suffixed
+symbols.
 
-According to your suggestion, I made some new changes to the V1 patch.
+/sys/kernel/tracing # echo "p c_start.llvm.8011538628216713357" >> kprobe_events
+ /sys/kernel/tracing # cat kprobe_events 
+p:kprobes/p_c_start_llvm_8011538628216713357_0 c_start.llvm.8011538628216713357
+/sys/kernel/tracing # echo "p c_start" >> kprobe_events 
+/sys/kernel/tracing # cat kprobe_events 
+p:kprobes/p_c_start_llvm_8011538628216713357_0 c_start.llvm.8011538628216713357
+p:kprobes/p_c_start_0 c_start
 
-I am waiting for your suggestions. 
+And ftrace too.
 
-Thanks.
-Wardenjohn.
+/sys/kernel/tracing # grep ^c_start available_filter_functions
+c_start.llvm.8011538628216713357
+c_start
+c_start.llvm.17132674095431275852
 
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+for this series.
+
+> Changes v2 => v3:
+> 1. Remove the _without_suffix APIs, as kprobe will not use them.
+>    (Masami Hiramatsu)
+> 
+> v2: https://lore.kernel.org/live-patching/20240802210836.2210140-1-song@kernel.org/T/#u
+> 
+> Changes v1 => v2:
+> 1. Update the APIs to remove all .XXX suffixes (v1 only removes .llvm.*).
+> 2. Rename the APIs as *_without_suffix. (Masami Hiramatsu)
+> 3. Fix another user from kprobe. (Masami Hiramatsu)
+> 4. Add tests for the new APIs in kallsyms_selftests.
+> 
+> v1: https://lore.kernel.org/live-patching/20240730005433.3559731-1-song@kernel.org/T/#u
+> 
+> Song Liu (2):
+>   kallsyms: Do not cleanup .llvm.<hash> suffix before sorting symbols
+>   kallsyms: Match symbols exactly with CONFIG_LTO_CLANG
+> 
+>  kernel/kallsyms.c          | 55 +++++---------------------------------
+>  kernel/kallsyms_selftest.c | 22 +--------------
+>  scripts/kallsyms.c         | 31 ++-------------------
+>  scripts/link-vmlinux.sh    |  4 ---
+>  4 files changed, 9 insertions(+), 103 deletions(-)
+> 
+> --
+> 2.43.5
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
