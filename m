@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A200D1D1759;
-	Tue,  3 Sep 2024 04:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425791D2F52;
+	Tue,  3 Sep 2024 04:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725336036; cv=none; b=eXAL6BHsQ5KgLDs0/Aw5OM6OxtfOIytYqiW+JqrqN2gqkfvCxV8K9iWG9QfiU62V5qaqXGytzGO1j60Mf/fLUfcckFN5dMYSzs3ee2VgG+2FiIlmTuelt7/vhz3xdCufqfUEBA8V13/9mmvy457bhVlZpv8QNNicHTeDpRDWZGg=
+	t=1725336037; cv=none; b=M4BskPwOHQvEsFfi3+djGaqY2YVwKviWYcCoSdgUiGekx9/Foj9OpyLefezjtOvNeVy+JLJ6PBTFcY9LobvgUUllDo3DGyiBCgsCHWdI6nNGfB10Mh+3CVgrkew9drZdZXLjMrnTcXcipf6H3v4BhKOh9UGYM9nh5vopCT7bmXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725336036; c=relaxed/simple;
-	bh=S1TH3NgEYk8GKWSjwZk9iXKEQgbZtCkEzrr/z/94KPc=;
+	s=arc-20240116; t=1725336037; c=relaxed/simple;
+	bh=VgC2+j0s9bIMK+3nuQz/1Q1o5SD9/C5KSNwbSBE0sEg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HDQpLc8LWsoVYZOZxVvte+a3/7hxP2eac8sV/XWsSByCUCTFbBbJpFCwh/1jufzidjRDSmmAd9YyZ9sy7cjokPBx38pwWqP0qrX8KXJyUggMvzCgn8xZ/uf/3SMHWp2/6ir8hplzlbF9X+XJN5ClvP4UnCrh077uDsqdJ4xTmis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uum9/FgW; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=f67M0jmXkpKpCkw7Er2e/dkAKo2OHN7F3ZxcqEALj1MKXw/Ikv0j/UAhfgFBdwN+yvmQp+rRSKLxBMDQXHxRrTg31wf8TX6CfuB4ghfx5PeghjqGYDpAw133Ju3LR/GFyFTAkyD/KXBC+Ns/YQ1KSJ6boHhrHkbalyefdUj8wjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PXoDzT2z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uum9/FgW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF1AC4CEC8;
-	Tue,  3 Sep 2024 04:00:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PXoDzT2z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E72BC4CEC9;
+	Tue,  3 Sep 2024 04:00:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725336035;
-	bh=S1TH3NgEYk8GKWSjwZk9iXKEQgbZtCkEzrr/z/94KPc=;
+	s=k20201202; t=1725336036;
+	bh=VgC2+j0s9bIMK+3nuQz/1Q1o5SD9/C5KSNwbSBE0sEg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uum9/FgWdoJnVN7TiIBuJmzsm4uI2exSJUrF+Sn+6vwuamDLqxWMGNnIe7JgfZHX6
-	 kiszVrIzcR9GeEAPotXDZU4HlXfwqqhwPVzFZ3S69YySTnTNWQMsnBC4Dxx453esN3
-	 tPRAf+gY0k4cC3arZqf+1JH68GQyUl5ed6DunTdlcvFFGp+yA3gaLrxg+d1TOgLGT7
-	 CUBc320fzM7nwq/lyvYHZbcJ6oM72VJ3laxRkCt9Ddhv+HbLqWXbL9NN50Pgf+KDE5
-	 OcLgjWKgUCVsSYAlNRkjqDYcIsAvo7T8dszGk8lfpH4mtfFh+4gq1PVriakeFmqk5J
-	 U2PHDm8GnUUjg==
+	b=PXoDzT2zkdmushDDgZReQT6xPHxRasR8St4zk0vucHQ+XRZDd3DAaAJY2Ky6Ac69n
+	 2XnXTb7nnVKipAqEYu7PhDKfe0brC5Ae2SmhuTSvtUacfF2IHhBuRsT8Dhn/3uaM64
+	 lf5DzsVRvqJNumVIUmH90x26XDAcO6uZ+NF26hGJ77vaVhYxKAbsqnAafvNJzdpjQ8
+	 cOzaww1pE1MEjxiPiiSKum7SZRz4eTgqSbKqyzS387/KocH9GoxZc6bnTPQEXM9BSz
+	 lzXh/MSv0vD6/JST6IH9NWm64dONtwjUGSsHisCHxyK1k3YBT69+ImdlqTT8/ob+pa
+	 w9yP6QNZqWFBw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -37,9 +37,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Peter Zijlstra <peterz@infradead.org>,
 	Marcos Paulo de Souza <mpdesouza@suse.com>,
 	Song Liu <song@kernel.org>
-Subject: [RFC 12/31] objtool: 'objname' refactoring
-Date: Mon,  2 Sep 2024 20:59:55 -0700
-Message-ID: <3058a111d265e2cbcc6732e7d1a48ef4b506c8df.1725334260.git.jpoimboe@kernel.org>
+Subject: [RFC 15/31] objtool: Interval tree cleanups
+Date: Mon,  2 Sep 2024 20:59:58 -0700
+Message-ID: <74b0bbc42dcbd778f14946ab600670f7d14c6c6f.1725334260.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <cover.1725334260.git.jpoimboe@kernel.org>
 References: <cover.1725334260.git.jpoimboe@kernel.org>
@@ -51,206 +51,142 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rename the global 'objname' variable to 'Objname' to avoid local
-variable conflicts, and initialize it in elf_open_read() which is a more
-natural place for that.
+Change some comments and variable names to improve readability of the
+interval tree code.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/builtin-check.c           |  2 +-
- tools/objtool/check.c                   |  4 ++--
- tools/objtool/elf.c                     |  3 +++
- tools/objtool/include/objtool/objtool.h |  2 +-
- tools/objtool/include/objtool/warn.h    |  8 +++++---
- tools/objtool/objtool.c                 | 17 ++++++++---------
- tools/objtool/orc_dump.c                |  4 ++--
- tools/objtool/weak.c                    |  2 +-
- 8 files changed, 23 insertions(+), 19 deletions(-)
+ tools/objtool/elf.c | 50 ++++++++++++++++++++++-----------------------
+ 1 file changed, 24 insertions(+), 26 deletions(-)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 5e21cfb7661d..2f16f5ee83ae 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -204,8 +204,8 @@ static bool link_opts_valid(struct objtool_file *file)
- 
- int objtool_run(int argc, const char **argv)
- {
--	const char *objname;
- 	struct objtool_file *file;
-+	const char *objname;
- 	int ret;
- 
- 	argc = cmd_parse_options(argc, argv, check_usage);
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 95f5de0c293d..92171ce458ec 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4621,7 +4621,7 @@ static int disas_funcs(const char *funcs)
- 			"}' 1>&2";
- 
- 	/* fake snprintf() to calculate the size */
--	size = snprintf(NULL, 0, objdump_str, cross_compile, objname, funcs) + 1;
-+	size = snprintf(NULL, 0, objdump_str, cross_compile, Objname, funcs) + 1;
- 	if (size <= 0) {
- 		WARN("objdump string size calculation failed");
- 		return -1;
-@@ -4630,7 +4630,7 @@ static int disas_funcs(const char *funcs)
- 	cmd = malloc(size);
- 
- 	/* real snprintf() */
--	snprintf(cmd, size, objdump_str, cross_compile, objname, funcs);
-+	snprintf(cmd, size, objdump_str, cross_compile, Objname, funcs);
- 	ret = system(cmd);
- 	if (ret) {
- 		WARN("disassembly failed: %d", ret);
 diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 5301fff87bea..12dbcf425321 100644
+index 12dbcf425321..fc76692ced2c 100644
 --- a/tools/objtool/elf.c
 +++ b/tools/objtool/elf.c
-@@ -996,6 +996,9 @@ struct elf *elf_open_read(const char *name, int flags)
- 	struct elf *elf;
- 	Elf_Cmd cmd;
+@@ -103,7 +103,7 @@ INTERVAL_TREE_DEFINE(struct symbol, node, unsigned long, __subtree_last,
+ 	     _iter; _iter = __sym_iter_next(_iter, (_start), (_end)))
  
-+	if (!Objname)
-+		Objname = strdup(name);
-+
- 	elf_version(EV_CURRENT);
- 
- 	elf = malloc(sizeof(*elf));
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index 94a33ee7b363..ae30497e014b 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -39,7 +39,7 @@ struct objtool_file {
- 	struct pv_state *pv_ops;
+ struct symbol_hole {
+-	unsigned long key;
++	unsigned long offset;
+ 	const struct symbol *sym;
  };
  
--struct objtool_file *objtool_open_read(const char *_objname);
-+struct objtool_file *objtool_open_read(const char *objname);
+@@ -115,10 +115,10 @@ static int symbol_hole_by_offset(const void *key, const struct rb_node *node)
+ 	const struct symbol *s = rb_entry(node, struct symbol, node);
+ 	struct symbol_hole *sh = (void *)key;
  
- void objtool_pv_add(struct objtool_file *file, int idx, struct symbol *func);
+-	if (sh->key < s->offset)
++	if (sh->offset < s->offset)
+ 		return -1;
  
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index ac04d3fe4dd9..69995f84f91b 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -14,7 +14,7 @@
- #include <objtool/builtin.h>
- #include <objtool/elf.h>
- 
--extern const char *objname;
-+extern char *Objname;
- 
- static inline char *offstr(struct section *sec, unsigned long offset)
+-	if (sh->key >= s->offset + s->len) {
++	if (sh->offset >= s->offset + s->len) {
+ 		if (s->type != STT_SECTION)
+ 			sh->sym = s;
+ 		return 1;
+@@ -167,11 +167,11 @@ static struct symbol *find_symbol_by_index(struct elf *elf, unsigned int idx)
+ struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset)
  {
-@@ -41,10 +41,12 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 	return str;
- }
+ 	struct rb_root_cached *tree = (struct rb_root_cached *)&sec->symbol_tree;
+-	struct symbol *iter;
++	struct symbol *sym;
  
--#define WARN(format, ...)				\
-+#define WARN(...) WARN_FILENAME(Objname, ##__VA_ARGS__)
-+
-+#define WARN_FILENAME(filename, format, ...)		\
- 	fprintf(stderr,					\
- 		"%s: warning: objtool: " format "\n",	\
--		objname, ##__VA_ARGS__)
-+		filename, ##__VA_ARGS__)
- 
- #define WARN_FUNC(format, sec, offset, ...)		\
- ({							\
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index f40febdd6e36..6d2102450b35 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -18,12 +18,12 @@
- 
- bool help;
- 
--const char *objname;
-+char *Objname;
- static struct objtool_file file;
- 
--static bool objtool_create_backup(const char *_objname)
-+static bool objtool_create_backup(const char *objname)
- {
--	int len = strlen(_objname);
-+	int len = strlen(objname);
- 	char *buf, *base, *name = malloc(len+6);
- 	int s, d, l, t;
- 
-@@ -32,7 +32,7 @@ static bool objtool_create_backup(const char *_objname)
- 		return false;
+-	__sym_for_each(iter, tree, offset, offset) {
+-		if (iter->offset == offset && !is_section_symbol(iter))
+-			return iter;
++	__sym_for_each(sym, tree, offset, offset) {
++		if (sym->offset == offset && !is_section_symbol(sym))
++			return sym;
  	}
  
--	strcpy(name, _objname);
-+	strcpy(name, objname);
- 	strcpy(name + len, ".orig");
+ 	return NULL;
+@@ -180,11 +180,11 @@ struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset)
+ struct symbol *find_func_by_offset(struct section *sec, unsigned long offset)
+ {
+ 	struct rb_root_cached *tree = (struct rb_root_cached *)&sec->symbol_tree;
+-	struct symbol *iter;
++	struct symbol *sym;
  
- 	d = open(name, O_CREAT|O_WRONLY|O_TRUNC, 0644);
-@@ -41,7 +41,7 @@ static bool objtool_create_backup(const char *_objname)
- 		return false;
+-	__sym_for_each(iter, tree, offset, offset) {
+-		if (iter->offset == offset && is_function_symbol(iter))
+-			return iter;
++	__sym_for_each(sym, tree, offset, offset) {
++		if (sym->offset == offset && is_function_symbol(sym))
++			return sym;
  	}
  
--	s = open(_objname, O_RDONLY);
-+	s = open(objname, O_RDONLY);
- 	if (s < 0) {
- 		perror("failed to open orig file");
- 		return false;
-@@ -79,16 +79,15 @@ static bool objtool_create_backup(const char *_objname)
- 	return true;
- }
- 
--struct objtool_file *objtool_open_read(const char *_objname)
-+struct objtool_file *objtool_open_read(const char *objname)
+ 	return NULL;
+@@ -209,26 +209,24 @@ struct symbol *find_symbol_containing(const struct section *sec, unsigned long o
+ int find_symbol_hole_containing(const struct section *sec, unsigned long offset)
  {
--	if (objname) {
--		if (strcmp(objname, _objname)) {
-+	if (Objname) {
-+		if (strcmp(Objname, objname)) {
- 			WARN("won't handle more than one file at a time");
- 			return NULL;
- 		}
- 		return &file;
+ 	struct symbol_hole hole = {
+-		.key = offset,
++		.offset = offset,
+ 		.sym = NULL,
+ 	};
+ 	struct rb_node *n;
+ 	struct symbol *s;
+ 
+-	/*
+-	 * Find the rightmost symbol for which @offset is after it.
+-	 */
++	/* Find the last symbol before @offset */
+ 	n = rb_find(&hole, &sec->symbol_tree.rb_root, symbol_hole_by_offset);
+ 
+-	/* found a symbol that contains @offset */
++	/* found a symbol containing @offset */
+ 	if (n)
+ 		return 0; /* not a hole */
+ 
+-	/* didn't find a symbol for which @offset is after it */
++	/* no symbol before @offset */
+ 	if (!hole.sym)
+ 		return 0; /* not a hole */
+ 
+-	/* @offset >= sym->offset + sym->len, find symbol after it */
++	/* find first symbol after @offset */
+ 	n = rb_next(&hole.sym->node);
+ 	if (!n)
+ 		return -1; /* until end of address space */
+@@ -241,11 +239,11 @@ int find_symbol_hole_containing(const struct section *sec, unsigned long offset)
+ struct symbol *find_func_containing(struct section *sec, unsigned long offset)
+ {
+ 	struct rb_root_cached *tree = (struct rb_root_cached *)&sec->symbol_tree;
+-	struct symbol *iter;
++	struct symbol *sym;
+ 
+-	__sym_for_each(iter, tree, offset, offset) {
+-		if (is_function_symbol(iter))
+-			return iter;
++	__sym_for_each(sym, tree, offset, offset) {
++		if (is_function_symbol(sym))
++			return sym;
  	}
--	objname = _objname;
  
- 	file.elf = elf_open_read(objname, O_RDWR);
- 	if (!file.elf)
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index a62247efb64f..9c0b9d8a34fe 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -10,7 +10,7 @@
- #include <objtool/warn.h>
- #include <objtool/endianness.h>
- 
--int orc_dump(const char *_objname)
-+int orc_dump(const char *objname)
+ 	return NULL;
+@@ -393,7 +391,7 @@ static void elf_add_symbol(struct elf *elf, struct symbol *sym)
  {
- 	int fd, nr_entries, i, *orc_ip = NULL, orc_size = 0;
- 	struct orc_entry *orc = NULL;
-@@ -27,7 +27,7 @@ int orc_dump(const char *_objname)
- 	struct elf dummy_elf = {};
+ 	struct list_head *entry;
+ 	struct rb_node *pnode;
+-	struct symbol *iter;
++	struct symbol *s;
  
+ 	INIT_LIST_HEAD(&sym->pv_target);
+ 	sym->alias = sym;
+@@ -407,9 +405,9 @@ static void elf_add_symbol(struct elf *elf, struct symbol *sym)
+ 	sym->offset = sym->sym.st_value;
+ 	sym->len = sym->sym.st_size;
  
--	objname = _objname;
-+	Objname = strdup(objname);
+-	__sym_for_each(iter, &sym->sec->symbol_tree, sym->offset, sym->offset) {
+-		if (iter->offset == sym->offset && iter->type == sym->type)
+-			iter->alias = sym;
++	__sym_for_each(s, &sym->sec->symbol_tree, sym->offset, sym->offset) {
++		if (s->offset == sym->offset && s->type == sym->type)
++			s->alias = sym;
+ 	}
  
- 	elf_version(EV_CURRENT);
- 
-diff --git a/tools/objtool/weak.c b/tools/objtool/weak.c
-index d83f607733b0..b568da3c33e6 100644
---- a/tools/objtool/weak.c
-+++ b/tools/objtool/weak.c
-@@ -15,7 +15,7 @@
- 	return ENOSYS;							\
- })
- 
--int __weak orc_dump(const char *_objname)
-+int __weak orc_dump(const char *objname)
- {
- 	UNSUPPORTED("ORC");
- }
+ 	__sym_insert(sym, &sym->sec->symbol_tree);
 -- 
 2.45.2
 
