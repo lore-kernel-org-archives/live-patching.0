@@ -1,62 +1,48 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF4A33997;
-	Thu, 17 Oct 2024 20:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775AF17BB32;
+	Thu, 17 Oct 2024 20:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729195308; cv=none; b=hDSXnkNQQ1V3mtt9+Xk03aXWw0t9Ed7JmhUtfsMLZ3Dbzhn2DDIlbBg9jN5PSNZbgqJH6K7DJoQUoZJzjyO+n8wSDyykNiNPcp16j818CEBfakab3gIyP/suPhbOBdd7uvRDhcL/KPUrGWZs6eQbV0aS7Dp53QFZ4n0XkO73+L0=
+	t=1729195310; cv=none; b=HlnMFJZ4+DfZ/jMeYALY1P6klM1LGjWrxhpK5PIf3Hc8gY9qjKFZvBh8Vq9GPJuEYvBXjrQNvrWr3tv+LB1WhfzvpLhLggw3iMTMJ2r3X+Jlhl/BMrBbajTQUQ+vetJX+Dmxbz+tyoaQ3n4DiXSveBAmDecilEuk4xe6cMXt/84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729195308; c=relaxed/simple;
-	bh=uVcG2cVOtJxPXJgrNAGPg5moJTK0fI/I7Akda/Fu3yQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nUA+TD11KXf4tiRrvqXrEmvABpt9OdlCnrX2dH+KXO7zV3oXhmzTXq1rfzZ//ZzPyQvEWIAdjA/wYP/vl8uBS6mTjWcegE7jG/ymzt3V2wNCFFoFhREx5Tvpa/NxYEiiIxvPh1dtgtY58uNM5IgEHyZ5ilOMuClexRh7jpOQn0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sWb7UstH; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=sWb7UstH; arc=none smtp.client-ip=195.135.223.130
+	s=arc-20240116; t=1729195310; c=relaxed/simple;
+	bh=MUH7ox4xw7+eRj41xora3KvXQGvRjDxs78paoxUnKHI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oxO6Meb7Crq0/mYrxpMOO3JYipXarnAs/qANt0u3PUwAMJeRJQCZgmxHyAIxxzPi6ojjRLkskFQbcXl9kgRGK29PqcYraEVS74a/tpDhCjhkImSeumZrkh5bQWS20o+W4A+0meQw0AgQ9LcblaI9KWKlJcaysgZ+n/NHlQwt7vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sWb7UstH";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="sWb7UstH"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 73B0F21DB6;
-	Thu, 17 Oct 2024 20:01:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1729195299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=QcEClRU86UuFjcjFYZ55ePdo1liVzL+Hv3FxGUse45s=;
-	b=sWb7UstHI7aJUr3rherlpMfR1VOqqyUcjJj2orYlOHCxP6bXKhiUYpAoLp7wBQ2zfsoDUp
-	sT247bKtgd2+KTQ5saHGDI4J6pPNNtjk28gp5ubqi5UtTi540a67q3o/1n67+luBJagL3I
-	vox+s4DZ5rO4F6UoQbNO1DMkSCC9sG8=
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BBC6921EAF;
+	Thu, 17 Oct 2024 20:01:43 +0000 (UTC)
 Authentication-Results: smtp-out1.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1729195299; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=QcEClRU86UuFjcjFYZ55ePdo1liVzL+Hv3FxGUse45s=;
-	b=sWb7UstHI7aJUr3rherlpMfR1VOqqyUcjJj2orYlOHCxP6bXKhiUYpAoLp7wBQ2zfsoDUp
-	sT247bKtgd2+KTQ5saHGDI4J6pPNNtjk28gp5ubqi5UtTi540a67q3o/1n67+luBJagL3I
-	vox+s4DZ5rO4F6UoQbNO1DMkSCC9sG8=
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4BD3A13A53;
-	Thu, 17 Oct 2024 20:01:39 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 940B713A53;
+	Thu, 17 Oct 2024 20:01:43 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id bZeHESNtEWf1AwAAD6G6ig
-	(envelope-from <mvetter@suse.com>); Thu, 17 Oct 2024 20:01:39 +0000
+	id 2F48IydtEWf1AwAAD6G6ig
+	(envelope-from <mvetter@suse.com>); Thu, 17 Oct 2024 20:01:43 +0000
 From: Michael Vetter <mvetter@suse.com>
 To: linux-kselftest@vger.kernel.org,
 	live-patching@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Michael Vetter <mvetter@suse.com>
-Subject: [PATCH v5 0/3] selftests: livepatch: test livepatching a kprobed function
-Date: Thu, 17 Oct 2024 22:01:29 +0200
-Message-ID: <20241017200132.21946-1-mvetter@suse.com>
+Subject: [PATCH v5 2/3] selftests: livepatch: save and restore kprobe state
+Date: Thu, 17 Oct 2024 22:01:31 +0200
+Message-ID: <20241017200132.21946-3-mvetter@suse.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241017200132.21946-1-mvetter@suse.com>
+References: <20241017200132.21946-1-mvetter@suse.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -64,71 +50,79 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
 X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:mid];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -2.80
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Spam-Score: -4.00
 X-Spam-Flag: NO
+X-Rspamd-Queue-Id: BBC6921EAF
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 
-Thanks for all the reviews.
+Save the state of /sys/kernel/debug/kprobes/enabled
+during setup_config() and restore it during cleanup().
 
-V5:
-Replace /sys/kernel/livepatch also in other/already existing tests.
-Improve commit message of 3rd patch.
+This is in preparation for a future commit that will add a test
+that should confirm that we cannot livepatch a kprobed function
+if that kprobe has a post handler.
 
-V4:
-Use variable for /sys/kernel/debug.
-Be consistent with "" around variables.
-Fix path in commit message to /sys/kernel/debug/kprobes/enabled.
+Signed-off-by: Michael Vetter <mvetter@suse.com>
+---
+ tools/testing/selftests/livepatch/functions.sh | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-V3:
-Save and restore kprobe state also when test fails, by integrating it
-into setup_config() and cleanup().
-Rename SYSFS variables in a more logical way.
-Sort test modules in alphabetical order.
-Rename module description.
-
-V2:
-Save and restore kprobe state.
-
-Michael Vetter (3):
-  selftests: livepatch: rename KLP_SYSFS_DIR to SYSFS_KLP_DIR
-  selftests: livepatch: save and restore kprobe state
-  selftests: livepatch: test livepatching a kprobed function
-
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../testing/selftests/livepatch/functions.sh  | 29 +++++----
- .../selftests/livepatch/test-callbacks.sh     | 24 +++----
- .../selftests/livepatch/test-ftrace.sh        |  2 +-
- .../selftests/livepatch/test-kprobe.sh        | 62 +++++++++++++++++++
- .../selftests/livepatch/test-livepatch.sh     | 12 ++--
- .../testing/selftests/livepatch/test-state.sh |  8 +--
- .../selftests/livepatch/test-syscall.sh       |  2 +-
- .../testing/selftests/livepatch/test-sysfs.sh |  8 +--
- .../selftests/livepatch/test_modules/Makefile |  3 +-
- .../livepatch/test_modules/test_klp_kprobe.c  | 38 ++++++++++++
- 11 files changed, 150 insertions(+), 41 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-kprobe.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index e0e7f8db894c..e78e0e16ad4d 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -6,7 +6,10 @@
+ 
+ MAX_RETRIES=600
+ RETRY_INTERVAL=".1"	# seconds
+-SYSFS_KLP_DIR="/sys/kernel/livepatch"
++SYSFS_KERNEL_DIR="/sys/kernel"
++SYSFS_KLP_DIR="$SYSFS_KERNEL_DIR/livepatch"
++SYSFS_DEBUG_DIR="$SYSFS_KERNEL_DIR/debug"
++SYSFS_KPROBES_DIR="$SYSFS_DEBUG_DIR/kprobes"
+ 
+ # Kselftest framework requirement - SKIP code is 4
+ ksft_skip=4
+@@ -55,22 +58,26 @@ function die() {
+ }
+ 
+ function push_config() {
+-	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
++	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' "$SYSFS_DEBUG_DIR/dynamic_debug/control" | \
+ 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
+ 	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
++	KPROBE_ENABLED=$(cat "$SYSFS_KPROBES_DIR/enabled")
+ }
+ 
+ function pop_config() {
+ 	if [[ -n "$DYNAMIC_DEBUG" ]]; then
+-		echo -n "$DYNAMIC_DEBUG" > /sys/kernel/debug/dynamic_debug/control
++		echo -n "$DYNAMIC_DEBUG" > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
+ 	fi
+ 	if [[ -n "$FTRACE_ENABLED" ]]; then
+ 		sysctl kernel.ftrace_enabled="$FTRACE_ENABLED" &> /dev/null
+ 	fi
++	if [[ -n "$KPROBE_ENABLED" ]]; then
++		echo "$KPROBE_ENABLED" > "$SYSFS_KPROBES_DIR/enabled"
++	fi
+ }
+ 
+ function set_dynamic_debug() {
+-        cat <<-EOF > /sys/kernel/debug/dynamic_debug/control
++        cat <<-EOF > "$SYSFS_DEBUG_DIR/dynamic_debug/control"
+ 		file kernel/livepatch/* +p
+ 		func klp_try_switch_task -p
+ 		EOF
 -- 
 2.47.0
 
