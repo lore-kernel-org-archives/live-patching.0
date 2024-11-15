@@ -1,144 +1,154 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413871D5173
-	for <live-patching@vger.kernel.org>; Fri, 15 Nov 2024 17:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F248818B463;
+	Fri, 15 Nov 2024 21:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731690852; cv=none; b=ptlclTnJ4GwFWIJlUOXcIAljPmTEOhgFxJRJse1zc/AwiNJS8GJryFtYCBTvyM88GZYSW/H7z0reo6WL0m2grdVL86FRLH1Tt4IBoGsHjybcbNUgLfGDtP9CvWjoPSPgZ3sn9Oz9tNtLfexa9+HmLjC8pvoStGm+ZEJYKy7L1lM=
+	t=1731705764; cv=none; b=bARVhpoO88P9F3P6zhHQq2MDn1B2WrW119xpPvSU+/fyTwdajIaddGIJnua4pn3k04UPNAQNE6WYfPG/UlfRtymeL0sF+t9FJtiUaWEKHJ64Nep6uIjmEMYxnM+xypm5bohy2bxn/Qf274Z4IwTBVw7F0GABbs7EHcapAOn3fWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731690852; c=relaxed/simple;
-	bh=xe2YCtcX9ilx+J/zhJYk3W+EJiFx/fVLUDUM1MHY51E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmpDuA7Jo+hv4AbRDeBplJoU3wBmCJOKRfcFaaJ3WPvw9AOuqSBMGMtkxd6XNCyY+cMtMA/FXO/fAR3sj+EHzlt5yLOSIo63Emo8ZF7NbtZ3QoV7RyXSxVs1MSOsl8QszBJCRH8CyczbYIwH31BEqhuUVi5rbFnPK4kEi7IXAoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SkhB+am1; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1731705764; c=relaxed/simple;
+	bh=2iWwhGMiOXyDUdwM0ZnOEDU3u4Uun5dVYtqdWB2sR+Q=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=TnGjljdAd3L8mx8BYGads/9PFgCqdElZZ9Ao3+O2A/NV8GyOo7RTQyJD7CHfIqk0XAQH59nuShHdLqRYuU8GpHIpt3yC5Q4jTNFt/D4/YBrNkyTLYSjJqxj4sgJtbdEV6tY5jYzI9kynjUfBIY1JT4nCcGvYSfDJAfHBwDEMJ/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TpPSBC6Q; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SkhB+am1"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-38221c82827so1126406f8f.3
-        for <live-patching@vger.kernel.org>; Fri, 15 Nov 2024 09:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1731690848; x=1732295648; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bBhRJC3YYfm7gt3zgLGDXyOzCWCO53ZfJKUiZkiERp4=;
-        b=SkhB+am1QVXoCT+2J9eV7kY+ecF9SCSKXg7y80NUnxY8PFu8TSjtLz37ir+ys/piSW
-         aBpmYr8qGxkpnS1qh7pZz3MKYZ4uaFwRo11R0o3ekxsKydOKIq47erkEMs4IZluuyHYn
-         Oj4kg0ahnVpZ8gwl/SmfZ4YLbQC17W6pHmphtCqehUDR/RGdgDDvW9MT5bIHYF58YC0o
-         IxeweoICMPNLqv8XUYYlDkPwhPqca94QUpjaEh5vsY82b+8xyGwvr5Cu1hCXLKCISEgv
-         RDM02lY9gJiuQaNZQm1i+KpQ2ytSq/BWTH8V+zBs6fZekmhV0koTVe+JaAqakuZYaDtc
-         pPGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731690848; x=1732295648;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bBhRJC3YYfm7gt3zgLGDXyOzCWCO53ZfJKUiZkiERp4=;
-        b=NncUTbZOPio7lAY84MwMyxV8EuvfGFyvRbtvf7E7WwcytW3NRAi/5o3tiFYMktYTlG
-         IKSQr0XZe0GjkIXOVTZBfZfy4Yn7GD96T23la812t4mYaEHSd8HWnh9Xf9IlQev/LlEZ
-         xRvzjQgg7nyUcTmfeuqz9yZNDsUBoBATgQyvHVSZD9vHxvUkjhhm72plMGXzrPrG5J/L
-         OWRQQga/JGVLw8E/tl196HOEWRpQU1f2aJfI0dqwIcSkMvwrB7DVoxHcBD4azIuY8poS
-         gDjv1SaSd3/E9H3U5V+i1eHGusMOdkLtNZ5EEgSSfbGx7XUAv1bqRIUlHPZLOp3CZ5yE
-         8DnA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWGjXOoIO4Y63TRiV56yr5uULlZeQ2QLQwih3nwty9k5A6tVLw/4owZmI5EXJL7iINAveUEIcigjo600MX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwS2LJ9DLzVUi3T4zB+8V4Y6LvBUT0ZsZMe7SIV6sZTjYA5UOct
-	5Mlj5v28Qy9kRoOlG0zd3TP9izAjbsgMf52mmUt0/5NG/rU460ca75Inh+FoQYQ=
-X-Google-Smtp-Source: AGHT+IHBhyqcpdNrxuifDtQggFsMRrVDvZ+EVK4nIQIaBJkyeNLUa/StPRUsnluLzs6nkaN5ncI6mA==
-X-Received: by 2002:a05:6000:460d:b0:382:1aee:82a7 with SMTP id ffacd0b85a97d-38225a8945emr3095988f8f.40.1731690848444;
-        Fri, 15 Nov 2024 09:14:08 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821b31d9ccsm4741618f8f.99.2024.11.15.09.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 09:14:08 -0800 (PST)
-Date: Fri, 15 Nov 2024 18:14:05 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Siddharth Menon <simeddon@gmail.com>
-Cc: shuah@kernel.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/livepatch: Check if CONFIG_LIVEPATCH is enabled
-Message-ID: <ZzeBXRjWq4vBdaCE@pathway.suse.cz>
-References: <20241106174120.5602-1-simeddon@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="TpPSBC6Q"
+Received: from eahariha-devbox.internal.cloudapp.net (unknown [40.91.112.99])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 1682D206BCE4;
+	Fri, 15 Nov 2024 13:22:42 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1682D206BCE4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1731705762;
+	bh=Q64Lap8gGilYnZS8wBYuXVtg6CkDWFgIDR5hpRb/qKY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=TpPSBC6Q0pyCMIPKcOfsvZX/wWIHu4+ejmKY8xw+0GecDvIAUfgwshz01AoOkZ0WD
+	 k4gHIei/egZSo7W0NlMAlHYHatQ5bzRsbZtX1NOQvIcE9aFKMDcUHtqmglM484AIGB
+	 /3Fdhfw7EN1qT/zCvUp8095p9P9VmicZ+TZgDM0I=
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Date: Fri, 15 Nov 2024 21:22:31 +0000
+Subject: [PATCH 01/22] netfilter: conntrack: Cleanup timeout definitions
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241106174120.5602-1-simeddon@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241115-converge-secs-to-jiffies-v1-1-19aadc34941b@linux.microsoft.com>
+References: <20241115-converge-secs-to-jiffies-v1-0-19aadc34941b@linux.microsoft.com>
+In-Reply-To: <20241115-converge-secs-to-jiffies-v1-0-19aadc34941b@linux.microsoft.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>, 
+ Nicolas Palix <nicolas.palix@imag.fr>, Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
+ Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Ofir Bitton <obitton@habana.ai>, 
+ Oded Gabbay <ogabbay@kernel.org>, 
+ Lucas De Marchi <lucas.demarchi@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jeroen de Borst <jeroendb@google.com>, 
+ Praveen Kaligineedi <pkaligineedi@google.com>, 
+ Shailend Chand <shailend@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ James Smart <james.smart@broadcom.com>, 
+ Dick Kennedy <dick.kennedy@broadcom.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ =?utf-8?q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>, 
+ Jens Axboe <axboe@kernel.dk>, Kalle Valo <kvalo@kernel.org>, 
+ Jeff Johnson <jjohnson@kernel.org>, 
+ Catalin Marinas <catalin.marinas@arm.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Jack Wang <jinpu.wang@cloud.ionos.com>, 
+ Marcel Holtmann <marcel@holtmann.org>, 
+ Johan Hedberg <johan.hedberg@gmail.com>, 
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Lucas Stach <l.stach@pengutronix.de>, 
+ Russell King <linux+etnaviv@armlinux.org.uk>, 
+ Christian Gmeiner <christian.gmeiner@gmail.com>, 
+ Louis Peens <louis.peens@corigine.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, cocci@inria.fr, 
+ linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
+ linux-scsi@vger.kernel.org, xen-devel@lists.xenproject.org, 
+ linux-block@vger.kernel.org, linux-wireless@vger.kernel.org, 
+ ath11k@lists.infradead.org, linux-mm@kvack.org, 
+ linux-bluetooth@vger.kernel.org, linux-staging@lists.linux.dev, 
+ linux-rpi-kernel@lists.infradead.org, ceph-devel@vger.kernel.org, 
+ live-patching@vger.kernel.org, linux-sound@vger.kernel.org, 
+ etnaviv@lists.freedesktop.org, oss-drivers@corigine.com, 
+ linuxppc-dev@lists.ozlabs.org, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Easwar Hariharan <eahariha@linux.microsoft.com>
+X-Mailer: b4 0.14.2
 
-On Wed 2024-11-06 23:11:20, Siddharth Menon wrote:
-> When CONFIG_LIVEPATCH is disabled, compilation fails due to the
-> required structs from the livepatch header file being undefined.
-> This checks for CONFIG_LIVEPATCH in order to verify that
-> it is enabled before compiling livepatch self-tests.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Siddharth Menon <simeddon@gmail.com>
-> ---
->  tools/testing/selftests/livepatch/test_modules/Makefile | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-> index e6e638c4bcba..b34b80544709 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> @@ -1,5 +1,6 @@
->  TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
->  KDIR ?= /lib/modules/$(shell uname -r)/build
-> +CONFIG_LIVEPATCH := $(shell cd $(KDIR) && scripts/config --state CONFIG_LIVEPATCH)
->  
->  obj-m += test_klp_atomic_replace.o \
->  	test_klp_callbacks_busy.o \
-> @@ -13,10 +14,15 @@ obj-m += test_klp_atomic_replace.o \
->  	test_klp_shadow_vars.o \
->  	test_klp_syscall.o
->  
-> -# Ensure that KDIR exists, otherwise skip the compilation
-> +
-> +# Ensure that KDIR exists and CONFIG_LIVEPATCH is enabled, else skip compilation
->  modules:
->  ifneq ("$(wildcard $(KDIR))", "")
-> +ifneq ($(filter y m,$(CONFIG_LIVEPATCH)),)
->  	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-> +else
-> +    $(warning CONFIG_LIVEPATCH is not enabled in the kernel config file.)
-> +endif
->  endif
+None of the higher order definitions are used anymore, so remove
+definitions for minutes, hours, and days timeouts. Convert the seconds
+denominated timeouts to secs_to_jiffies()
 
-This handles only the build of the modules.
+Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+---
+ net/netfilter/nf_conntrack_proto_sctp.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-It does not block building the test_klp-call_getpid binary.
-Also it does not block running the tests, so I get:
+diff --git a/net/netfilter/nf_conntrack_proto_sctp.c b/net/netfilter/nf_conntrack_proto_sctp.c
+index 4cc97f971264ed779434ab4597dd0162586b3736..6c95ac96fa42a39acafb5b88a7cf8898010e911c 100644
+--- a/net/netfilter/nf_conntrack_proto_sctp.c
++++ b/net/netfilter/nf_conntrack_proto_sctp.c
+@@ -39,20 +39,15 @@ static const char *const sctp_conntrack_names[] = {
+ 	[SCTP_CONNTRACK_HEARTBEAT_SENT]		= "HEARTBEAT_SENT",
+ };
+ 
+-#define SECS  * HZ
+-#define MINS  * 60 SECS
+-#define HOURS * 60 MINS
+-#define DAYS  * 24 HOURS
+-
+ static const unsigned int sctp_timeouts[SCTP_CONNTRACK_MAX] = {
+-	[SCTP_CONNTRACK_CLOSED]			= 10 SECS,
+-	[SCTP_CONNTRACK_COOKIE_WAIT]		= 3 SECS,
+-	[SCTP_CONNTRACK_COOKIE_ECHOED]		= 3 SECS,
+-	[SCTP_CONNTRACK_ESTABLISHED]		= 210 SECS,
+-	[SCTP_CONNTRACK_SHUTDOWN_SENT]		= 3 SECS,
+-	[SCTP_CONNTRACK_SHUTDOWN_RECD]		= 3 SECS,
+-	[SCTP_CONNTRACK_SHUTDOWN_ACK_SENT]	= 3 SECS,
+-	[SCTP_CONNTRACK_HEARTBEAT_SENT]		= 30 SECS,
++	[SCTP_CONNTRACK_CLOSED]			= secs_to_jiffies(10),
++	[SCTP_CONNTRACK_COOKIE_WAIT]		= secs_to_jiffies(3),
++	[SCTP_CONNTRACK_COOKIE_ECHOED]		= secs_to_jiffies(3),
++	[SCTP_CONNTRACK_ESTABLISHED]		= secs_to_jiffies(210),
++	[SCTP_CONNTRACK_SHUTDOWN_SENT]		= secs_to_jiffies(3),
++	[SCTP_CONNTRACK_SHUTDOWN_RECD]		= secs_to_jiffies(3),
++	[SCTP_CONNTRACK_SHUTDOWN_ACK_SENT]	= secs_to_jiffies(3),
++	[SCTP_CONNTRACK_HEARTBEAT_SENT]		= secs_to_jiffies(3),
+ };
+ 
+ #define	SCTP_FLAG_HEARTBEAT_VTAG_FAILED	1
 
-tools/testing/selftests/livepatch # make run_tests 
-  CC       test_klp-call_getpid
-Makefile:24: CONFIG_LIVEPATCH is not enabled in the kernel config file.
-make[1]: Nothing to be done for 'modules'.
-TAP version 13
-1..7
-# timeout set to 0
-# selftests: livepatch: test-livepatch.sh
-# TEST: basic function patching ... ERROR: Can't find "test_modules/test_klp_livepatch.ko", try "make"
-not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
-# timeout set to 0
-# selftests: livepatch: test-callbacks.sh
-# TEST: target module before livepatch ... ERROR: Can't find "test_modules/test_klp_callbacks_mod.ko", try "make"
-not ok 2 selftests: livepatch: test-callbacks.sh # exit=1
-...
+-- 
+2.34.1
 
-
-I like idea mentioned in Miroslav's reply. I wonder if the check
-could take into account all CONFIG_* variables mentioned
-in tools/testing/selftests/livepatch/config.
-
-And if it could be generic so that it works for all
-tools/testing/selftests/<project> directories.
-
-And for both build and run_tests.
-
-Best Regards,
-Petr
