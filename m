@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3095D27A925;
-	Fri,  9 May 2025 20:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F265290BC2;
+	Fri,  9 May 2025 20:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746821886; cv=none; b=KvfUcexMYAvQZwPUJDPlnE7ndfGWNLllFT45T9XmLl3sbxsdiKh70UhvHb09JGRbWEy7noaX7rq1YwUSkENg5uy8BJ2whmEddFaamM4GWcHPuoKKRDoRPtyIHqCH4XJsK9K99SiKLxIuTiF6imZz7PkYfnZ688qy/hgAitu61NI=
+	t=1746821886; cv=none; b=ToOBkqNUDtfuIKqzJnpRigmQwUULoG4C9QQk0pJ/rfEjNZE1r/87y9YN3Q8h5wwx8m78m5zdqw/QtgfKV0bORoi3g4SKUHAJUNWQtTt/0VmmPHuQgUD9to/vaR7iZmCKP54jiYbVCs39vYJias1p+ZD6cKTeMpIFAZJEHRz/Pp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746821886; c=relaxed/simple;
-	bh=Boy9wHA23OKqJtEN3bVTI2eRSSWNKeq4o2FdXbHxnqE=;
+	bh=TCh7mN1dtaUkmUbKcMUgKaRQzRkSpr6K6e506gWbFxc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I84SzgU/baYUPsuoclDLZ3qS6xI1EY2Nvb/Stojn/ELXBmjmXSpjqIAY9W6JGreKU0+pgKy6ekujWle+7hu5l1OaFn6QjSLOkA9oDwsOieRKHEdd5IvvZnE90Y9zOJIHznAqJaebG5gbAq7ITsfAxb/jtrH32lsh+dzmioDBvM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bNpa9S0N; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=R1bpPl067Nt/uhHRb7rt6cGwNp7aqBBmU/kIwJClcVyN3SxYWSDgUNepR9s91h/rzwnkmot2PI5IzoTW735+cQ7U+IV0Ngc9igtZfpTdeabz5NyrBkcoItZ70Df21WE7okgXE8Q3BND8I2mgUJEfDCZatMjqlJmlreL2u9/g+Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dVomlVuq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bNpa9S0N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12CFBC4CEEF;
-	Fri,  9 May 2025 20:18:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dVomlVuq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749A4C4CEEE;
+	Fri,  9 May 2025 20:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746821884;
-	bh=Boy9wHA23OKqJtEN3bVTI2eRSSWNKeq4o2FdXbHxnqE=;
+	s=k20201202; t=1746821886;
+	bh=TCh7mN1dtaUkmUbKcMUgKaRQzRkSpr6K6e506gWbFxc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bNpa9S0NxvncHPr23Hfpe++saLBwT1acULEXarkyfD1eG7DHmkVBWC1x8n0SkmHfo
-	 b8PEuNe2vHeu9I0zy4hpIk1pvjU4aQOJIBmkEEI6rODk6HROy+gnEplGcMxUViP63p
-	 tYc6p2EV7joaAcjppe+Zx4UYo7gL9o9rvPHfHJvkwdFxEBtzmqLwNTLrmDZtHE8ETL
-	 jjS8vNKThHUz8GVvHa4qadYrDKCi/hl8RYwkNOhed05HnHMt27Bzud8lcG501HzMGP
-	 43aq5SFz/wuwHKqUYHXAr5wSnEl98Iko+6PVWwHMYCJ2nSd2HEJ784PrQb2PvmTN9g
-	 YUdZiCYU6sg+A==
+	b=dVomlVuqWJQIWdDDc3MebpfihTCirAtSplPO1VKcVQZ9HelUbAD/dWpRcj8bVwWlJ
+	 CGPvPg7ol7/13NYE0VrYxQMVT6s1TfUqli2qBPVkc2pUDX45Y4IMOFrXuZk5icVafh
+	 ZJkTfKCROla4+mY0tbJdfzIV9K/F4UWJwDtvM8fGQb5BqkvxrxqOPdFfTzU1+9I8Tu
+	 wycRo7cK0Q7Xzy1HCqbn4Ka3Xa3cJdYVPASHBRQI+YaAScOrGS1OT2gKjvkBvBNLC9
+	 UXZlSWNrhNRVpxoBSNWesBFWtf46TdLuIG80F7NbzEsiowpatNKLcqkkcS615dwZH2
+	 qr/J1bzZ2LRwA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -41,9 +41,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Fazla Mehrab <a.mehrab@bytedance.com>,
 	Chen Zhongjin <chenzhongjin@huawei.com>,
 	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH v2 28/62] objtool: Fix weak symbol hole detection for .cold functions
-Date: Fri,  9 May 2025 13:16:52 -0700
-Message-ID: <8ae052ab65412c0fc0359e780dc382f9feb53ace.1746821544.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 30/62] objtool: Simplify reloc offset calculation in unwind_read_hints()
+Date: Fri,  9 May 2025 13:16:54 -0700
+Message-ID: <c623904b170f2b5337cb8af9fdb32f2843e65812.1746821544.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1746821544.git.jpoimboe@kernel.org>
 References: <cover.1746821544.git.jpoimboe@kernel.org>
@@ -55,150 +55,34 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When ignore_unreachable_insn() looks for weak function holes which jump
-to their .cold functions, it assumes the parent function comes before
-the corresponding .cold function in the symbol table.  That's not
-necessarily the case with -ffunction-sections.
-
-Mark all the holes beforehand (including .cold functions) so the
-ordering of the discovery doesn't matter.
+Simplify the relocation offset calculation in unwind_read_hints(),
+similar to other conversions which have already been done.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c                 | 84 ++++++++++++++-------------
- tools/objtool/include/objtool/check.h |  3 +-
- 2 files changed, 45 insertions(+), 42 deletions(-)
+ tools/objtool/check.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 043c36b70f26..a2a025ec57e8 100644
+index 6b2e57d9aaf8..c9f041168bce 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -2527,6 +2527,44 @@ static void mark_rodata(struct objtool_file *file)
- 	file->rodata = found;
- }
+@@ -2221,14 +2221,7 @@ static int read_unwind_hints(struct objtool_file *file)
+ 			return -1;
+ 		}
  
-+static void mark_holes(struct objtool_file *file)
-+{
-+	struct instruction *insn;
-+	bool in_hole = false;
-+
-+	if (!opts.link)
-+		return;
-+
-+	/*
-+	 * Whole archive runs might encounter dead code from weak symbols.
-+	 * This is where the linker will have dropped the weak symbol in
-+	 * favour of a regular symbol, but leaves the code in place.
-+	 */
-+	for_each_insn(file, insn) {
-+		if (insn->sym || !find_symbol_hole_containing(insn->sec, insn->offset)) {
-+			in_hole = false;
-+			continue;
-+		}
-+
-+		/* Skip function padding and pfx code */
-+		if (!in_hole && insn->type == INSN_NOP)
-+			continue;
-+
-+		in_hole = true;
-+		insn->hole = 1;
-+
-+		/*
-+		 * If this hole jumps to a .cold function, mark it ignore.
-+		 */
-+		if (insn->jump_dest) {
-+			struct symbol *dest_func = insn_func(insn->jump_dest);
-+
-+			if (dest_func && dest_func->cold)
-+				dest_func->ignore = true;
-+		}
-+	}
-+}
-+
- static int decode_sections(struct objtool_file *file)
- {
- 	int ret;
-@@ -2592,6 +2630,9 @@ static int decode_sections(struct objtool_file *file)
- 	if (ret)
- 		return ret;
- 
-+	/* Must be after add_jump_destinations() */
-+	mark_holes(file);
-+
- 	/*
- 	 * Must be after add_call_destinations() such that it can override
- 	 * dead_end_function() marks.
-@@ -4021,7 +4062,8 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	struct instruction *prev_insn;
- 	int i;
- 
--	if (insn->type == INSN_NOP || insn->type == INSN_TRAP || (func && func->ignore))
-+	if (insn->type == INSN_NOP || insn->type == INSN_TRAP ||
-+	    insn->hole || (func && func->ignore))
- 		return true;
- 
- 	/*
-@@ -4032,46 +4074,6 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	    !strcmp(insn->sec->name, ".altinstr_aux"))
- 		return true;
- 
--	/*
--	 * Whole archive runs might encounter dead code from weak symbols.
--	 * This is where the linker will have dropped the weak symbol in
--	 * favour of a regular symbol, but leaves the code in place.
--	 *
--	 * In this case we'll find a piece of code (whole function) that is not
--	 * covered by a !section symbol. Ignore them.
--	 */
--	if (opts.link && !func) {
--		int size = find_symbol_hole_containing(insn->sec, insn->offset);
--		unsigned long end = insn->offset + size;
--
--		if (!size) /* not a hole */
--			return false;
--
--		if (size < 0) /* hole until the end */
--			return true;
--
--		sec_for_each_insn_continue(file, insn) {
--			/*
--			 * If we reach a visited instruction at or before the
--			 * end of the hole, ignore the unreachable.
--			 */
--			if (insn->visited)
--				return true;
--
--			if (insn->offset >= end)
--				break;
--
--			/*
--			 * If this hole jumps to a .cold function, mark it ignore too.
--			 */
--			if (insn->jump_dest && insn_func(insn->jump_dest) &&
--			    insn_func(insn->jump_dest)->cold)
--				insn_func(insn->jump_dest)->ignore = true;
+-		if (is_sec_sym(reloc->sym)) {
+-			offset = reloc_addend(reloc);
+-		} else if (reloc->sym->local_label) {
+-			offset = reloc->sym->offset;
+-		} else {
+-			ERROR("unexpected relocation symbol type in %s", sec->rsec->name);
+-			return -1;
 -		}
--
--		return false;
--	}
--
- 	if (!func)
- 		return false;
++		offset = reloc->sym->offset + reloc_addend(reloc);
  
-diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/objtool/check.h
-index 00fb745e7233..0f4e7ac929ef 100644
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -64,7 +64,8 @@ struct instruction {
- 	    noendbr		: 1,
- 	    unret		: 1,
- 	    visited		: 4,
--	    no_reloc		: 1;
-+	    no_reloc		: 1,
-+	    hole		: 1;
- 		/* 10 bit hole */
- 
- 	struct alt_group *alt_group;
+ 		insn = find_insn(file, reloc->sym->sec, offset);
+ 		if (!insn) {
 -- 
 2.49.0
 
