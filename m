@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2F622FF35;
-	Thu, 26 Jun 2025 23:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ED522B8A4;
+	Thu, 26 Jun 2025 23:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750982173; cv=none; b=o1jbvsgdsnOpuMhPd2ZBUEWCO5E7IOX0ETb5ZCNE0PPo64xxkaoWCEnOcgknqQ/IkWHgo6NPeNrtHnmFbnYqJSygOiorXWWY0WQrCFRLgw0+YBwpNCGbrB/vBxWkU5Byjd8+CXtao4PriV3wl9crpawCMY4WYIFGZlKOetoBPW8=
+	t=1750982175; cv=none; b=Bls52F+zFelBZQ8UEbKpUxbwvovfaC2iKoW8s4eahohwYQ2ZCdVk5FkJDeALA457im11LUn2ZifaoBId7SZIl+dytipJXTuaomZaGrVgnYpDzom8hOh2KL16IC8XXVJl3uDnk26lltTwOMPaVX8muulfv7t7fk5lEJYxruUuIhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750982173; c=relaxed/simple;
-	bh=SsRyTzAom/Wft869KnQ9Qt38Extxe2ej+kbogzcDl+g=;
+	s=arc-20240116; t=1750982175; c=relaxed/simple;
+	bh=+gcNbV45TaLEx/fkSMmJPJZRwj8zt4CCwlysvxWZl8E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NUemSvx4eqPXgQNlv4ZBi4UemsEdJYpOfU9TjZSNYO+LZrX730r+IT9NtIer3Zha1z93v5BzfFDRCo0mnqfGotpDBaEIWLXQUQq3qFY0p7hGBAOMvPaMOKmco2IO/3Oa1V2z0anqfCrfVOmDvgKo9SvpG67XSTeZGBxUYtz+KiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jSWHjW60; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=m7jcqCypWHWNGPoWxVFWhtgja58a2Oz2Y/v8UaG3WheCCJFkLpNBoNsAtOGeZWBf6cuuTMAcDWVfu1jgKg+OFqxHEpe700QH9aID49h6X1LTyFe3P3ICbMYaMXkiN7ADuAUHeS1G5+ZgjKpQa8CRcGOw8lhiAY1eCIXLGSVQotE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OnYr6Lqa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jSWHjW60"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283F2C4CEF0;
-	Thu, 26 Jun 2025 23:56:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OnYr6Lqa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851B7C4CEEB;
+	Thu, 26 Jun 2025 23:56:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750982173;
-	bh=SsRyTzAom/Wft869KnQ9Qt38Extxe2ej+kbogzcDl+g=;
+	s=k20201202; t=1750982175;
+	bh=+gcNbV45TaLEx/fkSMmJPJZRwj8zt4CCwlysvxWZl8E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jSWHjW60G8GS61l8W1ybCUT6+mPL0SvzERSpSGE52j81O3ajU0dld4FH1WZDxcOkj
-	 gmgpBjpYB1Osz6b2Hg/FYdsOggNZzJimbOQ8xgPnwPWpeNYfpC0vpEeSDUf2cGkGpW
-	 3gSKvVZoz7p6MCb4LAlO4Jd+KRIOGqP/sqW60uwmn8GwcJqyuUD5rSUgNpOPph3viU
-	 KP70TE+kiAVsAyGvIKQFTgG2tGobGMCdtizAfLBEhWkmSk1dFAOsrmGmRmUXC31Cds
-	 i7ex3YQvE93ZSYvUOKZSaGxsbU9H6D9AAgwilHIGKojs40P3400INvnAjGywyeA+FD
-	 EgHpvcVjykSjg==
+	b=OnYr6Lqaq7MGQpQMWza2/EahiaqO69pwpeFksYdUG2hRJsZqHPmpoGvOZiAUkRirm
+	 RGcNSFdQhCJEtO9CgPT3b+BAYoLQ/hIyyP4tysk4/GO8rXqml4DtXNjcl89sFdaOSP
+	 Kw6hPjvwYKVm4QePFtffdQEvf8OTA4y6t/aCYkwq9D8YE2jqtangRlu2zvMqsapY5j
+	 soE+cuQt0/LXN9VCUMfGgdBvI4pJT/HOcD3Crx28fn/lW7HUdqg1oQQijUhq04ogU5
+	 1CyQa1qEsXW2qci5xyEQGQ77XAFE9drxQcaWgDhPKCctbl8wGun3tyTph12G1mlQD2
+	 nsV4je4njwYjQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Chen Zhongjin <chenzhongjin@huawei.com>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	Dylan Hatch <dylanbhatch@google.com>
-Subject: [PATCH v3 04/64] x86/kprobes: Remove STACK_FRAME_NON_STANDARD annotation
-Date: Thu, 26 Jun 2025 16:54:51 -0700
-Message-ID: <84b4dbbb573519658e378de029f2802698228a45.1750980517.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 06/64] compiler.h: Make addressable symbols less of an eyesore
+Date: Thu, 26 Jun 2025 16:54:53 -0700
+Message-ID: <ef25dfe532618a794f15930ef44218f9ee994888.1750980517.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1750980516.git.jpoimboe@kernel.org>
 References: <cover.1750980516.git.jpoimboe@kernel.org>
@@ -56,37 +56,35 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since commit 877b145f0f47 ("x86/kprobes: Move trampoline code into
-RODATA"), the optprobe template code is no longer analyzed by objtool so
-it doesn't need to be ignored.
+Avoid underscore overload by changing:
+
+  __UNIQUE_ID___addressable_loops_per_jiffy_868
+
+to the following:
+
+  __UNIQUE_ID_addressable_loops_per_jiffy_868
+
+This matches the format used by other __UNIQUE_ID()-generated symbols
+and improves readability for those who stare at ELF symbol table dumps.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/x86/kernel/kprobes/opt.c | 4 ----
- 1 file changed, 4 deletions(-)
+ include/linux/compiler.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 0aabd4c4e2c4..6f826a00eca2 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -103,7 +103,6 @@ static void synthesize_set_arg1(kprobe_opcode_t *addr, unsigned long val)
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 4406c1592d78..2039da81cf16 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -287,7 +287,7 @@ static inline void *offset_to_ptr(const int *off)
+  */
+ #define ___ADDRESSABLE(sym, __attrs)						\
+ 	static void * __used __attrs						\
+-	__UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
++	__UNIQUE_ID(__PASTE(addressable_, sym)) = (void *)(uintptr_t)&sym;
  
- asm (
- 			".pushsection .rodata\n"
--			"optprobe_template_func:\n"
- 			".global optprobe_template_entry\n"
- 			"optprobe_template_entry:\n"
- #ifdef CONFIG_X86_64
-@@ -160,9 +159,6 @@ asm (
- 			"optprobe_template_end:\n"
- 			".popsection\n");
- 
--void optprobe_template_func(void);
--STACK_FRAME_NON_STANDARD(optprobe_template_func);
--
- #define TMPL_CLAC_IDX \
- 	((long)optprobe_template_clac - (long)optprobe_template_entry)
- #define TMPL_MOVE_IDX \
+ #define __ADDRESSABLE(sym) \
+ 	___ADDRESSABLE(sym, __section(".discard.addressable"))
 -- 
 2.49.0
 
