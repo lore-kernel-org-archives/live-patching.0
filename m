@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D358E258CC4;
-	Thu, 26 Jun 2025 23:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E5924A061;
+	Thu, 26 Jun 2025 23:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750982177; cv=none; b=E/ciPwJ6LxWUzCByFXGwUqlnGHsw8hJnqB6KCxhli+RfTRImtGUXg64Ho8TG004eusBvM6NOnMNhzBQ7Tqp2eFVXcRP0IndxLVeydAVNL8x8XWxJ78+Wm6RgeHi9a76vR4LpE14kNCwVshrmfPTge89/RdP1OZn+B1AdDt5ZW74=
+	t=1750982178; cv=none; b=fOIEet9zZx9F4EW+Gj7M5EiAbTdHNUF4eOSWn66p3h9b2Id3xSenrUrXNS/Y7O7sJy/1nhajggEMt46GPNPJgxbCaTD+u3DFMrZMdY/zStkOUrTl4Zn1OILNwqLyjuAxM98adliU79AiooISWD5aZKZTCHNvKZa8s3xv40BhFyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750982177; c=relaxed/simple;
-	bh=J8WhknoQAqa4+U6iX36FxAI9Wkoq8PCgC13kVt4mfbk=;
+	s=arc-20240116; t=1750982178; c=relaxed/simple;
+	bh=7iDLdpvwAdVD2fSGLdr4rv0JsZashmlV1YL2edneIcM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gVvSYaAcudhEC7fBPHpFWYcAMTsoMx03pUW4tcbG3zswfIqUTPgGrEruCykvAMMcMfzFsQcUUTtciciPidK87MBBL7tgnmbMyFPVaszfACGQUtDOJnZQt6L2XYc1j8BVfjLFjQ9C+sXA9lPU08457Vdi4YJdOml7lm7vc60+0iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QdEGmray; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Pmot3yu0vriMeTjIcJWf9oXJ1x325hoadtt8u7HMJBFSguhNb/WI57fQILDDpZnElmEtqKb6yFG6y2QXxZiBJ4jmhMQ77wRWxsOnXWenmUt3n2fIBpZOOJOdpv1Eg3jejgVFKl5GnGJsszJhJVcVO2aouILJpBihmcFV/yReGdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKHoIv+q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QdEGmray"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4304C4CEF0;
-	Thu, 26 Jun 2025 23:56:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKHoIv+q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F184C4CEF3;
+	Thu, 26 Jun 2025 23:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750982176;
-	bh=J8WhknoQAqa4+U6iX36FxAI9Wkoq8PCgC13kVt4mfbk=;
+	s=k20201202; t=1750982177;
+	bh=7iDLdpvwAdVD2fSGLdr4rv0JsZashmlV1YL2edneIcM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QdEGmrayOuOpSSbtxAGMvJC3209IyisOItGbLWk4qT7F1o390Wz7D92yiVSYsTZPG
-	 JH+HwRAZe2gGG7KsA+QDgB2IQxQDK+XJJPniqWCAlK04TggwC4QkiFJ7bukfodmrCb
-	 UqJatXjxj7EMJIKfYahwd7TTDo22U797EOWmTJ++NINPBisqJm/xdJLWD/o/ZlVUQb
-	 40tGPeuPUs8asXNCtnQG+TX7/FmDctCSEr0I3MuMlw/1VHHq24PEunoZRWBVK1yHpE
-	 5hIZl/vh5c1gxa3kptCwxb3ZYdnOWPyDuON5IY+15efemWJQhnQ/lT8V1VGWWgoaIP
-	 sWmQsHDC2tahQ==
+	b=oKHoIv+qtf8z/1py8aY4/NC/O8aR6Gp4qVF4IWyPKWmtUtTsnFY8fQ39aIeE7Jl+v
+	 XhyRfSBG6ROWasZAjZRDEmIWOF1RkIO/2MVqb6lzv3QJZWDtEhFNuZRCubNOiJJfbL
+	 GVo/53v41z+0uvpMtE65dy5etHsbABxUaelnHBb6NKJ/m2+uPwTehLvhy9m3tF3YFq
+	 QyV/4YJvW5xMcfaP4csAsUBPl2G69jMMViRtn0N8mI1ylfEjIeu09AFIZ8gLNe7xs5
+	 dsXVjz3rRt+iuGAiNfquV0nKzDDQ6uVMUGmJjN2yrCvBH51JlWgQrqOWTOkWQYTCCN
+	 z9NIHSuSzZ8pg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -41,11 +41,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Fazla Mehrab <a.mehrab@bytedance.com>,
 	Chen Zhongjin <chenzhongjin@huawei.com>,
 	Puranjay Mohan <puranjay@kernel.org>,
-	Dylan Hatch <dylanbhatch@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v3 08/64] kbuild: Remove 'kmod_' prefix from __KBUILD_MODNAME
-Date: Thu, 26 Jun 2025 16:54:55 -0700
-Message-ID: <8c457bf0087beccb4d82b4672f2a2c163f1c22b7.1750980517.git.jpoimboe@kernel.org>
+	Dylan Hatch <dylanbhatch@google.com>
+Subject: [PATCH v3 10/64] x86/alternative: Refactor INT3 call emulation selftest
+Date: Thu, 26 Jun 2025 16:54:57 -0700
+Message-ID: <eb5078c9b057c1349bc284dbaedc20efb256d9c6.1750980517.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1750980516.git.jpoimboe@kernel.org>
 References: <cover.1750980516.git.jpoimboe@kernel.org>
@@ -57,54 +56,112 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for the objtool klp diff subcommand, remove the arbitrary
-'kmod_' prefix from __KBUILD_MODNAME and instead add it explicitly in
-the __initcall_id() macro.
+The INT3 call emulation selftest is a bit fragile as it relies on the
+compiler not inserting any extra instructions before the
+int3_selftest_ip() definition.
 
-This change supports the standardization of "unique" symbol naming by
-ensuring the non-unique portion of the name comes before the unique
-part.  That will enable objtool to properly correlate symbols across
-builds.
+Also, the int3_selftest_ip() symbol overlaps with the int3_selftest
+symbol(), which can confuse objtool.
 
-Cc: Masahiro Yamada <masahiroy@kernel.org>
+Fix those issues by slightly reworking the functionality and moving
+int3_selftest_ip() to a separate asm function.  While at it, improve the
+naming.
+
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- include/linux/init.h | 3 ++-
- scripts/Makefile.lib | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/kernel/alternative.c | 51 +++++++++++++++++++----------------
+ 1 file changed, 28 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/init.h b/include/linux/init.h
-index ee1309473bc6..553a62f4cff5 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -206,12 +206,13 @@ extern struct module __this_module;
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index ea1d984166cd..bacd6c157626 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -2223,21 +2223,34 @@ int alternatives_text_reserved(void *start, void *end)
+  * See entry_{32,64}.S for more details.
+  */
  
- /* Format: <modname>__<counter>_<line>_<fn> */
- #define __initcall_id(fn)					\
-+	__PASTE(kmod_,						\
- 	__PASTE(__KBUILD_MODNAME,				\
- 	__PASTE(__,						\
- 	__PASTE(__COUNTER__,					\
- 	__PASTE(_,						\
- 	__PASTE(__LINE__,					\
--	__PASTE(_, fn))))))
-+	__PASTE(_, fn)))))))
+-/*
+- * We define the int3_magic() function in assembly to control the calling
+- * convention such that we can 'call' it from assembly.
+- */
+-
+-extern void int3_magic(unsigned int *ptr); /* defined in asm */
++extern void int3_selftest_asm(unsigned int *ptr);
  
- /* Format: __<prefix>__<iid><id> */
- #define __initcall_name(prefix, __iid, id)			\
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 1d581ba5df66..b95560266124 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -20,7 +20,7 @@ name-fix-token = $(subst $(comma),_,$(subst -,_,$1))
- name-fix = $(call stringify,$(call name-fix-token,$1))
- basename_flags = -DKBUILD_BASENAME=$(call name-fix,$(basetarget))
- modname_flags  = -DKBUILD_MODNAME=$(call name-fix,$(modname)) \
--		 -D__KBUILD_MODNAME=kmod_$(call name-fix-token,$(modname))
-+		 -D__KBUILD_MODNAME=$(call name-fix-token,$(modname))
- modfile_flags  = -DKBUILD_MODFILE=$(call stringify,$(modfile))
+ asm (
+ "	.pushsection	.init.text, \"ax\", @progbits\n"
+-"	.type		int3_magic, @function\n"
+-"int3_magic:\n"
++"	.type		int3_selftest_asm, @function\n"
++"int3_selftest_asm:\n"
+ 	ANNOTATE_NOENDBR
+-"	movl	$1, (%" _ASM_ARG1 ")\n"
++	/*
++	 * INT3 padded with NOP to CALL_INSN_SIZE. The INT3 triggers an
++	 * exception, then the int3_exception_nb notifier emulates a call to
++	 * int3_selftest_callee().
++	 */
++"	int3; nop; nop; nop; nop\n"
+ 	ASM_RET
+-"	.size		int3_magic, .-int3_magic\n"
++"	.size		int3_selftest_asm, . - int3_selftest_asm\n"
++"	.popsection\n"
++);
++
++extern void int3_selftest_callee(unsigned int *ptr);
++
++asm (
++"	.pushsection	.init.text, \"ax\", @progbits\n"
++"	.type		int3_selftest_callee, @function\n"
++"int3_selftest_callee:\n"
++	ANNOTATE_NOENDBR
++"	movl	$0x1234, (%" _ASM_ARG1 ")\n"
++	ASM_RET
++"	.size		int3_selftest_callee, . - int3_selftest_callee\n"
+ "	.popsection\n"
+ );
  
- _c_flags       = $(filter-out $(CFLAGS_REMOVE_$(target-stem).o), \
+@@ -2246,7 +2259,7 @@ extern void int3_selftest_ip(void); /* defined in asm below */
+ static int __init
+ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
+ {
+-	unsigned long selftest = (unsigned long)&int3_selftest_ip;
++	unsigned long selftest = (unsigned long)&int3_selftest_asm;
+ 	struct die_args *args = data;
+ 	struct pt_regs *regs = args->regs;
+ 
+@@ -2261,7 +2274,7 @@ int3_exception_notify(struct notifier_block *self, unsigned long val, void *data
+ 	if (regs->ip - INT3_INSN_SIZE != selftest)
+ 		return NOTIFY_DONE;
+ 
+-	int3_emulate_call(regs, (unsigned long)&int3_magic);
++	int3_emulate_call(regs, (unsigned long)&int3_selftest_callee);
+ 	return NOTIFY_STOP;
+ }
+ 
+@@ -2277,19 +2290,11 @@ static noinline void __init int3_selftest(void)
+ 	BUG_ON(register_die_notifier(&int3_exception_nb));
+ 
+ 	/*
+-	 * Basically: int3_magic(&val); but really complicated :-)
+-	 *
+-	 * INT3 padded with NOP to CALL_INSN_SIZE. The int3_exception_nb
+-	 * notifier above will emulate CALL for us.
++	 * Basically: int3_selftest_callee(&val); but really complicated :-)
+ 	 */
+-	asm volatile ("int3_selftest_ip:\n\t"
+-		      ANNOTATE_NOENDBR
+-		      "    int3; nop; nop; nop; nop\n\t"
+-		      : ASM_CALL_CONSTRAINT
+-		      : __ASM_SEL_RAW(a, D) (&val)
+-		      : "memory");
++	int3_selftest_asm(&val);
+ 
+-	BUG_ON(val != 1);
++	BUG_ON(val != 0x1234);
+ 
+ 	unregister_die_notifier(&int3_exception_nb);
+ }
 -- 
 2.49.0
 
