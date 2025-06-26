@@ -1,90 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1F22253EE;
-	Thu, 26 Jun 2025 23:27:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4470225A3B;
+	Thu, 26 Jun 2025 23:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750980452; cv=none; b=B1NJ96QoQWkSCesP88bjHy0VJtbq7Fsr9uxGSapMwS8ECzgKxUHXhs7hV0VM9xk4vifrX1rbkYByRRcRLesYTuZAeetcpZyNKAH5PHfYjmJdteMpzDR6seG6c43mqJuGNKFPIAhxcFPhnFME9szxc6EwiklHQttNDNZSQK3Bzts=
+	t=1750982171; cv=none; b=D3v/SMCK0kWfXCFOqK0GZLkDnPsLTbOdEi8bF47WvBdHwHtBxxm3WFxk+7yDkme29V/nxsGbUEMLvbHw638xpSpvsCy3bkAF0QGSBGjWnbZUTpHfYxn+mRuB+JB+G4HQJWTzVMeMsFk4zfX6cILTbokgHjODtsKL7WaKgIKHm+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750980452; c=relaxed/simple;
-	bh=V9ZFFu06Gx4VRv5ACITTag+DK1If3ZV6TP8DupOmiEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uY66Hzkq6cf2XOUPvnFnDLLM7SNrk3kzPyb/J7WtMiIMuRRPm1UlJj4gJVKEZ+2uFa66GVQdit38+DqHJSNhTXIHFyxPUUsQESbOrYrxJzLxxa0bHmhuuKXfNB8LdQGPxdGLaokmv7glxPRxB0oNGnyJrvwrrb1nCTaMokj2vBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ho8C3Pi0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750982171; c=relaxed/simple;
+	bh=EiuK1X9yLyff3oe0kJ8VsJ5+DhDW2GwGgf3p+fKQ2NM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iyu9iNpQYvXDZ1AneHKFkr2iiqFqgqyRYT0cNxeEcQurebQe+cYUpm+lKFpI4VrxiLDehaKxLmcn1koQYaoM7DDA98/7DPvTDECydrFhrrIC5xMXU8YKNQqsjFka+IE/GzJXRLpfNQlIi2Atl5iewAaQGGbyaEyWNdvuQFj6bSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xlzow91a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ho8C3Pi0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71324C4CEF2;
-	Thu, 26 Jun 2025 23:27:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xlzow91a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8493C4CEF2;
+	Thu, 26 Jun 2025 23:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750980450;
-	bh=V9ZFFu06Gx4VRv5ACITTag+DK1If3ZV6TP8DupOmiEo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ho8C3Pi0O7kC1H8wV1QxFR0tOrczbsCZp8A0KOeSJBbQfwjkS7BhjkId5iYIb4PsM
-	 g4Mk7cWhskKUxxadlb7qR2urk3bSG33wLoRJncPN5X4RIWMKqk6TTD+F7C3d285oHU
-	 vgwdwElSXI58ypWIZRWS5kGotrZSKPgnfZCzwnm7x8tKktTS/9A2HYqWqRYh/ebAN/
-	 zzUcLBWA9M3geCRxWLs9fI3zp/aVf3H1QMKxPd4ITXi5z3xI2MKHKF5Q5ym6bgotjE
-	 +pb689FXMnoZIa2h6wIqnfebMZyIUUZsBXBCgi8NmxTTbIL68yo3vvZFFlLgGrrQBf
-	 OiIlSSuyDMJ3A==
-Date: Thu, 26 Jun 2025 16:27:27 -0700
+	s=k20201202; t=1750982171;
+	bh=EiuK1X9yLyff3oe0kJ8VsJ5+DhDW2GwGgf3p+fKQ2NM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Xlzow91aUz8yuDeqSHPGXdFrdtjtLVxV8+6X2J76WSuUkFWKwCR5IG/CYtGIlzTfl
+	 sIrQvgu2vSzh79bvrJYby6irSO37UoA6YbdtFKI4IU5S80dDchZ9BDiACeuScA5fa2
+	 ccovNUZ0Rix+lwIrexSvL77/eUNkIL4fykR/WZ8hgS+R9/51+N5e/RC0H0nLA70obh
+	 dJ20J0zcWT1KflnRSynWo0fLYmagO2hp5u842Di6u5Tdf/WEUA3lcsnNl0Fk1zWD4m
+	 ngqyQRv04cyjyRjSDnqSWCv/yfgc3oO0C110Q7qYGb0JgvGXrh+BSlTgQudi2U+IXC
+	 7ZP/NPHdy01cQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	Petr Mladek <pmladek@suse.com>, Miroslav Benes <mbenes@suse.cz>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, live-patching@vger.kernel.org, Song Liu <song@kernel.org>, 
-	laokz <laokz@foxmail.com>, Jiri Kosina <jikos@kernel.org>, 
-	Marcos Paulo de Souza <mpdesouza@suse.com>, Weinan Liu <wnliu@google.com>, 
-	Fazla Mehrab <a.mehrab@bytedance.com>, Chen Zhongjin <chenzhongjin@huawei.com>, 
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: Re: [PATCH v2 59/62] livepatch/klp-build: Introduce klp-build script
- for generating livepatch modules
-Message-ID: <2pwptog6wdwbpz7jzu4ftiwu33aehmgrsh5oqou36jgfqlqrqk@bvezulebykbn>
-References: <cover.1746821544.git.jpoimboe@kernel.org>
- <10ccbeb0f4bcd7d0a10cc9b9bd12fdc4894f83ee.1746821544.git.jpoimboe@kernel.org>
- <CADBMgpxP31YyRMXkHnCvjbb7D8OaUuGKbR9_66pRjGsBd57m8A@mail.gmail.com>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Petr Mladek <pmladek@suse.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	live-patching@vger.kernel.org,
+	Song Liu <song@kernel.org>,
+	laokz <laokz@foxmail.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Weinan Liu <wnliu@google.com>,
+	Fazla Mehrab <a.mehrab@bytedance.com>,
+	Chen Zhongjin <chenzhongjin@huawei.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Dylan Hatch <dylanbhatch@google.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: [PATCH v3 01/64] s390/vmlinux.lds.S: Prevent thunk functions from getting placed with normal text
+Date: Thu, 26 Jun 2025 16:54:48 -0700
+Message-ID: <aa748165bf9888b0a7bd36dc505dfe8b237f9c62.1750980517.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <cover.1750980516.git.jpoimboe@kernel.org>
+References: <cover.1750980516.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADBMgpxP31YyRMXkHnCvjbb7D8OaUuGKbR9_66pRjGsBd57m8A@mail.gmail.com>
 
-On Wed, Jun 18, 2025 at 05:38:07PM -0500, Dylan Hatch wrote:
-> On Fri, May 9, 2025 at 1:30 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > +
-> > +# Make sure git re-stats the changed files
-> > +git_refresh() {
-> > +       local patch="$1"
-> > +       local files=()
-> > +
-> > +       [[ ! -d "$SRC/.git" ]] && return
-> 
-> As a user of git worktrees, my $SRC/.git is a file containing a key:
-> value pair "gitdir: <path>", causing this script to fail on a [[ ! -d
-> "$SRC/.git" ]] check. Can this be handled, perhaps with a check if
-> .git is a file?
-> 
-> It seems like the check is just to confirm the $SRC directory is still
-> a git tree, in which case maybe adding a -f check would fix this:
-> 
-> [[ ! -d "$SRC/.git" ]] && [[ ! -f "$SRC/.git" ]] && return
-> 
-> Or if the actual git directory is needed for something, maybe it can
-> be located ahead of time:
-> 
-> GITDIR="$SRC/.git"
-> [[ -f $GITDIR ]] && GITDIR=$(sed -n
-> 's/^gitdir[[:space:]]*:[[:space:]]*//p' $GITDIR)
+The s390 indirect thunks are placed in the .text.__s390_indirect_jump_*
+sections.
 
-I believe the subsequent "git update-index" operation should work on git
-worktrees as well, so I changed that to use '-e':
+Certain config options which enable -ffunction-sections have a custom
+version of the TEXT_TEXT macro:
 
-	[[ ! -e "$SRC/.git" ]] && return
+  .text.[0-9a-zA-Z_]*
 
+That unintentionally matches the thunk sections, causing them to get
+grouped with normal text rather than being handled by their intended
+rule later in the script:
+
+  *(.text.*_indirect_*)
+
+Fix that by adding another period to the thunk section names, following
+the kernel's general convention for distinguishing code-generated text
+sections from compiler-generated ones.
+
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ arch/s390/include/asm/nospec-insn.h | 2 +-
+ arch/s390/kernel/vmlinux.lds.S      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/s390/include/asm/nospec-insn.h b/arch/s390/include/asm/nospec-insn.h
+index cb15dd25bf21..84372c3f313a 100644
+--- a/arch/s390/include/asm/nospec-insn.h
++++ b/arch/s390/include/asm/nospec-insn.h
+@@ -18,7 +18,7 @@
+ #ifdef CONFIG_EXPOLINE_EXTERN
+ 	SYM_CODE_START(\name)
+ #else
+-	.pushsection .text.\name,"axG",@progbits,\name,comdat
++	.pushsection .text..\name,"axG",@progbits,\name,comdat
+ 	.globl \name
+ 	.hidden \name
+ 	.type \name,@function
+diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
+index ff1ddba96352..fbd6d1f83b67 100644
+--- a/arch/s390/kernel/vmlinux.lds.S
++++ b/arch/s390/kernel/vmlinux.lds.S
+@@ -51,7 +51,7 @@ SECTIONS
+ 		IRQENTRY_TEXT
+ 		SOFTIRQENTRY_TEXT
+ 		FTRACE_HOTPATCH_TRAMPOLINES_TEXT
+-		*(.text.*_indirect_*)
++		*(.text..*_indirect_*)
+ 		*(.gnu.warning)
+ 		. = ALIGN(PAGE_SIZE);
+ 		_etext = .;		/* End of text section */
 -- 
-Josh
+2.49.0
+
