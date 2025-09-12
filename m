@@ -1,149 +1,114 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C0226CE39
-	for <live-patching@vger.kernel.org>; Fri, 12 Sep 2025 07:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A59322DCA
+	for <live-patching@vger.kernel.org>; Fri, 12 Sep 2025 14:27:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757661280; cv=none; b=cluamrrcxt53ggtI189r3ytKExXxRUKdJYdPmUNP2cD8CGd5ZY+7vxfh/2OUXSvWXjcyeShtX5Wli+jKdchjVq4kioAuvo/JTtFjfVtNyU+xEB7v+qyqUofK4dJTlXe3M7I35rckR9gEoBmsgI1Y+6Guyb95nvnl16Etio0ElhE=
+	t=1757687278; cv=none; b=Tgs1qarM7Cp5/GL29kOCJuAP2E9OnDjGD+ivtFx5i9j2uf3AF+hZcJ6s7RLq5Kn/wON4Qo0zq1w8F49mrvoDpOZwJ/du3HgN3OAWf1mIvcCQhD6OAzwcIqvSF1KB8utOIWWC+6kEJ1im9oead+fxIZ18/0/xQ4j9CBwg9zogk/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757661280; c=relaxed/simple;
-	bh=5UmTb29+wvToZMjF8jQIGCifuFHDDgC/fASNWQ5bMto=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WSVVjFVyy+Skf6cqzyWeAyDDdwGEapq4/I+hkDIpQhwF4HQNg1gyqRd4mkJsYBYDyIo9tougIg00XDKo8QL/l+dqbcrQyKKe2TBZ3JtdVR3pyb40GX85sDaOXDyZ27YA6QjCz67naeGcaUNICU2Jhfpg5xXyx59kvEIsnEPOHU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=wthmgBzU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=kVUIzgFS; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=wthmgBzU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=kVUIzgFS; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1757687278; c=relaxed/simple;
+	bh=Ll8Vc4MtYa73XNI19Vym2twYPNQI64pQ+dPv6i2m/5M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-type; b=LRccBVWfaKPz1EziweOgWf6mNoX86m1WNDPPpKni3yR+M+dz9os0lwcPSlgKKpg0JSOQIJomxDi7Ff90yRMQsZ1fd7HSb87YijzS8sRYP8WxTB26GLRsxW8YkZz9pPW2nwSzdZryB/nWjTiO/f1gmwQE5yrrnCE+2vMDx4+B3fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dtq7XPeu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wthmgBzU";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="kVUIzgFS";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wthmgBzU";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="kVUIzgFS"
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dtq7XPeu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757687274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aZPvyy/AKMXkhDZNYow1h1stF46QQDZbnLwLHlg6QM8=;
+	b=dtq7XPeuywi5PYHmdN+DZ0EdSocSFgdM6D0LPMGYENISR4ZxJ00nKvKgQoLxEKn67NuGbi
+	o6H6WYxVKagqpNwY2qjcOMvyfUzsx/N7ioOkw9kuWDBBuFszL8FWGT8vaczq2pTHLMlIgx
+	e94awMd66NU+usYosCjC2ZQ+tdoSL0M=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-477-mg6a9mulNxG3LU0iggUvtg-1; Fri,
+ 12 Sep 2025 10:27:51 -0400
+X-MC-Unique: mg6a9mulNxG3LU0iggUvtg-1
+X-Mimecast-MFC-AGG-ID: mg6a9mulNxG3LU0iggUvtg_1757687269
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 40A0521B3B;
-	Fri, 12 Sep 2025 07:14:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757661277; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mV+s3hEFUvEmsYvcUZo46b54180UGBE4ZzHhrPY5VJY=;
-	b=wthmgBzU5MqeZQ8GPkP8sVM8PukPsWHv/xchnTHeWA/+n3qzv64N44nSbrasl86vJtBUEi
-	/9j54MY7pLycjNQ+uzI1HjD8rwi/O1dCNSUPkVx4V41ijIkepSW9rkx8l8mbuExhuHbtc9
-	fKQqgrmOwtqHC2Z3Y0Vuw53brqGXdmA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757661277;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mV+s3hEFUvEmsYvcUZo46b54180UGBE4ZzHhrPY5VJY=;
-	b=kVUIzgFS7+Ux6qoePXWUBwc129xgSHIx9SuT4CFqrXag2o7X7pVCJP3DTErdigZMQ/KPBk
-	iF8ilg/CmqjnlqBg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757661277; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mV+s3hEFUvEmsYvcUZo46b54180UGBE4ZzHhrPY5VJY=;
-	b=wthmgBzU5MqeZQ8GPkP8sVM8PukPsWHv/xchnTHeWA/+n3qzv64N44nSbrasl86vJtBUEi
-	/9j54MY7pLycjNQ+uzI1HjD8rwi/O1dCNSUPkVx4V41ijIkepSW9rkx8l8mbuExhuHbtc9
-	fKQqgrmOwtqHC2Z3Y0Vuw53brqGXdmA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757661277;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mV+s3hEFUvEmsYvcUZo46b54180UGBE4ZzHhrPY5VJY=;
-	b=kVUIzgFS7+Ux6qoePXWUBwc129xgSHIx9SuT4CFqrXag2o7X7pVCJP3DTErdigZMQ/KPBk
-	iF8ilg/CmqjnlqBg==
-Date: Fri, 12 Sep 2025 09:14:37 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
-    Xi Zhang <zhangxi@kylinos.cn>, live-patching@vger.kernel.org, 
-    loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] livepatch: Add config LIVEPATCH_DEBUG to get
- debug information
-In-Reply-To: <8dcdba05-4d8c-83ff-f337-b6e71546e1a0@loongson.cn>
-Message-ID: <alpine.LSU.2.21.2509120912510.26788@pobox.suse.cz>
-References: <20250909113106.22992-1-yangtiezhu@loongson.cn> <20250909113106.22992-2-yangtiezhu@loongson.cn> <alpine.LSU.2.21.2509111549200.29971@pobox.suse.cz> <8dcdba05-4d8c-83ff-f337-b6e71546e1a0@loongson.cn>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B1EA4180057A;
+	Fri, 12 Sep 2025 14:27:49 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.81.60])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C366E1800452;
+	Fri, 12 Sep 2025 14:27:47 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: linuxppc-dev@lists.ozlabs.org,
+	live-patching@vger.kernel.org
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>
+Subject: [PATCH v2 1/3] powerpc/ftrace: ensure ftrace record ops are always set for NOPs
+Date: Fri, 12 Sep 2025 10:27:38 -0400
+Message-ID: <20250912142740.3581368-2-joe.lawrence@redhat.com>
+In-Reply-To: <20250912142740.3581368-1-joe.lawrence@redhat.com>
+References: <20250912142740.3581368-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1678380546-2262061-1757661277=:26788"
-X-Spamd-Result: default: False [-3.29 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.19)[-0.949];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FROM_EQ_ENVFROM(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -3.29
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+When an ftrace call site is converted to a NOP, its corresponding
+dyn_ftrace record should have its ftrace_ops pointer set to
+ftrace_nop_ops.
 
---1678380546-2262061-1757661277=:26788
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Correct the powerpc implementation to ensure the
+ftrace_rec_set_nop_ops() helper is called on all successful NOP
+initialization paths. This ensures all ftrace records are consistent
+before being handled by the ftrace core.
 
-On Fri, 12 Sep 2025, Tiezhu Yang wrote:
+Fixes: eec37961a56a ("powerpc64/ftrace: Move ftrace sequence out of line")
+Suggested-by: Naveen N Rao <naveen@kernel.org>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ arch/powerpc/kernel/trace/ftrace.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> On 2025/9/11 下午9:50, Miroslav Benes wrote:
-> > Hi,
-> > 
-> > On Tue, 9 Sep 2025, Tiezhu Yang wrote:
-> > 
-> >> Add config LIVEPATCH_DEBUG and define DEBUG if CONFIG_LIVEPATCH_DEBUG
-> >> is set, then pr_debug() can print a debug level message, it is a easy
-> >> way to get debug information without dynamic debugging.
-> > 
-> > I do not have a strong opinion but is it really worth it? Configuring
-> 
-> This is an alternative way, there are some similar usages:
-> 
-> drivers/iommu/exynos-iommu.c:
-> #ifdef CONFIG_EXYNOS_IOMMU_DEBUG
-> #define DEBUG
-> #endif
-> 
-> drivers/mtd/nand/raw/s3c2410.c:
-> #ifdef CONFIG_MTD_NAND_S3C2410_DEBUG
-> #define DEBUG
-> #endif
-> 
-> drivers/usb/storage/usb.c:
-> #ifdef CONFIG_USB_STORAGE_DEBUG
-> #define DEBUG
-> #endif
-> 
-> > dynamic debug is not difficult, it is more targetted (you can enable it
-> > just for a subset of functions in livepatch subsystem) and it can also be
-> > done on the command line.
-> 
-> Yes, this is true. It is up to the maintainers to apply this patch
-> or not.
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index 6dca92d5a6e8..841d077e2825 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -488,8 +488,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 		return ret;
+ 
+ 	/* Set up out-of-line stub */
+-	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
+-		return ftrace_init_ool_stub(mod, rec);
++	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
++		ret = ftrace_init_ool_stub(mod, rec);
++		goto out;
++	}
+ 
+ 	/* Nop-out the ftrace location */
+ 	new = ppc_inst(PPC_RAW_NOP());
+@@ -520,6 +522,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 		return -EINVAL;
+ 	}
+ 
++out:
++	if (!ret)
++		ret = ftrace_rec_set_nop_ops(rec);
++
+ 	return ret;
+ }
+ 
+-- 
+2.51.0
 
-Right and I do not see the point to have it in the tree for the reasons 
-above.
-
-Miroslav
---1678380546-2262061-1757661277=:26788--
