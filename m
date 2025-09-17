@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73AA52FA0DD;
-	Wed, 17 Sep 2025 16:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFF22FB0A7;
+	Wed, 17 Sep 2025 16:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758125061; cv=none; b=noUPvsBGeq6/n/xyHltf+/APz/NCyLaNsSMBqWYJbK0W3KTf4FdreYCfdzNva/DT3XFn+AaSNlo5UC5PNZQT1UwgnN/v7T6QnBDwxmBexYLnkCCr8GAAmacNxiWls9SSAVkx9yiPW3npabI+jOGVaHvvWgk7OLQB5HneQGbr0Io=
+	t=1758125062; cv=none; b=tZiP6vUYAuN5Tmh0gYYb3JWAKeaykvtX32YE8ym+yve644kaozdWDpB6d8tsbu09R9tmaQ3o8m7qihb6CGQonGIxBJlI6osaYjIt0RxdZjgftARmYq/RQBTItVMHv+5PFmeh97Dh56O2TbhNCFL2D5U3FsOZ3CBwAOSBpQnkOwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758125061; c=relaxed/simple;
-	bh=edjS2E9XX9ax1DMF/nNFhXZZs9mX8DK0OwXbIxiMZtY=;
+	s=arc-20240116; t=1758125062; c=relaxed/simple;
+	bh=dxrTl9A4NvZjNOxon5FJcu6lJrpl3HE5uxGv+3v/KTw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rx3j8XneyU/A2yz0rZHA2wCET2jzio392NXTsa7tmIxB5XPfgCZtFMLbFIhRhwu0Rhm031TqeImuBcckf3Fuo3nWDhRl2RdRcG+3RJ0TkcNZg9vnannMVutv8HPsJngno8X2cQLzE2m9NxdD7a8+grKmJ7EBpu84bicSkRdfHqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R0XD/nQE; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=X3bl/VQb58Z6gkJhfXIb/84X+eWe2NPVwY2d2OSNX92B46Joi2CX6zvRh0er+rEhqgEKUZzDmXjDpQFXy4q9VT3niznaK0XHHprV03W146+HDVXL66rFCBtxiJHhI8HUhO/h7oGHwhqajRR/chqLcCwSIGryuFIlaVZdLLDd1Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BoIkIqtl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R0XD/nQE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3FFC4CEF7;
-	Wed, 17 Sep 2025 16:04:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BoIkIqtl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0863FC4CEF9;
+	Wed, 17 Sep 2025 16:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758125061;
-	bh=edjS2E9XX9ax1DMF/nNFhXZZs9mX8DK0OwXbIxiMZtY=;
+	s=k20201202; t=1758125062;
+	bh=dxrTl9A4NvZjNOxon5FJcu6lJrpl3HE5uxGv+3v/KTw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=R0XD/nQExYCxBrAyGYtcLh56K19PHDyqTqVo4qdv2p3myqoYuJJbbM4R3Z/ciWTMj
-	 2nacItHg+SlXfO4aSALwC7GrY/ycuelGXm+GjO/DfgmTwHVGgqBN10lxnTqkxA+W8n
-	 vhhKxeZ0amRow+SxhAOzk/r/f06mXsEDd2HBh1xpyU7xxQfXVt7GYAusM5l3N94RQE
-	 uzHr210mfA3XI4ldxJmbyqOQGaBo+MfGJvrQrGmgMfYarkl4+a2urq9lQ0S93WVQq2
-	 w38BgY5amRe8V+uXyjupAlNuZc/4wXFD1R2hIco6BOvuIBOIpHfpwJsubdM1xJVwMx
-	 H8U+I1q3oRDhA==
+	b=BoIkIqtl04IC+gwVZ9IE2a+F7g1jzIOfFifYuSOfaKg/inCdOqJfhi5KdpfysNj4X
+	 w1OowhorVAdAcvvKXGRxj+7cDqU4qY1d88pQT8T88B9HMlvrfUY4qCARgacJ5FD4sW
+	 +NE/p2SUvZbTMA7ZJ+AncMguycxW9kRvTM8Ny0LjZ63Cb/pe8w2KUSKp5o9wqfb3+4
+	 nxAqwx7xLi9OHG+/1K9Ofszqn7ZTqNVpvsDGTc3QXChag585Vflxripa37sFa3wmqt
+	 5BGxK13UYUofi8LECjj17r0Cojrn0JR8MNokAZIqsg3YBCE7jyoOO4HVue0WZmzuzY
+	 DhQ8ITMnxTUSw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,10 +42,11 @@ Cc: linux-kernel@vger.kernel.org,
 	Chen Zhongjin <chenzhongjin@huawei.com>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	Dylan Hatch <dylanbhatch@google.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v4 07/63] elfnote: Change ELFNOTE() to use __UNIQUE_ID()
-Date: Wed, 17 Sep 2025 09:03:15 -0700
-Message-ID: <2cb558a895702dd74240516523324123b9933914.1758067942.git.jpoimboe@kernel.org>
+	Peter Zijlstra <peterz@infradead.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v4 09/63] modpost: Ignore unresolved section bounds symbols
+Date: Wed, 17 Sep 2025 09:03:17 -0700
+Message-ID: <9610e9e5d3e0747b151b9ea2399a3ebf84b2da46.1758067942.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <cover.1758067942.git.jpoimboe@kernel.org>
 References: <cover.1758067942.git.jpoimboe@kernel.org>
@@ -57,63 +58,35 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for the objtool klp diff subcommand, replace the custom
-unique symbol name generation in ELFNOTE() with __UNIQUE_ID().
+In preparation for klp-build livepatch module creation tooling,
+suppress warnings for unresolved references to linker-generated
+__start_* and __stop_* section bounds symbols.
 
-This standardizes the naming format for all "unique" symbols, which will
-allow objtool to properly correlate them.  Note this also removes the
-"one ELF note per line" limitation.
+These symbols are expected to be undefined when modpost runs, as they're
+created later by the linker.
 
+Cc: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- include/linux/elfnote.h | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ scripts/mod/modpost.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/elfnote.h b/include/linux/elfnote.h
-index 69b136e4dd2b6..bb3dcded055fc 100644
---- a/include/linux/elfnote.h
-+++ b/include/linux/elfnote.h
-@@ -60,23 +60,21 @@
- 
- #else	/* !__ASSEMBLER__ */
- #include <uapi/linux/elf.h>
-+#include <linux/compiler.h>
- /*
-  * Use an anonymous structure which matches the shape of
-  * Elf{32,64}_Nhdr, but includes the name and desc data.  The size and
-  * type of name and desc depend on the macro arguments.  "name" must
-- * be a literal string, and "desc" must be passed by value.  You may
-- * only define one note per line, since __LINE__ is used to generate
-- * unique symbols.
-+ * be a literal string, and "desc" must be passed by value.
-  */
--#define _ELFNOTE_PASTE(a,b)	a##b
--#define _ELFNOTE(size, name, unique, type, desc)			\
-+#define ELFNOTE(size, name, type, desc)					\
- 	static const struct {						\
- 		struct elf##size##_note _nhdr;				\
- 		unsigned char _name[sizeof(name)]			\
- 		__attribute__((aligned(sizeof(Elf##size##_Word))));	\
- 		typeof(desc) _desc					\
- 			     __attribute__((aligned(sizeof(Elf##size##_Word)))); \
--	} _ELFNOTE_PASTE(_note_, unique)				\
-+	} __UNIQUE_ID(note)						\
- 		__used							\
- 		__attribute__((section(".note." name),			\
- 			       aligned(sizeof(Elf##size##_Word)),	\
-@@ -89,11 +87,10 @@
- 		name,							\
- 		desc							\
- 	}
--#define ELFNOTE(size, name, type, desc)		\
--	_ELFNOTE(size, name, __LINE__, type, desc)
- 
- #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
- #define ELFNOTE64(name, type, desc) ELFNOTE(64, name, type, desc)
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 5ca7c268294eb..c2b2c8fa6d258 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -606,6 +606,11 @@ static int ignore_undef_symbol(struct elf_info *info, const char *symname)
+ 		    strstarts(symname, "_savevr_") ||
+ 		    strcmp(symname, ".TOC.") == 0)
+ 			return 1;
 +
- #endif	/* __ASSEMBLER__ */
- 
- #endif /* _LINUX_ELFNOTE_H */
++	/* ignore linker-created section bounds variables */
++	if (strstarts(symname, "__start_") || strstarts(symname, "__stop_"))
++		return 1;
++
+ 	/* Do not ignore this symbol */
+ 	return 0;
+ }
 -- 
 2.50.0
 
