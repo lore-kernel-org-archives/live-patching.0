@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B54E2877F7;
-	Wed, 17 Sep 2025 16:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2038C2F7AD5;
+	Wed, 17 Sep 2025 16:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758125057; cv=none; b=G00s2258BwncArsnMDBZNYQW3bSEagvJp+c+lWbBEJSE241LuD15udjNaEgHeorNs47lrrmSiwpnFpUoMm/tvgUBpm1bu0kYZIC3ucSmK3xOWcTEfI+ucWons9eQeX39XDQCVCioNAokmn85sLomNMVXBqot2TsD4Q+ZsE7w0s0=
+	t=1758125059; cv=none; b=pqZj7O/fycRg32W1qc5wHAtD0zu6cTjLRAEC6S7417A0SnRJ8dRXD15PH6mEpxFCzGEQjjPXyq6zKZJCrpK2r0mVxhxOEE3F11beZ6ARcP4SLjLcaqHnqd7b+ToGyCuN9KmQ2lIwBX4H2OxiRNX1ZM9sG6GuoN/AqDR+3wY27tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758125057; c=relaxed/simple;
-	bh=nnjz7icAVSnZx5tYZe6k3KmmtjVt/3AzI/SEQTCK794=;
+	s=arc-20240116; t=1758125059; c=relaxed/simple;
+	bh=kB2bITyAnXNik8zj9vwWQanEEkbV3eGASbyxSl9fHig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ukFqrPL5jCF/KUnGsqIgeZ5t8fBJEmWLf6TAjzwwrmxXu9B9ITKnUWXQWzUo2cpEetGKFvVXtaNN8GCVdLWU9769cAayJxRpobe3yC7m6OkkMCRM1MiuwXkBYZPt15PLjiN2ss9gDyhrXT6rADS1ihIksKs0Fpf3I5Lml/E1/as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5IO7XM8; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=YEyF2XOYoTTD2+HuCaWeHnvS7nZe1xiw8n10dngUGRcoou+lHklWA8WDjDlVURQogKoIUxYET3660oFQOiMLHOJa54qHpnxUI2VJVh43nExIEgMuboJUfh1fYbj/kEfX5FdM5iKkk4G5Xki9GQpK3qS1Qb3u85tS7mR0klr8xtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ij1OCcfg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5IO7XM8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E22EC4CEFB;
-	Wed, 17 Sep 2025 16:04:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ij1OCcfg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C9C8C4CEFB;
+	Wed, 17 Sep 2025 16:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758125056;
-	bh=nnjz7icAVSnZx5tYZe6k3KmmtjVt/3AzI/SEQTCK794=;
+	s=k20201202; t=1758125059;
+	bh=kB2bITyAnXNik8zj9vwWQanEEkbV3eGASbyxSl9fHig=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k5IO7XM8SXo70vajGZci2kLy+B6Y5RKPF87Qwsbx5XK26c3U/u4rdJCwYna3uIgnr
-	 bYsBqotgqbV/ptHTDAO8Tmtqns1wWqGPDEpNXRANYKrfvgW05EA+3ZWqZp9uxZJHh1
-	 tuLg18sj1s7UQj2iu8RgpXXcGKrJ4iU8eLyLG+gswVpNOjNW9QnNYBodE8TlN4O1te
-	 JFCwhOGzT53VEYul5E2c8Vp1lO9gQnRFw/3dL031F5hIqxWg/0YtCnmPged8WB8ZLv
-	 YhoCwAEAVNCbvW7xKZA9CK9FDu31fktMEoHmJ//0LYL8PZWky242pEGedE2aAp4ISy
-	 AY2qVJdxZTCig==
+	b=Ij1OCcfgnNCcdyk0D57N9VRM+nEbhEzNTyRKxSB8fyyyJOmN35bJesIhTk4OxrCvU
+	 T9omJ6HoDCg3tn3pgo0M44O+NFgjL9Z9MAejw5eOYqrSW2PkA+8/7NKvFB1CyT31VN
+	 vn5DXEJvgLICD/9fWFzlAgVqjXD6r3E8uQ5r10FDVll1mcw5xtjmmdDEPy5I1fEYYG
+	 Wso7hHYul2nQFaCpWF7/A7rrYAYPzzF61XfCTGJevXOcB7Y4xhmhVBd49vFANjgl60
+	 YPP+br89hc5jS75ysUC4AfHs5BEB0oOAtI118Os2mc3l/W7RTYqoOr3VkMhMT+Va2V
+	 I1/tfP3E57wCw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,13 +42,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Chen Zhongjin <chenzhongjin@huawei.com>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	Dylan Hatch <dylanbhatch@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH v4 01/63] s390/vmlinux.lds.S: Prevent thunk functions from getting placed with normal text
-Date: Wed, 17 Sep 2025 09:03:09 -0700
-Message-ID: <f41932f45a581433ceeab8226e35dc052a4babbe.1758067942.git.jpoimboe@kernel.org>
+	Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v4 04/63] x86/kprobes: Remove STACK_FRAME_NON_STANDARD annotation
+Date: Wed, 17 Sep 2025 09:03:12 -0700
+Message-ID: <1df0892691049cda78c595b5b19878821cf5d0cc.1758067942.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <cover.1758067942.git.jpoimboe@kernel.org>
 References: <cover.1758067942.git.jpoimboe@kernel.org>
@@ -60,59 +57,37 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The s390 indirect thunks are placed in the .text.__s390_indirect_jump_*
-sections.
+Since commit 877b145f0f47 ("x86/kprobes: Move trampoline code into
+RODATA"), the optprobe template code is no longer analyzed by objtool so
+it doesn't need to be ignored.
 
-Certain config options which enable -ffunction-sections have a custom
-version of the TEXT_TEXT macro:
-
-  .text.[0-9a-zA-Z_]*
-
-That unintentionally matches the thunk sections, causing them to get
-grouped with normal text rather than being handled by their intended
-rule later in the script:
-
-  *(.text.*_indirect_*)
-
-Fix that by adding another period to the thunk section names, following
-the kernel's general convention for distinguishing code-generated text
-sections from compiler-generated ones.
-
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/s390/include/asm/nospec-insn.h | 2 +-
- arch/s390/kernel/vmlinux.lds.S      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kernel/kprobes/opt.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/arch/s390/include/asm/nospec-insn.h b/arch/s390/include/asm/nospec-insn.h
-index 6ce6b56e282b8..46f92bb4c9e50 100644
---- a/arch/s390/include/asm/nospec-insn.h
-+++ b/arch/s390/include/asm/nospec-insn.h
-@@ -19,7 +19,7 @@
- #ifdef CONFIG_EXPOLINE_EXTERN
- 	SYM_CODE_START(\name)
- #else
--	.pushsection .text.\name,"axG",@progbits,\name,comdat
-+	.pushsection .text..\name,"axG",@progbits,\name,comdat
- 	.globl \name
- 	.hidden \name
- 	.type \name,@function
-diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-index 1c606dfa595d8..79b514c72c5b4 100644
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -51,7 +51,7 @@ SECTIONS
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
- 		FTRACE_HOTPATCH_TRAMPOLINES_TEXT
--		*(.text.*_indirect_*)
-+		*(.text..*_indirect_*)
- 		*(.gnu.warning)
- 		. = ALIGN(PAGE_SIZE);
- 		_etext = .;		/* End of text section */
+diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
+index 0aabd4c4e2c4f..6f826a00eca29 100644
+--- a/arch/x86/kernel/kprobes/opt.c
++++ b/arch/x86/kernel/kprobes/opt.c
+@@ -103,7 +103,6 @@ static void synthesize_set_arg1(kprobe_opcode_t *addr, unsigned long val)
+ 
+ asm (
+ 			".pushsection .rodata\n"
+-			"optprobe_template_func:\n"
+ 			".global optprobe_template_entry\n"
+ 			"optprobe_template_entry:\n"
+ #ifdef CONFIG_X86_64
+@@ -160,9 +159,6 @@ asm (
+ 			"optprobe_template_end:\n"
+ 			".popsection\n");
+ 
+-void optprobe_template_func(void);
+-STACK_FRAME_NON_STANDARD(optprobe_template_func);
+-
+ #define TMPL_CLAC_IDX \
+ 	((long)optprobe_template_clac - (long)optprobe_template_entry)
+ #define TMPL_MOVE_IDX \
 -- 
 2.50.0
 
