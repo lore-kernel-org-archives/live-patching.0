@@ -1,59 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062002D46B3
-	for <live-patching@vger.kernel.org>; Thu, 29 Jan 2026 18:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A2D369222
+	for <live-patching@vger.kernel.org>; Fri, 30 Jan 2026 18:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769710116; cv=none; b=iVRBCTPP8Ys6mLPlK0bfViXlRh2u35L8crhaVxxbtc3uI8VvdM94q8/TVsS4dA5928rFv/sBZrzTS4t3yAW/ahjOW7w+Epc2NRXGhg3SHYsSpcxgVVqpJq+zbFLfuI3fp6/j6bUv7I9K0obERjlTDa8oZtjSFJ8otd8X8gS3TtU=
+	t=1769796007; cv=none; b=ltN5jC40yCWmuPCdGnJ6cahXV7IGn95RwRVpHKBmjSzvbK4v3UpGNQvUKckE7xHGo6Y/0412ZuGIX1cnXrJaDwQ1iSRInUz73n8w2NzBBltAmUroeDXZaaOhsHZ4GAkHS+Y7HXG/yf8rOebTg0pfADrvi75c6nv60B4xg2urspY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769710116; c=relaxed/simple;
-	bh=SS57QMHe5f9qhlh7BPrZYji0zRw10WiOjNiRT6n2CUI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IIWeR/JBZeWtS0Qy+i2eQmod1Tiz2bh3QZNb3fXIzEj4RSLOWJZ8sL6GGx3+VJFlGBpEx1YSDdIZQI1IgeRe5axJoaM8suwVDeslVg4w4i9i8eyS90er1RIjyjvcqgdrcZ/nnDJDyzNS4abo0wg07v4VGWX7hRbUNBcBmxCRyow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPg9jM3c; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769796007; c=relaxed/simple;
+	bh=2+U5GvE313dNelVdURbCRih+eFvDFiagP2Q2HKu0ZuM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-type; b=RaoO/v5prhBiu6zXV1hKVwdmmfa65H7HZkHiUrcfJLtr+5kCntt3h7Z2dliLqbuNTMx2dLWZdhjpNUmFRKExZWoPaTtbFAM252mPbsr4/uOlAQGn/BM2m9EZYXRakd+XxWRJF2bm7jUzRxgnrTailKR7eRmDt1jnO/ygBfz/IF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tw7XLJcO; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPg9jM3c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C1FC4CEF7;
-	Thu, 29 Jan 2026 18:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769710115;
-	bh=SS57QMHe5f9qhlh7BPrZYji0zRw10WiOjNiRT6n2CUI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hPg9jM3cv+sxC4V0Tr9SNCTKpoXmixZ+wPOzIJBKrI87mlH01nsS9L8cN/vEOImkk
-	 ueN2tIsACaJPcl8bTyWyiO8O8ABiL/AHeZwFRctKhmUErQyq4voSflL5j1gQdHcPej
-	 x8/F084vsD42aOfgHPwqE5VY3m6De91NiCZzcfqMqiCfTun+F5b5/rrcwVicQx2JRV
-	 uf+PQ8RPS5aa67+Yu/q7kqbYmY8aeb5Of4c+LB6qgA9jsP/EgFZtqKeK4C4ci4ZYtx
-	 RL4vlzl7rxx4dKRzIbOjy338NYIwPhWoGaPVysiMTnHZ3h8Yn7Mcqb2cTVFi+ZlIDH
-	 N8ZWLjWHmq4Sg==
-Date: Thu, 29 Jan 2026 10:08:33 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: live-patching@vger.kernel.org, kernel-team@meta.com, jikos@kernel.org, 
-	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com
-Subject: Re: [PATCH] klp-build: Support clang/llvm built kernel
-Message-ID: <mt6sjhz5ydcxnp5jqlq3il4th65zevwrw4ihsnkcnuln6czvul@ljlgziem2eqs>
-References: <20260129170321.700854-1-song@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tw7XLJcO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769796005;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sY8Rf+RLGZiCJqduddHZGbA621Aq0r5KGWIkYIfkDIw=;
+	b=Tw7XLJcO20sRLulMOm30BgHQe49G82MIV701YjIm+uBUHBgG0spAgiVbjnOGmmhMzowS3x
+	/P2uPqDI2EMNRmIE867MEtkm3ewjuAUGGRWgwPbJaUnNtTs9Kk5MgVr391mOttpUHSwmrs
+	0+FKpykcO2cOxMd27dDGNldFFka9LSk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-25-WZp20Bo4MLysDBzvLGVuTg-1; Fri,
+ 30 Jan 2026 13:00:02 -0500
+X-MC-Unique: WZp20Bo4MLysDBzvLGVuTg-1
+X-Mimecast-MFC-AGG-ID: WZp20Bo4MLysDBzvLGVuTg_1769796001
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB3BD195608F;
+	Fri, 30 Jan 2026 18:00:01 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.81.18])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5BBFA18007D2;
+	Fri, 30 Jan 2026 18:00:00 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: live-patching@vger.kernel.org
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH 1/5] objtool/klp: limit parent .git directory search
+Date: Fri, 30 Jan 2026 12:59:46 -0500
+Message-ID: <20260130175950.1056961-2-joe.lawrence@redhat.com>
+In-Reply-To: <20260130175950.1056961-1-joe.lawrence@redhat.com>
+References: <20260130175950.1056961-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260129170321.700854-1-song@kernel.org>
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Thu, Jan 29, 2026 at 09:03:21AM -0800, Song Liu wrote:
-> When the kernel is built with clang/llvm, it is expected to run make
-> with "make LLVM=1 ...". The same is needed when building livepatches.
-> 
-> Use CONFIG_CC_IS_CLANG as the flag to detect kernel built with
-> clang/llvm, and add LLVM=1 to make commands from klp-build
-> 
-> Signed-off-by: Song Liu <song@kernel.org>
+When klp-build runs git commands, they may search upwards for a .git/
+directory if one isn't found in the current $SRC path. This can lead to
+unexpected behavior if the kernel source is nested within another git
+tree.
 
-Indeed, I had tested by exporting LLVM=1, but this is better...  Thanks!
+Set and export GIT_CEILING_DIRECTORIES to the parent of $SRC to restrict
+git lookups to the local kernel tree only. This ensures that git
+operations remain consistent and prevents picking up repository state
+from parent directories.
 
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ scripts/livepatch/klp-build | 3 +++
+ 1 file changed, 3 insertions(+)
+
+I encountered this failure mode when running klp-build out of a kernel
+source rpm extraction inside a testing git repo tree.  In this case,
+there is no <kernel_dir>/.git, but there is one further up the directory
+hierarchy.  This confuses the script when it tries to fixup the patch as
+git commands will keep looking for a .git in parent directories unless
+otherwise bounded [1].
+
+Here's a quick repo:
+
+  $ cd /tmp
+  $ mkdir test_dir
+  $ cd test_dir
+
+  # Force a /tmp/test_dir/.git
+  $ git init
+
+  $ git clone --depth=1 --branch=v6.19-rc4 git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+  $ cd linux
+
+  $ wget https://raw.githubusercontent.com/dynup/kpatch/refs/heads/master/examples/cmdline-string.patch
+
+  # Basic config for livepatching ...
+  $ make -j$(nproc) defconfig
+  $ ./scripts/config --file .config \
+      --set-val CONFIG_FTRACE y \
+      --set-val CONFIG_KALLSYMS_ALL y \
+      --set-val CONFIG_FUNCTION_TRACER y \
+      --set-val CONFIG_DYNAMIC_FTRACE y \
+      --set-val CONFIG_DYNAMIC_DEBUG y \
+      --set-val CONFIG_LIVEPATCH y
+  $ make olddefconfig
+
+  # GOOD BUILD
+  $ ./scripts/livepatch/klp-build -T cmdline-string.patch
+  Validating patch(es)
+  Building original kernel
+  Copying original object files
+  Fixing patch(es)
+  Building patched kernel
+  Copying patched object files
+  Diffing objects
+  vmlinux.o: changed function: cmdline_proc_show
+  Building patch module: livepatch-cmdline-string.ko
+  SUCCESS
+
+  # BAD BUILD - remove .git/ to simulate rpm/tarball
+  $ rm -rf .git
+  $ ./scripts/livepatch/klp-build -T cmdline-string.patch
+  Validating patch(es)
+  Building original kernel
+  Copying original object files
+  Fixing patch(es)
+  error: No valid patches in input (allow with "--allow-empty")
+  error: klp-build: line 350: 'git apply "${extra_args[@]}"'
+  error: klp-build: line 351: '( cd "$SRC"; sed -n '/^-- /q;p' "$patch" | git apply "${extra_args[@]}" )'
+
+[1] https://git-scm.com/book/be/v2/Git-Internals-Environment-Variables#:~:text=GIT_DIR%20is%20the%20location,your%20shell%20prompt.
+
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index 882272120c9e..964f9ed5ee1b 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -52,6 +52,9 @@ PATCH_TMP_DIR="$TMP_DIR/tmp"
+ 
+ KLP_DIFF_LOG="$DIFF_DIR/diff.log"
+ 
++# Restrict Git repository lookup to the local $SRC path
++export GIT_CEILING_DIRECTORIES="$(dirname "$SRC")"
++
+ grep0() {
+ 	command grep "$@" || true
+ }
 -- 
-Josh
+2.52.0
+
