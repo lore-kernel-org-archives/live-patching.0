@@ -1,127 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10167376498;
-	Mon,  2 Feb 2026 18:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD502DE71B;
+	Mon,  2 Feb 2026 18:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770055286; cv=none; b=kwtjnwDN+UuoL2wuRMj44lN2yncGLy6vbJV735/NrwXt/ZdaIVW9tTwhg+gWVFDSz/VCrfjlC2jhv7kwpz66AEdxwuwu9dAuIxUUMyH6dzlAIT61RLsGdKRYoaNHOBtI+0UxpnDzg3ri8+vAefF5x7MVGA6SSbE4nK9fwgLEH3A=
+	t=1770056373; cv=none; b=ODUWZHvvJuMG8VxRoRLJBVBbfc20hlhai63Y3zoi27gy1FyIJTl8fBcgxlbhpiOs/SePKywU1c+nQTRWNvQOd8M9oyf3v3XkyhEuBTGS3vEHvI+ErKHbzAG3jZpyVVqGoDehUYyTKLKil5RJCA0fR8dvl6QEj2kAiEF/qftQwAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770055286; c=relaxed/simple;
-	bh=bxS4LYmsZDEdGZDSBA18gbQaB9IvnUzePe5VAUD6GzE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ayyr4Slc/o/hXRmoh7DCJlWb+EOrnht4ZMPBZ1gdlOcw3WYQgkO9zkzj3WFfhsZ8pZFrDRZ0TUKGt4vy8kFivtyhiGEwcDgCC6OON+FvWOxW/gw0EDicn4tDIuN6YVjlmKYS4izkjpx6tNqgttV0ESeFT7/a0lzbPiLIGLXjz4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0Od5W7N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770056373; c=relaxed/simple;
+	bh=J6Pdx4sD9u0QU1u0keSf2ZQUpI6TtEGLSO7C8QAvu/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vGKj3ec8mGu6vigj9e3o07jgyOPpmChNd7z1r2kASaRrPoxXCgpVfsyEF29KZzhOgdCz6nqiz4c66jXeL68LktOsBLsu2VUSSl5kGEVtc0HtAPc68GV5YBRQgsuRC2thPRWf77RGmct2AWPwXnadCEp8KAD/d6NxsTQ9j1Kipvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kyX1gAtM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0Od5W7N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F0FC2BC86;
-	Mon,  2 Feb 2026 18:01:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kyX1gAtM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAB0C19422;
+	Mon,  2 Feb 2026 18:19:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770055285;
-	bh=bxS4LYmsZDEdGZDSBA18gbQaB9IvnUzePe5VAUD6GzE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Y0Od5W7NWDrf09mEBKW28vrk0BV+RM7NCGnOwYV8Oj9RnMW0/9Rl2EEWH9PnXQVB6
-	 t53W7O63LiZRfsk53Gi4Gdw8mN1mNWyQVFc6+SLlIZJNEr6ejHZq/IpDOXsUzefgf2
-	 qYrQftw2AGHsl1uvUFnsSPl/B13JZ62Tuk5cQ1w/xngvA24uPgD3UM+pNF47GJ6IZ/
-	 05oUlrKFhDrbppdTEYt+4nnuaBpY8VvgsmUfumQlRGoVF0F6K6/am4uISRUoK+Pyl7
-	 yxZ/Cl+mjo1567h1JavzZMxg/PtV8s/W/J+I4VmTbLs0us1pxswNDaqedjhPkSqTCj
-	 4NAARbnMEcirw==
+	s=k20201202; t=1770056373;
+	bh=J6Pdx4sD9u0QU1u0keSf2ZQUpI6TtEGLSO7C8QAvu/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kyX1gAtMR3HaqbriNGL/nVyhTkbCLF7GIs4gg74CIvfCAgAEC874NNzbZ+6hVOHZT
+	 oNCgfeLa7J0ffW5QoSAqCc/FRQFQ2ILjoxQBqRSw0Hp6xS8f+YrRf4w/YXiXdptqC/
+	 v9LUJqZNM5ZVK7BHlvDSjT7x4/+wQD7bQ1EF+i10GYxbpn5JE/glfK5SR90hhdaAw0
+	 elbgRrIPKYO9qhqCdjvl3kHHzltvxkL9FBIbelAZrgZpxpNa803xCh2wQLdDLW3geI
+	 ONE9tbI5W9b8beMm+HvF5qg591+turFECwBKOTIRlPNacWvtwM08QN3P3n+TqzYAeE
+	 /qR2wEFK2u3dQ==
+Date: Mon, 2 Feb 2026 10:19:29 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Song Liu <song@kernel.org>
-Subject: [PATCH] objtool/klp: Fix symbol correlation for orphaned local symbols
-Date: Mon,  2 Feb 2026 10:01:08 -0800
-Message-ID: <e21ec1141fc749b5f538d7329b531c1ab63a6d1a.1770055235.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.52.0
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: objtool: static_call: can't find static_call_key symbol:
+ __SCK__WARN_trap
+Message-ID: <dbbcybceshl7xlj2qujmo6s2vha7oqvp6bqcir5jfjae7h2z7b@iy4uzb2ygunj>
+References: <99f7cfd4-ef1a-4da6-842f-19429b1fb2d2@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <99f7cfd4-ef1a-4da6-842f-19429b1fb2d2@app.fastmail.com>
 
-When compiling with CONFIG_LTO_CLANG_THIN, vmlinux.o has
-__irf_[start|end] before the first FILE entry:
+On Mon, Feb 02, 2026 at 05:18:13PM +0100, Arnd Bergmann wrote:
+> Hi,
+> 
+> I see a new objtool related build failure on current linux-next
+> with clang-21:
+> 
+> samples/livepatch/livepatch-shadow-fix1.o: error: objtool: static_call: can't find static_call_key symbol: __SCK__WARN_trap
+> 
+> I couldn't figure out what exactly is going on there, this seems fine
+> with gcc, and so far only one of hundreds of configs has this issue.
+> 
+> See the attachments for .config and the object file.
 
-  $ readelf -sW vmlinux.o
-  Symbol table '.symtab' contains 597706 entries:
-     Num:    Value          Size Type    Bind   Vis      Ndx Name
-       0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
-       1: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   18 __irf_start
-       2: 0000000000000200     0 NOTYPE  LOCAL  DEFAULT   18 __irf_end
-       3: 0000000000000000     0 SECTION LOCAL  DEFAULT   17 .text
-       4: 0000000000000000     0 SECTION LOCAL  DEFAULT   18 .init.ramfs
+Ah, this is CONFIG_MEM_ALLOC_PROFILING_DEBUG inserting a WARN() in the
+sample livepatch module's memory allocation, triggering the following
+warning (file->klp is true):
 
-This causes klp-build warnings like:
+		if (!key_sym) {
+			if (!opts.module || file->klp) {
+				ERROR("static_call: can't find static_call_key symbol: %s", tmp);
+				return -1;
+			}
 
-  vmlinux.o: warning: objtool: no correlation: __irf_start
-  vmlinux.o: warning: objtool: no correlation: __irf_end
 
-The problem is that Clang LTO is stripping the initramfs_data.o FILE
-symbol, causing those two symbols to be orphaned and not noticed by
-klp-diff's correlation logic.  Add a loop to correlate any symbols found
-before the first FILE symbol.
+So this is showing that the sample livepatch modules (which are built
+differently from the new klp-build way of building livepatch modules)
+will fail to build when trying to access a non-exported static key.
 
-Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-Reported-by: Song Liu <song@kernel.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/klp-diff.c | 39 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 5 deletions(-)
+I will need to stare at that a bit to try to figure out a fix.
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 1e649a3eb4cd..9f1f4011eb9c 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -364,11 +364,40 @@ static int correlate_symbols(struct elfs *e)
- 	struct symbol *file1_sym, *file2_sym;
- 	struct symbol *sym1, *sym2;
- 
--	/* Correlate locals */
--	for (file1_sym = first_file_symbol(e->orig),
--	     file2_sym = first_file_symbol(e->patched); ;
--	     file1_sym = next_file_symbol(e->orig, file1_sym),
--	     file2_sym = next_file_symbol(e->patched, file2_sym)) {
-+	file1_sym = first_file_symbol(e->orig);
-+	file2_sym = first_file_symbol(e->patched);
-+
-+	/*
-+	 * Correlate any locals before the first FILE symbol.  This has been
-+	 * seen when LTO inexplicably strips the initramfs_data.o FILE symbol
-+	 * due to the file only containing data and no code.
-+	 */
-+	for_each_sym(e->orig, sym1) {
-+		if (sym1 == file1_sym || !is_local_sym(sym1))
-+			break;
-+
-+		if (dont_correlate(sym1))
-+			continue;
-+
-+		for_each_sym(e->patched, sym2) {
-+			if (sym2 == file2_sym || !is_local_sym(sym2))
-+				break;
-+
-+			if (sym2->twin || dont_correlate(sym2))
-+				continue;
-+
-+			if (strcmp(sym1->demangled_name, sym2->demangled_name))
-+				continue;
-+
-+			sym1->twin = sym2;
-+			sym2->twin = sym1;
-+			break;
-+		}
-+	}
-+
-+	/* Correlate locals after the first FILE symbol */
-+	for (; ; file1_sym = next_file_symbol(e->orig, file1_sym),
-+		 file2_sym = next_file_symbol(e->patched, file2_sym)) {
- 
- 		if (!file1_sym && file2_sym) {
- 			ERROR("FILE symbol mismatch: NULL != %s", file2_sym->name);
 -- 
-2.52.0
-
+Josh
