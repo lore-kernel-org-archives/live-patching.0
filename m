@@ -1,93 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4575D318BB2
-	for <live-patching@vger.kernel.org>; Mon,  2 Feb 2026 21:59:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317CF309F0E
+	for <live-patching@vger.kernel.org>; Tue,  3 Feb 2026 10:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770069566; cv=none; b=sERpuqqItNN3X5lMnwmlm5i7nUQybA+CGhZXOPRi6AkJeghYlaeltjwu8nvsgK+l9dNYGdJhkBkyYSK2DoEcUiDCObcWL6CVWVGxpx5lhdU8hv1XI2nwYdE/rwyvuCQ7EgNJ2dFic8j34ThOpmre9AghbThCfHEAJxV/Hw5hnyM=
+	t=1770114278; cv=none; b=ZgpeUYqPJfvKHltYYtqxeZHcaRJmspR+pyKJVYwXyAru3w11n5cp5ykBKbPVo4jqkdBcG77WrgxtZYn3guM3fVt5Kt5N1ezI75SNGbtZgAasFtweVf8aEZuYzU3BZ0xQ3fM2quYMd0tw+hKfcBJIyu309CTlIvrRJ6aGfNZq1QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770069566; c=relaxed/simple;
-	bh=83293i7jcnUcVkBVW7it3OvjhcrYUca8CHdxEre9tmM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ioCViLXkYynNlB7EAoW0XzUtdWozgnWtBWIhh81b0IsYIHlih3czXhHwp2CuXUAaFlN/q8nyRxYCBQBwxlWoBAnnA9v2F4GLBMNX9OSAFA78mgwUbfauaMs1lNKkfpXU1YfeijIfD6xyyilmx3h76QYVNHU4SU3qWsOqRLy/HME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qs89bqHA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770114278; c=relaxed/simple;
+	bh=ZPnQ1HTuX6/8TUjJZQEUNBKfShrrT/gk9os+omxmngE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=hxHncN9eajrkNQbq90vHXtScLHKYZNRwLV3c/LIvgcwv67OyXHAYDBBplbG7c40XLTWuNHYgXEUldasvG2eK9He+eoNn4RBqIxtf3VNW9s7/K8tKuoZOE+ttzi3ZGmO7LPKrimLW8VGTlwoH4VOavcsG4Dhijsq52RqtKk2Eegw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=oKihOAPY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=d0Z+EwAk; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JEcuAUv+; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=k26vDfBl; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qs89bqHA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9176C2BC86
-	for <live-patching@vger.kernel.org>; Mon,  2 Feb 2026 21:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770069565;
-	bh=83293i7jcnUcVkBVW7it3OvjhcrYUca8CHdxEre9tmM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qs89bqHApGWMQWM05OZ3fYAPoREMCbSm4H62hMwUJqJPWMHPHouzD+KjZ6PxdwhKa
-	 z2ocbQUUNrnebG5pRQlF64o60r0r5rYhrVZd5gt5FV61oTyTVBkF7gG5SvlYKkhdD4
-	 jI0Kd8iHu5tYerTfm+RqXbTV3STU3+zrGLyP92ZidOTJZDNx3+3G0tALGLntoWWyhK
-	 umeU2FRlLerws/NYiOr0/UTxwW4oWWynLqjovSUkqjIQYGRsXym9fwM3eJbJwSf9ji
-	 mx87XtcXJDhWYIqMkRNWntk6RPnAKHyZkSvCmjUaugMHRtv9TW0rVRSVd1zbhaq0/i
-	 i1nc6P+9IN43w==
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8c6a0702b86so507724085a.0
-        for <live-patching@vger.kernel.org>; Mon, 02 Feb 2026 13:59:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWKGmU0vfkvZV++YOa8zKR6RICA9fhnfDMNXUHZlSFLpZ8yK2TtsSIDQjY6DhK2n2LRV64Id3XEMjINUWXq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3A17b13u666+bjQHGLEXC0GP3j55XmQh+7zvOK6rQriMf3UwY
-	xEiWSFq8fZRoZnfvV2R8NrYpc5e3DGpTnfJbtk9Txphdg/0JIrMc3ESz/TNMCC6B6FQchnl2UAX
-	G0+aHV+b4AWSzP8blG94/0fwCu8MvXNk=
-X-Received: by 2002:a05:620a:440b:b0:8a4:107a:6772 with SMTP id
- af79cd13be357-8c9eb32dfc5mr1687381585a.76.1770069565051; Mon, 02 Feb 2026
- 13:59:25 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="oKihOAPY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="d0Z+EwAk";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JEcuAUv+";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="k26vDfBl"
+Received: from [10.128.32.1] (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6BED43E6D1;
+	Tue,  3 Feb 2026 10:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770114274; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NXLc+2Adk+AGPqid+ouMV8j5AeeHusZ6zyh11O4Tw1A=;
+	b=oKihOAPYjLVp+fl/g2hEKBBV+iPVb/y6/1MSj6tLFL154W7+kgfgEfdzGar9p3ci8otPRp
+	Dq16Qap9rqYnvq8ud3dUDnXU6cRmokfA6sxS8yKFs/osFjxoV+AKO1fDLmFpvqrPj/7g49
+	DwDzIpPAuDIJ886uutIGWom68EuTFz0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770114274;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NXLc+2Adk+AGPqid+ouMV8j5AeeHusZ6zyh11O4Tw1A=;
+	b=d0Z+EwAkv0iwKf6p1yggnT+8gzHI0Vcyiccsz6eHTAbQZVZPCibQIuCv2Gb5FMzujR3m9v
+	Wstt8TLVDBjA+IAw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770114273; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NXLc+2Adk+AGPqid+ouMV8j5AeeHusZ6zyh11O4Tw1A=;
+	b=JEcuAUv+h4kJjgGFz93l6T+gfN33Cv7GtZfLvqRy5h/BY+HQjL7wXaW9FFrEC3NwV25jlY
+	56cnGyrbkjLF4JRa6lsCsRkToEILXB9rtYlBqosFmgpzY16xWRZoKXBSDmsO3C1TG5Fa3k
+	BkU26cQ8Eg4PHG6kVwbNvEAM+I5kEOE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770114273;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NXLc+2Adk+AGPqid+ouMV8j5AeeHusZ6zyh11O4Tw1A=;
+	b=k26vDfBlwloLR/FIwRhFb6wMwVfWahUiI/rcuBrWGFvauv3ejCMMvniPccWTedIvJnjqC2
+	/AYNMe+EA8IyCAAQ==
+Date: Tue, 3 Feb 2026 11:24:33 +0100 (CET)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Petr Pavlu <petr.pavlu@suse.com>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+    Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+    Sami Tolvanen <samitolvanen@google.com>, 
+    Aaron Tomlin <atomlin@atomlin.com>, Peter Zijlstra <peterz@infradead.org>, 
+    live-patching@vger.kernel.org, linux-modules@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Improve handling of the __klp_{objects,funcs}
+ sections in modules
+In-Reply-To: <20260123102825.3521961-1-petr.pavlu@suse.com>
+Message-ID: <alpine.LSU.2.21.2602031124080.19996@pobox.suse.cz>
+References: <20260123102825.3521961-1-petr.pavlu@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0bd3ae9a53c3d743417fe842b740a7720e2bcd1c.1770058775.git.jpoimboe@kernel.org>
-In-Reply-To: <0bd3ae9a53c3d743417fe842b740a7720e2bcd1c.1770058775.git.jpoimboe@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Mon, 2 Feb 2026 13:59:13 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7HDdwSdvNzVMtTPrJp=96coaLttU4p4szmF19beTzKnQ@mail.gmail.com>
-X-Gm-Features: AZwV_QiGwRQ-4tdr5_P3YKfSqoCVqhT_35PcGn7uUVIHntvQmHSaqDGTmJgR3Vo
-Message-ID: <CAPhsuW7HDdwSdvNzVMtTPrJp=96coaLttU4p4szmF19beTzKnQ@mail.gmail.com>
-Subject: Re: [PATCH] objtool/klp: Fix unexported static call key access for
- manually built livepatch modules
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[suse.cz:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:mid]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On Mon, Feb 2, 2026 at 11:00=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> Enabling CONFIG_MEM_ALLOC_PROFILING_DEBUG with CONFIG_SAMPLE_LIVEPATCH
-> results in the following error:
->
->   samples/livepatch/livepatch-shadow-fix1.o: error: objtool: static_call:=
- can't find static_call_key symbol: __SCK__WARN_trap
->
-> This is caused an extra file->klp sanity check which was added by commit
-> 164c9201e1da ("objtool: Add base objtool support for livepatch
-> modules").  That check was intended to ensure that livepatch modules
-> built with klp-build always have full access to their static call keys.
->
-> However, it failed to account for the fact that manually built livepatch
-> modules (i.e., not built with klp-build) might need access to unexported
-> static call keys, for which read-only access is typically allowed for
-> modules.
->
-> While the livepatch-shadow-fix1 module doesn't explicitly use any static
-> calls, it does have a memory allocation, which can cause
-> CONFIG_MEM_ALLOC_PROFILING_DEBUG to insert a WARN() call.  And WARN() is
-> now an unexported static call as of commit 860238af7a33 ("x86_64/bug:
-> Inline the UD1").
->
-> Fix it by removing the overzealous file->klp check, restoring the
-> original behavior for manually built livepatch modules.
->
-> Fixes: 164c9201e1da ("objtool: Add base objtool support for livepatch mod=
-ules")
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Fri, 23 Jan 2026, Petr Pavlu wrote:
 
-Acked-by: Song Liu <song@kernel.org>
+> Changes since v2 [1]:
+> - Generalize the helper function that locates __klp_objects in a module
+>   to allow it to find any data in other sections as well.
+> 
+> Changes since v1 [2]:
+> - Generalize the helper function that locates __klp_objects in a module
+>   to allow it to find objects in other sections as well.
+> 
+> [1] https://lore.kernel.org/linux-modules/20260121082842.3050453-1-petr.pavlu@suse.com/
+> [2] https://lore.kernel.org/linux-modules/20260114123056.2045816-1-petr.pavlu@suse.com/
+> 
+> Petr Pavlu (2):
+>   livepatch: Fix having __klp_objects relics in non-livepatch modules
+>   livepatch: Free klp_{object,func}_ext data after initialization
+> 
+>  include/linux/livepatch.h           |  3 +++
+>  kernel/livepatch/core.c             | 19 +++++++++++++++++++
+>  scripts/livepatch/init.c            | 20 +++++++++-----------
+>  scripts/module.lds.S                |  9 ++-------
+>  tools/objtool/check.c               |  2 +-
+>  tools/objtool/include/objtool/klp.h | 10 +++++-----
+>  tools/objtool/klp-diff.c            |  2 +-
+>  7 files changed, 40 insertions(+), 25 deletions(-)
+> 
+> 
+> base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+
+Thank you,
+M
