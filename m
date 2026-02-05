@@ -1,85 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB84343637F
-	for <live-patching@vger.kernel.org>; Thu,  5 Feb 2026 16:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ED42DCF45
+	for <live-patching@vger.kernel.org>; Thu,  5 Feb 2026 16:53:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770310223; cv=none; b=rZo0GptdVKGda9oEz7edFOAGy+mtypsOJWsTjwc72sgxCSdH9K5AkaG1k1hyq0D/LkR7T/FaQs+9vorhOylAsKQQWhrGAc8CHPfHl8CAEJ970a3raJ017tm+b9GSMpdwJGL0s9G5WtLKFTsUSGPp/T3JvAgx1Li6jGXRdotMoSs=
+	t=1770310424; cv=none; b=tr+wdZbKigMFCHh/sGEAfKVcDoHUKOnM4pBWCYUFIZWrRNy06nUEmvME1XBLJaKQmY+y7o9eSgm6f8XZfyxikC/29PEo9T6d9Mq3bFE16Gtle+x2FbmprN26DUO4zCyvHBoHbOCOIDHkyox7tgJ1LVAFy7OfS7KbFCfUVHV9A/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770310223; c=relaxed/simple;
-	bh=i2l4OIdGbqm3tV0XibzaeZujd7WGFKqgyfL08M7mCr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m5bYrto/IB4uRUR8Rc8MuiyZxH4TF//y8yLhv23SsQBUT/RmUnFsVRYl9IjSVROBp6xeENzfJA2THwhh46l/Bi1vJLKyXHlnRlgra4CuvZ/evuZVgS6PbE2FeKpoG5DVjfoSIa08RosptvOK73j2H5sztWh7to3G17s93LagLSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SuzGm9dh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770310424; c=relaxed/simple;
+	bh=I8ND0B+SUt+6LEITR69+ACNctaYWJ7w5vZPTv13lDxk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mBAdrDug+QBPF2hqVtShnagimIL3pm2rM86moh1ZsactVQx5HWcRNjwtnU4Zw4tPM59mLJyJvwXB5ehnZb9Ykr1G7gQtq3Yk/u/Z7jvWuvruJu1Sho7oqcUd6xcR/3uGZzMyw1xPgcEVC+MbsRnVYQslp1q4vS31R+KaJDMf06U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNMkes6p; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuzGm9dh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5702DC4CEF7
-	for <live-patching@vger.kernel.org>; Thu,  5 Feb 2026 16:50:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNMkes6p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80CB6C4CEF7;
+	Thu,  5 Feb 2026 16:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770310223;
-	bh=i2l4OIdGbqm3tV0XibzaeZujd7WGFKqgyfL08M7mCr0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SuzGm9dhjjC/88JRiwRheDxnpnyZdQ6nYfIlmU4ng9hA2nGVHTn6Hy6QPtv2TngIm
-	 GtGyjzD2T7eZlyY8ibu2YSsApUqoR+9h92qtevh18WxKIucTNTkM1nDk9pC2F2oDD4
-	 5oTzQXOEMrdxcCAsXZx3vruxu5DT/4P3YOGsAPpQPrr2XVATkKhMb/EhmcDxfYyvHS
-	 II9K2n1hhhD7f6+qEzkBGgodXyoDJj1d5MKAC+3pWO3R8daSJgmToVlgvz3M/F3zc9
-	 4jfIemKypco3LhPAFpZLnh16OTKhwbsotw/VHH08MAsl2q4XgU8k5jvEtM2dlyGsFh
-	 d4SMDA+Z8EMiQ==
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-5013d163e2fso14086451cf.0
-        for <live-patching@vger.kernel.org>; Thu, 05 Feb 2026 08:50:23 -0800 (PST)
-X-Gm-Message-State: AOJu0Yx1YAypSe6iU3tMPwBx1VJZPQpDU8lTq7b6WJwo4pjn0nPaqHED
-	GmR4xD1aC2B7vHsUzepMtW9Ua9cDG0Mjh+AVgrCDbj1g8WDE+SZ5n5YHQuhTEdcZ8/DkITYAFNh
-	Djfo265YGzRaEbKE1uv1u+f4c4k5aOxQ=
-X-Received: by 2002:ac8:7f49:0:b0:501:4c41:989f with SMTP id
- d75a77b69052e-5061c1b30a5mr83745571cf.69.1770310222560; Thu, 05 Feb 2026
- 08:50:22 -0800 (PST)
+	s=k20201202; t=1770310424;
+	bh=I8ND0B+SUt+6LEITR69+ACNctaYWJ7w5vZPTv13lDxk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NNMkes6ppTWltS1CGoXKY+gOrThpG2w1jg5jIRhzHX8lqud8ZHUnvQMZDvjYy8ikl
+	 pEjVgzTB2HHS73caYjkY4EpWRxTGJIfsEISoZ/ynXKUxH4qpYTzSEYlWyi/HemqMaa
+	 sDGhgqn5NsWrUo9Bk/PKw0eCaWwrAYiQDsojo3W3+tGsTUgFQwI6VuSaVgtfl0fCuA
+	 BlFqsB50HHVcwJdnk1SLOomdbBQ6yI5III//rXrqgclo5VVsQMEIau1mzB6+hwUVbE
+	 qD+DYUh6F4RJgLpNaU7UzuZuUq1Oon5HHoqg8qVn3hRFuPHmeUxYGA6xQ+IDMlOGzz
+	 GfpSy/5yTs6WQ==
+Date: Thu, 5 Feb 2026 08:53:42 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: live-patching@vger.kernel.org, Song Liu <song@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 2/5] livepatch/klp-build: handle patches that
+ add/remove files
+Message-ID: <uy6a5xdp7e6cp6xj2r5zavb2ujtkapsjp2hixtgga4vwywkslv@6uhrgvb2hvo3>
+References: <20260204025140.2023382-1-joe.lawrence@redhat.com>
+ <20260204025140.2023382-3-joe.lawrence@redhat.com>
+ <ywooax5vfkh7k7h4mjpxfhtbkr3rdcvi5sjqmnjgcmxrc4ykwa@mk6z5zosbuvz>
+ <aYTGtI41jhDSm5gf@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129170321.700854-1-song@kernel.org> <gqqr3ulqbhecvev36ry7nlra3fysgltlpiv2lzsil7ewrwy7qx@dlp77z56npqc>
-In-Reply-To: <gqqr3ulqbhecvev36ry7nlra3fysgltlpiv2lzsil7ewrwy7qx@dlp77z56npqc>
-From: Song Liu <song@kernel.org>
-Date: Thu, 5 Feb 2026 08:50:11 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7DrOqq6Neu_fgxt9V1Zpz+_o8VobvO_OdkJt_WGzKvSg@mail.gmail.com>
-X-Gm-Features: AZwV_Qg7fTs4tylLPl6qEBa1LHm5u9oTY_gfdPM8c5fUI0RywHmYl_tPb4qWFo8
-Message-ID: <CAPhsuW7DrOqq6Neu_fgxt9V1Zpz+_o8VobvO_OdkJt_WGzKvSg@mail.gmail.com>
-Subject: Re: [PATCH] klp-build: Support clang/llvm built kernel
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: live-patching@vger.kernel.org, kernel-team@meta.com, jikos@kernel.org, 
-	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aYTGtI41jhDSm5gf@redhat.com>
 
-On Thu, Feb 5, 2026 at 8:25=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org>=
- wrote:
->
-> On Thu, Jan 29, 2026 at 09:03:21AM -0800, Song Liu wrote:
-> > When the kernel is built with clang/llvm, it is expected to run make
-> > with "make LLVM=3D1 ...". The same is needed when building livepatches.
-> >
-> > Use CONFIG_CC_IS_CLANG as the flag to detect kernel built with
-> > clang/llvm, and add LLVM=3D1 to make commands from klp-build
-> >
-> > Signed-off-by: Song Liu <song@kernel.org>
->
-> Peter informed me that "LLVM=3D" has different syntaxes:
->
->   LLVM=3D1
->   LLVM=3D-22
->   LLVM=3D/opt/llvm/
->
-> Debian has parallel llvm (and gcc) toolchains, and suffixes them with
-> -$ver.
->
-> So we dropped this patch for now.  "export LLVM=3D1" still works.  Not
-> sure if you have any other ideas?
+On Thu, Feb 05, 2026 at 11:35:00AM -0500, Joe Lawrence wrote:
+> On Wed, Feb 04, 2026 at 10:02:38AM -0800, Josh Poimboeuf wrote:
+> > On Tue, Feb 03, 2026 at 09:51:37PM -0500, Joe Lawrence wrote:
+> > > The klp-build script prepares a clean patch by populating two temporary
+> > > directories ('a' and 'b') with source files and diffing the result.
+> > > However, this process currently fails when a patch introduces a new
+> > > source file as the script attempts to copy files that do not yet exist
+> > > in the original source tree.  Likewise, there is a similar limitation
+> > > when a patch removes a source file and the script tries to copy files
+> > > that no longer exist.
+> > > 
+> > > Refactor the file-gathering logic to distinguish between original input
+> > > files and patched output files:
+> > > 
+> > > - Split get_patch_files() into get_patch_input_files() and
+> > >   get_patch_output_files() to identify which files exist before and
+> > >   after patch application.
+> > > - Filter out "/dev/null" from both to handle file creation/deletion
+> > > - Update refresh_patch() to only copy existing input files to the 'a'
+> > >   directory and the resulting output files to the 'b' directory.
+> > > 
+> > > This allows klp-build to successfully process patches that add or remove
+> > > source files.
+> > > 
+> > > Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> > > ---
+> > >  scripts/livepatch/klp-build | 34 +++++++++++++++++++++++++++-------
+> > >  1 file changed, 27 insertions(+), 7 deletions(-)
+> > > 
+> > > Lightly tested with patches that added or removed a source file, as
+> > > generated by `git diff`, `git format-patch`, and `diff -Nupr`.
+> > > 
+> > > diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+> > > index 9f1b77c2b2b7..5a99ff4c4729 100755
+> > > --- a/scripts/livepatch/klp-build
+> > > +++ b/scripts/livepatch/klp-build
+> > > @@ -299,15 +299,33 @@ set_kernelversion() {
+> > >  	sed -i "2i echo $localversion; exit 0" scripts/setlocalversion
+> > >  }
+> > >  
+> > > -get_patch_files() {
+> > > +get_patch_input_files() {
+> > > +	local patch="$1"
+> > > +
+> > > +	grep0 -E '^--- ' "$patch"				\
+> > > +		| gawk '{print $2}'				\
+> > > +		| grep -v '^/dev/null$'				\
+> > 
+> > Because pipefail is enabled, the grep0 helper should be used instead of
+> > grep, otherwise a failed match can propagate to an error.  Maybe we need
+> > a "make check" or something which enforces that and runs shellcheck.
+> > 
+> 
+> Good catch.  So your idea is to drop a Makefile in scripts/livepatch
+> with a check target that runs shellcheck and then a klp-build specific
+> check for any non-grep0 grep?  (like `grep -w 'grep' klp-build`).  If
+> so, any other things to should check for?
 
-Hmm... I guess "export LLVM=3Dsomething" is probably the best option
-for now.
+That's all I can think of, hopefully shellcheck would catch most of the
+other footguns.
 
-Thanks,
-Song
+-- 
+Josh
