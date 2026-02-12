@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849E828E0
-	for <live-patching@vger.kernel.org>; Thu, 12 Feb 2026 19:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F9C28E0
+	for <live-patching@vger.kernel.org>; Thu, 12 Feb 2026 19:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770924144; cv=none; b=EmbiB5yBw4GajcsXYR2698Ns2kIzrbE/BphMQbtLm4J+WYtHK3uK/rmjDs6OzYycvbHK03CAOt1SSGtwHbODAxTW1pyJ7nO4Uwzzc7SQGmdkVPSTT68MkIGzGFYGFdqRxf6LlZuNXX6oR+xx6xelsP8a2bLB3lLEcTUrukiQ7zU=
+	t=1770924150; cv=none; b=A7/6cnnLMOg8g0CPP1bvzicYXDSetMfiHcSwkjBcG0IUosdYulNR4JOipDhcaQXdGKl6ouD/5WR8z1jL5vZmNIT1rnhUwnO73NfAgRI03U9lmDcIR7mu7yTeD8njmQuyOJTXB/0X748zg+g5/HgcYtIdJrFnM3tK4Z0kvzc4Lgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770924144; c=relaxed/simple;
-	bh=NF985SuSmn9wmB4vLhm1ef1RmrUrWhw45OEe/IaMNFA=;
+	s=arc-20240116; t=1770924150; c=relaxed/simple;
+	bh=Sikm3tBdRebSPK/JmcCZImuhJKkS3pnJEMKEf+9Njs4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nkF3pLZ2TDBT3YHMy5cOWZP+hWC2gkW9opStDkGKDH46Q/FutrKkvi2KQpcgcLZfi0jBqkiAbL8Q+vZ6iiqU7xNEQ1D44PFOu4gybsEWTXZhnYZld8lZObZ3MaK+QJbY659YKiEciQtuRxMGlLXh8Jhyc25QZNgdW8rryZhb6l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MHFceIFc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=pREiGxfXZ4iVHLzvBkfAzZ07LPdlPbwsjZzXBK19bpcdxSYnCF/MjvGudOudtrJmsDiRM8bN+3RhxmisYm8DhguKP90qxH9l8IiJiV5qkCb6Amv8ZulDNnF1t3xIluqs2QzAMarRMUWT4QQ+ABAyqEC8SduQMPE9mSRnrO2MuTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UVWKyYzQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MHFceIFc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4CDCC4CEF7;
-	Thu, 12 Feb 2026 19:22:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UVWKyYzQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BD1C4CEF7;
+	Thu, 12 Feb 2026 19:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770924144;
-	bh=NF985SuSmn9wmB4vLhm1ef1RmrUrWhw45OEe/IaMNFA=;
+	s=k20201202; t=1770924150;
+	bh=Sikm3tBdRebSPK/JmcCZImuhJKkS3pnJEMKEf+9Njs4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MHFceIFcpxuudh6jo/Aypyt1mtxwzhW1nhOcT317us1DZEjrsqR7ZNAyJ71jHL9+U
-	 5+QgDxzexpv7jaEJJIWD0IApSpWYurl1hcx6OeESFH8Bs1QN+SYumzJIwrFudelnTa
-	 HeHv+OCHCpTYNAiP/nAR0AqGZ8HlQl4bmQQWa9hveX/oN22RG4fcnURb6/F7aE7AZn
-	 tFlcCd08S9tkhKf5Bq9k1e/8zXrs1XnlME94/Mgkuq5xTppvRsOMDqJ4Iq2w/XWCaL
-	 GC5yUMye9mo9vZOZyOln9+kKDiwzpH8HrQXTHbyt2Nhj5Hf8qcJM2TJiDrQGGWAwl5
-	 SYkNcJnvgLHnA==
+	b=UVWKyYzQ5ECn6fg3iwg191mJUbp77UJeSREAz8S2ZNO4HXbCA31VU2qS4JAmaoGFZ
+	 kOflZqSlwRHytzC8z9+IGNv/CFrqbwpUHMI/F7fMEBXoaUcODYDJKb2j/aAk5666vp
+	 3WaYKg/PszwVo+GH5tAt9atLJgDKaVo9L77iDvBHqC6TUKO1gKQQajil5Hngdtv4EC
+	 XtwpX0kHHYE4hBGjsupU7QLdrQY6avj7PJ+ffQ1E+8dF+8rM0/UlqS3IYE7/zo0+s0
+	 x+9dRYTD0Mrk82YCtojjhfngpU/QOQ1DGovK6WLMle/J95ZRKX5DCFNHqWxVsRb5as
+	 PbiS7xAjjNiTA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -35,9 +35,9 @@ Cc: jpoimboe@kernel.org,
 	joe.lawrence@redhat.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 1/8] objtool/klp: Remove redundent strcmp in correlate_symbols
-Date: Thu, 12 Feb 2026 11:21:54 -0800
-Message-ID: <20260212192201.3593879-2-song@kernel.org>
+Subject: [PATCH 2/8] objtool/klp: Remove trailing '_' in demangle_name()
+Date: Thu, 12 Feb 2026 11:21:55 -0800
+Message-ID: <20260212192201.3593879-3-song@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260212192201.3593879-1-song@kernel.org>
 References: <20260212192201.3593879-1-song@kernel.org>
@@ -49,26 +49,52 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-find_global_symbol_by_name() already compares names of the two symbols,
-so there is no need to compare them again.
+With CONFIG_LTO_CLANG_THIN, it is possible to have nested __UNIQUE_ID_,
+such as:
+
+  __UNIQUE_ID_addressable___UNIQUE_ID_pci_invalid_bar_694_695
+
+To remove both trailing numbers, also remove trailing '_'.
+
+Also add comments to demangle_name().
 
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/klp-diff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/objtool/elf.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index a3198a63c2f0..57606bc3390a 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -454,7 +454,7 @@ static int correlate_symbols(struct elfs *e)
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 2c02c7b49265..0d93e8496e8d 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -441,6 +441,19 @@ static int read_sections(struct elf *elf)
+ 	return 0;
+ }
  
- 		sym2 = find_global_symbol_by_name(e->patched, sym1->name);
++/*
++ * Remove number suffix of a symbol.
++ *
++ * Specifically, remove trailing numbers for "__UNIQUE_ID_" symbols and
++ * symbols with '.'.
++ *
++ * With CONFIG_LTO_CLANG_THIN, it is possible to have nested __UNIQUE_ID_,
++ * such as
++ *
++ *   __UNIQUE_ID_addressable___UNIQUE_ID_pci_invalid_bar_694_695
++ *
++ * to remove both trailing numbers, also remove trailing '_'.
++ */
+ static const char *demangle_name(struct symbol *sym)
+ {
+ 	char *str;
+@@ -463,7 +476,7 @@ static const char *demangle_name(struct symbol *sym)
+ 	for (int i = strlen(str) - 1; i >= 0; i--) {
+ 		char c = str[i];
  
--		if (sym2 && !sym2->twin && !strcmp(sym1->name, sym2->name)) {
-+		if (sym2 && !sym2->twin) {
- 			sym1->twin = sym2;
- 			sym2->twin = sym1;
+-		if (!isdigit(c) && c != '.') {
++		if (!isdigit(c) && c != '.' && c != '_') {
+ 			str[i + 1] = '\0';
+ 			break;
  		}
 -- 
 2.47.3
