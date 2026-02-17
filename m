@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C64236C0CF
-	for <live-patching@vger.kernel.org>; Tue, 17 Feb 2026 16:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F62236C0CF
+	for <live-patching@vger.kernel.org>; Tue, 17 Feb 2026 16:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771344436; cv=none; b=R9JmgetNwyhiyACQ8wPUkproo6mRL3POeOFiXvIJUzOoO08exHUBltt+L/1/Jp0IoNKS0v2NItldDY6AMKmdn6FPal4U6cyJpngt5k68H0jfh87U99L1o0QKdAKRA8mt0BxMiBDO5nTRv8OHvq7lVOQ+iS6AZp2CoyQQ/jvsfeU=
+	t=1771344439; cv=none; b=cs0TNoyFAkjWkwiah2Qq3TXgoj1Gw/TBp9HbrLldlUa3RKo1ijXNKE+H7bYLVZ1WYVIplG3UubysnZZjeQ19tCX4xfNnsK5joyCdsLYRTYEnF9e8/EmMScul5SFFePPCOJZ35Few6cqjJdkY43yh1r9mkISw8BYWt9Big0J5mY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771344436; c=relaxed/simple;
-	bh=HVq/wLgCQW6Xfh/0mDruHbNTFvUpmRujYEYetSvjgpI=;
+	s=arc-20240116; t=1771344439; c=relaxed/simple;
+	bh=9iyGjKH/ZCQz73oXk5Oxhr2M6EandGNwSusOMEoz7PM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=qhzN3wnRGF7QorukLUXqotrZuu8+zBO1+CakiAXoy/gl9WP+4/cAnP8ZXGfaS1VjZvkQTAaODGQLXvGCgW3JyWQ3tAZEFojiIsJ/tktDj3+NZ7LqkcUzYnEOTa2ixfpM54785Cu3ADeEAZptNEgi5uNustsWAoEItfdjEP12aOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TMYhoIRT; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-type; b=Kv9prRj3YPdtMU++8v/TU//Gy1K4GeP61BLUaD7y064bhRgFmJgRJdpvV3sQhqwAqaF9ERAJqRKgMntj1AqKv2VTOU0+Fmf4h+Oxw7mhG1zxX5cEkeY0bKiy3vMKoqz5k8WtFz5U7cszq/4XjvLKS7EYbUoiaeS8YZ2faJNmdWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XxR/ytTy; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TMYhoIRT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XxR/ytTy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771344434;
+	s=mimecast20190719; t=1771344437;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4PpSzQJyzU8gtJYdAsuoo9e1Tig+WeepqPMXKWRW5p4=;
-	b=TMYhoIRT9gkBGZ3YDzxr/+zHSqe0QKcwJDZzihG5ugJ0/Q3SvjSFT/qg1lML3IaESf+S2C
-	IfHGiH48uQ5vtCWbQt8LNX/O1qMBUW67NH8hK2pQamkoV0fInWgCqvVmRkkSdEpaE9vKgN
-	tQvsVK2Ill9WTEouSGBXkSuS0RRTnbo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=35OmfNA781oFbGRjpB6OTJ6e0X0SwSykHvIChQ8N1Ps=;
+	b=XxR/ytTy8EK3338ZKwhmVcGBXBfVTncz32lfvL3a3UTw2FyyMHVKLncjmE8lbWuoOMITZU
+	eWvEa29eB9PXD1vbfe0lBEN/I7v7V4PajOa9nyDrACknpSspuBHJfaVU/33nik/qREWwYB
+	lwqFzNc7DFkjZQ7Mi3ckzVZZ4kfiT+k=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-600-1Lw--c8xNtiBXleG_CnIQQ-1; Tue,
- 17 Feb 2026 11:07:11 -0500
-X-MC-Unique: 1Lw--c8xNtiBXleG_CnIQQ-1
-X-Mimecast-MFC-AGG-ID: 1Lw--c8xNtiBXleG_CnIQQ_1771344430
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-582-5Y8fN1HGNlW5ljUMiglTmA-1; Tue,
+ 17 Feb 2026 11:07:10 -0500
+X-MC-Unique: 5Y8fN1HGNlW5ljUMiglTmA-1
+X-Mimecast-MFC-AGG-ID: 5Y8fN1HGNlW5ljUMiglTmA_1771344429
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 84D48195606C;
-	Tue, 17 Feb 2026 16:07:10 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.197])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4760B30001A5;
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F3511800639;
 	Tue, 17 Feb 2026 16:07:09 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.197])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BB0DD30001A5;
+	Tue, 17 Feb 2026 16:07:07 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Jiri Kosina <jikos@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 13/13] livepatch/klp-build: don't look for changed objects in tools/
-Date: Tue, 17 Feb 2026 11:06:44 -0500
-Message-ID: <20260217160645.3434685-14-joe.lawrence@redhat.com>
+Subject: [PATCH v3 12/13] livepatch/klp-build: report patch validation drift
+Date: Tue, 17 Feb 2026 11:06:43 -0500
+Message-ID: <20260217160645.3434685-13-joe.lawrence@redhat.com>
 In-Reply-To: <20260217160645.3434685-1-joe.lawrence@redhat.com>
 References: <20260217160645.3434685-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -64,26 +64,83 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+Capture the output of the patch command to detect when a patch applies
+with fuzz or line offsets.
+
+If such "drift" is detected during the validation phase, warn the user
+and display the details.  This helps identify input patches that may need
+refreshing against the target source tree.
+
+Ensure that internal patch operations (such as those in refresh_patch or
+during the final build phase) can still run quietly.
+
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- scripts/livepatch/klp-build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/livepatch/klp-build | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 5367d573b94b..9bbce09cfb74 100755
+index fd104ace29e6..5367d573b94b 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -564,8 +564,8 @@ find_objects() {
- 	local opts=("$@")
+@@ -369,11 +369,24 @@ check_unsupported_patches() {
  
- 	# Find root-level vmlinux.o and non-root-level .ko files,
--	# excluding klp-tmp/ and .git/
--	find "$OBJ" \( -path "$TMP_DIR" -o -path "$OBJ/.git" -o	-regex "$OBJ/[^/][^/]*\.ko" \) -prune -o \
-+	# excluding klp-tmp/, .git/, and tools/
-+	find "$OBJ" \( -path "$TMP_DIR" -o -path "$OBJ/.git" -o -path "$OBJ/tools" -o -regex "$OBJ/[^/][^/]*\.ko" \) -prune -o \
- 		    -type f "${opts[@]}"				\
- 		    \( -name "*.ko" -o -path "$OBJ/vmlinux.o" \)	\
- 		    -printf '%P\n'
+ apply_patch() {
+ 	local patch="$1"
++	shift
++	local extra_args=("$@")
++	local drift_regex="with fuzz|offset [0-9]+ line"
++	local output
++	local status
+ 
+ 	[[ ! -f "$patch" ]] && die "$patch doesn't exist"
+-	patch -d "$SRC" -p1 --dry-run --silent --no-backup-if-mismatch -r /dev/null < "$patch"
+-	patch -d "$SRC" -p1 --silent --no-backup-if-mismatch -r /dev/null < "$patch"
++	status=0
++	output=$(patch -d "$SRC" -p1 --dry-run --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" < "$patch" 2>&1) || status=$?
++	if [[ "$status" -ne 0 ]]; then
++		echo "$output"
++		die "$patch did not apply"
++	elif [[ "$output" =~ $drift_regex ]]; then
++		warn "$patch applied with drift"
++		echo "$output"
++	fi
+ 
++	patch -d "$SRC" -p1 --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" --silent < "$patch"
+ 	APPLIED_PATCHES+=("$patch")
+ }
+ 
+@@ -392,10 +405,11 @@ revert_patch() {
+ }
+ 
+ apply_patches() {
++	local extra_args=("$@")
+ 	local patch
+ 
+ 	for patch in "${PATCHES[@]}"; do
+-		apply_patch "$patch"
++		apply_patch "$patch" "${extra_args[@]}"
+ 	done
+ }
+ 
+@@ -453,7 +467,7 @@ refresh_patch() {
+ 	( cd "$SRC" && echo "${input_files[@]}" | xargs cp --parents --target-directory="$tmpdir/a" )
+ 
+ 	# Copy patched source files to 'b'
+-	apply_patch "$patch"
++	apply_patch "$patch" "--silent"
+ 	( cd "$SRC" && echo "${output_files[@]}" | xargs cp --parents --target-directory="$tmpdir/b" )
+ 	revert_patch "$patch"
+ 
+@@ -826,7 +840,7 @@ fi
+ if (( SHORT_CIRCUIT <= 2 )); then
+ 	status "Fixing patch(es)"
+ 	fix_patches
+-	apply_patches
++	apply_patches "--silent"
+ 	status "Building patched kernel"
+ 	build_kernel "patched"
+ 	revert_patches
 -- 
 2.53.0
 
