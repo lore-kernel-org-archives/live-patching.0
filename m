@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0CB2EC54C
-	for <live-patching@vger.kernel.org>; Thu, 19 Feb 2026 22:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794DC32B9A0
+	for <live-patching@vger.kernel.org>; Thu, 19 Feb 2026 22:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771539796; cv=none; b=t9Ba+P1D4OGBMUSjYphadTCHknEsnmBhI/mh2s6X8lRT61hvUWBys+pjXwvGDhMqnWBSBePqQ16KI9vh3W9wiBaViePFD5nZo3OidKC6UKUflpO/2ilzgC+xLrZtB55d08dPzCYpVqVCjd8N3b71pwDaRqI5Bv2tJ4YyqYccSSY=
+	t=1771539801; cv=none; b=tj4mV+rE25roloLvY8DCtJXejOEojCJW2UAQdgwtAaHkZIMI+IKzlExRxlZgsx1l255xrUp5Xf5CEg6AjjIBJY05AV5a9QQGi9egsBH+Jf2qTL4hPiBpgCtbYpkzWoge2SO4FUFkVv3ncSHGCfBE910jFef+2K9ziEhQlnGEcGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771539796; c=relaxed/simple;
-	bh=eKr5J9budkSlw7R2Xgj4GlPzCqaaiSuLkblPDVyEOjA=;
+	s=arc-20240116; t=1771539801; c=relaxed/simple;
+	bh=byG8QnDCnvclNUlqBW44pnuOed0W7mucPcg41Zr5Oaw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UyP5dlHkAOMgTPxENCKNW8YD/Ao1BHF+Arz8OfAXWHr/B/dkWQi1nvFi59XAzsqOmh3Ek03+Dl5t+3UQmzUvkFcKK8/Mx7jWTTEeCFCTUKjKSf0reqDwJrlksS97UbZPbycuOoVGljpas+X9VBcPFKVpW7nkMZ6PCzGMjgQH2nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pailzwFX; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=pJedKyytBEOPUj3ZcvMornXDMZtI3gH+Z/NjHaiZzLufbhtJKqQkqjfBi/FgjPsBJWfBt5gNNjKRlrmoYAU6xkAisATC2FEPOfSTgusnRRu5o7Q/QO1RS1MbqQCG4UtNzfaORuPjsBLZjt5nOPuH2j3q7vmUSnWXoGiuAG0Db10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+bYaPJU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pailzwFX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCF6C4CEF7;
-	Thu, 19 Feb 2026 22:23:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+bYaPJU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC36C4CEF7;
+	Thu, 19 Feb 2026 22:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771539795;
-	bh=eKr5J9budkSlw7R2Xgj4GlPzCqaaiSuLkblPDVyEOjA=;
+	s=k20201202; t=1771539801;
+	bh=byG8QnDCnvclNUlqBW44pnuOed0W7mucPcg41Zr5Oaw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pailzwFXb/R69sUAio8RSkLNriy5CmQOB9isCJudkIHdWC491MQRHeovgurV8dRE1
-	 0wi1hyUcm14nxkaLF/ybSOFTZXAsIofDVbGU6Acb45Nhsq9IShJ9ZvHJrdm3+jMGnp
-	 //AZC2FZ1i8STVGjLa/63tLPn//WMEe0EpKXY3vkpiteQ6tUm1L2oD1GP2KxWmxHhe
-	 pTzZvTRjPMvZCc8pigvIbU49UDil6XomDibrDp/0G4qOlkYncsU8b6UFJBz7CQn73F
-	 yHhQrn2eQox/ounu3PLTOxeO89hMSnv6JS5LIsWRaiXTESyshIIT9yHXcJI6BizE43
-	 IMtT0TS1I+wIg==
+	b=F+bYaPJU1F+aJiaX8ur3lyZY8iM/3yEvysxGReFz4bpDUaJa7APC3gYGAcSepTgUO
+	 H0E47JUs7DBsIdWq0jA6JpRW3gvOQC1Y1ujiFQ42NRQHv5qsV8pUgOFH0eiuP7TPWk
+	 grPYovlWAREn2DrwvtBlOYk3R9LMocI/Bi0qmNu+eKTsexvbXp51snlXy9I0mSKIg2
+	 Y6UZKXrBc8IEYmvnJ5AqMwrccVI2Jzd+hlPxS3VLsLBrNjEN3aTfa3Wjg+bWQGJ9C/
+	 hIWYcqFcnrbVsVv3j4EMOQe24lTsuGyvh094ndAhVE18P82KT+RiuAt/xRsfAnAksy
+	 JZweggddidqqQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -35,9 +35,9 @@ Cc: jpoimboe@kernel.org,
 	joe.lawrence@redhat.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 5/8] objtool/klp: Remove .llvm suffix in demangle_name()
-Date: Thu, 19 Feb 2026 14:22:36 -0800
-Message-ID: <20260219222239.3650400-6-song@kernel.org>
+Subject: [PATCH v2 6/8] objtool/klp: Match symbols based on demangled_name for global variables
+Date: Thu, 19 Feb 2026 14:22:37 -0800
+Message-ID: <20260219222239.3650400-7-song@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260219222239.3650400-1-song@kernel.org>
 References: <20260219222239.3650400-1-song@kernel.org>
@@ -49,44 +49,136 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove .llvm suffix, so that we can correlate foo.llvm.<hash 1> and
-foo.llvm.<hash 2>.
+correlate_symbols will always try to match full name first. If there is no
+match, try match only demangled_name.
+
+In very rare cases, it is possible to have multiple foo.llvm.<hash> in
+the same kernel. Whenever there is ambiguity like this, fail the klp diff.
 
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/elf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/objtool/elf.c                 | 13 +++++++
+ tools/objtool/include/objtool/elf.h |  3 ++
+ tools/objtool/klp-diff.c            | 59 +++++++++++++++++++++++++++++
+ 3 files changed, 75 insertions(+)
 
 diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index d66452d66fb4..efb13ec0a89d 100644
+index efb13ec0a89d..5ddbfa8f8701 100644
 --- a/tools/objtool/elf.c
 +++ b/tools/objtool/elf.c
-@@ -455,10 +455,15 @@ static int read_sections(struct elf *elf)
- static ssize_t demangled_name_len(const char *name)
- {
- 	ssize_t len;
-+	const char *p;
+@@ -323,6 +323,19 @@ struct symbol *find_global_symbol_by_name(const struct elf *elf, const char *nam
+ 	return NULL;
+ }
  
- 	if (!strstarts(name, "__UNIQUE_ID_") && !strchr(name, '.'))
- 		return strlen(name);
- 
-+	p = strstr(name, ".llvm.");
-+	if (p)
-+		return p - name;
++void iterate_global_symbol_by_demangled_name(const struct elf *elf,
++					     const char *demangled_name,
++					     void (*process)(struct symbol *sym, void *data),
++					     void *data)
++{
++	struct symbol *sym;
 +
- 	for (len = strlen(name) - 1; len >= 0; len--) {
- 		char c = name[len];
- 
-@@ -482,6 +487,9 @@ static ssize_t demangled_name_len(const char *name)
-  *   __UNIQUE_ID_addressable___UNIQUE_ID_pci_invalid_bar_694_695
-  *
-  * to remove both trailing numbers, also remove trailing '_'.
-+ *
-+ * For symbols with llvm suffix, i.e., foo.llvm.<hash>, remove the
-+ * .llvm.<hash> part.
-  */
- static const char *demangle_name(struct symbol *sym)
++	elf_hash_for_each_possible(symbol_name, sym, name_hash, str_hash(demangled_name)) {
++		if (!strcmp(sym->demangled_name, demangled_name) && !is_local_sym(sym))
++			process(sym, data);
++	}
++}
++
+ struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *sec,
+ 				     unsigned long offset, unsigned int len)
  {
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index e12c516bd320..25573e5af76e 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -186,6 +186,9 @@ struct symbol *find_func_by_offset(struct section *sec, unsigned long offset);
+ struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset);
+ struct symbol *find_symbol_by_name(const struct elf *elf, const char *name);
+ struct symbol *find_global_symbol_by_name(const struct elf *elf, const char *name);
++void iterate_global_symbol_by_demangled_name(const struct elf *elf, const char *demangled_name,
++					     void (*process)(struct symbol *sym, void *data),
++					     void *data);
+ struct symbol *find_symbol_containing(const struct section *sec, unsigned long offset);
+ int find_symbol_hole_containing(const struct section *sec, unsigned long offset);
+ struct reloc *find_reloc_by_dest(const struct elf *elf, struct section *sec, unsigned long offset);
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index 57606bc3390a..147e7e7176fb 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -355,6 +355,46 @@ static bool dont_correlate(struct symbol *sym)
+ 	       strstarts(sym->name, "__initcall__");
+ }
+ 
++struct process_demangled_name_data {
++	struct symbol *ret;
++	int count;
++};
++
++static void process_demangled_name(struct symbol *sym, void *d)
++{
++	struct process_demangled_name_data *data = d;
++
++	if (sym->twin)
++		return;
++
++	data->count++;
++	data->ret = sym;
++}
++
++/*
++ * When there is no full name match, try match demangled_name. This would
++ * match original foo.llvm.123 to patched foo.llvm.456.
++ *
++ * Note that, in very rare cases, it is possible to have multiple
++ * foo.llvm.<hash> in the same kernel. When this happens, report error and
++ * fail the diff.
++ */
++static int find_global_symbol_by_demangled_name(struct elf *elf, struct symbol *sym,
++						struct symbol **out_sym)
++{
++	struct process_demangled_name_data data = {};
++
++	iterate_global_symbol_by_demangled_name(elf, sym->demangled_name,
++						process_demangled_name,
++						&data);
++	if (data.count > 1) {
++		ERROR("Multiple (%d) correlation candidates for %s", data.count, sym->name);
++		return -1;
++	}
++	*out_sym = data.ret;
++	return 0;
++}
++
+ /*
+  * For each symbol in the original kernel, find its corresponding "twin" in the
+  * patched kernel.
+@@ -453,8 +493,27 @@ static int correlate_symbols(struct elfs *e)
+ 			continue;
+ 
+ 		sym2 = find_global_symbol_by_name(e->patched, sym1->name);
++		if (sym2 && !sym2->twin) {
++			sym1->twin = sym2;
++			sym2->twin = sym1;
++		}
++	}
++
++	/*
++	 * Correlate globals with demangled_name.
++	 * A separate loop is needed because we want to finish all the
++	 * full name correlations first.
++	 */
++	for_each_sym(e->orig, sym1) {
++		if (sym1->bind == STB_LOCAL || sym1->twin)
++			continue;
++
++		if (find_global_symbol_by_demangled_name(e->patched, sym1, &sym2))
++			return -1;
+ 
+ 		if (sym2 && !sym2->twin) {
++			WARN("correlate %s (original) to %s (patched)",
++			     sym1->name, sym2->name);
+ 			sym1->twin = sym2;
+ 			sym2->twin = sym1;
+ 		}
 -- 
 2.47.3
 
