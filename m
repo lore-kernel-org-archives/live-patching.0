@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A241280309;
-	Thu,  5 Mar 2026 03:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7E117B425;
+	Thu,  5 Mar 2026 03:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772681510; cv=none; b=PxKwq3z2Zf+RWZ1aoszHpyLsMAZN2GNEgcGfHwnIAhGj3yQzQFT6yUn7fBIY4FnxkTKkKn+OwbRWTiq8SpI6M4gZ1ORkPoh84BSS2PuB1fjDUeIZ6DdgI5w3SAo8SXhENbu6YXtPwlnrIbJ6i67HOgpUfHbtpEigP8rkMIcOYHM=
+	t=1772681511; cv=none; b=ONX0NWIB7CblCelEK2duXqV/4+UQTktHoPlPlNTSW7XLTNTzzrSmGRZ0899S9X8lwK5pK9HXRUlgjL1CZTfi+XUY32wLjbpY20I9AzrTLT/PCxMWVdcRQhfL+sQU31Tq/GkvAaY1PekySD6Qk61LjsG23t/42JBn8IKPksA+dnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772681510; c=relaxed/simple;
-	bh=5NJSqLWQvTCeEjYLw+cyVI09fAwxwdSEOs9zrhOHrJo=;
+	s=arc-20240116; t=1772681511; c=relaxed/simple;
+	bh=VHYVcG46HDcvFMvnPYNK+XTdXj0sPBym+XtZyAEFC2M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yat9/x7Ntb9QVyWztlQ6n969TUZuDAL7je7ZkejiBAz6x/2gTkuEskGfD/zS4X+HZFOx1SjUiHESv4XyQQ6XjNGWiHm/Z4x8LVD+O1iFhHpLxVr6G/RUnCWc6feRWW/uyy1jWmmdJtvfgvs+ngbSrRSfAk+w1FoWijgRFtUYIH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtaioH7Z; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=bReLBVOob81IsDmidl7c1iU85SyI93HAzLkA+nUovDfT7Q42tfcHH0jux0nbG8ZBBL7vhqEq5qk33PNoy3Go2ZcWXfialvi6zUhjATHryX8g25NruO9KK4lD22MI+UmFO8UNpjnXiqc9vIlSe25X3+4jk/mSIieMvoy6Yu44nTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOBegSj4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtaioH7Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE1D8C19422;
-	Thu,  5 Mar 2026 03:31:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOBegSj4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBA4C2BCB1;
+	Thu,  5 Mar 2026 03:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772681509;
-	bh=5NJSqLWQvTCeEjYLw+cyVI09fAwxwdSEOs9zrhOHrJo=;
+	s=k20201202; t=1772681511;
+	bh=VHYVcG46HDcvFMvnPYNK+XTdXj0sPBym+XtZyAEFC2M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QtaioH7ZbYcBhZZK3Jp83z+yQIQU1Phpz2iH8jV+jk6PMMMOhry84JoME+vpEjQ3A
-	 AzxbTlbjEeJrRK+fkuaGKCoU/5ahlSShNuGHdFUC5mBSDjFb+qgfrQtBSPNr0ttWi/
-	 y9kKrz+fYMCZ6i5nn/1EBEVhGd1Tpqo9RtxlMcTu/Kr8Btr25oPRvQbQfFw/vs2LAi
-	 +MA3o6OyUeadSngMuz+CA3wlwdg52krarBeNF0WNDchwSxmYeW+QFutPtVMi4EfD0X
-	 Alm0bIK9chbCzEUHwpn+q0DKpTeZJAaBNdjOkzITqAVZsdws5hNxAcQsTuOQpU8C6+
-	 WTieenc6WUPQQ==
+	b=YOBegSj4bFua+UjhhPwRDV7XNVhh/g3cKxQYIjT6ew5n5CetHZ3r1VPz9EuZCV0Tg
+	 swMjoMoh53oWoDa09zYVhImN91Zp1NCMiEJQrZRqI0Q++rkV9WtrcQtcbwdPTz/jjY
+	 IvPvdLjkNcO6TtKX2LZOOME4Uc9ICEsJcbHX2H8bKve9InN/Qys/3LYRr4Z8keeDb+
+	 YvaE6JwhSE1P/o5t5Ar1CxAnGRUZewumnyrLjtlW/MFNNzk0TuZJb9/XPVbpCYk5bN
+	 +16QWy0tFMJT63+G0nCMqXwQOhKz0uRWj/AGumH4ZQfGoRhnjwY39auhvx7quWclaO
+	 htiUQKywMIsBw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nicolas Schier <nsc@kernel.org>,
 	Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 05/14] arm64: Fix EFI linking with -fdata-sections
-Date: Wed,  4 Mar 2026 19:31:24 -0800
-Message-ID: <f85416e754996eeaaf158143e43eea8a81003849.1772681234.git.jpoimboe@kernel.org>
+Subject: [PATCH 06/14] crypto: arm64: Move data to .rodata
+Date: Wed,  4 Mar 2026 19:31:25 -0800
+Message-ID: <8060fb1dec9eff0927f999389b62957ca9dac675.1772681234.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1772681234.git.jpoimboe@kernel.org>
 References: <cover.1772681234.git.jpoimboe@kernel.org>
@@ -54,28 +54,64 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When building with func-fdata-sections, the .init.bss section gets split
-up into a bunch of .init.bss.<var> sections.  Make sure they get linked
-into .init.data.
+Data embedded in .text pollutes i-cache and confuses objtool and other
+tools that try to disassemble it.  Move it to .rodata.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/kernel/vmlinux.lds.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/crypto/arm64/sha2-armv8.pl | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index ad6133b89e7a..1f5e4f996a21 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -269,7 +269,7 @@ SECTIONS
- 		INIT_CALLS
- 		CON_INITCALL
- 		INIT_RAM_FS
--		*(.init.altinstructions .init.bss)	/* from the EFI stub */
-+		*(.init.altinstructions .init.bss .init.bss.*)	/* from the EFI stub */
- 	}
- 	.exit.data : {
- 		EXIT_DATA
+diff --git a/lib/crypto/arm64/sha2-armv8.pl b/lib/crypto/arm64/sha2-armv8.pl
+index 35ec9ae99fe1..8cd86768bf5c 100644
+--- a/lib/crypto/arm64/sha2-armv8.pl
++++ b/lib/crypto/arm64/sha2-armv8.pl
+@@ -237,7 +237,8 @@ $code.=<<___;
+ 	ldp	$E,$F,[$ctx,#4*$SZ]
+ 	add	$num,$inp,$num,lsl#`log(16*$SZ)/log(2)`	// end of input
+ 	ldp	$G,$H,[$ctx,#6*$SZ]
+-	adr	$Ktbl,.LK$BITS
++	adrp	$Ktbl,.LK$BITS
++	add	$Ktbl,$Ktbl,:lo12:.LK$BITS
+ 	stp	$ctx,$num,[x29,#96]
+ 
+ .Loop:
+@@ -286,6 +287,7 @@ $code.=<<___;
+ 	ret
+ .size	$func,.-$func
+ 
++.pushsection .rodata
+ .align	6
+ .type	.LK$BITS,%object
+ .LK$BITS:
+@@ -365,6 +367,7 @@ $code.=<<___;
+ #endif
+ .asciz	"SHA$BITS block transform for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
+ .align	2
++.popsection
+ ___
+ 
+ if ($SZ==4) {
+@@ -385,7 +388,8 @@ sha256_block_armv8:
+ 	add		x29,sp,#0
+ 
+ 	ld1.32		{$ABCD,$EFGH},[$ctx]
+-	adr		$Ktbl,.LK256
++	adrp		$Ktbl,.LK256
++	add		$Ktbl,$Ktbl,:lo12:.LK256
+ 
+ .Loop_hw:
+ 	ld1		{@MSG[0]-@MSG[3]},[$inp],#64
+@@ -648,7 +652,8 @@ sha256_block_neon:
+ 	mov	x29, sp
+ 	sub	sp,sp,#16*4
+ 
+-	adr	$Ktbl,.LK256
++	adrp	$Ktbl,.LK256
++	add	$Ktbl,$Ktbl,:lo12:.LK256
+ 	add	$num,$inp,$num,lsl#6	// len to point at the end of inp
+ 
+ 	ld1.8	{@X[0]},[$inp], #16
 -- 
 2.53.0
 
