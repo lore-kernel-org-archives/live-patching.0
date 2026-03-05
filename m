@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7E117B425;
-	Thu,  5 Mar 2026 03:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE93283FD8;
+	Thu,  5 Mar 2026 03:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772681511; cv=none; b=ONX0NWIB7CblCelEK2duXqV/4+UQTktHoPlPlNTSW7XLTNTzzrSmGRZ0899S9X8lwK5pK9HXRUlgjL1CZTfi+XUY32wLjbpY20I9AzrTLT/PCxMWVdcRQhfL+sQU31Tq/GkvAaY1PekySD6Qk61LjsG23t/42JBn8IKPksA+dnQ=
+	t=1772681512; cv=none; b=ILky6Lr324/Rw2CczhTQNGive9Rd/7P59aIqda9BP0dSqdwUS5D4k8nUdWBqukd+N8Y8+LwYOeBHufN5MAlhJWiNySjUPX4n87ak8h/SXDpM8q23gWgR7bdF446dEqkavj2ieyxGTy78T/K0HP7v0+KGoF/RoPqmt7HmySUy17k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772681511; c=relaxed/simple;
-	bh=VHYVcG46HDcvFMvnPYNK+XTdXj0sPBym+XtZyAEFC2M=;
+	s=arc-20240116; t=1772681512; c=relaxed/simple;
+	bh=ADXWqrae8tD6YOBhZxjrPHy9oL8O7xj7H69iC9u6dCs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bReLBVOob81IsDmidl7c1iU85SyI93HAzLkA+nUovDfT7Q42tfcHH0jux0nbG8ZBBL7vhqEq5qk33PNoy3Go2ZcWXfialvi6zUhjATHryX8g25NruO9KK4lD22MI+UmFO8UNpjnXiqc9vIlSe25X3+4jk/mSIieMvoy6Yu44nTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOBegSj4; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=g0uT3Q/FUcPh0Y3maxpBK4kRE2w9Wd45IrzZlaQLADcQfJz93/nBtruZHFkIPdXp0v28FsOgu2T1ffrkT1FUy6IhHmmLqgYuNDAbuKkJXarhSm2LmH8RCLaMW8/BH/YZkCEFNUBYytEnLCzddSHys2Rq9Li2xQH41DtI43x3pOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VXogCV+g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOBegSj4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBA4C2BCB1;
-	Thu,  5 Mar 2026 03:31:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VXogCV+g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54063C2BCB9;
+	Thu,  5 Mar 2026 03:31:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772681511;
-	bh=VHYVcG46HDcvFMvnPYNK+XTdXj0sPBym+XtZyAEFC2M=;
+	s=k20201202; t=1772681512;
+	bh=ADXWqrae8tD6YOBhZxjrPHy9oL8O7xj7H69iC9u6dCs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YOBegSj4bFua+UjhhPwRDV7XNVhh/g3cKxQYIjT6ew5n5CetHZ3r1VPz9EuZCV0Tg
-	 swMjoMoh53oWoDa09zYVhImN91Zp1NCMiEJQrZRqI0Q++rkV9WtrcQtcbwdPTz/jjY
-	 IvPvdLjkNcO6TtKX2LZOOME4Uc9ICEsJcbHX2H8bKve9InN/Qys/3LYRr4Z8keeDb+
-	 YvaE6JwhSE1P/o5t5Ar1CxAnGRUZewumnyrLjtlW/MFNNzk0TuZJb9/XPVbpCYk5bN
-	 +16QWy0tFMJT63+G0nCMqXwQOhKz0uRWj/AGumH4ZQfGoRhnjwY39auhvx7quWclaO
-	 htiUQKywMIsBw==
+	b=VXogCV+gsXplNUnHAX0EhrXtvFtCY0kZ9SFnCx7fP6A5vxmNEx9jGVJsc3mEj8HV7
+	 Q8/0fyZvGbxrtjd3qOaNy2DI3LXh467G829vL9GxFozG61ehPOlrjVWtXtO8UCCkfN
+	 aeMqMEJ0tpyPeNdG6ZttiWDu7IHqFprKNNSbBogCoEW/1IHiVyHnmTYcmZztZF/wFc
+	 ZPzPHLg1/SR0VcqEG4/bHVM9dEetv+M5MqQndEGNL/YcR7qhj79N8OF08B3rxBp2AP
+	 Z58qDayQf/42nEfQq3ub66FX1uR6DQd+23buH7qWyoM4xXENIhhsH9X45cxAbKjmOc
+	 TFecJykpOLcbw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nicolas Schier <nsc@kernel.org>,
 	Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 06/14] crypto: arm64: Move data to .rodata
-Date: Wed,  4 Mar 2026 19:31:25 -0800
-Message-ID: <8060fb1dec9eff0927f999389b62957ca9dac675.1772681234.git.jpoimboe@kernel.org>
+Subject: [PATCH 07/14] objtool: Extricate checksum calculation from validate_branch()
+Date: Wed,  4 Mar 2026 19:31:26 -0800
+Message-ID: <7a1e22454a3fd1d968775c24aa0529a4ec7c5886.1772681234.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1772681234.git.jpoimboe@kernel.org>
 References: <cover.1772681234.git.jpoimboe@kernel.org>
@@ -54,64 +54,189 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Data embedded in .text pollutes i-cache and confuses objtool and other
-tools that try to disassemble it.  Move it to .rodata.
+In preparation for porting the checksum code to other arches, make its
+functionality independent from validate_branch().
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- lib/crypto/arm64/sha2-armv8.pl | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ tools/objtool/check.c                    | 71 +++++++++++++++++-------
+ tools/objtool/include/objtool/checksum.h |  6 +-
+ 2 files changed, 53 insertions(+), 24 deletions(-)
 
-diff --git a/lib/crypto/arm64/sha2-armv8.pl b/lib/crypto/arm64/sha2-armv8.pl
-index 35ec9ae99fe1..8cd86768bf5c 100644
---- a/lib/crypto/arm64/sha2-armv8.pl
-+++ b/lib/crypto/arm64/sha2-armv8.pl
-@@ -237,7 +237,8 @@ $code.=<<___;
- 	ldp	$E,$F,[$ctx,#4*$SZ]
- 	add	$num,$inp,$num,lsl#`log(16*$SZ)/log(2)`	// end of input
- 	ldp	$G,$H,[$ctx,#6*$SZ]
--	adr	$Ktbl,.LK$BITS
-+	adrp	$Ktbl,.LK$BITS
-+	add	$Ktbl,$Ktbl,:lo12:.LK$BITS
- 	stp	$ctx,$num,[x29,#96]
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index a30379e4ff97..f73cf1382e5c 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2633,8 +2633,7 @@ static bool validate_branch_enabled(void)
+ {
+ 	return opts.stackval ||
+ 	       opts.orc ||
+-	       opts.uaccess ||
+-	       opts.checksum;
++	       opts.uaccess;
+ }
  
- .Loop:
-@@ -286,6 +287,7 @@ $code.=<<___;
- 	ret
- .size	$func,.-$func
+ static int decode_sections(struct objtool_file *file)
+@@ -3649,6 +3648,7 @@ static bool skip_alt_group(struct instruction *insn)
+ 	return alt_insn->type == INSN_CLAC || alt_insn->type == INSN_STAC;
+ }
  
-+.pushsection .rodata
- .align	6
- .type	.LK$BITS,%object
- .LK$BITS:
-@@ -365,6 +367,7 @@ $code.=<<___;
- #endif
- .asciz	"SHA$BITS block transform for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
- .align	2
-+.popsection
- ___
++#ifdef BUILD_KLP
+ static int checksum_debug_init(struct objtool_file *file)
+ {
+ 	char *dup, *s;
+@@ -3691,9 +3691,30 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 				 struct instruction *insn)
+ {
+ 	struct reloc *reloc = insn_reloc(file, insn);
++	struct alternative *alt;
+ 	unsigned long offset;
+ 	struct symbol *sym;
  
- if ($SZ==4) {
-@@ -385,7 +388,8 @@ sha256_block_armv8:
- 	add		x29,sp,#0
++	for (alt = insn->alts; alt; alt = alt->next) {
++		struct alt_group *alt_group = alt->insn->alt_group;
++
++		checksum_update(func, insn, &alt->type, sizeof(alt->type));
++
++		if (alt_group && alt_group->orig_group) {
++			struct instruction *alt_insn;
++
++			checksum_update(func, insn, &alt_group->feature, sizeof(alt_group->feature));
++
++			for (alt_insn = alt->insn; alt_insn; alt_insn = next_insn_same_sec(file, alt_insn)) {
++				checksum_update_insn(file, func, alt_insn);
++				if (alt_insn == alt_group->last_insn)
++					break;
++			}
++		} else {
++			checksum_update(func, insn, &alt->insn->offset, sizeof(alt->insn->offset));
++		}
++	}
++
+ 	if (insn->fake)
+ 		return;
  
- 	ld1.32		{$ABCD,$EFGH},[$ctx]
--	adr		$Ktbl,.LK256
-+	adrp		$Ktbl,.LK256
-+	add		$Ktbl,$Ktbl,:lo12:.LK256
+@@ -3702,9 +3723,11 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 	if (!reloc) {
+ 		struct symbol *call_dest = insn_call_dest(insn);
  
- .Loop_hw:
- 	ld1		{@MSG[0]-@MSG[3]},[$inp],#64
-@@ -648,7 +652,8 @@ sha256_block_neon:
- 	mov	x29, sp
- 	sub	sp,sp,#16*4
+-		if (call_dest)
++		if (call_dest) {
++			/* intra-TU call without reloc */
+ 			checksum_update(func, insn, call_dest->demangled_name,
+ 					strlen(call_dest->demangled_name));
++		}
+ 		return;
+ 	}
  
--	adr	$Ktbl,.LK256
-+	adrp	$Ktbl,.LK256
-+	add	$Ktbl,$Ktbl,:lo12:.LK256
- 	add	$num,$inp,$num,lsl#6	// len to point at the end of inp
+@@ -3731,6 +3754,29 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 	checksum_update(func, insn, &offset, sizeof(offset));
+ }
  
- 	ld1.8	{@X[0]},[$inp], #16
++static int calculate_checksums(struct objtool_file *file)
++{
++	struct instruction *insn;
++	struct symbol *func;
++
++	if (checksum_debug_init(file))
++		return -1;
++
++	for_each_sym(file->elf, func) {
++		if (!is_func_sym(func))
++			continue;
++
++		checksum_init(func);
++
++		func_for_each_insn(file, func, insn)
++			checksum_update_insn(file, func, insn);
++
++		checksum_finish(func);
++	}
++	return 0;
++}
++#endif /* BUILD_KLP */
++
+ static int validate_branch(struct objtool_file *file, struct symbol *func,
+ 			   struct instruction *insn, struct insn_state state);
+ static int do_validate_branch(struct objtool_file *file, struct symbol *func,
+@@ -4012,9 +4058,6 @@ static int do_validate_branch(struct objtool_file *file, struct symbol *func,
+ 		insn->trace = 0;
+ 		next_insn = next_insn_to_validate(file, insn);
+ 
+-		if (opts.checksum && func && insn->sec)
+-			checksum_update_insn(file, func, insn);
+-
+ 		if (func && insn_func(insn) && func != insn_func(insn)->pfunc) {
+ 			/* Ignore KCFI type preambles, which always fall through */
+ 			if (is_prefix_func(func))
+@@ -4080,9 +4123,6 @@ static int validate_unwind_hint(struct objtool_file *file,
+ 		struct symbol *func = insn_func(insn);
+ 		int ret;
+ 
+-		if (opts.checksum)
+-			checksum_init(func);
+-
+ 		ret = validate_branch(file, func, insn, *state);
+ 		if (ret)
+ 			BT_INSN(insn, "<=== (hint)");
+@@ -4525,9 +4565,6 @@ static int validate_symbol(struct objtool_file *file, struct section *sec,
+ 
+ 	func = insn_func(insn);
+ 
+-	if (opts.checksum)
+-		checksum_init(func);
+-
+ 	if (opts.trace && !fnmatch(opts.trace, sym->name, 0)) {
+ 		trace_enable();
+ 		TRACE("%s: validation begin\n", sym->name);
+@@ -4540,9 +4577,6 @@ static int validate_symbol(struct objtool_file *file, struct section *sec,
+ 	TRACE("%s: validation %s\n\n", sym->name, ret ? "failed" : "end");
+ 	trace_disable();
+ 
+-	if (opts.checksum)
+-		checksum_finish(func);
+-
+ 	return ret;
+ }
+ 
+@@ -4997,10 +5031,6 @@ int check(struct objtool_file *file)
+ 	cfi_hash_add(&init_cfi);
+ 	cfi_hash_add(&func_cfi);
+ 
+-	ret = checksum_debug_init(file);
+-	if (ret)
+-		goto out;
+-
+ 	ret = decode_sections(file);
+ 	if (ret)
+ 		goto out;
+@@ -5091,6 +5121,9 @@ int check(struct objtool_file *file)
+ 		warnings += check_abs_references(file);
+ 
+ 	if (opts.checksum) {
++		ret = calculate_checksums(file);
++		if (ret)
++			goto out;
+ 		ret = create_sym_checksum_section(file);
+ 		if (ret)
+ 			goto out;
+diff --git a/tools/objtool/include/objtool/checksum.h b/tools/objtool/include/objtool/checksum.h
+index 7fe21608722a..36a17688c716 100644
+--- a/tools/objtool/include/objtool/checksum.h
++++ b/tools/objtool/include/objtool/checksum.h
+@@ -32,11 +32,7 @@ static inline void checksum_finish(struct symbol *func)
+ 
+ #else /* !BUILD_KLP */
+ 
+-static inline void checksum_init(struct symbol *func) {}
+-static inline void checksum_update(struct symbol *func,
+-				   struct instruction *insn,
+-				   const void *data, size_t size) {}
+-static inline void checksum_finish(struct symbol *func) {}
++static inline int calculate_checksums(struct objtool_file *file) { return -ENOSYS; }
+ 
+ #endif /* !BUILD_KLP */
+ 
 -- 
 2.53.0
 
