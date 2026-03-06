@@ -1,39 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862C83115AF
-	for <live-patching@vger.kernel.org>; Fri,  6 Mar 2026 16:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C6C33BBAD;
+	Fri,  6 Mar 2026 18:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772813367; cv=none; b=u0CKxsT1iMlvx46rjDeHbWu/O9ljkZmn78hwIc8NIjDOzFHkijPEK1tzmNrq/8VQMWxcnR4+mA8dFCTT2tmyR+7fYC/kaTOINGAiecd44pqJEFCm08EenkwJLu9E0qGw/AJLzl7012tMK3602KB/ZuDakz6sAvjFOwba/IXXqu0=
+	t=1772821956; cv=none; b=U7G90Ky2O6JgO91qXwPMTj3WlQtkvpltrOO7n/szI80xq9+Qp66c3r17y2jhPtHhh4Kp1fA9LD5vVOylVS34T/12tDdCoWVpIIpnitOSb9iEX4sOPyxlYZJKD+985isahPFlFeK00Ww7AKwq0GKpxYYPYqtMYx1hLTRor2NHAIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772813367; c=relaxed/simple;
-	bh=jkJMgauDX1t19dAN3PhNCeHQj3PQivjP8ilh4ArcwfM=;
+	s=arc-20240116; t=1772821956; c=relaxed/simple;
+	bh=zIFjbZzFGH8xleoElScILSUjUJP7/AN816fjOoAle6k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PC824O650Clq76Sb9s5szDEQSLeup4RS+D00wpc6IaEl5or5K90Z4gT+c324SRToURtOcubXrSGlLMsHMOaiaS6iifMnWiPIh2PH5dfJIz4MlI5ME9zYe/UuCAVlTLHkGF1QN6jOeDAua99Ixv46hvPemBOoQqsHPB8MKFasC9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5/i+Yro; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tPelWz+HIgZ9gHVLzLOzUf7vK7qE9xp8AymJej6lPwkv3DyySme/8Iu9ONb6EB+dneuevbV6U3wr7d0MlRT+4kyHNn0KpuY7AKeK6QmX5LtEQkbQxQNcIUSPwEmuTUJ4hp6QW67gSKI+GgjUoMFFpnGRuBoWBW7o3TX4lSEblDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s3r/Gpk4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5/i+Yro"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F417CC4CEF7;
-	Fri,  6 Mar 2026 16:09:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s3r/Gpk4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2E5C4CEF7;
+	Fri,  6 Mar 2026 18:32:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772813367;
-	bh=jkJMgauDX1t19dAN3PhNCeHQj3PQivjP8ilh4ArcwfM=;
+	s=k20201202; t=1772821956;
+	bh=zIFjbZzFGH8xleoElScILSUjUJP7/AN816fjOoAle6k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z5/i+YrotTWDUZo4o2gHMgDzg28xIvoKCXP8F4eIlDOjU3Jajm2vnlC9G+xlD2XRt
-	 RhvLonJvIfZjsz1Ekwlnxc0MgLY/jT5PhduK5aheSyEmcto7k+RDJ1BhaCJymp/h5P
-	 cVf9qCN2KK2rDH15Eydxko2cghQ7p0A3ajLGqVlVV480wPk0+j9htsxG0ANceRoOJH
-	 B6sMkTcM6inY7+xMIt89bDph53bTrc1uLr/cAKmkAUrrMJEV3PIGlnvbTz0xzcBZQR
-	 mR3KYbPmTRZykhmBuEPjhXCf5CNM6m8FGWkuoUSxZsqy8VI4x5vFFZgNtgVOE4256b
-	 i9pzVNCKFfAEA==
-Date: Fri, 6 Mar 2026 08:09:25 -0800
+	b=s3r/Gpk41MIV+EO8J7NYTIvDd469saPvgdSXxmt0P39U7uSrbiVRcGkqOmx8VEGUD
+	 rVv3FXDeqmSx7kTRixzElRuA4aN7U55ssoyhgeyyM9SgguQD7RMrBU22IK/QM7v59e
+	 kfR+bgv9MSHlpksBW+BvgZDYJ852rSHEoj7A7xbBrCYJPv6LBUt37rBp8wcSX0EUAA
+	 GvZvHfliZl5Ekpk0E96g+uBkuZ9D+7HHui6UUYSZKxnzM6NyiRR3SwkIlUQ1FjRIev
+	 AZOI6TRMGJ2rUN/DxADVK27AYUcQPSWGgKlf/iInMENFyf1gmO+tTpNTbr3ViXAViA
+	 QSQzsOMdsw2Rg==
+Date: Fri, 6 Mar 2026 10:32:33 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: live-patching@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	pmladek@suse.com, joe.lawrence@redhat.com, kernel-team@meta.com
-Subject: Re: [PATCH v4 0/7] objtool/klp: klp-build LTO support
-Message-ID: <kgfsbith6oibrvgytcnncg2zyrxfa6wc3ltpqulyrk2633oetp@wrkqqifhesxn>
-References: <20260305231531.3847295-1-song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: linux-kbuild@vger.kernel.org, live-patching@vger.kernel.org, 
+	kernel-team@fb.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH kbuild] kbuild: Allow to reduce the number of suffixes
+ for clang thin-lto build
+Message-ID: <pat2b5nibiik6nua6ls7cu7eqy5qgrugo4gnel32bz6vpcrmz3@f7ynsbvnxcaj>
+References: <20260306034325.3605301-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -42,49 +44,98 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260305231531.3847295-1-song@kernel.org>
+In-Reply-To: <20260306034325.3605301-1-yonghong.song@linux.dev>
 
-On Thu, Mar 05, 2026 at 03:15:24PM -0800, Song Liu wrote:
-> Add support for LTO in klp-build toolchain. The key changes are to the
-> symbol correlation logic.Basically, we want to:
+On Thu, Mar 05, 2026 at 07:43:25PM -0800, Yonghong Song wrote:
+> The current clang thin-lto build often produces lots of symbols with
+> suffix. The following is a partial list of such function call symbols:
+>     ...
+>     ethnl_module_fw_flash_ntf.llvm.7631589765585346066
+>     __nf_conntrack_alloc.llvm.6438426151906658917
+>     tcp_can_early_drop.llvm.11937612064648250727
+>     tcp_print_conntrack.llvm.11937612064648250727
+>     ...
 > 
-> 1. Match symbols with differerent .llvm.<hash> suffixes, e.g., foo.llvm.123
->    to foo.llvm.456.
-> 2. Match local symbols with promoted global symbols, e.g., local foo
->    with global foo.llvm.123.
+> In my particular build with current bpf-next, the number of '*.llvm.<hash>'
+> function calls is 1212. Such symbols make kernel live patching
+> difficult since
+>   - a minor code change will change the hash and then the '*.llvm.<hash>'
+>     symbol becomes another one with a different hash or no hash, and
+>   - a previous source-level symbol may become an one with suffix after live
+>     patching code.
 > 
-> 1/7 and 2/7 are small cleanup/fix for existing code.
-> 3/7 through 7/7 contains the core logic changes to correlate_symbols().
+> In [1], Song Liu suggested to reduce the number of '*.llvm.<hash>' functions
+> to make live patch easier. In respond of this, I implemented this
+> in llvm ([2]). The same thin-lto build with [2] only has two symbols with
+> suffix:
+>     m_stop.llvm.14460341347352036579
+>     m_next.llvm.14460341347352036579
+> This should make live patch much easier.
 > 
-> Changes v3 => v4:
-> 1. Minor fixes in patches 1, 3, 7.
-> 2. Only keep patches 1-7 for now, as there is ongoing discussion about the
->    test infrastructure.
+> To support suffix symbol reduction, a new config
+>     LTO_CLANG_THIN_SUFFIX_REDUCTION
+> is introduced and the config depends on thin-lto and llvm23 or higher.
 > 
-> Changes v2 => v3:
-> 1. Fix a bug in global => local correlations (patch 7/8).
-> 2. Remove a WARN().
-> 3. Some empty line changes.
+> Two lld flags are necessary to enable this feature in kernel:
+>     - Flag '--lto-whole-program-visibility' is needed as it ensures that all
+>       modules are available in the same process, which is true for kernel at
+>       thin-lto lld.
+>     - Flag '-mllvm -always-rename-promoted-locals=false' is needed to enable
+>       suffix reduction. Currently in llvm [1], only process mode is supported.
+>       There is another distributed mode (across different processes or even
+>       different machines) which is not supported yet ([2]).
 > 
-> Changes v1 => v2:
-> 1. Error out on ambiguous .llvm.<hash>
+>   [1] https://lpc.events/event/19/contributions/2212
+>   [2] https://github.com/llvm/llvm-project/pull/178587
 > 
-> Song Liu (7):
->   objtool/klp: Remove redundant strcmp() in correlate_symbols()
->   objtool/klp: Remove trailing '_' in demangle_name()
->   objtool/klp: Use sym->demangled_name for symbol_name hash
->   objtool/klp: Also demangle global objects
->   objtool/klp: Remove .llvm suffix in demangle_name()
->   objtool/klp: Match symbols based on demangled_name for global
->     variables
->   objtool/klp: Correlate locals to globals
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>  Makefile     |  3 +++
+>  arch/Kconfig | 15 +++++++++++++++
+>  2 files changed, 18 insertions(+)
 > 
->  tools/objtool/elf.c                 | 95 ++++++++++++++++++++++-------
->  tools/objtool/include/objtool/elf.h |  3 +
->  tools/objtool/klp-diff.c            | 89 ++++++++++++++++++++++++++-
->  3 files changed, 165 insertions(+), 22 deletions(-)
+> diff --git a/Makefile b/Makefile
+> index e944c6e71e81..9d6033595615 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1034,6 +1034,9 @@ endif
+>  ifdef CONFIG_LTO_CLANG
+>  ifdef CONFIG_LTO_CLANG_THIN
+>  CC_FLAGS_LTO	:= -flto=thin -fsplit-lto-unit
+> +ifdef CONFIG_LTO_CLANG_THIN_SUFFIX_REDUCTION
+> +KBUILD_LDFLAGS += --lto-whole-program-visibility -mllvm -always-rename-promoted-locals=false
+> +endif
+>  else
+>  CC_FLAGS_LTO	:= -flto
+>  endif
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 102ddbd4298e..e1db64a3284e 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -861,8 +861,23 @@ config LTO_CLANG_THIN
+>  	    https://clang.llvm.org/docs/ThinLTO.html
+>  
+>  	  If unsure, say Y.
+> +
+>  endchoice
+>  
+> +config LTO_CLANG_THIN_SUFFIX_REDUCTION
+> +	bool "Clang ThinLTO Suffix Reduction (EXPERIMENTAL)"
+> +	depends on LTO_CLANG_THIN
+> +	depends on CLANG_VERSION >= 230000
+> +	default y
+> +	help
+> +	  This option allows to reduce the number of symbols with
+> +	  '.llvm.<hash' suffixes. This can help KLP (kernel living
+> +	  patch) as symbol name can stay stable in most cases.
+> +
+> +	  See https://github.com/llvm/llvm-project/pull/178587
+> +
+> +	  If unsure, say N.
+> +
 
-Thanks!  I will go ahead and queue these up.
+Thanks!  Would there be any downsides to enabling this feature
+unconditionally in the kernel when the compiler supports it?
 
 -- 
 Josh
