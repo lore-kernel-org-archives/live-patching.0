@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1143A3CA487
-	for <live-patching@vger.kernel.org>; Tue, 10 Mar 2026 20:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5573CA491
+	for <live-patching@vger.kernel.org>; Tue, 10 Mar 2026 20:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773175097; cv=none; b=nCzFwMhbj1FtQbbNKNhy3uqlNhwOFRKyoZ2me2+9gKlwmNOK2e86lYLXgZ/nhgf9m7utcuxZJ8duoBT9wnMhb6YB0ckhBum8Zj7NS1kPLUWMjwkQc2PYCREyD9dypT2Wkb4k0wAMlmHfNwwU/VaMOI+af3EuG5JXj5a4VOaT6VA=
+	t=1773175097; cv=none; b=NKHErGZSJyMeBYZwqJtH2u5QcUf2JgTt6YQBxw44r/aZ1Co6Xb+hsr8+mhhb5YL3LYm2xR5cn8Bn6rtiolL+ie1qfCLFFLfjnD3bhUhNNOwp8aa6kX4JLklXOfJO5hhVg/T4ZAf2aRRTFS0bfi8mUslMEHksy+sqNG7veV/6EWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1773175097; c=relaxed/simple;
-	bh=QQ2fwq4lBAmbrwcBC8jptzFkJV9t3psUTv33R6+wgfQ=;
+	bh=flJPCvN1hLj/R5qaGWn+SyqhionmWqzlBsMee658j7s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=ciVd9xbkj87BRcurTLgtvjqOX0cjyiQRUa98lFTk3I1iiVbt401tzZN80xJD/c4NAhyrdYEgqg/bbosQwksDyeiEWCJhm4OuCM4OrrXjvXPR5KgUGVLpwj/mEGiTKfV9HS98kloxJpLKz1pMU+TMR6qJOvI1n8mJlw/5CwLfV78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cMyAVbhO; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-type; b=h4T2C5V4aF+VKtNEUFpdeMjxU7Csh++3+h6GLfz/wHgLvipzBSy6nrE8Q2LucSvlatX81wjNiQ2sEIB/AlPwxGkQYO15JN7ThA9oytAEENLrm1BP/NLy581QMajOeVfA5MJStflFvdfu3rntG3gW+MffCEQmMHY/2srg5k4++Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hEF12eIe; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cMyAVbhO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hEF12eIe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1773175095;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DjCIN/azMEvTV9V44oEUDGxr4gmcM10BkklrAB7gRyc=;
-	b=cMyAVbhOSAy9mP0tAAQi+QuwUzttSoZGGcSpuv3QOKc0mFSfNjqNgSNx01+hnpEQjzeYcN
-	mMoVoM/+xuMDQm2fibwFGjebSS6o3JuBHclCeGvISe30dUaRmyiTn449q661lJMmeJDx1b
-	1UkzCIzuHleknQnxojMrpPwz6tZ/PF4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+	bh=fP2witCR/uO9oX6V/z1+MkU1OAds2owMEli1JKZTD8c=;
+	b=hEF12eIeLncQGakKpQJeWcmbxotpm9EZU8hOfQ0zQ3VPqe7Yk18cH0WgDmYUv4GvWjsF+2
+	0/xyjlGEklKrNUjjqEfp+8eTFNdjEzKqoj43wsBaYVbUD3SfSkRLKV1fzWKdiNceefX0EX
+	1MBFsXJVnGpXvdCm5RZeu7i2QJH2YgA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-534-vM1SZwLnO5ur_MT4T_MbJw-1; Tue,
- 10 Mar 2026 16:38:12 -0400
-X-MC-Unique: vM1SZwLnO5ur_MT4T_MbJw-1
-X-Mimecast-MFC-AGG-ID: vM1SZwLnO5ur_MT4T_MbJw_1773175091
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-353-NcITvrj6PMq5-lDdV9wa7w-1; Tue,
+ 10 Mar 2026 16:38:11 -0400
+X-MC-Unique: NcITvrj6PMq5-lDdV9wa7w-1
+X-Mimecast-MFC-AGG-ID: NcITvrj6PMq5-lDdV9wa7w_1773175089
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4A2D01800359;
-	Tue, 10 Mar 2026 20:38:11 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.5])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B81B319560A6;
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6F20218005B8;
 	Tue, 10 Mar 2026 20:38:09 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.5])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0532319560A6;
+	Tue, 10 Mar 2026 20:38:07 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Jiri Kosina <jikos@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v4 09/12] livepatch/klp-build: Fix inconsistent kernel version
-Date: Tue, 10 Mar 2026 16:37:48 -0400
-Message-ID: <20260310203751.1479229-10-joe.lawrence@redhat.com>
+Subject: [PATCH v4 08/12] livepatch/klp-build: improve short-circuit validation
+Date: Tue, 10 Mar 2026 16:37:47 -0400
+Message-ID: <20260310203751.1479229-9-joe.lawrence@redhat.com>
 In-Reply-To: <20260310203751.1479229-1-joe.lawrence@redhat.com>
 References: <20260310203751.1479229-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -64,47 +64,49 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+Update SHORT_CIRCUIT behavior to better handle patch validation and
+argument processing in later klp-build steps.
 
-If .config hasn't been synced with auto.conf, any recent changes to
-CONFIG_LOCALVERSION* may not get reflected in the kernel version name.
+Perform patch validation for both step 1 (building original kernel) and
+step 2 (building patched kernel) to ensure patches are verified before
+any compilation occurs.
 
-Use "make syncconfig" to force them to sync, and "make -s kernelrelease"
-to get the version instead of having to construct it manually.
+Additionally, allow the user to omit input patches when skipping past
+step 2.
 
-Fixes: 24ebfcd65a87 ("livepatch/klp-build: Introduce klp-build script for generating livepatch modules")
-Closes: https://lore.kernel.org/20260217160645.3434685-10-joe.lawrence@redhat.com
-Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com> [add -s to make kernelrelease]
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- scripts/livepatch/klp-build | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ scripts/livepatch/klp-build | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 60c7635e65c1..7f4041a0eefb 100755
+index 374e1261fd7a..60c7635e65c1 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -293,15 +293,14 @@ set_module_name() {
- # application from appending it with '+' due to a dirty working tree.
- set_kernelversion() {
- 	local file="$SRC/scripts/setlocalversion"
--	local localversion
-+	local kernelrelease
+@@ -220,7 +220,7 @@ process_args() {
+ 		esac
+ 	done
  
- 	stash_file "$file"
+-	if [[ $# -eq 0 ]]; then
++	if [[ $# -eq 0 ]] && (( SHORT_CIRCUIT <= 2 )); then
+ 		usage
+ 		exit 1
+ 	fi
+@@ -791,9 +791,12 @@ build_patch_module() {
+ process_args "$@"
+ do_init
  
--	localversion="$(cd "$SRC" && make --no-print-directory kernelversion)"
--	localversion="$(cd "$SRC" && KERNELVERSION="$localversion" ./scripts/setlocalversion)"
--	[[ -z "$localversion" ]] && die "setlocalversion failed"
-+	kernelrelease="$(cd "$SRC" && make syncconfig &>/dev/null && make -s kernelrelease)"
-+	[[ -z "$kernelrelease" ]] && die "failed to get kernel version"
- 
--	sed -i "2i echo $localversion; exit 0" scripts/setlocalversion
-+	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
- }
- 
- get_patch_input_files() {
+-if (( SHORT_CIRCUIT <= 1 )); then
++if (( SHORT_CIRCUIT <= 2 )); then
+ 	status "Validating patch(es)"
+ 	validate_patches
++fi
++
++if (( SHORT_CIRCUIT <= 1 )); then
+ 	status "Building original kernel"
+ 	clean_kernel
+ 	build_kernel
 -- 
 2.53.0
 
