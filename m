@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060D8375AA9
-	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 23:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6AD377542
+	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 23:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773270824; cv=none; b=mgkET/QmG24yvsvxCDyzV2RgVCigvlywB/R7iVwD0Doi/5l3549LlGXKb4y/ovoKChbwsdoJkvZmXqtAYRm2PIDs9ST1OMSyIv+lGDn6KYSjdiFF/FUgl5KOaHAnU4G3QqC61TQQ9ZdZyqFV7i49+wb/u58xYkKikvz+9DsmRg4=
+	t=1773270862; cv=none; b=iex8OgtAd0SlKumn23t2ub1rP66LYlSvqQ6WPfZ9EqjN6uQ6ty5XIKWXQ1v1TU6L/2it9BcegThiANlrihz3jrC6fHr8TQiwUgOHGuSrloY2It2uMEQ3TMB4RmmpdkNMtu1KfxRMjsKwn3ZbzqkUjbdEEIe1I5o/lUMhwPSkMqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773270824; c=relaxed/simple;
-	bh=+fnd8GyqNif8heEveaiUaU5hVAJSMaWTWNUQxsBz62E=;
+	s=arc-20240116; t=1773270862; c=relaxed/simple;
+	bh=xjrAc3qmId1a2v9e00uKv43/2Twl2eGTpfjvSlvf8go=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kxdI3Wc4ad+pOKouUaowsrFF2LwX75ORfvKFP1Esp0tgVuzzVVT9S5T8ejGbuufBTebxxyL4v1vSKIsfx/fbUtuJNAVuaC+k54/rX0BDl3hBikQ5o5BPHGZt5z6voC34ntX1ETOO4cyb96I4RmbeNRpc3wiIiHGS6gBOFvdHz58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aNd3/ivz; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=hAHPNKpmLARV/QLocN5Ns1L+0P1LOcSHaYosWdMoZKcEBX+78eGHyTlgr5M5Uqic1Ym3kokwbUjuHW+sUcR+cVjRuzEPCh1BRc8BS8eSJx0bzHmQIEwRS5XNu2X/meE3FmRSk9xszjN3im0Z3IZHpPkb6ysX5GmmF0Cnc5SX4do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwKwXLr+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNd3/ivz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B99C4AF0E
-	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 23:13:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwKwXLr+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E26BBC4AF09
+	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 23:14:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773270823;
-	bh=+fnd8GyqNif8heEveaiUaU5hVAJSMaWTWNUQxsBz62E=;
+	s=k20201202; t=1773270861;
+	bh=xjrAc3qmId1a2v9e00uKv43/2Twl2eGTpfjvSlvf8go=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aNd3/ivzSpKsXILkEa6pWkM9T+0ceORI8IsbXSsjpjnU7YGIzeXaBUyw7vP1GVGBP
-	 a9Yiynl9793uKXoFNGHbJWMDXpE8X0Fa7bUakWm0FpaanPmDjs3+Ole7tHrhBdxcuQ
-	 NNtd0zRO/xhNsjcXYaO3Bp262jt+GBkQ2hGQ6a3CKDqwIq8onKaLfEWdSSQ1Nk/+Ix
-	 Rvg+UgshtP/CDNnwbY7KW1Zei/DjmFo/pnc68MNBG4ME/HOkQL2sG2x+qu7mcmdDbd
-	 4aFcUCH46+7k0ZeX8E/v6swA1332LaFxxePjkInLfV+/nQYs/EGNnY7oV8UlhGgD3I
-	 uoCsq5b8CRCMA==
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-89a1c6dd788so6868646d6.0
-        for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 16:13:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU5PjDxPcwSSjO2d/fx5o8qZlKI3ra9GCLUYUAxgURAMHqYe5TcukD6ilJ0KZ2IKqgJHYhjB02+q8VQr9GM@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaBjwo8YrjoTkXe7ZshP/ZWszf+IE6QPyzmRgXQGdSg+HK7VVW
-	lWgwEyDipM79RClyqh28GEFJd+edEE6jDCRslnwpNoTQq/HK5eiS6fxxr0XQrm+CFOhP76riNcs
-	SQHKn82QCMpBy3yH/+ptdX54DLt196EE=
-X-Received: by 2002:a05:6214:2483:b0:894:6b9e:253e with SMTP id
- 6a1803df08f44-89a66b60bf3mr61486446d6.52.1773270822999; Wed, 11 Mar 2026
- 16:13:42 -0700 (PDT)
+	b=XwKwXLr+68Bkt2J0nDWHpAD2Gm506XyOlKJEfbrXqs6AlhVJ+M+6Cz2VT9fd/Wq/X
+	 03t9uYksFdQZyAqVdyJRx2aDhpL2gzEckiPeQyHT6nbOb5UySp0Ee1c6zuOoe5HMYd
+	 Ni1xjaQ1Xe2cOjhsOhHtsxr94dste5XooGrGykMKARPCvwaD/UVWzNuzZhwkyt2pbu
+	 FdW0N0oPPpCntzY9cJuIcBXEOiza7f+OWV/kHxMy6d3118PQ6S5EVhyQV/SFBZXj2k
+	 ABif4Xrc2ktcZ4lXDqjyQuxkuI0JS/u8ZIbkV39ojxyRo36br2FlBW7T9U+gJFj77V
+	 dcFBWZ5bBGp+Q==
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-899fc265126so4602816d6.1
+        for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 16:14:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUyPnsbEy1p5MDr8/irOPfXijr9QmZ4CHv6So42spkWqqBOty7tGkEkdRl/KejStjWjxnC0rOkZ2fhoBaAN@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBIpEeMoHBVoH1E3oceENFXKjKFop1590rKtc92mlru08lwEFG
+	CdWJcXdD23oN8JtVab1Sg/TsI/Hmuplm/zcUcbNykSIxkQLAdH086TMQlEaHrZMKugiYsSI9Sih
+	oO3McwWPRKc/AXE2mzxUEaDDdipMkjsI=
+X-Received: by 2002:a05:6214:d8c:b0:89a:4e3:aa3a with SMTP id
+ 6a1803df08f44-89a66a14d4cmr62957826d6.28.1773270861124; Wed, 11 Mar 2026
+ 16:14:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1772681234.git.jpoimboe@kernel.org> <696aeb326a797e97b87c7657b5b3d0ada958cc5f.1772681234.git.jpoimboe@kernel.org>
-In-Reply-To: <696aeb326a797e97b87c7657b5b3d0ada958cc5f.1772681234.git.jpoimboe@kernel.org>
+References: <cover.1772681234.git.jpoimboe@kernel.org> <1af3deb308fd59086b63690c1e7b53586ba3c5e7.1772681234.git.jpoimboe@kernel.org>
+In-Reply-To: <1af3deb308fd59086b63690c1e7b53586ba3c5e7.1772681234.git.jpoimboe@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Wed, 11 Mar 2026 16:13:31 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW52kX13KuQqHuq9CReksaV=GTMPoSB3PU8ZOfU-Quo88g@mail.gmail.com>
-X-Gm-Features: AaiRm508Or0sfnUqrHy7DAM78r2-dTNuvOfnqws0FNtwIKi1zmJ50NKIsPn7YHc
-Message-ID: <CAPhsuW52kX13KuQqHuq9CReksaV=GTMPoSB3PU8ZOfU-Quo88g@mail.gmail.com>
-Subject: Re: [PATCH 08/14] objtool: Allow setting --mnop without --mcount
+Date: Wed, 11 Mar 2026 16:14:09 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Rkfj8XGZJnDb38sLaAMv=+dEjXaEm1oGG8OiZe8U96w@mail.gmail.com>
+X-Gm-Features: AaiRm52SG38bxq2YdjNi5QYWzZEPiXxfjKoBoY-Ep8HQxEshw-prsY3revpgMhk
+Message-ID: <CAPhsuW5Rkfj8XGZJnDb38sLaAMv=+dEjXaEm1oGG8OiZe8U96w@mail.gmail.com>
+Subject: Re: [PATCH 11/14] objtool: Allow empty alternatives
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
@@ -62,8 +62,8 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Mar 4, 2026 at 7:31=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org>=
  wrote:
 >
-> Instead of returning an error for --mnop without --mcount, just silently
-> ignore it.  This will help simplify kbuild's handling of objtool args.
+> arm64 can have empty alternatives, which are effectively no-ops.  Ignore
+> them.
 >
 > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
