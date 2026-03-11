@@ -1,53 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B90F33DEF3
-	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 22:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAEF33DEF3
+	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 22:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773267763; cv=none; b=mrkRF+KLFMlZeJ0flnAF/sbtk5F9lo8bGeJgr6CdoOwyqg7KjLxZyJ/FFYoSsciAhlxw8lrA6Qwd30BwcaFg2V588W/+YlNDobCDunoCXdO9EyxNFxozM7dvBRLT9Lem5J1vYrzSQ2aEJWg3/d8eMpCkzIz+GRDoyrdTSgvRy3I=
+	t=1773267796; cv=none; b=e54JwG8YOf+ttGBs1UgPl5YAPdFrwhdwZLfmg7Rsd1Vt3aynJFR0palxwGGSqlQBjRxNkXld3sgzbTQ0JyyTeZnSHvuFu0h8SGfdTyQEjbjo2WvftoUZjppHSl8fidZvGwjB0V67UyqA1Ph6+7g3YqvX/4LAv6qp1F2YeCNooJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773267763; c=relaxed/simple;
-	bh=nnSNfQt+gvV9VYFp5kgal+ChmLUgi6djrHf4PSTVRTs=;
+	s=arc-20240116; t=1773267796; c=relaxed/simple;
+	bh=127OsXp72ltArJQOzAOi76gs1zOjbT1cWoA//sVab0s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=msoiHD0HxNGyEjSYV3/e3JQbN0fOiRIWjo8I52Z+3ctBo+gzpjd9KNLSF2DBlARtTi2P5JscKCYVml84UAOqtgGo2xieUIYmO3+IHRhKQqacS/Gd1v2AxDFIoZHoEVq9daggPtnfoYJX73n22QZzXnoIjhPrrHD4ktXdO7tpGa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PqqFvIaZ; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=GoTJGw+gAG/gOiRqUy5ggggMWHK/FcHYXiULNHy3dsYFFOzoDPOScVy55NKtIbZN8Bd1cd16Gsf4z06qt3QtzNVk8a6sZClsEF+u9kUWllB7UOCcSA10odytzTx/5hqpqjkToeqPThNHL81iddmUkaLRFSXrrb+gG4bKnTpda2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dazRgTym; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PqqFvIaZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A17C19425
-	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 22:22:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dazRgTym"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F900C4CEF7
+	for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 22:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773267762;
-	bh=nnSNfQt+gvV9VYFp5kgal+ChmLUgi6djrHf4PSTVRTs=;
+	s=k20201202; t=1773267796;
+	bh=127OsXp72ltArJQOzAOi76gs1zOjbT1cWoA//sVab0s=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PqqFvIaZQuySMrqM9U2lzjf1bvct+HMEh/32n54zTp1oIy0le9Ssk1MSyn0DvG3Eq
-	 mKCuAJluoJodFBAbnC2PDVskZkbtfhtavWqONt6GTKuHDdi6x7bogg3fzZkyCFGaRU
-	 ZS4WegcgBaEwqvDcWxo3qRhGvv3IEJ3uXu/jCOX535rwqCT9ZUPL5qpv73CvLYmEe4
-	 kLdvc7KqcsSDWkW2Dm5qfFAB7P4g2cas8CiueMSG0o8uLmCDi4zvimwXLoLicds8bI
-	 bw0wXGbuWU4y9B2khFtKYZowe9JIpd+AqyCW5R7j1dQyO6WofWPK/fsqjYyG+87Uyv
-	 S5VBflfdjnOFA==
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-8cd8d97aa2eso42572285a.3
-        for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 15:22:42 -0700 (PDT)
-X-Gm-Message-State: AOJu0YyglesagOXErnQyRQot/6bWA4IRcfxx52RYbwZ0sSK9T0F0aUOe
-	JY/8utjoDJaPCn3BGR+xpx4d8QsoDPIbMiQfhJz/1OBTDOostz8dXzpqhQCchnjUfcATOzR6GO6
-	x6U2lHGgpPqn1eK9XGW0Ebe9cVZfdPRo=
-X-Received: by 2002:a05:620a:46a8:b0:8c9:ea1c:f218 with SMTP id
- af79cd13be357-8cda19ba4e2mr533912785a.15.1773267761890; Wed, 11 Mar 2026
- 15:22:41 -0700 (PDT)
+	b=dazRgTymf93WtSmlnm23JVBtNqt0QzEAHspOgZ5aAl/0kPQXFJk27vOCnFRFMlZHh
+	 6dcNflDEq0X2k/j+BfRXK5e6D0WIfAP5FvfzjguvtQH1hEQ6gIGHL8qgd9rNEbC59V
+	 MBYawUupp7FqGZZDXYzqHV2cOP5QxlLULeibCCETbbAKcWleoppvIEFQjJEo5Guiir
+	 BeMJxim8Wx00UJZkNobgqQgCOoooZZCWVYFdjBAbCk66ltPjxTXODQPzc/xArDNugu
+	 t56p1QvyQ+AOESikM2C95UOmCXfEwNpK8Z+xrITMTmF7nRp868JEGQ6jURA+dYPxY5
+	 ZnmCk4DyVG/IQ==
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-899d6b7b073so4687826d6.2
+        for <live-patching@vger.kernel.org>; Wed, 11 Mar 2026 15:23:16 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yz/vCeAOcZVQiZOJ0QRBSw2ffgLEFrtmumZ3BzTjBwgETuokD6M
+	8OHayF6aujODAnzJYTyvVeLsq7wru9AWl4vE4QpTUne+Nbt71e+fB0MjnN3kRJHHGdxs2wKXf8y
+	TNIvTHRFOO0LTAYuIkhcvjgwn7Gl4kGY=
+X-Received: by 2002:a05:6214:d65:b0:89a:2fe7:91d2 with SMTP id
+ 6a1803df08f44-89a66ad7034mr63880246d6.57.1773267795357; Wed, 11 Mar 2026
+ 15:23:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310203751.1479229-1-joe.lawrence@redhat.com> <20260310203751.1479229-13-joe.lawrence@redhat.com>
-In-Reply-To: <20260310203751.1479229-13-joe.lawrence@redhat.com>
+References: <20260310203751.1479229-1-joe.lawrence@redhat.com> <20260310203751.1479229-10-joe.lawrence@redhat.com>
+In-Reply-To: <20260310203751.1479229-10-joe.lawrence@redhat.com>
 From: Song Liu <song@kernel.org>
-Date: Wed, 11 Mar 2026 15:22:30 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5a7EmcF6WMss8Hso746RPQ5S6x2gGBQQkKzHu=Fc8AXw@mail.gmail.com>
-X-Gm-Features: AaiRm51cx0qe-GJOuF_cmc-Pa1Yt5ePhepI1lcvuORTFwlG1TZoXOJhhnuT_LKU
-Message-ID: <CAPhsuW5a7EmcF6WMss8Hso746RPQ5S6x2gGBQQkKzHu=Fc8AXw@mail.gmail.com>
-Subject: Re: [PATCH v4 12/12] livepatch/klp-build: report patch validation fuzz
+Date: Wed, 11 Mar 2026 15:23:04 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5ksu-e17WPCOTggnQ4C9XE-ZsZY72h4f0jC=JSYVrbsQ@mail.gmail.com>
+X-Gm-Features: AaiRm51YxG4OWLT4Q38XxLsaLHpmw3jwqhok0s04cH9DK1Ax_IkTqCOIgKkyw10
+Message-ID: <CAPhsuW5ksu-e17WPCOTggnQ4C9XE-ZsZY72h4f0jC=JSYVrbsQ@mail.gmail.com>
+Subject: Re: [PATCH v4 09/12] livepatch/klp-build: Fix inconsistent kernel version
 To: Joe Lawrence <joe.lawrence@redhat.com>
 Cc: live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, 
 	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
@@ -57,16 +57,21 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Mar 10, 2026 at 1:38=E2=80=AFPM Joe Lawrence <joe.lawrence@redhat.c=
 om> wrote:
 >
-> Capture the output of the patch command to detect when a patch applies
-> with fuzz or line offsets.
+> From: Josh Poimboeuf <jpoimboe@kernel.org>
 >
-> If such "fuzz" is detected during the validation phase, warn the user
-> and display the details.  This helps identify input patches that may
-> need refreshing against the target source tree.
+> If .config hasn't been synced with auto.conf, any recent changes to
+> CONFIG_LOCALVERSION* may not get reflected in the kernel version name.
 >
-> Ensure that internal patch operations (such as those in refresh_patch or
-> during the final build phase) can still run quietly.
+> Use "make syncconfig" to force them to sync, and "make -s kernelrelease"
+> to get the version instead of having to construct it manually.
 >
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Fixes: 24ebfcd65a87 ("livepatch/klp-build: Introduce klp-build script for=
+ generating livepatch modules")
+> Closes: https://lore.kernel.org/20260217160645.3434685-10-joe.lawrence@re=
+dhat.com
+> Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com> [add -s to make ker=
+nelrelease]
 
 Acked-by: Song Liu <song@kernel.org>
