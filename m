@@ -1,71 +1,87 @@
-Received: from mailsender2.cdac.in (mailsender2.cdac.in [196.1.1.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD9D38D010;
-	Thu, 12 Mar 2026 09:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=196.1.1.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE9640DFD5;
+	Thu, 12 Mar 2026 14:12:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773306286; cv=none; b=hiyh8G2sZ69SiT7s8WWm9zMOIfoSvM8KvEAZ3ISMtr9cQ0l2rP51lc+FUuqWlISqjUxRSN1iYtojl+QmJB+EXkHZW60I8C/6D16vbhMLgz3rwyTBCt5VJQPN3Vy70+u4hkqPlBPuSlgSkzMKaavxJoveWzdZuy4DWmztnU8WRd8=
+	t=1773324770; cv=none; b=d+YKRKKpF6LVebijbbbx90X6KwYqzNQsObro0P+RQd8obG7VIHqugOe+3w+WwOASyvFPF/Tk4/yca/x6o4z1V8cIug7YbeNzBaB/W6q1qCMvK6nbDhwyCr7/B0JAqPA9ScLsnyHUMOhkUuzG6j045dU1EGmkJrYBfCOE0kGd4ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773306286; c=relaxed/simple;
-	bh=cc4sUo8ABmfAJfiB2Td65E0S841rDp6Ssvqun49TuE4=;
-	h=Message-ID:Date:MIME-Version:To:From:Content-Type; b=l/vuoX4dhgLHMXj289q/lqnzO+qzuqoMSeX1djWxud4gKOGi3Zt5oWnQ65OzSJOgqWTfVpg3JcVGyL3/LWqNNQUP+7ITvFaLpd9EVujvyrWgcq4+SRuYAg1qz5ucwA6+gIyH1OMHi2Hu1lEKY8K106QtpSO7iOIRfVWEW+MnMz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cdac.in; spf=pass smtp.mailfrom=cdac.in; dkim=pass (1024-bit key) header.d=cdac.in header.i=@cdac.in header.b=JlnKRyuB; arc=none smtp.client-ip=196.1.1.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cdac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cdac.in
+	s=arc-20240116; t=1773324770; c=relaxed/simple;
+	bh=JUNNBRHYqAlI90eVN92Ye3wzh5o69+j3AKe0pIbjTr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Rltjz7MUl1GqDA4tSFecOCCVdwPJkC8Rv3FKfiyi88dSfkvg7cPB9Q6JE4utCe9RRk5gFmMOG9w2sgdELeQEeV1j+BhsWsTXlFSEwXRH757G5tlOzor/B/7PHKnatnoCldSRzzb38TMtbgIFfcx/ZubPfnfw6/Qj5hPjn7VmsA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tzbpDLF3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cdac.in header.i=@cdac.in header.b="JlnKRyuB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cdac.in; s=default;
-	t=1773305593; bh=cc4sUo8ABmfAJfiB2Td65E0S841rDp6Ssvqun49TuE4=;
-	h=Date:To:From:From;
-	b=JlnKRyuBoxttzfIT/D+Gcwxdah8FF+4gp9j1piGPmrT49Dx+lBTYKdajPZE+vvCKB
-	 7qhhSa1ibrfQdjBIn3PA+dF/aKl6DuxLG83D9YnuYUdi9fsK4jNMWFghC/TpiFZl77
-	 L1P1vwn3b6yvtWc1yTHad0scWkqeAYuhq5/li1q8=
-Received: from mscr-int.pune.cdac.in (mscr-int.pune.cdac.in [10.208.193.2])
-	by mailsender2.cdac.in (8.15.2/8.15.2/Debian-22ubuntu3) with ESMTP id 62C8rDgq3124766;
-	Thu, 12 Mar 2026 14:23:13 +0530
-Received: from mailgw-cip.pune.cdac.in (mailgw-cipdc.pune.cdac.in [10.208.193.4])
-	by mscr-int.pune.cdac.in (Postfix) with ESMTP id F114E10006EE7;
-	Thu, 12 Mar 2026 14:23:11 +0530 (IST)
-X-Auth: premjith@cdac.in
-Received: from [10.176.18.227] (hdg_hdg068.tvm.cdac.in [10.176.18.227])
-	(Authenticated sender: premjith@cdac.in)
-	by mailgw-cip.pune.cdac.in (Postfix) with ESMTPSA id D6B5414E0D93;
-	Thu, 12 Mar 2026 14:23:11 +0530 (IST)
-Message-ID: <b8c3ea1b-4658-4278-9e16-578b3b802f9a@cdac.in>
-Date: Thu, 12 Mar 2026 14:22:13 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tzbpDLF3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F339CC4CEF7;
+	Thu, 12 Mar 2026 14:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773324769;
+	bh=JUNNBRHYqAlI90eVN92Ye3wzh5o69+j3AKe0pIbjTr4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tzbpDLF352DZo8kyJ8wujuZ3MzRPcZcr3Bwhj7BTReIFDFWjwhgaep3va6mEfBXG2
+	 QsTH81aXUkiRtTJ6BZM0aIpST1pDxkvw4hihtxnxGfl0cVCU02aMLA9ANc0hUqzSN4
+	 PWzELtT8n6W7aFGjNuPeu6RHgViAtADqZegyW1iYRH7MCx0km7J4OcS9na/pPRvaOU
+	 amd3vjGbX0QNjbxR8QZm/V8LKeTk9R7vPaLuXGBhf/nss+GJRjVgK6dTntFSkcPFDj
+	 4rWvMLZ9Uw+qYDc3gRQqKLsVYBuSzhrWZaqj3wd2VS+XEzO/E/MX3k4+yThZEaeJSD
+	 P41YKGCaULBzQ==
+From: Nicolas Schier <nsc@kernel.org>
+To: linux-kbuild@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>
+Cc: Nicolas Schier <nsc@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	kernel-team@fb.com,
+	Nathan Chancellor <nathan@kernel.org>,
+	Song Liu <song@kernel.org>
+Subject: Re: [PATCH kbuild v2] kbuild: Reduce the number of compiler-generated suffixes for clang thin-lto build
+Date: Thu, 12 Mar 2026 15:12:24 +0100
+Message-ID: <177332462174.82802.2344537821152391518.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20260307050250.3767489-1-yonghong.song@linux.dev>
+References: <20260307050250.3767489-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: majordomo@vger.kernel.org, live-patching@vger.kernel.org
-From: Premjith A V <premjith@cdac.in>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CDAC-PUNE-MailScanner-Information: Please contact the ISP for more information
-X-CDAC-PUNE-MailScanner-ID: F114E10006EE7.AE9BF
-X-CDAC-PUNE-MailScanner: Found to be clean
-X-CDAC-PUNE-MailScanner-SpamCheck: not spam, SpamAssassin (cached,
-	score=-0.199, required 6, autolearn=disabled, ALL_TRUSTED -1.00,
-	BAYES_50 0.80, TVD_SPACE_RATIO 0.00)
-X-CDAC-PUNE-MailScanner-From: premjith@cdac.in
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-unsubscribe live-patching
+On Fri, 06 Mar 2026 21:02:50 -0800, Yonghong Song wrote:
+> The current clang thin-lto build often produces lots of symbols with
+> suffix. The following is a partial list of such function call symbols:
+>     ...
+>     ethnl_module_fw_flash_ntf.llvm.7631589765585346066
+>     __nf_conntrack_alloc.llvm.6438426151906658917
+>     tcp_can_early_drop.llvm.11937612064648250727
+>     tcp_print_conntrack.llvm.11937612064648250727
+>     ...
+> 
+> [...]
+
+Note: Due to application of [1] to kbuild-next-unstable, I had to update the
+      patch context.
+
+[1]: https://lore.kernel.org/linux-kbuild/20251028182822.3210436-1-xur@google.com/
 
 
-------------------------------------------------------------------------------------------------------------
-[ C-DAC is on Social-Media too. Kindly follow us at:
-Facebook: https://www.facebook.com/CDACINDIA & Twitter: @cdacindia ]
 
-This e-mail is for the sole use of the intended recipient(s) and may
-contain confidential and privileged information. If you are not the
-intended recipient, please contact the sender by reply e-mail and destroy
-all copies and the original message. Any unauthorized review, use,
-disclosure, dissemination, forwarding, printing or copying of this email
-is strictly prohibited and appropriate legal action will be taken.
-------------------------------------------------------------------------------------------------------------
+Applied to kbuild/kbuild-next.git (kbuild-next-unstable), thanks!
+
+[1/1] kbuild: Reduce the number of compiler-generated suffixes for clang thin-lto build
+      https://git.kernel.org/kbuild/c/b7a7ce34
+
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped,
+reverted or modified (e.g. trailers). Patches applied to the
+kbuild-next-unstable branch are accepted pending wider testing in
+linux-next and any post-commit review; they will generally be moved
+to the kbuild-next branch in about a week if no issues are found.
+
+Best regards,
+-- 
+Nicolas
 
