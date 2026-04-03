@@ -1,142 +1,95 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6683CC9EA
-	for <live-patching@vger.kernel.org>; Fri,  3 Apr 2026 16:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775232060; cv=pass; b=s4mZJrvF4UGNiMlVv/06/vrY8RMU8ZR7Ri4geKUqJvFwjT2CN9pyyGLF8bUKvztKrodu0sAtSqKgw01l5L+h1KAUUxC8MbwKUrhC06yoH89Ua+Nqjd+Mltektm+z36xyY309NrJO9R6R1ygO5VaZlFYoOQ+ObQU/NVrIUk/ITmI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775232060; c=relaxed/simple;
-	bh=4J8XcLhyQNpn4ct//tlB3JgTqU1q9N+kL/BF7kTxfb8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D633C9EC0
+	for <live-patching@vger.kernel.org>; Fri,  3 Apr 2026 16:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775232422; cv=none; b=nEnfPvE7jhw4B2rAvN3hpE4b7Tt1+ZvlPmj38nUhR4JZu6GkOZADRpBSRc1uYIdEhzb3tefS9oJzxeNhPqTVCuNgEaloSMRyu0sugD7K+CfmpdLtEVdoiZbYvZBWl/pzCZvD1KySTvILiEcJEt5zgocaYHLBmSVLJo3BO8sHADc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775232422; c=relaxed/simple;
+	bh=VgMTj/MSX86VvvlFowbzT2maCh5ozW0tOeKlicuhWJA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mn0mfb3LiYbCIqrk8TpLfjLCf0dWNcHA+NeSwZWYluQanPHDNVO8nSF5Xp+daC60r7JFpDJe08F7a/1aF6GJPI1N0g6nSZG+F3mA4PDw5j3Ff4GiN/RoheL+Y1cbAMP96dgTgVvy/rsST+19DwkP+VnNc0xvGNfmEXYh5tTcT4I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a1f5lNwJ; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=RaBd4XjyXfWZv5vjtuPzGaWWUpd93kdXy86XwkwhwirNWMZIOcNUMhSxLQFVzFXJ8CvBLHMztunJV9lTfObJd/L1o50y774JbSMUo9E+gnOe/VKD1s9jcKcqhaBDe6n/jTQSqN4FWbhfvYH4NmD+qhxGQNN0cdPdfltjJTynAUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t2qAfo94; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a1f5lNwJ"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-797ab169454so33148667b3.3
-        for <live-patching@vger.kernel.org>; Fri, 03 Apr 2026 09:00:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775232057; cv=none;
-        d=google.com; s=arc-20240605;
-        b=e9/1Uz4esGU6osJFXqqAK9NUob1CL7kcxvPCS/F0P5lOJHwYu7yibcpPBGryE4inkX
-         szFV+AhlaH6kqkcBW9tnIAJJW9DZ8rfQbpW8yOV1xQ42BndAiJUk5J/ule8SXf16pSFB
-         TNYUwWflQvXxhZTubRbj8aJS32Iew5SOJ1r15T9sBx2DMN+5gaqyQsG7whWbIKgPy8aP
-         q7buclwTVbcv0LFqQa/zPtoao3ZqWcKp+jJ47nrAfFqoUGd43CQbGycdcwED+PT24EL9
-         rBqR9OSxa9F7YfEgzhRxA3uwQtBWvrCqG324TSyaLMeuCeJMo5cNkhzqUXNFtOcGBPKQ
-         Njsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=smlalJP6W4oXJb7plM4HOYk8mDYdhNOc9XE7DYiHv4c=;
-        fh=KU+tjwAGAZ+vdxvcYPGE6DuQIt3WyqRBPAHwWGTihME=;
-        b=QJb/sdmRVuLyQY8NFPNvu4R5JKXUaPPqCBi6iml79iqEwxSL2k4CJcfn6GyJ0+MVkU
-         cHh7oVP8M/r69A7Z3bdHwSwqn3ZJ+6t8Yd8apz4+BEz5NoIR501Yt+MgLEia4fgeVV97
-         cSKHJm+v/JMjJFN509bEV7mfbj3Kz08LcibIguau2Ik6cZjbGIiwDrS8NZjQDmbsGjHL
-         Ym3ZhYDmVSsO2WYM8Q3f5SJywLtdebexEHX2v8xzpRMZKNq9qCaVT9Qg38s3PyyMSgWa
-         jsiBFQQlTMlFKhuA6n4T1GXH9tJB23mQeG5MQHx02j8nlXbsF5AZqZCM1zpAL4zdAzU+
-         NhiQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775232057; x=1775836857; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=smlalJP6W4oXJb7plM4HOYk8mDYdhNOc9XE7DYiHv4c=;
-        b=a1f5lNwJiAm0TGs+sEWU6QfG2WtDoFox/x/qmgvsumuMWIYC9S6+T/cIQX3T1Y1duX
-         lId1pWuHWQSyO9v2RgjofvPo0/vdceanEvNpb7zVV49TLxz0HqqW12CpxNV8z/rKdMME
-         5j4+5pcx83XncSRS09GllTtDVmiZRq+TJUOf+Vqi3ZKMkH2WfTdXit4m1T+Cgp6dToHK
-         ZJ1NTfsLmpFsosakca71KXC7iVl4ex13VfGLmDRsEheEnfwacl8mn/Egl8rEJQpWuxSA
-         GcKpHHzuhFp1IIMxa8rLvEnvOVlu0Ro6huIEh7Pm7fsYRv4bUb8dljHYdtOfKRO8rhnI
-         nmGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775232057; x=1775836857;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=smlalJP6W4oXJb7plM4HOYk8mDYdhNOc9XE7DYiHv4c=;
-        b=i2Xz09S9vehzntXncp/e5WL/RvVgCqbrnfaSra15kGbGQQW+gDvaq4IZCdWHa+yDi6
-         Ja/eX1o+xbFRbRbiyeS6vHbMIy3OA3OXGhs37lQ6Simtsfq6Xg8ijforXNtMAEy8F8Ux
-         F8wEXaoyNZjnoAFvb69dHvv3wAXIL/C/cP+YzJOIo6GylEGsowmSFvxrmev0I8zW8XrL
-         37mSCzt+WD6Nzr+rc1Ny/pLWr/WRNNZHX6i+QyO0vwtULySuRrouUDReAQrsA7Qz4lTI
-         c0pm5g5w3JSbYuZ8Tw8nGDvk9S865u0nmP7mYfOq9VzCQ8OMidqOEgFMlfQm05ZVmVnE
-         CdZg==
-X-Forwarded-Encrypted: i=1; AJvYcCXVdQXRB0mRcgLa1TRpceakA8hNeUvO7LC8/t0V8+PisZCKdzZNlZ8lqlnsmcRkRMsxvjlGkiNFCBXy+3m+@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUWgq/C9rkq+1nsR61p0Zu9MHpStD7wv/cei7hCcmTsq6C1UA1
-	gCmBlSBMzoxT0qHmx8qQu5YhGrKnE5zKPofsMuNV7g13D6d7byN+0YNxRiwXzc8o4/39NEOHB85
-	7d+4LYSTtzmnWt8RvDLzfjVtTRpi84Zk=
-X-Gm-Gg: AeBDietrlIwZPXFyhXb9pQexrjV2uL0GIRZB7nMa9MiFKtnGXonqxDz0c6BavHTtkG9
-	zaJZ0BHFgyYtNv1wZBL/yM9Mv6THh664bUKhWXMvaaPW3Ee5W+zakXCd16yNNKSS3lZan58MTOg
-	h6sRXxy4m2mhAo0g8NtjmntYMteaPUzG9zlysH88zidg4SysKiIFhuG4qUMjMnwIZaN2Iy+fnJd
-	7/JH3m/98TmpoQUDoGKD1olOYzL5oTrJ9WVjAgDnngdSJJlerbt7U/NgMnylUaRBR4a9TxW9V7G
-	P3cxczipbKhVyqlbaEj+Yut6PnZA1gE/UZiuz/Q=
-X-Received: by 2002:a53:df06:0:b0:650:b0d:f4bd with SMTP id
- 956f58d0204a3-6504874d4e6mr2666334d50.24.1775232056866; Fri, 03 Apr 2026
- 09:00:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t2qAfo94"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB056C2BCC9
+	for <live-patching@vger.kernel.org>; Fri,  3 Apr 2026 16:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775232421;
+	bh=VgMTj/MSX86VvvlFowbzT2maCh5ozW0tOeKlicuhWJA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=t2qAfo94ucUEw1uQEKuh9QVmJYQWO9+Oz9GjZuxdmQ3pruCeGRSgNuy0mes5GIYic
+	 tFf/iKHxu97pyzjRMJXVFrgX3l/ungrMBzclA32GRfDl719g3D9VnXdlniz0Fv5kj8
+	 zfafTtG1rfI9dxRHvaHGlIBpK1GRLnfONT8x/S0HPPOefYRMKDWSydn3/BYcDLnYGI
+	 IXidIhIEQXjBXdIoZFiU+il5Yuatq6aXnD1lyfAKVLfUhfC9OWn4iDw0sjSmpHOU/f
+	 C5YJjfPJkitOT2hlIEiObF4TWsXNpXyXOCCz/84xdNqVdXdosJrk9sV6m9lRXy4UV6
+	 y5htW4nD4zAiQ==
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-89cc71f4311so26989136d6.3
+        for <live-patching@vger.kernel.org>; Fri, 03 Apr 2026 09:07:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUPpeG7OPTkw3kZKH7QCky0/CT605JHM4RBGu3kfz1H2+ox3gIH9pOMQJQEMh7hVPGZtDmvQdHS1oz//vK5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqL9O8N7K3gm7eVPxRyhDWcbm1N785deycaTh7SF9Bzbm3IgUd
+	BKbZs6DMr0W2HTUQkssm8ZrVNpCnMDkHhNa4LuIg2dzXbAsfHvyELguJbcUe971Q1dJ5NrVmz93
+	2cNE91koKzachW5y0KEJLZHW4t0diDfU=
+X-Received: by 2002:a05:6214:2422:b0:89c:d931:62ee with SMTP id
+ 6a1803df08f44-8a7041fd1f4mr55594166d6.34.1775232420638; Fri, 03 Apr 2026
+ 09:07:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260402092607.96430-1-laoar.shao@gmail.com> <2261072.irdbgypaU6@7950hx>
- <CALOAHbDnNba_w_nWH3-S9GAXw0+VKuLTh1gy5hy9Yqgeo4C0iA@mail.gmail.com>
- <3036842.e9J7NaK4W3@7940hx> <20260403073055.031275d9@gandalf.local.home>
- <CALOAHbBBf_vWcwZp9kdXhpFOq_oG87X-7Nj2yurZ6LgBpDHwwQ@mail.gmail.com> <CAADnVQJobMwH8Q0LtCrwbD2TkzFaLfRaw9gyVnhDpMWGmLFVvg@mail.gmail.com>
-In-Reply-To: <CAADnVQJobMwH8Q0LtCrwbD2TkzFaLfRaw9gyVnhDpMWGmLFVvg@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sat, 4 Apr 2026 00:00:20 +0800
-X-Gm-Features: AQROBzAveI_l2DNpt7U84Ib2Mv4Qw04LElhCVGE816Jd6EhbLPSjW1ZrRCTxVQU
-Message-ID: <CALOAHbAiNQaVYO3WeNvUBzw+4zAM-ZjgxYWKX5e_0Fw+KX-ZPA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/4] trace: Allow kprobes to override livepatched functions
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Menglong Dong <menglong.dong@linux.dev>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	live-patching@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+References: <20260402092607.96430-1-laoar.shao@gmail.com>
+In-Reply-To: <20260402092607.96430-1-laoar.shao@gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 3 Apr 2026 09:06:49 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
+X-Gm-Features: AQROBzAm0t2b67APn7ntpBbViV_qfNNj9_UUU_aG9AkiVCLDMIVGO7FMUNPLhp4
+Message-ID: <CAPhsuW7Y5KksWM49TrGH_Hohaq02XO8qs7G99Y6D8=0usLFSrQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] trace, livepatch: Allow kprobe return overriding
+ for livepatched functions
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, kpsingh@kernel.org, mattbobrowski@google.com, 
+	jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 3, 2026 at 10:26=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Apr 3, 2026 at 6:31=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com>=
- wrote:
-> >
-> > >
-> > > If this were to go in, I say it would require both a kernel config, w=
-ith
-> > > a big warning about this being a security hole, and a kernel command =
-line
-> > > option to enable it, so that people don't accidentally have it enable=
-d in
-> > > their config.
-> > >
-> > > The command line should be something like:
-> > >
-> > >   allow_bpf_to_rootkit_functions
-> >
-> > The feature is currently gated by CONFIG_KPROBE_OVERRIDE_KLP_FUNC. In
-> > the next revision, I will rename this to
-> > CONFIG_ALLOW_BPF_TO_ROOTKIT_FUNCS and introduce a corresponding kernel
-> > command-line parameter, allow_bpf_to_rootkit_functions, to control
-> > it.
->
-> No. Even with extra config this is not ok.
+Hi Yafang,
 
-I will send patch #3 and #4 as a standalone patchset to upstream the
-hybrid livepatch first and then figure out how to move
-allow_bpf_to_rootkit_functions forward.
+On Thu, Apr 2, 2026 at 2:26=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> w=
+rote:
+>
+> Livepatching allows for rapid experimentation with new kernel features
+> without interrupting production workloads. However, static livepatches la=
+ck
+> the flexibility required to tune features based on task-specific attribut=
+es,
+> such as cgroup membership, which is critical in multi-tenant k8s
+> environments. Furthermore, hardcoding logic into a livepatch prevents
+> dynamic adjustments based on the runtime environment.
+>
+> To address this, we propose a hybrid approach using BPF. Our production u=
+se
+> case involves:
+>
+> 1. Deploying a Livepatch function to serve as a stable BPF hook.
+>
+> 2. Utilizing bpf_override_return() to dynamically modify the return value
+>    of that hook based on the current task's context.
 
---
-Regards
-Yafang
+Could you please provide a specific use case that can benefit from this?
+AFAICT, livepatch is more flexible but risky (may cause crash); while
+BPF is safe, but less flexible. The combination you are proposing seems
+to get the worse of the two sides. Maybe it can indeed get the benefit of
+both sides in some cases, but I cannot think of such examples.
+
+Thanks,
+Song
