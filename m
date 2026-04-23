@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830E43D6CC2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53DD3D75A0;
 	Thu, 23 Apr 2026 04:04:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776917073; cv=none; b=tshwHzc+C0AAGPod6VNzrLMiIyWXJyj0Y95xmloAHuQexwRI0RzHzjHiYbe1AaFQp6s8HZZE2Ywq6NBIZrRqGAK4V0aqF1tvyAGiOL2c4c7t+9a1gqvrG0ug4j4Jmsekd6vKpAOTkgH5z8ADsCT6qIyLM7xEGwmM+pY0wPVCG1Q=
+	t=1776917073; cv=none; b=h4FMg9sJ+bcHtCKpHjLUWrQEnBavsMxKsUyvgPrEAyK4XSVmFfRrsHYBj5L5M8aqUViPLzJMzDC9ejDydPrEux8KCajDkWYr0Ct+q5k4gL7YJhyi3B9ooNb808bM/gzWO/ai2QO9aDXx1v8+3jEJJq7vP7xzlJLpaUKybd5RgGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1776917073; c=relaxed/simple;
-	bh=0rrESB7Tw2th22oQqKf55qbbRHuSPvTcbVTjD/fC290=;
+	bh=p3tDSzhkhuYxo7Rda0jssYM2X7zLXfdCw/lc/q2MBvI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nWCdW9Ga2Goi0huVYxBZLH1bx9D3yH5GcfyBBPosL/zTzRUoNuV1VHSeqZtngW6QZNld9wUomSjm4xc52HJDYr4pNk+bzkCorBwkE20uYEdgWNA+3xSANEM7gGQSGBINtkOg+5JUO5CYMC9gepUrDr6on232ipIXGLOrvwE22OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NI2csMWY; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=f+pfvXVGigTID5F4erd77gfH0M75Tx6heuuNoq7oc/kJKK05n9zplpi+kQdHkLTt0HK0AMvDwCPoDUPdXeYhfku0tjYKFrabmOX/P5X6uOTOnaGaynzgLI3fafp1DU8aZTTY56w50+w7UiLJvJgS9jFqh8mKYVM3+y5vP/cOhIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vGgetgGZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NI2csMWY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF550C2BCB4;
-	Thu, 23 Apr 2026 04:04:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vGgetgGZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544F1C2BCB2;
+	Thu, 23 Apr 2026 04:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1776917073;
-	bh=0rrESB7Tw2th22oQqKf55qbbRHuSPvTcbVTjD/fC290=;
+	bh=p3tDSzhkhuYxo7Rda0jssYM2X7zLXfdCw/lc/q2MBvI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NI2csMWY0m2KHlosfoeo9wEfVaEvSTNfoc2yn3xfMJbUSZ69lbPOEwbHyQ8v0PpdB
-	 ebv970LuBdJhotr3PvrREVPQ3a0oCfFtrFfn0ZgYMVVctqhNZXoutDAV7vaH5vqQ2Y
-	 LDtaVUmuv+RpKxR9ZOYPlQxezRk7H5CIiRJNVrPPl+R/SLjjvO5pMSB4AzhgWV0YlV
-	 FmuYOAviDvT8VpfIkEezGJnmFvDOxyl8hTNslbmx7+EMMOdfFAHuTXGKI02rnybugP
-	 Qdz6j22eRWmXDS6C3x7KVcFUCd5Qvfd0leZQ+FlZGwsY8KDjV8OsxRshLmrv6OxxoE
-	 YrXvPO5tsuiLw==
+	b=vGgetgGZdpahrvq2LAhRk7GcdNa2zsd68FktJYpWHwX6KBFj5nMY/b5ywNXnO4AU0
+	 39mLZ/72IWp5DzKp/1BIdzfJaRsgGVRlTGVjT2lMcNjeUetCQ/0JkZx/DUFwRZxsJz
+	 xoPjHY36w3nCsV32x4eA5usbBjDbN7SGYEhbfqxQty5HnQxrROjnU1U2X9TXBVgc3r
+	 Xx0wh3cTM6p83fogP6FcQztd7ryn27noYDpkF722Kur9beGC1nSfwXKRhJYwlYfY1U
+	 cB1QYa5sPJru38mDNynCpOs21Y1faSpsqjX2tACooYFCGXvPQM5NvaCtQOtYlKDZ9K
+	 A6OcSJRqlOqfg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 19/48] klp-build: Fix checksum comparison for changed offsets
-Date: Wed, 22 Apr 2026 21:03:47 -0700
-Message-ID: <128563f2a525de0ab3518f826d4719149e5712cf.1776916871.git.jpoimboe@kernel.org>
+Subject: [PATCH 20/48] klp-build: Don't use errexit
+Date: Wed, 22 Apr 2026 21:03:48 -0700
+Message-ID: <f86bf0b781101152b35437bfe0e6a286f3955247.1776916871.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1776916871.git.jpoimboe@kernel.org>
 References: <cover.1776916871.git.jpoimboe@kernel.org>
@@ -49,64 +49,27 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The klp-build -f/--show-first-changed feature uses diff to compare
-checksum log lines between original and patched objects.  However, diff
-compares entire lines, including the offset field.  When a function is
-at a different section offset, the offset field differs even though the
-instruction checksum is identical, causing the wrong instruction to be
-printed.
+The errtrace option (combined with the ERR trap) already serves the same
+function (and more) as errexit, so errexit is redundant.  And it has
+more pitfalls.  Remove it.
 
-Only compare the checksum field when looking for the first changed
-instruction.  Also print both the original and patched offsets when they
-differ.
-
-Fixes: 78be9facfb5e ("livepatch/klp-build: Add --show-first-changed option to show function divergence")
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- scripts/livepatch/klp-build | 30 +++++++++++++++++++++++-------
- 1 file changed, 23 insertions(+), 7 deletions(-)
+ scripts/livepatch/klp-build | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 81b35fc10877..2b8b3c338a87 100755
+index 2b8b3c338a87..e2f0eb8fdc7f 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -727,13 +727,29 @@ diff_checksums() {
- 		)
+@@ -11,7 +11,6 @@ if (( BASH_VERSINFO[0]  < 4 || \
+ 	exit 1
+ fi
  
- 		for func in ${funcs[$file]}; do
--			diff <( grep0 -E "^DEBUG: .*checksum: $func " "$orig_log"    | sed "s|$ORIG_DIR/||")	\
--			     <( grep0 -E "^DEBUG: .*checksum: $func " "$patched_log" | sed "s|$PATCHED_DIR/||")	\
--				| gawk '/^< DEBUG: / {
--					gsub(/:/, "")
--					printf "%s: %s: %s\n", $3, $5, $6
--					exit
--			}' || true
-+			local -a orig patched
-+			paste <(grep0 -E "^DEBUG: .*checksum: $func " "$orig_log") \
-+			      <(grep0 -E "^DEBUG: .*checksum: $func " "$patched_log") |
-+			while IFS=$'\t' read -r orig patched; do
-+				read -ra orig <<< "$orig"
-+				read -ra patched <<< "$patched"
-+
-+				if [[ ${#patched[@]} -eq 0 ]]; then
-+					printf "%s: %s: %s (removed)\n" "${orig[1]%:}" "${orig[3]}" "${orig[-2]}"
-+					break
-+				elif [[ ${#orig[@]} -eq 0 ]]; then
-+					printf "%s: %s: %s (added)\n" "${patched[1]%:}" "${patched[3]}" "${patched[-2]}"
-+					break
-+				fi
-+
-+				[[ "${orig[-1]}" == "${patched[-1]}" ]] && continue
-+
-+				printf "%s: %s: %s" "${orig[1]%:}" "${orig[3]}" "${orig[-2]}"
-+				[[ "${orig[-2]}" != "${patched[-2]}" ]] && \
-+					printf " (patched: %s)" "${patched[-2]}"
-+				printf "\n"
-+				break
-+			done || true
- 		done
- 	done
- }
+-set -o errexit
+ set -o errtrace
+ set -o pipefail
+ set -o nounset
 -- 
 2.53.0
 
