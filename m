@@ -1,55 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF585378815
-	for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 23:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB6A35F164
+	for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 23:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776988460; cv=none; b=Xw3j8+VHWVt0DY3ec1Aae8gihUogdlFFXViLAK1huyMa5MBRV0OExyGyCWCxQVcIbJaDrPJbQVCQN2yvL5XLwmxb52dsI32uSbBFueNfSXqXi78nbn0O4g3TP/7mvKhNQo611m0wUqM2XK2wr/yuaZU8uAbWrrXUAO7rb7yuEks=
+	t=1776988502; cv=none; b=iim0Ln6QBfrZDXjN5OeMOcgvIW3yTHFXkwOb07OZndQAlGJg1sXusfL49OUEgz63gyQiZwUX3jTVmyC7R2QIKDA1eCI/bqCIHIoD0GQ8LAEQtTaENf4jUqFgdVX5i2fAoAr7SWzuHaCkoe2yXgOjXSHe8mL2zk6tE/RIk5B8Ci8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776988460; c=relaxed/simple;
-	bh=3QFSv0U2fFgLudtNwV9TzoT6SWsPZW4/F4F78GlgQJQ=;
+	s=arc-20240116; t=1776988502; c=relaxed/simple;
+	bh=S9d2jy8y7PXxhRVjhahQpk+3FIaibGwpIgRrutq3g5U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H1TE/r2vgWTalFCr3L/pSdiIc8m1/Pufmc+td7DF5pAIptwFoyB7BpL9YWwZI9wWg0WqiWJ/MgGwjT1mxyIGRbSeEPZKekaWqfpI5eZL1QV4cLQXlXKPBhLqeBaHpvDd6DDLk7ix2Lfub02IbjDBKRZ29w3V0iDqzZ2ousnHN0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tXQunbW0; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=BzCD+8mo+LvFICgdOyS3PJzmEcWoe5fSolP2eN/ouvU4clzciQ1Vcy1bywhN/0SYEDwFJalDDIg2lSRPqdOVs3WyGRV8sff7RFCXU3P7J9ZfB0DQYNjhbFHx1QL9cDOhlRAkAukY/hGY9/bX+MQ4ugW6eI+Wl6YdkkVeTTOP76o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVw28ng0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tXQunbW0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BC2C2BCC4
-	for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 23:54:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVw28ng0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2494C2BCB4
+	for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 23:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776988459;
-	bh=3QFSv0U2fFgLudtNwV9TzoT6SWsPZW4/F4F78GlgQJQ=;
+	s=k20201202; t=1776988501;
+	bh=S9d2jy8y7PXxhRVjhahQpk+3FIaibGwpIgRrutq3g5U=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tXQunbW0QyH2LN/jzbEnd5CEKICaaeIJLM2V7Nl9hdvk01WjjnFnlolWOaEDA4S1G
-	 2wWIS7W5NtGGcgTaqrmh9fAvlZw+e6AJuc/fwcow42/zgOQDGKQ5cfs7vkf++x6n5f
-	 OcRsOAozIEbXg6EYcIS6HyPHIS3fqXrLlpO4V3cpoBvLQ9+2C6Ib5zt9gd4EErTLj4
-	 q9gpe/jYd/OO88xsO1zgS8MDc/dMqsGvgJAIM4Mj6ZhcpB4U0tEqhQhI0CWUehuUaN
-	 ZiLTK8FjSE9ZhBQk5s4IIi36ED9hIQesGh7S8wHIyIJBJ2xuEh4pm2RWYXRYKkmm6z
-	 lmEHK+1Q/n+Jw==
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-899a9f445cbso86107546d6.0
-        for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 16:54:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/eYblyCWRzAryV/8848NUOa9SzMxkfIiNZRRESpqZ2DIzzn+sfTUJ7X6NL7eJTeq3zulIA6haNrU5r1PMh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzuwm0lpWQwxshfRwPojecBdoUH1R1Q2BoJBbkXR+E883trmjop
-	qgCxTxVRb1WOX8lozDH2RVHk8XUacj059ouqlCjfNc2JHdb7NqqqbzxglO3lf+RI3iwAp+yKdas
-	59W4EiKpY7+I4jYNNtrLJhmpX2IAMGsU=
-X-Received: by 2002:a05:6214:e65:b0:8b1:f784:7ecc with SMTP id
- 6a1803df08f44-8b1f784822dmr207045716d6.46.1776988458723; Thu, 23 Apr 2026
- 16:54:18 -0700 (PDT)
+	b=aVw28ng0LAZVJAJjAj2hwO6KlH6hutAomG6Bwmg/dFMaqDjomr24m49VSk3fneCni
+	 U/3rJ8DTNc2UeJaYd7LmZ5/Yr+eQ7G9V+umTC5uwrMUUfE12W0kmhEQqG+R0hm0Qqt
+	 29VyEhz/3gJPNmirMhc+C8EIPtFzIeB4xjo5vE2Q5hJDOhD/fLtvdl0X0acwfCmmte
+	 HSJ19XstJ3Ok4M5c3FQOBJwJ+W5kzPiXqlLCRZ9vNoNyc3AH4hzdXy6H+6AjnF9Ms9
+	 PaunJnsSYwN+7VLYghmed9xiFCuhSCkvgf9xXWbPb53OkUZnn1npWxd3wJeVye98j7
+	 h2nfjJjlD993w==
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8aca2726f61so86436646d6.0
+        for <live-patching@vger.kernel.org>; Thu, 23 Apr 2026 16:55:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+Ow0YHQ3Iygocl49UyeXwmPOchvB6OT8AnACyT3rnICyVAKa3jkBU6ptnbdXeTxC+Uj8peFiBlkpRhltGa@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOvEjPhPXvFI9MjF8yw8UvoE+8F010lgGSwAzQpAconxsLkoYU
+	4A73Vx3pQ8OX1A/Bicgd1pvWk8FG84BI2BKNoj+9jV0UeBrYNV422scvah1gfRT8zkbCeGOJ2zF
+	KCzjEyOZ1hK+z7WhgdDu0twxrL1POD5c=
+X-Received: by 2002:a05:6214:43c8:b0:89e:a170:6af2 with SMTP id
+ 6a1803df08f44-8b028126c3emr446041286d6.41.1776988500816; Thu, 23 Apr 2026
+ 16:55:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1776916871.git.jpoimboe@kernel.org> <f34990d29dd7642ada7843613c96c563043c28a5.1776916871.git.jpoimboe@kernel.org>
- <CAPhsuW7rmG_tybJwKdrX+DsKx9a7xA-Qa57njW5r+NyvhT3DUA@mail.gmail.com> <tzunpmsnca3pi5ziak6cwrqftdl7oa34jcuy7cm4nrzzfd6276@jkates4giayx>
-In-Reply-To: <tzunpmsnca3pi5ziak6cwrqftdl7oa34jcuy7cm4nrzzfd6276@jkates4giayx>
+References: <cover.1776916871.git.jpoimboe@kernel.org> <93c7c80130375edd22874a57cdea132b0edbb0e4.1776916871.git.jpoimboe@kernel.org>
+ <CAPhsuW6_FzbAeqOduv56jZEk2E1xm+RqAxOHdekUHJwezvGOyw@mail.gmail.com>
+ <gmjxp6lzlwjfdp4gf2nktoqfwrdx4bapf2mnnezo2gjyjj6yqf@if35zh3xa7t6>
+ <CAPhsuW6VWk43z+BYCYRxo56w-4VKw8W3nmvVfCLh=ouN7a2Cqg@mail.gmail.com> <l6spha5o4wl5ksczovjwxghb5lhe4parswxhtzk2ac4inxmmhc@h2hiehwqkgmx>
+In-Reply-To: <l6spha5o4wl5ksczovjwxghb5lhe4parswxhtzk2ac4inxmmhc@h2hiehwqkgmx>
 From: Song Liu <song@kernel.org>
-Date: Thu, 23 Apr 2026 16:54:07 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7MqJH-Tof6u8iSYoACY_hDC_3WFQ0y-sxpmiF0rULxYQ@mail.gmail.com>
-X-Gm-Features: AQROBzDpTYR2x4JjBf6fx3p2pVZCefHLIYEuvowZAmzN-SXmJtI6IRaB7ZMYSQw
-Message-ID: <CAPhsuW7MqJH-Tof6u8iSYoACY_hDC_3WFQ0y-sxpmiF0rULxYQ@mail.gmail.com>
-Subject: Re: [PATCH 02/48] objtool/klp: Fix .data..once static local non-correlation
+Date: Thu, 23 Apr 2026 16:54:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6RZhwr2rWyMoedUEOXaRyBCyAwjwefrhz2dD-ukdLK9w@mail.gmail.com>
+X-Gm-Features: AQROBzDBdX-8_pfSYW6eEiiL2VrZbgvI86JgrFyuSOt2pv_jJCGgUzOA33VL96w
+Message-ID: <CAPhsuW6RZhwr2rWyMoedUEOXaRyBCyAwjwefrhz2dD-ukdLK9w@mail.gmail.com>
+Subject: Re: [PATCH 04/48] objtool/klp: Ignore __UNIQUE_ID_*() PCI stub functions
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
@@ -57,34 +59,59 @@ Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 23, 2026 at 4:34=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+On Thu, Apr 23, 2026 at 4:50=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
 > wrote:
 >
-> On Thu, Apr 23, 2026 at 11:54:39AM -0700, Song Liu wrote:
-> > On Wed, Apr 22, 2026 at 9:04=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel=
-.org> wrote:
+> On Thu, Apr 23, 2026 at 02:33:00PM -0700, Song Liu wrote:
+> > On Thu, Apr 23, 2026 at 12:31=E2=80=AFPM Josh Poimboeuf <jpoimboe@kerne=
+l.org> wrote:
 > > >
-> > > While there was once a section named .data.once, it has since been
-> > > renamed to .data..once with commit dbefa1f31a91 ("Rename .data.once t=
-o
-> > > .data..once to fix resetting WARN*_ONCE").  Fix it.
+> > > On Thu, Apr 23, 2026 at 12:05:03PM -0700, Song Liu wrote:
+> > > > On Wed, Apr 22, 2026 at 9:04=E2=80=AFPM Josh Poimboeuf <jpoimboe@ke=
+rnel.org> wrote:
+> > > > >
+> > > > > With Clang LTO enabled, DECLARE_PCI_FIXUP_SECTION() uses __UNIQUE=
+_ID()
+> > > > > to generate uniquely named wrapper functions, which are being rep=
+orted
+> > > > > as new functions and unnecessarily included in the patch module:
+> > > > >
+> > > > >   vmlinux.o: new function: __UNIQUE_ID_quirk_f0_vpd_link_661
+> > > > >
+> > > > > These stub functions only exist to make the compiler happy.  Just=
+ ignore
+> > > > > them along with any other dont_correlate() symbols.  Note that
+> > > > > dont_correlate() already includes prefix functions.
+> > > > >
+> > > > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> > > >
+> > > > The actual change appears to be much bigger than the subject line.
+> > > > Maybe rephrase it a bit?
 > > >
-> > > Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for =
-diffing object files")
-> > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> > > Hm, in fact this is a relic from a previous iteration of the patches:=
+ it
+> > > longer fixes what it claims to fix, as __UNIQUE_ID_ (other than
+> > > __ADDRESSABLE()) are now correlated.  The claimed issue actually gets
+> > > fixed later by the rewriting of the correlation algorithm.
+> > >
+> > > That said, I still think the below is needed, I just need to rewrite =
+the
+> > > commit log.
 > >
-> > Acked-by: Song Liu <song@kernel.org>
-> >
-> > Nitpick: shall we match both ".data.once" and ".data..once", so that wh=
-oever
-> > backports klp-build to older kernels will not have a surprise.
+> > Agreed.
 >
-> Hm, I'm a bit hesitant to do that.  One of the nice things about having
-> this code upstream is that we don't have to start collecting all the
-> cruft for old kernels.
+> From: Josh Poimboeuf <jpoimboe@kernel.org>
+> Subject: [PATCH] objtool/klp: Don't report uncorrelated functions as new
+>
+> Clang LTO uses __UNIQUE_ID() to generate some uniquely named wrapper
+> functions, like initstubs.  If they're uncorrelated, prevent them from
+> being reported as new functions and included unnecessarily.
+>
+> Note that dont_correlate() already includes prefix functions, so prefix
+> functions are still being ignored here.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Agreed. Instead of matching both, we can probably cover this with a
-test case.
+LGTM.
 
-Thanks,
-Song
+Acked-by: Song Liu <song@kernel.org>
