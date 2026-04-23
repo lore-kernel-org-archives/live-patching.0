@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4394A3563E8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A397932ED24;
 	Thu, 23 Apr 2026 04:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776917064; cv=none; b=tVoPmm8w7gTzhuh5w7nSdjh/2H1N9DTFMsTXnxETM85v1XyvRIiGFGbiMZTAHnk7T3LaeeWI/kPhSkB+49R5f5FN1SipY+gQGQCjB54cLtr5pbrjdNZWk5cVRcUVKcfCwyOH1wIhkr4EgmQ2uEVRmNSK2kastJLxQwUmU7vKBvg=
+	t=1776917064; cv=none; b=HPgAjMbvJc5twfOZA8nOdJa/AgixcwsKXurltL5Cw3Ri9ez/Om1g+bUNKtUnjwbZgRk7ZIe/MYeiPcUh/FwklLCzxEFCiYZ+VUD3JZvPFa1nxzI3VaRfpZqSqgZGUmmDB0GG8y3+Y83cwZc0ILYgczvDcG/nSHaZ/gXThNkhzMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1776917064; c=relaxed/simple;
-	bh=CRPOSrWb90t9017QEk/rI+Ud/vacLDUdl92sc+smDow=;
+	bh=m63KetNM8hjihetR3hWKARSwXrlz8FMc6/yAkKODq4o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VM4TXj2mjRiGTBPdTHxPzYAHr5yod8ORpE6LyrrvCC2DWPoVUYnonPylOq+4dasmM2VwXw1IG/fkgxFZw1XiP8OIhRx883rNhwOgIXaLuKB26aUaKLZgqWZHnBlha/BxVowmCH+ANFAejSC8VZ0IR9gh1zVYNGmfh274o6RDxKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOJpFITE; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=h3iIBQZDgzMCNXGrgHMttWD2rkyvTeHg9dnr0jrbjDmYGdChnP24sov0khbTDv5kFRx9UQvj/C6iUI8Ayz2DwKTmrnFNxTEQyvuz/Mjk5ftpj/bmqaw7LESfSiLdoQXETlouvStyE+PKk/Pz36SE8aOxVIoQq10iiXOCNMWBAgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cthaEmPR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOJpFITE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C6DC2BCB6;
-	Thu, 23 Apr 2026 04:04:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cthaEmPR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D2FC2BCB7;
+	Thu, 23 Apr 2026 04:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1776917064;
-	bh=CRPOSrWb90t9017QEk/rI+Ud/vacLDUdl92sc+smDow=;
+	bh=m63KetNM8hjihetR3hWKARSwXrlz8FMc6/yAkKODq4o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KOJpFITEx+22jPK0Q6qFGsyxJks6JqIr7Uw2sL/XzxnakRE05XXt1qWPihgg9miZL
-	 LMBXuk2r+EAmYACPa7RfVDYfbAh83CJXc5Zwd7iecbIv2RUVNHzCRu1mh7U/SoOpeo
-	 yB7QLMPP8XgvCoMBiNgXxjOhqhY+CakoNIyAa2ZFHNHPAC7MZ2axw0k/xX4XBwLnur
-	 WBCm2LnJvSAP5VbNYc687vRD9Necr0Clu9c9RN69U8IH9oWY0Ibxvt6gL8806f6NiP
-	 dEOhxemJJywKSCj73EBuWTXd8BFRqR10rlDWLZ3J1pIaKXa3mokb+3FHpaw2kVBh/Q
-	 JjgCSx+8sKaaQ==
+	b=cthaEmPR59tv0x35YlMswmRUajeUCH/x2qQ9kOU63AJLsjCm5/7kA8rYVCWR8jZiI
+	 3lh9+bEkSzNGAVRHo/ucOfg9Qb7JQY8Y0cn/7vV3fk/jUYm81brakJbHnTHIbP5o9s
+	 DAx5mfIA6/3m48Bht9DS9WTIYtzmINDnomcvsZP8KfG8XHdhs0qq0OpFPSur+KnOJP
+	 kf1dpZ4g8PKOIcOY07FRXA8BlprdZm7oHdfTTaQ0fcj4qbYzI2G06hFl3ZKtV3m9bH
+	 NNp6pfQPYXP2I2v8X0zDELifwKP9pdbIhDgCnpSh03DrC/GwYjLuoZ1FnWSpujMmPM
+	 n0DbyUOBxpwag==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 01/48] objtool/klp: Fix is_uncorrelated_static_local() for Clang
-Date: Wed, 22 Apr 2026 21:03:29 -0700
-Message-ID: <f2a97da92796708f77c6fb3e07816f84874b79a4.1776916871.git.jpoimboe@kernel.org>
+Subject: [PATCH 02/48] objtool/klp: Fix .data..once static local non-correlation
+Date: Wed, 22 Apr 2026 21:03:30 -0700
+Message-ID: <f34990d29dd7642ada7843613c96c563043c28a5.1776916871.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1776916871.git.jpoimboe@kernel.org>
 References: <cover.1776916871.git.jpoimboe@kernel.org>
@@ -49,77 +49,30 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
-
-For naming function-local static locals, GCC uses <var>.<id>, e.g.
-__already_done.15, while Clang uses <func>.<var> with optional .<id>,
-e.g. create_worker.__already_done.111
-
-The existing is_uncorrelated_static_local() check only matches the GCC
-convention where the variable name is a prefix.  Handle both cases by
-checking for a prefix match (GCC) and by checking after the first dot
-separator (Clang).
+While there was once a section named .data.once, it has since been
+renamed to .data..once with commit dbefa1f31a91 ("Rename .data.once to
+.data..once to fix resetting WARN*_ONCE").  Fix it.
 
 Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/klp-diff.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ tools/objtool/klp-diff.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 0b0d1503851f..b1b068e9b4c7 100644
+index b1b068e9b4c7..cb26c1c92a74 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -242,16 +242,17 @@ static struct symbol *next_file_symbol(struct elf *elf, struct symbol *sym)
- static bool is_uncorrelated_static_local(struct symbol *sym)
- {
- 	static const char * const vars[] = {
--		"__already_done.",
--		"__func__.",
--		"__key.",
--		"__warned.",
--		"_entry.",
--		"_entry_ptr.",
--		"_rs.",
--		"descriptor.",
--		"CSWTCH.",
-+		"__already_done",
-+		"__func__",
-+		"__key",
-+		"__warned",
-+		"_entry",
-+		"_entry_ptr",
-+		"_rs",
-+		"descriptor",
-+		"CSWTCH",
- 	};
-+	const char *dot;
- 
+@@ -257,7 +257,8 @@ static bool is_uncorrelated_static_local(struct symbol *sym)
  	if (!is_object_sym(sym) || !is_local_sym(sym))
  		return false;
-@@ -259,8 +260,20 @@ static bool is_uncorrelated_static_local(struct symbol *sym)
- 	if (!strcmp(sym->sec->name, ".data.once"))
+ 
+-	if (!strcmp(sym->sec->name, ".data.once"))
++	/* WARN_ONCE, etc */
++	if (!strcmp(sym->sec->name, ".data..once"))
  		return true;
  
-+	dot = strchr(sym->name, '.');
-+	if (!dot)
-+		return false;
-+
- 	for (int i = 0; i < ARRAY_SIZE(vars); i++) {
--		if (strstarts(sym->name, vars[i]))
-+		size_t len = strlen(vars[i]);
-+
-+		/* GCC: <var>.<id> */
-+		if (strstarts(sym->name, vars[i]) && (sym->name[len] == '.'))
-+			return true;
-+
-+		/* Clang: <func>.<var>[.<id>] */
-+		if (strstarts(dot + 1, vars[i]) &&
-+		    (dot[1 + len] == '.' || dot[1 + len] == '\0'))
- 			return true;
- 	}
- 
+ 	dot = strchr(sym->name, '.');
 -- 
 2.53.0
 
