@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5233D9054;
-	Thu, 23 Apr 2026 04:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF1E3DA7DA;
+	Thu, 23 Apr 2026 04:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776917078; cv=none; b=C41vCt4c/ns9BQz6tJ8PFutRAVPLM/+SphJfrjEw3DNe0pzZtUfJMJS+ZSUHo7WZVNYGjO3S1IEPHOoln+9jyhaRZDUrsHqZx6av2KifCXLyR8ybMAuSBNdrLg6oNRbd5Hj0lgK49A6Qr8u6T1t4LJCHtjqYl/dFad+vkuaRgIU=
+	t=1776917079; cv=none; b=XV1e0UqMpqJX9hOlvbAHdzx5za8gTUNfTS5lRHy7kOUA8yiGSvJl8cAhA7trl2HaDg0ZUAM7n4ug23Nw4ATHTKQphg8552G6BO2uhSHWnash3AwHgzoaLgxxa1rs64EWTlUbfBVy1XaiN05GG9V57DdCaIdJwIXeDN/HmdhvKEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776917078; c=relaxed/simple;
-	bh=KwniOSZKrmfZmefhKpGgVT9FoHPJ4cAvLoUrNHUDbJk=;
+	s=arc-20240116; t=1776917079; c=relaxed/simple;
+	bh=7tLQh+7OETPl9KIZz6uVG5pJs5EnZZ9Aues+hP46pQU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uO52PT6ER0O2NvemCwnJ5oL/KSSnMIdHUNQwvkuKXi41bvdz+HEFfzSHtKgvGLyCwTIWgu1/CDxjtyCXYVr8wA0mi3DgzIgQ9xd6srVxH5dc1E1MA5Y/EvZt8pxBvrqKaA4kSe4WpW4pVn+SS8Oje9/AAZK9e0d/u24914YBym0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1CyKk4T; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=nkOFNjXpIBo3+36knykMKgw2504X+IEleTwsZzppvoMtFq3pEU++9v2bGZMmrg8mtdYjJc6G0Vu/QaT71fjOtxpnWiuGuCc8AnFeiJLuqjdar7CLFlagt7Ng1JHBZ0k1AnJQMFyMHIgNrjdzcJk4MgmntylAFyQZb9GW0AeZaKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=glGmYpJg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1CyKk4T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61996C2BCB2;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="glGmYpJg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4624C2BCB7;
 	Thu, 23 Apr 2026 04:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776917078;
-	bh=KwniOSZKrmfZmefhKpGgVT9FoHPJ4cAvLoUrNHUDbJk=;
+	s=k20201202; t=1776917079;
+	bh=7tLQh+7OETPl9KIZz6uVG5pJs5EnZZ9Aues+hP46pQU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r1CyKk4THXKlJgNsmI0gbgKN8TZTwhCka7ORFxagTbgY21eNJKGH4Q/2+fWGDTaSs
-	 DeTRt3sF7mzTUNZm4/bK4ytEAqtQ7ztlfMNYGr3DcD+/S6zR7h3VAgWqe5Qx18sybC
-	 rdEqw0JXaIhlO7Zcnk9WDctDIOnEpVa3mDkW5PdRiuRzrH8/xk6Ifgmnrjfx2TXDEv
-	 1f+3EgMbAjdVKRlUorcCeimSerbNAuo5aRVOuhNzEKAIs43LQPeRlCFfQh3DlOccub
-	 JcZ+PtgBF8pUT1w7xk/cRdxjGcAsYVzhUZkB2HQ42bPyNi/9IQZQX3YVOxJxbLF03Z
-	 IoXlSwPDCWSfA==
+	b=glGmYpJgfLF9atIcpDOB50iD65TuVCr1JiRY4g9B2dV4kXcR2l272p1gs/g4EzLNH
+	 tkcYnfQEkvx1jkNzSKN4EJpF5/ERyQV5jdxdRTrzcZYzuCuyDtof4h/BEHOTdWvlDh
+	 uZ4c1ZpGakWKGZnf5Jo2yuSptYvV6M9q3hVoKb2L0v/7xon3fE3VJs0f0b1BKaAR+e
+	 qj8Nzft92flHFtH1JEaZSEQ3NcGxXnZTKIsPCexND6ImlYlWrA/qjwM4Rnw+iTm9er
+	 c1arNO7QWRbZeaZcAuBhXjTYj2s33MtB30t/dZs4TD2G3Idq08ldteTeB61mmwCxiD
+	 X23wnWbz4kc4w==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 30/48] objtool/klp: Handle Clang .data..Lanon anonymous data sections
-Date: Wed, 22 Apr 2026 21:03:58 -0700
-Message-ID: <11a0af398f5ebd591e87f3f8627bbf512260549a.1776916871.git.jpoimboe@kernel.org>
+Subject: [PATCH 31/48] objtool: Add is_alias_sym() helper
+Date: Wed, 22 Apr 2026 21:03:59 -0700
+Message-ID: <360097539ed947aea82ce5392548a898a346ffa7.1776916871.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1776916871.git.jpoimboe@kernel.org>
 References: <cover.1776916871.git.jpoimboe@kernel.org>
@@ -49,34 +49,63 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang generates anonymous data sections named .data..Lanon.<hash>.
-These need section-symbol references in the same way as .data..Lubsan
-(GCC) and .data..L__unnamed_ (Clang UBSAN) sections.  Without this,
-convert_reloc_sym() fails when processing relocations that reference
-these sections.
+Improve readability with a new is_alias_sym() helper.
+
+No functional changes intended.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/klp-diff.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/objtool/check.c               | 6 +++---
+ tools/objtool/include/objtool/elf.h | 5 +++++
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 57d2af98a33c..1951a8b2df44 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -873,9 +873,10 @@ static bool section_reference_needed(struct section *sec)
- 	if (strstarts(sec->name, ".rodata"))
- 		return true;
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 54ceac857979..4c18d6e7f6c3 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -491,7 +491,7 @@ static int decode_instructions(struct objtool_file *file)
+ 				return -1;
+ 			}
  
--	/* UBSAN anonymous data */
-+	/* Anonymous data (UBSAN, Clang anonymous constants, etc.) */
- 	if (strstarts(sec->name, ".data..Lubsan") ||	/* GCC */
--	    strstarts(sec->name, ".data..L__unnamed_"))	/* Clang */
-+	    strstarts(sec->name, ".data..L__unnamed_") ||	/* Clang */
-+	    strstarts(sec->name, ".data..Lanon."))	/* Clang */
- 		return true;
+-			if (func->embedded_insn || func->alias != func)
++			if (func->embedded_insn || is_alias_sym(func))
+ 				continue;
  
- 	return false;
+ 			if (!find_insn(file, sec, func->offset)) {
+@@ -2229,7 +2229,7 @@ static int add_jump_table_alts(struct objtool_file *file)
+ 		return 0;
+ 
+ 	for_each_sym(file->elf, func) {
+-		if (!is_func_sym(func) || func->alias != func)
++		if (!is_func_sym(func) || is_alias_sym(func))
+ 			continue;
+ 
+ 		mark_func_jump_tables(file, func);
+@@ -4527,7 +4527,7 @@ static int validate_symbol(struct objtool_file *file, struct section *sec,
+ 		return 1;
+ 	}
+ 
+-	if (sym->pfunc != sym || sym->alias != sym)
++	if (sym->pfunc != sym || is_alias_sym(sym))
+ 		return 0;
+ 
+ 	insn = find_insn(file, sec, sym->offset);
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index cd5844c7b4e2..3abe4cbc584c 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -279,6 +279,11 @@ static inline bool is_local_sym(struct symbol *sym)
+ 	return sym->bind == STB_LOCAL;
+ }
+ 
++static inline bool is_alias_sym(struct symbol *sym)
++{
++	return sym->alias != sym;
++}
++
+ static inline bool is_prefix_func(struct symbol *sym)
+ {
+ 	return sym->prefix;
 -- 
 2.53.0
 
