@@ -1,77 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129DC1DFFD
-	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:16:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FECEEC0
+	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777069002; cv=none; b=p054k5qkUlqTpw3S1O2AeocXRdChMI0xDU35aWpMsks17SaoSm4P6J4b42oaCqnpbBySQ/6mSSmwTbO5IPZvXLFKWhKEXiRQxxg9ViagEIV8VbNZLnZjVHuRhtEp5j+3uXS4Waz3+t9H8mRfFhFBtFtZeGBY9snGatt/XLU415M=
+	t=1777069144; cv=none; b=bicZd7tQUoNEPGciv0WobdBXLd7Cl3ChCA3VcCvuQdO+VrEviGd1TCXEEaJdxx3vip4uFCoC9pkqyL6KR/RWSJEIuxc40EDN7eeUxjPedhDYaFL3zPmBWbFoPGBVtwYoINGXD+vl+Q0QXJqKqazGeyo9hwWxsG3/IqNC8KUOqvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777069002; c=relaxed/simple;
-	bh=2QkS5OH8RBG/d0pcZwEXSnzhL4642zRdO9yLgQz02kA=;
+	s=arc-20240116; t=1777069144; c=relaxed/simple;
+	bh=TrAHvHGLvpzXcdqr4j1W/xnAnR38XVX/cr8Ruc57V0U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d4RcCN5iJCxVgsfgBDYZDNqzt+UX1TMs2S73odE/Ka++KC42fquuCuUtWOPrHZ0N+x0BwoBZ3HEBb2zTFkhzz5M9g+fWOOZcppZ5DEl2eJqgG0HPXLtDJR01XEBkTqn+2BtwrKimfzecJZFJSi+EtsMwD5eRpZw/PAnv2buyzxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfzOXIl1; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=LzWGPeN0lPXC+M0DfFmlkid+1G72wyeEnAUi+DnFWAQ8X2atMYxWW0YYI1KavBV8aiP5APDeBq830gFTD8vaFPpOXOmtZfYbUNxOoJC9I5Gi81azWBzM6E6+IMFKr7sXhzQDmgFKILRni1wHEynHBM6dNI6nIr3VoFwAkerJTB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahOPQf6B; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfzOXIl1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85CFC4AF09
-	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:16:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahOPQf6B"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31802C2BCB6
+	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777069001;
-	bh=2QkS5OH8RBG/d0pcZwEXSnzhL4642zRdO9yLgQz02kA=;
+	s=k20201202; t=1777069144;
+	bh=TrAHvHGLvpzXcdqr4j1W/xnAnR38XVX/cr8Ruc57V0U=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lfzOXIl1KxYSEZwVqbWBYhlf7U8DsEOT/3BUKAhsm31agVGOmCIRHtSML4bBnG/Wj
-	 iDGaOlvy+kePLy5vWFWbaCR/tiu/IO+gbNGqKXL5bIpYTgLt+gW0dUnfv4NviP6cTz
-	 hZS01O8pEgUEMl+5590qCp3fyOvCkNPCZe2rGNuECAwcwCReYddBQlQgDwLf5RdZZa
-	 i6+/XAUf5oLYVx0nui+Z5pYg1EB5QopDvT2OXe0Zsax3Kodh2ivFivwfQ30fB8c19L
-	 8UhfrPb1Pwm/tUkHEacvzlqLAZXtzYw6dA5QcwSE3fh//UlRBnJuVUTi49TQGEhlF5
-	 kd4tWZiNG5ylQ==
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-8a48deebe95so63845376d6.0
-        for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 15:16:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+JYWGP8Ak8ifY3lbtYHKPZPw3PPfGC+TlQnTWO+oAva/dQGwafKKfXTE5N+wzuWKCka2+iaJu7ZkM0dbpo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRl9WNagMfJ16445l7r8zw9Oqwofyu4Auefli1Il9BvC2SW30F
-	lDUwLd+cdFoVc64s+mEBFteiEK4bMS9XPPU0T7KC6HRFSLna6k4TbsWdjlfpJX6Ecnskt1z1WOJ
-	dQR7QKi8am0DtErDE6aZeT3j+WEbppok=
-X-Received: by 2002:a05:6214:5f86:b0:8a0:e931:5fbe with SMTP id
- 6a1803df08f44-8b0280ee3d9mr480013516d6.29.1777069000948; Fri, 24 Apr 2026
- 15:16:40 -0700 (PDT)
+	b=ahOPQf6BuP4nl1fuNidU9PfxxlRvtuQzBRoCumJNYVQjent0Vzu8fHsDMV1W2hL3e
+	 2Om4LQ3waHeEZeoctnYOcgVdTAjl7Ez07KcVoN39qaMQWwZoTCqen05YOviL2D171a
+	 cOE+UwpY3UYxrZlsEfsbJAxBJWlutN50v5i5RfJuQd+EKjt9AlJvEjeqPT3rhEJ+U4
+	 0RAm+mxrJIMczK3jrw3Hf08uNMKqy2816BEgDCoxM5jDDmqCIkwjB9OVs42VJtxfa1
+	 EcsUjW+k8vk6Mvw7OGsQUwjhrR7tznGbAtkotQ4oSO/IPKGh25eIXygHf1CEnrt6oW
+	 1GMT5McKG2YeQ==
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8cbc593a67aso769598585a.2
+        for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 15:19:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/x4VXSGbwU6M+nRoC59Q+Z9NeO+t1+6l/3SaHF5Q1j0NYZv/UZhEVIsBsrP3i2ezs6FWPxGTHXEHJYO3VM@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJDrKHC5smUJusN6t53B3HQPplX/UQDCFr+1c/nAnrWDiD+TOS
+	2pxfRm+r/+jlooMI5tKo43Eypfe7pk1JSVCrpTUoF+AVILIHABQokOARLCIs7zZ7htUKTE+5zBg
+	irUFdh5GjyFwQti7t5OFPA5wR7le3vBM=
+X-Received: by 2002:a05:620a:7083:b0:8cf:c0c9:bca with SMTP id
+ af79cd13be357-8e78fe20806mr4782173285a.17.1777069143397; Fri, 24 Apr 2026
+ 15:19:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1776916871.git.jpoimboe@kernel.org> <1b6557569cbdf893b832c37ba16dafaf69f9c3f6.1776916871.git.jpoimboe@kernel.org>
- <20260423084159.GW3126523@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260423084159.GW3126523@noisy.programming.kicks-ass.net>
+References: <cover.1776916871.git.jpoimboe@kernel.org> <29304d60b4b4949720e3e5a5e6f26196bc29fa07.1776916871.git.jpoimboe@kernel.org>
+In-Reply-To: <29304d60b4b4949720e3e5a5e6f26196bc29fa07.1776916871.git.jpoimboe@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Fri, 24 Apr 2026 15:16:29 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5JnWvCC1XeTFwcp6_3yGF2n-M8ymQ=bZfxr3bzwEixdQ@mail.gmail.com>
-X-Gm-Features: AQROBzASb78ZT5ntIpmSpgPL_3SQtQQkOVQYi2ey16Wba_jmiMPVjiWH3pPiKh4
-Message-ID: <CAPhsuW5JnWvCC1XeTFwcp6_3yGF2n-M8ymQ=bZfxr3bzwEixdQ@mail.gmail.com>
-Subject: Re: [PATCH 34/48] objtool: Consolidate file decoding into decode_file()
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Date: Fri, 24 Apr 2026 15:18:52 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7LdrgrbCp-jfX2NjWOuM3+-ggT7GTHg9Uub1_F6X_xbQ@mail.gmail.com>
+X-Gm-Features: AQROBzD_g98bvEbevEFieTUHUbEmeP_DUjM3B1U2A9XCt_e6gxdb6D-HVA6bYOk
+Message-ID: <CAPhsuW7LdrgrbCp-jfX2NjWOuM3+-ggT7GTHg9Uub1_F6X_xbQ@mail.gmail.com>
+Subject: Re: [PATCH 35/48] objtool/klp: Add "objtool klp checksum" subcommand
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 23, 2026 at 1:42=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
+On Wed, Apr 22, 2026 at 9:04=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
 >
-> On Wed, Apr 22, 2026 at 09:04:02PM -0700, Josh Poimboeuf wrote:
-> > decode_sections() relies on CFI and cfi_hash initialization done
-> > separately in check(), making it unusable outside of check().
-> >
-> > Consolidate the initialization into decode_sections() and rename it to
-> > decode_file(), and make it global along with free_insns() and
-> > insn_reloc() for use by other objtool components -- namely, the checksu=
-m
-> > code which will be moving to another file.
-> >
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> Move the checksum functionality out of the main objtool command into a
+> new "objtool klp checksum" subcommand.
 >
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> This has the benefit of making the code (and the patch generation
+> process itself) more modular.
+>
+> For bisectability, both "objtool --checksum" and "objtool klp checksum"
+> work for now.  The former will be removed after klp-build has been
+> converted to use the new subcommand.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
 Acked-by: Song Liu <song@kernel.org>
