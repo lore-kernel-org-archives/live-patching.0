@@ -1,72 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBAB388E62
-	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B4B349B1C
+	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777068632; cv=none; b=gTOUbuAS8aELm+GFaKcyhSwlt5xs8FNC2q8+AdtGMnLl89JXlEF/1h65aguPh0wm3fnCD6876BilQytEFTKQxaKJflzVHrpBy4MOY31jIhi7EaAMl0Xb0SQiaDR8sY69HUMZ91PHMdyeVyVOseaemD+pvZBU69wfAB6pZxUmfJ8=
+	t=1777068868; cv=none; b=HX3xzirkj7+JOhA0QFpD4eLFWCWKx58kxlVeJd5neo6OxGsbMotqhcgUnsrmnMlmXoENDhAUtRRWvWQz7872YVlsOpUZIXCdyt8hVU01B5wZkICcP6DlrqKZ/SHjSJcTBbmxH+2m7tAN3prKLOVPWxIP495vdC2i039WofcGjpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777068632; c=relaxed/simple;
-	bh=GNjPa0QzvhI0mOqKG1vhNikbHzECCewsJEI3GHGfdkk=;
+	s=arc-20240116; t=1777068868; c=relaxed/simple;
+	bh=kCc4lHd+8kN/RzhuTyo2jmpnpu+7HwgZ30dxi+sxgSo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q6JU144o3/T7+LdY0ctIdJJleh261eDI9wcVBzHRw6qvRqoI/+4jj1nUhOc8RF/4IWwxYGZnoPJxhVLhvAYqfRr3pALGYuhOe/5+2LfHsbxmtCWjcxLng8zva7HgWFpMkraAhhkV8b5zDh+f86xomxC5+rsbAErn8qZeJ7la/Nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAjm7lCX; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=fEx0cVftZ1IPQYbLYfm8Z7+e3jg9zpPoL01cwUgK3acYhGZ5pj3alBtoe5/nbAUDmc/5VBqQ0CGZgnzee6wKw63R4G0ghiDykTVuhMh3d2OdKSH2w8rQtJz4iRicerEiHcIcHLg78KeZVGVoNcXcReBOjpBOqfF/kD3Uk/TPIhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=np9+rwAB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAjm7lCX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582FAC2BCB0
-	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:10:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="np9+rwAB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7372FC2BCB6
+	for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 22:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777068632;
-	bh=GNjPa0QzvhI0mOqKG1vhNikbHzECCewsJEI3GHGfdkk=;
+	s=k20201202; t=1777068868;
+	bh=kCc4lHd+8kN/RzhuTyo2jmpnpu+7HwgZ30dxi+sxgSo=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BAjm7lCX2GB5vBeJIj2v+hXsSyQ63xEqqhQ3gMeZg8zd+CvMBqXMFdgNcp2XXgRBi
-	 5vuG7Xja9CdLgxeC8C4Qd0MRdpgWnO6C3CBwc9HA3cy+4dAWWiH5+d02F1wNglWqYg
-	 n/yJqjue5yP4EfoYgFYCcPLiOmxoHhNJF+zXUVdgzvTXFMqeF27d7aoFMZmusj9J1y
-	 URPCNN/bueXvjFWn+O+L37TFv6Hu83/ucQnWLungW/pU9iq/PUy3Ef6fLehPDUDI8n
-	 VjQD+wQbS6c2g9CX75Tg7S61ZUYpiHtoBxh/lEmYUGvWcm9Ghyeiy0DsuC9M1wIc76
-	 Lqm0TLYP6ApRQ==
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8a049a767c3so94765676d6.1
-        for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 15:10:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ9wFdpxfxKn1a82XsLFFdsbkcLH1hmYz/HBW3bEJNn5XFRZYcrgH1ht2k9zSHI7i9A3gkBcGFlc0uI9rLzu@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf2lu8FUpbt8anQREUZf5ouJt7yqzfSxY0pY+fuy1+32UVObm3
-	cs4HvPKVoCTarEgF98VT1ioYPH0FPgNutCBFeLVQQ/OEWez5207/uXQtBy2Xqn2SD8xrTUP1RjZ
-	9lKg1MA+4BY4lxcc+tfmJw5QztEatxWI=
-X-Received: by 2002:a05:6214:5b86:b0:89c:cfa9:f1fe with SMTP id
- 6a1803df08f44-8b028324ee8mr459687226d6.2.1777068631604; Fri, 24 Apr 2026
- 15:10:31 -0700 (PDT)
+	b=np9+rwABSt1kgYzldIye+MIk1F5TKRt0vtT0+rPt/QPpep5Pf3OHoaGY1eU8G5L5g
+	 maRh6ydlKqrj+JuDQOHLTRr5maEGUagvwYIb7Q8TThdutzp/BeKzJo85+8yvrZbzWw
+	 a/xWnSjDLChymljfUnEV6JT/EdFcbkK90LAPqvLz0C84Fao25GYK3LmK70iAS9W6VK
+	 mpu6SYQkDdzZ33MmHE0HJS5eBZjL/q1CpxNde9STtxy4X7g1NtPOzNOSY1ycmBDUFa
+	 dLbZboKv8A7dCdchSRTtmAJlpcP8aAg9L5rAlhNqkcK80JpjWiuRYAHDhgks8OU2v4
+	 jAklyNf3KY/dQ==
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8b038a00370so69395846d6.1
+        for <live-patching@vger.kernel.org>; Fri, 24 Apr 2026 15:14:28 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8Gqf10sY0rlGm288QOGD5ea4NkxPsPVvyztXXUoH2CCXuTG6Kl7CSg2WW9stnkTOcKES8ea66qUF3ZsXYH@vger.kernel.org
+X-Gm-Message-State: AOJu0YzK5bCDBl/8vwGXMlW2cYtnOQ1XgsSofj7eyDPRy2ZO45Y1OMjo
+	zbGg7PAnYitvMhWY8Q1JBSeqDSJvxJLCc7H96tK0sdMwZfp1EjPJsoRI+FTJ6Wp6Djuu8zEXsnk
+	oCX1h8272WytoLguSFo19NDPbRR5yRaE=
+X-Received: by 2002:ad4:5bce:0:b0:8b0:2d20:ff8e with SMTP id
+ 6a1803df08f44-8b02d2101acmr446877456d6.25.1777068867635; Fri, 24 Apr 2026
+ 15:14:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1776916871.git.jpoimboe@kernel.org> <360097539ed947aea82ce5392548a898a346ffa7.1776916871.git.jpoimboe@kernel.org>
- <20260423083500.GU3126523@noisy.programming.kicks-ass.net>
-In-Reply-To: <20260423083500.GU3126523@noisy.programming.kicks-ass.net>
+References: <cover.1776916871.git.jpoimboe@kernel.org> <ab7a6a65b9139aee9f52829048be928ca0c062b8.1776916871.git.jpoimboe@kernel.org>
+In-Reply-To: <ab7a6a65b9139aee9f52829048be928ca0c062b8.1776916871.git.jpoimboe@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Fri, 24 Apr 2026 15:10:20 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7Kjtpu6C4Wi30Mk+AD--zOJebz0Xm5_9HaXcA=Ek0WoA@mail.gmail.com>
-X-Gm-Features: AQROBzCh6Om-B2z6RfzOl3MIN03BB6A3LcWT_znez_zz1FgA7cmaUIz-im_T33o
-Message-ID: <CAPhsuW7Kjtpu6C4Wi30Mk+AD--zOJebz0Xm5_9HaXcA=Ek0WoA@mail.gmail.com>
-Subject: Re: [PATCH 31/48] objtool: Add is_alias_sym() helper
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Date: Fri, 24 Apr 2026 15:14:15 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4yPvnQ3fYMp+K1vBeZE9WCGkWi2eYiixk0CH6kO3Kx5w@mail.gmail.com>
+X-Gm-Features: AQROBzArmbNX469GChAv7XPAlkUZprMO6vyJIRI6Q8mijkFNZ33j49U-Hcd9dbk
+Message-ID: <CAPhsuW4yPvnQ3fYMp+K1vBeZE9WCGkWi2eYiixk0CH6kO3Kx5w@mail.gmail.com>
+Subject: Re: [PATCH 33/48] objtool/klp: Extricate checksum calculation from validate_branch()
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 23, 2026 at 1:35=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
+On Wed, Apr 22, 2026 at 9:04=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
 >
-> On Wed, Apr 22, 2026 at 09:03:59PM -0700, Josh Poimboeuf wrote:
-> > Improve readability with a new is_alias_sym() helper.
-> >
-> > No functional changes intended.
-> >
-> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> In preparation for porting the checksum code to other arches, make its
+> functionality independent from the CFG reverse engineering code.
 >
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Move it into a standalone calculate_checksums() function which iterates
+> all functions and instructions directly, rather than being called inline
+> from do_validate_branch().
+>
+> Since checksum_update_insn() is no longer called during CFG traversal,
+> it needs to manually iterate the alternatives.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
 Acked-by: Song Liu <song@kernel.org>
