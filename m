@@ -1,66 +1,66 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7BF43D4F7
-	for <live-patching@vger.kernel.org>; Tue, 28 Apr 2026 12:43:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B0FD41C31E
+	for <live-patching@vger.kernel.org>; Tue, 28 Apr 2026 12:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777380245; cv=none; b=SUpml+WVLU//JenS/6UOM1bdUImkZaW9m/GxvLpjA1c9x4jgJfiE8iXBi/MSoEtxypFCsyaVxjxsdALx5eEQiZzEKZKy6wViC3UwhakTUqJGiylhKhVbsv1TCtPDLUdcCzjF2QrzrCKEqVt9kBuvksB9mvuDhxxXJMvreL2Y3No=
+	t=1777380255; cv=none; b=qN6ej9m8n0aBmAnspzKUzCDb4c0fjZLiw1uKaOKKf+XZBaRvL7jm8wjaeqi0wCyNLASN3V2NiBiUQBGeFdzGON+INwoI358oiMJUYIBuozwFglP1Ao0uz339zw3WP0GqXPIqd7vd+yyOHQnvk7Vc6RL93hgaEMUYOJZtzarCqr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777380245; c=relaxed/simple;
-	bh=CcaEEf3raQ+8G3ikImRZLsiI8/I6/iYU3E/vFI6Tiik=;
+	s=arc-20240116; t=1777380255; c=relaxed/simple;
+	bh=M851tRMV/xqcCGzOe1deJBa3wdrYN/CyJu4FeeEuK6A=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=dcasEbCqCHZ8kGRhBte+AZD1ad0LlJYGdIIyf51SiYJHE4As0F2XdTwph6T6iTziYEktlokHBPILAfwpiL1RYWn0CJjjOCe93VDT545vZEytqOZDZsu4QSfN/wa/N2xXuee2XJOtz58JqLmIirrkYMhyqQJw0ACQSFYPwq0QWJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pGUVQKl2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+p8JqZVv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pGUVQKl2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=+p8JqZVv; arc=none smtp.client-ip=195.135.223.130
+	 References:Date:Message-Id; b=W+YzykHKhoamVcxH11eSGUIftQ4OWZiCYVZbDkkCf6dGurjX0ubEXcaLcJ9YGxMBLMXrI7apfF7hVJmsd36B+rVWHXCGySFs6CE3tGKFUHTDPVAeZ1nLMfQIMoUvaVRNY4axMhaqC+1FM5K0AG4xtF7R3DuGvPw8GUGXemAu86E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LD340ztM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ci2fG9EF; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LD340ztM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ci2fG9EF; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pGUVQKl2";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+p8JqZVv";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pGUVQKl2";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="+p8JqZVv"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LD340ztM";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ci2fG9EF";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LD340ztM";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ci2fG9EF"
 Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 6552B6A881;
+	by smtp-out1.suse.de (Postfix) with ESMTP id 8F45F6A84E;
 	Tue, 28 Apr 2026 12:43:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
 	t=1777380180; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y20POoP6V/cvXv8TWrMLc589N6UcfTk9Gsh8wUwAa3Q=;
-	b=pGUVQKl2ofIBBJNt/TjkNsfUXjOuj/FoengPRYex4e7AClMlG11/DNtLS0TqgL1b58cfSa
-	YA0cdeW4NjSxmZ1ewUE6x1fxLhrwjk1cHYJHV+yR7AuhfkTxxBrPjTtP1rQiRviZgjM2w/
-	q4Ce+5WzqN9XQSyPRaf5JEn64XZLP7I=
+	bh=M+X3Kdg4mVNxAtvQ1gOYLsUUv+5UuOgrZKRVQxAdXtQ=;
+	b=LD340ztMV09HBVZAz6vVRJ7xJOgc5ZoO22Ypgcy6vdaEaCRrRHm4nVcOfd1ISfYuO2b4E/
+	bK3+AgYPA0gmZcgF9J7itCOTeoOoBMlDLfQBkTyeKYzwD+j1aFoZO9KeOGe2g1pCF0Yzn6
+	KLukR1vuBknBg/z1/xr69YJCvJ0sGQ8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
 	s=susede2_ed25519; t=1777380180;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y20POoP6V/cvXv8TWrMLc589N6UcfTk9Gsh8wUwAa3Q=;
-	b=+p8JqZVvp/fOH7WI70aX9qml7foQHAS3XBFATEApSHf3r473+tBAte/DRkLCoWNK9KyeOX
-	dzowZP7yeca/y6CA==
+	bh=M+X3Kdg4mVNxAtvQ1gOYLsUUv+5UuOgrZKRVQxAdXtQ=;
+	b=Ci2fG9EFqS/IdYn+FpWYfrtvFkxY9fvucgbuFc5Jy8628M02ztAGRf67cVQARDc+JdlGEl
+	DGK+zzNNdjCfyKBg==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=pGUVQKl2;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=+p8JqZVv
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=LD340ztM;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Ci2fG9EF
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
 	t=1777380180; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y20POoP6V/cvXv8TWrMLc589N6UcfTk9Gsh8wUwAa3Q=;
-	b=pGUVQKl2ofIBBJNt/TjkNsfUXjOuj/FoengPRYex4e7AClMlG11/DNtLS0TqgL1b58cfSa
-	YA0cdeW4NjSxmZ1ewUE6x1fxLhrwjk1cHYJHV+yR7AuhfkTxxBrPjTtP1rQiRviZgjM2w/
-	q4Ce+5WzqN9XQSyPRaf5JEn64XZLP7I=
+	bh=M+X3Kdg4mVNxAtvQ1gOYLsUUv+5UuOgrZKRVQxAdXtQ=;
+	b=LD340ztMV09HBVZAz6vVRJ7xJOgc5ZoO22Ypgcy6vdaEaCRrRHm4nVcOfd1ISfYuO2b4E/
+	bK3+AgYPA0gmZcgF9J7itCOTeoOoBMlDLfQBkTyeKYzwD+j1aFoZO9KeOGe2g1pCF0Yzn6
+	KLukR1vuBknBg/z1/xr69YJCvJ0sGQ8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
 	s=susede2_ed25519; t=1777380180;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y20POoP6V/cvXv8TWrMLc589N6UcfTk9Gsh8wUwAa3Q=;
-	b=+p8JqZVvp/fOH7WI70aX9qml7foQHAS3XBFATEApSHf3r473+tBAte/DRkLCoWNK9KyeOX
-	dzowZP7yeca/y6CA==
+	bh=M+X3Kdg4mVNxAtvQ1gOYLsUUv+5UuOgrZKRVQxAdXtQ=;
+	b=Ci2fG9EFqS/IdYn+FpWYfrtvFkxY9fvucgbuFc5Jy8628M02ztAGRf67cVQARDc+JdlGEl
+	DGK+zzNNdjCfyKBg==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -69,44 +69,38 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 16/48] objtool/klp: Fix relocation conversion failures
- for R_X86_64_NONE
+Subject: Re: [PATCH 17/48] objtool: Fix reloc hash collision in
+ find_reloc_by_dest_range()
 From: Miroslav Benes <mbenes@suse.cz>
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
  live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
  Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
  Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-In-Reply-To: <2779114efd74a9dd9f1e78076e1b9e3a5273de73.1776916871.git.jpoimboe@kernel.org>
+In-Reply-To: <09dab1995c4ba6ca29dd70b0a7472f1a2975fefd.1776916871.git.jpoimboe@kernel.org>
 References: <cover.1776916871.git.jpoimboe@kernel.org>
- <2779114efd74a9dd9f1e78076e1b9e3a5273de73.1776916871.git.jpoimboe@kernel.org>
+ <09dab1995c4ba6ca29dd70b0a7472f1a2975fefd.1776916871.git.jpoimboe@kernel.org>
 Date: Tue, 28 Apr 2026 14:42:55 +0200
-Message-Id: <177738017547.11371.14673493009732344391.b4-review@b4>
+Message-Id: <177738017548.11371.16572871519515726131.b4-review@b4>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=495; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=CcaEEf3raQ+8G3ikImRZLsiI8/I6/iYU3E/vFI6Tiik=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhswPq4NmNGvt4hSOW5HN5Vu3wdmjc1OQ0dwX8V62nYqMN
- VtO2/zpZPRnYWDkYLAUU2R5vddZznBKroFm9bu7MINYmUCmSIs0MAABCwNfbmJeqZGOkZ6ptqGe
- IZChY8TAxSkAU91TwMHQH6iynGmGjKpb6Mk9bgppMx2n6xvu0G2+Vu7uvOfg1rztm6KlJhk/OKM
- wW8Zlw/WnJ5j3BavUzQysOHtA44hVWVvwqY1vdFY2nb0Vsi7v/6rC+Ek32Gb/PVz2d1ffvS83c3
- s7nMQXfp9dwNk2c07K+ZuVIvM4/pzbUCjY8PVO5YY3u4Vk37AY7G2/UKYWFWTm8vibUV2XrVZb5
- OImrTKru78NTry6djYp2fsnFze/ceG2h5pWP6/NmLn2aJ9HYMfpHcmzXmXvOy9pyxT/+fQXPt/f
- 17cVfjr9wfP9R4YG8bc34yrfSn/kf5T4RvU0Fx9DdkaTWKP5oWvrilcH660WlzlSN+X18p3qFR2
- Gt7JCAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=536; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=M851tRMV/xqcCGzOe1deJBa3wdrYN/CyJu4FeeEuK6A=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhswPq4NaezcUve1OMLlZPMG/0fxjRuaFtD/Mn2vUBFUv5
+ 7FXvRTvZPRnYWDkYLAUU2R5vddZznBKroFm9bu7MINYmUCmSIs0MAABCwNfbmJeqZGOkZ6ptqGe
+ IZChY8TAxSkAU71+PwfDtjzepzqZ5Xt2JMVlvjQN2bRc9dyRIMNzJeHb5rFvqVvAuObV1eJbPt/
+ czh2K/vR8kY/3G82TpxvuWP4py7FUrrvSdHOFVsgkm64I8Qf3xTczfQ50PmhR8aROb6L57i/ZR8
+ 9fMnYp+/JCPFDhBdcHB3E+M8W9whmlyxjknix4m2jfzrHz1Mvn0g5ThBMZY3pufDzAGWx9/7XCk
+ VWqP85eMS+IvLCddenm02ZnZu2Q0p685o/lefUbYpHW7+/W73LLy+AMYLIqfTFd1KHRQ1w78XqH
+ 0LxUo3kzzkRnRZitMPLzlXzd/OrQAZu3G1z5fzL6/v7/9tvPGZNctPtd9794vNq51Fje48734JI
+ LV18cAQA=
 X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
  fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spamd-Bar: ++++++++++++++++++++
-X-Rspamd-Queue-Id: 6552B6A881
-X-Rspamd-Action: add header
-X-Spam-Flag: YES
-X-Spam-Score: 20.69
-X-Spam-Level: ********************
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [20.69 / 50.00];
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [20.68 / 50.00];
 	SPAM_FLAG(5.00)[];
 	NEURAL_SPAM_LONG(3.50)[1.000];
 	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	NEURAL_SPAM_SHORT(3.00)[1.000];
+	NEURAL_SPAM_SHORT(2.99)[0.998];
 	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
 	RDNS_NONE(2.00)[];
 	ONCE_RECEIVED(1.20)[];
@@ -114,7 +108,7 @@ X-Spamd-Result: default: False [20.69 / 50.00];
 	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
-	BAYES_SPAM(0.00)[41.56%];
+	BAYES_SPAM(0.00)[27.80%];
 	RCVD_COUNT_ZERO(0.00)[0];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	ARC_NA(0.00)[];
@@ -131,15 +125,22 @@ X-Spamd-Result: default: False [20.69 / 50.00];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	R_DKIM_ALLOW(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email]
+X-Spamd-Bar: ++++++++++++++++++++
+X-Rspamd-Queue-Id: 8F45F6A84E
+X-Rspamd-Action: add header
+X-Spam-Flag: YES
+X-Spam-Score: 20.68
+X-Spam-Level: ********************
 X-Spam: Yes
 
-On Wed, 22 Apr 2026 21:03:44 -0700, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> Objtool has some hacks which NOP out certain calls/jumps and replace
-> their relocations with R_X86_64_NONE.  The klp-diff relocation
-> extraction code will error out when trying to copy these relocations due
-> to their negative addend, which would only makes sense for a PC-relative
-> branch instruction.  Just ignore them.
+On Wed, 22 Apr 2026 21:03:45 -0700, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> In find_reloc_by_dest_range(), hash collisions can cause a high-offset
+> relocation to appear when probing a low-offset hash bucket.
 > 
+> Only return early when the best match found so far genuinely belongs to
+> the current bucket (its offset is within the bucket's stride range).
+> Otherwise, continue scanning later buckets which may contain
+> lower-offset matches.
 > 
 > [...]
 
