@@ -1,66 +1,66 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E79402451
-	for <live-patching@vger.kernel.org>; Tue, 28 Apr 2026 12:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AA943D504
+	for <live-patching@vger.kernel.org>; Tue, 28 Apr 2026 12:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777378372; cv=none; b=b772eKbjJxKkf7H/Jq+mv7bVUV3p3C5eqkUuiIUKRls0H4JuB1J5SezhvJpZN8/IwEQaOCkvvtuCMf2qZQ5x0QJ7yCfPxyZsrbpzvsLGe7GLzZNTJgkW8TQ2SvJrieRk4RcEhR7gSbWr1rgio/SBFhLTadpGV1vU8cdXRRrlGpE=
+	t=1777380186; cv=none; b=O21A0zCwyxpu9TZZmgV4vzbph/iF986fqKk+iYpcYBF0UaaPTG6g13qyELXAMi7nhJbgWgW6Rs6WyGZ7YQGCXRI6PXb/kr3PlhXZnwPPyXDi0jVgcJgtUhuTzD9+71/emRgPbEPVrJfkEu2jzdWng/OJ1pNURgF1ItDwIHcH8pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777378372; c=relaxed/simple;
-	bh=SvvjyxN4h/mnVkrLCKw5rrXcqpwvssAioiPn0QU8Muo=;
+	s=arc-20240116; t=1777380186; c=relaxed/simple;
+	bh=YLo4HdoWAavQR85kHUyi05vt3OQUEANL8JUhswEbf3Q=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=sOV9h1Rr3f/8KEJ8jImgpzI99UPvcA8sgL+MVSk1imwFdfJpJyJ95xr2Zy7KK8fayvda8EYuR3qly6stejhUe8cXd8tsin2PoZva6Bmwf+iXJ/NsFI7/DvNZLsKmyqe5PnlmKRpeXN8Q64k1p7OjzfbtpwjYQ0dWZZFYZ6FPm48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=O7gedYO1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=lVGwoNX3; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=O7gedYO1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=lVGwoNX3; arc=none smtp.client-ip=195.135.223.131
+	 References:Date:Message-Id; b=gySPBBK5uX9AR57gnWFgCyRoEpriU5AzVs08nj3KhbTldQ7iOi+4snILA01c2m0/9hfEzfJH8fnd7U3gb2nlGOY8JBZui7SBA4Y343QZKJU5ODeM8UCOywhBSdqn2vLsh+BN0WobuwNrvm39TmfUrRvJ/1odMwNjA1hqZ9/3Go0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ddxhsm16; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UwvL9AW8; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ddxhsm16; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UwvL9AW8; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="O7gedYO1";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="lVGwoNX3";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="O7gedYO1";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="lVGwoNX3"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ddxhsm16";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UwvL9AW8";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ddxhsm16";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UwvL9AW8"
 Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 3BACC5BD47;
-	Tue, 28 Apr 2026 12:12:40 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTP id 7403A6A855;
+	Tue, 28 Apr 2026 12:42:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1777378360; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1777380178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TPYIs7h+GtsN8p1mPQujvbaG/qEgEobiWK6PXdZ7bjM=;
-	b=O7gedYO1IXRQh7wjBB4a/P8hLqdJgOAmUHfY57sSBCyBZP1/0HsF41dWocXZ/9UnSjktHs
-	T1q6qeUlZ41ZPh0YssRyRk+OChD0T47UL+KnDmbNxGwnnW4m7vP3wheG/xhQhi1hb0A8uh
-	oH6rSgFYh/bhjvMSLTpeB7RJH1qYcm4=
+	bh=U+2son+Tigq+kJ/g+2iRuOIPLhmqOFES90LteJEmicA=;
+	b=ddxhsm163JF+nTCn0eD8G/mDuJkc4pCjBeu9M4cHA3PA8a9HTrvLdVbv2Cy2lO/Y5Bk3lo
+	Z7odb9QxTG6F3w9SUeSguOJmkltSawpn2tGtRfOQFaTS37cJs1q2GxaoXWFXX2o/uXUF4B
+	kMShTLi0N+Bia729QvQsr0a7GXPgb5I=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1777378360;
+	s=susede2_ed25519; t=1777380178;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TPYIs7h+GtsN8p1mPQujvbaG/qEgEobiWK6PXdZ7bjM=;
-	b=lVGwoNX3REYPpXozRZ9X6Ki+z/PrjVqskDwmQ26vGCczBTspX2pu+qVvf3nXF+r2ASJtpG
-	ITN0MH7XUVI2XsCQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=O7gedYO1;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=lVGwoNX3
+	bh=U+2son+Tigq+kJ/g+2iRuOIPLhmqOFES90LteJEmicA=;
+	b=UwvL9AW8uUBNbhsnKZf2n35VdEZ9XAPft7tO3enRSrbdKXuVofYWCRaDQM8QFC38OMaoyV
+	WYW+vDK/gSyVHVBw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ddxhsm16;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=UwvL9AW8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1777378360; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1777380178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TPYIs7h+GtsN8p1mPQujvbaG/qEgEobiWK6PXdZ7bjM=;
-	b=O7gedYO1IXRQh7wjBB4a/P8hLqdJgOAmUHfY57sSBCyBZP1/0HsF41dWocXZ/9UnSjktHs
-	T1q6qeUlZ41ZPh0YssRyRk+OChD0T47UL+KnDmbNxGwnnW4m7vP3wheG/xhQhi1hb0A8uh
-	oH6rSgFYh/bhjvMSLTpeB7RJH1qYcm4=
+	bh=U+2son+Tigq+kJ/g+2iRuOIPLhmqOFES90LteJEmicA=;
+	b=ddxhsm163JF+nTCn0eD8G/mDuJkc4pCjBeu9M4cHA3PA8a9HTrvLdVbv2Cy2lO/Y5Bk3lo
+	Z7odb9QxTG6F3w9SUeSguOJmkltSawpn2tGtRfOQFaTS37cJs1q2GxaoXWFXX2o/uXUF4B
+	kMShTLi0N+Bia729QvQsr0a7GXPgb5I=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1777378360;
+	s=susede2_ed25519; t=1777380178;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TPYIs7h+GtsN8p1mPQujvbaG/qEgEobiWK6PXdZ7bjM=;
-	b=lVGwoNX3REYPpXozRZ9X6Ki+z/PrjVqskDwmQ26vGCczBTspX2pu+qVvf3nXF+r2ASJtpG
-	ITN0MH7XUVI2XsCQ==
+	bh=U+2son+Tigq+kJ/g+2iRuOIPLhmqOFES90LteJEmicA=;
+	b=UwvL9AW8uUBNbhsnKZf2n35VdEZ9XAPft7tO3enRSrbdKXuVofYWCRaDQM8QFC38OMaoyV
+	WYW+vDK/gSyVHVBw==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -69,38 +69,38 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 11/48] objtool/klp: Fix handling of zero-length
- .altinstr_replacement sections
+Subject: Re: [PATCH 12/48] objtool/klp: Fix cloning of zero-length section
+ symbols
 From: Miroslav Benes <mbenes@suse.cz>
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
  live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
  Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
  Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-In-Reply-To: <99099e77dffb352f97c5276298ab344c186a3ee2.1776916871.git.jpoimboe@kernel.org>
+In-Reply-To: <2a02cb0d5de7a60f5ef135dac071c93f6303bd82.1776916871.git.jpoimboe@kernel.org>
 References: <cover.1776916871.git.jpoimboe@kernel.org>
- <99099e77dffb352f97c5276298ab344c186a3ee2.1776916871.git.jpoimboe@kernel.org>
-Date: Tue, 28 Apr 2026 14:12:33 +0200
-Message-Id: <177737835357.11371.10822107396048907769.b4-review@b4>
+ <2a02cb0d5de7a60f5ef135dac071c93f6303bd82.1776916871.git.jpoimboe@kernel.org>
+Date: Tue, 28 Apr 2026 14:42:55 +0200
+Message-Id: <177738017545.11371.11359100423490469258.b4-review@b4>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=333; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=SvvjyxN4h/mnVkrLCKw5rrXcqpwvssAioiPn0QU8Muo=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhswPS8xvh/dKTk1zM00pmL9/5eED12wiFq7jldx2NtVp5
- +cOt2jTTkZ/FgZGDgZLMUWW13ud5Qyn5BpoVr+7CzOIlQlkirRIAwMQsDDw5SbmlRrpGOmZahvq
- GQIZOkYMXJwCMNUbCtj/h6x1n5b3577SzP8fEk4vbAvxmbWGOVs4z83hXvjBXkXviylOr6cINDU
- G7d4d0nH6eWVMyZ4DvlPyVh/YVWDXW7VQtW3dQe98sZ7Vi9Yoy0Rk7rvz6ecBP42FGga72p1Py3
- iutq5W4FD6ZPuGR35aS/vNw3y7Z54MN405ZPDX+JqI2KqUdY3TL9/eUeCZucsi59gn/Q1vt9+29
- K/1TnJOLEvMeOIctf/Sy93LxLQCxYQ+MhYbuWSKqnTVLema7/Ixn2OChdWVOYeuxkbPkI24X23F
- OyGVRWdqi3bKCSP+aA31mAUa6co51ywivtz/la8osT0xef68haH1bq0GkYz9JjyFR3briUW49Ud
- ncgMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=279; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=YLo4HdoWAavQR85kHUyi05vt3OQUEANL8JUhswEbf3Q=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhswPqwPfO3Mk7z9hlOwu/sT/d+7jy+quieebfE52cbKf6
+ 6x+oNXayejPwsDIwWAppsjyeq+znOGUXAPN6nd3YQaxMoFMkRZpYAACFga+3MS8UiMdIz1TbUM9
+ QyBDx4iBi1MApvp0Gvv/pCyv9wXsF5YVNfrdXDpTx+nHu79TxH+y6DRs/M+8Y0bOqyhnkanqbx0
+ vlKWaOp+u5fqfMfHmvRym/cwJlR3uTip+V21VE4MC/mddtYtNLlZw+y4beXiy2ZSSxhQWmcWl6W
+ FaypUSyvMabuwxffMtuJznSvZXh9l2iqfzV4uv+Tv9YILZZv3A/fWrxHY8Ytvh5bZ8buP3ptsxc
+ yaLqb6dwMw94TWbtfLEU21R5ZsXeVgefK3HlmnLcL/ifXUz28yM71seV5pzyCSutirbF3lSo+5V
+ tcwV/8tpvP7MkwN3BW9/IGpxw2XxSaXMndqv/p7Y0PQ/bXebCHu45NINE15H1Oe/6nQPvCnJt8N
+ K9SIA
 X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
  fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
 X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [20.39 / 50.00];
+X-Spamd-Result: default: False [20.17 / 50.00];
 	SPAM_FLAG(5.00)[];
 	NEURAL_SPAM_LONG(3.50)[1.000];
 	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	NEURAL_SPAM_SHORT(3.00)[1.000];
+	NEURAL_SPAM_SHORT(2.78)[0.926];
 	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
 	RDNS_NONE(2.00)[];
 	ONCE_RECEIVED(1.20)[];
@@ -109,32 +109,30 @@ X-Spamd-Result: default: False [20.39 / 50.00];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_TRACE(0.00)[suse.cz:+];
 	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email];
 	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
 	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	GREYLIST(0.00)[pass,meta];
+	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	GREYLIST(0.00)[pass,meta];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email]
+	DKIM_TRACE(0.00)[suse.cz:+]
 X-Spamd-Bar: ++++++++++++++++++++
-X-Rspamd-Queue-Id: 3BACC5BD47
+X-Rspamd-Queue-Id: 7403A6A855
 X-Rspamd-Action: add header
 X-Spam-Flag: YES
-X-Spam-Score: 20.39
+X-Spam-Score: 20.17
 X-Spam-Level: ********************
 X-Spam: Yes
 
-On Wed, 22 Apr 2026 21:03:39 -0700, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> When a section is empty (e.g. only zero-length alternative
-> replacements), there are no symbols to convert a section symbol
-> reference to.  Skip the reloc instead of erroring out.
+On Wed, 22 Apr 2026 21:03:40 -0700, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
+> Fix NULL dereference when cloning a symbol from an empty section.
+> sec->data is only populated for sections with non-zero size.
 
 Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 
