@@ -1,105 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A213BA25C;
-	Thu, 30 Apr 2026 14:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570ED438FEC
+	for <live-patching@vger.kernel.org>; Thu, 30 Apr 2026 15:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777560806; cv=none; b=Pc0btyilswekxPgXV++hD7F+JsqCM9bfM+8Jlo7bOnrdZdRczuvAmbjrElMhp5/88z0oEF07uIsWUENKSg7S8IMZgtYw0UgGiONNeP1cUjPcraBxPrj4NOLl+xcwKuxvaE9fPvfuLGVqb8JXRrzw/zc3DgY/OAraqindEMcyaXw=
+	t=1777561923; cv=none; b=jICAR/8IgrDwwUEVGvhhozmGtncQ34XBdEZKsSOvWOhQKmBZjkjbioF/mkhW9o4nGSdRnBxyr5jWIHH85Jo9KGDC/XSWQ2NItnGdnGHAm0IET+r6V+tQBJ5FtdMCC9F+t0YF5jHJEhyHx1buyWndY0UD5u7rWp3KscXS6hDkABA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777560806; c=relaxed/simple;
-	bh=aabHYQnU0VgK38gZ78iM846QRJyUGNMNhhs5dafz8Rw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PIOMiI2QXeWoyfWfX0X71QhsFZ4aTY8i8NHFa+nhgri4DatIKljoEO1fSglBARRtbA+DWabZK40dA0+Je4TJLFG14/kXKQL4llriVODvYrGGn9O0XZuu8eorPZa+t7usdoIlGZjEJ63i4tfChqAC0Kc1GK9bsm+eoiDFbO/cfNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsQvX5my; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777561923; c=relaxed/simple;
+	bh=mkTj0HUPdtaF4M9iRKk2jM6BLpIgDC0BRYzHz4cP5LQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k/3BjalE0Pog0rnzWCeJF7Eig99wjDtluJfT0TD6oUOI0CP12wpursYEbbA7wgp443KOmncGU1Amln3u0oPFTL35INH1gSuaaiOJtnq3qToq1iaqxr3Od9bIZYfN8DRflgF1ZyR+5zuxQ5jh0HG25XzMdVN3NXppjXeVOYJaqV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOPOFqpr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsQvX5my"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41975C2BCB3;
-	Thu, 30 Apr 2026 14:53:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOPOFqpr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D5CC2BCB3
+	for <live-patching@vger.kernel.org>; Thu, 30 Apr 2026 15:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777560806;
-	bh=aabHYQnU0VgK38gZ78iM846QRJyUGNMNhhs5dafz8Rw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GsQvX5myc7YToZls9+nyOjZ9FCMquGG0x2LKr3jVqFu90y9pSKYfPUkU8rX2LfV/t
-	 CV4m8hasAXErkBsDbQQjF9WuA+7hipumz4wSZaRaH7s40+NEcj/wowbN2MYEKt3JjQ
-	 FX0W1ds2L2USeGvhhF0JpuDNqhODZTWAYp3gKyyrhCLQGkpPMOexS1D3pjv3+xE7PU
-	 IWdUMVM6EiLaG/VWUfb31f++qTXM8pmyHVzHcbSGNB1jQ0P/yHMVReSx/PX0qwPiBU
-	 2CBJjNUlWkn0JggcgDHOUCnKC+ye+kfX7sGTC9FtMsNkgD88cZnJgKY7b+TK4OrQ0i
-	 oEFX7LehjNyGA==
-Date: Thu, 30 Apr 2026 07:53:23 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH 41/48] objtool/klp: Rewrite symbol correlation algorithm
-Message-ID: <z5njxpewtwl4m3drovmqykouqmwon3klnsvs6ypa63jym7t2ic@nonc2g73yvs3>
-References: <cover.1776916871.git.jpoimboe@kernel.org>
- <284944d45120ff69959c4d9cde90db13e493d223.1776916871.git.jpoimboe@kernel.org>
- <CAPhsuW4zF9P1mpZ88P5k=TgbHSCQfrdqFok9YiANHo5CLttZNQ@mail.gmail.com>
- <abm7sbrlshe23ccholc5q67idnvuackxfy34thnpvyeiglafwe@cdtxtdi3zenv>
- <CAPhsuW5H47o59-Np_Uj1xP5V5wFj7KeVEaiDUoTGki=uxrbGDQ@mail.gmail.com>
+	s=k20201202; t=1777561922;
+	bh=mkTj0HUPdtaF4M9iRKk2jM6BLpIgDC0BRYzHz4cP5LQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=KOPOFqpr9jRNpQbq7Rz3ARf6aPIMGBhWJ86U3Ju0zTrR+d4R4OwqDFHdyH9xwTUxJ
+	 kxRqYGSwna9PgLB2A0o13ZR1hqsyWQtgssrs555cgttQPRNyMusvV223WwxQqXh7cz
+	 9nnX2meLeOjt3AvMNd+32YIJcscczuTHbKii7lFWpt5qY/Bp+cvshepL6qDDkt+/33
+	 ohbm8nSPUQA83fShf4aIFLSt73PMgxrtN1k1I0NyWllNJ6ZsMLdWBLaBm+puQg4Lct
+	 JYYC4uJXk+BZxjgmoT7R2bcblVISB0Il5TmN2XLYyEudx0b0yydCJWZGL9dLDA++0w
+	 pChbxf8j2b7WQ==
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8aca4e14411so10933596d6.3
+        for <live-patching@vger.kernel.org>; Thu, 30 Apr 2026 08:12:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+m7mdEdyiiIaxZvRubPeXKyl4+zfERTyZo+AcDcT6JC4FSbMw6rv+Axhm/mHKTMGlJCQnIKhAri2OFRz28@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4y51o5hyqFSI+NC4Hrazm2kBkuWNi/KdjXpOuyeiOeb+qZK3e
+	dsX8ZVXCjbaqfSqn7S3Ael/1gjulCrYhi6K38/aFVzQgo4Tvc1d/d+FOcsv0O7hF2fcCUoj/Dkg
+	ctJX5M3z+5KNINB5AU68P5FrW3+hZVTc=
+X-Received: by 2002:a05:6214:2a8a:b0:8ac:b4d5:50ec with SMTP id
+ 6a1803df08f44-8b3fe801483mr47056106d6.38.1777561921695; Thu, 30 Apr 2026
+ 08:12:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5H47o59-Np_Uj1xP5V5wFj7KeVEaiDUoTGki=uxrbGDQ@mail.gmail.com>
+References: <cover.1776916871.git.jpoimboe@kernel.org> <284944d45120ff69959c4d9cde90db13e493d223.1776916871.git.jpoimboe@kernel.org>
+ <CAPhsuW4zF9P1mpZ88P5k=TgbHSCQfrdqFok9YiANHo5CLttZNQ@mail.gmail.com>
+ <abm7sbrlshe23ccholc5q67idnvuackxfy34thnpvyeiglafwe@cdtxtdi3zenv>
+ <CAPhsuW5H47o59-Np_Uj1xP5V5wFj7KeVEaiDUoTGki=uxrbGDQ@mail.gmail.com> <z5njxpewtwl4m3drovmqykouqmwon3klnsvs6ypa63jym7t2ic@nonc2g73yvs3>
+In-Reply-To: <z5njxpewtwl4m3drovmqykouqmwon3klnsvs6ypa63jym7t2ic@nonc2g73yvs3>
+From: Song Liu <song@kernel.org>
+Date: Thu, 30 Apr 2026 16:11:47 +0100
+X-Gmail-Original-Message-ID: <CAPhsuW4g=ZTnFsrTeV_sQYZyK==twONBTHjDbcdbx1MHs9Yfuw@mail.gmail.com>
+X-Gm-Features: AVHnY4I4GWFBmLfN2XnmI-0OBoVGbzncQRH4Ezw0kKeGMPukdoe_JcpdmX8hNgE
+Message-ID: <CAPhsuW4g=ZTnFsrTeV_sQYZyK==twONBTHjDbcdbx1MHs9Yfuw@mail.gmail.com>
+Subject: Re: [PATCH 41/48] objtool/klp: Rewrite symbol correlation algorithm
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2026 at 09:50:46PM +0100, Song Liu wrote:
-> On Tue, Apr 28, 2026 at 5:23 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> [...]
-> > > Also a few nitpicks below.
-> > >
-> > > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > > > ---
-> > > [...]
-> > > > +static struct symbol *find_twin(struct elfs *e, struct symbol *sym1)
-> > > > +{
-> > > > +       struct symbol *name_last = NULL, *scope_last = NULL,
-> > > > +                     *file_last = NULL, *csum_last = NULL;
-> > > > +       unsigned int name_orig = 0, name_patched = 0;
-> > > > +       unsigned int scope_orig = 0, scope_patched = 0;
-> > > > +       unsigned int file_orig = 0, file_patched = 0;
-> > > > +       unsigned int csum_orig = 0, csum_patched = 0;
-> > > > +       struct symbol *sym2, *match = NULL;
-> > > > +
-> > > > +       /* Count orig candidates */
-> > > > +       for_each_sym_by_demangled_name(e->orig, sym1->demangled_name, sym2) {
-> > > > +               if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2) ||
-> > > > +                   (!maybe_same_file(sym1, sym2)))
-> > > >                         continue;
+On Thu, Apr 30, 2026 at 3:53=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
+>
+> On Tue, Apr 28, 2026 at 09:50:46PM +0100, Song Liu wrote:
+> > On Tue, Apr 28, 2026 at 5:23=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel=
+.org> wrote:
+> > [...]
+> > > > Also a few nitpicks below.
 > > > >
-> > > > -               count++;
-> > > > -               result = sym2;
-> > > > +               /* Level 1: name match (widest filter)  */
-> > > > +               name_orig++;
-> > > > +
-> > > > +               /* Level 2: scope (scope changes allowed) */
-> > > > +               if (is_tu_local_sym(sym1) != is_tu_local_sym(sym2))
+> > > > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> > > > > ---
+> > > > [...]
+> > > > > +static struct symbol *find_twin(struct elfs *e, struct symbol *s=
+ym1)
+> > > > > +{
+> > > > > +       struct symbol *name_last =3D NULL, *scope_last =3D NULL,
+> > > > > +                     *file_last =3D NULL, *csum_last =3D NULL;
+> > > > > +       unsigned int name_orig =3D 0, name_patched =3D 0;
+> > > > > +       unsigned int scope_orig =3D 0, scope_patched =3D 0;
+> > > > > +       unsigned int file_orig =3D 0, file_patched =3D 0;
+> > > > > +       unsigned int csum_orig =3D 0, csum_patched =3D 0;
+> > > > > +       struct symbol *sym2, *match =3D NULL;
+> > > > > +
+> > > > > +       /* Count orig candidates */
+> > > > > +       for_each_sym_by_demangled_name(e->orig, sym1->demangled_n=
+ame, sym2) {
+> > > > > +               if (sym2->twin || sym1->type !=3D sym2->type || d=
+ont_correlate(sym2) ||
+> > > > > +                   (!maybe_same_file(sym1, sym2)))
+> > > > >                         continue;
+> > > > >
+> > > > > -               count++;
+> > > > > -               result =3D sym2;
+> > > > > +               /* Level 1: name match (widest filter)  */
+> > > > > +               name_orig++;
+> > > > > +
+> > > > > +               /* Level 2: scope (scope changes allowed) */
+> > > > > +               if (is_tu_local_sym(sym1) !=3D is_tu_local_sym(sy=
+m2))
+> > > >
+> > > > is_tu_local_sym(sym1) is called many times, shall we add a variable
+> > > > for it?
 > > >
-> > > is_tu_local_sym(sym1) is called many times, shall we add a variable
-> > > for it?
+> > > Unless it's actually a performance issue I'd prefer not to add yet
+> > > another bit to struct symbol.
 > >
-> > Unless it's actually a performance issue I'd prefer not to add yet
-> > another bit to struct symbol.
-> 
-> We don't need to add it to struct symbol, a local variable for sym1
-> will be good. No need for sym2.
-> 
-> IOW, we have something like
-> 
-> bool sym1_is_local = is_tu_local_sym(sym1);
-> ...
-> if (sym1_is_local != is_tu_local_sym(sym2))
+> > We don't need to add it to struct symbol, a local variable for sym1
+> > will be good. No need for sym2.
+> >
+> > IOW, we have something like
+> >
+> > bool sym1_is_local =3D is_tu_local_sym(sym1);
+> > ...
+> > if (sym1_is_local !=3D is_tu_local_sym(sym2))
+>
+> I'd rather keep it the way it is for readability, the compiler should be
+> able to recognize the sym1 value doesn't change and calculate its value
+> once.
 
-I'd rather keep it the way it is for readability, the compiler should be
-able to recognize the sym1 value doesn't change and calculate its value
-once.
+Agreed for readability.
 
--- 
-Josh
+We can always optimize it in case this becomes a real slowdown.
+
+Thanks,
+Song
