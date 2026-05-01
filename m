@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3743093C1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB08230B51A;
 	Fri,  1 May 2026 04:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608533; cv=none; b=qZbwseBSe1BayL+9TrGzGQ2mpiz9734tHuiA391KpfWyFRFPjcaHwDbnm8PKvD4CqBaX0udZM/GGkswEsa6rSU5a2/wp5lVrNcZdFoxAsLoUpZc7UaW4ZKDecBR/GZlZaRhEKTo/BjydI48WVLQfrL/FKm+/c1oKLHmFrixXSh8=
+	t=1777608533; cv=none; b=aBwBB3meOqXxllgvQPuGn4tbaZGsekqWiHYMCI+7ncDrdOzb/I4KY1CzmFZWlm97CpleGsuKfMnuLfr3D3MOO1YD+FM4NLvqFP6JJV/5ul346xqlSnwQ420iu92W4LlwcfiWsuwLQHsVy98KzV526szGflTuaGRkATiP/2lSuGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777608533; c=relaxed/simple;
-	bh=kx/DM46jLcl46ytKU6Wkkwpr6I9x6N6yRUUppki+X3k=;
+	bh=4uHNmNTMs6Cvsbo7XOnU9ntyLG2KD6N0hm/d06JUQYc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cq+MQD9FcoU/6t3yAkATnEgaf8oPSc7mz4XWctbhcXefsMLHGKMZCzJVolsS0E0/JGKWc3t7mzrQuEa4JHCDRzwiCCcsmxiUsLNB2Pc3TFgERzktYdI5UrZQk3Br4PU0jdC1RGsCaY556r4rM6DvcDegcJxdVeoHnDvWw+tEJn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ug0zvKh6; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ReRHLcj6opmeEq1RvHNARjzRQ1JBgkdSmODaEchRBA/2I8n3SKU7o4NdFlN3qjlNHhOJ4o51Du4BRH5774wVv59tFiai6OLCW07nf3p0RIAAu/NSrdqspvwddq/GYwgcA47YbqK/7JXHoPnzts+lMbvlXXNY7BSbZNrSRDiRjpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J375LHWm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ug0zvKh6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD12C2BCB8;
-	Fri,  1 May 2026 04:08:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J375LHWm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35ECEC2BCC6;
+	Fri,  1 May 2026 04:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777608533;
-	bh=kx/DM46jLcl46ytKU6Wkkwpr6I9x6N6yRUUppki+X3k=;
+	bh=4uHNmNTMs6Cvsbo7XOnU9ntyLG2KD6N0hm/d06JUQYc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ug0zvKh6CIa34t0ye6V1PNLzXcSWy1w/8P2OC1UDNeOvVNDHwKKPAPodIw3O7zfqz
-	 hxH9uCuqSuAsZaZXQV5SJbMi7MVrfRKb7EF0lrNgAMw2pyf5TPc8Y1jahyVCoxQN4l
-	 9/WV3OUHwoKcVpHYk0Z1J9OWWRBpDB1OqX+44gwsfRmDiYgBe3yWTgnkaMe2wkC1Vb
-	 rlbTIr53mynppupYqMH57SQYOK4hx/1d8Om9HWPxZmQ6JmhSfpT1X2GO8jHk7UNCx8
-	 UQHcPGwDELgKXP9tVnYOpuEb05gdFFIxhTEcgxHdRxefY0m/I02vBhNSDuf/m3W4Ac
-	 RH8weLN4kGjmQ==
+	b=J375LHWmOz2F7UsxX8f8qx1fK5JLd0V5FFy7UJvRJxxlyVUYNEAEYqrn6o3JLUWon
+	 IXHYigIqpz80uTw7QxWkL2YW41eZ+NdeL/929fVcOFiTYJQfuPqUuoVpELu2EBp5mE
+	 H/T5Qq4RtVxm6Hb9bDqaeLPYjBaYM3jIh3y2lyUu4S8kBKNZGBTmJ7g+dillE5cW7i
+	 5GXQOLFtKIqLn5ILUzT4BW5Dv01/0q+5GQS2mGxEw5TEm9Jig+rK3QY0kED/LioxSh
+	 QLpz05YjLjReabM+Lgea2/iwFIFHrJbNJTZH65xZMVZc0BagqeM7Qyw+tqnrwO0b+7
+	 cU44BUVEPVzNA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 06/53] objtool/klp: Don't report uncorrelated functions as new
-Date: Thu, 30 Apr 2026 21:07:54 -0700
-Message-ID: <8709eeaf528ed434a5fb1c2056927bae6ceb473a.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 07/53] objtool/klp: Improve local label check
+Date: Thu, 30 Apr 2026 21:07:55 -0700
+Message-ID: <54175a1446aae952ad4d886eec3f64fcbdbeb375.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,42 +49,53 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clang LTO uses __UNIQUE_ID() to generate some uniquely named wrapper
-functions, like initstubs.  If they're uncorrelated, prevent them from
-being reported as new functions and included unnecessarily.
+Clang emits various .L-prefixed local symbols beyond .Ltmp*, such as
+.L__const.* for local constant data.  These are assembler-local labels
+not present in kallsyms, so they can never be resolved at module load
+time.
 
-Note that dont_correlate() already includes prefix functions, so prefix
-functions are still being ignored here.
+Broaden the check from .Ltmp* to all .L* symbols so they get cloned into
+the patch module instead.
 
-Acked-by: Song Liu <song@kernel.org>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/klp-diff.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/objtool/klp-diff.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 4f668117c45e..ccb16a45107e 100644
+index ccb16a45107e..c5d4c9ed8580 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -802,7 +802,7 @@ static int mark_changed_functions(struct elfs *e)
+@@ -282,14 +282,14 @@ static bool is_uncorrelated_static_local(struct symbol *sym)
+ }
  
- 	/* Find changed functions */
- 	for_each_sym(e->orig, sym_orig) {
--		if (!is_func_sym(sym_orig) || is_prefix_func(sym_orig))
-+		if (!is_func_sym(sym_orig) || dont_correlate(sym_orig))
- 			continue;
+ /*
+- * Clang emits several useless .Ltmp_* code labels.
++ * .L symbols are assembler-local labels not present in kallsyms.  They must
++ * never become KLP relocations; instead their data is cloned into the patch
++ * module.  This covers .Ltmp* (Clang temp labels), .L__const.* (Clang local
++ * constants), and any other assembler-local pattern.
+  */
+-static bool is_clang_tmp_label(struct symbol *sym)
++static bool is_local_label(struct symbol *sym)
+ {
+-	return is_notype_sym(sym) &&
+-	       is_text_sec(sym->sec) &&
+-	       strstarts(sym->name, ".Ltmp") &&
+-	       isdigit(sym->name[5]);
++	return strstarts(sym->name, ".L");
+ }
  
- 		patched_sym = sym_orig->twin;
-@@ -818,7 +818,7 @@ static int mark_changed_functions(struct elfs *e)
- 
- 	/* Find added functions and print them */
- 	for_each_sym(e->patched, patched_sym) {
--		if (!is_func_sym(patched_sym) || is_prefix_func(patched_sym))
-+		if (!is_func_sym(patched_sym) || dont_correlate(patched_sym))
- 			continue;
- 
- 		if (!patched_sym->twin) {
+ static bool is_special_section(struct section *sec)
+@@ -388,7 +388,7 @@ static bool dont_correlate(struct symbol *sym)
+ 	       is_abs_sym(sym) ||
+ 	       is_prefix_func(sym) ||
+ 	       is_uncorrelated_static_local(sym) ||
+-	       is_clang_tmp_label(sym) ||
++	       is_local_label(sym) ||
+ 	       is_string_sec(sym->sec) ||
+ 	       is_initcall_sym(sym) ||
+ 	       is_addressable_sym(sym) ||
 -- 
 2.53.0
 
