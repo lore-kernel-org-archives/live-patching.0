@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A594737CD4E;
-	Fri,  1 May 2026 04:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2410637DE8E;
+	Fri,  1 May 2026 04:09:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608556; cv=none; b=oDNobvkJwnoznzxsGB/dkdvCuc+D3EdJZu2zFMgjlM52y4//0mdHeiGq+AZNDErinbeatmk+ne3BH2E1rcLc5OCGlaqh3Vt9nPmAIYxU9DnBcvpRaU/tgW3GK/zaVQEh30JpkOLpexkOa1qI+w3kbZMqPVo9AWv4CiIGOsJ5Nnw=
+	t=1777608556; cv=none; b=fXfQbYUxS7EhGSC3/tO+nCwPz982R7eBZD3E/U97cp+fbcU0gLj3iosY2P5pmIbsIFv+kI1nj3vU1JxTSmeZsKyCZlNprgcF7mZpwQvn6bG6OgRFnZzHS5DyABdeMqT84nniM92vMon0Pvm6JnETr013/e1wPv5dMAZ3toJjQBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777608556; c=relaxed/simple;
-	bh=QM3Sy43j93J1jjno7s1BKyzci2eruNBPlvhQNf4ekrw=;
+	bh=GF28pI1dFS/n6Z9A4UM/rCVDz8QhPIV1HAHHVKcRD2k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o0e0T/csnIldNHO8/BU39B9Ey4ipiA1ZZ86Tk6depdectwtrT6Tb1lV3OFernhlUs571DW4XZOWqz6suW5vRq0RHPmzhhPS91NtL9Yw9pT9K4nqn6zmNhsF9uIcwH4Hq0N5Gp97seE70LeL9KavCq30eaMIGukJqblAdKFeD3UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L6G871RT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=rZzXsu9RHwa5qGALEkl4mSsu4rR+FZiVjViM8/jlnjJ381vKufw1K6yAjmr9H+YehVuKOnilohHvIfy1dAVz/QcSiWk1tanywnFFfMgRgpbgXprzyNOLpMAvgT5G1ZBtvIHDuhRCPMRCCYhZ9LW0miaXXJAaLFfjQkrhcexYIwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fb03TBxR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L6G871RT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435DEC2BCC7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fb03TBxR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B28C4C2BCB9;
 	Fri,  1 May 2026 04:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608555;
-	bh=QM3Sy43j93J1jjno7s1BKyzci2eruNBPlvhQNf4ekrw=;
+	s=k20201202; t=1777608556;
+	bh=GF28pI1dFS/n6Z9A4UM/rCVDz8QhPIV1HAHHVKcRD2k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L6G871RTLzKkbu/R9WX6ECusV4gfsxWYo4oQv19jQCbeW/8ygMcaLA+TbLmZlv4tz
-	 TXUum0Se+IXZ9ZioyJKWYfB1+6AEQlIbRO0wuXREsbq4yshSRYB3MxIifCpaZpEF+Y
-	 u0hTosZXzNf4xZ62/NN3E+oMspO2y1WOZj7fECAt2XiROrBDOii6XmbL5o4YrH07yp
-	 ZhQFhg7lOULhY/LeUaBagw29rl0PMRY0zi60A2KU8Vm1GTezbT83vmNCsZeyuKdVlm
-	 aYshgu8vy916n7fEZ8JRsw3l1eA8TCA3o66iw7ZWHw7QLwaD+S+W14NR5RKvIWDVdE
-	 53w5izTNKlz9w==
+	b=Fb03TBxR69SS0/X2CYZAQnq+qKnZnfZD7FGOkwpdDBVAyJpKUz8/fK4xJq3Gs+2a0
+	 0nU23QtD1ffjeMtLEXTVG1Sfcts7hwA9TiN9/rwJ9rqMBnVmqCYraKAq02B9CxLzcv
+	 ihHS6uocB2/1i+tx438IGbScAdKVn9C9w/6Fzpvjo6TP/SMXul29FVojJ7xkI92KF+
+	 fLPTe9PJeQcgOeRYzS3K/4wFOmq7RUjmMLLVz9jhN0dYwgHdGMtfgtwujKwO48UwkK
+	 JmvtHEKNwk57/ABZPpTkoZKjcplyyFVyRFm7Oh1y1OBBC58A4w1uQkwXg9/uDUQfmb
+	 XVLAhnHFkjgPA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 52/53] objtool: Improve and simplify prefix symbol detection
-Date: Thu, 30 Apr 2026 21:08:40 -0700
-Message-ID: <45078e9521b1c36da7e64a6a22153b7433711b51.1777575753.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 53/53] objtool/klp: Cache dont_correlate() result
+Date: Thu, 30 Apr 2026 21:08:41 -0700
+Message-ID: <b13cf9c9e942563b4a9b19494a83f4abf073b0c5.1777575753.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,150 +49,153 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Only create prefix symbols for functions that have
-__patchable_function_entries entries, since those are the only C
-functions where prefix NOPs are intentional.
+Cache the dont_correlate() result once per symbol at the start of
+correlate_symbols().  This reduces klp diff time on an arm64 LTO
+vmlinux.o from 2m51s to 35s.
 
-This both simplifies the detection and makes it more accurate.
-
-Note that assembly functions using SYM_TYPED_FUNC_START() can also have
-prefixed NOPs, but that macro already creates their __cfi_ symbols.
-
+Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c | 90 ++++++++++---------------------------------
- 1 file changed, 21 insertions(+), 69 deletions(-)
+ tools/objtool/include/objtool/elf.h |  1 +
+ tools/objtool/klp-diff.c            | 29 +++++++++++++++++------------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0d9b859b006e..1635c87a4ac8 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4296,17 +4296,6 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
-  * For FineIBT or kCFI, a certain number of bytes preceding the function may be
-  * NOPs.  Those NOPs may be rewritten at runtime and executed, so give them a
-  * proper function name: __pfx_<func>.
-- *
-- * The NOPs may not exist for the following cases:
-- *
-- *   - compiler cloned functions (*.cold, *.part0, etc)
-- *   - asm functions created with inline asm or without SYM_FUNC_START()
-- *
-- * Also, the function may already have a prefix from a previous objtool run
-- * (livepatch extracted functions, or manually running objtool multiple times).
-- *
-- * So return 0 if the NOPs are missing or the function already has a prefix
-- * symbol.
-  */
- static int create_prefix_symbol(struct objtool_file *file, struct symbol *func)
- {
-@@ -4314,10 +4303,6 @@ static int create_prefix_symbol(struct objtool_file *file, struct symbol *func)
- 	char name[SYM_NAME_LEN];
- 	struct cfi_state *cfi;
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index fccf72cbd343..d9c44df9cc76 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -96,6 +96,7 @@ struct symbol {
+ 	u8 changed	     : 1;
+ 	u8 included	     : 1;
+ 	u8 klp		     : 1;
++	u8 dont_correlate    : 1;
+ 	struct list_head pv_target;
+ 	struct reloc *relocs;
+ 	struct section *group_sec;
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index ed3bf1c55001..f8787d7d1454 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -524,7 +524,7 @@ static struct symbol *find_twin(struct elfs *e, struct symbol *sym1)
  
--	if (!is_func_sym(func) || is_prefix_func(func) || is_cold_func(func) ||
--	    func->static_call_tramp)
--		return 0;
--
- 	if ((strlen(func->name) + sizeof("__pfx_") > SYM_NAME_LEN)) {
- 		WARN("%s: symbol name too long, can't create __pfx_ symbol",
- 		      func->name);
-@@ -4327,59 +4312,21 @@ static int create_prefix_symbol(struct objtool_file *file, struct symbol *func)
- 	if (snprintf_check(name, SYM_NAME_LEN, "__pfx_%s", func->name))
- 		return -1;
- 
--	if (file->klp) {
--		struct symbol *pfx;
--
--		pfx = find_symbol_by_offset(func->sec, func->offset - opts.prefix);
--		if (pfx && is_prefix_func(pfx) && !strcmp(pfx->name, name))
--			return 0;
--	}
--
--	insn = find_insn(file, func->sec, func->offset);
--	if (!insn) {
--		WARN("%s: can't find starting instruction", func->name);
-+	if (!elf_create_symbol(file->elf, name, func->sec,
-+			       GELF_ST_BIND(func->sym.st_info),
-+			       GELF_ST_TYPE(func->sym.st_info),
-+			       func->offset - opts.prefix, opts.prefix))
- 		return -1;
--	}
--
--	for (prev = prev_insn_same_sec(file, insn);
--	     prev;
--	     prev = prev_insn_same_sec(file, prev)) {
--		u64 offset;
--
--		if (prev->type != INSN_NOP)
--			return 0;
--
--		offset = func->offset - prev->offset;
--
--		if (offset > opts.prefix)
--			return 0;
--
--		if (offset < opts.prefix)
--			continue;
--
--		if (!elf_create_symbol(file->elf, name, func->sec,
--				       GELF_ST_BIND(func->sym.st_info),
--				       GELF_ST_TYPE(func->sym.st_info),
--				       prev->offset, opts.prefix))
--			return -1;
--
--		break;
--	}
--
--	if (!prev)
--		return 0;
--
--	if (!insn->cfi) {
--		/*
--		 * This can happen if stack validation isn't enabled or the
--		 * function is annotated with STACK_FRAME_NON_STANDARD.
--		 */
--		return 0;
--	}
- 
- 	/* Propagate insn->cfi to the prefix code */
-+	insn = find_insn(file, func->sec, func->offset);
-+	if (!insn || !insn->cfi)
-+		return 0;
-+
- 	cfi = cfi_hash_find_or_add(insn->cfi);
--	for (; prev != insn; prev = next_insn_same_sec(file, prev))
-+	for (prev = find_insn(file, func->sec, func->offset - opts.prefix);
-+	     prev && prev != insn;
-+	     prev = next_insn_same_sec(file, prev))
- 		prev->cfi = cfi;
- 
- 	return 0;
-@@ -4387,15 +4334,20 @@ static int create_prefix_symbol(struct objtool_file *file, struct symbol *func)
- 
- static int create_prefix_symbols(struct objtool_file *file)
- {
--	struct section *sec;
-+	struct section *pfe_sec;
- 	struct symbol *func;
-+	struct reloc *reloc;
- 
--	for_each_sec(file->elf, sec) {
--		if (!is_text_sec(sec))
-+	for_each_sec(file->elf, pfe_sec) {
-+		if (strcmp(pfe_sec->name, "__patchable_function_entries"))
-+			continue;
-+		if (!pfe_sec->rsec)
+ 	/* Count orig candidates */
+ 	for_each_sym_by_demangled_name(e->orig, sym1->demangled_name, sym2) {
+-		if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2) ||
++		if (sym2->twin || sym1->type != sym2->type || sym2->dont_correlate ||
+ 		    (!maybe_same_file(sym1, sym2)))
  			continue;
  
--		sec_for_each_sym(sec, func) {
--			if (create_prefix_symbol(file, func))
-+		for_each_reloc(pfe_sec->rsec, reloc) {
-+			func = find_func_by_offset(reloc->sym->sec,
-+						   reloc->sym->offset + reloc_addend(reloc) + opts.prefix);
-+			if (func && create_prefix_symbol(file, func))
- 				return -1;
- 		}
+@@ -550,7 +550,7 @@ static struct symbol *find_twin(struct elfs *e, struct symbol *sym1)
+ 
+ 	/* Count patched candidates */
+ 	for_each_sym_by_demangled_name(e->patched, sym1->demangled_name, sym2) {
+-		if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2) ||
++		if (sym2->twin || sym1->type != sym2->type || sym2->dont_correlate ||
+ 		    !maybe_same_file(sym1, sym2))
+ 			continue;
+ 
+@@ -693,7 +693,7 @@ static struct symbol *find_twin_suffixed(struct elf *elf, struct symbol *sym1)
+ 		return NULL;
+ 
+ 	for_each_sym_by_name(elf, name, sym2) {
+-		if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2))
++		if (sym2->twin || sym1->type != sym2->type || sym2->dont_correlate)
+ 			continue;
+ 		count++;
+ 		match = sym2;
+@@ -733,7 +733,7 @@ static struct symbol *find_twin_positional(struct elfs *e, struct symbol *sym1)
+ 	struct symbol *sym2, *match = NULL;
+ 
+ 	for_each_sym_by_demangled_name(e->orig, sym1->demangled_name, sym2) {
+-		if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2) ||
++		if (sym2->twin || sym1->type != sym2->type || sym2->dont_correlate ||
+ 		    !maybe_same_file(sym1, sym2))
+ 			continue;
+ 		if (is_tu_local_sym(sym1) != is_tu_local_sym(sym2) ||
+@@ -745,7 +745,7 @@ static struct symbol *find_twin_positional(struct elfs *e, struct symbol *sym1)
  	}
+ 
+ 	for_each_sym_by_demangled_name(e->patched, sym1->demangled_name, sym2) {
+-		if (sym2->twin || sym1->type != sym2->type || dont_correlate(sym2) ||
++		if (sym2->twin || sym1->type != sym2->type || sym2->dont_correlate ||
+ 		    !maybe_same_file(sym1, sym2))
+ 			continue;
+ 		if (is_tu_local_sym(sym1) != is_tu_local_sym(sym2) ||
+@@ -777,6 +777,11 @@ static int correlate_symbols(struct elfs *e)
+ 	struct symbol *sym1, *sym2;
+ 	bool progress;
+ 
++	for_each_sym(e->orig, sym1)
++		sym1->dont_correlate = dont_correlate(sym1);
++	for_each_sym(e->patched, sym2)
++		sym2->dont_correlate = dont_correlate(sym2);
++
+ 	/* Correlate FILE symbols */
+ 	file1_sym = first_file_symbol(e->orig);
+ 	file2_sym = first_file_symbol(e->patched);
+@@ -817,7 +822,7 @@ static int correlate_symbols(struct elfs *e)
+ 	do {
+ 		progress = false;
+ 		for_each_sym(e->orig, sym1) {
+-			if (sym1->twin || dont_correlate(sym1))
++			if (sym1->twin || sym1->dont_correlate)
+ 				continue;
+ 			sym2 = find_twin(e, sym1);
+ 			if (!sym2)
+@@ -831,7 +836,7 @@ static int correlate_symbols(struct elfs *e)
+ 			return -1;
+ 
+ 		for_each_sym(e->orig, sym1) {
+-			if (sym1->twin || dont_correlate(sym1))
++			if (sym1->twin || sym1->dont_correlate)
+ 				continue;
+ 			sym2 = find_twin_suffixed(e->patched, sym1);
+ 			if (!sym2)
+@@ -843,7 +848,7 @@ static int correlate_symbols(struct elfs *e)
+ 	} while (progress);
+ 
+ 	for_each_sym(e->orig, sym1) {
+-		if (sym1->twin || dont_correlate(sym1))
++		if (sym1->twin || sym1->dont_correlate)
+ 			continue;
+ 		sym2 = find_twin_positional(e, sym1);
+ 		if (!sym2)
+@@ -853,7 +858,7 @@ static int correlate_symbols(struct elfs *e)
+ 	}
+ 
+ 	for_each_sym(e->orig, sym1) {
+-		if (sym1->twin || dont_correlate(sym1))
++		if (sym1->twin || sym1->dont_correlate)
+ 			continue;
+ 		WARN("no correlation: %s", sym1->name);
+ 	}
+@@ -1066,7 +1071,7 @@ static int mark_changed_functions(struct elfs *e)
+ 
+ 	/* Find changed functions */
+ 	for_each_sym(e->orig, orig_sym) {
+-		if (dont_correlate(orig_sym))
++		if (orig_sym->dont_correlate)
+ 			continue;
+ 
+ 		patched_sym = orig_sym->twin;
+@@ -1087,7 +1092,7 @@ static int mark_changed_functions(struct elfs *e)
+ 
+ 	/* Find added functions and print them */
+ 	for_each_sym(e->patched, patched_sym) {
+-		if (!is_func_sym(patched_sym) || dont_correlate(patched_sym))
++		if (!is_func_sym(patched_sym) || patched_sym->dont_correlate)
+ 			continue;
+ 
+ 		if (!patched_sym->twin) {
+@@ -1193,7 +1198,7 @@ static bool klp_reloc_needed(struct reloc *patched_reloc)
+ 	struct export *export;
+ 
+ 	/* no external symbol to reference */
+-	if (dont_correlate(patched_sym))
++	if (patched_sym->dont_correlate)
+ 		return false;
+ 
+ 	/* For included functions, a regular reloc will do. */
 -- 
 2.53.0
 
