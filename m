@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467A737D126
-	for <live-patching@vger.kernel.org>; Fri,  1 May 2026 10:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604252DA76C
+	for <live-patching@vger.kernel.org>; Fri,  1 May 2026 10:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777631312; cv=none; b=Pev00BQZeW9oHm673a0BblCnu2hhRWI1hRb3fy0bXTYMt0mwm+0o2/3IeIf/MX1ZPUeysHNEgEh7/4Z/CjyGKdoRnsWP+/PBsU9yf26dbcpJsq4dIrh1i3yWzHqsg8FyPM1sFULtYjzHSkO7Zf/PlK7dQbHRuz+C+w6d/xV7oa4=
+	t=1777631482; cv=none; b=ZJOOMRMQ9zIzE+FF1UgCKs46Yv/dw3Ma8sPN1cp/oBAhCgxxbWDWbebkJPhCRVuVARsimP0pS75FA71EQsjxg9Ab86IgJAjatZo7ultJhpmPFIiKXIUBgjBT6WsgYdVBKAEtw9PJLTSnhI48gsaOdWTvV2Rz7/Gfq4x4qbSd+Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777631312; c=relaxed/simple;
-	bh=fxj4/DbMyxJTvqiTulV3+u8K1F8yWbNaMSDRyayDGEU=;
+	s=arc-20240116; t=1777631482; c=relaxed/simple;
+	bh=bkhxa34jQ0/l8Or4nfWOCt2LQpGobbilYpsnnKocUqs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K0hPTqhGlcp+7Mq1PeyS7biCSRw1b1T/etfOqzyjmAI0LHL1vhvrYSyewsKGYyx6wHxtZDU2FUvJ4WD3gfK9H7YnVpOrf4Sw3Y501rAFK2ZbzyImpJbuMyCvcPzsTxysYp3bqDO1nGVfKB1DyrzKtYqH3a4v0DEIO1oJjh/f8Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxDlnoNc; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=OVUhEJJZ+E3qFB3nHnAndfwSmCZN6DVkHWWjst+uSqlPTgOxNxXUDwAPM2Wtpf0V9IjhZ2N/u6BABO0rSK4gi7AvrOrh7qtEmUs6hNFFpzUByrO3abat/2a5USKRo6Zmehg3SE862+Sg22ce5NLYE68jarWEQ+KLRlCfVoGJAx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hfaHRBez; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VxDlnoNc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 280B9C2BCB4
-	for <live-patching@vger.kernel.org>; Fri,  1 May 2026 10:28:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hfaHRBez"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10157C2BCB7
+	for <live-patching@vger.kernel.org>; Fri,  1 May 2026 10:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777631312;
-	bh=fxj4/DbMyxJTvqiTulV3+u8K1F8yWbNaMSDRyayDGEU=;
+	s=k20201202; t=1777631482;
+	bh=bkhxa34jQ0/l8Or4nfWOCt2LQpGobbilYpsnnKocUqs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VxDlnoNcDpVEa9LdTYlmH8kqtFzJ4EkkyMP1e9T3vlZjFbQbmK/Kjn/zuw0M40SWD
-	 VFwupqseTdqQ1f/uMAR8Ft4aoWRNf2Ur0zSP01wVtI6cfZX8TEZqGaO4Odvp0jOGWi
-	 raE7LX/5ZCGi1zOYYpZEd3CoiZpBYPAhRmPpmAAl/Zvi+3pxfuTTcdKmkevZc1y90d
-	 DxEcoInVVI98geCVW6sPuw1weA1I5pXoqPdjaRA6hP1QRqbORQI5b1hw4cql+d2h7r
-	 vCU9JxCkqOtwj5zDx98WXHPu6xr0T2VGhETwfZS69QLbaHwTeb3RVDarx8P2pnN9Ru
-	 e16mjrkD+eYVA==
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8aca6bd57cfso15984446d6.0
-        for <live-patching@vger.kernel.org>; Fri, 01 May 2026 03:28:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+MvH3W2BUgTjbLUMEdg+6VeHEcm/qt4EFG/+2RRLW58A+hxAuAvNJQr52XkOW2pNkBX9l1IJaiskiAm7qr@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywb/6lAxCHL6glqd+H5KRHKQosRdiB7SblQL/DlkKVS4Q7rr6X6
-	Fln7QAaJm02amsr4k6a+LHAJi3Vtw1UF3ay4iFd+NF/zKWi8ldskmG0B7CmRrHNSHMW18vcpK5E
-	QAVfryEj8buqpwymWaet6GvXCxgEd0I0=
-X-Received: by 2002:a05:6214:6008:b0:8b1:f8fe:507f with SMTP id
- 6a1803df08f44-8b3fe80754cmr92387226d6.46.1777631311358; Fri, 01 May 2026
- 03:28:31 -0700 (PDT)
+	b=hfaHRBez8t9BaW9QHermxSPSar7eBZueNyZyetIwzp2J4fhrzMZYgUQneaC77FXJM
+	 yOutuL0vFIFD0glgNHY96jTz0hmJuiI5DKmf3JIxlC46tpgp/51nu0xLVZzYp1IpFK
+	 9DurGA3T7xgiAV8BiCsmAmcoYlV/JB5DZco/XT9xCVTN68pywk/W+pk0UcCa2EQJlO
+	 HTr/0gaDx8rGvejSW0VBKSldGGzXJGHeeij1DKChqNQJ85AV4fTa3HjgY7fHkrGUrd
+	 l+FSbYWZBcmJhwb7gKYS6vjmIbloZyQEY//WP0xXHKeeeXZjos3zTgtKcBJXn1Qa2K
+	 JQ7+KvlWQAz/Q==
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-8b3eab6ec9bso34119846d6.1
+        for <live-patching@vger.kernel.org>; Fri, 01 May 2026 03:31:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/EAkjnwB8vdsVIM3pWVHL5c4ieo++UtjEZpmxiP1P00IQBU0qTdq0AzL5OedhiltAStz0Htk2Pz6CY1ann@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6P0cW3OCMWScji4KGQUdvTKot/q8+8ubktZ35EaIuxcyidne/
+	Rv2rrcyLR0Eta/bTQCANJTUH6mYRKRPxL8tn3lyeRPrRhqUZh1EEOlG7+RMhMyTGDdmYJhQtIso
+	kxCs2+ADeuGX5BH+/PmEZSn5HlmWtPX0=
+X-Received: by 2002:ac8:58c2:0:b0:50e:474a:47e1 with SMTP id
+ d75a77b69052e-5102d0d3e7cmr75966411cf.10.1777631481255; Fri, 01 May 2026
+ 03:31:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1777575752.git.jpoimboe@kernel.org> <cb95eae9cc63ca04f881c69c93eed6bac0c751fe.1777575752.git.jpoimboe@kernel.org>
-In-Reply-To: <cb95eae9cc63ca04f881c69c93eed6bac0c751fe.1777575752.git.jpoimboe@kernel.org>
+References: <cover.1777575752.git.jpoimboe@kernel.org> <9572b2e15500e5ed8dcbaac78c966557d3000d85.1777575752.git.jpoimboe@kernel.org>
+In-Reply-To: <9572b2e15500e5ed8dcbaac78c966557d3000d85.1777575752.git.jpoimboe@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Fri, 1 May 2026 11:28:18 +0100
-X-Gmail-Original-Message-ID: <CAPhsuW6zujVRNQnY_zqwqzpxb2VFO4HvbQ+jc69StSv=6szc=w@mail.gmail.com>
-X-Gm-Features: AVHnY4LutR8Qn2H8QVB_NjDY2fmViMpZkcZ1Efa-fHqK3GIWjfEwjCET8CXBhEk
-Message-ID: <CAPhsuW6zujVRNQnY_zqwqzpxb2VFO4HvbQ+jc69StSv=6szc=w@mail.gmail.com>
-Subject: Re: [PATCH v2 09/53] objtool: Replace iterator callback with for_each_sym_by_mangled_name()
+Date: Fri, 1 May 2026 11:31:08 +0100
+X-Gmail-Original-Message-ID: <CAPhsuW7Kcc0a1RYoynrq3U7S1+1B3AX3OCovGa2bs-NgpRoJ2w@mail.gmail.com>
+X-Gm-Features: AVHnY4LnT-6bWRm9zsXpiX8OnuQrnX1wjG7VdBzQizTbK2SFm1x-LXCixUH1XlY
+Message-ID: <CAPhsuW7Kcc0a1RYoynrq3U7S1+1B3AX3OCovGa2bs-NgpRoJ2w@mail.gmail.com>
+Subject: Re: [PATCH v2 18/53] objtool/klp: Simplify reloc symbol conversion
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
@@ -56,12 +56,17 @@ Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 1, 2026 at 5:08=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org>=
+On Fri, May 1, 2026 at 5:09=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org>=
  wrote:
 >
-> Convert the callback-based iterate_sym_by_demangled_name() with a new
-> for_each_sym_by_demangled_name() macro.  This eliminates the callback
-> struct/function and makes the code more compact and readable.
+> Inline section_reference_needed() and is_reloc_allowed() into
+> convert_reloc_sym() and remove the redundant is_reloc_allowed() check in
+> clone_reloc().
+>
+> Move the is_sec_sym() checks into the convert callees so they become
+> no-ops when the reloc is already in the right format.  This allows
+> convert_reloc_sym() to unconditionally dispatch to the right converter
+> based on section type.
 >
 > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
