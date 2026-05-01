@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B5833E37C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28D1340283;
 	Fri,  1 May 2026 04:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608541; cv=none; b=jkGLn6N+vPDe4yY90OW67S3i//zT0zEjZ0uA41vx+PUcDMNRJYhw/Rwrc1TfMNUEEtx4maL40ROOSD9rwqtSxUOc1GDWk3HOucaC+7+l6a6rjz7CVjhEnNfceBT+QBHu1Odt3sQUYBQjYe4cvh7/wQz/IA4YvvbbckGth/7u5hw=
+	t=1777608541; cv=none; b=V2JDKBsTQqczex8mJbV2mTBIMsHBP1FjYb3+cEkwIjHLXpP9ggKLU21WIBwOvUmWKe3UcEPDvigwYXzz5061+Vf9XWaLp/f8wee03K41LGGKuj2Q0A3EHFpT4LhGoiOv5mDauadOhTR3w2SgMVDaSuZTgwUO4OLIaIgs9juDehM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777608541; c=relaxed/simple;
-	bh=0cgE2+HLfMAXuXxdci20y5BlxGcfiybyyBZ+oUe/nZ4=;
+	bh=LeLdvkaGeI52MJHHJIpetvWxTUeyqHasZJ3P0shfBW0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lnx/tXnAp5l338MhQvbMlHWi6tJD6xcX2lxl9A4kf8t53sicVKbaR9gQ+mxWmWdk1HXSaw2NKk3IdFafDSW9Miw0WEG8LVXNa54tDYseRBEnFfNcmumxXvB6/jkVZfU8fkdjNzoLYT9QX7fPR2uhlsIPgFRpsXhfKalGl4+yIdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lN+wb+17; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=LJxfjlC+OLZLtWu26RyjJIowLrFF1c/gl3WXJok6ohcuRRH8KoJdNbDWafWVsClLIsdQ/yp1fMzTrBh4fuOBrxOj2v3JAbiMUTV+nMScIXP7YwsRLkhxq7MjWF99V3F/zQeNL8rb2Xh6xRLvRmSMzHtcLIAty+dskPj0zseUkpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gr0NV+ou; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lN+wb+17"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA12DC2BCB7;
-	Fri,  1 May 2026 04:09:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gr0NV+ou"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44782C2BCB8;
+	Fri,  1 May 2026 04:09:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777608541;
-	bh=0cgE2+HLfMAXuXxdci20y5BlxGcfiybyyBZ+oUe/nZ4=;
+	bh=LeLdvkaGeI52MJHHJIpetvWxTUeyqHasZJ3P0shfBW0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lN+wb+17MN3nRa4zLaUb/Rj4rT39PqGXVVTCF15WkwYVTM/AD59HljCJQL+LrpA6E
-	 +f9fPw4jvgFzKkUoL3Lf9RJSbev//L5rFxJ2jTFst6j01wewfxBS2zDe11BnFlFUHY
-	 w6pa3Fl6oWBJdRaW1ICIdpJxgbdDHVevxq8TbLay9CcCfsvm3Q8LmAmMburnOTbEOa
-	 Ydw2/T+mudR/dP/mb1COZW1gpvhPauSARYbZZtFLYqwcivGSohK3UvB/KFw3fE8WA1
-	 ITIk+U/an1iTrBKMb91MBBYhBZ22Nkw0Aqw3jrY6kZd5A6SS94LZw7Dv4yhmY5B+JT
-	 j37BpXTlGTKPQ==
+	b=gr0NV+oueqyr35nIEvXkHWv507vcgMgN/O0z8qg7U46qhn+uWqlkFy/U+hTAtGiYL
+	 Gx/qnhMmTyoJsCFJZnGrl+t2cb6KcMRXjF+hBBWC3M+RFQ2SJK1N5EBuBNnoipaC/o
+	 up/JJMPzpLO2VRrhns/GXOTpTMieW/Uw6rhioyXvhU/+mZQhv4b6xzIR9zVVPAFBBw
+	 eYaBUcblOC+/8TNp58W4YYXzK3sYAJFiiFJmESd+qIDY8ZTgk3IS/99K6I4+11OLEA
+	 s401gVXx5SS4R5vcEdDSxz+Soqpxu1mdtwHy6ezwZfbOQp3YdHM6RGwq4ivvyDe/Eu
+	 9SKkm1CxvORLw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 23/53] klp-build: Fix hang on out-of-date .config
-Date: Thu, 30 Apr 2026 21:08:11 -0700
-Message-ID: <5e2a75b8ce5120bbbec6c8e992f1d3c772b8e5d5.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 24/53] klp-build: Fix checksum comparison for changed offsets
+Date: Thu, 30 Apr 2026 21:08:12 -0700
+Message-ID: <6392d4f0c8837ccc0498a1c79a2d9534dacfce82.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,34 +49,64 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If .config is out of date with the kernel source, 'make syncconfig'
-hangs while waiting for user input on new config options.  Detect the
-mismatch and return an error.
+The klp-build -f/--show-first-changed feature uses diff to compare
+checksum log lines between original and patched objects.  However, diff
+compares entire lines, including the offset field.  When a function is
+at a different section offset, the offset field differs even though the
+instruction checksum is identical, causing the wrong instruction to be
+printed.
 
-Fixes: 6f93f7b06810 ("livepatch/klp-build: Fix inconsistent kernel version")
+Only compare the checksum field when looking for the first changed
+instruction.  Also print both the original and patched offsets when they
+differ.
+
+Fixes: 78be9facfb5e ("livepatch/klp-build: Add --show-first-changed option to show function divergence")
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- scripts/livepatch/klp-build | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ scripts/livepatch/klp-build | 30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 0ad7e6631314..e19d93b78fcb 100755
+index e19d93b78fcb..8f0ea56f2640 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -306,7 +306,12 @@ set_kernelversion() {
+@@ -727,13 +727,29 @@ diff_checksums() {
+ 		)
  
- 	stash_file "$file"
- 
--	kernelrelease="$(cd "$SRC" && make syncconfig &>/dev/null && make -s kernelrelease)"
-+	if [[ -n "$(make -s listnewconfig 2>/dev/null)" ]]; then
-+		die ".config mismatch, check your .config or run 'make olddefconfig'"
-+	fi
-+	make syncconfig &>/dev/null || die "make syncconfig failed"
+ 		for func in ${funcs[$file]}; do
+-			diff <( grep0 -E "^DEBUG: .*checksum: $func " "$orig_log"    | sed "s|$ORIG_DIR/||")	\
+-			     <( grep0 -E "^DEBUG: .*checksum: $func " "$patched_log" | sed "s|$PATCHED_DIR/||")	\
+-				| gawk '/^< DEBUG: / {
+-					gsub(/:/, "")
+-					printf "%s: %s: %s\n", $3, $5, $6
+-					exit
+-			}' || true
++			local -a orig patched
++			paste <(grep0 -E "^DEBUG: .*checksum: $func " "$orig_log") \
++			      <(grep0 -E "^DEBUG: .*checksum: $func " "$patched_log") |
++			while IFS= read -r line; do
++				read -ra orig <<< "${line%%$'\t'*}"
++				read -ra patched <<< "${line#*$'\t'}"
 +
-+	kernelrelease="$(make -s kernelrelease)"
- 	[[ -z "$kernelrelease" ]] && die "failed to get kernel version"
- 
- 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
++				if [[ ${#patched[@]} -eq 0 ]]; then
++					printf "%s: %s: %s (removed)\n" "${orig[1]%:}" "${orig[3]}" "${orig[-2]}"
++					break
++				elif [[ ${#orig[@]} -eq 0 ]]; then
++					printf "%s: %s: %s (added)\n" "${patched[1]%:}" "${patched[3]}" "${patched[-2]}"
++					break
++				fi
++
++				[[ "${orig[-1]}" == "${patched[-1]}" ]] && continue
++
++				printf "%s: %s: %s" "${orig[1]%:}" "${orig[3]}" "${orig[-2]}"
++				[[ "${orig[-2]}" != "${patched[-2]}" ]] && \
++					printf " (patched: %s)" "${patched[-2]}"
++				printf "\n"
++				break
++			done || true
+ 		done
+ 	done
+ }
 -- 
 2.53.0
 
