@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190933148B4;
-	Fri,  1 May 2026 04:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEA336B046;
+	Fri,  1 May 2026 04:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608549; cv=none; b=h+AgROeqQNRE4kQgT6f7wFhyiV8dglfriiolZjAlkUJ1Z51Ja8STZ+dMOJztAjzF1DXSpAgM/7ehpBRHInUsJRoXf9uwLDqplHaD1vzLf6cCL84CO3DqwO8b5+zFvZd6HBsi48HHQ9x2/ZS1/OohfQpj+SDvCdrnRlXHNOV6OU0=
+	t=1777608549; cv=none; b=usCqQT/ZPKUwnYDANBvP4JTVKDiwNEyL/L67pB7coif2eFbR8GIby3ihDH/57mRa0ZfX1fAtwgZUCnd6ggyjvnQ5g0Ol3ZI7wT0Bxd5fVosnDrxMNeF/X4tDCRBDPjuQqis90wL59Fju5tfOibAsn0/0kR79L8esIZO/QWjmGUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777608549; c=relaxed/simple;
-	bh=PAmYtqsZr0HcMy1tdE3sw+RY8cBvKIrfx2uuoBzbka4=;
+	bh=m/ozg1EAde/Oq0i+pAtSNUYhLnhNOg5iFqi9kLnbM7k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CQK4aBu29aXXvKDMq7gjEg89fuQbb9NTpw4A1E5rueO5Qi2Aydeg4DyI1EVvkKoS5whd4MqLMTkw4iuSWur9NOHKCMRGUej4Ag/ZYRIqlZPgaJy4bhvhVT8mF+bt2V/2GG/B1g5is4Np5X4unYEbFYN/tLM4AzOsxPIR085heyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWkc6ZUr; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=FDIjEpqCEDDXzv1ZxVOBDdkyQ0UFgLNTcAupmQXBMv1x2gCgVTSIFOnegnh0/3bPiLt70YVX7X6IqnRW3uzZOtUrqgqM2mH6i921Kz2lfwsMm27NLr8j3NxL23U+EExCsAYvgOXkwvaQqp9VfBqTwzWM/uxB+RKSJsChsWhCv4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S2MoqPvL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWkc6ZUr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694B2C2BCC6;
-	Fri,  1 May 2026 04:09:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S2MoqPvL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC68C2BCB7;
+	Fri,  1 May 2026 04:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608546;
-	bh=PAmYtqsZr0HcMy1tdE3sw+RY8cBvKIrfx2uuoBzbka4=;
+	s=k20201202; t=1777608549;
+	bh=m/ozg1EAde/Oq0i+pAtSNUYhLnhNOg5iFqi9kLnbM7k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oWkc6ZUrTKd7wFbIs7KVl+GAEHAVmxpRLKaDEafmHX6/O5JZh2Prb/KaTwiHhZ1HM
-	 6h3kyNqqKbhsU+HZ/byfLXjOBwJIqBCAwQjX18PIuNG0V9D7U5madz9EO2GUd1pWeF
-	 dSVE//9Bzbb8dAxv8GINp9YKpBxRhVjpBkORfcDSxWZKVz6oieL9sJal3sCYdwzm3d
-	 CCI1qiskSstCNDreTiCn/6ibbzsyz1u+jLi5/cynCvjk12vyZ0Qi398qnp9rkliVhx
-	 CZ3Zy79c4dPqdkKLB4FknZvZ3Z2Qu/DXurJZGeW3tUuN0HEQQ7zBPk494C2cSmpS1l
-	 QdfQoTIgR7hkQ==
+	b=S2MoqPvLjobCDFbBephCUsWbaz29eUSsOx653JSjD6cgk1BM7YIJDJQ3kbfp0xnrt
+	 hxtBhCVHDiC/f0KUpgze6hG4twAxT8gsLPCh1Xdk+7SNDRJhZMrmlW/SQhvwwblCIv
+	 fVDZOOL1fjxVv3DvNQAlLS/f167BoxyZYGV2/XdXJ02N/NU3VVVr98/np/hjhozjEu
+	 PBHOx+zpwmeYzlZl2e+5WBE4RchJ0BAtFu7P7qNT4D3XH7EYPggpx2fzHXoKp5fh4U
+	 cTuQwWPxomwUPwMT/Ag5XvAm9I64O37O83g1YdTX3Y6UkclCoIfzZCnFNpwNov4Thd
+	 UVBe4iSwQ5jjg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 35/53] objtool/klp: Create empty checksum sections for function-less object files
-Date: Thu, 30 Apr 2026 21:08:23 -0700
-Message-ID: <94267cbd67da8e158153743b80f4d2bfb3f62b4a.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 40/53] objtool: Consolidate file decoding into decode_file()
+Date: Thu, 30 Apr 2026 21:08:28 -0700
+Message-ID: <36478f25bee19c8acbff3992e27436b544c4e26b.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,35 +49,107 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If an object file has no functions, objtool has nothing to checksum, so
-it doesn't create the .discard.sym_checksum symbol.
+decode_sections() relies on CFI and cfi_hash initialization done
+separately in check(), making it unusable outside of check().
 
-Then when 'objtool klp diff' reads symbol checksums, it errors out due
-to the missing .discard.sym_checksum section.
+Consolidate the initialization into decode_sections() and rename it to
+decode_file(), and make it global along with free_insns() and
+insn_reloc() for use by other objtool components -- namely, the checksum
+code which will be moving to another file.
 
-Instead, just create an empty checksum section to signal to
-read_sym_checksums() that the file has been processed.
-
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c | 3 ---
- 1 file changed, 3 deletions(-)
+ tools/objtool/check.c                 | 36 +++++++++++++--------------
+ tools/objtool/include/objtool/check.h |  5 ++++
+ 2 files changed, 22 insertions(+), 19 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e7579c4e46dc..f020f21f94a7 100644
+index f019e1f06780..49171ddc6f54 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -1044,9 +1044,6 @@ static int create_sym_checksum_section(struct objtool_file *file)
- 		if (sym->csum.checksum)
- 			idx++;
+@@ -1346,7 +1346,7 @@ __weak bool arch_is_embedded_insn(struct symbol *sym)
+ 	return false;
+ }
  
--	if (!idx)
--		return 0;
+-static struct reloc *insn_reloc(struct objtool_file *file, struct instruction *insn)
++struct reloc *insn_reloc(struct objtool_file *file, struct instruction *insn)
+ {
+ 	struct reloc *reloc;
+ 
+@@ -2633,8 +2633,21 @@ static bool alts_needed(void)
+ 	       opts.checksum;
+ }
+ 
+-static int decode_sections(struct objtool_file *file)
++int decode_file(struct objtool_file *file)
+ {
++	arch_initial_func_cfi_state(&initial_func_cfi);
++	init_cfi_state(&init_cfi);
++	init_cfi_state(&func_cfi);
++	set_func_state(&func_cfi);
++	init_cfi_state(&force_undefined_cfi);
++	force_undefined_cfi.force_undefined = true;
++
++	if (!cfi_hash_alloc(1UL << (file->elf->symbol_bits - 3)))
++		return -1;
++
++	cfi_hash_add(&init_cfi);
++	cfi_hash_add(&func_cfi);
++
+ 	file->klp = is_livepatch_module(file);
+ 
+ 	mark_rodata(file);
+@@ -4998,7 +5011,7 @@ struct insn_chunk {
+  * which can trigger more allocations for .debug_* sections whose data hasn't
+  * been read yet.
+  */
+-static void free_insns(struct objtool_file *file)
++void free_insns(struct objtool_file *file)
+ {
+ 	struct instruction *insn;
+ 	struct insn_chunk *chunks = NULL, *chunk;
+@@ -5045,22 +5058,7 @@ int check(struct objtool_file *file)
+ 		objtool_disas_ctx = disas_ctx;
+ 	}
+ 
+-	arch_initial_func_cfi_state(&initial_func_cfi);
+-	init_cfi_state(&init_cfi);
+-	init_cfi_state(&func_cfi);
+-	set_func_state(&func_cfi);
+-	init_cfi_state(&force_undefined_cfi);
+-	force_undefined_cfi.force_undefined = true;
 -
- 	sec = elf_create_section_pair(file->elf, ".discard.sym_checksum", entsize,
- 				      idx, idx);
- 	if (!sec)
+-	if (!cfi_hash_alloc(1UL << (file->elf->symbol_bits - 3))) {
+-		ret = -1;
+-		goto out;
+-	}
+-
+-	cfi_hash_add(&init_cfi);
+-	cfi_hash_add(&func_cfi);
+-
+-	ret = decode_sections(file);
++	ret = decode_file(file);
+ 	if (ret)
+ 		goto out;
+ 
+diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/objtool/check.h
+index 5f2f77bd9b41..6489e52ea2f2 100644
+--- a/tools/objtool/include/objtool/check.h
++++ b/tools/objtool/include/objtool/check.h
+@@ -155,6 +155,11 @@ struct instruction *next_insn_same_sec(struct objtool_file *file, struct instruc
+ 	     insn && insn->offset < sym->offset + sym->len;		\
+ 	     insn = next_insn_same_sec(file, insn))
+ 
++struct reloc *insn_reloc(struct objtool_file *file, struct instruction *insn);
++
++int decode_file(struct objtool_file *file);
++void free_insns(struct objtool_file *file);
++
+ const char *objtool_disas_insn(struct instruction *insn);
+ 
+ extern size_t sym_name_max_len;
 -- 
 2.53.0
 
