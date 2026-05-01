@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18FB3101C8;
-	Fri,  1 May 2026 04:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFAD9359A94;
+	Fri,  1 May 2026 04:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608545; cv=none; b=CAhuccataCevUaea+G7QBlfT2G6gZN9mEqTBAfwg6+Rd+k2WfNQQUVLspwAQQKwmC0gh+1rth0tx7L3SKsO+gIhELx81VVOUBez4WPvJpN+wgcV9LabqFGl8KPuBZxYyORc4gXiMiTeYBhYeQ6XxCGYQBx3TWmxCydJp8TpAppM=
+	t=1777608545; cv=none; b=p+LaINcQZ1GZ+LZG8qLLRK8cnZkx9ggypE3O0xV9UHIYJy+oiQwZL6GNL5oLxsOKOC5i3O1dyJJIUoAg0241M2/1MmdXDf+YttNeschl5LnV+VkuYxL7gNTkXoChbwfkFC4FQ3K3IeD8iXmzeWKTrdOam2heqQL0h3wljVhLwxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1777608545; c=relaxed/simple;
-	bh=f0Ve5bg2CjhT77knL5sFvHMeomh5ZlbAk6fCFX9rZXc=;
+	bh=6jE4uMMHkB1mOztBVCv0yYQ2rdykfzMXfWMb8wecjjQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dU9nGIZXy2FdbiddUoWi6wRW6pGbKmbK60dixbqUmwCNm8Zlul1fE6ilPDOW5gba4M41327Uvv2Y98aXJLybOigfZ6IG3//8wqJcMNm5cet6C+9Z3e6qzSTcHAsr+iTvaeykYNL5DfjAINJZarM71upqmc0pync5KKYofrAao6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZtIXwMXo; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=gJfwtQgmZ5asqvQ2Iwjp7O/EtVqMcG75h4FnTPCUZbbqSQlnu5ADkmjzerqUHZbWYnoDOgteSJoGssD27bQAdbWLRnwt8BQ4eZDSqHp91SQP3AfsALm7VW6hbJIJFzuNNNZZcs6Ud3/7SG1cld0HcCkxayqJDFrgv+kr3LKY47s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeSqdBRv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZtIXwMXo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17715C2BCB7;
-	Fri,  1 May 2026 04:09:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeSqdBRv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75593C2BCB9;
+	Fri,  1 May 2026 04:09:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608543;
-	bh=f0Ve5bg2CjhT77knL5sFvHMeomh5ZlbAk6fCFX9rZXc=;
+	s=k20201202; t=1777608545;
+	bh=6jE4uMMHkB1mOztBVCv0yYQ2rdykfzMXfWMb8wecjjQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZtIXwMXo5VjFnqr/ifRe6z+qLTkDV1Q0T2rxRjYpzomAwk3HJpBVT242wth9KpPcw
-	 JGoCWfxiPPbz5YJAF5Fc3d6VOZGPggRBwgrp14BKfuoEMGgPHBeskBm0QXgTEsQy4E
-	 zCObEQNgsAhCKUY9vf/BJRF7ikfbtHYfVjiEqy46pHTqpEPdbbKKeOv2VL/JSuUu2q
-	 JY/zk57eh5ppgy2UMdYHtSIUYjGoBqf0pL/O1h2iJxMydTPiOGxfuknlwT+jq4XEjc
-	 Q5M4UsPA4TKSqPCeB/+0CARF3k0VJqWwAzUiD2NtbjVOSECS3Rv6wk4sgdE71ZJTRE
-	 5+3XNA1x2sMIg==
+	b=oeSqdBRvDbQ4razru/Lqyx/m/A0iPPvj1Q0InlNU2tF0lzWAIxcoNP7Hc3NbE+/pz
+	 X6+Fp56g2XhB7cwwaCHxXnyh0Bpx4D1ZPrqJsLCTfo9S1zsQfpFONLOYdE0SZ1XWOe
+	 edRQx/NGA/R0gfOvH2QUM3XuOXogBHwzkeOOmGEtcvkvO0CwAonffCoNQlaN1rPVm7
+	 czisz9y3y2hx0XyuHCwrxzblIQVWqI8wi4pU+Q+3cCr7ip8/YhC8h+ZtGIIFm4VSmD
+	 KBWwNsfJJmmqZ5XJffrZ3Fi6Nu9i94o8CSklHVwT33geKGohD1MDsfnohrlSHk989Y
+	 O09gnPGr+ExbQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 28/53] klp-build: Fix patch cleanup on interrupt
-Date: Thu, 30 Apr 2026 21:08:16 -0700
-Message-ID: <cfc3c1d5096764d0cd79ef85e833b8ce098f0838.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 33/53] objtool/klp: Don't set sym->file for section symbols
+Date: Thu, 30 Apr 2026 21:08:21 -0700
+Message-ID: <d44d6a8f8256c9d3896bf531050c969cb15f2661.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,52 +49,30 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If a build error occurs and the user hits Ctrl-C while a large patch is
-being reverted during cleanup, the cleanup EXIT trap gets re-triggered
-and tries to re-revert the already partially-reverted patch.  That
-causes 'patch -R' to repeatedly prompt
+Section symbols aren't grouped after their corresponding FILE symbols.
+Their sym->file should really be NULL rather than whatever random FILE
+happened to be last.
 
-  "Unreversed patch detected!  Ignore -R? [n]"
-
-for each already-reverted hunk, with no way to break out.
-
-Fix it by adding '--force' to the patch revert command in
-revert_patch(), which causes it to silently ignore already-reverted
-hunks.  And ignore errors, as the cleanup is always best-effort.
-
-For similar reasons, add to APPLIED_PATCHES before (rather than after)
-applying the patch in apply_patch() so an interrupted apply will also
-get cleaned up.
-
-Fixes: d36a7343f4ba ("livepatch/klp-build: switch to GNU patch and recountdiff")
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- scripts/livepatch/klp-build | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/objtool/elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index dc2c5c33d1db..9970e1f274ef 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -384,15 +384,15 @@ apply_patch() {
- 		warn "${patch} applied with fuzz"
- 	fi
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index f41280e454ca..d9cee8d5d9e8 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -649,7 +649,7 @@ static int read_symbols(struct elf *elf)
  
--	patch -d "$SRC" -p1 --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" --silent < "$patch"
- 	APPLIED_PATCHES+=("$patch")
-+	patch -d "$SRC" -p1 --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" --silent < "$patch"
- }
+ 		if (is_file_sym(sym))
+ 			file = sym;
+-		else if (sym->bind == STB_LOCAL)
++		else if (sym->bind == STB_LOCAL && !is_sec_sym(sym))
+ 			sym->file = file;
+ 	}
  
- revert_patch() {
- 	local patch="$1"
- 	local tmp=()
- 
--	patch -d "$SRC" -p1 -R --silent --no-backup-if-mismatch -r /dev/null < "$patch"
-+	patch -d "$SRC" -p1 -R --force --no-backup-if-mismatch -r /dev/null &> /dev/null < "$patch" || true
- 
- 	for p in "${APPLIED_PATCHES[@]}"; do
- 		[[ "$p" == "$patch" ]] && continue
 -- 
 2.53.0
 
