@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD354377EC2;
-	Fri,  1 May 2026 04:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0B531D74B;
+	Fri,  1 May 2026 04:09:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608553; cv=none; b=uK4HSl3t6N+BaD3gIe8t15egRQNHo4yqdNIE06QC+1qwkbVn9PY409I1KfO28y80fpJLiispO+wb8T3DCjL37CQiWIHdeqRf85tRd9V5oVqC/hpgeqPPPSB8XgMApdXekeabQZr8hm3WADJEHUTJ3gNjkfbbUoNc9fkcqCHrcfM=
+	t=1777608554; cv=none; b=aD4hzFLE1732Q+ybY1YMjK5zUWKzO+0RQHnC7CEDuMoDHmI8sBkElZymXEB7PhkF8lvFnI1eGo1IxrCHASsdKG9gCHnXGGdHCJfPvgjPjToLBASol28DFjgX+ViT9oTl3yz0CtVjLV6jQrhg/P+EaMUCvMXYQoAZNY50u/o3Nzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777608553; c=relaxed/simple;
-	bh=e7oEQ6SJLpFdZk2kmS/+iqVKxltT9tyXuHd9cNVZaCg=;
+	s=arc-20240116; t=1777608554; c=relaxed/simple;
+	bh=4sZ9od17f5P1PS5M6howR79GuYi+ntpQw6uTUlGfUxY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aEC/YuehyBYpOM0qf7YLLHsuz/PM0npVXiSBvAN7t2ZxuQd3Qx8Q4wzMN0H5eW91L1EqUIfFXtjXLSEhfB9lXgKReaw2w4eIuZAYkcVkDIEXUM4b3F7+NQNxlhXNO67UGY+abLRnMktHZ/cnbBZPB/ZgfOgbvw0CsFcl1Rs2xC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/sEPkNz; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Rz9bPjZps6tT3t8R1fNT53FV2qMxr5RgTFrmwFDedXygh1mA4Yqf40FFJd+yqFBvklm2omMxV/KUKmmg1n8jEKAqyI7byLcb8/JCg9BgSoDoRfwDJkwsccbeXnPRBiPjLhD6CEJl7UJkmETkegEB0aD4Q67Hvl4vzMSReruSgqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X/nYocX6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/sEPkNz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277B3C2BCF4;
-	Fri,  1 May 2026 04:09:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X/nYocX6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86033C2BCC6;
+	Fri,  1 May 2026 04:09:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608549;
-	bh=e7oEQ6SJLpFdZk2kmS/+iqVKxltT9tyXuHd9cNVZaCg=;
+	s=k20201202; t=1777608554;
+	bh=4sZ9od17f5P1PS5M6howR79GuYi+ntpQw6uTUlGfUxY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Q/sEPkNzhwi7KF8JwHF8mSll152KP61hoiG/aILcOVurjygHT93SBYgR3P2LzIE6P
-	 f1JbNFyr3z0EHrqja9CI0RepNtvhe6PwzordXURl13O8r3eV94cxJ9M+JE/ikaQsJu
-	 avC0x0H8LTGDfpVqsQnbwP8U68rk9zsQ0bUVOOoJALuAeodXjXhvTyWvqzISDGTGdA
-	 SzKisI7C5X1FfwCRdbGgn4yC9lRj+VSJPrUtj4pj3l+kVLT12g7CPUsr2OGXLADIqd
-	 bdZrDI59BL5hzW14tGbfIp9cHjdicyEUqa2HPtM+gi5ZQ4P3uP4GMOybOKF49K2u5H
-	 aCPebITj/OLnw==
+	b=X/nYocX6YDEhopf51+IO3sYh/KAEBEWPikCnugtF/Mw3BIDfBGp60xnScOG7aZ6iX
+	 dZtEa1PmxHXXjjnYs2PbZYNj/xw5FI5wu/TqitxWg8HWkNJm9DxEaPFl+U/945yNfn
+	 uZvD6ew6UiF3eFDbsh1XMOYEk9sifOZGFhAx1Lz7Giue/jUgPlcIcWCg6920e0XgV6
+	 38wftTWzl63kpLE5AjxDJ7LW+Rt4pNh21mmEWQH5grfJCAf0QwINVoxXuO+jOQt2ns
+	 oET+4vkpDpJ95RcNxE/+lHaKn2icqwFF8tMrFesFUbfuJx/p03YwBv9ly70j2YXNDE
+	 pNpBFH4eWHnoA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 41/53] objtool/klp: Add "objtool klp checksum" subcommand
-Date: Thu, 30 Apr 2026 21:08:29 -0700
-Message-ID: <ce954af546c49aab9a02de2fa85fb6565ebd3aef.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 49/53] objtool/klp: Fix position-dependent checksums for non-relocated jumps/calls
+Date: Thu, 30 Apr 2026 21:08:37 -0700
+Message-ID: <b9fe30f891bddaff919e48bc2f620f7f66fa98ca.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,611 +49,176 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move the checksum functionality out of the main objtool command into a
-new "objtool klp checksum" subcommand.
+When computing klp checksums, instructions with non-relocated jump/call
+destination offsets are problematic because the offset values can change
+when surrounding code has moved, causing the function to be incorrectly
+marked as changed.
 
-This has the benefit of making the code (and the patch generation
-process itself) more modular.
+Specifically, that includes jumps from alternatives to the end of the
+alternative, which from objtool's perspective are jumps to the end of
+the alternative instruction block in the original function.
 
-For bisectability, both "objtool --checksum" and "objtool klp checksum"
-work for now.  The former will be removed after klp-build has been
-converted to use the new subcommand.
+Note that 'jump_dest' jumps don't include sibling calls (those use
+call_dest), nor do they include jumps to/from .cold sub functions (those
+are cross-section and need a reloc).
 
-Acked-by: Song Liu <song@kernel.org>
+Fix it by hashing the opcode bytes (excluding the immediate operand)
+along with a position-independent representation of the destination.
+For calls, use the function name, and for jumps, use the destination's
+offset within its function.
+
+[Note the "9 bit hole" comment was wrong: it has been 8 bits since
+commit 70589843b36f ("objtool: Add option to trace function validation")
+added the 'trace' field.  Adding the 4-bit 'immediate_len' field now
+leaves a 4-bit hole.]
+
+Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/Build                      |   2 +-
- tools/objtool/builtin-klp.c              |   1 +
- tools/objtool/check.c                    | 205 +-----------------
- tools/objtool/include/objtool/check.h    |   6 +
- tools/objtool/include/objtool/checksum.h |   4 +
- tools/objtool/include/objtool/klp.h      |   1 +
- tools/objtool/klp-checksum.c             | 253 +++++++++++++++++++++++
- tools/objtool/klp-diff.c                 |   2 +-
- 8 files changed, 269 insertions(+), 205 deletions(-)
- create mode 100644 tools/objtool/klp-checksum.c
+ tools/objtool/arch/x86/decode.c       | 17 ++++++++-
+ tools/objtool/include/objtool/arch.h  |  3 ++
+ tools/objtool/include/objtool/check.h |  3 +-
+ tools/objtool/klp-checksum.c          | 53 ++++++++++++++++++++++++---
+ 4 files changed, 67 insertions(+), 9 deletions(-)
 
-diff --git a/tools/objtool/Build b/tools/objtool/Build
-index 600da051af12..93a37b0dfd31 100644
---- a/tools/objtool/Build
-+++ b/tools/objtool/Build
-@@ -12,7 +12,7 @@ objtool-$(BUILD_DISAS) += disas.o
- objtool-$(BUILD_DISAS) += trace.o
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index 350b8ee6e776..1b387d5a195b 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -805,14 +805,27 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 		break;
+ 	}
  
- objtool-$(BUILD_ORC) += orc_gen.o orc_dump.o
--objtool-$(BUILD_KLP) += builtin-klp.o klp-diff.o klp-post-link.o
-+objtool-$(BUILD_KLP) += builtin-klp.o klp-checksum.o klp-diff.o klp-post-link.o
+-	if (ins.immediate.nbytes)
++	if (ins.immediate.nbytes) {
+ 		insn->immediate = ins.immediate.value;
+-	else if (ins.displacement.nbytes)
++		insn->immediate_len = ins.immediate.nbytes;
++	} else if (ins.displacement.nbytes) {
+ 		insn->immediate = ins.displacement.value;
++		insn->immediate_len = ins.displacement.nbytes;
++	}
  
- objtool-y += libstring.o
- objtool-y += libctype.o
-diff --git a/tools/objtool/builtin-klp.c b/tools/objtool/builtin-klp.c
-index 56d5a5b92f72..58c3b9bda3eb 100644
---- a/tools/objtool/builtin-klp.c
-+++ b/tools/objtool/builtin-klp.c
-@@ -13,6 +13,7 @@ struct subcmd {
- };
- 
- static struct subcmd subcmds[] = {
-+	{ "checksum",		"Generate per-function checksums",			cmd_klp_checksum, },
- 	{ "diff",		"Generate binary diff of two object files",		cmd_klp_diff, },
- 	{ "post-link",		"Finalize klp symbols/relocs after module linking",	cmd_klp_post_link, },
- };
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 49171ddc6f54..3e5d335d0e29 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -64,8 +64,8 @@ struct instruction *next_insn_same_sec(struct objtool_file *file,
- 	return insn;
- }
- 
--static struct instruction *next_insn_same_func(struct objtool_file *file,
--					       struct instruction *insn)
-+struct instruction *next_insn_same_func(struct objtool_file *file,
-+				       struct instruction *insn)
- {
- 	struct instruction *next = next_insn_same_sec(file, insn);
- 	struct symbol *func = insn_func(insn);
-@@ -113,10 +113,6 @@ static struct instruction *prev_insn_same_sym(struct objtool_file *file,
- 		for_each_sec(file->elf, __sec)				\
- 			sec_for_each_insn(file, __sec, insn)
- 
--#define func_for_each_insn(file, func, insn)				\
--	for (insn = find_insn(file, func->sec, func->offset);		\
--	     insn;							\
--	     insn = next_insn_same_func(file, insn))
- 
- #define sym_for_each_insn(file, sym, insn)				\
- 	for (insn = find_insn(file, sym->sec, sym->offset);		\
-@@ -1023,56 +1019,6 @@ static int create_direct_call_sections(struct objtool_file *file)
  	return 0;
  }
  
--#ifdef BUILD_KLP
--static int create_sym_checksum_section(struct objtool_file *file)
--{
--	struct section *sec;
--	struct symbol *sym;
--	unsigned int idx = 0;
--	struct sym_checksum *checksum;
--	size_t entsize = sizeof(struct sym_checksum);
--
--	sec = find_section_by_name(file->elf, ".discard.sym_checksum");
--	if (sec) {
--		if (!opts.dryrun)
--			WARN("file already has .discard.sym_checksum section, skipping");
--
--		return 0;
--	}
--
--	for_each_sym(file->elf, sym)
--		if (sym->csum.checksum)
--			idx++;
--
--	sec = elf_create_section_pair(file->elf, ".discard.sym_checksum", entsize,
--				      idx, idx);
--	if (!sec)
--		return -1;
--
--	idx = 0;
--	for_each_sym(file->elf, sym) {
--		if (!sym->csum.checksum)
--			continue;
--
--		if (!elf_init_reloc(file->elf, sec->rsec, idx, idx * entsize,
--				    sym, 0, R_TEXT64))
--			return -1;
--
--		checksum = (struct sym_checksum *)sec->data->d_buf + idx;
--		checksum->addr = 0; /* reloc */
--		checksum->checksum = sym->csum.checksum;
--
--		mark_sec_changed(file->elf, sec, true);
--
--		idx++;
--	}
--
--	return 0;
--}
--#else
--static int create_sym_checksum_section(struct objtool_file *file) { return -EINVAL; }
--#endif
--
- /*
-  * Warnings shouldn't be reported for ignored functions.
-  */
-@@ -3672,153 +3618,6 @@ static bool skip_alt_group(struct instruction *insn)
- 	return alt_insn->type == INSN_CLAC || alt_insn->type == INSN_STAC;
- }
++size_t arch_jump_opcode_bytes(struct objtool_file *file, struct instruction *insn,
++			      unsigned char *buf)
++{
++	size_t len;
++
++	len = insn->len - insn->immediate_len;
++	memcpy(buf, insn->sec->data->d_buf + insn->offset, len);
++	return len;
++}
++
+ void arch_initial_func_cfi_state(struct cfi_init_state *state)
+ {
+ 	int i;
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
+index 8866158975fc..96d828a8401f 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -79,6 +79,9 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			    unsigned long offset, unsigned int maxlen,
+ 			    struct instruction *insn);
  
--#ifdef BUILD_KLP
--static int checksum_debug_init(struct objtool_file *file)
--{
--	char *dup, *s;
--
--	if (!opts.debug_checksum)
--		return 0;
--
--	dup = strdup(opts.debug_checksum);
--	if (!dup) {
--		ERROR_GLIBC("strdup");
--		return -1;
--	}
--
--	s = dup;
--	while (*s) {
--		bool found = false;
--		struct symbol *sym;
--		char *comma;
--
--		comma = strchr(s, ',');
--		if (comma)
--			*comma = '\0';
--
--		for_each_sym_by_name(file->elf, s, sym) {
--			if (!is_func_sym(sym))
--				continue;
--			sym->debug_checksum = 1;
--			found = true;
--		}
--
--		if (!found)
--			WARN("--debug-checksum: can't find '%s'", s);
--
--		if (!comma)
--			break;
--
--		s = comma + 1;
--	}
--
--	free(dup);
--	return 0;
--}
--
--static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
--				 struct instruction *insn)
--{
--	struct reloc *reloc = insn_reloc(file, insn);
--	struct alternative *alt;
--	unsigned long offset;
--	struct symbol *sym;
--	static bool in_alt;
--
--	if (insn->fake)
--		return;
--
--	checksum_update(func, insn, insn->sec->data->d_buf + insn->offset, insn->len);
--
--	if (!reloc) {
--		struct symbol *call_dest = insn_call_dest(insn);
--
--		if (call_dest)
--			checksum_update(func, insn, call_dest->demangled_name,
--					strlen(call_dest->demangled_name));
--		goto alts;
--	}
--
--	sym = reloc->sym;
--	offset = arch_insn_adjusted_addend(insn, reloc);
--
--	if (is_string_sec(sym->sec)) {
--		char *str;
--
--		str = sym->sec->data->d_buf + sym->offset + offset;
--		checksum_update(func, insn, str, strlen(str));
--		goto alts;
--	}
--
--	if (is_sec_sym(sym)) {
--		sym = find_symbol_containing(reloc->sym->sec, offset);
--		if (!sym)
--			goto alts;
--
--		offset -= sym->offset;
--	}
--
--	checksum_update(func, insn, sym->demangled_name, strlen(sym->demangled_name));
--	checksum_update(func, insn, &offset, sizeof(offset));
--
--alts:
--	for (alt = insn->alts; alt; alt = alt->next) {
--		struct alt_group *alt_group = alt->insn->alt_group;
--
--		/* Prevent __ex_table recursion, e.g. LOAD_SEGMENT() */
--		if (in_alt)
--			break;
--		in_alt = true;
--
--		checksum_update(func, insn, &alt->type, sizeof(alt->type));
--
--		if (alt_group && alt_group->orig_group) {
--			struct instruction *alt_insn;
--
--			checksum_update(func, insn, &alt_group->feature, sizeof(alt_group->feature));
--
--			for (alt_insn = alt->insn; alt_insn; alt_insn = next_insn_same_sec(file, alt_insn)) {
--				checksum_update_insn(file, func, alt_insn);
--				if (!alt_group->last_insn || alt_insn == alt_group->last_insn)
--					break;
--			}
--		} else {
--			checksum_update_insn(file, func, alt->insn);
--		}
--
--		in_alt = false;
--	}
--}
--
--static int calculate_checksums(struct objtool_file *file)
--{
--	struct instruction *insn;
--	struct symbol *func;
--
--	if (checksum_debug_init(file))
--		return -1;
--
--	for_each_sym(file->elf, func) {
--		/*
--		 * Skip cold subfunctions and aliases: they share the
--		 * parent's checksum via func_for_each_insn() which
--		 * follows func->cfunc into the cold subfunction.
--		 */
--		if (!is_func_sym(func) || is_cold_func(func) ||
--		    is_alias_sym(func) || !func->len)
--			continue;
--
--		checksum_init(func);
--
--		func_for_each_insn(file, func, insn)
--			checksum_update_insn(file, func, insn);
--
--		checksum_finish(func);
--	}
--	return 0;
--}
--#endif /* BUILD_KLP */
--
- static int validate_branch(struct objtool_file *file, struct symbol *func,
- 			   struct instruction *insn, struct insn_state state);
- static int do_validate_branch(struct objtool_file *file, struct symbol *func,
++size_t arch_jump_opcode_bytes(struct objtool_file *file, struct instruction *insn,
++			      unsigned char *buf);
++
+ bool arch_callee_saved_reg(unsigned char reg);
+ 
+ unsigned long arch_jump_destination(struct instruction *insn);
 diff --git a/tools/objtool/include/objtool/check.h b/tools/objtool/include/objtool/check.h
-index 6489e52ea2f2..eea64728d39b 100644
+index fe08205d8eb1..063f5985fecd 100644
 --- a/tools/objtool/include/objtool/check.h
 +++ b/tools/objtool/include/objtool/check.h
-@@ -144,6 +144,12 @@ struct instruction *find_insn(struct objtool_file *file,
- 			      struct section *sec, unsigned long offset);
+@@ -68,6 +68,7 @@ struct instruction {
+ 	s8 instr;
  
- struct instruction *next_insn_same_sec(struct objtool_file *file, struct instruction *insn);
-+struct instruction *next_insn_same_func(struct objtool_file *file, struct instruction *insn);
-+
-+#define func_for_each_insn(file, func, insn)				\
-+	for (insn = find_insn(file, func->sec, func->offset);		\
-+	     insn;							\
-+	     insn = next_insn_same_func(file, insn))
+ 	u32 idx			: INSN_CHUNK_BITS,
++	    immediate_len	: 4,
+ 	    dead_end		: 1,
+ 	    ignore_alts		: 1,
+ 	    hint		: 1,
+@@ -81,7 +82,7 @@ struct instruction {
+ 	    hole		: 1,
+ 	    fake		: 1,
+ 	    trace		: 1;
+-		/* 9 bit hole */
++		/* 4 bit hole */
  
- #define sec_for_each_insn(file, _sec, insn)				\
- 	for (insn = find_insn(file, _sec, 0);				\
-diff --git a/tools/objtool/include/objtool/checksum.h b/tools/objtool/include/objtool/checksum.h
-index 3f25df90305d..be4eb7dfe6f2 100644
---- a/tools/objtool/include/objtool/checksum.h
-+++ b/tools/objtool/include/objtool/checksum.h
-@@ -31,9 +31,13 @@ static inline void checksum_finish(struct symbol *func)
- 	}
- }
- 
-+int calculate_checksums(struct objtool_file *file);
-+int create_sym_checksum_section(struct objtool_file *file);
-+
- #else /* !BUILD_KLP */
- 
- static inline int calculate_checksums(struct objtool_file *file) { return -ENOSYS; }
-+static inline int create_sym_checksum_section(struct objtool_file *file) { return -EINVAL; }
- 
- #endif /* !BUILD_KLP */
- 
-diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
-index e32e5e8bc631..6f60cf05db86 100644
---- a/tools/objtool/include/objtool/klp.h
-+++ b/tools/objtool/include/objtool/klp.h
-@@ -29,6 +29,7 @@ struct klp_reloc {
- 	u32 type;
- };
- 
-+int cmd_klp_checksum(int argc, const char **argv);
- int cmd_klp_diff(int argc, const char **argv);
- int cmd_klp_post_link(int argc, const char **argv);
- 
+ 	struct alt_group *alt_group;
+ 	struct instruction *jump_dest;
 diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
-new file mode 100644
-index 000000000000..e4a910f3211c
---- /dev/null
+index 19653dbe109d..b8e47f28997e 100644
+--- a/tools/objtool/klp-checksum.c
 +++ b/tools/objtool/klp-checksum.c
-@@ -0,0 +1,253 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include <string.h>
-+#include <subcmd/parse-options.h>
-+
-+#include <objtool/arch.h>
-+#include <objtool/builtin.h>
-+#include <objtool/check.h>
-+#include <objtool/elf.h>
-+#include <objtool/klp.h>
-+#include <objtool/objtool.h>
-+#include <objtool/warn.h>
-+#include <objtool/checksum.h>
-+
-+static int checksum_debug_init(struct objtool_file *file)
-+{
-+	char *dup, *s;
-+
-+	if (!opts.debug_checksum)
-+		return 0;
-+
-+	dup = strdup(opts.debug_checksum);
-+	if (!dup) {
-+		ERROR_GLIBC("strdup");
-+		return -1;
-+	}
-+
-+	s = dup;
-+	while (*s) {
-+		bool found = false;
-+		struct symbol *sym;
-+		char *comma;
-+
-+		comma = strchr(s, ',');
-+		if (comma)
-+			*comma = '\0';
-+
-+		for_each_sym_by_name(file->elf, s, sym) {
-+			if (!is_func_sym(sym))
-+				continue;
-+			sym->debug_checksum = 1;
-+			found = true;
-+		}
-+
-+		if (!found)
-+			WARN("--debug-checksum: can't find '%s'", s);
-+
-+		if (!comma)
-+			break;
-+
-+		s = comma + 1;
-+	}
-+
-+	free(dup);
-+	return 0;
-+}
-+
-+static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
-+				 struct instruction *insn)
-+{
-+	struct reloc *reloc = insn_reloc(file, insn);
-+	struct alternative *alt;
-+	unsigned long offset;
-+	struct symbol *sym;
-+	static bool in_alt;
-+
-+	if (insn->fake)
-+		return;
-+
-+	checksum_update(func, insn, insn->sec->data->d_buf + insn->offset, insn->len);
-+
-+	if (!reloc) {
-+		struct symbol *call_dest = insn_call_dest(insn);
-+
-+		if (call_dest)
-+			checksum_update(func, insn, call_dest->demangled_name,
-+					strlen(call_dest->demangled_name));
-+		goto alts;
-+	}
-+
-+	sym = reloc->sym;
-+	offset = arch_insn_adjusted_addend(insn, reloc);
-+
-+	if (is_string_sec(sym->sec)) {
-+		char *str;
-+
-+		str = sym->sec->data->d_buf + sym->offset + offset;
-+		checksum_update(func, insn, str, strlen(str));
-+		goto alts;
-+	}
-+
-+	if (is_sec_sym(sym)) {
-+		sym = find_symbol_containing(reloc->sym->sec, offset);
-+		if (!sym)
-+			goto alts;
-+
-+		offset -= sym->offset;
-+	}
-+
-+	checksum_update(func, insn, sym->demangled_name, strlen(sym->demangled_name));
-+	checksum_update(func, insn, &offset, sizeof(offset));
-+
-+alts:
-+	for (alt = insn->alts; alt; alt = alt->next) {
-+		struct alt_group *alt_group = alt->insn->alt_group;
-+
-+		/* Prevent __ex_table recursion, e.g. LOAD_SEGMENT() */
-+		if (in_alt)
-+			break;
-+		in_alt = true;
-+
-+		checksum_update(func, insn, &alt->type, sizeof(alt->type));
-+
-+		if (alt_group && alt_group->orig_group) {
-+			struct instruction *alt_insn;
-+
-+			checksum_update(func, insn, &alt_group->feature, sizeof(alt_group->feature));
-+
-+			for (alt_insn = alt->insn; alt_insn; alt_insn = next_insn_same_sec(file, alt_insn)) {
-+				checksum_update_insn(file, func, alt_insn);
-+				if (!alt_group->last_insn || alt_insn == alt_group->last_insn)
-+					break;
-+			}
-+		} else {
-+			checksum_update_insn(file, func, alt->insn);
-+		}
-+
-+		in_alt = false;
-+	}
-+}
-+
-+int calculate_checksums(struct objtool_file *file)
-+{
-+	struct instruction *insn;
-+	struct symbol *func;
-+
-+	if (checksum_debug_init(file))
-+		return -1;
-+
-+	for_each_sym(file->elf, func) {
-+		/*
-+		 * Skip cold subfunctions and aliases: they share the
-+		 * parent's checksum via func_for_each_insn() which
-+		 * follows func->cfunc into the cold subfunction.
-+		 */
-+		if (!is_func_sym(func) || is_cold_func(func) ||
-+		    is_alias_sym(func) || !func->len)
-+			continue;
-+
-+		checksum_init(func);
-+
-+		func_for_each_insn(file, func, insn)
-+			checksum_update_insn(file, func, insn);
-+
-+		checksum_finish(func);
-+	}
-+	return 0;
-+}
-+
-+int create_sym_checksum_section(struct objtool_file *file)
-+{
-+	struct section *sec;
-+	struct symbol *sym;
-+	unsigned int idx = 0;
-+	struct sym_checksum *checksum;
-+	size_t entsize = sizeof(struct sym_checksum);
-+
-+	sec = find_section_by_name(file->elf, ".discard.sym_checksum");
-+	if (sec) {
-+		if (!opts.dryrun)
-+			WARN("file already has .discard.sym_checksum section, skipping");
-+
-+		return 0;
-+	}
-+
-+	for_each_sym(file->elf, sym)
-+		if (sym->csum.checksum)
-+			idx++;
-+
-+	sec = elf_create_section_pair(file->elf, ".discard.sym_checksum", entsize,
-+				      idx, idx);
-+	if (!sec)
-+		return -1;
-+
-+	idx = 0;
-+	for_each_sym(file->elf, sym) {
-+		if (!sym->csum.checksum)
-+			continue;
-+
-+		if (!elf_init_reloc(file->elf, sec->rsec, idx, idx * entsize,
-+				    sym, 0, R_TEXT64))
-+			return -1;
-+
-+		checksum = (struct sym_checksum *)sec->data->d_buf + idx;
-+		checksum->addr = 0; /* reloc */
-+		checksum->checksum = sym->csum.checksum;
-+
-+		mark_sec_changed(file->elf, sec, true);
-+
-+		idx++;
-+	}
-+
-+	return 0;
-+}
-+
-+static const char * const klp_checksum_usage[] = {
-+	"objtool klp checksum [<options>] file.o",
-+	NULL,
-+};
-+
-+int cmd_klp_checksum(int argc, const char **argv)
-+{
-+	struct objtool_file *file;
-+	int ret;
-+
-+	const struct option options[] = {
-+		OPT_STRING(0,	"debug-checksum", &opts.debug_checksum,	"funcs", "enable checksum debug output"),
-+		OPT_BOOLEAN(0,	"dry-run", &opts.dryrun, "don't write modifications"),
-+		OPT_END(),
-+	};
-+
-+	argc = parse_options(argc, argv, options, klp_checksum_usage, 0);
-+	if (argc != 1)
-+		usage_with_options(klp_checksum_usage, options);
-+
-+	opts.checksum = true;
-+
-+	objname = argv[0];
-+
-+	file = objtool_open_read(objname);
-+	if (!file)
-+		return 1;
-+
-+	ret = decode_file(file);
-+	if (ret)
-+		goto out;
-+
-+	ret = calculate_checksums(file);
-+	if (ret)
-+		goto out;
-+
-+	ret = create_sym_checksum_section(file);
-+
-+out:
-+	free_insns(file);
-+
-+	if (ret)
-+		return ret;
-+
-+	if (!opts.dryrun && file->elf->changed && elf_write(file->elf))
-+		return 1;
-+
-+	return elf_close(file->elf);
-+}
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 8728dda1e08c..95359ad336bb 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -166,7 +166,7 @@ static int read_sym_checksums(struct elf *elf)
+@@ -66,17 +66,58 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 	if (insn->fake)
+ 		return;
  
- 	sec = find_section_by_name(elf, ".discard.sym_checksum");
- 	if (!sec) {
--		ERROR("'%s' missing .discard.sym_checksum section, file not processed by 'objtool --checksum'?",
-+		ERROR("'%s' missing .discard.sym_checksum section, file not processed by 'objtool klp checksum'?",
- 		      elf->name);
- 		return -1;
+-	__checksum_update_insn(func, insn, insn->sec->data->d_buf + insn->offset, insn->len);
+-
+ 	if (!reloc) {
+ 		struct symbol *call_dest = insn_call_dest(insn);
++		struct instruction *jump_dest = insn->jump_dest;
+ 
+-		if (call_dest)
+-			__checksum_update_insn(func, insn, call_dest->demangled_name,
+-					       strlen(call_dest->demangled_name));
+-		goto alts;
++		/*
++		 * For a jump/call non-relocated dest offset embedded in the
++		 * instruction, the offset may vary due to changes in
++		 * surrounding code.  Just hash the opcode and a
++		 * position-independent representation of the destination.
++		 */
++
++		if (call_dest || jump_dest) {
++			unsigned char buf[16];
++			size_t len;
++
++			len = arch_jump_opcode_bytes(file, insn, buf);
++			__checksum_update_insn(func, insn, buf, len);
++
++			if (call_dest) {
++				__checksum_update_insn(func, insn, call_dest->demangled_name,
++						       strlen(call_dest->demangled_name));
++
++			} else if (jump_dest) {
++				struct symbol *dest_sym;
++				unsigned long offset;
++
++				/*
++				 * use insn->_sym instead of insn_sym() here.
++				 * For alternative replacements, the latter
++				 * would give the function of the code being
++				 * replaced.
++				 */
++				dest_sym = jump_dest->_sym;
++				if (!dest_sym)
++					goto alts;
++
++				__checksum_update_insn(func, insn, dest_sym->demangled_name,
++						       strlen(dest_sym->demangled_name));
++
++				offset = jump_dest->offset - dest_sym->offset;
++				__checksum_update_insn(func, insn, &offset, sizeof(offset));
++			}
++
++			goto alts;
++		}
  	}
+ 
++	__checksum_update_insn(func, insn, insn->sec->data->d_buf + insn->offset, insn->len);
++
++	if (!reloc)
++		goto alts;
++
+ 	sym = reloc->sym;
+ 	offset = arch_insn_adjusted_addend(insn, reloc);
+ 
 -- 
 2.53.0
 
