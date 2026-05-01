@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F319E30E858;
-	Fri,  1 May 2026 04:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE38530F958;
+	Fri,  1 May 2026 04:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777608544; cv=none; b=JAEWu+vnO3ohT88N5udPhCxsnYIftp/kbHPE64aafbbw5yEu+ZPC/c0QEIGvcJnX+UDftfQpehzyjY6K0S+s5Zu9mrdqzXE7rxvd25f57O3fqTBwJ07IBOTYOAH/HlhnRNB3M5Ttvw1x9Z1KbsTQpgYk7apmmVb9WmO6+pBpVJU=
+	t=1777608545; cv=none; b=hLJvpH7Y05j0Pagyxuk26vTZHWG0zu7Z+mfP8tSJ0MF0ta9e/q+mgFRCKQhmwSljhxMbXQX/Rjnz+ZdKWfQ/MKyUs5k+/clpVhz/AOUGAXDy+FYMNdIdi06CDTTKkMzZGjqMSH40HfR6xHRKAAmoxXbAU79Y351fYUoiaYau4EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777608544; c=relaxed/simple;
-	bh=sOjPZIGXc7QuIPp7UhkHLTQ38hR0PnpHghxAZO7qmxk=;
+	s=arc-20240116; t=1777608545; c=relaxed/simple;
+	bh=+cSOMoJ52+YC//3yBJ8PpJ9LJCgKreOela/CrfW2oxk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fMOWKN7zf2zG0qVCnjAL57lkJ2WDpoLJDyuWMzGWEkWTr0kSBXxkDroLIdBbgkgsKomnKg8uupmiY6JrHNaZHB8e13aQTHAvHCZgZYVqNu2OSfEHE1ZlJvZYJY8ik3J8ozNX0Md8Siqk+8ksjr69CBd7tZi6zm1of4xaihHSAko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zmui32L2; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=umo2ke2EkJxzT0JNQkRe1h0G64TtdqQENiQsuAQxuK8cgG/yeZd6KBLGwaRJAdQK9G0XfBE/BWmYCTcZn30gWa9/O4vlzKFgpPx/ns60elJuCHfASwGmlrGkgVKZRj3IBd7I3hGNpbzmLf1SKJ7g+ohnVmFr0N+i9NLGek3GTCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIiyF5wL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zmui32L2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BA6C2BCB9;
-	Fri,  1 May 2026 04:09:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIiyF5wL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B69C2BCC6;
+	Fri,  1 May 2026 04:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777608543;
-	bh=sOjPZIGXc7QuIPp7UhkHLTQ38hR0PnpHghxAZO7qmxk=;
+	s=k20201202; t=1777608544;
+	bh=+cSOMoJ52+YC//3yBJ8PpJ9LJCgKreOela/CrfW2oxk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Zmui32L2phOMpoSXr5Mid+Pe2qJouJT3I4TfDUL2uOu6uX4F0M+cgZ8xaIFuRH5aW
-	 R98J+R1fFmfB319+IGscGegAqa0hAth+mqzD+GnDEyEsS2+3R++G5u7O0ykCX/veMX
-	 Nqu9D6h7c/PJOUlAD6gSvTAU6IeHWWWeLO/3jVw+6PFhgIOI/lPAajJAcI32RtcvGX
-	 jXNTIceAXXNjCc3SANYLmjOc4AMr+Qoo2RfZecALIUAchtzvYtmzwkY9UCYBXkR0ST
-	 dJ47amN0f8tYBXwYWpZZn0QuDl6SYU9ytMKmIoNNaEL+Nn0ubvX2Go2SQPzCk8D5ls
-	 Lrv0H+Yaz4sXA==
+	b=AIiyF5wLl+kWFlNnqB2iCf0JvENSB5fHk3EDZIf9sJpd00z+OvFgd+8qHzrhH5u5j
+	 KBwIHY6zvmr0vgbpTmmzMaagM8XTtMsb8iwAthB/LA4zsWZ2ulNTUcZ5kjbFJIogxX
+	 42EC1GsA+KLwvMKHtcA19tc9+rxRjp8nv1+QyLE2821U5sGVgYLtGZeIFKZPGh6xk6
+	 KHNgWyGxjugVpnz0UNoR1XoyivlA2KkOuLBAnbS1GJxeaQCh7W6qv/TDgd8lPr9mke
+	 XN3/R+mhgjMBrSLmwcoDeICAql4mkmRLGE/8MSoMX68/T/3ehpWg7qmh7Kdq+GlF8I
+	 z17Vq4eh2BFmg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -35,9 +35,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 29/53] klp-build: Reject patches to vDSO
-Date: Thu, 30 Apr 2026 21:08:17 -0700
-Message-ID: <a22e56b997cb56f2db1e154a847b354cf9b5b074.1777575752.git.jpoimboe@kernel.org>
+Subject: [PATCH v2 31/53] klp-build: Print "objtool klp diff" command in verbose mode
+Date: Thu, 30 Apr 2026 21:08:19 -0700
+Message-ID: <949a2ff797f2c7e366dedc760aea726e7cae1b11.1777575752.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1777575752.git.jpoimboe@kernel.org>
 References: <cover.1777575752.git.jpoimboe@kernel.org>
@@ -49,29 +49,27 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-vDSO code runs in userspace and can't be livepatched.  Such patches also
-cause spurious "new function" errors due to generated files like
-vdso*-image.c having unstable line numbers across builds.
+Print the full objtool command line when '--verbose' is given to help
+with debugging.
 
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- scripts/livepatch/klp-build | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/livepatch/klp-build | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index 9970e1f274ef..a70d48d98453 100755
+index 2bb35de5db75..355345aa94d2 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -357,7 +357,7 @@ check_unsupported_patches() {
+@@ -681,6 +681,7 @@ diff_objects() {
  
- 		for file in "${files[@]}"; do
- 			case "$file" in
--				lib/*|*.S)
-+				lib/*|*/vdso/*|*.S)
- 					die "${patch}: unsupported patch to $file"
- 					;;
- 			esac
+ 		(
+ 			cd "$ORIG_DIR"
++			[[ -v VERBOSE ]] && echo "${cmd[@]}"
+ 			"${cmd[@]}"							\
+ 				1> >(tee -a "$log")					\
+ 				2> >(tee -a "$log" | "${filter[@]}" >&2) ||		\
 -- 
 2.53.0
 
