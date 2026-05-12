@@ -1,56 +1,56 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED89C399354
-	for <live-patching@vger.kernel.org>; Tue, 12 May 2026 22:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B6339B964
+	for <live-patching@vger.kernel.org>; Tue, 12 May 2026 22:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778623877; cv=none; b=Agrs7U+AhyabzN1FowfNgrKnbLZp+hlzQOkYA8UQAX7WNee9YVZh9uezIF0BSHPcNe2SzA5hL3xbu1tKc82pXhKBRVUv9gLOm7MRnfWC8B5gKoosGXXFdAmYsL310UXIf1gGQStRVm8PcR9QUrNvV7duTibNzaIyVfEP2XQRieA=
+	t=1778623878; cv=none; b=YXYnI5Pg/cl4uF/GucPExuaXFxALDvAp/5IjKN0CkgfQGqYuQ9hROm/KxW+tA+qR2BuAqYRrAgJQP/9P1118w3GaTM9/8+/sGMHkHS+INNzBzO9SHGsPtPD5vbhJT/hAWnE+knNvgnLWf2vZgBorhOmAXD01LwQUaiNYR1ajiMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778623877; c=relaxed/simple;
-	bh=hT2Lb2gyz6qP9aZKuYbHMEiwNhVnCddtnbL7dOxSSZQ=;
+	s=arc-20240116; t=1778623878; c=relaxed/simple;
+	bh=36Tw+gz85KTY3fBDCPnS7KKF24RCjtB1UcjdLUyYiPg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=s4N93lmnK5fk4gVBkBc8NcU3WeugYVhmrIWdgkY64VIT2sdEhHwybX/MgPTfZYda3cxu5TuP3418YJUoOUhgpC7TsYKWPzFBpSFPXfZReAC4gaXli3opD+PUFIuyAbyvFxcn0eKkSPlOlZnrjbDWITHEKZnY5dUGXTp2+042HwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T8CtVhlv; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-type; b=LMOArPJROdls/igm16RDi+oZMGi0YRhAJK6HEHvfaellFfpaHPwljnbGTNwgKQjWZSywC8Zp2dec2SND3I4767KbCcTSEuKSIHfeNuG/TZ8auKXu66MuQnGjPmF82snneeb51aqZHOu9eH+aaoLex3L8rzzeOPzFNTzGp1GI3XQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DO13w20q; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T8CtVhlv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DO13w20q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778623875;
+	s=mimecast20190719; t=1778623876;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6jUpUteB+fL5/Gn+lO9XqONgcFiGo6qcPWJ1La1GAco=;
-	b=T8CtVhlvYEavvg6vr4s+37OvBpClRS5rJhegcSMwpCzPoByOMOdTYaWNnbVFFfrqZsrTAQ
-	NlJq/nMc/ptzbEqL+4CWwmRZPXySmiPie55su9VRyICCzY1PqqwMSor9zHM17P/FB2p0yu
-	WRveTaC4o1F/RNv9GBwHfKjObZoU8T0=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=jl30t3jXKDaBR32ke15XxtGmE5d14QvFnALDQQLw2mE=;
+	b=DO13w20qSc1L1Ri4a9ES0qhsihqnKOov5j9I44HXxGPUPBbfO5ITLjOvSoMVJeUXAssBtm
+	U361q+RplbB2QOeeCs+fw0Nh4GfXqrcZ7lUmoEEwve75r2JATtuzjUAanucKSCfKKJcG+t
+	gLC++ASV3rhZEeg+huXNVOqdl6KSJ3M=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-HQ15H1jSPe-P96sJXpSmfA-1; Tue,
- 12 May 2026 18:11:13 -0400
-X-MC-Unique: HQ15H1jSPe-P96sJXpSmfA-1
-X-Mimecast-MFC-AGG-ID: HQ15H1jSPe-P96sJXpSmfA_1778623872
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-214-MPHo4m1ZNQ6ugcJ4F_Cm0w-1; Tue,
+ 12 May 2026 18:11:12 -0400
+X-MC-Unique: MPHo4m1ZNQ6ugcJ4F_Cm0w-1
+X-Mimecast-MFC-AGG-ID: MPHo4m1ZNQ6ugcJ4F_Cm0w_1778623871
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 581041800577;
-	Tue, 12 May 2026 22:11:12 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E19C61955F01;
+	Tue, 12 May 2026 22:11:10 +0000 (UTC)
 Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.89.145])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 31B1918004A3;
-	Tue, 12 May 2026 22:11:11 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D67941800347;
+	Tue, 12 May 2026 22:11:09 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [RFC 3/4] objtool/klp: add --arch option to display target architecture
-Date: Tue, 12 May 2026 18:11:01 -0400
-Message-ID: <20260512221102.2720763-4-joe.lawrence@redhat.com>
+Subject: [RFC 2/4] objtool/klp: allow special section entry size overrides
+Date: Tue, 12 May 2026 18:11:00 -0400
+Message-ID: <20260512221102.2720763-3-joe.lawrence@redhat.com>
 In-Reply-To: <20260512221102.2720763-1-joe.lawrence@redhat.com>
 References: <20260512221102.2720763-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -63,75 +63,73 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-objtool is built for a specific architecture determined by SRCARCH at
-compile time.  However, the binary currently provides no way to report
-this target architecture, making it difficult for scripts or test suites
-to verify compatibility before processing object files.
+Special section entry sizes (ALT_ENTRY_SIZE, JUMP_ENTRY_SIZE,
+EX_ENTRY_SIZE) are built into objtool from arch-specific headers.
+When processing cached unit test objects that were built from a
+different kernel version, these compiled-in sizes may not match the
+objects' actual entry sizes, causing create_fake_symbols() to
+incorrectly parse special sections.
 
-Pass SRCARCH as a preprocessor define and add a --arch (-a) option to
-klp diff that prints the target architecture and exits:
-
-  $ objtool klp diff --arch
-  x86
-
-This is mutually exclusive with normal operation: when --arch is given,
-all other options and arguments are ignored.
+Allow the user to override the compiled-in defaults via environment
+variables of the same name.  When unset, behavior is unchanged.  This
+will enable a klp-diff unit test runner to pass the correct entry sizes
+from test metadata.
 
 Assisted-by: Cursor:claude-4.6-opus
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- tools/objtool/Makefile   | 3 ++-
- tools/objtool/klp-diff.c | 9 ++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ tools/objtool/klp-diff.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 94aabeee9736..79694444053c 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -65,7 +65,8 @@ INCLUDES := -I$(srctree)/tools/include \
- 	    -I$(srctree)/tools/lib
- 
- OBJTOOL_CFLAGS  := -std=gnu11 -fomit-frame-pointer -O2 -g $(WARNINGS)	\
--		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS)
-+		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS) \
-+		   -DOBJTOOL_ARCH=$(SRCARCH)
- 
- OBJTOOL_LDFLAGS := $(LIBSUBCMD) $(LIBELF_LIBS) $(LIBXXHASH_LIBS) $(HOSTLDFLAGS)
- 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index ebe4a2a087ca..8710ae8708df 100644
+index bd8d64f2f3f6..ebe4a2a087ca 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -35,7 +35,7 @@ struct export {
- };
+@@ -1749,6 +1749,22 @@ static int clone_sym_relocs(struct elfs *e, struct symbol *patched_sym)
  
- static const char *symvers_path = "Module.symvers";
--bool debug, debug_correlate, debug_clone;
-+bool show_arch, debug, debug_correlate, debug_clone;
- int indent;
+ }
  
- static const char * const klp_diff_usage[] = {
-@@ -45,6 +45,7 @@ static const char * const klp_diff_usage[] = {
- 
- static const struct option klp_diff_options[] = {
- 	OPT_GROUP("Options:"),
-+	OPT_BOOLEAN('a', "arch", &show_arch, "display target architecture"),
- 	OPT_BOOLEAN('d', "debug", &debug, "enable all debug output"),
- 	OPT_BOOLEAN(0, "debug-correlate", &debug_correlate, "enable correlation debug output"),
- 	OPT_BOOLEAN(0, "debug-clone", &debug_clone, "enable cloning debug output"),
-@@ -2366,6 +2367,12 @@ int cmd_klp_diff(int argc, const char **argv)
- 	int ret;
- 
- 	argc = parse_options(argc, argv, klp_diff_options, klp_diff_usage, 0);
++static unsigned int entry_size_from_env(const char *name, unsigned int def)
++{
++	const char *str = getenv(name);
++	char *end;
++	unsigned long val;
 +
-+	if (show_arch) {
-+		printf("%s\n", __stringify(OBJTOOL_ARCH));
-+		return 0;
-+	}
++	if (!str)
++		return def;
 +
- 	if (argc != 3)
- 		usage_with_options(klp_diff_usage, klp_diff_options);
++	val = strtoul(str, &end, 10);
++	if (*end || !val)
++		return def;
++
++	return val;
++}
++
+ static int create_fake_symbol(struct elf *elf, struct section *sec,
+ 			      unsigned long offset, size_t size)
+ {
+@@ -1871,6 +1887,21 @@ static int create_fake_symbols(struct elf *elf)
+ 		}
  
+ 		entry_size = sec->sh.sh_entsize;
++
++		/*
++		 * Some special sections have multiple relocs per entry,
++		 * so the reloc-based heuristic below doesn't work.  Use
++		 * the arch-defined entry sizes for known special sections.
++		 */
++		if (!entry_size) {
++			if (!strcmp(sec->name, ".altinstructions"))
++				entry_size = entry_size_from_env("ALT_ENTRY_SIZE", ALT_ENTRY_SIZE);
++			else if (!strcmp(sec->name, "__jump_table"))
++				entry_size = entry_size_from_env("JUMP_ENTRY_SIZE", JUMP_ENTRY_SIZE);
++			else if (!strcmp(sec->name, "__ex_table"))
++				entry_size = entry_size_from_env("EX_ENTRY_SIZE", EX_ENTRY_SIZE);
++		}
++
+ 		if (!entry_size) {
+ 			entry_size = arch_reloc_size(sec->rsec->relocs);
+ 			if (sec_size(sec) != entry_size * sec_num_entries(sec->rsec)) {
 -- 
 2.53.0
 
