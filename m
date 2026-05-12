@@ -1,56 +1,56 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D08D39A04B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED89C399354
 	for <live-patching@vger.kernel.org>; Tue, 12 May 2026 22:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778623876; cv=none; b=O6qhdxVvD+KhpxHucRrv7BlbarTlo2i2eyavybr+842WboybbLuFectsm8DoovDPf4lrmS+++N0/edHgm59F6k3CxmNVLT0aTOIMCNYCXki0uXDadBCxUIXCLiVTRfk6GUaE1jKmYiKqgyNTAId13YbaTznodkGNhwihHz2Ks5s=
+	t=1778623877; cv=none; b=Agrs7U+AhyabzN1FowfNgrKnbLZp+hlzQOkYA8UQAX7WNee9YVZh9uezIF0BSHPcNe2SzA5hL3xbu1tKc82pXhKBRVUv9gLOm7MRnfWC8B5gKoosGXXFdAmYsL310UXIf1gGQStRVm8PcR9QUrNvV7duTibNzaIyVfEP2XQRieA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778623876; c=relaxed/simple;
-	bh=gECdz6zcWZXHiX7/8w4kq3L75tckDtrUFc0FOY0Ex8M=;
+	s=arc-20240116; t=1778623877; c=relaxed/simple;
+	bh=hT2Lb2gyz6qP9aZKuYbHMEiwNhVnCddtnbL7dOxSSZQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=mEsQ7E2K4Nz4CnAZxpVmkhUr3vhLSyPIFQwDS6/n4JuEJ2EkGoMstCNnBcNCcvfFmYe2S4Kqs+v1f65R2qLaiINohDsXfKrh3nx+VPvUHj9//wA7sokxHWFKoUgvix0psJwszhLFmqAqSpZ6ubx3DdFg2qSvfNQpNe/omA72nqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=erDTa7j5; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-type; b=s4N93lmnK5fk4gVBkBc8NcU3WeugYVhmrIWdgkY64VIT2sdEhHwybX/MgPTfZYda3cxu5TuP3418YJUoOUhgpC7TsYKWPzFBpSFPXfZReAC4gaXli3opD+PUFIuyAbyvFxcn0eKkSPlOlZnrjbDWITHEKZnY5dUGXTp2+042HwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T8CtVhlv; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="erDTa7j5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T8CtVhlv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778623874;
+	s=mimecast20190719; t=1778623875;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oDpL3nXOLEaRoHDYwhPLUSNJyZ2U9nKp5cmtYyZyePU=;
-	b=erDTa7j5gBs+dPOlZHpAfsFxHp4B5xnIpIGEnsj766wJrJQafpDiqt6/VLDXPd5FVTXB7j
-	4kwI0xFr2WzGEzMZLWiMyeDeLzZfekCixDrlI6lggMEZyM5526Y/rmoOSaHdEyuLNNfRVT
-	78tTuD8BWJth2dUTvy2tG+0qgTUEPdY=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=6jUpUteB+fL5/Gn+lO9XqONgcFiGo6qcPWJ1La1GAco=;
+	b=T8CtVhlvYEavvg6vr4s+37OvBpClRS5rJhegcSMwpCzPoByOMOdTYaWNnbVFFfrqZsrTAQ
+	NlJq/nMc/ptzbEqL+4CWwmRZPXySmiPie55su9VRyICCzY1PqqwMSor9zHM17P/FB2p0yu
+	WRveTaC4o1F/RNv9GBwHfKjObZoU8T0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-680-OnlDOUrWMhGI-ecb1-8hBA-1; Tue,
- 12 May 2026 18:11:10 -0400
-X-MC-Unique: OnlDOUrWMhGI-ecb1-8hBA-1
-X-Mimecast-MFC-AGG-ID: OnlDOUrWMhGI-ecb1-8hBA_1778623869
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-HQ15H1jSPe-P96sJXpSmfA-1; Tue,
+ 12 May 2026 18:11:13 -0400
+X-MC-Unique: HQ15H1jSPe-P96sJXpSmfA-1
+X-Mimecast-MFC-AGG-ID: HQ15H1jSPe-P96sJXpSmfA_1778623872
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 89E4A180060D;
-	Tue, 12 May 2026 22:11:09 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 581041800577;
+	Tue, 12 May 2026 22:11:12 +0000 (UTC)
 Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.89.145])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 562B81800349;
-	Tue, 12 May 2026 22:11:08 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 31B1918004A3;
+	Tue, 12 May 2026 22:11:11 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [RFC 1/4] objtool/klp: add --symvers option to klp diff
-Date: Tue, 12 May 2026 18:10:59 -0400
-Message-ID: <20260512221102.2720763-2-joe.lawrence@redhat.com>
+Subject: [RFC 3/4] objtool/klp: add --arch option to display target architecture
+Date: Tue, 12 May 2026 18:11:01 -0400
+Message-ID: <20260512221102.2720763-4-joe.lawrence@redhat.com>
 In-Reply-To: <20260512221102.2720763-1-joe.lawrence@redhat.com>
 References: <20260512221102.2720763-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -63,62 +63,74 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Add a --symvers (-s) option that accepts a path to Module.symvers.  When
-provided, it replaces the default "Module.symvers" filename used by the
-auto-detection logic.
+objtool is built for a specific architecture determined by SRCARCH at
+compile time.  However, the binary currently provides no way to report
+this target architecture, making it difficult for scripts or test suites
+to verify compatibility before processing object files.
 
-This decoupling helps to enable scenarios like out-of-tree module
-patching and unit testing of klp-diff, where object files /
-Module.symvers live outside the kernel tree.
+Pass SRCARCH as a preprocessor define and add a --arch (-a) option to
+klp diff that prints the target architecture and exits:
 
-The existing auto-detection behavior (try cwd, then top_level_dir()
-fallback) is preserved regardless of whether --symvers is specified.
+  $ objtool klp diff --arch
+  x86
+
+This is mutually exclusive with normal operation: when --arch is given,
+all other options and arguments are ignored.
 
 Assisted-by: Cursor:claude-4.6-opus
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- tools/objtool/klp-diff.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ tools/objtool/Makefile   | 3 ++-
+ tools/objtool/klp-diff.c | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
+diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
+index 94aabeee9736..79694444053c 100644
+--- a/tools/objtool/Makefile
++++ b/tools/objtool/Makefile
+@@ -65,7 +65,8 @@ INCLUDES := -I$(srctree)/tools/include \
+ 	    -I$(srctree)/tools/lib
+ 
+ OBJTOOL_CFLAGS  := -std=gnu11 -fomit-frame-pointer -O2 -g $(WARNINGS)	\
+-		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS)
++		   $(INCLUDES) $(LIBELF_FLAGS) $(LIBXXHASH_CFLAGS) $(HOSTCFLAGS) \
++		   -DOBJTOOL_ARCH=$(SRCARCH)
+ 
+ OBJTOOL_LDFLAGS := $(LIBSUBCMD) $(LIBELF_LIBS) $(LIBXXHASH_LIBS) $(HOSTLDFLAGS)
+ 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index b9624bd9439b..bd8d64f2f3f6 100644
+index ebe4a2a087ca..8710ae8708df 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -34,6 +34,7 @@ struct export {
- 	char *mod, *sym;
+@@ -35,7 +35,7 @@ struct export {
  };
  
-+static const char *symvers_path = "Module.symvers";
- bool debug, debug_correlate, debug_clone;
+ static const char *symvers_path = "Module.symvers";
+-bool debug, debug_correlate, debug_clone;
++bool show_arch, debug, debug_correlate, debug_clone;
  int indent;
  
-@@ -47,6 +48,7 @@ static const struct option klp_diff_options[] = {
+ static const char * const klp_diff_usage[] = {
+@@ -45,6 +45,7 @@ static const char * const klp_diff_usage[] = {
+ 
+ static const struct option klp_diff_options[] = {
+ 	OPT_GROUP("Options:"),
++	OPT_BOOLEAN('a', "arch", &show_arch, "display target architecture"),
  	OPT_BOOLEAN('d', "debug", &debug, "enable all debug output"),
  	OPT_BOOLEAN(0, "debug-correlate", &debug_correlate, "enable correlation debug output"),
  	OPT_BOOLEAN(0, "debug-clone", &debug_clone, "enable cloning debug output"),
-+	OPT_STRING('s', "symvers", &symvers_path, "path", "path to Module.symvers (default: Module.symvers)"),
- 	OPT_END(),
- };
+@@ -2366,6 +2367,12 @@ int cmd_klp_diff(int argc, const char **argv)
+ 	int ret;
  
-@@ -86,16 +88,15 @@ static char *escape_str(const char *orig)
- 
- static int read_exports(void)
- {
--	const char *symvers = "Module.symvers";
- 	char line[1024], *path = NULL;
- 	unsigned int line_num = 1;
- 	FILE *file;
- 
--	file = fopen(symvers, "r");
-+	file = fopen(symvers_path, "r");
- 	if (!file) {
--		path = top_level_dir(symvers);
-+		path = top_level_dir(symvers_path);
- 		if (!path) {
--			ERROR("can't open '%s', \"objtool diff\" should be run from the kernel tree", symvers);
-+			ERROR("can't open '%s', \"objtool diff\" should be run from the kernel tree", symvers_path);
- 			return -1;
- 		}
+ 	argc = parse_options(argc, argv, klp_diff_options, klp_diff_usage, 0);
++
++	if (show_arch) {
++		printf("%s\n", __stringify(OBJTOOL_ARCH));
++		return 0;
++	}
++
+ 	if (argc != 3)
+ 		usage_with_options(klp_diff_usage, klp_diff_options);
  
 -- 
 2.53.0
