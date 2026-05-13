@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A28BE3932D5;
-	Wed, 13 May 2026 03:34:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBC7395AE3;
+	Wed, 13 May 2026 03:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643271; cv=none; b=FwT5ks55Vme62htdNoRe66L8b0GRHJCMhSk+rOWMOgW0UFB5cHqX7JmbbfsovqAVW22zzk3pXzBjwj+klXccnwr0ahI7O6yejSDn+ybnaEDtyNj8I2Cj+ZJwSnf3hmCdG4hqFOL8YMKyFEVBdNYHqbOVVOnmzWo+c1ZvXv+MTJI=
+	t=1778643272; cv=none; b=rU7WPwFBF1YIt3APZPO4Dj4u+1VapqVa1m/wM8Q2I237uYHmwSRHOitTv1EZ3BlS1Bdwkr+ZHrzccRdSF/G4+s/hnei1YG4h9y08x3jiAY4y+4nATfxQloUxCsmS4ZMgSWrb3W7bqKaQL2jgRDyPKmomjsYJgM4VV2toB7Dypuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778643271; c=relaxed/simple;
-	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
+	s=arc-20240116; t=1778643272; c=relaxed/simple;
+	bh=LhHK0lCryH3GfUbhtNycvw/+YpO/Fwf9dWZJEbuG8Pg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lr6vxtncxvj9Hz45c62jZgJP/PGqdQ2S5Hp5P1ztGfFXD4aBY8VpdOE0poQUg6vtSXEQWedaw0RMHMC3BxOs++ptf7kHMn/+HQFqe8ROFkhXEA8JVZXUJoAuhGwpxuFu7TCl7ramjhw4WJVuBm/slskD2EVtcQnJqKcQzoWgHso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hIIHfT85; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ieo9X8oKkLpke4oqyL5hmkyWNHwvvuLgtUSNGEty81Ln2SvcdLuO898iuCC8ervLoalfvzoa8ea+9z7JkNqGXod6cxm270cfEZwo4JXv1u0lr3LWprBbcCrRAtUJAu+EFzpxRpiRUhPNbOOv6DQAtZp67S7iVYM1i/UdmWBqr2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jNxtfagA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hIIHfT85"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B65BC2BCF7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jNxtfagA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8992C2BCC9;
 	Wed, 13 May 2026 03:34:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643271;
-	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
+	s=k20201202; t=1778643272;
+	bh=LhHK0lCryH3GfUbhtNycvw/+YpO/Fwf9dWZJEbuG8Pg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hIIHfT854Lr7qsvx6I7cr5tcMFSOYnHYPsUmlBOOQ12eZ0G9T3SFghvuElI0QqTAV
-	 2SLst2YyVIO1f/ZvenQYzJYqR/oV8LI5/GEj7n/hGWaNL6KxmxWXwSHw24BJsHHoz6
-	 e2OgjzlFPNrAXLwegFCvo6KF2cyu61LwIX8Bm4kooPJGmoqItKTAdEUrh4Olr0dA4K
-	 zOUmYG+BHOMK3fJejkQed26rSkT16Kc94617C4QN3JjjjI7wd97LhqZFTbFIDtbb7+
-	 i9PXHoqiMYP2/mIjzf87KMuc5dG8JRc9WUbRdqozAxsJGZKdOOuGVGb91juojVNqX6
-	 5dREqsC8NOPAg==
+	b=jNxtfagASYgYVYf1umkw+kM2WaikjdPtSOls1zGgc03ZsJiT9PFu2l8y1CWdDS/r0
+	 KcYXbYeQkvoNFIDyvxRqbSmKa5kaQDL2+94KzG1ZqzDTQ2iNFMDb3ytwVxz0fzTFbT
+	 w9OtedfmjwJHTR2cDz+vJCJ9BJw+IY32/pHZvo+RqOZ2U9kFwHQl9gpSZRS8AQ7WXk
+	 x+Y7Cf198wdLgHWYjrQnrpKCGy3dmLOnlYhEX1PSis/Cd1b0EWkOgtCrs5axbGf1LB
+	 UJNEOIkwyzk6MMDhbieMpPa4BsUO8llqizoEIWXfZ02sNUxy/vU8uTb430nzBeENMh
+	 jNVc0uQ70vviw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 02/21] arm64: Annotate intra-function calls
-Date: Tue, 12 May 2026 20:33:36 -0700
-Message-ID: <16bdb04ed6653809514d9f060702248b8e587f05.1778642120.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 03/21] arm64: Fix EFI linking with -fdata-sections
+Date: Tue, 12 May 2026 20:33:37 -0700
+Message-ID: <1e5281cfb9a7daec8283e46e2879be8ec468713c.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -53,66 +53,29 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for enabling objtool on arm64, annotate intra-function
-calls.
+When building with -fdata-sections, the .init.bss section gets split up
+into a bunch of .init.bss.<var> sections.  Make sure they get linked
+into .init.data.
 
 Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/kernel/entry.S       |  2 ++
- arch/arm64/kernel/proton-pack.c | 12 +++++++-----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ arch/arm64/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index e0db14e9c843a..d4cbdfb23d733 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -10,6 +10,7 @@
- #include <linux/arm-smccc.h>
- #include <linux/init.h>
- #include <linux/linkage.h>
-+#include <linux/annotate.h>
- 
- #include <asm/alternative.h>
- #include <asm/assembler.h>
-@@ -705,6 +706,7 @@ alternative_else_nop_endif
- 	 * entry onto the return stack and using a RET instruction to
- 	 * enter the full-fat kernel vectors.
- 	 */
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	2f
- 	b	.
- 2:
-diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
-index b3801f532b10b..b63887a1b8234 100644
---- a/arch/arm64/kernel/proton-pack.c
-+++ b/arch/arm64/kernel/proton-pack.c
-@@ -24,6 +24,7 @@
- #include <linux/nospec.h>
- #include <linux/prctl.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/annotate.h>
- 
- #include <asm/debug-monitors.h>
- #include <asm/insn.h>
-@@ -245,11 +246,12 @@ static noinstr void qcom_link_stack_sanitisation(void)
- {
- 	u64 tmp;
- 
--	asm volatile("mov	%0, x30		\n"
--		     ".rept	16		\n"
--		     "bl	. + 4		\n"
--		     ".endr			\n"
--		     "mov	x30, %0		\n"
-+	asm volatile("mov	%0, x30			\n"
-+		     ".rept	16			\n"
-+		     ANNOTATE_INTRA_FUNCTION_CALL "	\n"
-+		     "bl	. + 4			\n"
-+		     ".endr				\n"
-+		     "mov	x30, %0			\n"
- 		     : "=&r" (tmp));
- }
- 
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index e1ac876200a3d..1ad7e3dba460a 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -281,7 +281,7 @@ SECTIONS
+ 		INIT_CALLS
+ 		CON_INITCALL
+ 		INIT_RAM_FS
+-		*(.init.altinstructions .init.bss)	/* from the EFI stub */
++		*(.init.altinstructions .init.bss .init.bss.*)	/* from the EFI stub */
+ 	}
+ 	.exit.data : {
+ 		EXIT_DATA
 -- 
 2.53.0
 
