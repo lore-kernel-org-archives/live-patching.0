@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC3739B97F;
-	Wed, 13 May 2026 03:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E88397350;
+	Wed, 13 May 2026 03:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643275; cv=none; b=fP2v6wTSydXXrXSCDP1yUumOwNxhzdrRwGJrbLktDLJACIhmIl88vfoYK8dXi7fadoV44aClio7uZ9FNs8bB4zdYuG/MfskkqMM1Yg33mbTI4UGJ0SLOfTZgzUEjE8pSSPEa9Z0W0lNPLDaf8089/B1oiiRUjOCHTdGYhMsuQsQ=
+	t=1778643276; cv=none; b=p0JvgPhHXlg5c9MTTisVYHpDTt1s0xU3hn17zvDBPJcJ4hhB4zQC9EgAI7pxbp/dQlG0hE+EEGSt63Blwgd3BV8UBryFj97c0eGZAimDStz8Exfi+OJP70m2A+ebyLs2fk35igdM+LtGcMjiKxGfdCGYrSevFVNjtqaM9my5czY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778643275; c=relaxed/simple;
-	bh=G1VVkFA+yVRTPwxqst2UM5oq5D62mSukpDgUevX4w2g=;
+	s=arc-20240116; t=1778643276; c=relaxed/simple;
+	bh=voedLEVhufD2EC2qnX2retheCvvJ6sgwG1j/M2rJ6o4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k+tfEpKKfJyqmnqS+5x68OuaUbQ/cCij7Qs2o4dQ/1F+4T5J/dTA09EE8DfgRqPprr/7sjdFl/bDbJmCrh4+wSdVBc0+A+3zydMRHa+NuzCvgiWc3yTMjbjA5wjwYtLvNV2MTJTwI4KFpi+PGErskrqVNOBw7vrCH9fCQrD/VFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FAq1sQGu; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=gz4GHtOl2xqqZtdSdhIKqm359pbnFq2pVRGbaBlObq4XoAHO7U3XI6RetfP3V/KzbkN3xXoX/XvzL3JhwGwgv3BHhn1eWlrWsPmMpSeN+d4wL9F1zdPNnXDHW91mRr1ejRH6Chg0Ew+i9iloekfjcISvC5jvczdsGJxfFY8jpvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vIprIIHJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FAq1sQGu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0423C4AF0D;
-	Wed, 13 May 2026 03:34:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vIprIIHJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376F0C4AF0C;
+	Wed, 13 May 2026 03:34:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643275;
-	bh=G1VVkFA+yVRTPwxqst2UM5oq5D62mSukpDgUevX4w2g=;
+	s=k20201202; t=1778643276;
+	bh=voedLEVhufD2EC2qnX2retheCvvJ6sgwG1j/M2rJ6o4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FAq1sQGuE3TpxvXSQqiv81ymQkRW5Kz8xNVroB1+dCvMNfczjd5dD8sXkZBvKCAAZ
-	 XFnCSG50et9MffoTcNedo57cFHrFe8cptzo26rVRvMczk/1ibH3mcsLFjfhN+U0rFq
-	 R/TZI1F5+Ecd4H48ShdE9l0ZFlSepjYAGpY8ZfwUSjLb0UYXg/mDRxhRhVdny7ibAf
-	 k/Fe2GZVsoCJXV5utkA5RANCNXn4DBZLBiLYKbNd3DbxTOphnQxaI+Pue5+jpjx/BL
-	 C3KITB3RcLS2BTEs9KbSuo6CvRNOokWGeySDHZfGE9fqajzXijfkcriX/YaN/7ixRs
-	 gMQ1LyRfGvozQ==
+	b=vIprIIHJ/gc88MjsvGV+iSCWjgIRrxQQ7HtYjYUFYhEl5ubF7WygFbdw2O31xsaMF
+	 jS8J4tdUeo4ObYLbE+VKPuDMBZGvzs2uAAFNvdgFyBHEG97Ng6EyqprLLUihe1fNMP
+	 h66I0LgN0RkUYXKvn7S4HRqFpl63oL++AAZHh3vHTJnTbXxzKKpOpidXg+4w+nrcsY
+	 CzP+nWsTp2cB+5utoDbiFdFuN5Dr5dSCwc9OVSwuw7Umz2WcZp17C0CzhyOvCoTJZs
+	 Yu+KmX8LPho6lxymdfETKlajMcGtuH7Oik5rXuqUIWr71e+rNJz1fnYa6ZwcyIxiXS
+	 acXMyjfLWa0GA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 08/21] objtool: Allow setting --mnop without --mcount
-Date: Tue, 12 May 2026 20:33:42 -0700
-Message-ID: <87e956a4b3c8081c6ce0b75c043c15babf2a7f7e.1778642120.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 10/21] objtool: Ignore jumps to the end of the function for checksum runs
+Date: Tue, 12 May 2026 20:33:44 -0700
+Message-ID: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -53,31 +53,82 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of returning an error for --mnop without --mcount, just silently
-ignore it.  This will help simplify kbuild's handling of objtool args.
+Sometimes Clang arm64 code jumps to the end of the function for UB.
+No need to make that an error for checksum runs.
 
-Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/builtin-check.c | 5 -----
- 1 file changed, 5 deletions(-)
+ tools/objtool/check.c | 42 +++++++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 118c3de2f293e..bd84f5b7c9ee9 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -144,11 +144,6 @@ int cmd_parse_options(int argc, const char **argv, const char * const usage[])
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 10b18cf9c3608..73451aef68029 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -37,6 +37,22 @@ struct disas_context *objtool_disas_ctx;
  
- static bool opts_valid(void)
+ size_t sym_name_max_len;
+ 
++static bool validate_branch_enabled(void)
++{
++	return opts.stackval	||
++	       opts.orc		||
++	       opts.uaccess;
++}
++
++static bool alts_needed(void)
++{
++	return validate_branch_enabled()	||
++	       opts.noinstr			||
++	       opts.hack_jump_label		||
++	       opts.disas			||
++	       opts.checksum;
++}
++
+ struct instruction *find_insn(struct objtool_file *file,
+ 			      struct section *sec, unsigned long offset)
  {
--	if (opts.mnop && !opts.mcount) {
--		ERROR("--mnop requires --mcount");
--		return false;
--	}
+@@ -1593,10 +1609,14 @@ static int add_jump_destinations(struct objtool_file *file)
+ 			/*
+ 			 * GCOV/KCOV dead code can jump to the end of
+ 			 * the function/section.
++			 *
++			 * Clang on arm64 also does this sometimes for
++			 * undefined behavior.
+ 			 */
+-			if (file->ignore_unreachables && func &&
+-			    dest_sec == insn->sec &&
+-			    dest_off == func->offset + func->len)
++			if (!validate_branch_enabled() ||
++			    (file->ignore_unreachables && func &&
++			     dest_sec == insn->sec &&
++			     dest_off == func->offset + func->len))
+ 				continue;
+ 
+ 			ERROR_INSN(insn, "can't find jump dest instruction at %s",
+@@ -2584,22 +2604,6 @@ static void mark_holes(struct objtool_file *file)
+ 	}
+ }
+ 
+-static bool validate_branch_enabled(void)
+-{
+-	return opts.stackval	||
+-	       opts.orc		||
+-	       opts.uaccess;
+-}
 -
- 	if (opts.noinstr && !opts.link) {
- 		ERROR("--noinstr requires --link");
- 		return false;
+-static bool alts_needed(void)
+-{
+-	return validate_branch_enabled()	||
+-	       opts.noinstr			||
+-	       opts.hack_jump_label		||
+-	       opts.disas			||
+-	       opts.checksum;
+-}
+-
+ int decode_file(struct objtool_file *file)
+ {
+ 	arch_initial_func_cfi_state(&initial_func_cfi);
 -- 
 2.53.0
 
