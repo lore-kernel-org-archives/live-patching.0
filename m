@@ -1,81 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988FA25B0BE
-	for <live-patching@vger.kernel.org>; Tue, 12 May 2026 23:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C373E13C9C4;
+	Wed, 13 May 2026 03:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778628661; cv=none; b=ezlZEGZtEXaiIVRpWzHhSklOhpmcH2kV3FmtBK2SvAErqj+zqHIZ/OGlrj8KD+VGVgf8PkfejMOmTRvsMpIdkPPvm0/tx+46wHn5xPXYSlrlR0TAUgoHszuw2u6SEiz9lsNFOzTUNXR3uQJ2oFM7r0pLLW5qhCuFnZ8ryuwVC2s=
+	t=1778643270; cv=none; b=kUhwaaLs70weGMt2kJwVj9E0CRlHWi4j0NRCzhfre0kof41gssnVeHwkxtkWA6M9wGz/Pz7E/7ZjjprSBb6MoWbohIayY7Cu11QmjUpbtkwVzlSdNjEwAkhpPL9Mf6YQhnESuqI11D8Dkhswyi9iYADvGd3WDGRNMuVC/81hevo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778628661; c=relaxed/simple;
-	bh=PWN9WjQeZL4CS/4El9jWxT1JcxI8SXHsZnSkEOumzvo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pyAIRoHdzFoqfI6gFC9Em2ec2rM0+WtjI7KjtDV5HcCHr9Pnc7Ree+OEEmstGsyBB7IdPCxVAwhniq+/iQlZaf4dmHONwYiIMbrYBHgdWrKArLuOglisGqLAnduMb6bXAmRIpL+Kypr6lhDNXqdFUdcYap1aUmniC0RLSgZyU+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFwG7psz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778643270; c=relaxed/simple;
+	bh=3oqfclx78zKWNl/PM+bomMzSvStvzcGz0lbbX8cPMeE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mzQQxMA/QiL4JpxtyVgruzsgxI52vk3gBDHXu+0PCT6y0D5v0mQ3oXWaTDhp39HW0HL1lHg7/aCrBqcovE8fNQS7/ic/ssHB9RprOKIr1qadwPAqnQl6TZbPZvb+pwfxGhoaf0xh6orEaZK1NuaSraLomMVd5OT60r2u/R2e344=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tqGuPuh2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFwG7psz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B5FC4AF0B
-	for <live-patching@vger.kernel.org>; Tue, 12 May 2026 23:31:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tqGuPuh2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07F5C2BCC7;
+	Wed, 13 May 2026 03:34:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778628661;
-	bh=PWN9WjQeZL4CS/4El9jWxT1JcxI8SXHsZnSkEOumzvo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RFwG7pszK6/F+uH3b0xWw/H6IKv5kkYRaBfDZl+lIgXXr/Irt4z0YwLJfNIcLFWB8
-	 gfAibShqPZdB4R94LMczDd/bSsoEOk4T8JOxDBMZUWP4gdMyL19ydDni7pU9QphAI9
-	 kXTa4iYkw4SdHSzBOuyvgInbj/cWR2T3v4q/kaRBJO+iZ4DCCJ9U91Pjd+6nqzNdcY
-	 ud4lFuza5v60vczTusHLkylM/WeTVfyepUvTw7PNbEKF0/07V1Vic+6A7juW5ykJlS
-	 eesj/IeOr+Mo130dMGhvM3+bgd2uTMtwpfeSiZB8yqtm5EeQk/74o/2dnVT9zziWMn
-	 3LIrF8BT/dL5g==
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-651bf695701so6700824d50.2
-        for <live-patching@vger.kernel.org>; Tue, 12 May 2026 16:31:01 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxyNF0fUnxX5BiL3XXKRYG446WpRwxwKqtoWOVw6lxBNaV2BKVJ
-	nvXNM/cJzHCvEdmG+1sQ9A+Q48A14LYcAJr6uHpP9b+ywJcQv1/GTi3snVnJ2SY06ERfXQhE1GL
-	oiTbfLXQq6WtjzL/J5q2aLl9TwwZBmOw=
-X-Received: by 2002:a05:690e:480a:b0:65c:6164:f29a with SMTP id
- 956f58d0204a3-65df6319231mr815659d50.46.1778628660547; Tue, 12 May 2026
- 16:31:00 -0700 (PDT)
+	s=k20201202; t=1778643270;
+	bh=3oqfclx78zKWNl/PM+bomMzSvStvzcGz0lbbX8cPMeE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tqGuPuh2s9Yuad2jAFCuchftjpS/NeJlQ3UArT0ujCd4EvuVE9a7MyLMtR9ZM3WEf
+	 IwxWJgdjuABmwEjiT/wxwtY4HHpQ1LHLwY0IkgYwvIxfwjw/Uo7keM90Esdn3Hnm0m
+	 ImSiR/QXRbFZHeBI8QwKaxH2QzONBFSuyj5aOFEqiJanktyPDe5jgsJu4a+Pa4CYf8
+	 DbmR53T0vpceirjX8UUiCR1zYmh0U5kKyayBoNXrBIgVGb3Jk59+h1c157om2vRcpX
+	 RD7tcNAXdbrJO7qTWXdbXm1DvN3awXJkElwGBpNvRjhZlcRfBxjCt/TAvfgoBbxEjV
+	 Czs6+9J/Avhqg==
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Song Liu <song@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v3 00/21] objtool/arm64: Port klp-build to arm64
+Date: Tue, 12 May 2026 20:33:34 -0700
+Message-ID: <cover.1778642120.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512221102.2720763-1-joe.lawrence@redhat.com>
-In-Reply-To: <20260512221102.2720763-1-joe.lawrence@redhat.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 12 May 2026 16:30:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6YGdh4xFcsfUiGtVzLg2nR_cEiQpvmyEN+Ffyf_O53LA@mail.gmail.com>
-X-Gm-Features: AVHnY4K0Gfzdny_AK3Itks95571WEdlKM1aeyjNb4fcU-GF1M9WckymdT2XOs9I
-Message-ID: <CAPhsuW6YGdh4xFcsfUiGtVzLg2nR_cEiQpvmyEN+Ffyf_O53LA@mail.gmail.com>
-Subject: Re: [RFC 0/4] klp-build: simple OOT module support
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Joe,
+Based on tip/objtool/core.
 
-On Tue, May 12, 2026 at 3:11=E2=80=AFPM Joe Lawrence <joe.lawrence@redhat.c=
-om> wrote:
->
-> This patchset introduces support for patching basic out-of-tree (OOT)
-> modules.  The primary motivation is to streamline testing for objtool klp
-> diff by providing a flexible and stable environment.
+v3:
+- Too many changes to list.  Did a lot of testing and fixed a bunch of
+  issues (many of which have already been merged in tip/objtool/core).
 
-Thanks for this work!
+v2: https://lore.kernel.org/cover.1773787568.git.jpoimboe@kernel.org
+- patches 1-2 were merged, rebase on tip/master
+- improve commit message for "objtool: Extricate checksum calculation from validate_branch()"
+- add review tags
 
-I would like to add to the motivation here:
+v1: https://lore.kernel.org/cover.1772681234.git.jpoimboe@kernel.org
 
-It is actually useful to livepatch OOT modules in production.
-When using kpatch-build, we (Meta) generally do not patch OOT
-modules. But there was one case where we had to do it, and it
-required quite some manual work.
+Port objtool and the klp-build tooling (for building livepatch modules)
+to arm64.
 
-If we can make building livepatch for OOT easy, we are likely to
-use it regularly in the future.
+Note this doesn't bring all the objtool bells and whistles to arm64, nor
+any of the CFG reverse engineering.  This only adds the bare minimum
+needed for 'objtool --checksum'.
 
-Thanks,
-Song
+And note that objtool still doesn't get enabled at all for normal arm64
+kernel builds, so this doesn't affect any users other than those running
+klp-build directly.
 
-[...]
+
+Josh Poimboeuf (21):
+  klp-build: Reject patches to init/*.c
+  arm64: Annotate intra-function calls
+  arm64: Fix EFI linking with -fdata-sections
+  arm64: Rename TRAMP_VALIAS -> TRAMP_VALIAS_ASM in asm-offsets
+  arm64: vdso: Discard .discard.* sections
+  arm64: Annotate special section entries
+  crypto: arm64: Move data to .rodata
+  objtool: Allow setting --mnop without --mcount
+  kbuild: Only run objtool if there is at least one command
+  objtool: Ignore jumps to the end of the function for checksum runs
+  objtool: Allow empty alternatives
+  objtool: Refactor elf_add_data() to use a growable data buffer
+  objtool: Reuse string references
+  objtool: Prevent kCFI hashes from being decoded as instructions
+  objtool/klp: Add arm64 support for prefix/PFE detection
+  objtool/klp: Filter arm64 mapping symbols in find_symbol_by_offset()
+  objtool/klp: Don't correlate arm64 mapping symbols
+  objtool/klp: Clone inline alternative replacements
+  objtool/klp: Introduce objtool for arm64
+  klp-build: Support cross-compilation
+  klp-build: Add arm64 syscall patching macro
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/alternative-macros.h   |  27 +-
+ arch/arm64/include/asm/asm-bug.h              |   2 +
+ arch/arm64/include/asm/asm-extable.h          |  21 +-
+ arch/arm64/include/asm/jump_label.h           |   2 +
+ arch/arm64/kernel/asm-offsets.c               |   7 +-
+ arch/arm64/kernel/entry.S                     |  10 +-
+ arch/arm64/kernel/proton-pack.c               |  12 +-
+ arch/arm64/kernel/vdso/vdso.lds.S             |   1 +
+ arch/arm64/kernel/vmlinux.lds.S               |   2 +-
+ arch/x86/boot/startup/Makefile                |   2 +-
+ include/linux/annotate.h                      |  14 +-
+ include/linux/livepatch_helpers.h             |  19 ++
+ include/linux/objtool_types.h                 |   1 +
+ lib/crypto/arm64/sha2-armv8.pl                |  18 +-
+ scripts/Makefile.build                        |   4 +-
+ scripts/Makefile.lib                          |  52 ++--
+ scripts/Makefile.vmlinux_o                    |  15 +-
+ scripts/livepatch/klp-build                   |  24 +-
+ tools/include/linux/objtool_types.h           |   1 +
+ tools/objtool/Makefile                        |   4 +
+ tools/objtool/arch/arm64/Build                |   2 +
+ tools/objtool/arch/arm64/decode.c             | 177 +++++++++++++
+ .../arch/arm64/include/arch/cfi_regs.h        |  11 +
+ tools/objtool/arch/arm64/include/arch/elf.h   |  15 ++
+ .../objtool/arch/arm64/include/arch/special.h |  21 ++
+ tools/objtool/arch/arm64/special.c            |  21 ++
+ tools/objtool/arch/x86/include/arch/elf.h     |   2 +
+ tools/objtool/builtin-check.c                 |   5 -
+ tools/objtool/check.c                         |  65 +++--
+ tools/objtool/elf.c                           | 170 +++++++------
+ tools/objtool/include/objtool/elf.h           |  48 +++-
+ tools/objtool/klp-diff.c                      | 237 ++++++++++++++++--
+ 33 files changed, 819 insertions(+), 195 deletions(-)
+ create mode 100644 tools/objtool/arch/arm64/Build
+ create mode 100644 tools/objtool/arch/arm64/decode.c
+ create mode 100644 tools/objtool/arch/arm64/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/arm64/include/arch/special.h
+ create mode 100644 tools/objtool/arch/arm64/special.c
+
+-- 
+2.53.0
+
