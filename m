@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D460A3998B2;
-	Wed, 13 May 2026 03:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E8339AD32;
+	Wed, 13 May 2026 03:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643278; cv=none; b=bh48TOpnAkQKvB/v53jaWj53fGgLPdNkR84HmBemlml3wfVE+PUTSa+XyNp8NiK4DEdndBn5rFG+/7rN6ZslmTA0dv46CSrJKdoaYUto51tP9KQsNC+2Qy7GRNn1UM98y4+QHiFE63cWbQDvqBpa2EALNIxe3/AwcpeU20TJKZU=
+	t=1778643281; cv=none; b=TBvJycGrwm4F+whgYxuiJonSPlb75/UMbw3F2jxCxQZubB8wypY3KpbWSngwSQCoTApoTAcNdmsGD3izhMAwT86smh/8KXqj9SWTh8+5V8dapvRUH9FoX1pbiQBs7E6NoCms1vY+/2n4gerSTObF4k+IBl/0bnc+2hQiUSjiZaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778643278; c=relaxed/simple;
-	bh=6qM6eS73y/2HGC/l7RWciS6d5w9G1tF/qeUGxjijkEE=;
+	s=arc-20240116; t=1778643281; c=relaxed/simple;
+	bh=y8OlQ2u+RBKl5+g5VAi278HKoC71kQ9CG5Kwq0UXfOw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H6Rkvfx7I2WHbVRCzQ1ab856YAppjBi+DzXUDDvWKIgXeGX8GWhtpkOX6K0Z1BXp/cA8/n3eoC2w14oKLj+SpbQY12OpdzgdEDHgqXJLF1sCO4CH2gcEAKd8qWZZjYhnq7Vj8i2mvmVAMGi+TACV1DahIDOvkYLGXF3Kz1JvxVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMwNtuUs; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sM1jJzkX1Grc7EtuNU/uu9YAtKVYJD+Me5LGihwCaEZzjJDpmDT0LqDSZY8AMl0fDQutU4vslK3qiFKBgUryKpopuAyKI9pnHF6Uj1DcItQoU2lAddDgVEXJ+aC5TMO3dtX/Oj3xpPd0dkSCoozW0LsyFaAmnibYLlkvfeIxaU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N69tE3GM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMwNtuUs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B16C4AF0E;
-	Wed, 13 May 2026 03:34:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N69tE3GM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCB0C2BCC9;
+	Wed, 13 May 2026 03:34:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643276;
-	bh=6qM6eS73y/2HGC/l7RWciS6d5w9G1tF/qeUGxjijkEE=;
+	s=k20201202; t=1778643280;
+	bh=y8OlQ2u+RBKl5+g5VAi278HKoC71kQ9CG5Kwq0UXfOw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZMwNtuUso1KmF3zovvyP98IAAheQGw5HYUfApTI9FkfqlQEPmOsu/B2SkcYXBcXdi
-	 RuPi4hHEHz9ECpJJRlUzuCbIIBuIh2TYi7+hUzejgskeqL8abZ3yNnY8SjvvCAG65G
-	 frbBT1pD1JuWcqPdEz4mp+Xpsy1LnHXnXdK2NNtUMwUTxoJ5XUyHDOmJNxJH/w7iNw
-	 bDZD2CxdEKArrOJPU3e30Cl5cd+fYKhk0LlX5b40qGA/Hi8AM+ynQ572kUIMBJujGQ
-	 EgOzyvtCU3pmQLgImOtnqoRhFJQ6Ni8QeH/uIrDMypcvHoBF/Yb3yctQp2KWU1KSLp
-	 bAMIXincMPPIg==
+	b=N69tE3GMovJzMPOd8iBy8ZvldlfJ/pvSh5RBikos9xuV+s1/rJmWPtbsZV7vYKLGW
+	 S/3TtZL+vGbmLWA29QlR+qE+6AUfz7zPJ5r1K0lnwZOlFSQtkjqnJQ/pqW0IoPpJZ1
+	 guRw87L52HGk2leR7vcx0gJhwUtstnbmsfhJkeKnvdAkCHxZmihZ7yQ7IKgpyljnAA
+	 bH0R/jby/qxP3AQUmphNILHNzLe5ySMMRwjPnFelNfp/rvmpIkpsnOCpiNY8eQqtTq
+	 5jIE3oVuW+VN3IpLUvcTqjEy25JwF00zb/w/fg0I6e41t3yC6mnMxpW4guIe6LknJZ
+	 8rvjlxh5EO7JQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -38,12 +38,10 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>
-Subject: [PATCH v3 09/21] kbuild: Only run objtool if there is at least one command
-Date: Tue, 12 May 2026 20:33:43 -0700
-Message-ID: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v3 17/21] objtool/klp: Don't correlate arm64 mapping symbols
+Date: Tue, 12 May 2026 20:33:51 -0700
+Message-ID: <48efc64058f667159d3dedf367c1d4cdedf84f1c.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -55,156 +53,29 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Split the objtool args into commands and options, such that if no
-commands have been enabled, objtool doesn't run.
+ARM64 ELF files contain mapping symbols ($d, $x, $a, etc.) which mark
+transitions between code and data.  There are thousands of them per
+object file, all sharing the same few names.
 
-This is in preparation for enabling objtool and klp-build for arm64.
+They aren't "real" symbols so there's no need to correlate them.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/x86/boot/startup/Makefile |  2 +-
- scripts/Makefile.build         |  4 +--
- scripts/Makefile.lib           | 52 ++++++++++++++++++----------------
- scripts/Makefile.vmlinux_o     | 15 ++++------
- 4 files changed, 36 insertions(+), 37 deletions(-)
+ tools/objtool/klp-diff.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
-index 5e499cfb29b5c..a08297829fc63 100644
---- a/arch/x86/boot/startup/Makefile
-+++ b/arch/x86/boot/startup/Makefile
-@@ -36,7 +36,7 @@ $(patsubst %.o,$(obj)/%.o,$(lib-y)): OBJECT_FILES_NON_STANDARD := y
- # relocations, even if other objtool actions are being deferred.
- #
- $(pi-objs): objtool-enabled	= 1
--$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-args-y)) --noabs
-+$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-cmds-y) $(objtool-opts-y)) --noabs
- 
- #
- # Confine the startup code by prefixing all symbols with __pi_ (for position
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 3498d25b15e85..c4accfcd177d4 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -277,7 +277,7 @@ endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
- is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(target-stem).o)$(OBJECT_FILES_NON_STANDARD)n),$(is-kernel-object))
- 
- ifdef CONFIG_OBJTOOL
--$(obj)/%.o: private objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
-+$(obj)/%.o: private objtool-enabled = $(and $(is-standard-object),$(objtool-cmds-y),$(if $(delay-objtool),$(is-single-obj-m),y))
- endif
- 
- ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-@@ -501,7 +501,7 @@ define rule_ld_multi_m
- 	$(call cmd,gen_objtooldep)
- endef
- 
--$(multi-obj-m): private objtool-enabled := $(delay-objtool)
-+$(multi-obj-m): private objtool-enabled := $(if $(objtool-cmds-y),$(delay-objtool))
- $(multi-obj-m): private part-of-module := y
- $(multi-obj-m): %.o: %.mod FORCE
- 	$(call if_changed_rule,ld_multi_m)
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 7e216d82e9887..7f803796d20cf 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -183,30 +183,34 @@ ifdef CONFIG_OBJTOOL
- 
- objtool := $(objtree)/tools/objtool/objtool
- 
--objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
--objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
--objtool-args-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
--objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
--objtool-args-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
--ifdef CONFIG_CALL_PADDING
--objtool-args-$(CONFIG_CFI)				+= --cfi
--objtool-args-$(CONFIG_FINEIBT)				+= --fineibt
--endif
--objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
--ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
--objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
--endif
--objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
--objtool-args-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
--objtool-args-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
--objtool-args-$(CONFIG_MITIGATION_SLS)			+= --sls
--objtool-args-$(CONFIG_STACK_VALIDATION)			+= --stackval
--objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
--objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
--objtool-args-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
--objtool-args-$(CONFIG_OBJTOOL_WERROR)			+= --werror
-+# objtool commands
-+objtool-cmds-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
-+objtool-cmds-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
-+objtool-cmds-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
-+objtool-cmds-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
-+objtool-cmds-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
-+objtool-cmds-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
-+objtool-cmds-$(CONFIG_UNWINDER_ORC)			+= --orc
-+objtool-cmds-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
-+objtool-cmds-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
-+objtool-cmds-$(CONFIG_MITIGATION_SLS)			+= --sls
-+objtool-cmds-$(CONFIG_STACK_VALIDATION)			+= --stackval
-+objtool-cmds-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
-+objtool-cmds-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
-+objtool-cmds-y						+= $(OBJTOOL_ARGS)
- 
--objtool-args = $(objtool-args-y)					\
-+# objtool options
-+ifdef CONFIG_CALL_PADDING
-+objtool-opts-$(CONFIG_CFI)				+= --cfi
-+objtool-opts-$(CONFIG_FINEIBT)				+= --fineibt
-+endif
-+ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
-+objtool-opts-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
-+endif
-+objtool-opts-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
-+objtool-opts-$(CONFIG_OBJTOOL_WERROR)			+= --werror
-+
-+objtool-args = $(objtool-cmds-y) $(objtool-opts-y)			\
- 	$(if $(delay-objtool), --link)					\
- 	$(if $(part-of-module), --module)
- 
-@@ -215,7 +219,7 @@ delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT),$(CONFIG_KLP_
- cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool-args) $@)
- cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
- 
--objtool-enabled := y
-+objtool-enabled = $(if $(objtool-cmds-y),y)
- 
- endif # CONFIG_OBJTOOL
- 
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 527352c222ff6..09af33203bd8d 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -36,18 +36,13 @@ endif
- # For !delay-objtool + CONFIG_NOINSTR_VALIDATION, it runs on both translation
- # units and vmlinux.o, with the latter only used for noinstr/unret validation.
- 
--objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
--
--ifeq ($(delay-objtool),y)
--vmlinux-objtool-args-y					+= $(objtool-args-y)
--else
--vmlinux-objtool-args-$(CONFIG_OBJTOOL_WERROR)		+= --werror
-+ifneq ($(delay-objtool),y)
-+objtool-cmds-y					 =
-+objtool-opts-y					+= --link
- endif
- 
--vmlinux-objtool-args-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
--							   $(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
--
--objtool-args = $(vmlinux-objtool-args-y) --link
-+objtool-cmds-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
-+						   $(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
- 
- # Link of vmlinux.o used for section mismatch analysis
- # ---------------------------------------------------------------------------
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index eb21f3bf3120b..e1d4d94c9d77c 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -501,6 +501,7 @@ static bool dont_correlate(struct symbol *sym)
+ 	       is_prefix_func(sym) ||
+ 	       is_uncorrelated_static_local(sym) ||
+ 	       is_local_label(sym) ||
++	       is_mapping_sym(sym) ||
+ 	       is_string_sec(sym->sec) ||
+ 	       is_anonymous_rodata(sym) ||
+ 	       is_initcall_sym(sym) ||
 -- 
 2.53.0
 
