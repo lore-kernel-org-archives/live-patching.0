@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5DD3AA1BF;
-	Wed, 13 May 2026 03:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A51E3AA1BD;
+	Wed, 13 May 2026 03:34:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643290; cv=none; b=qgEdF+IuFaDHdJFy1QzNhi616JhsbEkG/OKh8DwXf8ISYUyoXq3ZvQoUhh5RTWoxMBzOFIzpnGxcrJtA/u4Kzpkor9wVg5q39daJwn/PJ//g2n1mLGcyF65gx/OOMFqkMWTygLOYmFf//R05RaiT41xO77BtV+g5Y/pFLXPqv6s=
+	t=1778643290; cv=none; b=KV5FirGoBImcymrlTYtUfdlcRISzUeZ3SdScCJEFuv3UXRArEriZL471DLEfKXmyLJO5QkVykwUlwZrhc2iafTf0C8HbVvhydBSSJ+yohn81+nEeVZYqgXlWQcEYIlvng9FcjUirq4V63NF3fib5HeSuJgyIf/hzHvAvlSmEoAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778643290; c=relaxed/simple;
-	bh=Ab2hQoImpnCesBxD7mSC6H2W3UbT0AZPaZqbzGazFII=;
+	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jVOM3KSh/KgW4jQgpIT581YOPjmLiQ8vNV9YAu7oDpF/u4JL5tp1HKlTq3EY96GcZtkEYLvRg8sjI2E/u3EXXKepVV3LIxH5Rhx918i1hQuykg1TxG+ALK/OYzZw+QI0L1b5iyXaQ06CqQHovK7M0XG64+Dr3Kb3g8b5/VflCI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uaar01VR; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=B9P/8oL6tUr18bN01wNZCGJxM9sCSriNUfsxrGxA4TyU9IUEtPMRlwADsU3Y6I9C/Mmxu8+8mMteURagFoeNjIvpIP5eJ2wU+YIj/8PqrVWEo0/i0Q1pTWkskBzL1gcjfPz1TlhuvMrTAkm3NbF42xr5dRZvvooV6SHcnBxF33c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n4wFO7Ny; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uaar01VR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A93AC2BD00;
-	Wed, 13 May 2026 03:34:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n4wFO7Ny"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213AAC4AF16;
+	Wed, 13 May 2026 03:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643287;
-	bh=Ab2hQoImpnCesBxD7mSC6H2W3UbT0AZPaZqbzGazFII=;
+	s=k20201202; t=1778643285;
+	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Uaar01VRPhzPW7I9Vozg8jeKcfsAFt8wRSqBPzw78SyygwgjeTCvl950D2h6zTdxx
-	 kaLOWUSG78ufJ371BYz5dSSWfZ6LQnDAp6ADcxjbhbP5W4tZ5fZkR/nngA8KcLlKzN
-	 ncuy532crT9ydBLhRZExVn9KgP2arQWkKBlIh4vcBeCq3D5+O9EiIP6ONlPyGx66jy
-	 mJp51MTZ8at+2BItmKJijuL+fyOG2hp2xfYlxQ7yHi/PrihmokCBDVmZpD+HsjB+ef
-	 onsKVP8WaRa4kAWciJ0ya/03wQjSIqmpBgoS/rSZSr7CXXhOa5tnMz0Su5WiZ8Rc5J
-	 6W64T5XWnZlIg==
+	b=n4wFO7NyEYV/0+gNSdpO5s6iBrXisy37EVMZ7XBcBafOcltAlXO8aNqvC66gwtukA
+	 BpAC8LbYsQ83PGTqi+BVIzjsHKleUaDINXj+X40ksQjhqfhKihbK2EMAUEE1CN7Z2O
+	 2VxRe0WmYAIYRhBeOkV23VTmSMiKwFnkptoN0E9+gsURWFFm9BWuOlNsGxdlIJOdKL
+	 HKe/rTqC3sN/Kk/T09iqfq1Tx2kMx/M5PlnfC1rVP6e99977xU8Czo5Dn+iBzn6dXB
+	 5WOSu4exmVjZxnfcBgO/MXRSObGNVub56XoGBSugxwKrYmMp/FMo46gA/gWv1UVicG
+	 7v9P0wAMQPUnw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 04/21] arm64: Rename TRAMP_VALIAS -> TRAMP_VALIAS_ASM in asm-offsets
-Date: Tue, 12 May 2026 20:34:00 -0700
-Message-ID: <74623fad8c45d26a3da6c5420b00156d8f7c2150.1778642120.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 02/21] arm64: Annotate intra-function calls
+Date: Tue, 12 May 2026 20:33:58 -0700
+Message-ID: <16bdb04ed6653809514d9f060702248b8e587f05.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -52,62 +52,68 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Message-ID: <20260513033400.12dhIQkNXHzsGXTBW_GXF0V-1x3frE3SLi-1XGEcVmo@z>
+Message-ID: <20260513033358.flWYgJMtVIxDJUGwhP53789a-LNZRaqtRwrwn1_fG5o@z>
 
-Rename the asm-offsets TRAMP_VALIAS macro to TRAMP_VALIAS_ASM, following
-the naming convention already used by PIE_E0_ASM and PIE_E1_ASM.  This
-disambiguates the asm-offsets-generated constant from the C macro of the
-same name defined in fixmap.h and vectors.h.
+In preparation for enabling objtool on arm64, annotate intra-function
+calls.
 
-This is needed by a later patch which adds new includes to asm-offsets.c
-that would otherwise conflict with the C version.
-
+Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/kernel/asm-offsets.c | 2 +-
- arch/arm64/kernel/entry.S       | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ arch/arm64/kernel/entry.S       |  2 ++
+ arch/arm64/kernel/proton-pack.c | 12 +++++++-----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index b6367ff3a49ca..44b92f582c127 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -153,7 +153,7 @@ int main(void)
-   DEFINE(ARM64_FTR_SYSVAL,	offsetof(struct arm64_ftr_reg, sys_val));
-   BLANK();
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
--  DEFINE(TRAMP_VALIAS,		TRAMP_VALIAS);
-+  DEFINE(TRAMP_VALIAS_ASM,	TRAMP_VALIAS);
- #endif
- #ifdef CONFIG_ARM_SDE_INTERFACE
-   DEFINE(SDEI_EVENT_INTREGS,	offsetof(struct sdei_registered_event, interrupted_regs));
 diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index d4cbdfb23d733..85f6305c1f568 100644
+index e0db14e9c843a..d4cbdfb23d733 100644
 --- a/arch/arm64/kernel/entry.S
 +++ b/arch/arm64/kernel/entry.S
-@@ -102,7 +102,7 @@
- 	.endm
+@@ -10,6 +10,7 @@
+ #include <linux/arm-smccc.h>
+ #include <linux/init.h>
+ #include <linux/linkage.h>
++#include <linux/annotate.h>
  
- 	.macro	tramp_alias, dst, sym
--	.set	.Lalias\@, TRAMP_VALIAS + \sym - .entry.tramp.text
-+	.set	.Lalias\@, TRAMP_VALIAS_ASM + \sym - .entry.tramp.text
- 	movz	\dst, :abs_g2_s:.Lalias\@
- 	movk	\dst, :abs_g1_nc:.Lalias\@
- 	movk	\dst, :abs_g0_nc:.Lalias\@
-@@ -626,10 +626,10 @@ SYM_CODE_END(ret_to_user)
- #ifdef CONFIG_QCOM_FALKOR_ERRATUM_1003
- alternative_if ARM64_WORKAROUND_QCOM_FALKOR_E1003
- 	/* ASID already in \tmp[63:48] */
--	movk	\tmp, #:abs_g2_nc:(TRAMP_VALIAS >> 12)
--	movk	\tmp, #:abs_g1_nc:(TRAMP_VALIAS >> 12)
-+	movk	\tmp, #:abs_g2_nc:(TRAMP_VALIAS_ASM >> 12)
-+	movk	\tmp, #:abs_g1_nc:(TRAMP_VALIAS_ASM >> 12)
- 	/* 2MB boundary containing the vectors, so we nobble the walk cache */
--	movk	\tmp, #:abs_g0_nc:((TRAMP_VALIAS & ~(SZ_2M - 1)) >> 12)
-+	movk	\tmp, #:abs_g0_nc:((TRAMP_VALIAS_ASM & ~(SZ_2M - 1)) >> 12)
- 	isb
- 	tlbi	vae1, \tmp
- 	dsb	nsh
+ #include <asm/alternative.h>
+ #include <asm/assembler.h>
+@@ -705,6 +706,7 @@ alternative_else_nop_endif
+ 	 * entry onto the return stack and using a RET instruction to
+ 	 * enter the full-fat kernel vectors.
+ 	 */
++	ANNOTATE_INTRA_FUNCTION_CALL
+ 	bl	2f
+ 	b	.
+ 2:
+diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
+index b3801f532b10b..b63887a1b8234 100644
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -24,6 +24,7 @@
+ #include <linux/nospec.h>
+ #include <linux/prctl.h>
+ #include <linux/sched/task_stack.h>
++#include <linux/annotate.h>
+ 
+ #include <asm/debug-monitors.h>
+ #include <asm/insn.h>
+@@ -245,11 +246,12 @@ static noinstr void qcom_link_stack_sanitisation(void)
+ {
+ 	u64 tmp;
+ 
+-	asm volatile("mov	%0, x30		\n"
+-		     ".rept	16		\n"
+-		     "bl	. + 4		\n"
+-		     ".endr			\n"
+-		     "mov	x30, %0		\n"
++	asm volatile("mov	%0, x30			\n"
++		     ".rept	16			\n"
++		     ANNOTATE_INTRA_FUNCTION_CALL "	\n"
++		     "bl	. + 4			\n"
++		     ".endr				\n"
++		     "mov	x30, %0			\n"
+ 		     : "=&r" (tmp));
+ }
+ 
 -- 
 2.53.0
 
