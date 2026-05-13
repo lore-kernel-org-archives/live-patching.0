@@ -1,97 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F1F3B3BE5;
-	Wed, 13 May 2026 03:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC5323EA89;
+	Wed, 13 May 2026 07:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643298; cv=none; b=jmE+ee/pyiH2QlL3OGjG8iQ2DKfkqHFGaQVBf6sbkjrtnoYvW3r8sioUbn0GqrIx5I7BXGTvH7HF9yBPAAk1ZkJPYhUKkGuE68zJ2bc6R274oja+cd+hc/uO6MeNBCzoqQT6SyGYxHC1Sf5PllpRR0bg/TMgTJ+cLaQk0iV5ARg=
+	t=1778658388; cv=none; b=OV7C8lHIm3YwHmLhx4liRpp175pcL4rq2R9C5+AN3a51NTh5VDMeKaM7W7Usw547jLlJQvtb+g3nXenofzleuUlraQuS7kEnCYHgrxpt1rvEMCWpWvLNEk1jsPC3hHEbGiC9Nko+13210S/TFPuMnJKohZbOEqO/dVindk7Skz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778643298; c=relaxed/simple;
-	bh=YLQATZuaSnhkkzf9eNAaMViHdYeqnWtOoiB9QIjH1E8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nh/XeTSLHVqON3rwkzGS7oB6ED+r/Y0j0kkQjs4RO5PelbIrM2/WsiNr+omRGf7KNkl+f5kiZ/eKXqHV9+wk+2DMwvfLSXBk32uYupGccyw0nTk/9XpEGrosZIa6STIS3JjSGNFK44EI13MnP5wgd8l6vki/Hs4QzacG9SJoikA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=srR52N72; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778658388; c=relaxed/simple;
+	bh=gdJ3bclZnSTQKqwObYZBerxCAeCGszQZnoiFN16hqOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M66Mx9CnvM50OXarrdhaRjL3mFya5KNksPF4Phtn+u0mkZ37LNCo4idN2YrnO3xCWnEqrGtGYU5LLSdYLS6ZMpWOx6Jw6XSkwaDg2G3PeDT7i7t9S8WhFHlx6eKiR0EWBPMhP5af+FGITIeoPAdrban8mdHHgR1BSvcwoEmPkl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pYLknmhr; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="srR52N72"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24E43C2BCC9;
-	Wed, 13 May 2026 03:34:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643298;
-	bh=YLQATZuaSnhkkzf9eNAaMViHdYeqnWtOoiB9QIjH1E8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=srR52N72ajUS/qt0gfNhYQ2ypWHNM39KZV/y9QyU/Tbh9AewWSuInrKg1fY0AqSkq
-	 bGFDCFvmtRYPpmTGDhZ79tmiUbXa1gAPhewu7765XOpGqRWIGtpUnz+AZZTeZxkQ//
-	 aKVf1U6Iq02t1j3k4JpsHZvx0MZ+OAa6pnWil+kljhiX7RrhVJkT1DTAhaGzXhtngs
-	 RhRvPcmm48852UA7rhOaOqZec1cX10IReoOqfMrliWxX0Jyzj1yqFPqqv62qxyToTB
-	 DZH5OeCYUqYw79i2SpwLkdrqf/tZRN7aQEEmQpwdmkmTpyE4sKR3OHymVHXVoFvC2i
-	 xYgYZw1nGVRtQ==
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pYLknmhr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gdJ3bclZnSTQKqwObYZBerxCAeCGszQZnoiFN16hqOM=; b=pYLknmhrYkO3h4mYcHqhgbr1Km
+	EBg4kCULjXxvtlr8jFObjuXNBjZe3bqKLp/yJviVic1RUp+6EbzHRj/9EnCnCsg8uEYVK4tuZAzSa
+	HHyKM+Gb0kKt6jiEM50zTk/pjY3WIP/Bh6smDq73X/7VNaNri8RGr+l+QJeLJLcY8ibN+4gltIbt+
+	FzaYKDU0nEGOpG1+TI04BDrXw/ztY6U9mMbrQekhuPuCVNSmM116gM+AFRsZ2qK9d1U98XykJpcue
+	K56NOgHMOzOg07CkU5WA85A9C5qQx510qX7BZugLsBvy5zKZZMNcFkKtfs2b7h1nDEEVOFdbLBYnU
+	RqqbXR0w==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wN4IQ-0000000BDhN-0Qsd;
+	Wed, 13 May 2026 07:46:22 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 94A4A300B8A; Wed, 13 May 2026 09:36:17 +0200 (CEST)
+Date: Wed, 13 May 2026 09:36:17 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
 	live-patching@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Song Liu <song@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
 	Mark Rutland <mark.rutland@arm.com>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 21/21] klp-build: Add arm64 syscall patching macro
-Date: Tue, 12 May 2026 20:34:17 -0700
-Message-ID: <3bf3cee43039fc4da84e83d0891a92e25f40f00f.1778642121.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v3 10/21] objtool: Ignore jumps to the end of the
+ function for checksum runs
+Message-ID: <20260513073617.GH1889694@noisy.programming.kicks-ass.net>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
+ <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Message-ID: <20260513033417.IxkYK2RnAFRcGLwF3WQr5BbYi187ceo6CuzsFzcyjWI@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
 
-Add arm64 support for KLP_SYSCALL_DEFINEx(), mirroring the arm64
-__SYSCALL_DEFINEx() pattern from arch/arm64/include/asm/syscall_wrapper.h.
+On Tue, May 12, 2026 at 08:33:44PM -0700, Josh Poimboeuf wrote:
+> Sometimes Clang arm64 code jumps to the end of the function for UB.
+> No need to make that an error for checksum runs.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- include/linux/livepatch_helpers.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+I'm not sure I understand the rationale. If the compiler trips UB, we
+want to be complaining about that no?
 
-diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
-index 99d68d0773fa8..4b647b83865f9 100644
---- a/include/linux/livepatch_helpers.h
-+++ b/include/linux/livepatch_helpers.h
-@@ -72,6 +72,25 @@
- 	}								\
- 	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
- 
-+#elif defined(CONFIG_ARM64)
-+
-+#define __KLP_SYSCALL_DEFINEx(x, name, ...)				\
-+	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
-+	asmlinkage long __arm64_sys##name(const struct pt_regs *regs);	\
-+	asmlinkage long __arm64_sys##name(const struct pt_regs *regs)	\
-+	{								\
-+		return __se_sys##name(SC_ARM64_REGS_TO_ARGS(x,__VA_ARGS__));\
-+	}								\
-+	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-+	{								\
-+		long ret = __klp_do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-+		__MAP(x,__SC_TEST,__VA_ARGS__);				\
-+		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));	\
-+		return ret;						\
-+	}								\
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-+
- #endif
- 
- #endif /* _LINUX_LIVEPATCH_HELPERS_H */
--- 
-2.53.0
-
+Same as when clang just stops code-gen, also something we commonly see
+when it hits UB.
