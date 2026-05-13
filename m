@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A51E3AA1BD;
-	Wed, 13 May 2026 03:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC7E3A4257;
+	Wed, 13 May 2026 03:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643290; cv=none; b=KV5FirGoBImcymrlTYtUfdlcRISzUeZ3SdScCJEFuv3UXRArEriZL471DLEfKXmyLJO5QkVykwUlwZrhc2iafTf0C8HbVvhydBSSJ+yohn81+nEeVZYqgXlWQcEYIlvng9FcjUirq4V63NF3fib5HeSuJgyIf/hzHvAvlSmEoAw=
+	t=1778643291; cv=none; b=G+rILZlhkQGmItYezR67Fs4mUQuoaG9Zjr+2asMXSS+JWtdfyofqTZeZ62WmRkEqxSFXH7Wlbsoyp0HhptNfNwWmGUR8h6JnA3isHkyIdcX3cJupn0WsmRWYXdqAygLmRQYNe/MNIDZOFmf62/G/S88yS3Gb7tB7UGHXUfBz9rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778643290; c=relaxed/simple;
-	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
+	s=arc-20240116; t=1778643291; c=relaxed/simple;
+	bh=voedLEVhufD2EC2qnX2retheCvvJ6sgwG1j/M2rJ6o4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B9P/8oL6tUr18bN01wNZCGJxM9sCSriNUfsxrGxA4TyU9IUEtPMRlwADsU3Y6I9C/Mmxu8+8mMteURagFoeNjIvpIP5eJ2wU+YIj/8PqrVWEo0/i0Q1pTWkskBzL1gcjfPz1TlhuvMrTAkm3NbF42xr5dRZvvooV6SHcnBxF33c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n4wFO7Ny; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Inqwj1zXiWSCTW9C7y6j+/ywxZZKCNMprMV98kQKjpp/fXQRVp1t0JcknHyKSflw5kbB0OxSMb+y5JpQWUZHs5QoBvcttYQc5UNLrbKoubm0raT0/SE27Rh2H1NboiR3CejwHqv049Y43p4iy/tzTrXw7ijTe0sG5tUhpw1UR2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hA06cJnD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n4wFO7Ny"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213AAC4AF16;
-	Wed, 13 May 2026 03:34:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hA06cJnD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F3CC2BCFB;
+	Wed, 13 May 2026 03:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643285;
-	bh=/D2z4LhluhXqyHCGUz6p/RDiGmFitxBUbjhr8ydpie0=;
+	s=k20201202; t=1778643291;
+	bh=voedLEVhufD2EC2qnX2retheCvvJ6sgwG1j/M2rJ6o4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n4wFO7NyEYV/0+gNSdpO5s6iBrXisy37EVMZ7XBcBafOcltAlXO8aNqvC66gwtukA
-	 BpAC8LbYsQ83PGTqi+BVIzjsHKleUaDINXj+X40ksQjhqfhKihbK2EMAUEE1CN7Z2O
-	 2VxRe0WmYAIYRhBeOkV23VTmSMiKwFnkptoN0E9+gsURWFFm9BWuOlNsGxdlIJOdKL
-	 HKe/rTqC3sN/Kk/T09iqfq1Tx2kMx/M5PlnfC1rVP6e99977xU8Czo5Dn+iBzn6dXB
-	 5WOSu4exmVjZxnfcBgO/MXRSObGNVub56XoGBSugxwKrYmMp/FMo46gA/gWv1UVicG
-	 7v9P0wAMQPUnw==
+	b=hA06cJnDIUfmXB/3JBgPXTt/tPmcVQStNmHqYSgYdqyZK1z0fhnA5E1Wg+3OSwk4a
+	 l8+c9EEraTlHhcNn7ogPeQ/SxzRmhMbzbhv5S5t+feNsOaX+Kpu2J0K4LNjATTU4+X
+	 Hsv7TAQEP9qJYXyTOZnWW8Io2lS2QDF3YQ6h7tScpWhbeD2JBV8QITnFwehBfkuSYh
+	 p46H1xKZh9y+H9uzV/VPpcoRn3KpKS80XEnstUKE19kRTS2KmXnsYyDhAyzGzSAOn/
+	 NxWt21EH45/0Jg707+N2zxMaWD/QGFatK5a9YDhSE1a5Fy/JXEp9CvMx/87hyCf7/R
+	 fKGB57IpVN9Bg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 02/21] arm64: Annotate intra-function calls
-Date: Tue, 12 May 2026 20:33:58 -0700
-Message-ID: <16bdb04ed6653809514d9f060702248b8e587f05.1778642120.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 10/21] objtool: Ignore jumps to the end of the function for checksum runs
+Date: Tue, 12 May 2026 20:34:06 -0700
+Message-ID: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -52,68 +52,84 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Message-ID: <20260513033358.flWYgJMtVIxDJUGwhP53789a-LNZRaqtRwrwn1_fG5o@z>
+Message-ID: <20260513033406.N0SRbRrzPYTcMKPQyhyIIz9RF_0Iusd4DO3vuXpFKJw@z>
 
-In preparation for enabling objtool on arm64, annotate intra-function
-calls.
+Sometimes Clang arm64 code jumps to the end of the function for UB.
+No need to make that an error for checksum runs.
 
-Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/kernel/entry.S       |  2 ++
- arch/arm64/kernel/proton-pack.c | 12 +++++++-----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+ tools/objtool/check.c | 42 +++++++++++++++++++++++-------------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index e0db14e9c843a..d4cbdfb23d733 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -10,6 +10,7 @@
- #include <linux/arm-smccc.h>
- #include <linux/init.h>
- #include <linux/linkage.h>
-+#include <linux/annotate.h>
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 10b18cf9c3608..73451aef68029 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -37,6 +37,22 @@ struct disas_context *objtool_disas_ctx;
  
- #include <asm/alternative.h>
- #include <asm/assembler.h>
-@@ -705,6 +706,7 @@ alternative_else_nop_endif
- 	 * entry onto the return stack and using a RET instruction to
- 	 * enter the full-fat kernel vectors.
- 	 */
-+	ANNOTATE_INTRA_FUNCTION_CALL
- 	bl	2f
- 	b	.
- 2:
-diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
-index b3801f532b10b..b63887a1b8234 100644
---- a/arch/arm64/kernel/proton-pack.c
-+++ b/arch/arm64/kernel/proton-pack.c
-@@ -24,6 +24,7 @@
- #include <linux/nospec.h>
- #include <linux/prctl.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/annotate.h>
+ size_t sym_name_max_len;
  
- #include <asm/debug-monitors.h>
- #include <asm/insn.h>
-@@ -245,11 +246,12 @@ static noinstr void qcom_link_stack_sanitisation(void)
++static bool validate_branch_enabled(void)
++{
++	return opts.stackval	||
++	       opts.orc		||
++	       opts.uaccess;
++}
++
++static bool alts_needed(void)
++{
++	return validate_branch_enabled()	||
++	       opts.noinstr			||
++	       opts.hack_jump_label		||
++	       opts.disas			||
++	       opts.checksum;
++}
++
+ struct instruction *find_insn(struct objtool_file *file,
+ 			      struct section *sec, unsigned long offset)
  {
- 	u64 tmp;
+@@ -1593,10 +1609,14 @@ static int add_jump_destinations(struct objtool_file *file)
+ 			/*
+ 			 * GCOV/KCOV dead code can jump to the end of
+ 			 * the function/section.
++			 *
++			 * Clang on arm64 also does this sometimes for
++			 * undefined behavior.
+ 			 */
+-			if (file->ignore_unreachables && func &&
+-			    dest_sec == insn->sec &&
+-			    dest_off == func->offset + func->len)
++			if (!validate_branch_enabled() ||
++			    (file->ignore_unreachables && func &&
++			     dest_sec == insn->sec &&
++			     dest_off == func->offset + func->len))
+ 				continue;
  
--	asm volatile("mov	%0, x30		\n"
--		     ".rept	16		\n"
--		     "bl	. + 4		\n"
--		     ".endr			\n"
--		     "mov	x30, %0		\n"
-+	asm volatile("mov	%0, x30			\n"
-+		     ".rept	16			\n"
-+		     ANNOTATE_INTRA_FUNCTION_CALL "	\n"
-+		     "bl	. + 4			\n"
-+		     ".endr				\n"
-+		     "mov	x30, %0			\n"
- 		     : "=&r" (tmp));
+ 			ERROR_INSN(insn, "can't find jump dest instruction at %s",
+@@ -2584,22 +2604,6 @@ static void mark_holes(struct objtool_file *file)
+ 	}
  }
  
+-static bool validate_branch_enabled(void)
+-{
+-	return opts.stackval	||
+-	       opts.orc		||
+-	       opts.uaccess;
+-}
+-
+-static bool alts_needed(void)
+-{
+-	return validate_branch_enabled()	||
+-	       opts.noinstr			||
+-	       opts.hack_jump_label		||
+-	       opts.disas			||
+-	       opts.checksum;
+-}
+-
+ int decode_file(struct objtool_file *file)
+ {
+ 	arch_initial_func_cfi_state(&initial_func_cfi);
 -- 
 2.53.0
 
