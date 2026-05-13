@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B9639C637;
-	Wed, 13 May 2026 03:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D460A3998B2;
+	Wed, 13 May 2026 03:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643278; cv=none; b=inhXyp9jHWFVQxdOVkcrVnXY1JCVb2D49V9nGpGwI1XSWo4057WmYajqFAG4dCRvGbWhagxW70QvBisc2jwnGHjDNgp+0WRXqi8QkMm3uGWzQFgid/nM47MovmIL69KZ9JYrKlEVRTcVnRQ5B9xmxK17lHItZ/tq9KVaFhMtQ2U=
+	t=1778643278; cv=none; b=bh48TOpnAkQKvB/v53jaWj53fGgLPdNkR84HmBemlml3wfVE+PUTSa+XyNp8NiK4DEdndBn5rFG+/7rN6ZslmTA0dv46CSrJKdoaYUto51tP9KQsNC+2Qy7GRNn1UM98y4+QHiFE63cWbQDvqBpa2EALNIxe3/AwcpeU20TJKZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778643278; c=relaxed/simple;
-	bh=lYQ1yov6GYXVE+5pFJSvbDLFJ5lLXCdGtVTWLqgmeuM=;
+	bh=6qM6eS73y/2HGC/l7RWciS6d5w9G1tF/qeUGxjijkEE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YqEfCtHEXpvjFz2n65P2q315+GH7D1Rrvax6TCxlWAy8WOAnBjuZonujLXAZAUcQ0JRXj0+zs3xxZcQQv94CWYtRVxc/QCED6TZAsLJNjIk6oAFO03PUXnVm3hbAB4MKJbQQG6C8Bajgg7Kh37F/pfO57EnuUHg3RMzAieURXGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ncUO3Z32; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=H6Rkvfx7I2WHbVRCzQ1ab856YAppjBi+DzXUDDvWKIgXeGX8GWhtpkOX6K0Z1BXp/cA8/n3eoC2w14oKLj+SpbQY12OpdzgdEDHgqXJLF1sCO4CH2gcEAKd8qWZZjYhnq7Vj8i2mvmVAMGi+TACV1DahIDOvkYLGXF3Kz1JvxVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMwNtuUs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ncUO3Z32"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D32C2BCC9;
-	Wed, 13 May 2026 03:34:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMwNtuUs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B16C4AF0E;
+	Wed, 13 May 2026 03:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643278;
-	bh=lYQ1yov6GYXVE+5pFJSvbDLFJ5lLXCdGtVTWLqgmeuM=;
+	s=k20201202; t=1778643276;
+	bh=6qM6eS73y/2HGC/l7RWciS6d5w9G1tF/qeUGxjijkEE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ncUO3Z32AbCA3N67e+bLhuW1dnvX0NQjy8olIzxmFBg+0bPjrMcNu0YF6dkAtue9L
-	 ki4CmckhNSZTSQps7z/m/oqN+kRw4sVVYZWOlE67k0U53hsYcyo2Zy7lkEwA194nzD
-	 e1rUTJkVPsoB1Qk1L5vr/1IagUXAy7mPYABMJcccHC0yP6myPwj7diAgZydR6JJxYV
-	 TDoNDG9TaWcpTjCfQ11W4HbQjqOhBSz+tbvEk6FiMdgqhFyCsrfcM8SrUdMy2Z4sYi
-	 p9JB7/eom2Ck4C3MoiDqc+h5JWS+1+R7wp98F/LDjVlfO5I4S9Fs/I5k3PE5CpGbyE
-	 FPkPPhuQSHenw==
+	b=ZMwNtuUso1KmF3zovvyP98IAAheQGw5HYUfApTI9FkfqlQEPmOsu/B2SkcYXBcXdi
+	 RuPi4hHEHz9ECpJJRlUzuCbIIBuIh2TYi7+hUzejgskeqL8abZ3yNnY8SjvvCAG65G
+	 frbBT1pD1JuWcqPdEz4mp+Xpsy1LnHXnXdK2NNtUMwUTxoJ5XUyHDOmJNxJH/w7iNw
+	 bDZD2CxdEKArrOJPU3e30Cl5cd+fYKhk0LlX5b40qGA/Hi8AM+ynQ572kUIMBJujGQ
+	 EgOzyvtCU3pmQLgImOtnqoRhFJQ6Ni8QeH/uIrDMypcvHoBF/Yb3yctQp2KWU1KSLp
+	 bAMIXincMPPIg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -38,10 +38,12 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 13/21] objtool: Reuse string references
-Date: Tue, 12 May 2026 20:33:47 -0700
-Message-ID: <8881010b54f07432929acb8e704cd6ffcc835318.1778642120.git.jpoimboe@kernel.org>
+	Petr Mladek <pmladek@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>
+Subject: [PATCH v3 09/21] kbuild: Only run objtool if there is at least one command
+Date: Tue, 12 May 2026 20:33:43 -0700
+Message-ID: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -53,105 +55,156 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For duplicate strings, elf_add_string() just blindly adds duplicates.
+Split the objtool args into commands and options, such that if no
+commands have been enabled, objtool doesn't run.
 
-That can be a problem for arm64 which often uses two consecutive
-instructions (and corresponding relocations) to put an address into a
-register, like:
+This is in preparation for enabling objtool and klp-build for arm64.
 
-  d8:   90000001        adrp    x1, 0 <meminfo_proc_show>       d8: R_AARCH64_ADR_PREL_PG_HI21  .rodata.meminfo_proc_show.str1.8
-  dc:   91000021        add     x1, x1, #0x0    dc: R_AARCH64_ADD_ABS_LO12_NC   .rodata.meminfo_proc_show.str1.8
-
-Referencing two different addresses in the ADRP+ADD pair would corrupt
-the memory access.  Avoid that by detecting and reusing duplicates when
-cloning string relocs.
-
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/elf.c                 | 29 +++++++++++++++++++++++------
- tools/objtool/include/objtool/elf.h |  3 ++-
- tools/objtool/klp-diff.c            |  4 +++-
- 3 files changed, 28 insertions(+), 8 deletions(-)
+ arch/x86/boot/startup/Makefile |  2 +-
+ scripts/Makefile.build         |  4 +--
+ scripts/Makefile.lib           | 52 ++++++++++++++++++----------------
+ scripts/Makefile.vmlinux_o     | 15 ++++------
+ 4 files changed, 36 insertions(+), 37 deletions(-)
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index e09bb0a63be35..065ccfeb98288 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -1366,9 +1366,27 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
- 	return elf;
- }
+diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
+index 5e499cfb29b5c..a08297829fc63 100644
+--- a/arch/x86/boot/startup/Makefile
++++ b/arch/x86/boot/startup/Makefile
+@@ -36,7 +36,7 @@ $(patsubst %.o,$(obj)/%.o,$(lib-y)): OBJECT_FILES_NON_STANDARD := y
+ # relocations, even if other objtool actions are being deferred.
+ #
+ $(pi-objs): objtool-enabled	= 1
+-$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-args-y)) --noabs
++$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-cmds-y) $(objtool-opts-y)) --noabs
  
--unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
-+int elf_find_string(struct elf *elf, struct section *strtab, const char *str)
- {
--	unsigned int offset;
-+	char *d_buf;
-+	int i;
-+
-+	if (!strtab->data)
-+		return -1;
-+
-+	d_buf = strtab->data->d_buf;
-+
-+	for (i = 0; i < strtab->data->d_size; i += strlen(d_buf + i) + 1) {
-+		if (!strcmp(d_buf + i, str))
-+			return i;
-+	}
-+
-+	return -1;
-+}
-+
-+int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
-+{
-+	void *data;
+ #
+ # Confine the startup code by prefixing all symbols with __pi_ (for position
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 3498d25b15e85..c4accfcd177d4 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -277,7 +277,7 @@ endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
+ is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(target-stem).o)$(OBJECT_FILES_NON_STANDARD)n),$(is-kernel-object))
  
- 	if (!strtab)
- 		strtab = find_section_by_name(elf, ".strtab");
-@@ -1382,12 +1400,11 @@ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char
- 		return -1;
- 	}
+ ifdef CONFIG_OBJTOOL
+-$(obj)/%.o: private objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
++$(obj)/%.o: private objtool-enabled = $(and $(is-standard-object),$(objtool-cmds-y),$(if $(delay-objtool),$(is-single-obj-m),y))
+ endif
  
--	offset = ALIGN(sec_size(strtab), strtab->sh.sh_addralign);
+ ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
+@@ -501,7 +501,7 @@ define rule_ld_multi_m
+ 	$(call cmd,gen_objtooldep)
+ endef
+ 
+-$(multi-obj-m): private objtool-enabled := $(delay-objtool)
++$(multi-obj-m): private objtool-enabled := $(if $(objtool-cmds-y),$(delay-objtool))
+ $(multi-obj-m): private part-of-module := y
+ $(multi-obj-m): %.o: %.mod FORCE
+ 	$(call if_changed_rule,ld_multi_m)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 7e216d82e9887..7f803796d20cf 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -183,30 +183,34 @@ ifdef CONFIG_OBJTOOL
+ 
+ objtool := $(objtree)/tools/objtool/objtool
+ 
+-objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
+-objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
+-objtool-args-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
+-objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
+-objtool-args-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
+-ifdef CONFIG_CALL_PADDING
+-objtool-args-$(CONFIG_CFI)				+= --cfi
+-objtool-args-$(CONFIG_FINEIBT)				+= --fineibt
+-endif
+-objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
+-ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
+-objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
+-endif
+-objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
+-objtool-args-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
+-objtool-args-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
+-objtool-args-$(CONFIG_MITIGATION_SLS)			+= --sls
+-objtool-args-$(CONFIG_STACK_VALIDATION)			+= --stackval
+-objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
+-objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
+-objtool-args-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
+-objtool-args-$(CONFIG_OBJTOOL_WERROR)			+= --werror
++# objtool commands
++objtool-cmds-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
++objtool-cmds-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
++objtool-cmds-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
++objtool-cmds-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
++objtool-cmds-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
++objtool-cmds-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
++objtool-cmds-$(CONFIG_UNWINDER_ORC)			+= --orc
++objtool-cmds-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
++objtool-cmds-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
++objtool-cmds-$(CONFIG_MITIGATION_SLS)			+= --sls
++objtool-cmds-$(CONFIG_STACK_VALIDATION)			+= --stackval
++objtool-cmds-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
++objtool-cmds-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
++objtool-cmds-y						+= $(OBJTOOL_ARGS)
+ 
+-objtool-args = $(objtool-args-y)					\
++# objtool options
++ifdef CONFIG_CALL_PADDING
++objtool-opts-$(CONFIG_CFI)				+= --cfi
++objtool-opts-$(CONFIG_FINEIBT)				+= --fineibt
++endif
++ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
++objtool-opts-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
++endif
++objtool-opts-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
++objtool-opts-$(CONFIG_OBJTOOL_WERROR)			+= --werror
++
++objtool-args = $(objtool-cmds-y) $(objtool-opts-y)			\
+ 	$(if $(delay-objtool), --link)					\
+ 	$(if $(part-of-module), --module)
+ 
+@@ -215,7 +219,7 @@ delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT),$(CONFIG_KLP_
+ cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool-args) $@)
+ cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+ 
+-objtool-enabled := y
++objtool-enabled = $(if $(objtool-cmds-y),y)
+ 
+ endif # CONFIG_OBJTOOL
+ 
+diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+index 527352c222ff6..09af33203bd8d 100644
+--- a/scripts/Makefile.vmlinux_o
++++ b/scripts/Makefile.vmlinux_o
+@@ -36,18 +36,13 @@ endif
+ # For !delay-objtool + CONFIG_NOINSTR_VALIDATION, it runs on both translation
+ # units and vmlinux.o, with the latter only used for noinstr/unret validation.
+ 
+-objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
 -
--	if (!elf_add_data(elf, strtab, str, strlen(str) + 1))
-+	data = elf_add_data(elf, strtab, str, strlen(str) + 1);
-+	if (!data)
- 		return -1;
+-ifeq ($(delay-objtool),y)
+-vmlinux-objtool-args-y					+= $(objtool-args-y)
+-else
+-vmlinux-objtool-args-$(CONFIG_OBJTOOL_WERROR)		+= --werror
++ifneq ($(delay-objtool),y)
++objtool-cmds-y					 =
++objtool-opts-y					+= --link
+ endif
  
--	return offset;
-+	return data - strtab->data->d_buf;
- }
+-vmlinux-objtool-args-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
+-							   $(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
+-
+-objtool-args = $(vmlinux-objtool-args-y) --link
++objtool-cmds-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
++						   $(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
  
- void *elf_add_data(struct elf *elf, struct section *sec, const void *data, size_t size)
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index 0801fcad516bb..d895023674673 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -187,7 +187,8 @@ struct symbol *elf_create_section_symbol(struct elf *elf, struct section *sec);
- void *elf_add_data(struct elf *elf, struct section *sec, const void *data,
- 		   size_t size);
- 
--unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str);
-+int elf_find_string(struct elf *elf, struct section *strtab, const char *str);
-+int elf_add_string(struct elf *elf, struct section *strtab, const char *str);
- 
- struct reloc *elf_create_reloc(struct elf *elf, struct section *sec,
- 			       unsigned long offset, struct symbol *sym,
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 6a1cec57dc6a3..6957292e455e4 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1509,7 +1509,9 @@ static int clone_reloc(struct elfs *e, struct reloc *patched_reloc,
- 
- 		__dbg_clone("\"%s\"", escape_str(str));
- 
--		addend = elf_add_string(e->out, out_sym->sec, str);
-+		addend = elf_find_string(e->out, out_sym->sec, str);
-+		if (addend == -1)
-+			addend = elf_add_string(e->out, out_sym->sec, str);
- 		if (addend == -1)
- 			return -1;
- 	}
+ # Link of vmlinux.o used for section mismatch analysis
+ # ---------------------------------------------------------------------------
 -- 
 2.53.0
 
