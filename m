@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1843A6413;
-	Wed, 13 May 2026 03:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75FB3A71B3;
+	Wed, 13 May 2026 03:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778643283; cv=none; b=Q38VxEUR5mm0yS6HawlVWig40WkKiZ6dqtLRqrhZUfcVatAYuWCWgvvKydJ7E2cdIKXg1Wf57Aq3cCZldUaAxAihoJAaSB4Ily69LyjEWSydQtT9Y+QoQ446gb22vnoakLiwB6ShzicMdOJYXlyJ8YlQ4joDdHViD0JC2lg+Mkc=
+	t=1778643283; cv=none; b=eGBv+f7qhxrlNgS+TgZ+lV08VMjuwqcgzQ/egtjvmlQR3acgSMBHxPA/p7f3kZa+Si8/dLs7yAq6yOmXp6b5yDxdbddvQJRO8bTEzShO0OoTX9SlyJQUjxKuSH9/pw9QrjL67b0MLDQLgr3oloDqQXAZlScQOpNTomtxxmbdENc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1778643283; c=relaxed/simple;
-	bh=+/sFHocRcUihmUH6/AgqXb/DZFT8Oa4f5kM+W19rLY8=;
+	bh=YLQATZuaSnhkkzf9eNAaMViHdYeqnWtOoiB9QIjH1E8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fUQfyV9vgTrHD2uhFA18caoXhFawieGVOKs4AteD54Ezonddub4wRcv9YWgHLmO4xQ/r06OodoYRRSmo9TQ2eIC7N4pvOU0lOjAtG97wXJEpYw4RTz3mLu8XUeeF/NDY0IJyLT55oA5gpm3QT6ZuA4ZiwLb9X7DjcdN+N+ANVjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KnB1C68t; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=RPn5LN3JN/o1WbqbZ3xHWMZupXICthkK5cKCdSi2QXiRUsmuJbHtO9W9zT/3svgYCRLeY3BejLwM5ghOh4RKgO6I+Hhef1FvnFhGwUVysWejX5mtf5/B9UGL+PpHvUQBzHKkz7jhUhQQ7dRZ+yxo2UCkPAhCh4AinLTzjju/Ca8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CTWc4f4x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KnB1C68t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8234C2BCFB;
-	Wed, 13 May 2026 03:34:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTWc4f4x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02842C2BCFC;
+	Wed, 13 May 2026 03:34:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778643280;
-	bh=+/sFHocRcUihmUH6/AgqXb/DZFT8Oa4f5kM+W19rLY8=;
+	s=k20201202; t=1778643283;
+	bh=YLQATZuaSnhkkzf9eNAaMViHdYeqnWtOoiB9QIjH1E8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KnB1C68tGrQ+hg40bSzILDRUj87xYxnqRY9/BJQhZg67HOujbCZsCfElQ0oEInBTU
-	 7tv8z+bAbnURxLtVLeojl9BGOy9qkqaLXsDZOtgO36wyn9iYQCvWHzCASnC14oQHX1
-	 i/M4WTGGdXN3aQ8s+O/Tzs/BsxlE67LVTTOQD+RlxQCTW3kCA5vvBXMwS3BpjNpy/s
-	 OP9hTFojt1p8wBP1lKsoY8lmqu6OIiyUwLTUYxOa2+D8EDeCSp5l6qYAwmdlT9bDS9
-	 MZ5e8uRti/DPMjq1lu8C8aXp3b0uVbxAOor3Ya4kChgc9DZbQA58zPO3eCsbgJaEgo
-	 gewvx101BQYYw==
+	b=CTWc4f4xlExzoEq65yIQKtV+ICaRbk2wTx/GfaqnnWlOQayhR49FihvTkMA/gPDLW
+	 8S55+o1kmVbXMVuV7/JtZ4i2DnXpnEBHAuP9NAbqX7kI4ankoTrgmxwjlnlzYWbO5T
+	 CTmG0fp4oml6/1T+KNbmNWrIu/UQWciXeyO39X3oEDZ54dk5GhhB3AEEM+ZQoG2yqa
+	 4LJWPwvACu78sd3oCUH2Ogat4xozo9Jlci41wUZuZM+2wbYuy5yI8dCglfbOFRXzKo
+	 Lh4yCeT5V4Cv+OOwGRxhSau6XQgU95Qii7FufQfJ/TbIHoump0sIfJ9vcgNP5Imqdb
+	 WviVX4N9n+cbA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v3 16/21] objtool/klp: Filter arm64 mapping symbols in find_symbol_by_offset()
-Date: Tue, 12 May 2026 20:33:50 -0700
-Message-ID: <236050080db7b2462fdb13a03ed48a8efb2415a4.1778642120.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 21/21] klp-build: Add arm64 syscall patching macro
+Date: Tue, 12 May 2026 20:33:55 -0700
+Message-ID: <3bf3cee43039fc4da84e83d0891a92e25f40f00f.1778642121.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1778642120.git.jpoimboe@kernel.org>
 References: <cover.1778642120.git.jpoimboe@kernel.org>
@@ -53,29 +53,44 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ARM64 ELF objects contain $d/$x mapping symbols (STT_NOTYPE) at offset 0
-in data/text sections.  These aren't "real" symbols so filter them from
-find_symbol_by_offset(), consistent with the existing section symbol
-filter.
+Add arm64 support for KLP_SYSCALL_DEFINEx(), mirroring the arm64
+__SYSCALL_DEFINEx() pattern from arch/arm64/include/asm/syscall_wrapper.h.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/elf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/livepatch_helpers.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 9d5a926934dc2..a4d9afa3a079c 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -159,7 +159,7 @@ struct symbol *find_symbol_by_offset(struct section *sec, unsigned long offset)
- 	struct symbol *sym;
+diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
+index 99d68d0773fa8..4b647b83865f9 100644
+--- a/include/linux/livepatch_helpers.h
++++ b/include/linux/livepatch_helpers.h
+@@ -72,6 +72,25 @@
+ 	}								\
+ 	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
  
- 	__sym_for_each(sym, tree, offset, offset) {
--		if (sym->offset == offset && !is_sec_sym(sym))
-+		if (sym->offset == offset && !is_sec_sym(sym) && !is_mapping_sym(sym))
- 			return sym->alias;
- 	}
++#elif defined(CONFIG_ARM64)
++
++#define __KLP_SYSCALL_DEFINEx(x, name, ...)				\
++	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
++	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
++	asmlinkage long __arm64_sys##name(const struct pt_regs *regs);	\
++	asmlinkage long __arm64_sys##name(const struct pt_regs *regs)	\
++	{								\
++		return __se_sys##name(SC_ARM64_REGS_TO_ARGS(x,__VA_ARGS__));\
++	}								\
++	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
++	{								\
++		long ret = __klp_do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
++		__MAP(x,__SC_TEST,__VA_ARGS__);				\
++		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));	\
++		return ret;						\
++	}								\
++	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
++
+ #endif
  
+ #endif /* _LINUX_LIVEPATCH_HELPERS_H */
 -- 
 2.53.0
 
