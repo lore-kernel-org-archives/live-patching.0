@@ -1,42 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98DA32572F
-	for <live-patching@vger.kernel.org>; Thu, 14 May 2026 22:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFD73CF977;
+	Thu, 14 May 2026 22:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778797345; cv=none; b=lbwNS+FdCt7e2211rJBrddJ3/+VBPRfmDJPUa275ONlEHohE3xbif7n8fNaho6Cd7YQJMYJ+/U2evSX+DCSMzmxbkTfQ5+ELxAFB54JDwQVhEoJtgqC2iNleEPq1GnyLh0pZXg2Tkdk8RdLEpcvTAUBfgMzykXiocppNRxY/A4s=
+	t=1778797518; cv=none; b=nIK4UstiNwdyTsmw7ybNJwiRXM7OVldMDT1l47Rvzqm3YWDjKGhpwn5/JHz+g32BdnZ4OzUQ/IDNc7a6ngC4uQaU3cCEZqqGW4zkUF/e7rUsHFrH1+QxeWbhp9D75kvAffma45jnUj+l8eQCxcJkSftg/GZ9ZlGUPMygXZoao50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778797345; c=relaxed/simple;
-	bh=SIUMPPhLYQfebcU6ulCxa3RhFobg1UPAw8B3rsPpTcU=;
+	s=arc-20240116; t=1778797518; c=relaxed/simple;
+	bh=l4n1GCkss3HdumT9TYk9D1dQsWaT9kxRVhMfzwbcBDM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YrtenjENbO6OXE43ojnMfbkUytqfrKrQ15FQ15TRryBm3Xyxe8+VLGmj5gAHTpGaLrMtOPHiXF1pPkceflfUgz8fhNAc5VuJRuOtOtgNm37Fd9Q821OlA8UC4LSKzmC91V04Bdb/poSJl5YPm/RyJcps6wFedFofo9Nl7WKUEY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zu8VggiG; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=YPktk+Xq2expxcEFDWSwNwqdYXZAeL0RqmZNOpFRMhiIbylsJ0ONzEG2dAq8BSe+6YpOxHQtLtAG8MF9myk0trnewkP3iXnWM3MfucscVMpQPZbzPE1ofOW3ahSJuKn5BGIAtXbX3YMKvbCfUe9LTE3vDIEwXesD9aVJYHlSaKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AA1BYrod; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zu8VggiG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29879C2BCC6;
-	Thu, 14 May 2026 22:22:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AA1BYrod"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2437C2BCB3;
+	Thu, 14 May 2026 22:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778797344;
-	bh=SIUMPPhLYQfebcU6ulCxa3RhFobg1UPAw8B3rsPpTcU=;
+	s=k20201202; t=1778797517;
+	bh=l4n1GCkss3HdumT9TYk9D1dQsWaT9kxRVhMfzwbcBDM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=Zu8VggiGg24KJjmYJo7EdQdeFdT7UWRSLOrTVvox0o82j+PFiiX/82bQadNaa4U8V
-	 dJzKgdUNU0RzLuu1cB34K4Y1biCCPHb0pPUNmsDFod8XLHvpqhu5hhT8Ke2QYUEYCt
-	 I96W3JfEEJMh2OhaqihrhjD2v/QiY9XM5Y6xzae4ET7owZE7Mt9/Y53qXAENmHMr5q
-	 WHurnmSqUnzZZ+Fee71Yq2YzgBst9IyOvMMjB16inBPCb31j3H6WC5yu2Q957ekOLv
-	 qUCWqgwwyg7lsVnyPfdVuLjol4uGWwIZQR0cqB57WbsSvP14an17TCz8scHj0pD888
-	 AuJUWZtBxab7Q==
+	b=AA1BYrodfUHXEl65jh+fNAg+8mo1kGu/2Jn7U16Af+p0xZjpjjeVcVypmIjHWFAeN
+	 NnX0xWg4UulKnyi0CdfCwAs9eWf9S5L0X6UIFX2sMn423HC3Rfgah3UHGleTMxMMgu
+	 wHo46egB7gv6NCD3PGDz6yNNbhODIuqC5joMUFqdE04QYrwL/80N7Qtxgju7vL+Tih
+	 romzAo6uuFLMuDRDQm4hvE3Afz1z+lCcFMdnYrDxQd+ipgmKqZqVIu/3TVhelVNBl+
+	 cUVEivtUcxAOpJLOzi/OKwFLkM5o3YzYnd9OnELchlN4+yrLgyXDq/GP4eyAyvTLsk
+	 6tEx23VluLYGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 4/6] livepatch: Remove "data" from struct klp_state
+Subject: Re: [PATCH v3 09/21] kbuild: Only run objtool if there is at least
+ one command
 Reply-To: sashiko-reviews@lists.linux.dev
-To: jpoimboe@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com, song@kernel.org, mbenes@suse.cz, jikos@kernel.org
-Cc: live-patching@vger.kernel.org
-In-Reply-To: <20260513143321.26185-5-laoar.shao@gmail.com>
-References: <20260513143321.26185-5-laoar.shao@gmail.com>
+To: x86@kernel.org
+Cc: "Peter Zijlstra" <peterz@infradead.org>, "Song Liu" <song@kernel.org>, "Catalin
+ Marinas" <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, "Joe
+ Lawrence" <joe.lawrence@redhat.com>, "Will Deacon" <will@kernel.org>, "Miroslav
+ Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Nicolas Schier" <nsc@kernel.org>, live-patching@vger.kernel.org, "Nathan
+ Chancellor" <nathan@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
+In-Reply-To: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
+References: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 22:22:23 +0000
-Message-Id: <20260514222224.29879C2BCC6@smtp.kernel.org>
+Date: Thu, 14 May 2026 22:25:15 +0000
+Message-Id: <20260514222516.D2437C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -45,69 +50,54 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Removing `data` from `struct klp_state` breaks compilation of th=
-e livepatch selftests and leaves kernel documentation explicitly referencin=
-g a non-existent API.
+- [Low] Leaking objtool options into vmlinux.o validation causes a fatal bu=
+ild failure (`--cfi requires --prefix`) and silently alters validation beha=
+vior.
 --
 
-commit 792ddcf269c47d4de395b3873cfd5f02cbf282ef
-Author: Petr Mladek <pmladek@suse.com>
+commit 68e454f3a8ccd3d638c67c092eee264996286695
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-livepatch: Remove "data" from struct klp_state
+kbuild: Only run objtool if there is at least one command
 
-The commit removes the data pointer from struct klp_state since its lifetime
-is tied to the module rather than the state. This pointer is lost during a
-livepatch replacement, so shadow variables are recommended instead.
+This commit splits the objtool arguments into commands and options to
+prevent objtool from running when no commands are enabled.
 
-> diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-> index fef0c2f970838..56b7e4fe01bc8 100644
-> --- a/include/linux/livepatch.h
-> +++ b/include/linux/livepatch.h
-> @@ -152,14 +152,12 @@ struct klp_state_callbacks {
->   * @callbacks:	optional callbacks used when enabling or disabling the st=
-ate
->   * @is_shadow:	the state handles lifetime of a shadow variable with
->   *		the same @id
-> - * @data:	custom data
->   */
->  struct klp_state {
->  	unsigned long id;
->  	unsigned int version;
->  	struct klp_state_callbacks callbacks;
->  	bool is_shadow;
-> -	void *data;
-
-Does this code removal cause a regression by breaking the compilation of
-livepatch selftests?
-
-For example, test_klp_state.c and test_klp_state2.c actively use this field
-to store and transfer state.
-
-In tools/testing/selftests/livepatch/test_modules/test_klp_state.c:
-
-allocate_loglevel_state() {
-	...
-	loglevel_state->data =3D kzalloc(sizeof(console_loglevel), GFP_KERNEL);
-	if (!loglevel_state->data)
-		return -ENOMEM;
-	...
-}
-
-Additionally, does Documentation/livepatch/system-state.rst still reference
-this non-existent API? It continues to provide instructions like:
-
-In Documentation/livepatch/system-state.rst:
-  - Allocate *state->data* when necessary. The allocation might fail
-  ...
-  - Make sure that *state->data* has all necessary information.
-
-Should the selftests and documentation be updated as part of this change to
-prevent build failures and confusion?
-
->  };
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 527352c222ff6..09af33203bd8d 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+[ ... ]
+> @@ -36,18 +36,13 @@ endif
+>  # For !delay-objtool + CONFIG_NOINSTR_VALIDATION, it runs on both transl=
+ation
+>  # units and vmlinux.o, with the latter only used for noinstr/unret valid=
+ation.
 > =20
->  /**
+> -objtool-enabled :=3D $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
+> -
+> -ifeq ($(delay-objtool),y)
+> -vmlinux-objtool-args-y					+=3D $(objtool-args-y)
+> -else
+> -vmlinux-objtool-args-$(CONFIG_OBJTOOL_WERROR)		+=3D --werror
+> +ifneq ($(delay-objtool),y)
+> +objtool-cmds-y					 =3D
+> +objtool-opts-y					+=3D --link
+
+Does this code unintentionally retain the options from scripts/Makefile.lib?
+
+Since objtool-cmds-y is cleared here, commands like --prefix are dropped.
+However, because objtool-opts-y is only appended to, options like --cfi
+remain active.
+
+This causes objtool to fail with a fatal error: "--cfi requires --prefix"
+during vmlinux.o validation on configurations with KCFI.=20
+
+Should objtool-opts-y be assigned directly using =3D or :=3D instead of
+appended?
+
+>  endif
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260513143321.2618=
-5-1-laoar.shao@gmail.com?part=3D4
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1778642120.gi=
+t.jpoimboe@kernel.org?part=3D9
