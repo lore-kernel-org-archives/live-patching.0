@@ -1,47 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFD73CF977;
-	Thu, 14 May 2026 22:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2160438C42D;
+	Thu, 14 May 2026 22:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778797518; cv=none; b=nIK4UstiNwdyTsmw7ybNJwiRXM7OVldMDT1l47Rvzqm3YWDjKGhpwn5/JHz+g32BdnZ4OzUQ/IDNc7a6ngC4uQaU3cCEZqqGW4zkUF/e7rUsHFrH1+QxeWbhp9D75kvAffma45jnUj+l8eQCxcJkSftg/GZ9ZlGUPMygXZoao50=
+	t=1778797822; cv=none; b=hDzvDdr3/1Wl5wQOJ5qIw1WapM4wrMZRhi1BKkeHG5bNjR6bH/5H7pcHlUJVhc9TEAxKv1zmtoimStStZrPi828o7+aKtAjkxxFBLERVS8FZqgHZI1N1xLhJheQ4xm0Y257U5JOr0NyFXUafFQ9uBil1ytCtiw3Gg9cwSec3yYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778797518; c=relaxed/simple;
-	bh=l4n1GCkss3HdumT9TYk9D1dQsWaT9kxRVhMfzwbcBDM=;
+	s=arc-20240116; t=1778797822; c=relaxed/simple;
+	bh=5yns+K4CDbbF35ROcL1UsFk0JF6RfU8OVfC6oCazIG8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YPktk+Xq2expxcEFDWSwNwqdYXZAeL0RqmZNOpFRMhiIbylsJ0ONzEG2dAq8BSe+6YpOxHQtLtAG8MF9myk0trnewkP3iXnWM3MfucscVMpQPZbzPE1ofOW3ahSJuKn5BGIAtXbX3YMKvbCfUe9LTE3vDIEwXesD9aVJYHlSaKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AA1BYrod; arc=none smtp.client-ip=10.30.226.201
+	 Message-Id; b=EXMCoYCuGV7e9ltv23MeqXEMUKQBoiSgQaSVwxJaKNft8S/2DrQZWqniqRFjzDnPHsrCdU1gIl7x0Zgw86eAxmJdWbk1IF6yclA3ADnATgidNIt6T/zYRyNlUw/BjbHofiS/elFsZYGifLV3Sv7K/xVgtvfRtuyD+xno10UHQAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bvAGzvan; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AA1BYrod"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2437C2BCB3;
-	Thu, 14 May 2026 22:25:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bvAGzvan"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1326AC2BCB3;
+	Thu, 14 May 2026 22:30:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778797517;
-	bh=l4n1GCkss3HdumT9TYk9D1dQsWaT9kxRVhMfzwbcBDM=;
+	s=k20201202; t=1778797821;
+	bh=5yns+K4CDbbF35ROcL1UsFk0JF6RfU8OVfC6oCazIG8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date:From;
-	b=AA1BYrodfUHXEl65jh+fNAg+8mo1kGu/2Jn7U16Af+p0xZjpjjeVcVypmIjHWFAeN
-	 NnX0xWg4UulKnyi0CdfCwAs9eWf9S5L0X6UIFX2sMn423HC3Rfgah3UHGleTMxMMgu
-	 wHo46egB7gv6NCD3PGDz6yNNbhODIuqC5joMUFqdE04QYrwL/80N7Qtxgju7vL+Tih
-	 romzAo6uuFLMuDRDQm4hvE3Afz1z+lCcFMdnYrDxQd+ipgmKqZqVIu/3TVhelVNBl+
-	 cUVEivtUcxAOpJLOzi/OKwFLkM5o3YzYnd9OnELchlN4+yrLgyXDq/GP4eyAyvTLsk
-	 6tEx23VluLYGg==
+	b=bvAGzvanzcVJ4tqsWCZGn3wQSpUAEil8eXUpDwbqMdKk/9uFQMCtC4l8MwdH+oYhn
+	 ySrnk0z50ZUIacONiFV6UZf+Q1J5I95aWBe4nc1aPnLN4yT5pZM0c7yOHR17RsK7BN
+	 XEld92GAoxisDXweArpdyNQ7sxVUv5UhZagpJzsGDwWZjpTXLxPhaqkXgkL7sMYlWV
+	 DnoSW3YUBS8uKCr2oEIMrtCfqwVAQTiIuXwqJ5XgTRLMF9wqFtdW0EJSWl29T9onZJ
+	 0bOUFkRAEgRMsXN+5xg1sdUv9sHT6CJLFojYIyVqqTbMjfHHDJAFf5dFbhmilRckiN
+	 gkosRnmHX/V+A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 09/21] kbuild: Only run objtool if there is at least
- one command
+Subject: Re: [PATCH v3 10/21] objtool: Ignore jumps to the end of the
+ function for checksum runs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: x86@kernel.org
-Cc: "Peter Zijlstra" <peterz@infradead.org>, "Song Liu" <song@kernel.org>, "Catalin
- Marinas" <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, "Joe
- Lawrence" <joe.lawrence@redhat.com>, "Will Deacon" <will@kernel.org>, "Miroslav
- Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Nicolas Schier" <nsc@kernel.org>, live-patching@vger.kernel.org, "Nathan
- Chancellor" <nathan@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
-In-Reply-To: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
-References: <8699672b82fef17e73a5f2e5528478778dbdab31.1778642120.git.jpoimboe@kernel.org>
+Cc: "Mark Rutland" <mark.rutland@arm.com>, live-patching@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, "Miroslav
+ Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Will Deacon" <will@kernel.org>, "Song
+ Liu" <song@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Joe
+ Lawrence" <joe.lawrence@redhat.com>, "Catalin Marinas" <catalin.marinas@arm.com>
+In-Reply-To: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
+References: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 14 May 2026 22:25:15 +0000
-Message-Id: <20260514222516.D2437C2BCB3@smtp.kernel.org>
+Date: Thu, 14 May 2026 22:30:20 +0000
+Message-Id: <20260514223021.1326AC2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -50,54 +49,64 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Leaking objtool options into vmlinux.o validation causes a fatal bu=
-ild failure (`--cfi requires --prefix`) and silently alters validation beha=
-vior.
+- [Medium] Missing parentheses in the jump destination check causes objtool=
+ to silently ignore all missing jump targets when branch validation is disa=
+bled, instead of only jumps to the end of the function.
 --
 
-commit 68e454f3a8ccd3d638c67c092eee264996286695
+commit aa068d4053e8b92ff17082c7a023821e72f5d625
 Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-kbuild: Only run objtool if there is at least one command
+objtool: Ignore jumps to the end of the function for checksum runs
 
-This commit splits the objtool arguments into commands and options to
-prevent objtool from running when no commands are enabled.
+Sometimes Clang arm64 code jumps to the end of the function for UB.
+This commit ignores these jumps to the end of the function for
+checksum runs to avoid errors.
 
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 527352c222ff6..09af33203bd8d 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 10b18cf9c3608..73451aef68029 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+
 [ ... ]
-> @@ -36,18 +36,13 @@ endif
->  # For !delay-objtool + CONFIG_NOINSTR_VALIDATION, it runs on both transl=
-ation
->  # units and vmlinux.o, with the latter only used for noinstr/unret valid=
-ation.
-> =20
-> -objtool-enabled :=3D $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
-> -
-> -ifeq ($(delay-objtool),y)
-> -vmlinux-objtool-args-y					+=3D $(objtool-args-y)
-> -else
-> -vmlinux-objtool-args-$(CONFIG_OBJTOOL_WERROR)		+=3D --werror
-> +ifneq ($(delay-objtool),y)
-> +objtool-cmds-y					 =3D
-> +objtool-opts-y					+=3D --link
 
-Does this code unintentionally retain the options from scripts/Makefile.lib?
+> @@ -1593,10 +1609,14 @@ static int add_jump_destinations(struct objtool_f=
+ile *file)
+>  			/*
+>  			 * GCOV/KCOV dead code can jump to the end of
+>  			 * the function/section.
+> +			 *
+> +			 * Clang on arm64 also does this sometimes for
+> +			 * undefined behavior.
+>  			 */
+> -			if (file->ignore_unreachables && func &&
+> -			    dest_sec =3D=3D insn->sec &&
+> -			    dest_off =3D=3D func->offset + func->len)
+> +			if (!validate_branch_enabled() ||
+> +			    (file->ignore_unreachables && func &&
+> +			     dest_sec =3D=3D insn->sec &&
+> +			     dest_off =3D=3D func->offset + func->len))
+>  				continue;
 
-Since objtool-cmds-y is cleared here, commands like --prefix are dropped.
-However, because objtool-opts-y is only appended to, options like --cfi
-remain active.
+Does this condition silently ignore all missing jump targets when branch
+validation is disabled?
 
-This causes objtool to fail with a fatal error: "--cfi requires --prefix"
-during vmlinux.o validation on configurations with KCFI.=20
+Because of the || without proper parenthetical grouping around the first
+two terms, if !validate_branch_enabled() is true (which it is for
+--checksum or --noinstr runs), the rest of the condition short-circuits.
 
-Should objtool-opts-y be assigned directly using =3D or :=3D instead of
-appended?
+This appears to cause objtool to skip the error reporting and silently
+leave the jump destination as NULL for any unresolvable jump in the binary,
+instead of only those jumping to the end of the function.
 
->  endif
+Should the logic be grouped to restrict the exception to the end of the
+function?
+
+			if ((!validate_branch_enabled() || file->ignore_unreachables) &&
+			    func &&
+			    dest_sec =3D=3D insn->sec &&
+			    dest_off =3D=3D func->offset + func->len)
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1778642120.gi=
-t.jpoimboe@kernel.org?part=3D9
+t.jpoimboe@kernel.org?part=3D10
