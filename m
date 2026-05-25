@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C31D17993;
-	Mon, 25 May 2026 00:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B2164A9D;
+	Mon, 25 May 2026 00:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779668658; cv=none; b=Aq4T37Tx8Jbg1q+Mz8PizztulNIHe30/Sjxau6q0kneU5SixaKSZelbl4bA8FT6XWOT0un7mRc3t3AP/EPy5ClGUOJY1P0I8miudRPffUmtd8FdwNNC+MJs7E281E8S7fsW6la3IYKYhuAWmQrqCtn/nRFiBS2lAxYyR3KcAJ+k=
+	t=1779668984; cv=none; b=j7FX2oTEUD6rEGGkHrw/bd81GzQn8R4P9zIT4JjMLFSgOYSQ66aSJS+bEpXDnGpOHD3iEATfiuBIIgGvCVzkZnx3VtCLsOjpb3N7dkDjtUJHUAo/Uq8WdrIr0P8aVUoioeg+Mt6ZbWwZqpjcWWeQplg1jj40yyFDz8nJ2I77ohk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779668658; c=relaxed/simple;
-	bh=iAvdNb6M8a+Pw9hBeWWn5yPDZnzYiyHLKHmE8lwGMZs=;
+	s=arc-20240116; t=1779668984; c=relaxed/simple;
+	bh=Qoxj9vzxkk7qVf1ZYlS82Hr9skoAVvLaDZc5If5HiK0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NMYMop9gPzOUncKe8KRrh9dcZxkbFWG/lQgxj7IXJnwY1JXm2FWPDFvOyyPaAhATFbM2LQM/zHnIy6jSqjO+d5QMtpMIG4cKl/fgqnlU6azYO0a2SvAN3h9LcxH8ZI+Ls30CLUoobpFlFFo3yfmKfTUOOzlYIXxJDMc/oNzbTb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XGEYeens; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kecOLPdzSxz5BvRHtLri3P7WpH8OqJKqRKnEGjQ37ktzvmCYy5rW8xV+/g/WHXIM4TJbMbRclqGr5bmOg3VWqtQk3fmx9yTzI35EjhNIcsmT6oR+CHJpPJ7QwYzPAobvzf68lT0n74k9Pxz4wJJ5IR3FO5cYxQKnsMlJvaqHs7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eahBUstE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XGEYeens"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3A41F000E9;
-	Mon, 25 May 2026 00:24:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eahBUstE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1581F000E9;
+	Mon, 25 May 2026 00:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779668656;
-	bh=xnl7Gw1dyLrNeHWmc4DlkVh3G7Adi0Kb17RdZbXKT5I=;
+	s=k20260515; t=1779668983;
+	bh=+0la3+a1/SfXT05O5t+8D92DVzm5jvZ6Ee5NFqbA31g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XGEYeensuRckssSNIIUKwyIZXde4GZ1q/nA1OxDSR7o+Znb5DmLFOgcPO+PUyVXQr
-	 tR4/ZiR43ZYaZECyg+aQzhxOO2ZiMuPoFRGUkn7J/AdWOAbRyhrlNiqN4dZHezl5CZ
-	 ZjCwGZzlOGUIqBKIev1HPR2U0jWFRxHNX4hZGh5MB17RpEGwpUNdwbEBst9RoY6f/x
-	 9+tYmwENIs1IChNq1OChH82rAJRFbNeK4HpLrkhNoWKpxaZem8V4PMW32w8tVA3rrd
-	 MXcHBYBkRL3ZrIutxJuhbkho1pWunskPyyPs27HHbe1L12HQpqizSzxgofUBkEHHfV
-	 MfJ9GQJQ7+6TQ==
+	b=eahBUstE7YWCRe5itSf6PKisDW58q2zaRelFaRX/Hdxq0WcLv0Dl0gPu9jtTCDtR+
+	 89jVTjUJwDm/yCTwCzlhcwCjO3Z1AGcBMRTSGxjnuLYzRkF864vXKmu6zRVo9lbQYJ
+	 okBgmT/XQyO4dRpybXn7k28gmZUqYVXDF8VZMUkuxBrn/r2W9Pod2DHTKA4I9HtuzC
+	 0xe4cEhAaUAJTa4fe7p80zKfb/0hd+zMT+fWiJc++vNJ1kpvbhgRFEbC/gs4Mwr+rQ
+	 1YPSdCGV36oA6nopNZx2kw/matboECHwSfEZMEtZkFh0VKeRdjqKPdMqlC2ipUE57u
+	 Sn2I5Gpqr/sZQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/4] selftests: livepatch: Adapt mod_target module to
- pass on 4.12 kernels
+Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about minimum
+ kernel support
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Miroslav Benes" <mbenes@suse.cz>, "Shuah Khan" <shuah@kernel.org>, "Petr
- Mladek" <pmladek@suse.com>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Joe
- Lawrence" <joe.lawrence@redhat.com>, "Jiri Kosina" <jikos@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, "Marcos
- Paulo de Souza" <mpdesouza@suse.com>, marcos@mpdesouza.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20260524-livepatch-unload-on-fail-v1-3-7465de7f741d@suse.com>
-References: <20260524-livepatch-unload-on-fail-v1-3-7465de7f741d@suse.com>
+To: "Miroslav Benes" <mbenes@suse.cz>, "Jiri Kosina" <jikos@kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Petr
+ Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, live-patching@vger.kernel.org, "Marcos
+ Paulo de Souza" <mpdesouza@suse.com>, marcos@mpdesouza.com
+In-Reply-To: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
+References: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 25 May 2026 00:24:15 +0000
-Message-Id: <20260525002416.3B3A41F000E9@smtp.kernel.org>
+Date: Mon, 25 May 2026 00:29:42 +0000
+Message-Id: <20260525002942.9D1581F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -49,45 +49,47 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `test_klp_mod_target_ops` structure omits the logically requ=
-ired `.set` callback, exposing the kernel to a NULL pointer dereference dur=
-ing module load.
+- [Medium] Mandating backward compatibility with an ancient kernel version =
+(4.12) for all new in-tree selftests violates established upstream kernel p=
+rinciples.
 --
 
-commit 532c1b8c7438f534fd4e3440716ede6cf83efe1c
+commit 005a4d6b98d5e0ddf7ab7d595575364d010c4d3f
 Author: Marcos Paulo de Souza <mpdesouza@suse.com>
 
-selftests: livepatch: Adapt mod_target module to pass on 4.12 kernels
+selftests: livepatch: Add information about minimum kernel support
 
-Use the stable module_param_cb API instead of proc_fs for exposing module
-state. This approach is compatible with kernel 4.12 and later.
+This commit adds a note to the livepatch selftests README. It documents that
+the current tests are compatible with kernel 4.12 and mandates that all new
+tests must maintain this backward compatibility.
 
-> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_mod_=
-target.c b/tools/testing/selftests/livepatch/test_modules/test_klp_mod_targ=
-et.c
-> index 9643984d24022..1382a266825fb 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_mod_target.c
-> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_mod_target.c
-> @@ -5,31 +5,29 @@
-[ ... ]
-> +static const struct kernel_param_ops test_klp_mod_target_ops =3D {
-> +	.get =3D test_klp_mod_target_get,
-> +};
+> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/sel=
+ftests/livepatch/README
+> index d2035dd64a2be..293f4730b9277 100644
+> --- a/tools/testing/selftests/livepatch/README
+> +++ b/tools/testing/selftests/livepatch/README
+> @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's=
+ ring buffer for
+>  those strings for result comparison.  Other utility functions include
+>  general module loading and livepatch loading helpers (waiting for patch
+>  transitions, sysfs entries, etc.)
 > +
-> +module_param_cb(klp_mod_arg, &test_klp_mod_target_ops, NULL, 0444);
+> +All new tests and test modules MUST be compatible with kernel version 4.=
+12 and
+> +later, including current upstream kernels.
 
 [Severity: Medium]
-Does this code need a .set callback in the kernel_param_ops structure?
+Does mandating backward compatibility with kernel 4.12 for all new tests
+conflict with upstream kernel principles?
 
-When a module parameter is passed during module load, the kernel parses the
-arguments using parse_args(), which invokes parse_one() in kernel/params.c.
-Because parse_one() unconditionally executes the .set callback without
-verifying if it is actually defined, omitting it here leaves the callback
-implicitly initialized to NULL.
+Requiring tests to support an older kernel could block the introduction of
+tests for any livepatch features developed after 4.12, as the required
+internal APIs would not exist. This might also force developers to clutter
+the test module codebase with version checks for old kernels.
 
-Could this lead to a NULL pointer dereference and a kernel panic if someone
-attempts to set this parameter during module load?
+Should the burden of backporting tests to older enterprise kernels be left
+to downstream distributions rather than enforced on upstream contributors?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260524-livepatch-=
-unload-on-fail-v1-0-7465de7f741d@suse.com?part=3D3
+unload-on-fail-v1-0-7465de7f741d@suse.com?part=3D4
