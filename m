@@ -1,141 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05B3FF1AB;
-	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF5D38C42D
+	for <live-patching@vger.kernel.org>; Tue, 26 May 2026 18:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805787; cv=none; b=AUc5MNpjfYJLd9hFWghdGyk54Ry0pxtYN4CLMwfXQ56mLdFKOSrU81ME70q3qMDpc3R5RwvbJh3BTNo3iCIxb486dS3kJQtsuWKYQX24pIUocgxs0k2Kgij5ULalyfjHg1VI+P4azaIuZ9Q2FADLWEH9eduU3FU5Ih79+n1TcIw=
+	t=1779820090; cv=none; b=Y4+epVE5n88AdEsYMEvEHBZeDrNVwXysy2LZasaB3A7oATBQthUWHOgYK1xa6ooAUzXGnP2mx86p/SQcGLn8NE4aGZxfI4iRXCD3h3XLC8zCeh83B+qZyo9ZFQniujA38nd1i7SjAPCy1uRH71Ipqg8iJCUsMi997DDWH9eoHhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805787; c=relaxed/simple;
-	bh=01QZ3Oc+k3R391wthpsoqAJ4A4j9P7bKR8UG9T3xXXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GKJewTHD96pW9neIFhdR92mobyLjNtcTYZSdmdGQSY4pAFXP+l6pBsQmpd+IrTIYWkFYWa7ivmjlQfpSYYArIvLuCz0VhDrYBERngxlUpUGDjDnGHMfBZSvHryFg6PXuS7RLoq0VXEfqQfrlCVtI1n3yuvcdOLkUbtfQXa4tymA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzsWz/vl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779820090; c=relaxed/simple;
+	bh=92RLB+LsBmj6/cQJEKssexPiW/LGz7Rb2s+WDolZcJc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ACaXK9Fu4vUr56pYMA92EaED8gTsHEpd+uXDTVBNjcUS5KW4maJhfo+WWw9LXDQMchzqI88dBU+TfA1tZxEoEOHfIn6rkEF+SV9Zg6o9O+JfG4wCAvUa1yDrNWyidmcio6bDFRS2vfezGCp2f796JwaTZww2IpACKl+Rwtp7cSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajffb/tP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzsWz/vl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D741F000E9;
-	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajffb/tP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633E31F000E9
+	for <live-patching@vger.kernel.org>; Tue, 26 May 2026 18:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779805785;
-	bh=GSX/o3tGKH8prhZQKAGSjMb4rUlV/Z55PxckME59z4U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=EzsWz/vlNWJNW+NMA+grSpGmEAlzW1dMhzljG4DDGQOP42grQ3eEtdXE+yg/tu0nJ
-	 e2v3LjX3uBcVx2JXnnVCBQNmCVQI7uLKvZgmd7Nxrd6B+jZBk85BEhu6L9hr4AWOhN
-	 DmVXv8lzXWvF/wiKNTotwFW8EP7Ra+ZA35C0sV8SMVdKBC9j5ntx1+ijctMD6qQYF9
-	 3qUB2mKBtFBdFI85Oqtg3YjaU1gaQYfEjc1plhfWPXZUkEMZg3O4ZfPw+YIn8ZesD3
-	 5FkFfGfwX6V0F/bhrOcnpOSpiV6QT7FJQ6li+thvYCff9a1ujIZiIrS55YWerf7k2a
-	 Zd7p7PpJbHEkA==
-Date: Tue, 26 May 2026 10:29:44 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, live-patching@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Joshua Peisach <jpeisach@ubuntu.com>,
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
-	Anthony Iliopoulos <ailiop@suse.com>,
-	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	KP Singh <kpsingh@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <ahWuWBrZlFsAVZo2@laps>
-References: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
- <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
- <agzAwjKhOhuANz_P@laps>
- <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
- <ag8lOe6dAOgnWmsQ@laps>
- <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
- <ahGufsGqmLZZQL4M@laps>
- <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
+	s=k20260515; t=1779820089;
+	bh=HI2uoA0n1M13V/as5BANxWG0gD/IOAfpKGAm07iqeMw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=ajffb/tPoKoVz6F1bulr5ZGrO4oCvagr7BOLhk6Grk/85d3m3XVEpzmDwiGNyW9f5
+	 abag3IKcNppafmRM0GtE8qcU6/5bg2HodDPqKrEmVNwgu3rvBMq3cpDT+d4M+FG2Mz
+	 expI6JFZiRpPh3h44WJ9Rm0oEQmOBDtm4EFK+VppMYbnYPQ7NVtsa0EJFKfHWUonVs
+	 0ni4btwoCczUw3bBKj3VVr2RmjaLjkhFb3aZmsu+PeF4TTR6SJ2DYzcMQkDDGwwHky
+	 KCS2TKqjbzl0E8iDJQ82VeRt8lh4pSt2niw9yb5Q8UZICYUdJGmKk2i68RFcx4tT5d
+	 QO+xPVLMLkO+Q==
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-91066394ef8so839399585a.1
+        for <live-patching@vger.kernel.org>; Tue, 26 May 2026 11:28:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9cGxUcxovYtlrUQ3OI287VxOKDCp2Lja69vGtIJEonl4V0UVKGGHVG++F2En2EMVk3iLoaJMvZ159h83ky@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywnn2ZSMZrYE5OIinQZKoEy9qpM0cEb8Y9Sfz5lJepo2bffW9VE
+	ErW0G6kvBie3/YasC7QwyQmiJPJf0mQRUNVuTGlsvov/fPCnEXfP48Qn07caheQlSZOeYCZ9uuA
+	4HlNuZeckpP4ovMcF40Hr2hhaiJu74/I=
+X-Received: by 2002:a05:620a:468a:b0:914:aa94:8e9 with SMTP id
+ af79cd13be357-914b4915983mr3024257085a.17.1779820088722; Tue, 26 May 2026
+ 11:28:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
+References: <20260513143321.26185-1-laoar.shao@gmail.com> <20260513143321.26185-2-laoar.shao@gmail.com>
+ <CAPhsuW6Aa8Tu5aWGVYzRVVNEnJiHrNzsa4aKXoOEa_gwhp3XfQ@mail.gmail.com> <ahV3dBovdQZoF__j@pathway.suse.cz>
+In-Reply-To: <ahV3dBovdQZoF__j@pathway.suse.cz>
+From: Song Liu <song@kernel.org>
+Date: Tue, 26 May 2026 11:27:56 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4OsPexwZE9EeffuDwndV_Oj-fcR5T-ZFFsBOuY1EkKnw@mail.gmail.com>
+X-Gm-Features: AVHnY4LgnIdR7FBDhKYiefSL6cYaiPAKWIxmnFMRWEw2peeQr1mD8A_NBERYNrE
+Message-ID: <CAPhsuW4OsPexwZE9EeffuDwndV_Oj-fcR5T-ZFFsBOuY1EkKnw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] livepatch: Support scoped atomic replace using
+ replace set
+To: Petr Mladek <pmladek@suse.com>
+Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+	mbenes@suse.cz, joe.lawrence@redhat.com, live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 26, 2026 at 03:10:45PM +0200, Daniel Borkmann wrote:
->On 5/23/26 3:41 PM, Sasha Levin wrote:
->>On Thu, May 21, 2026 at 11:16:46AM -0700, Song Liu wrote:
->>>On Thu, May 21, 2026 at 8:31 AM Sasha Levin <sashal@kernel.org> wrote:
->>>>On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
->>>>>On 5/19/26 9:57 PM, Sasha Levin wrote:
->>>>>>Sure, this would also work. How do you see this happening? Can we let a certain
->>>>>>user/pid/etc disable the allowlist if they choose to?
->>>>>
->>>>>I don't think we should, given then we're back to square one where root
->>>>>or some other user would be able to just override/bypass an LSM.
->>>>
->>>>killswitch already disables itself when lockdown is active. We can easily
->>>>disable it too when one of the LSMs that cares about this is active.
->>>>
->>>>>[...]
->>>>>>How do you see this working with the allowlist?
->>>>>
->>>>>We should look at the underlying areas where most of the CVE-like fixes
->>>>>took place (these days should be more easily doable given Claude and friends)
->>>>>and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
->>>>>new hooks which BPF LSM can consume where you can then have a policy to reject
->>>>>requests and tighten the attack surface. For example, the AF_ALG stuff you
->>>>
->>>>So we could grow the LSM tentacles deeper into the kernel, and we can see where
->>>>current CVEs are happening, which I suspect is the darker corners of the kernel
->>>>(old unmaintained, rarely used code), but this definitely won't stay the case,
->>>>right? Newer and better LLMs will discover issues elsewhere, and once the low
->>>>hanging fruits are picked off of the current target subsystems, researchers
->>>>will move elsewhere. We will be dooming ourselves to an endless cat and mouse
->>>>game where we go add LSM hooks after some big security issue goes public.
->>>
->>>Do we really need to add new LSM hooks for recent CVEs?
->>>
->>>The LSM hooks are designed to cover all the user-kernel interfaces. Then
->>>with properly designed policies, we should have coverage for potential CVEs.
->>>Existing LSM hooks may not be perfect, but we can improve the hooks,
->>>potentially with the help of smart LLMs, so that these hooks can cover
->>>future security issues. In some cases, we will need new policies, but I don't
->>>think new hooks will be needed for most of these CVEs.
->>
->>Running a quick LLM evaluation on the last ~70 severe CVEs, it seems that about
->>40% is doable with the current hooks.
+On Tue, May 26, 2026 at 3:35=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrot=
+e:
+[...]
+> > I wonder whether we should have "replace_set =3D 0" means no replace.
+> > This will simplify the transition for users of the existing replace=3Df=
+alse
+> > option. I would like to hear other folks' thoughts on this.
 >
+> I would find this confusing. Also it would complicate the code.
+
+Agreed with your assessment of the scenario.
+
+> I always considered the "replace" and "no replace" mode as two
+> separate worlds:
 >
->Interesting, do you have some more details in which areas your eval sees new
->lsm hooks missing?
+>     + people using many "no replace" livepatches
 
-The recent ones I saw fall into about 5 buckets:
+My only concern is that we are adding more burden to these users.
+Before replace_set, they just use 0 for all the live patches. With
+replace_set, they will have to use some mechanism to assign a
+unique replace_set for each livepatch.
 
-1. Kernel-thread / workqueue context: LSM hooks fire but current is a worker,
-not the actual attacker. Lots of ksmbd, ceph-msgr, and async cleanup races land
-here.
+I don't know how many users are in this world. If there aren't many
+users, we can ignore this case.
 
-2. Driver: pci_driver.probe, notifier_call_chain, ib_* RDMA callbacks, ndo_*,
-bus dispatch tables all sit below any LSM hook. Big chunk of mlx5, RDMA, USB,
-i3c, DRM bugs.
+>     + people always using atomic replace
 
-3. Per-packet softirq RX: security_sock_rcv_skb only fires inside
-sk_filter_trim_cap, which UDP encap_rcv bypasses and L2/bridge protocols never
-reach. Covers Bluetooth softirq, bond, IPv6 softirq, TCP-MD5/AO timing leaks,
-etc.
+OTOH, these users don't need much change. They will just use
+replace_set =3D 1 for all live patches.
 
-4. Netfilter: config path is well-gated via security_netlink_send, but
-per-match callbacks, set GC, and flowtable cleanup have nothing. That's where
-most of the recent netfilter CVEs actually fire.
+Note that, I am not proposing to have replace_set =3D 1 to replace
+all live patches. It only needs to replace other live patches with
+replace_set =3D 1. The only change I am proposing (debating) here
+is to have replace_set =3D 0 as "no replace". However, if this still
+feels too confusing, or there are NOT many users in the "no
+replace" world, we can safely ignore this.
 
-5. Crypto subsystem + io_uring per-opcode: crypto/ has zero LSM hooks.
-
--- 
 Thanks,
-Sasha
+Song
