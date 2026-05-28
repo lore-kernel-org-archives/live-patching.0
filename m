@@ -1,30 +1,30 @@
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B6A1925BC;
-	Thu, 28 May 2026 08:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4F736729D;
+	Thu, 28 May 2026 08:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956608; cv=none; b=rXjdwQA6O2CrEEo8n9PjM/uMTJqGe2uFQqSKU2gPwimte0UqOIilw3GFGUMlALWIaWgCEdmV4WWaJZKaQ6lmzDCrcMYsPzXctp/LAalyErVFmucafA0atJiI8axtAU6Xfg+ERsr4JKPgbz4+NRJQXmptZiR99JrqMlOlIlaN11g=
+	t=1779956609; cv=none; b=XK1WNjECUeH6caKug3bfBtRlaLE+tNLcgf2AKPIMeBr2Lag1eNFdMbTQUMzfaVzOgC38/5kSb9ThoKmmIuKQfgvuLnpjA55wSLcLTx0baVL6c0imEZ7N2XO3Ke4vVgCxgcONZJv8JsY5iGrSu2RS3Aailxlyv4z4qyjALZgaPug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956608; c=relaxed/simple;
-	bh=+zdF7Wz1qSIbzWTC+Qaz5AvlBWMIhZZ0AbLYqA69WVM=;
+	s=arc-20240116; t=1779956609; c=relaxed/simple;
+	bh=P9tchkPn7nicuhH05c/nVuXpiXVPC63jUT8L+QwGhhE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q3xFPXzs32Bf2Y3vYxaDBztFhRI9YDbGdN9+/UsgsKBPVvjuKUIC0SCA5Zn6dSUsR72LeY9md4tM6AYTieknykkM+L/vM82K6JS7TR7uUo6A/3KA4YaE+5gtztf+40XPcj14bRzaL8LTntuUYg9U52mErrOkrkJdPl6OcYkAqxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=A8sNj5sV; arc=none smtp.client-ip=115.124.30.98
+	 MIME-Version; b=LNEN+YUnZM4Um3/A5jeugfKpE9Cs25JPddryNW8zrR7dkEKKM5wTSCYstnBWc6DOUcTAkHWjXqChOsTSeojX1dqgB4GX2n/YcWbKfsjqjtO4RwTgD3CbtX7xu+wzItzY+rZojPKwGywo2WCOxhmuh3UGq3Yg14iDPGjjB00jXuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=UXGvcZtu; arc=none smtp.client-ip=115.124.30.113
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="A8sNj5sV"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="UXGvcZtu"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1779956596; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=hx/IyZLsW3yP4Odj5A1dY32lM9lXE7p/KdxI82QGF2I=;
-	b=A8sNj5sVdQUKdJZyc52ek4L8WEJdPaqKIERckZPyiYNFgZrBR0zyQdN+Mnw2YWYWf+bMtnSu08ib6E8sUIXYj40ZmpVXN9kBl/J5Gqq8HKcs7qBhBsKQJQh8XTcJULwW2GElE3hjbldSZjiNWxII9fGegDGUVH1TMyLte4k+NNw=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R321e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X3lxQM3_1779956593;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lxQM3_1779956593 cluster:ay36)
+	t=1779956603; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=PWXhWzyCALmai/5XB1OyTOO1hzuVkcfr5CK2JaR3L3w=;
+	b=UXGvcZtuprzZYzzALiiTH1ZO+JzQU4Mn7lcUtJYpPUN2uNFBiy7BW0/zfz4Hko86Xq+dFXCtAJNEUVXyLhpui8BH1Mlsws/hQcl+3F0a+bNKBx830TPxQvlRW/S9iSwn7Xkp7f/yhOK2AbHk+/MeW+hwaoQ+XoAxnzo1Wzs9i4I=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X3lxQP5_1779956600;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lxQP5_1779956600 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Thu, 28 May 2026 16:23:14 +0800
+          Thu, 28 May 2026 16:23:21 +0800
 From: Wang Han <wanghan@linux.alibaba.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -60,9 +60,9 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-perf-users@vger.kernel.org
-Subject: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
-Date: Thu, 28 May 2026 16:23:03 +0800
-Message-ID: <20260528082310.1994388-2-wanghan@linux.alibaba.com>
+Subject: [PATCH v2 5/8] riscv: stacktrace: introduce stack-bound tracking helpers
+Date: Thu, 28 May 2026 16:23:07 +0800
+Message-ID: <20260528082310.1994388-6-wanghan@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
 References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
@@ -74,89 +74,290 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-patchable NOP area starts 8 bytes before the function symbol address.
-The __mcount_loc entries therefore point at the patchable NOP area
-associated with a function, while nm reports the function symbol at the
-entry address used for the function range check.
+A reliable unwinder needs to validate that every frame record it reads
+is fully contained in a known kernel stack, and it needs to refuse to
+walk back into a stack it has already left. Add the building blocks
+for that:
 
-After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
-applying that range check at build time. Without allowing entries just
-before the reported function address, the mcount sorter treats valid
-RISC-V ftrace callsites as invalid weak-function entries and writes
-them back as zero. The resulting kernel boots with no ftrace entries,
-breaking dynamic ftrace and users such as livepatch.
+  * struct stack_info / struct unwind_state in a new
+    asm/stacktrace/common.h, modelled on the arm64 reference
+    implementation.
+  * stackinfo_get_irq() / stackinfo_get_task() / stackinfo_get_overflow()
+    plus the corresponding on_*_stack() predicates in asm/stacktrace.h,
+    so callers can ask "is this object on stack X?" by stack kind
+    rather than open-coded address arithmetic.
+  * unwind_init_common(), unwind_find_stack() and
+    unwind_consume_stack() helpers that enforce the
+    forward-progress-only invariant required for reliability.
 
-The failure is silent during the final link because zeroing weak-function
-entries is an expected sorttable operation. At boot, those zero entries
-are skipped by ftrace_process_locs(), so the only obvious symptom is that
-the vmlinux ftrace table has lost valid callsites and ftrace users cannot
-attach to them.
+No existing user is wired up to these helpers in this commit; the
+unwinder switch comes in a follow-up. The header changes leave
+on_thread_stack() with the same semantics as before, just expressed in
+terms of the new helpers.
 
-CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
-state: it only checks that the __mcount_loc entries are in ascending
-order, which a fully zeroed table trivially satisfies. The original
-commit relied on this check and did not see the regression.
-
-On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-while ftrace reports zero usable entries and the early selftests fail:
-
-  [    0.000000] ftrace section at ffffffff8101da98 sorted properly
-  [    0.000000] ftrace: allocating 0 entries in 128 pages
-  [    0.054999] Testing tracer function: .. no entries found ..FAILED!
-  [    0.172407] tracer: function failed selftest, disabling
-  [    0.178186] Failed to init function_graph tracer, init returned -19
-
-Handle RISC-V like arm64 for the function-range check and allow
-patchable entries up to 8 bytes before the function address.
-
-With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-the vmlinux ftrace table is populated and dynamic ftrace still works:
-
-  [    0.000000] ftrace: allocating 46749 entries in 184 pages
-  [    0.051115] Testing tracer function: PASSED
-  [    1.283782] Testing dynamic ftrace: PASSED
-  [    6.275456] Testing tracer function_graph: PASSED
-
-Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
 Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 ---
- scripts/sorttable.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ arch/riscv/include/asm/stacktrace.h        |  65 ++++++++-
+ arch/riscv/include/asm/stacktrace/common.h | 159 +++++++++++++++++++++
+ 2 files changed, 222 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/include/asm/stacktrace/common.h
 
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index e8ed11c680c6..4c10e85bb5af 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -891,17 +891,21 @@ static int do_file(char const *const fname, void *addr)
- 	table_sort_t custom_sort = NULL;
+diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
+index b1495a7e06ce..bc87c4940379 100644
+--- a/arch/riscv/include/asm/stacktrace.h
++++ b/arch/riscv/include/asm/stacktrace.h
+@@ -3,8 +3,13 @@
+ #ifndef _ASM_RISCV_STACKTRACE_H
+ #define _ASM_RISCV_STACKTRACE_H
  
- 	switch (elf_map_machine(ehdr)) {
--	case EM_AARCH64:
- #ifdef MCOUNT_SORT_ENABLED
-+	case EM_AARCH64:
- 		sort_reloc = true;
- 		rela_type = 0x403;
--		/* arm64 uses patchable function entry placing before function */
-+		/* fallthrough */
-+	case EM_RISCV:
-+		/* arm64 and RISC-V place patchable entries before the function */
- 		before_func = 8;
-+#else
-+	case EM_AARCH64:
-+	case EM_RISCV:
- #endif
- 		/* fallthrough */
- 	case EM_386:
- 	case EM_LOONGARCH:
--	case EM_RISCV:
- 	case EM_S390:
- 	case EM_X86_64:
- 		custom_sort = sort_relative_table_with_data;
++#include <linux/percpu.h>
+ #include <linux/sched.h>
++#include <linux/sched/task_stack.h>
++
++#include <asm/irq_stack.h>
+ #include <asm/ptrace.h>
++#include <asm/stacktrace/common.h>
+ 
+ struct stackframe {
+ 	unsigned long fp;
+@@ -16,14 +21,70 @@ extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *re
+ extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+ 			   const char *loglvl);
+ 
+-static inline bool on_thread_stack(void)
++/*
++ * IRQ stack accessors
++ */
++static inline struct stack_info stackinfo_get_irq(void)
++{
++	unsigned long low = (unsigned long)raw_cpu_read(irq_stack_ptr);
++	unsigned long high = low + IRQ_STACK_SIZE;
++
++	return (struct stack_info) {
++		.low = low,
++		.high = high,
++	};
++}
++
++static inline bool on_irq_stack(unsigned long sp, unsigned long size)
++{
++	struct stack_info info = stackinfo_get_irq();
++
++	return stackinfo_on_stack(&info, sp, size);
++}
++
++/*
++ * Task stack accessors
++ */
++static inline struct stack_info stackinfo_get_task(const struct task_struct *tsk)
+ {
+-	return !(((unsigned long)(current->stack) ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
++	unsigned long low = (unsigned long)task_stack_page(tsk);
++	unsigned long high = low + THREAD_SIZE;
++
++	return (struct stack_info) {
++		.low = low,
++		.high = high,
++	};
++}
++
++static inline bool on_task_stack(const struct task_struct *tsk,
++				 unsigned long sp, unsigned long size)
++{
++	struct stack_info info = stackinfo_get_task(tsk);
++
++	return stackinfo_on_stack(&info, sp, size);
+ }
+ 
++/*
++ * Cast is necessary since current->stack is an opaque ptr.
++ */
++#define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1))
+ 
++/*
++ * Overflow stack accessors
++ */
+ #ifdef CONFIG_VMAP_STACK
+ DECLARE_PER_CPU(unsigned long [OVERFLOW_STACK_SIZE/sizeof(long)], overflow_stack);
++
++static inline struct stack_info stackinfo_get_overflow(void)
++{
++	unsigned long low = (unsigned long)raw_cpu_ptr(overflow_stack);
++	unsigned long high = low + OVERFLOW_STACK_SIZE;
++
++	return (struct stack_info) {
++		.low = low,
++		.high = high,
++	};
++}
+ #endif /* CONFIG_VMAP_STACK */
+ 
+ #endif /* _ASM_RISCV_STACKTRACE_H */
+diff --git a/arch/riscv/include/asm/stacktrace/common.h b/arch/riscv/include/asm/stacktrace/common.h
+new file mode 100644
+index 000000000000..87d6d40672f3
+--- /dev/null
++++ b/arch/riscv/include/asm/stacktrace/common.h
+@@ -0,0 +1,159 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * RISC-V common stack unwinder types and helpers.
++ *
++ * See: arch/arm64/include/asm/stacktrace/common.h for the reference
++ * implementation.
++ *
++ * Copyright (C) 2024
++ */
++#ifndef __ASM_RISCV_STACKTRACE_COMMON_H
++#define __ASM_RISCV_STACKTRACE_COMMON_H
++
++#include <linux/compiler.h>
++#include <linux/errno.h>
++#include <linux/types.h>
++
++#include <asm/stacktrace/frame.h>
++
++/**
++ * struct stack_info - describes the bounds of a stack.
++ *
++ * @low:  The lowest valid address on the stack.
++ * @high: The highest valid address on the stack.
++ */
++struct stack_info {
++	unsigned long low;
++	unsigned long high;
++};
++
++/**
++ * struct unwind_state - state used for robust unwinding.
++ *
++ * @fp:        The fp value in the frame record (or the real fp).
++ * @pc:        The ra value in the frame record (or the real ra).
++ *
++ * @stack:     The stack currently being unwound.
++ * @stacks:    An array of stacks which can be unwound.
++ * @nr_stacks: The number of stacks in @stacks.
++ */
++struct unwind_state {
++	unsigned long fp;
++	unsigned long pc;
++
++	struct stack_info stack;
++	struct stack_info *stacks;
++	int nr_stacks;
++};
++
++/**
++ * stackinfo_get_unknown() - Get an unknown stack_info.
++ *
++ * Return: a stack_info with low and high set to 0.
++ */
++static inline struct stack_info stackinfo_get_unknown(void)
++{
++	return (struct stack_info) {
++		.low = 0,
++		.high = 0,
++	};
++}
++
++/**
++ * stackinfo_on_stack() - Check whether an object is fully within a stack.
++ *
++ * @info: The stack to check against.
++ * @sp:   The base address of the object.
++ * @size: The size of the object.
++ *
++ * Return: true if the object is fully contained within the stack.
++ */
++static inline bool stackinfo_on_stack(const struct stack_info *info,
++				      unsigned long sp, unsigned long size)
++{
++	if (!info->low)
++		return false;
++
++	if (sp < info->low || sp + size < sp || sp + size > info->high)
++		return false;
++
++	return true;
++}
++
++/**
++ * unwind_init_common() - Initialize the common parts of the unwind state.
++ *
++ * @state: the unwind state to initialize.
++ */
++static inline void unwind_init_common(struct unwind_state *state)
++{
++	state->stack = stackinfo_get_unknown();
++}
++
++/**
++ * unwind_find_stack() - Find the accessible stack which entirely contains an
++ * object.
++ *
++ * @state: the current unwind state.
++ * @sp:    the base address of the object.
++ * @size:  the size of the object.
++ *
++ * Return: a pointer to the relevant stack_info if found; NULL otherwise.
++ */
++static inline struct stack_info *unwind_find_stack(struct unwind_state *state,
++						   unsigned long sp,
++						   unsigned long size)
++{
++	struct stack_info *info = &state->stack;
++
++	if (stackinfo_on_stack(info, sp, size))
++		return info;
++
++	for (int i = 0; i < state->nr_stacks; i++) {
++		info = &state->stacks[i];
++		if (stackinfo_on_stack(info, sp, size))
++			return info;
++	}
++
++	return NULL;
++}
++
++/**
++ * unwind_consume_stack() - Update stack boundaries so that future unwind steps
++ * cannot consume this object again.
++ *
++ * @state: the current unwind state.
++ * @info:  the stack_info of the stack containing the object.
++ * @sp:    the base address of the object.
++ * @size:  the size of the object.
++ *
++ * Stack transitions are strictly one-way, and once we've
++ * transitioned from one stack to another, it's never valid to
++ * unwind back to the old stack.
++ *
++ * Note that stacks can nest in several valid orders, e.g.
++ *
++ *   TASK -> IRQ -> OVERFLOW
++ *
++ * ... so we do not check the specific order of stack
++ * transitions.
++ */
++static inline void unwind_consume_stack(struct unwind_state *state,
++					struct stack_info *info,
++					unsigned long sp,
++					unsigned long size)
++{
++	struct stack_info tmp;
++
++	tmp = *info;
++	*info = stackinfo_get_unknown();
++	state->stack = tmp;
++
++	/*
++	 * Future unwind steps can only consume stack above this frame record.
++	 * Update the current stack to start immediately above it.
++	 */
++	state->stack.low = sp + size;
++}
++
++#endif /* __ASM_RISCV_STACKTRACE_COMMON_H */
 -- 
 2.43.0
 
