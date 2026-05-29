@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C791F38CFEF
-	for <live-patching@vger.kernel.org>; Fri, 29 May 2026 04:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F15221E097
+	for <live-patching@vger.kernel.org>; Fri, 29 May 2026 05:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780030489; cv=none; b=uuHzVMjQk3avlAV3j5w8/cdnF9a+c7wlIv8vyFlFff9U8lqFNjmzgJauFd94VL9uGyacukKmOtFHvKr2eIPciVTcot6BNydDqN38N9tPRjesPlIzY7RIMSzR0KccaqIvmvSVHsbrkDhTvrLxKxC1UqTcIrvv3kzgeY0y4P7oPw8=
+	t=1780031821; cv=none; b=j0GLnukZfM5X16z24xpDsGdqo6hWVE8rKilOfcsvp1Js/pWhVPFXvxnScXy26KCkQP/w6NimjgQV9p19VbyXNUFWlkhvUWBY0aYYZYAobDJin3jvzYDBd3MMXIviZl31tk1TzNzmB2/7dAy97rvv/K1cvAjiqZItRVLZ2NGae7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780030489; c=relaxed/simple;
-	bh=iJmkvm378Wwp5C23b+GhypE1Ge1/iKwTwaga5yWq+1I=;
+	s=arc-20240116; t=1780031821; c=relaxed/simple;
+	bh=gYWyYnsHw+slL4itxOegm9AKy1tA2huh9bBu/xlD/+0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KvDxEyjGa94+9B8beL2nNv/Ufc7x49AiTMkdkm3l+Sm3+zoy+8BfUi9BkEmUps5qmHf3NtFPI9oyJns0nI0ncyxY03g8lRGDz+zRmHP7xx2zvr/aML9oQ7pGQSZ80ffo8jzszyoQUjCve4zag7BS5+iz/7hFLUAAjpcdrGrsp1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TxAXp0SU; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uVAI+kym/S06lYcfx/3cQ6H0GqXJPe4JS/vX21z2rtAGPSMGDvdFE1ArAqEEtCNeySDPjzv0mqd9jqMfNcen9NhLK/ccF7J6oN4Jis5nEP75u5NW6AwiAhJymyNCvNv0q4jdVT6Y8UkDQXsOT7IedYBxl8MoZSCri/ZMOg+7K08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XX4CZiej; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TxAXp0SU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22791F00893;
-	Fri, 29 May 2026 04:54:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XX4CZiej"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA391F00893;
+	Fri, 29 May 2026 05:16:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780030487;
-	bh=kKahT91E6JfACw+5Y2h7FjJK0MMqfYxpNtiL3vV9uNg=;
+	s=k20260515; t=1780031820;
+	bh=Vb+jnipy2ReA35yJuhRiE2nXBGEC6nePk5SjXKwn3ro=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TxAXp0SUf2Wcx/O2XWlxS+t1kcw1C5Hy84u0dwgGh64Juc6OBv+EBZxAJzQlYNAp/
-	 ap1WOwWNFhS1tNfT/sr1Ks6v1goGfvECgz0Oae0qW/fbH2YO1qzd7x+8+ccBJcmdB6
-	 ZBl+YAPW1pwedN9Qz8J2q7nmnLzEcEWpYGtGzbwp5ZwRUHSJKJJ5dS647i806lbTBF
-	 dkaUjzuibG/mWej5c0vuxe/Yz7KCqnpPX1ZvpKRWJTcZlafvcorpQcmltilGxCRsz8
-	 WbVJ2QILzveNVEtdGko86Bsi4rJZn31J22W7IYhlItjWzcdgy3PSWmBowMyexGULos
-	 8jRvcOFBsxr2g==
+	b=XX4CZiej8vbOuNIiBh8q92ssmabgnbwxu8zK58SqR+B7x1yLGuB0WLZtVip96ToKy
+	 aWah6msFSy9eawvvhOXvXFjfS+GMHdF/OtWUHzVoD8hMuSxBpM4+k6q4PmwtUs1rbk
+	 ePSZ4OcTQQ9h8ceFkweMbiLjv9NocJbVbnz4LcujFy1d2UrV0u+8275/iXasCdDWUH
+	 v1js/z1zZIXeHKl3ZNBOJoKvPqvvouRkt5E4ne5lM4GbB3ke/lqpT1tkTl7cTN9RWm
+	 onQGN4zTNpoIpuU6cdeAJvwZSUQsisAtDbA4LJX2WwpU6ZdhnH1MQn9T9zZ7GPFVL0
+	 CUaGo1bh8u0Rg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/4] livepatch: deprecate stack_order
+Subject: Re: [PATCH v2 4/4] selftests/livepatch: Update tests for
+ replace_set
 Reply-To: sashiko-reviews@lists.linux.dev
-To: song@kernel.org, jpoimboe@kernel.org, joe.lawrence@redhat.com, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com
-Cc: live-patching@vger.kernel.org, "Yafang Shao" <laoar.shao@gmail.com>
-In-Reply-To: <20260529034542.68766-4-laoar.shao@gmail.com>
-References: <20260529034542.68766-4-laoar.shao@gmail.com>
+To: jikos@kernel.org, mbenes@suse.cz, song@kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, jpoimboe@kernel.org
+Cc: "Yafang Shao" <laoar.shao@gmail.com>, live-patching@vger.kernel.org
+In-Reply-To: <20260529034542.68766-5-laoar.shao@gmail.com>
+References: <20260529034542.68766-5-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 29 May 2026 04:54:46 +0000
-Message-Id: <20260529045446.B22791F00893@smtp.kernel.org>
+Date: Fri, 29 May 2026 05:16:59 +0000
+Message-Id: <20260529051659.BEA391F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -45,94 +46,64 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Critical] The commit entirely removes the `stack_order` sysfs attribute =
-while only marking it as `<deprecated>` in the ABI documentation, causing i=
-mmediate backwards compatibility breakage and contradicting documentation g=
-uidelines.
+- [Medium] The 'atomic replace livepatch' test case in test-livepatch.sh wa=
+s completely removed instead of being updated, resulting in lost test cover=
+age and leaving behind dead variables.
 --
 
-commit 041b2dbba1a7397626104dd773fc1f37228d382c
+commit 99bb60c2ba8319ec21289c482f1ea304e282396c
 Author: Yafang Shao <laoar.shao@gmail.com>
 
-livepatch: deprecate stack_order
+selftests/livepatch: Update tests for replace_set
 
-This commit deprecates the stack_order sysfs attribute for atomic-replace
-livepatches, since a single function can only be modified by a unique
-replace_set.
+This commit updates the livepatch selftests to use "replace_set" instead
+of "replace". It configures different livepatches to share or have different
+replace_sets to test atomic and non-atomic replace behaviors.
 
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-livepatch b/Documenta=
-tion/ABI/testing/sysfs-kernel-livepatch
-> index 6d75235a6a2e4..fddad93dba797 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-livepatch
-> +++ b/Documentation/ABI/testing/sysfs-kernel-livepatch
-> @@ -62,6 +62,7 @@ Description:
->  		are applied to the system. If multiple live patches modify the same
->  		function, the implementation with the biggest 'stack_order' number
->  		is used, unless a transition is currently in progress.
-> +		<deprecated>
-
+> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/=
+testing/selftests/livepatch/test-livepatch.sh
+> index c44c5341a2f1e..042999856267f 100755
+> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
+> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
 [ ... ]
-
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 969fea2a92631..6d65f839f4420 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-[ ... ]
-> @@ -457,38 +456,15 @@ static ssize_t replace_set_show(struct kobject *kob=
-j,
->  	return sysfs_emit(buf, "%u\n", patch->replace_set);
->  }
+> @@ -108,96 +108,6 @@ livepatch: '$MOD_LIVEPATCH1': completing unpatching =
+transition
+>  livepatch: '$MOD_LIVEPATCH1': unpatching complete
+>  % rmmod $MOD_LIVEPATCH1"
 > =20
-> -static ssize_t stack_order_show(struct kobject *kobj,
-> -				struct kobj_attribute *attr, char *buf)
-> -{
-> -	struct klp_patch *patch, *this_patch;
-> -	int stack_order =3D 0;
 > -
-> -	this_patch =3D container_of(kobj, struct klp_patch, kobj);
+> -# - load a livepatch that modifies the output from /proc/cmdline and
+> -#   verify correct behavior
+> -# - load two additional livepatches and check the number of livepatch mo=
+dules
+> -#   applied
+> -# - load an atomic replace livepatch and check that the other three modu=
+les were
+> -#   disabled
+> -# - remove all livepatches besides the atomic replace one and verify tha=
+t the
+> -#   atomic replace livepatch is still active
+> -# - remove the atomic replace livepatch and verify that none are active
 > -
-> -	mutex_lock(&klp_mutex);
+> -start_test "atomic replace livepatch"
 > -
-> -	klp_for_each_patch(patch) {
-> -		stack_order++;
-> -		if (patch =3D=3D this_patch)
-> -			break;
-> -	}
-> -
-> -	mutex_unlock(&klp_mutex);
-> -
-> -	return sysfs_emit(buf, "%d\n", stack_order);
-> -}
-> -
->  static struct kobj_attribute enabled_kobj_attr =3D __ATTR_RW(enabled);
->  static struct kobj_attribute transition_kobj_attr =3D __ATTR_RO(transiti=
-on);
->  static struct kobj_attribute force_kobj_attr =3D __ATTR_WO(force);
->  static struct kobj_attribute replace_set_kobj_attr =3D __ATTR_RO(replace=
-_set);
-> -static struct kobj_attribute stack_order_kobj_attr =3D __ATTR_RO(stack_o=
-rder);
->  static struct attribute *klp_patch_attrs[] =3D {
->  	&enabled_kobj_attr.attr,
->  	&transition_kobj_attr.attr,
->  	&force_kobj_attr.attr,
->  	&replace_set_kobj_attr.attr,
-> -	&stack_order_kobj_attr.attr,
->  	NULL
->  };
+> -load_lp $MOD_LIVEPATCH1
 
-[Severity: Critical]
-The commit message and documentation state that the stack_order attribute
-is being deprecated, but this code completely removes the attribute. Does
-this abruptly break ABI compatibility for userspace tools that expect this
-sysfs file to exist?
+[Severity: Medium]
+Was this test case intentionally removed completely instead of being update=
+d for
+the new replace_set semantics?
 
-Normally, deprecating an interface requires keeping it around for a
-transition period (perhaps returning a dummy value) rather than deleting
-it immediately. Also, if it were actually removed, shouldn't the ABI
-documentation be moved to the removed/ directory instead of just appending
-<deprecated> to the existing entry?
+The commit message does not mention removing this test. This removal causes=
+ a
+loss of test coverage that previously verified an atomic replace successful=
+ly
+disables multiple existing livepatches.
+
+Additionally, removing this test leaves the script variables MOD_LIVEPATCH2
+and MOD_LIVEPATCH3 unused in test-livepatch.sh. Could this test be adapted
+to use replace_set instead?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260529034542.6876=
-6-1-laoar.shao@gmail.com?part=3D3
+6-1-laoar.shao@gmail.com?part=3D4
