@@ -1,101 +1,155 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0125939B4BB;
-	Wed,  3 Jun 2026 07:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2144611EE
+	for <live-patching@vger.kernel.org>; Wed,  3 Jun 2026 13:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780470896; cv=none; b=IBeXSs6xJG59AOmqDrJODvfoF8+kfUEx979phQw1JrjKOTxfha8quamC7tflG6hnKw7G5a3iN1U1QMl1qDTe0IYxYMEOnNYhvC5oE+7hyr9A2+OJ8ijKE0UEvvoOoGNiiSiGh+uVJIlrnDVpaWGoiKuZlEng0V+2Ojx9s5mkLds=
+	t=1780492187; cv=none; b=gfRZB/vADe2wX/fg0WID+tHQmUMyhRM5WbfYgnQAxpFXvMGqhXHjGysyqriPIhcgEV1rx+4NdsTlp+pfeIPqM9sqGGYZPBxlcOZgLZyZ4KfxxVqLnypNr0ABrmhfCKOnMiWghocAEv9p8U/LYesR0I+I2wVldvRi+xnRfHtZJ3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780470896; c=relaxed/simple;
-	bh=rDxOehn6sudiAxRrHRT66Kpef5+QJrVaK09yRPwMOOM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jGpxF5YyVAMIYOIktPXj4SsNp9uEQsWF9MHnB1wjMgM6+YzXDRVoF4JxCSKa95KoCRC4kqthhzn+Sjim3kaGvzgexrUfGVjcKAod19N6pNsOlJGL2HWM+SyI5hMirPqJmV2AB9paWi3BEM2qWk4n9PdliKkyksDk1g/cB9N6qmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gl6upFNn; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1780492187; c=relaxed/simple;
+	bh=obYxKfMdRgtW8BEH4IjaawQvf3rPgPG9+RmoM6JlSQs=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=V5qJoK5rxJxDp+fmQOBb28a7TQyUlgP+xIkyINwlfXZk+VZVZSl765idHH6FKe7+TUV53jiwxRXcC1nBQ6FhNUI0/FZFH81W4xFf8vrsSa8vs4gBX4mzxLvCnhUUf1yRWNNcj+87P87YzmKOZ9J2e+fjBnI1GoSaJI4ySadJwtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CvalLuIr; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=CBmU6Mkp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=m9ZlgGdF; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=v9XfewCk; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gl6upFNn"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1780470884; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=S3SFKFoWcboEPyPNGOUmpMlqfzFH7srYWpl0FUhqNPI=;
-	b=gl6upFNnzDhHgvU+qiSg9Y/QA3GA1MuqGKfxArPk75YFM4ejp3tz97Nv9GY9erqV8pK/6XqCI6tCPEw7XwqncUpINiDz52JKcyE7ojWOLYeh6EVbNH7Z2otNhFCdFhLDMZsEno22oyOEwF7OB3wRM4SJ14Rz0NqsFViDdTNexQU=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0X46a5-T_1780470878;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X46a5-T_1780470878 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 03 Jun 2026 15:14:42 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: wanghan@linux.alibaba.com
-Cc: acme@kernel.org,
-	alex@ghiti.fr,
-	andybnac@gmail.com,
-	aou@eecs.berkeley.edu,
-	bjorn@rivosinc.com,
-	catalin.marinas@arm.com,
-	conor.dooley@microchip.com,
-	cp0613@linux.alibaba.com,
-	debug@rivosinc.com,
-	jikos@kernel.org,
-	joe.lawrence@redhat.com,
-	jpoimboe@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	mark.rutland@arm.com,
-	mbenes@suse.cz,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	palmer@dabbelt.com,
-	peterz@infradead.org,
-	pjw@kernel.org,
-	pmladek@suse.com,
-	puranjay@kernel.org,
-	rostedt@goodmis.org,
-	shuah@kernel.org
-Subject: Re: [PATCH 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
-Date: Wed,  3 Jun 2026 15:14:29 +0800
-Message-ID: <20260603071430.59794-1-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
-References: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CvalLuIr";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="CBmU6Mkp";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="m9ZlgGdF";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="v9XfewCk"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 74A4F6A96D;
+	Wed,  3 Jun 2026 13:09:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780492183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jk7etxi20eTchK/Hm1eqIXIhNDaRqEyTR3r1YTY1oPU=;
+	b=CvalLuIrGezgaDjhUr6LsbyskttrxdfEiENKmDg3TSmcthtg4WuPH178YG+XCLgraGAB0r
+	vZfRvcWEMzt/fXF/P1uIZ2elF+Yj3Zqki54mKLeDSgh8w4+C1YtWLLjG6gC7IDR+RaQNo2
+	NiFChaOIe2MPA9LwogcCNM9KggORr84=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780492183;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jk7etxi20eTchK/Hm1eqIXIhNDaRqEyTR3r1YTY1oPU=;
+	b=CBmU6MkpCnfMzXYEslK6qgW3Mgwc6xh6PXOlINJOG9/PHBZzi5obJ7Zt3WnkvKRJXbmfSp
+	ThCieRryvgVo0/Bw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=m9ZlgGdF;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=v9XfewCk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780492182; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jk7etxi20eTchK/Hm1eqIXIhNDaRqEyTR3r1YTY1oPU=;
+	b=m9ZlgGdFiAHgNbplRLh3dw9sPUrbMiDLNVmpLQPPvnkLPXphCpY8mVA8nNxp6o00OHaOQm
+	Ss8M0xSnEwPAcyiXPDhQbOmalke9B/UBQgQTZtXiCZhpw1O4MYts2xRzTAetXpMfg8JC3Q
+	98VwU9ceuPJqZSDSP+NxMokVfJvzXqs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780492182;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jk7etxi20eTchK/Hm1eqIXIhNDaRqEyTR3r1YTY1oPU=;
+	b=v9XfewCkE1/Xh3J/AJ9y9y5C9yaoSJOoJPyzR9NcraX9GZFw1F+hI3cWVFlObxgUU1QtVu
+	nqdWs+6OQAeaSBAw==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] selftests/livepatch: fix resource leak in
+ test_klp_syscall init error path
+From: Miroslav Benes <mbenes@suse.cz>
+To: Rui Qi <qirui.001@bytedance.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+ joe.lawrence@redhat.com, shuah@kernel.org, live-patching@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260602124509.365996-1-qirui.001@bytedance.com>
+References: <20260602124509.365996-1-qirui.001@bytedance.com>
+Date: Wed, 03 Jun 2026 15:09:37 +0200
+Message-Id: <178049217756.69035.11980890855635035855.b4-review@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=859; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=obYxKfMdRgtW8BEH4IjaawQvf3rPgPG9+RmoM6JlSQs=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiwF9Ukn534rmr03sOfo5vUVB/+1GZx3jXz29EfaayPTD
+ b+XML7438noz8LAyMFgKabI8nqvs5zhlFwDzep3d2EGsTKBTJEWaWAAAhYGvtzEvFIjHSM9U21D
+ PUMgQ8eIgYtTAKZ6aTb7//Lt8Wp//3MUhHRuk9zJbi1llyj7ISXma5+s7rwEi8sKNq1LO7bwXSx
+ fE3k4Wst+vwvbxlNH8ls+Wn9nyzz9z23yQ73Ec4asQk/57uy7OUtwyUzvDrErLa5Cv4sFg8z5NL
+ 3fWbZ+/ZR5RPntXoOQY8ziJ4QtDzSaKtp/m6Rm78ZgcF4n353hW9J29vRFCnzTzP5xPPqwydbof
+ Lb/KZ5l36YHCP/J+Cs2obpityCTb4PD5fMSa4P0FC4dc9r+p82oqZXblHnFww/P5jyaszq64fTT
+ XsaTaXxrlBTimsqzPyZ+inv93nnCcqYvC6on2x8wuTfzhb2q0/3z7CsK3mpOZmPZEr5/5vF7FdN
+ fL1vGAgA=
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 74A4F6A96D
+X-Spam-Flag: YES
+X-Spam-Score: 17.36
+X-Spam-Level: *****************
+X-Rspamd-Action: add header
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [17.36 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_SPAM_SHORT(2.97)[0.989];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DIRECT_TO_MX(0.00)[b4 0.15.2];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bytedance.com:email,suse.cz:dkim,localhost.localdomain:helo]
+X-Spam: Yes
 
-On Wed, 27 May 2026 20:35:23 +0800, wanghan@linux.alibaba.com wrote:
+On Tue, 02 Jun 2026 20:45:09 +0800, Rui Qi <qirui.001@bytedance.com> wrote:
+> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> index 0630ffd9d9a1..d631acae48b9 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+> @@ -109,7 +109,12 @@ static int livepatch_init(void)
+>  	 */
+>  	npids = npids_pending;
+>  
+> -	return klp_enable_patch(&patch);
+> +	ret = klp_enable_patch(&patch);
+> +	if (ret) {
+> +		sysfs_remove_file(klp_kobj, &klp_attr.attr);
+> +		kobject_put(klp_kobj);
+> +	}
+> +	return ret;
 
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-> 
->   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->   [    0.000000] ftrace: allocating 0 entries in 128 pages
->   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->   [    0.172407] tracer: function failed selftest, disabling
->   [    0.178186] Failed to init function_graph tracer, init returned -19
-> 
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-> 
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-> 
->   [    0.000000] ftrace: allocating 46749 entries in 184 pages
->   [    0.051115] Testing tracer function: PASSED
->   [    1.283782] Testing dynamic ftrace: PASSED
->   [    6.275456] Testing tracer function_graph: PASSED
-> 
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
+Is sysfs_remove_file() needed? I think that kobject_put() should remove
+it automatically since the object is bound to sysfs.
 
-Oops, sorry for missing that. Thanks for the quick fix!
+-- 
+Miroslav
 
-Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
