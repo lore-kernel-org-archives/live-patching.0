@@ -1,133 +1,101 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C4B283FCF;
-	Wed,  3 Jun 2026 02:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0125939B4BB;
+	Wed,  3 Jun 2026 07:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780452653; cv=none; b=Xj0l9Px7x3h0iRb97l+x48cNVj5r3Vq0EcPwSpgKD67ltPHv1ooIz+LITpeQRKawhuu81K0NIz5cGuOkiqMEeHPLQkf4jQdsSaMew3tSxx0hrNKwEnT50n+z3HXPKgQLxfN3p6Em2YuDlsucNpL0xmGPh+dKP4g4eECkKyHiSEg=
+	t=1780470896; cv=none; b=IBeXSs6xJG59AOmqDrJODvfoF8+kfUEx979phQw1JrjKOTxfha8quamC7tflG6hnKw7G5a3iN1U1QMl1qDTe0IYxYMEOnNYhvC5oE+7hyr9A2+OJ8ijKE0UEvvoOoGNiiSiGh+uVJIlrnDVpaWGoiKuZlEng0V+2Ojx9s5mkLds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780452653; c=relaxed/simple;
-	bh=sXwvZ3wYOxFDQXt0kfCdHokeQDrQ2QizOVau/+esg4M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qWDWxz6AiV8iCBXj/A6DFAq9zYy+GFSrApi7UcseFA/59ubesf7KQyK2iqbPKGGOO+00QCgHNnTF6OG+Mgt68iZCaeH0c0oJLREPjsl6O/HYT8BPPxm2L45R9TWLKuTJeJaWEhZDtI9km5xvTD0UZUaclr+bFhgAKxlqv6X8svU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PdQ9892K; arc=none smtp.client-ip=115.124.30.119
+	s=arc-20240116; t=1780470896; c=relaxed/simple;
+	bh=rDxOehn6sudiAxRrHRT66Kpef5+QJrVaK09yRPwMOOM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jGpxF5YyVAMIYOIktPXj4SsNp9uEQsWF9MHnB1wjMgM6+YzXDRVoF4JxCSKa95KoCRC4kqthhzn+Sjim3kaGvzgexrUfGVjcKAod19N6pNsOlJGL2HWM+SyI5hMirPqJmV2AB9paWi3BEM2qWk4n9PdliKkyksDk1g/cB9N6qmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gl6upFNn; arc=none smtp.client-ip=115.124.30.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PdQ9892K"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gl6upFNn"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1780452649; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=Jv3cJulouSWGCvGi6TS1IMCaE/rqytDPu3rilFU0XAM=;
-	b=PdQ9892KisRjKniNqwNvBrPBbRq95IfB9m4CDMSoqRaJtuAVVn0WhQNcM5u5UjO5axes7st/Dz3DfepyMAEiSF/KRgCj3uX6niBrXtSvXhKicchdpXFj4vfXLoU4qir6AgvEifNR8+X9DQgBeg50mjCS5k+cwvqfd+e54wK6boQ=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045133197;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X45l.8N_1780452644;
-Received: from 30.246.180.204(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X45l.8N_1780452644 cluster:ay36)
+	t=1780470884; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=S3SFKFoWcboEPyPNGOUmpMlqfzFH7srYWpl0FUhqNPI=;
+	b=gl6upFNnzDhHgvU+qiSg9Y/QA3GA1MuqGKfxArPk75YFM4ejp3tz97Nv9GY9erqV8pK/6XqCI6tCPEw7XwqncUpINiDz52JKcyE7ojWOLYeh6EVbNH7Z2otNhFCdFhLDMZsEno22oyOEwF7OB3wRM4SJ14Rz0NqsFViDdTNexQU=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R611e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0X46a5-T_1780470878;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X46a5-T_1780470878 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Wed, 03 Jun 2026 10:10:47 +0800
-Message-ID: <6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-Date: Wed, 3 Jun 2026 10:10:44 +0800
+          Wed, 03 Jun 2026 15:14:42 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: wanghan@linux.alibaba.com
+Cc: acme@kernel.org,
+	alex@ghiti.fr,
+	andybnac@gmail.com,
+	aou@eecs.berkeley.edu,
+	bjorn@rivosinc.com,
+	catalin.marinas@arm.com,
+	conor.dooley@microchip.com,
+	cp0613@linux.alibaba.com,
+	debug@rivosinc.com,
+	jikos@kernel.org,
+	joe.lawrence@redhat.com,
+	jpoimboe@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	mark.rutland@arm.com,
+	mbenes@suse.cz,
+	mhiramat@kernel.org,
+	mingo@redhat.com,
+	namhyung@kernel.org,
+	palmer@dabbelt.com,
+	peterz@infradead.org,
+	pjw@kernel.org,
+	pmladek@suse.com,
+	puranjay@kernel.org,
+	rostedt@goodmis.org,
+	shuah@kernel.org
+Subject: Re: [PATCH 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
+Date: Wed,  3 Jun 2026 15:14:29 +0800
+Message-ID: <20260603071430.59794-1-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
+References: <20260527123530.2593918-2-wanghan@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>,
- Conor Dooley <conor.dooley@microchip.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
- <20260528082310.1994388-2-wanghan@linux.alibaba.com>
- <0a913398-3d0c-472e-89c4-062052eae04d@linux.alibaba.com>
- <20260601095746.70c01d24@fedora>
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260601095746.70c01d24@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+On Wed, 27 May 2026 20:35:23 +0800, wanghan@linux.alibaba.com wrote:
 
-
-On 6/1/26 9:57 PM, Steven Rostedt wrote:
-> On Mon, 1 Jun 2026 14:17:08 +0800
-> Shuai Xue <xueshuai@linux.alibaba.com> wrote:
+> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
+> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
+> while ftrace reports zero usable entries and the early selftests fail:
 > 
->>> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
->>> index e8ed11c680c6..4c10e85bb5af 100644
->>> --- a/scripts/sorttable.c
->>> +++ b/scripts/sorttable.c
->>> @@ -891,17 +891,21 @@ static int do_file(char const *const fname, void *addr)
->>>    	table_sort_t custom_sort = NULL;
->>>    
->>>    	switch (elf_map_machine(ehdr)) {
->>> -	case EM_AARCH64:
->>>    #ifdef MCOUNT_SORT_ENABLED
->>> +	case EM_AARCH64:
->>>    		sort_reloc = true;
->>>    		rela_type = 0x403;
->>> -		/* arm64 uses patchable function entry placing before function */
->>> +		/* fallthrough */
->>> +	case EM_RISCV:
->>> +		/* arm64 and RISC-V place patchable entries before the function */
->>>    		before_func = 8;
->>
->> Nit: The shared comment now sits under `case EM_RISCV:` but the two
->> lines above it (sort_reloc / rela_type = 0x403) are strictly
->> arm64-only — they configure the RELA-based weak-function fixup that
->> RISC-V does not need. On a quick read it is easy to wonder if RISC-V
->> is implicitly inheriting that path. Splitting the comments would
->> help, e.g.:
->>
->>          case EM_AARCH64:
->>              /* arm64 needs RELA-based weak-function fixup */
->>              sort_reloc = true;
->>              rela_type = 0x403;
->>              /* fallthrough */
->>          case EM_RISCV:
->>              /* arm64 and RISC-V place patchable entries before the function */
->>              before_func = 8;
+>   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
+>   [    0.000000] ftrace: allocating 0 entries in 128 pages
+>   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
+>   [    0.172407] tracer: function failed selftest, disabling
+>   [    0.178186] Failed to init function_graph tracer, init returned -19
 > 
-> Makes sense.
+> Handle RISC-V like arm64 for the function-range check and allow
+> patchable entries up to 8 bytes before the function address.
 > 
-> Care to send a v3?
+> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
+> the vmlinux ftrace table is populated and dynamic ftrace still works:
 > 
-> -- Steve
+>   [    0.000000] ftrace: allocating 46749 entries in 184 pages
+>   [    0.051115] Testing tracer function: PASSED
+>   [    1.283782] Testing dynamic ftrace: PASSED
+>   [    6.275456] Testing tracer function_graph: PASSED
+> 
+> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
 
-Hi, Steve,
+Oops, sorry for missing that. Thanks for the quick fix!
 
-It's a pure comment cosmetic, not worth a respin on its own. But for the
-rest of the feedback on this series (the frame-record metadata contract
-in patch 2 and the dead state->regs field / Call Trace output change in
-patch 6) are the ones actually worth a new version.
-
-Just to get the routing straight: are you planning to pick this one up
-through the tracing tree on its own?
-
-It feels like a good candidate for that -- it's an independent
-regression fix (Fixes: 0ca1724b56af) that breaks *all* RISC-V dynamic
-ftrace, not just livepatch, so it shouldn't have to wait on the rest of
-the livepatch series.
-
-Thanks.
-Shuai
-
-
+Reviewed-by: Chen Pei <cp0613@linux.alibaba.com>
