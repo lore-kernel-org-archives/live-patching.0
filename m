@@ -1,32 +1,32 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCB43DC4DD
-	for <live-patching@vger.kernel.org>; Thu,  4 Jun 2026 06:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E6E3DA5D6
+	for <live-patching@vger.kernel.org>; Thu,  4 Jun 2026 06:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780556074; cv=none; b=U44QEh9EpZmvWpydpdQZxEvW8ner83kwT9bwFc5bzi1A0wiHtRu9tAuabZ5L4q9gHtlHpzcak7jrzQz/Fij4QiSrPKKt2RuVR1j6QjgcRJC9+E12R4YMJAf5Vsx8avlrAtTduJEgZou/THuVLTOcmTlWtA/8y8varJ9xK2hf8QY=
+	t=1780556112; cv=none; b=mrxJxsJ3JRa7t44ZUxbBWuid7ZHS8pzeSrWggxFlQ68KnNM918mPEUJmwH8IKL/QMguWcR8+Nj59wftLk3ZLwQmhPoKxPMMZfSf23r9zMq8hZ7AoYzGsKwCvKraD+xdozzUPjIvSroAOsjSKg29X1jEoMKHgRoArTpMZvxK3RWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780556074; c=relaxed/simple;
-	bh=CEIAnlvL0rhnO6ZzKUdVEs7J/+earQCHbO4otn4jgzY=;
+	s=arc-20240116; t=1780556112; c=relaxed/simple;
+	bh=oLaUr+FB9VSsAuBRiSWaPzIJPJ7H5RqIcSuL90V25FQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=b8MWkp/ZyM9V1Iybfa2123LK3d3e9DSE4Lm4PrL46+F1Acbgd8W0wzff6eNLu1GgTa+dEvd4VVuweeP9jONm02tjlC5YVDhNeDtf3KxFreT0juwPCgTAadey9SfY+gjcdIE4hR/cxTd5iTFHVVUvWohLtXZaLqBpBCEqtKqjofE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i0TTT6EX; arc=none smtp.client-ip=91.218.175.174
+	 MIME-Version; b=YhXlSp9TZPPxrSGonpO6KpGOizvZPbL5XwZcvLV8miorK/K6BpYotNOPnytPKePLKGggioe/n4uc/FdXLEXHM8UuncUo0HzYLtpVB7yf8Bi7hVKdu+fka2zISROKRBI/PMN4j2CDJpYW409aId+d7IzHuTJivXaM0OfnEve6CLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tdnOfxvD; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i0TTT6EX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tdnOfxvD"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780556070;
+	t=1780556106;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BZal1eUFT5zCvAjnUL3zj5MffVR6wFyaxSxRBYF+dwo=;
-	b=i0TTT6EXqtPFUHsFVCn/SBtfpu0yFK3pTonWomD5VpGQSe8iUE8ITtZJkePGIHI8w3YgCh
-	O+I2moKQ1Ma9gBTfgpLg1jMZj0LFm/AOGLY+dNi6et8p2zC0dDZSzcEpAN+4amxlghO1I9
-	SRezudzNIz6C3Cu85aPphlOVWAgHUDU=
+	bh=svJYdefjY/nnU0nlx6aQgjbpTVvVYZOsKKX0wUiaSj0=;
+	b=tdnOfxvDgxTn6fQkXk2LW/QfycMkY+owjw4QTRPOcWLfnrvl3pox0zq+UNndIX99OR/tj8
+	Acw4eyINDBioJiju8gexjls2B0K2kgKKuZYEuhMT4AlkdB/+Gpa38tJPi2gA7syUN0WVnw
+	BbAgK2RyqU8WkrIP7+DmoYoBj/Pk+Zs=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -49,9 +49,9 @@ Cc: kernel@xen0n.name,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 1/8] LoongArch: Add livepatch build (KLP) support
-Date: Thu,  4 Jun 2026 14:53:10 +0800
-Message-Id: <20260604065317.219777-2-dongtai.guo@linux.dev>
+Subject: [PATCH 2/8] objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+Date: Thu,  4 Jun 2026 14:53:11 +0800
+Message-Id: <20260604065317.219777-3-dongtai.guo@linux.dev>
 In-Reply-To: <20260604065317.219777-1-dongtai.guo@linux.dev>
 References: <20260604065317.219777-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -65,42 +65,31 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-This allows automated livepatch module generation using objtool.
+Implement arch_adjusted_addend() to return the relocation addend value.
 
 Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/Kconfig | 1 +
- tools/objtool/Makefile | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ tools/objtool/arch/loongarch/decode.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 3b042dbb2c41..1dbf51ba9d6a 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -159,6 +159,7 @@ config LOONGARCH
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
-+	select HAVE_KLP_BUILD
- 	select HAVE_KPROBES
- 	select HAVE_KPROBES_ON_FTRACE
- 	select HAVE_KRETPROBES
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 94aabeee9736..83d645675ed9 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -8,7 +8,8 @@ ifeq ($(SRCARCH),x86)
- endif
+diff --git a/tools/objtool/arch/loongarch/decode.c b/tools/objtool/arch/loongarch/decode.c
+index 6cd288150f49..674e4efd138f 100644
+--- a/tools/objtool/arch/loongarch/decode.c
++++ b/tools/objtool/arch/loongarch/decode.c
+@@ -34,6 +34,11 @@ s64 arch_insn_adjusted_addend(struct instruction *insn, struct reloc *reloc)
+ 	return reloc_addend(reloc);
+ }
  
- ifeq ($(SRCARCH),loongarch)
--	BUILD_ORC	   := y
-+	BUILD_ORC    := y
-+	ARCH_HAS_KLP := y
- endif
- 
- ifeq ($(SRCARCH),arm64)
++u64 arch_adjusted_addend(struct reloc *reloc)
++{
++	return reloc_addend(reloc);
++}
++
+ bool arch_pc_relative_reloc(struct reloc *reloc)
+ {
+ 	return false;
 -- 
 2.25.1
 
