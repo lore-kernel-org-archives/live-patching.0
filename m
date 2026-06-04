@@ -1,113 +1,84 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-1-112.ptr.blmpb.com (va-1-112.ptr.blmpb.com [209.127.230.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDB93DBD7C
-	for <live-patching@vger.kernel.org>; Thu,  4 Jun 2026 06:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B633859FF
+	for <live-patching@vger.kernel.org>; Thu,  4 Jun 2026 08:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780556227; cv=none; b=coTsSTCZD8EDwDp+NU+0K6+HCZqOJFeEUvUMuWvnovKjfSISZ9Nfh+Db1fYjBO1bh3zZfelprgiOHaiQATLpmcRjdDUe05HcI0cnpkqJlTk+JchmIcEgRisH75qAAPS++wze6GsrpVB1wbaJrxuF8woVWb2rBM+WPWwmKly//RI=
+	t=1780560683; cv=none; b=dBlqGAuMHCSgjNFZM9RPQPqL00mHnEKmya8JO4IgrIlogkVJjKfo0hKjwkFGdPqvJdYqROzACncAoWiBA44velWXehSAzDGZdc2BT8/4YBOxTsw51/p6Or8WhgNgFwk2pweXIqH2tHpyUK4c29k+uRACcJVY+B1RsqrTt7H+4cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780556227; c=relaxed/simple;
-	bh=dydZVhth1y6JE7+fyLmn2w7NHqI4W6Xits7j2exGHig=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WJkMJ4n56etPWPdTkuudgDXe+cY7tOonoV/b4uZ4cFLd92Nwrs6CfSYc4g76OLzvpll6Y5N+p91/DfOm1/3UndXkZkPyyknijOXAgvFW0Aw9xY+GZ0PbM6MrUvpZIfDHXGUSpHyScRXXrz0aiH/ju8HlbARRc/yzqeLuxpQ3psI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FcbXErjt; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1780560683; c=relaxed/simple;
+	bh=TmiZQJW2bYXEP+nGiUA9vOU5BR/5B6xI3uN30kC+xgs=;
+	h=Date:In-Reply-To:Content-Type:To:From:References:Cc:Message-Id:
+	 Subject:Mime-Version; b=KG0X6m5wfssKxjUiKJ+Ps851ClLxSa+gaNVNp3kPzU/Dd4zKGXREK/fnlimFysaON6RPr0xZlNHDg44EVHU4VNSg4ofB0ZUZIr7LLNfoesnfR/4u3V9irj0oCDHbNPi9BgIU2YxqQhiZy7bDczVXvrmhP5qf4sd0eo8e/0pKJUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=LxeMpiqR; arc=none smtp.client-ip=209.127.230.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FcbXErjt"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1780556224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2K4imcceEzYpUOx6xUchhbO3GzKewULjWdUSxLezYq8=;
-	b=FcbXErjtlTY6PwY7b3DmaGm946iCHHqA4xODP3txeKerfajc18mAzBEd9Nd86++L5m+r/y
-	RvxO+5n1yjYTpd/M4hPs7P5GSklG+evgZW74n4dl7PktQBKl5+Wti4zqEVchk6dDjMWjFQ
-	HSzjQISY/riGUyA58zySejFTRHTMHQA=
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com
-Cc: kernel@xen0n.name,
-	joe.lawrence@redhat.com,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn,
-	jiaxun.yang@flygoat.com,
-	xry111@xry111.site,
-	liukexin@kylinos.cn,
-	loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 8/8] klp-build: Add LoongArch syscall patching macro
-Date: Thu,  4 Jun 2026 14:53:17 +0800
-Message-Id: <20260604065317.219777-9-dongtai.guo@linux.dev>
-In-Reply-To: <20260604065317.219777-1-dongtai.guo@linux.dev>
-References: <20260604065317.219777-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="LxeMpiqR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1780560671; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=DFOSYT+g6gkCESpGC5S0ici3Wsoyd9mVDxkD1wkz7II=;
+ b=LxeMpiqRiLRVcRWXxnODLlm4ZOZOYV4WMLrP7cEVfFDaKe9SOqkO+2mHA1+JAhA78KlZTx
+ PoafrliLuNmjVUcdA7uuYOieN48TYq4M1w1A4ododcKy8wltw3xZPCK7N6kVWm2SjF5x67
+ oyjgyv9oZGebGLT1t/VM3A/zdEKBMqzj30BKOwl5tnLu/bgIU2KXTfz23vhNwDJo8mKPun
+ MXJdLajMYqPFZNWaL7UNtPLyXl/yfRjKuw6w9LT8U95XrDxn4cCz7VCx42uPfxlzs5DCQK
+ uT3M5poBmnbj+3q+z2ooKkyWoUBK0PGEzl/WSs/QTyFbYIoDnMyX6jrsorg1VA==
+Date: Thu, 4 Jun 2026 16:10:53 +0800
+In-Reply-To: <178049217756.69035.11980890855635035855.b4-review@b4>
+Content-Transfer-Encoding: 7bit
+X-Original-From: Rui Qi <qirui.001@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+To: "Miroslav Benes" <mbenes@suse.cz>
+From: "Rui Qi" <qirui.001@bytedance.com>
+References: <20260602124509.365996-1-qirui.001@bytedance.com> <178049217756.69035.11980890855635035855.b4-review@b4>
+User-Agent: Mozilla Thunderbird
+Cc: <jpoimboe@kernel.org>, <jikos@kernel.org>, <pmladek@suse.com>, 
+	<joe.lawrence@redhat.com>, <shuah@kernel.org>, 
+	<live-patching@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>
+Message-Id: <070ef555-da56-4695-afe9-e03974113c21@bytedance.com>
+X-Lms-Return-Path: <lba+26a21331d+66b2ae+vger.kernel.org+qirui.001@bytedance.com>
+Subject: Re: [PATCH] selftests/livepatch: fix resource leak in test_klp_syscall init error path
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
 
-From: George Guo <guodongtai@kylinos.cn>
+On 6/3/26 9:09 PM, Miroslav Benes wrote:
+> On Tue, 02 Jun 2026 20:45:09 +0800, Rui Qi <qirui.001@bytedance.com> wrote:
+>> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+>> index 0630ffd9d9a1..d631acae48b9 100644
+>> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+>> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+>> @@ -109,7 +109,12 @@ static int livepatch_init(void)
+>>  	 */
+>>  	npids = npids_pending;
+>>  
+>> -	return klp_enable_patch(&patch);
+>> +	ret = klp_enable_patch(&patch);
+>> +	if (ret) {
+>> +		sysfs_remove_file(klp_kobj, &klp_attr.attr);
+>> +		kobject_put(klp_kobj);
+>> +	}
+>> +	return ret;
+> 
+> Is sysfs_remove_file() needed? I think that kobject_put() should remove
+> it automatically since the object is bound to sysfs.
+> 
 
-Add LoongArch support for KLP_SYSCALL_DEFINEx(), mirroring the generic
-__SYSCALL_DEFINEx() pattern from include/linux/syscalls.h.
+You are right, the sysfs_remove_file() call is redundant. When
+kobject_put() drops the refcount to zero, kobject_cleanup() is
+invoked, which calls __kobject_del() -> sysfs_remove_dir(). The
+latter removes the entire kobject directory including all files
+created under it via sysfs_create_file(). This is also consistent
+with the livepatch_exit() cleanup path, which only calls
+kobject_put() without an explicit sysfs_remove_file().
 
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- include/linux/livepatch_helpers.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+I will send v2 with sysfs_remove_file() removed.
 
-diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
-index 4b647b83865f..a8aad067177b 100644
---- a/include/linux/livepatch_helpers.h
-+++ b/include/linux/livepatch_helpers.h
-@@ -91,6 +91,28 @@
- 	}								\
- 	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
- 
-+#elif defined(CONFIG_LOONGARCH)
-+
-+#define __KLP_SYSCALL_DEFINEx(x, name, ...)                             \
-+	__diag_push();                                                  \
-+	__diag_ignore(GCC, 8, "-Wattribute-alias",                      \
-+		      "Type aliasing is used to sanitize syscall arguments");\
-+	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-+		__attribute__((alias(__stringify(__se_sys##name))));    \
-+	ALLOW_ERROR_INJECTION(sys##name, ERRNO);                        \
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
-+	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__)); \
-+	asmlinkage long __attribute__((optimize("-fno-optimize-sibling-calls")))\
-+			__se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
-+	{                                                               \
-+		long ret = __klp_do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-+		__MAP(x,__SC_TEST,__VA_ARGS__);                         \
-+		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));       \
-+		return ret;                                             \
-+	}                                                               \
-+	__diag_pop();                                                   \
-+	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-+
- #endif
- 
- #endif /* _LINUX_LIVEPATCH_HELPERS_H */
--- 
-2.25.1
-
+Thank you for the review.
