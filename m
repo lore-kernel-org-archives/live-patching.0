@@ -1,99 +1,125 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917FA405C35;
-	Fri,  5 Jun 2026 08:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768453D1CA8;
+	Fri,  5 Jun 2026 08:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.100.241.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780647075; cv=none; b=n2mpJkiHwhIZnpdPd6+Dvsxqusn+XuxdunNTCkA4UuMYhVH8vLAkXRxf9yftFP1d4JH1oXGjYbmoSKd/l3ly6/yFtAJ2+v29DlVyj7jLa9zwPBIb+LWSbMdGKvF+aoY9xkMkmElqZg8KFF/Vm3E+pulPzowYyLAEvuZEzziuybs=
+	t=1780648744; cv=none; b=oGC+MMbc22vk797xiXMOuxji/KsSZaBjYRJFOQGWYiQ06RZ5VkmBgLBfAZUjLw3U/mLEYuaI9RUNqiheq35Fw7Od97WizHGnisSUvORUlqkvJdRHfhqolXRYwfMRPdvECJK052MNps+TgFn1TpwutW2k+agtZBLrJf+eABTRfqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780647075; c=relaxed/simple;
-	bh=1P75YSe2hDvmC1O+S+75qpdiJlWGlVpjjab3TK9N9+E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e89TIBEpYTR5ICJ60dIG9mfe+jIcIvmZMkQ+CaQ8Qj+Z3wPoUk53uxtf4wBQqRDH1fXpO01LuDKSntGrGXEV8OAmcjkOLeN5XHpsPwpEereOAPfv+g9VJ7kWEBxPyYPf+ncqBoAJfYrztbMz6Mfp2IkgW7SLCBljQdbc5mI9rd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=alo3Vano; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1780648744; c=relaxed/simple;
+	bh=HMZAFegtlDqpXJRbOJmUO8rEfB438lhD1TGdmzE5mSE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pVM9XFrRa6QTxFr42A8gDf4oHAGFXGh3E2SUqpqDfXQVHVReVKaBxFi7vTp5SS+MGDjreup/5h7xcyi/Yc80gP/5zc5JBUMPsUbUML2MuiO10FgDBkQoIWP3pfr1qbKtKci4b/NrlojkGCmJMtNCLXQ3d/TzXj14vQExoF/Tlkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=CoR/k9kj; arc=none smtp.client-ip=159.100.241.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="alo3Vano"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1780647064;
-	bh=q77HunASJP9ggqwJr7W+b5k7TC1K39oK1QiKtyFMGzs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=alo3VanokqDGJ5qOPkRx2f7xt8vyzPi7DaKgWDmHCliAyIbuqnaffUl75Cx7/VwsL
-	 IWoeAGYFUdyzQZZQEpN1oTHU1G/Zvt+K6Jf9ynHrBMXTMvaiIFOEdezf7vNujZ+rra
-	 OTulVux8/FM8YuEEKOHhSwWdGgN/4zi1pMzk9v3w=
-Received: from [127.0.0.1] (2607-8700-5500-e873-0000-0000-0000-1001.16clouds.com [IPv6:2607:8700:5500:e873::1001])
+	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="CoR/k9kj"
+Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.155])
+	by relay5.mymailcheap.com (Postfix) with ESMTPS id D2B09200C2;
+	Fri,  5 Jun 2026 08:39:00 +0000 (UTC)
+Received: from nf1.mymailcheap.com (nf1.mymailcheap.com [51.75.14.91])
+	by relay4.mymailcheap.com (Postfix) with ESMTPS id AB8D420012;
+	Fri,  5 Jun 2026 08:38:52 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	by nf1.mymailcheap.com (Postfix) with ESMTPSA id 728D4400D5;
+	Fri,  5 Jun 2026 08:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+	t=1780648732; bh=HMZAFegtlDqpXJRbOJmUO8rEfB438lhD1TGdmzE5mSE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CoR/k9kjPZDRYxqRu31UuugAQKDasD7nrfo6zx4woNry7eltJxLRqiGK11+OSMmW+
+	 Lz66x09r3vU3UufGwNHxpt2Ic7bLXTMbunEggaCK0IyWMWoehePCxTRxPCyRWVP0ET
+	 Og1FQFsA/sh7GTNst3TF0+7OFTTz5qQlEtTCsZrE=
+Received: from avenger-XINGYAO-Series.tail8e8410.ts.net (unknown [114.246.239.235])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id DC1A065982;
-	Fri,  5 Jun 2026 04:10:59 -0400 (EDT)
-Message-ID: <046da9c8886dcb35d6427b7467ce551ef1426480.camel@xry111.site>
-Subject: Re: [PATCH 5/8] LoongArch: fix kernel panic with -fPIC for
- same-compilation-unit symbol references
-From: Xi Ruoyao <xry111@xry111.site>
-To: George Guo <dongtai.guo@linux.dev>, chenhuacai@kernel.org, 
-	jpoimboe@kernel.org, peterz@infradead.org, jikos@kernel.org,
- mbenes@suse.cz, 	pmladek@suse.com
-Cc: kernel@xen0n.name, joe.lawrence@redhat.com, rostedt@goodmis.org, 
-	ardb@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com, liukexin@kylinos.cn, 
-	loongarch@lists.linux.dev, live-patching@vger.kernel.org,
- llvm@lists.linux.dev, 	linux-kernel@vger.kernel.org, George Guo
- <guodongtai@kylinos.cn>
-Date: Fri, 05 Jun 2026 16:10:58 +0800
-In-Reply-To: <20260604065317.219777-6-dongtai.guo@linux.dev>
-References: <20260604065317.219777-1-dongtai.guo@linux.dev>
-	 <20260604065317.219777-6-dongtai.guo@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 8B995406E1;
+	Fri,  5 Jun 2026 08:38:43 +0000 (UTC)
+From: WangYuli <wangyuli@aosc.io>
+To: dongtai.guo@linux.dev
+Cc: ardb@kernel.org,
+	chenhuacai@kernel.org,
+	guodongtai@kylinos.cn,
+	jiaxun.yang@flygoat.com,
+	jikos@kernel.org,
+	joe.lawrence@redhat.com,
+	jpoimboe@kernel.org,
+	kernel@xen0n.name,
+	linux-kernel@vger.kernel.org,
+	liukexin@kylinos.cn,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	loongarch@lists.linux.dev,
+	mbenes@suse.cz,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	peterz@infradead.org,
+	pmladek@suse.com,
+	rostedt@goodmis.org,
+	xry111@xry111.site,
+	yangtiezhu@loongson.cn
+Subject: Re: [PATCH 3/8] LoongArch: Add special section entry sizes for KLP support
+Date: Fri,  5 Jun 2026 16:38:39 +0800
+Message-ID: <20260605083839.67474-1-wangyuli@aosc.io>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260604065317.219777-4-dongtai.guo@linux.dev>
+References: <20260604065317.219777-4-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: nf1.mymailcheap.com
+X-Rspamd-Queue-Id: 728D4400D5
+X-Spamd-Result: default: False [2.70 / 10.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.10)[+mx];
+	MIME_GOOD(-0.10)[text/plain];
+	R_DKIM_ALLOW(-0.10)[aosc.io:s=default];
+	TO_DN_NONE(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TAGGED_RCPT(0.00)[lkml];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_ONE(0.00)[1];
+	LOCAL_OUTBOUND(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,kylinos.cn,flygoat.com,redhat.com,xen0n.name,vger.kernel.org,lists.linux.dev,suse.cz,gmail.com,infradead.org,suse.com,goodmis.org,xry111.site,loongson.cn];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_TRACE(0.00)[aosc.io:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[aosc.io,quarantine];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_TLS_ALL(0.00)[]
+X-Rspamd-Action: no action
 
-On Thu, 2026-06-04 at 14:53 +0800, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
->=20
-> Add architecture-specific -fPIC compiler flag for LoongArch64 to prevent
-> kernel panics when applying livepatches containing references to symbols
-> defined in the same compilation unit.
->=20
-> Root cause:
-> In the KLP workflow, when a function is livepatched, it's extracted
-> from the original object file and compiled into a separate kernel
-> module. When the patched function references symbols defined in the
-> same compilation unit (like 'uts_sem' in kernel/sys.c), these
-> references break if not compiled as position-independent code.
->=20
-> On LoongArch64, without -fPIC, references to same-compilation-unit symbol=
-s
-> use absolute addressing that assumes fixed memory locations. When the
-> function is relocated into the livepatch module, these absolute addresses
-> become invalid, causing kernel panics.
+Hi Dongtai,
 
-This is incorrect.
+Have you actually tested your changes with LLVM?
 
-With GCC and Clang, -fPIC does not mean generating position independent
-code.  It means generating position independent code *suitable for SVR4-
-style shared objects*.
+For example:
 
-The kernel has nothing to do with SVR4-style shared objects.  The kernel
-modules are not SVR4 shared objects but relocatable ELF object files.
+    asm volatile(
+        ".pushsection .altinstructions, \"aM\", @progbits, "
+        __stringify(ALT_INSTR_SIZE) "\n\t"
+        ".long 0\n\t"
+        ".popsection\n\t"
+    );
 
-If you only need position independent code (without the shared object
-stuff) you should use -fPIE instead.  The kernel is already built with -
-fPIE if CONFIG_RELOCATABLE=3Dy.
 
-Thus if you only need position independent code you should make live
-patching depend on CONFIG_RELOCATABLE.  On the contrary if you really
-need to use/abuse something mechanism designed for SVR4 shared object
-you 'd at least need to fix the description above.
+BTW, "awM" is dangerous, pls see how did x86 do.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
+And head.S doesn't need to include asm-offsets.h, it seems
+stackframe.h has included it.
+
+Thanks,
+---
+WangYuli
