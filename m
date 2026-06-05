@@ -1,142 +1,135 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from relay2-g-c.mailbaby.net (relay2-g-c.mailbaby.net [67.217.53.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2B14279FD
-	for <live-patching@vger.kernel.org>; Fri,  5 Jun 2026 06:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A35248C3F2
+	for <live-patching@vger.kernel.org>; Fri,  5 Jun 2026 08:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.217.53.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780642272; cv=none; b=rdCaWvSDwgVkQuaxbuSSO58PobVcrq6UAIXdyOX6+qa8tYNXkp1RXgffxMF6eV3q44c8ZhLgbuXmxu6IBx79HOKx0Jywrpo+5pZ0Mi0oDIOJBa4BWhV4ujzLZ2wZkHIvreWLW6H3QKON6WTB31Jswc5qFdfBUZmeyshC60DDJcU=
+	t=1780646602; cv=none; b=uW3Cw9ld3TV+PB8Q5NJdSoQHGYDQu5WHB4xRjjO8ZySrPHNGZCfmsU/Xw6ygOqnfIUTiBTxF3/ayINJXyogz+8s3s2HYMR5Szg4Q09DbR4xxQqSpYBdGgVTO+13uFTpJE5ynGyK6FKvut7ho9Y/BVIAbKfjCjj+Xt5ZlosE6s5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780642272; c=relaxed/simple;
-	bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=dSlxoQWO8iuKf2f2f8rJN3JKb7ccGYveWXN11SBgO0eM9WCrGN4qVGNuVTYIU2HTwKnPJ1Q/VtQXuzaCeu28Wpdv/y5CF40/J38NeRdVjlfFI2pl5IjwzkHMDw4diOSfBcSgIrUV8kB+rj4a0/qtpnrrWOiGxqK6F9WTPZSjcMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1780646602; c=relaxed/simple;
+	bh=X0io6JTVrv6uVlzin2aWfgk7nIYeP7EIf/6roE/0TJY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mLMLzqmtnOj1ztxkro+Sv7LTOavqRuLKIWsCtDXTJQxgkGTafOBZ7Me/3/9tN3+gLExihOn+Cr8rONsmpu5GZWPUde/PMX7WEDiC2QnjtwBHBdEcEg/rQL43z1XnVU/yhYeGrC4vNtmCrgo/iVv2HMriu6sYFauXskwMwDwe41U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=mailbaby.net header.i=@mailbaby.net header.b=os9istAw; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=SxRWcOK1; arc=none smtp.client-ip=67.217.53.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aosc.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 9F40275828;
-	Fri,  5 Jun 2026 06:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
-	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
-	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1780642266;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
-	8G9lsmxfaw4MinDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cqbLhYbX;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OCZPDZRv
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
-	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
-	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1780642266;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
-	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
-	8G9lsmxfaw4MinDA==
+	dkim=pass (1024-bit key) header.d=mailbaby.net header.i=@mailbaby.net header.b="os9istAw";
+	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="SxRWcOK1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbaby.net;
+ q=dns/txt; s=key2; bh=X0io6JTVrv6uVlzin2aWfgk7nIYeP7EIf/6roE/0TJY=;
+ h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:in-reply-to:references:feedback-id;
+ b=os9istAwTZCWVl9h2o1mFa5p1O2WD8n1077g7ybWh8Pg0WZeNFmBTKGUdmkQyRZPgh5+gfJyH
+ QegKcC8F6CgAszCL+bfgQNtjLcielDHUc7c+R3Gy4JGIk+7rLodWxuHVT/DYh0lsFiOEaBMYvpY
+ yWvKny80XuDmqxbCdEHkjHI=
+Received: from mb-nj-kvm1.internal (mb-nj-kvm1.internal [10.10.2.10])
+ (Authenticated sender: mb86144)
+ by relay2-g-c.mailbaby.net (MailBabyMTA) with ESMTPSA id 19e96c9f9b400048e8.002
+ for <live-patching@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 05 Jun 2026 07:57:59 +0000
+X-Zone-Loop: d14541cbc68f4518b8b9b5f129b47d01444b9262217a
+X-MB-ID: mb86144
+X-SPF: pass
+Feedback-ID: mb86144:19e96c:587f4d46584359477840504741595e:mbaby
+X-NS-SCAN: PASS
+X-MAILBABY-ORIGIN: PASS
+Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.102])
+	by relay5.mymailcheap.com (Postfix) with ESMTPS id 4261C26497;
+	Fri,  5 Jun 2026 07:57:51 +0000 (UTC)
+Received: from nf1.mymailcheap.com (nf1.mymailcheap.com [51.75.14.91])
+	by relay1.mymailcheap.com (Postfix) with ESMTPS id 768453EE8A;
+	Fri,  5 Jun 2026 07:57:43 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	by nf1.mymailcheap.com (Postfix) with ESMTPSA id 9BE97400D5;
+	Fri,  5 Jun 2026 07:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+	t=1780646262; bh=X0io6JTVrv6uVlzin2aWfgk7nIYeP7EIf/6roE/0TJY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=SxRWcOK1jqz7+V09WZfC+6zqsj9XpL+tEfnxyOGBKKLcGbNSiAEJSsg7SvO+Ks7Kb
+	 DQEG7F2clipuqr2bTu6ucZlnwHDt8i75R3n3W05ykJX5OwQPm15WP0b5rZPXztN7Cb
+	 pm5AmbgPbY+UVEhVezw8imfBDxjkWayCG8085z1E=
+Received: from avenger-XINGYAO-Series.tail8e8410.ts.net (unknown [114.246.239.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 96DE4406E1;
+	Fri,  5 Jun 2026 07:57:29 +0000 (UTC)
+From: WangYuli <wangyuli@aosc.io>
+To: dongtai.guo@linux.dev
+Cc: ardb@kernel.org,
+	chenhuacai@kernel.org,
+	guodongtai@kylinos.cn,
+	jiaxun.yang@flygoat.com,
+	jikos@kernel.org,
+	joe.lawrence@redhat.com,
+	jpoimboe@kernel.org,
+	kernel@xen0n.name,
+	linux-kernel@vger.kernel.org,
+	liukexin@kylinos.cn,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	loongarch@lists.linux.dev,
+	mbenes@suse.cz,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	peterz@infradead.org,
+	pmladek@suse.com,
+	rostedt@goodmis.org,
+	xry111@xry111.site,
+	yangtiezhu@loongson.cn
+Subject: Re: [PATCH 0/8] LoongArch: Add livepatch build (KLP) support
+Date: Fri,  5 Jun 2026 15:57:22 +0800
+Message-ID: <20260605075722.48712-1-wangyuli@aosc.io>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260604065317.219777-1-dongtai.guo@linux.dev>
+References: <20260604065317.219777-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v2] selftests/livepatch: fix resource leak in
- test_klp_syscall init error path
-From: Miroslav Benes <mbenes@suse.cz>
-To: Rui Qi <qirui.001@bytedance.com>
-Cc: mbenes@suse.cz, jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
- joe.lawrence@redhat.com, shuah@kernel.org, live-patching@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260604083208.1071428-1-qirui.001@bytedance.com>
-References: <20260602124509.365996-1-qirui.001@bytedance.com>
- <20260604083208.1071428-1-qirui.001@bytedance.com>
-Date: Fri, 05 Jun 2026 08:51:03 +0200
-Message-Id: <178064226303.69035.586790401674446574.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=364; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiylwutFJk+tdz8/ZSHzif3Y9Uiuw3eeqVoE/jow/6Cq9
- OfYr0syOhn9WRgYORgsxRRZXu91ljOckmugWf3uLswgViaQKdIiDQxAwMLAl5uYV2qkY6Rnqm2o
- Zwhk6BgxcHEKwFRfkuZg2Lwm+ZaJBffnP2v8LO9N+h9Tn/fCrmVrzr0cr89CPzZZ8R6te5nxd6N
- szckECZe/fIuNdTjfsa9tOv7QRb+nbumjA82eov+cwjYlPbUXmHBo0QLHPk4Hzyl/A1ljJH49Ev
- 635b/Wwv2GMo3BmmJrPSQTzTxlwuvu7t3boZgpLzv56JXrnee3r2K8Ws0XkZ5nslqcw8666LSD9
- 6XSdsZGd/fmH/yTVlw9skWPwb7+steOOx08/w8e4n+U3JQcbLBP9pe7W5LKhHrxhKrIWjUZmX2H
- 5wYuDQ4N/z/9myl/0ePD5aIvFLTevc6/vJTt4ImEU1cUNromvVKV6MywMWrade33FvvUlWeLZoX
- cjUkFAA==
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Flag: YES
-X-Rspamd-Action: add header
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.64 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	NEURAL_SPAM_SHORT(2.99)[0.998];
-	BAYES_HAM(-2.75)[98.90%];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Server: nf1.mymailcheap.com
+X-Rspamd-Queue-Id: 9BE97400D5
+X-Spamd-Result: default: False [2.70 / 10.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.10)[+mx];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
+	R_DKIM_ALLOW(-0.10)[aosc.io:s=default];
+	TO_DN_NONE(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 9F40275828
-X-Spam-Score: 17.64
-X-Spam: Yes
+	TAGGED_RCPT(0.00)[lkml];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_ONE(0.00)[1];
+	LOCAL_OUTBOUND(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,kylinos.cn,flygoat.com,redhat.com,xen0n.name,vger.kernel.org,lists.linux.dev,suse.cz,gmail.com,infradead.org,suse.com,goodmis.org,xry111.site,loongson.cn];
+	FROM_EQ_ENVFROM(0.00)[];
+	DKIM_TRACE(0.00)[aosc.io:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[aosc.io,quarantine];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_TLS_ALL(0.00)[]
+X-Rspamd-Action: no action
 
-On 2026-06-04 16:32 +0800, Rui Qi wrote:
-> In livepatch_init(), if klp_enable_patch() fails, the previously
-> created kobject and sysfs file are never cleaned up, causing a
-> resource leak. Capture the return value and add proper cleanup
-> on the error path.
-> 
-> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+Hi Dongtai,
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Patches 1 and 2 should be merged into a single patch and placed at the end of
+your patch series rather than at the beginning.
 
+Alternatively, you could simply use patch [1] to replace these two patches, which
+might make more sense chronologically.
+
+[1]. https://lore.kernel.org/all/20251203091039.125259-1-wangyuli@aosc.io/
+
+Thanks,
+---
+WangYuli
