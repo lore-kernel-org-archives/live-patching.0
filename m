@@ -1,138 +1,142 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BE63FA5E8
-	for <live-patching@vger.kernel.org>; Thu,  4 Jun 2026 21:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE2B14279FD
+	for <live-patching@vger.kernel.org>; Fri,  5 Jun 2026 06:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780607938; cv=none; b=Vtg7h3vO13HaOtlrFyPXFwUG2+sM8MBGiR8CbEddAn/WiwXuoo82Sj+A/0+OVnyxxd0IQfV54kiiXynXQ+bkJikR8nWr+Yk4N29EiTNNxHqA9oFN5DZvNbSu2XGYv+XSJTa3ho3Fkb0LJB4VEj+cNCm6jZvQyvN+NfxBKj+iNMI=
+	t=1780642272; cv=none; b=rdCaWvSDwgVkQuaxbuSSO58PobVcrq6UAIXdyOX6+qa8tYNXkp1RXgffxMF6eV3q44c8ZhLgbuXmxu6IBx79HOKx0Jywrpo+5pZ0Mi0oDIOJBa4BWhV4ujzLZ2wZkHIvreWLW6H3QKON6WTB31Jswc5qFdfBUZmeyshC60DDJcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780607938; c=relaxed/simple;
-	bh=j5Va7+gmykjYF242T1iZbiZTv44+SJJypaxifOh0AUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RfFLTvaN0GYnNohR/5Rlv8C7hsi6doaFKTqjJIIABEHjVurBGelgQxSSqaqVTIZ7jlrXLXbrHDfndSEJRpd4M2TnneEVl4GtWeN7bzlPrN3YpP12mapwYFMi8jz/FhmIqbjUMKAcd8qDcYfxLjB0wVB7fCTJ2gUAdRulJoRd0Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f6Iwf48g; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1780642272; c=relaxed/simple;
+	bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=dSlxoQWO8iuKf2f2f8rJN3JKb7ccGYveWXN11SBgO0eM9WCrGN4qVGNuVTYIU2HTwKnPJ1Q/VtQXuzaCeu28Wpdv/y5CF40/J38NeRdVjlfFI2pl5IjwzkHMDw4diOSfBcSgIrUV8kB+rj4a0/qtpnrrWOiGxqK6F9WTPZSjcMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=cqbLhYbX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OCZPDZRv; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f6Iwf48g"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-66056b248abso1251587d50.1
-        for <live-patching@vger.kernel.org>; Thu, 04 Jun 2026 14:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780607936; x=1781212736; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
-        b=f6Iwf48g0sV8eFbaZLcfnfr49MvzIaKGKwgcqlifmYPouS15GCriYWKZBmyjHTmuzE
-         zjyEb/65tqbtpv+uvM1STrUQ4ohRKKbNqvAdYScq0AP58i8eViSLl7y9eXrhBJLMPk4b
-         v4IPBECBBEtfa9hc5CXR83YHg4q7n6bGKdhQlu8qU9Ybwv20FlAFkAHQsTUAmixwupZP
-         sNXGO8teGzeRUFpJQkqDlyjDgU35kk7BO0ILO3T3VWR1fpcBUuvz7Dff3TKaQJTtgPKt
-         vhwY+cm8yBYVDli1ckPgytEZo6fMcITwrLoUhTXHvtvbutcw7lWkW1kyrbdvyHuNex5h
-         Pbpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780607936; x=1781212736;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2J8USZDL7/DpTIcuYHRyNZJXHApGCptCywopvKKKw0=;
-        b=MVrJ4SADxez5D82ihlR3zfyGXCAc6MDZD6NClT+wW7rnrRdxk7HkBLxcQCBFMDHQb6
-         +5MN6YfB5gYm1gex9ehKA1y+nAq9S35R9oOwj38n+DJ/OsfgavF6IIrRvPpZOy2cKryE
-         UsUSB6HNtvVslQyCsIgZi1Y0o264leD8nmKUqjhz0J1yFCU0kTD7Mjn4oGXgpbDNyCZr
-         FAgzMMke6wygCEvFT0saOsfZB4jNekpSOEAWRhgTsC7HXs4M7Q94AMsQrITfWkSE6gpJ
-         o9JDVSqLhAo2ELk7qUNdb30JB9Yr49al0DCZ75aUp3MmdzwzAHJ0hyP83dHlrBzeKypC
-         AhXA==
-X-Forwarded-Encrypted: i=1; AFNElJ9kRYpRTHdNJrh8GjskBRxTFnNye30RMmnUeudx4KTskxhAPdBuCufboEX0pv/mMGmzjLbCxhkVBGW59VRC@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlFU6N4VG8ykq1wRrfhwSt/NKjeYQhU34fIzG5y/PeevR+BSxS
-	C/MuKlhc7xclYiB8SizaCJN1W2h6caYTls9lXAsCkju/O7rBrp91KvSk
-X-Gm-Gg: Acq92OFvR2MyMtY2CcZpTpdohA8VnsYaJ8nbqz9EbYz07kBowZt2XRrVCuZmsVRaVpy
-	QfLBmPHN7WO9Uu0Wei2TClnpARLhy4HkTKBvaiXfW67JR3yzXDZaG6D2yBsOvw8IoueNs5TII/N
-	hx+gIAYaWPlhYCNX/cYDnZD3IJQxvyQLItZ+4wyiREest9inxERy0oJ0sXIUwzIRH5R+rXtFq0s
-	oWAMR/L/L36QA4atPDKRqZZ13Gq5qWC8QjE8k6QdPFbbTDiXwiRfQgfsDHumTYdjgrEoHI13Q6o
-	ahISPOiUECD0YA83BgH3GWlqHUj2Gd0XkY98NaF6Byh6Z4No8IcMY4DI4bKFLo5yAu8/tmmRiHQ
-	b0bHCxOYEYDJQaTgbS1vLOtfrho+LaJm62Ja7WfQ51caLMcquvf3Ked9Xw9RAJ7OAzLyRwTWvOg
-	IlxtsymMS8bGicBz6L7PglefGJtPOXaBueEpkcpNk2Ly1JBtz5hnFRuoQiXvL/qI5U6qQ=
-X-Received: by 2002:a05:690e:4805:b0:660:8e61:1a49 with SMTP id 956f58d0204a3-66106e4abb7mr376567d50.18.1780607936124;
-        Thu, 04 Jun 2026 14:18:56 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:6d35:e45:54a5:6b0f])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-660d5f883e2sm4500821d50.6.2026.06.04.14.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2026 14:18:55 -0700 (PDT)
-Date: Thu, 4 Jun 2026 17:18:55 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	live-patching@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Joshua Peisach <jpeisach@ubuntu.com>, 
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
-	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <aiHgdw_fBv8RTgC2@zenbox>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="cqbLhYbX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OCZPDZRv"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 9F40275828;
+	Fri,  5 Jun 2026 06:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
+	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
+	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780642266;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
+	8G9lsmxfaw4MinDA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=cqbLhYbX;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OCZPDZRv
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1780642266; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=cqbLhYbXqQ5DmSgOueZ40o4uwiC4l/F9yChE0ijzilkPc/NZ/8h52m+nyNo8Z927hNC/nD
+	h6uzKXUMPL2BLimxcA5vZYv8vWHupqNuhJrPtnMUdXjgiwj5AWdsmgTIs6A6COYS3G0Zlb
+	iMXt4baTpTkOZvgu3gj+t71ooYaDVvE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1780642266;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aSJgsdoPb53WKlxUb4Ar+zQAj0t57KFWBUIGPp5tZ/4=;
+	b=OCZPDZRvWlmxIPniJy+nNqaoe+0kcLrgcasJ8Go1l+GIVhUVnBeOC0znbu9O78tPyCl0QS
+	8G9lsmxfaw4MinDA==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <agsVDqdALBoHEHlv@laps>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2] selftests/livepatch: fix resource leak in
+ test_klp_syscall init error path
+From: Miroslav Benes <mbenes@suse.cz>
+To: Rui Qi <qirui.001@bytedance.com>
+Cc: mbenes@suse.cz, jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
+ joe.lawrence@redhat.com, shuah@kernel.org, live-patching@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260604083208.1071428-1-qirui.001@bytedance.com>
+References: <20260602124509.365996-1-qirui.001@bytedance.com>
+ <20260604083208.1071428-1-qirui.001@bytedance.com>
+Date: Fri, 05 Jun 2026 08:51:03 +0200
+Message-Id: <178064226303.69035.586790401674446574.b4-reply@b4>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=364; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=TfLsETz7Q6l0FsZne6CcwqKFbkV6sQbdJ3G/Uxbs0sc=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhiylwutFJk+tdz8/ZSHzif3Y9Uiuw3eeqVoE/jow/6Cq9
+ OfYr0syOhn9WRgYORgsxRRZXu91ljOckmugWf3uLswgViaQKdIiDQxAwMLAl5uYV2qkY6Rnqm2o
+ Zwhk6BgxcHEKwFRfkuZg2Lwm+ZaJBffnP2v8LO9N+h9Tn/fCrmVrzr0cr89CPzZZ8R6te5nxd6N
+ szckECZe/fIuNdTjfsa9tOv7QRb+nbumjA82eov+cwjYlPbUXmHBo0QLHPk4Hzyl/A1ljJH49Ev
+ 635b/Wwv2GMo3BmmJrPSQTzTxlwuvu7t3boZgpLzv56JXrnee3r2K8Ws0XkZ5nslqcw8666LSD9
+ 6XSdsZGd/fmH/yTVlw9skWPwb7+steOOx08/w8e4n+U3JQcbLBP9pe7W5LKhHrxhKrIWjUZmX2H
+ 5wYuDQ4N/z/9myl/0ePD5aIvFLTevc6/vJTt4ImEU1cUNromvVKV6MywMWrade33FvvUlWeLZoX
+ cjUkFAA==
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spam-Flag: YES
+X-Rspamd-Action: add header
+X-Spam-Level: *****************
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [17.64 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	NEURAL_SPAM_SHORT(2.99)[0.998];
+	BAYES_HAM(-2.75)[98.90%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DIRECT_TO_MX(0.00)[b4 0.15.2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:dkim]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 9F40275828
+X-Spam-Score: 17.64
+X-Spam: Yes
 
-On Mon, May 18, 2026 at 09:33:02AM -0400, Sasha Levin wrote:
-> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
-> > On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
-> > > * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
-> > >   most production kernels. Even where enabled, it only works on
-> > >   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
-> > >   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
-> > >   lockdown=integrity and the override is probabilistic.
-> > > 
-> > > * BPF override (bpf_override_return) honors the same
-> > >   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
-> > >   production kernels. Even where on, the operator interface is
-> > >   "load a verified BPF program," not a one-line write.
-> > 
-> > If it is OK for killswitch to attach to any kernel functions, do we still
-> > need ALLOW_ERROR_INJECTION() for fail_function and BPF
-> > override? Shall we instead also allow fail_function and BPF override
-> > to attach to any kernel functions?
+On 2026-06-04 16:32 +0800, Rui Qi wrote:
+> In livepatch_init(), if klp_enable_patch() fails, the previously
+> created kobject and sysfs file are never cleaned up, causing a
+> resource leak. Capture the return value and add proper cleanup
+> on the error path.
 > 
-> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
-> integrity/safety mechanism for both bpf and fault injection.
-> 
-> It protects against a "developer or CI script doing legitimate fault injection
-> accidentally panics the box" scenario, not an "attacker gets in" one.
->
-At that point why not just make this entire killswitch mechanism an expanded
-version of the bpf_override_return helper that doesn't care about ALLOW_ERROR_INJECTION?
+> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
 
-Then killswitch mitigations are just BPF programs.
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-This could be paired with a userspace tool for building and
-loading the killswitch programs conveniently.
-
-You can make the helper function only succeed if (CONFIG_KILLSWITCH=y
-CONFIG_BPF_KPROBE_OVERRIDE=y etc.) and taint the kernel on the first call.
-
-BPF has the crash_kexec kfunc already that can take down the kernel.
-Thus it's not crazy in my opinion to add a helper with a similar intentional
-intentional footgun in another kfunc/helper.
-
-We can automatically benefit from BPF signing mechanisms to prevent
-unauthorized loading of programs. If killswitch is enabled, users can
-restrict unauthorized use of it by restricting the loading of all BPF
-programs to those signed w/ the key.
-
-Thanks,
-Justin
-> -- 
-> Thanks,
-> Sasha
