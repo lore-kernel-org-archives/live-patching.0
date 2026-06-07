@@ -1,131 +1,180 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E615A3FFFB5
-	for <live-patching@vger.kernel.org>; Fri,  5 Jun 2026 15:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BF02BE057
+	for <live-patching@vger.kernel.org>; Sun,  7 Jun 2026 13:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780672487; cv=none; b=XAR0n1oQQ8FxaUUUcLQamhDsVb8Dg6PgsxR0gjesvG32wrAFweWmZrESOI0TuUQ+bAZd9JvZAfmFYWIxyt2BPW+wfKq7cRBPGvzfuzbCHDhs7RWOvn42RQ4m3RlEeb3AhhMTbaZDRLl1z5Y4TXUozZ50P87YSkfuVIhtj47BZQ4=
+	t=1780838235; cv=none; b=n5942PivjXc0MSRMPPuqo4SseSf/5L3I75f36FpEnwMGsDHFrxDKHpJZWyM+lbCHjgSw/uWEWikqwhN+c3H2gah8DtXuQ72+3lS1dmpwjX3HvcenL/I0iErebqfHnjMOqAXpZc9NM425p65Y/U83yF9hNlfeUV52UesYRVnA2M8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780672487; c=relaxed/simple;
-	bh=pVXqDCGJxcTY09vnClQDvcttv3WvWGsjeGCHpdDkg7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u6xsWAn1jZcjIXL+R9VJbdWmf3cl8Y4SyOpPuNnqfwtnDzoVKmhDn6Kj8KzrWTDQeIaCG1ID0v/zUkwnAF1ZoyTmMdoEyXezVKBj3aXsszU6OOGbhcdSxoaCubIJjrWYCNh/IJ8PdESTMJ5nSsHMzz/ea8RfgXPfUPMwwobBHNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bb49GgEP; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1780838235; c=relaxed/simple;
+	bh=r2w38YDm6Jo6C7DT8vrRDWab3RrMzn7vMAhPgOHdBRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KBMTFz7/VnKFHbiLYt0Srfd3Mlojtz6GApFYNz07nJ3+40YCKGv17p6oMTAwMy6Q10DBZfYX2ictHHFOGO0sHZZaobZHHFNKJnL/69llJcFRUHgu5j6GddTtL9JNSEIEjGxCSuB3lIIdCmzSMD++CGRvOFiwoLqQnqDbb7RRvXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RilAj29S; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bb49GgEP"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4908b92904fso23620465e9.0
-        for <live-patching@vger.kernel.org>; Fri, 05 Jun 2026 08:14:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RilAj29S"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c0c2d792c8so22526225ad.1
+        for <live-patching@vger.kernel.org>; Sun, 07 Jun 2026 06:17:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1780672484; x=1781277284; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5Us6LXX/m1CkmS8+PwnhcahCPKlGB8k4LedTlqb3Mg=;
-        b=bb49GgEPsSlce8cSGzzCUBfT7ydA151ASBn0zm/lNlFs/1W/JntJ5PRkvJ2Cv0ynMG
-         /QH1sd6ws8dcrekw5fS0MeeEhOHcw1zjjMWy90tcGoKvauDEhumBQmpe3X9A9OKz/5XB
-         jg4EzfAopKbU8+iVzsUWHGjE71Fn2nEyYDzFOZ7EQjsf1F9OmZaCEp/7o7EhBnrSKFEM
-         Ybr2a9oLVCRVwe4P6mMF7d/pHHGO+bR8pUsyXEkF2jcU5dNWJC3TMuc7kakQZDUn/q4T
-         iUet2MHtZO0o0eIKzRc7RoHFd7gTA0T3PpXXPBAGcMT3RLQJ/zcLBT678p3yABzZ4jnm
-         gmXA==
+        d=gmail.com; s=20251104; t=1780838233; x=1781443033; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ud8s9dgAQKP2pYmXcaHwmrljESzep5Y677MGUAKzEMc=;
+        b=RilAj29Sz/WIjrXdN4L4KW39d/65Iq8hOJNhHoIa8Pm1w0XcipJN50AZt56XNsPPJa
+         N7B93K+BbrKIFTkQGM5khQpb5f+spvsOSpYvZRv6mbRnVHB3cMJ5InWOpSXEI0YYgUka
+         4Rev5NzV1r0z0ZBKg/VZfbaYbGaGiEJxRO6MHLbg4tjT5m+cX/d5tmhmbyWv+Ggq6Fm1
+         QilFjEK+Y9CAdiGID0h8MJRaB5js//hOkzJNMvg3M1YSxERn/z5ZHBcadJpTp8KFKhZg
+         rOxXsTwCphehZYdajXGvrlCs6aI1YSgVJGuAOsEnfhOKMLh1h1CsNqD4ya/uOMG2yS79
+         GHUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780672484; x=1781277284;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w5Us6LXX/m1CkmS8+PwnhcahCPKlGB8k4LedTlqb3Mg=;
-        b=RhHSq3LLRhFQzbYUYm1iJn9UTdgc3EjT1DDHr/9zuM9/goGLZcwts9+l+b/MfHF4wT
-         oUltXz/Val1r0xGd97IgWbVB2WuRvYzKnMvpOroz7BXpve2I6O5EYFasxUvAjL/J/4rx
-         INHYoxyL+tcWYHnUDJaKjCYO4eCHurqy4PEfD4EcJ4lHWyNuCehMifAenQI6USb3tj9y
-         lrC1NAXnJVCZYbsnZXGJJXoa14ZmanurWCCDHYVwDKfMea1LoQwTbiYexuUsb+Nv4NWc
-         AHbM8sns3/Ut/wR35JSSgFe0K3pMX+S8Z+u5CdyHoDT+/3hhAPJqpp58yEn7/qDxXxzW
-         Warw==
-X-Forwarded-Encrypted: i=1; AFNElJ+e/+EN/GJjt7LvEFStmYMuiaUr6rSD8LkrVOFcIGKy+WvK2z993LK/wG+xuaKAJWrO+hA+MdpCS60OG+pa@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlx8045F4JTZpgqav+MdLXOowA4WZPIGbUhBFLuhKeuOFX5zDF
-	hfghJ0gg8LSuDAyJhLKw6XS/qduR439CouLq8hsGFEyCxX7gYHpNh0CHxomuYq7pqnY=
-X-Gm-Gg: Acq92OE5m1NleseVJSJHDBaUEk3V/dsL6g5vGOrm8YqjhNvByDeYT3QCguVU0B6bqa/
-	tRbQZTdTIjG1McoTMYne7fOYt6r+jbAGSvBMINsUqHzXOHdc/jlkYDIwz4Mfvh2qbSF+nIL20Rd
-	JCLgLqycmmKaP7lWJNXwtQWYEYcTUCSVociFbA//84uOPOszWe4PtVLtoKISj0QCGLZt7SxL2Ny
-	qj9Y4bAK0ev8NIVUZoTecWNe9Qs0ia1tAtJWDYNMlCHN8mkUtJYUQ1ms4N7RM1ZEI56omhuEcIc
-	H/qmhT5RzLMDPjjILfTLK7vUXjIYSamokioNHtZ+i4O9Ze4DZMBVfVKez83NvccBV/EtKXGSHPB
-	h2cyD8H59Z87L9EnKm8VoTcdFmVtLcHn/6l4KCNyEHbV/HS19Lq3d3rNvoC9OgRwIYGrr65dOIB
-	lMS9qFl6dnWYAjTQizp8RMYzkuH4fYqvFF8UBN
-X-Received: by 2002:a05:600c:310e:b0:490:b58b:a8cb with SMTP id 5b1f17b1804b1-490c263a615mr63235475e9.26.1780672484398;
-        Fri, 05 Jun 2026 08:14:44 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f0a43e9sm26721601f8f.0.2026.06.05.08.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jun 2026 08:14:44 -0700 (PDT)
-Date: Fri, 5 Jun 2026 17:14:42 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	marcos@mpdesouza.com
-Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about minimum
- kernel support
-Message-ID: <aiLn4slwOcpXhDhn@pathway.suse.cz>
-References: <20260524-livepatch-unload-on-fail-v1-0-7465de7f741d@suse.com>
- <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
+        d=1e100.net; s=20251104; t=1780838233; x=1781443033;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ud8s9dgAQKP2pYmXcaHwmrljESzep5Y677MGUAKzEMc=;
+        b=LAV17W8JiHe10Ip15BXIYsykTyDcuKMEwfoldD2Fl63sbRiUW9l5M7N81GxDREC/f5
+         HKCZAf/4mMWlGjBYgGFeHhbLkQyArKUyHHPmhGw6uC++C5UjQGTvkhOkSS12kp37cUkV
+         EMwzXYKbv/wr9ec+8kPaAqXBg6u+Hcv3KBRR0nD+U65gLF6C3mdnpgSuWrRM2M51Dy7r
+         Fng8C6zpzyjxq1BIZ+QjaqN+FqXsG3IBqJrLjQ7iHkJloenJEnEtP6NwU7y7CHs5KM2x
+         mtM+GDSfA5/mXBB0WS3VKnNOtzmpOm/4kMiUzn5QA0yhw3JQa+CPvOQ3rjFCu5lG7eYb
+         vTxg==
+X-Gm-Message-State: AOJu0Yxf2CfvxWs7cnhLnUd4HobnsQsXtFplsPeaw6VIUKDvfbBntYm2
+	HgWL5gXYca3i3xWgkUuKBhzjsmotVkTJeZjFdiYE+QAi4xbdbVorXADc
+X-Gm-Gg: Acq92OFbQMWvfw5LOgbo+MczJIOmsvxvgzhgIkXXVfAojjilC8cWmue4RCXQ+CIvhiM
+	lrU2+R2shzomqwUXaFV9ME4bDUCI0uUA4WjGRg4JzvZpvyz8bYEJ8K8wtlg2zTTe/m9ibgmL36g
+	/bpghuq6siZcTz3Q3aWgMEcOel3uLhm6swY1/XrNIUfh93GkD1XGI7uwakN6G0gi9KROnWzobGW
+	5zupQhQNF/rZpWNFbrucF33yDBen+QwdXHgYoHPdqE0j8S9xLnsQTDwiUo0JerB5dF/2mhfs5Hn
+	Kq1cwAa8UMO18t9PDC2ZKabczcaNL+oBzmrqI2gKYNgS1qyompQFel573qqFimnDxGDHbAQ/SO8
+	yuop5Ym3OwTmWZBzLh67Clea55jQsDqk3NluPRfm3CwM5668kDazXBxaCkZwAJ8ccbecgwv3v/I
+	WS2iuEFcIbpW2QggO7cpR7XWRbjMvNT3RsVjLtOHmkxkRFEDPD09Pcep9ffn6kMgSRNXPXIo0MT
+	5gzAuA0G+FQ
+X-Received: by 2002:a17:902:d58f:b0:2bf:195d:21d2 with SMTP id d9443c01a7336-2c1e7e44e91mr130091865ad.16.1780838232944;
+        Sun, 07 Jun 2026 06:17:12 -0700 (PDT)
+Received: from yafangs-Air ([240e:46c:a410:280:a000:69ce:6442:2055])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e627sm153004985ad.52.2026.06.07.06.17.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 07 Jun 2026 06:17:12 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	song@kernel.org
+Cc: live-patching@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v3 0/7] livepatch: Introduce replace set support
+Date: Sun,  7 Jun 2026 21:16:52 +0800
+Message-ID: <20260607131659.29281-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun 2026-05-24 20:50:33, Marcos Paulo de Souza wrote:
-> The current livepatch selftests are compatible with kernel 4.12, so add
-> a note about it for future developers willing to contribute with new
-> tests.
-> 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> ---
->  tools/testing/selftests/livepatch/README | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
-> index d2035dd64a2b..293f4730b927 100644
-> --- a/tools/testing/selftests/livepatch/README
-> +++ b/tools/testing/selftests/livepatch/README
-> @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's ring buffer for
->  those strings for result comparison.  Other utility functions include
->  general module loading and livepatch loading helpers (waiting for patch
->  transitions, sysfs entries, etc.)
-> +
-> +All new tests and test modules MUST be compatible with kernel version 4.12 and
-> +later, including current upstream kernels.
+We previously proposed a BPF+livepatch method to enable rapid
+experimentation with new kernel features without interrupting production
+workloads:
 
-I do not have a good feeling about this. One thing is to accept fixes/workarounds
-for the backward compatibility. But forcing contributors to keep the
-compatibility might be too demanding.
+  https://lore.kernel.org/live-patching/20260402092607.96430-1-laoar.shao@gmail.com/
 
-I might be wrong. But I think that you would need a pretty old
-userspace to run 4.12 kernel. And most people could not get it easily.
+In the resulting discussion, Song and Petr suggested adding a "replace set"
+to support scenarios where specific livepatches can be selectively replaced
+or skipped.
 
-Honestly, I though more about this effort and I am not sure how
-complicated it would be in the long term.
+This patch introduces 'replace_set' to provide finer-grained control over
+livepatch management. The core rules and behaviors of a replace_set are
+defined as follows:
+- Livepatches sharing the same replace_set can mutually replace each
+  other.
+- Only one livepatch within a given replace_set can be active at a time.
+- Livepatches belonging to different replace_sets can coexist on the
+  system.
+- Livepatches in different replace_sets are prohibited from modifying the
+  same function.
+- Livepatches in different replace_sets cannot use the same state ID.
 
-I know about two pending patchsets which are breaking the backward
-compatibility:
+Additionally, this design deprecates the traditional non-atomic-replace
+model. Previously, setting 'replace' to 0 was the only way to keep
+certain livepatches persistent on the system, forcing developers to
+disable atomic replacement entirely. With the introduction of replace_set,
+developers now have a selective option to keep specific livepatches
+persistent while maintaining atomic replacement capabilities elsewhere.
 
-  + Better integration of callbacks and shadow variables with the states API [1]
-  + Introduce replace set support [2]
+At present, KLP state, shadow variables, and callbacks are not integrated
+with the new replace_set mechanism in this patchset. Support for these
+features is deferred until Petr's klp-state-transfer infrastructure is
+completed and merged:
 
-Especially the 1st one is a pain. It is 19th patches and most of them
-are fixing/reworking the selftests. I think that it was the reason
-why nobody reviewed it yet. And it might be even worse if we wanted
-to make it backward compatible.
+  https://github.com/pmladek/linux/tree/klp-state-transfer-v1-iter12
 
-[1] https://lore.kernel.org/all/20250115082431.5550-1-pmladek@suse.com/
-[2] https://lore.kernel.org/all/20260529034542.68766-1-laoar.shao@gmail.com/
+v2->v3:
+- Address the feedback from Sachiko AI
+ - Fix the pre-existing NULL pointer dereference issue
+ - Move klp_find_func into core.h
+ - Don't deprecate stack_order completely
 
-Best Regards,
-Petr
+v2: https://lore.kernel.org/live-patching/20260529034542.68766-1-laoar.shao@gmail.com/
+
+v1->v2:
+- Incorporate feedback from Petr:
+  - Initialize replace_set to 0 by default
+  - Improve documentation
+  - Enforce that livepatches in different replace_sets cannot use the same
+    state->id.
+  - Enforce that livepatches in different replace_sets cannot modify the
+    same function.
+  - Ensure consistent capitalization and naming usage of KLP_REPLACE_SET.
+- Incorporate feedback from Sachiko AI:
+  - Skip the klp_transition patch during klp_force_transition().
+
+v1 (RFC): https://lore.kernel.org/live-patching/20260513143321.26185-1-laoar.shao@gmail.com/
+
+Yafang Shao (7):
+  livepatch: Fix NULL pointer dereference in klp_find_func()
+  livepatch: Move klp_find_func() into core.h
+  livepatch: Support scoped atomic replace using replace_set
+  livepatch: Deprecate stack_order
+  selftests/livepatch: Update tests for replace_set
+  selftests/livepatch: Add test for state ID conflict across
+    replace_sets
+  selftests/livepatch: Add test for function conflict across
+    replace_sets
+
+ .../ABI/removed/sysfs-kernel-livepatch        |   9 +
+ .../ABI/testing/sysfs-kernel-livepatch        |  14 +-
+ .../livepatch/cumulative-patches.rst          |  23 ++-
+ Documentation/livepatch/livepatch.rst         |  21 ++-
+ include/linux/livepatch.h                     |   5 +-
+ kernel/livepatch/core.c                       |  65 ++-----
+ kernel/livepatch/core.h                       |  21 +++
+ kernel/livepatch/state.c                      |  51 ++++--
+ kernel/livepatch/transition.c                 |  11 +-
+ scripts/livepatch/init.c                      |   6 +-
+ scripts/livepatch/klp-build                   |  16 +-
+ .../selftests/livepatch/test-callbacks.sh     |  33 ++--
+ .../selftests/livepatch/test-livepatch.sh     | 159 +++++++----------
+ .../testing/selftests/livepatch/test-state.sh |  34 ++++
+ .../testing/selftests/livepatch/test-sysfs.sh |  91 ++--------
+ .../selftests/livepatch/test_modules/Makefile |   2 +
+ .../test_modules/test_klp_atomic_replace.c    |  10 +-
+ .../test_modules/test_klp_atomic_replace2.c   |  55 ++++++
+ .../test_modules/test_klp_callbacks_demo.c    |   6 +
+ .../test_modules/test_klp_callbacks_demo2.c   |  10 +-
+ .../test_modules/test_klp_livepatch.c         |   6 +
+ .../livepatch/test_modules/test_klp_state.c   |   4 +-
+ .../livepatch/test_modules/test_klp_state2.c  |   4 +-
+ .../livepatch/test_modules/test_klp_state4.c  | 163 ++++++++++++++++++
+ 24 files changed, 507 insertions(+), 312 deletions(-)
+ create mode 100644 Documentation/ABI/removed/sysfs-kernel-livepatch
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace2.c
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_state4.c
+
+-- 
+2.52.0
+
