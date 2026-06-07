@@ -1,63 +1,63 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DABC2BE057
-	for <live-patching@vger.kernel.org>; Sun,  7 Jun 2026 13:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539442BE057
+	for <live-patching@vger.kernel.org>; Sun,  7 Jun 2026 13:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780838264; cv=none; b=HYXxCY3fd5pdxdWMaEr9U7hBxQZ/ZPxPOiU8Y+ok0qPeJTsAfdI51ck0GOFeRuYB7Qc9XTwpVMvuLLK8G6nwf7Hj1dzPUAD72ClusAJzA03BQtmfBfPgSjKf5UhefHxvWZakwi1uOV1bkrGtezCEdszKfNf85XRbEOoqKBqXVNk=
+	t=1780838268; cv=none; b=JOrWah59q3WezW21ts/C7Mmzi3mMaWN2hEEmfrj4D41cHw1RWMi7iNKjqzkNGfgnqkEQGa/Q4YbL1p+290V8auc8h+xWKsl4nAYjE09CEDO2HBy0pNyc0CbLJPiRXJ25zmZLLcYZkSlLDxewBFYPahRDAWPmkfT9o+25rkLEs/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780838264; c=relaxed/simple;
-	bh=83Z60zmpSksRaFw5TEiDtg+x7VUdYioyWnyBymAP/X0=;
+	s=arc-20240116; t=1780838268; c=relaxed/simple;
+	bh=aYCw3Dlw8MeIVAPUSsVjjaywJzu7cOFOWBPn+BiK6mU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O625/8huYospoP8Z+o/b66ivN3ckW5HmGyKXgHJ/jFWGY7OwbpYC7e+BAG4BaMLfbdR4nEPlJlQLhC887s7XA/z6qfu+BZyNb41bGOXb/41jaBehBgekl49R557cyOJ9QioRWcqHA2reAo2BU9SWBkTFm5PWcNICid6af6aaErk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DqAMmMrT; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=SZ3H4y2ctNT9jt2DtDCGCRqbqbQ57xMglPS+iw817M/wnMFeixIkNa8akVJB1mxqzFUKEYG9V9GYnXJ4L2JfMebXcmdTa2pp0X669ezZIZpeqE4Yl8i2M3xLju8btxENrkUkL3dVlrQ0DT68m2C91AHqRugZmWrmkUU1J0PuX00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VwLUqpdG; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqAMmMrT"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2bea7176c72so21759555ad.0
-        for <live-patching@vger.kernel.org>; Sun, 07 Jun 2026 06:17:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VwLUqpdG"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2bea7176c72so21759705ad.0
+        for <live-patching@vger.kernel.org>; Sun, 07 Jun 2026 06:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1780838261; x=1781443061; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1780838266; x=1781443066; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sxjEruDISpi6flTQfm47ZYo0nkBHxmAshnb/5/NL7fc=;
-        b=DqAMmMrTeDjnDC4j3dhWnqhoIRDCp8OYX7Z3ZJcVonhJurpG3O1qzkfRr0Rga0uAMt
-         WGsibbPYiIpez32zteXPyiIKdj6wrFkGTExPbtuL2SuF5w6JPD9e0s4Ed34LpRIHxqjy
-         48fHDIjm4xuRL+GaLME474o021VkMFfCESuWSUSqAjp73Jf/SlPTIaLp9JLd9sD/HJTx
-         zyX3vBkANzk2gWmmBOvV9GiTwtNb1vRd36KEEeJ6MItmADvSkqVY0wNY0PL06nZEYzjX
-         SWJOsAIil09Th0CKmyCoMglFopv4vRkK/843MLXpy/LMzKKqGIihYXI0uOw/tEoYxIRO
-         rS1A==
+        bh=A94/YZvddhw9JtMjCS+6+Kt4CwqtoWaKOzaU8jPqeKg=;
+        b=VwLUqpdGqwwwlIPvYChGl3JrNJAyM5mkkc/ZI8FC2+6XT35ih+m7/o9CnTllKVhNe5
+         kF/zYxyzskDxulbBHTpEz7JcnX3oYG1Tx2T7KYFC8Fcup+I+tKCh0QOnCdv2kKH9SDdO
+         prqgVcdgBQHO1vK5i/RFpHpaC9OvZ+FFQ4ELUTCq3gGhw3AWlyfzArFtCwryOY8J6P0g
+         pBaf9EuE+DNjDc0u4GQLyPWEGGw3tsut10NtExxXiCvGoWhpjjaXVPbXpncozE8EHhCC
+         QcqCP7p2cR6emvdT019hghp5/Nf/2W1pRomwRBhhmnbHZOCEyvCipU8TC6deo5Id+2/B
+         g7Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780838261; x=1781443061;
+        d=1e100.net; s=20251104; t=1780838266; x=1781443066;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=sxjEruDISpi6flTQfm47ZYo0nkBHxmAshnb/5/NL7fc=;
-        b=ARKZk4HBUBjA63EtybL5H/E1hO+jITipkQ7Nv742K4q5pn9Bcpzwev3mue1MAe6rq4
-         ftDFxm5Z2OqwLFvevX5rMwgk01LamIkcY2Hfq+XYTf9u8IS2IcJWJlrG64pjWB/Zx9vP
-         dZhXp3dHhKTOFVDJDutwfrX4S1xbz0LGo7aLq5ojoV+wDp6h3utMwiDoI+rzz2k9DEZz
-         5FyWZfc42RgBv2Z4YMzLMjk1DmgdJ8kQxfHAPeLJGpypvUhxvxNPFT/+yDPZa16tiAWb
-         Br/2mQ+HZT/ltJwgHh1ZCL3Sl1i5ZpnofuYWRuFDMe4/ChIvvLgHab95VFAfB7jW0v4q
-         HIxA==
-X-Gm-Message-State: AOJu0YwVJ0BSlJqu7JEgYxDfKgLwafKWs2fPFEYaWogDBPtm2eg25pCD
-	n0KHK3q5pv1LXNPh93BH9uau3a6zBFlwMLq+TLluIGV/+XzsEzSzvtcv
-X-Gm-Gg: Acq92OGO4c3SyPYxOTYorx+niEVBLFL4wY7ls5Nt9Mlax7dfQ5aiLtw2ddU/0UpOiDh
-	ty32DQL58vo84DSd0IjngnsZOnh/VgMTZI2mw1mgwoQ+YGOpNkYpMOnfzzAN+E636+8xdK1qj+v
-	bVdt97vrI/N/shcxiWWqPJ3pP2vRcPl6s5YSSB1rzf0uWs8KVvG/Lxfg9aY3OplM1ol8Or7iy+V
-	eyfZf65JQ9LkuwXPF4E7EcSr7NMAF2w+Hc27D+KJY/uZg6j9R38Codz7K+xYswuX+4taLqzQcfg
-	E94cO1obwS9Td/4o9s0L2l8gtBimZZ93rM2pp/ftY5Q0fWPAT9nBeTe4+BQm1LljrSznIarWL9T
-	7Act19Ql0AjXS7/IrHuNM9VAnxlAmHew+YNZqAaugInoBvNOKGcFJw8i+cR/zj7tEALc3EwFLsr
-	08O4LoLQYs0bibT/LSVfDiPEjdFdGNlvPs+JDsN+wS3qnVjj45T8P48qzQGDEpCxdNEMV7l1mGU
-	Zpqmae72ABM
-X-Received: by 2002:a17:903:4407:b0:2c1:d49c:8398 with SMTP id d9443c01a7336-2c1e78df934mr130708145ad.8.1780838261401;
-        Sun, 07 Jun 2026 06:17:41 -0700 (PDT)
+        bh=A94/YZvddhw9JtMjCS+6+Kt4CwqtoWaKOzaU8jPqeKg=;
+        b=AFyrFsExxJMDdOF5YGutig0WFcZEHQg8Mfr614Y6y/qZAaSeu6rplzC5f9TYdNaHCf
+         B+c4Vsf2w1lpFm4FXrm6pO2B3r1Rnj74N1RHRyprEHwJEn4xJ2ZIOQoPAsbsMS4z5jM4
+         rJ3nTAF+rXEHSR7D5/yB2X+LTxiob0IkqsQp4ky1N74IdqamSPOXMtoVJK6Nrhw4lAsN
+         OXr53GO5AqBHQCVy9O6+nP/e5Q127JXAX4uEDvMqA8d1w8QDooLlbLWst4nsTDy6I79f
+         UWR6b8yhdnoLUTw41NACHLqc429opBZfCI5LyuxsgWgKjYBXNUvzfdjoOb9Me19HVmkv
+         zyyg==
+X-Gm-Message-State: AOJu0Yyy0UE8AVOurX9TNTjleFQwQ62VWBi9wjgPQdFaT3rDLAfsSLkN
+	Ss1tta16CVoRfcbYhQEWMyq+J15+MaYGraItjNXDUuzbNjXqUSg/h3lr
+X-Gm-Gg: Acq92OGMj6ijET8hbOZdWPzDDbj7fl8Xuk4Jm9297S18tjYexzqxL/Qdxdu6MQRC+JP
+	KwwwL9Cku04x2IGv5v2VUKO/C/RsU86pdy18bE/sdj4ENX7KrUsn6/5p8Hp99I0MXAk2X6oCIVK
+	kz0dZCdwuDg4AYw2d6gLsf6Q2w2KE1LGbhB2d1mkLas/IH7YAij84re0dZDtrr2Goiq6IMrN5w1
+	+J2/NW4IEc2EyBlEMU+zD3uWqtXoP3s71dMCgpuUx5MID9TVQuXTGSl4/UZ7ehgwbxlZJXuK0eY
+	9feVoH6xa3EOUt4Yx0ZjF6z0mURdGqlZSPymaxFMDjRCiXhV8a/a1xkX0UarXYIb79YG22+hDYK
+	it4JhrQ/l1e2SwU4Q1rJRrQ1Ph1lbd0ZCKK0xdlDsqp1/uTNOGrimHCWCILvDBMznZYSi4coSla
+	CT2YZ69YVSFRtwBSQOGihhZM2xtLwrZVMHYwBce9ZEbZVZ7Dk8pkpZGBprri3dHj1GskWzjFyZD
+	AFKwa2g1k9q
+X-Received: by 2002:a17:903:248:b0:2bf:27b2:4b80 with SMTP id d9443c01a7336-2c1e7b457femr133197015ad.14.1780838266412;
+        Sun, 07 Jun 2026 06:17:46 -0700 (PDT)
 Received: from yafangs-Air ([240e:46c:a410:280:a000:69ce:6442:2055])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e627sm153004985ad.52.2026.06.07.06.17.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c16609e627sm153004985ad.52.2026.06.07.06.17.42
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 07 Jun 2026 06:17:40 -0700 (PDT)
+        Sun, 07 Jun 2026 06:17:45 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: jpoimboe@kernel.org,
 	jikos@kernel.org,
@@ -67,9 +67,9 @@ To: jpoimboe@kernel.org,
 	song@kernel.org
 Cc: live-patching@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v3 5/7] selftests/livepatch: Update tests for replace_set
-Date: Sun,  7 Jun 2026 21:16:57 +0800
-Message-ID: <20260607131659.29281-6-laoar.shao@gmail.com>
+Subject: [PATCH v3 6/7] selftests/livepatch: Add test for state ID conflict across replace_sets
+Date: Sun,  7 Jun 2026 21:16:58 +0800
+Message-ID: <20260607131659.29281-7-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260607131659.29281-1-laoar.shao@gmail.com>
 References: <20260607131659.29281-1-laoar.shao@gmail.com>
@@ -81,507 +81,287 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The changes are as follows:
-- Replace "replace" with "replace_set"
-- For atomic-replace test cases, we configure two different livepatches
-  that share the same replace_set.
-- For non-atomic-replace test cases, we configure multiple livepatches,
-  each with a different replace_set.
-- Remove the test case that an atomic replace livepatch disables
-  multiple existing livepatches
+Livepatches with different replace_sets must not share the same state
+ID. If a second livepatch attempts to reuse a state ID already
+registered by a livepatch with a different replace_set, the loading
+will fail.
 
-The result are as follows,
-
-$ ./test-callbacks.sh
-TEST: target module before livepatch ... ok
-TEST: module_coming notifier ... ok
-TEST: module_going notifier ... ok
-TEST: module_coming and module_going notifiers ... ok
-TEST: target module not present ... ok
-TEST: pre-patch callback -ENODEV ... ok
-TEST: module_coming + pre-patch callback -ENODEV ... ok
-TEST: multiple target modules ... ok
-TEST: busy target module ... ok
-TEST: multiple livepatches ... ok
-TEST: atomic replace ... ok
-
-$ ./test-ftrace.sh
-TEST: livepatch interaction with ftrace_enabled sysctl ... ok
-TEST: trace livepatched function and check that the live patch remains in effect ... ok
-TEST: livepatch a traced function and check that the live patch remains in effect ... ok
-
-$ ./test-kprobe.sh
-TEST: livepatch interaction with kprobed function with post_handler ... ok
-TEST: livepatch interaction with kprobed function without post_handler ... ok
-
-$ ./test-livepatch.sh
-TEST: basic function patching ... ok
-TEST: multiple livepatches ... ok
-TEST: module function patching ... ok
-TEST: module function patching (livepatch first) ... ok
-
-$ ./test-shadow-vars.sh
-TEST: basic shadow variable API ... ok
+Add a test case to verify this behavior. The test result is as follows:
 
 $ ./test-state.sh
 TEST: system state modification ... ok
 TEST: taking over system state modification ... ok
 TEST: compatible cumulative livepatches ... ok
 TEST: incompatible cumulative livepatches ... ok
-
-$ ./test-syscall.sh
-TEST: patch getpid syscall while being heavily hammered ... ok
+TEST: livepatches state compatibility  ... ok    <<<< This case
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- .../selftests/livepatch/test-callbacks.sh     |  33 +++---
- .../selftests/livepatch/test-livepatch.sh     | 100 +-----------------
- .../testing/selftests/livepatch/test-sysfs.sh |  22 ++--
- .../test_modules/test_klp_atomic_replace.c    |  10 +-
- .../test_modules/test_klp_callbacks_demo.c    |   6 ++
- .../test_modules/test_klp_callbacks_demo2.c   |  10 +-
- .../test_modules/test_klp_livepatch.c         |   6 ++
+ .../testing/selftests/livepatch/test-state.sh |  34 ++++
+ .../selftests/livepatch/test_modules/Makefile |   1 +
  .../livepatch/test_modules/test_klp_state.c   |   2 +-
  .../livepatch/test_modules/test_klp_state2.c  |   2 +-
- 9 files changed, 55 insertions(+), 136 deletions(-)
+ .../livepatch/test_modules/test_klp_state4.c  | 163 ++++++++++++++++++
+ 5 files changed, 200 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_state4.c
 
-diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-index 2a03deb26a12..692da8ea4c25 100755
---- a/tools/testing/selftests/livepatch/test-callbacks.sh
-+++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-@@ -451,8 +451,8 @@ $MOD_TARGET_BUSY: busymod_work_func exit
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
+index 04b66380f8a0..934a2aa655bb 100755
+--- a/tools/testing/selftests/livepatch/test-state.sh
++++ b/tools/testing/selftests/livepatch/test-state.sh
+@@ -7,6 +7,7 @@
+ MOD_LIVEPATCH=test_klp_state
+ MOD_LIVEPATCH2=test_klp_state2
+ MOD_LIVEPATCH3=test_klp_state3
++MOD_LIVEPATCH4=test_klp_state4
  
+ setup_config
  
--# Test loading multiple livepatches.  This test-case is mainly for comparing
--# with the next test-case.
-+# Test loading multiple livepatches sharing different replace_set.
-+# This test-case is mainly for comparing with the next test-case.
- #
- # - Load and unload two livepatches, pre and post (un)patch callbacks
- #   execute as each patch progresses through its (un)patching
-@@ -460,14 +460,14 @@ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
+@@ -173,4 +174,37 @@ $MOD_LIVEPATCH2: free_loglevel_state: freeing space for the stored console_logle
+ livepatch: '$MOD_LIVEPATCH2': unpatching complete
+ % rmmod $MOD_LIVEPATCH2"
  
- start_test "multiple livepatches"
- 
--load_lp $MOD_LIVEPATCH
--load_lp $MOD_LIVEPATCH2
-+load_lp $MOD_LIVEPATCH replace_set=0
-+load_lp $MOD_LIVEPATCH2 replace_set=1
- disable_lp $MOD_LIVEPATCH2
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH2
- unload_lp $MOD_LIVEPATCH
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
-+check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace_set=0
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
- $MOD_LIVEPATCH: pre_patch_callback: vmlinux
-@@ -475,7 +475,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
- livepatch: '$MOD_LIVEPATCH': completing patching transition
- $MOD_LIVEPATCH: post_patch_callback: vmlinux
- livepatch: '$MOD_LIVEPATCH': patching complete
--% insmod test_modules/$MOD_LIVEPATCH2.ko
-+% insmod test_modules/$MOD_LIVEPATCH2.ko replace_set=1
- livepatch: enabling patch '$MOD_LIVEPATCH2'
- livepatch: '$MOD_LIVEPATCH2': initializing patching transition
- $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
-@@ -501,14 +501,13 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
- 
--# Load multiple livepatches, but the second as an 'atomic-replace'
--# patch.  When the latter loads, the original livepatch should be
--# disabled and *none* of its pre/post-unpatch callbacks executed.  On
--# the other hand, when the atomic-replace livepatch is disabled, its
--# pre/post-unpatch callbacks *should* be executed.
-+# Load multiple livepatches sharing the same replace_set.
-+# When the latter loads, the original livepatch should be disabled and
-+# *none* of its pre/post-unpatch callbacks executed.  On the other hand,
-+# when the atomic-replace livepatch is disabled, its pre/post-unpatch
-+# callbacks *should* be executed.
- #
--# - Load and unload two livepatches, the second of which has its
--#   .replace flag set true.
-+# - Load and unload two livepatches sharing the same replace_set
- #
- # - Pre and post patch callbacks are executed for both livepatches.
- #
-@@ -517,13 +516,13 @@ livepatch: '$MOD_LIVEPATCH': unpatching complete
- 
- start_test "atomic replace"
- 
--load_lp $MOD_LIVEPATCH
--load_lp $MOD_LIVEPATCH2 replace=1
-+load_lp $MOD_LIVEPATCH replace_set=0
-+load_lp $MOD_LIVEPATCH2 replace_set=0
- disable_lp $MOD_LIVEPATCH2
- unload_lp $MOD_LIVEPATCH2
- unload_lp $MOD_LIVEPATCH
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
-+check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace_set=0
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
- $MOD_LIVEPATCH: pre_patch_callback: vmlinux
-@@ -531,7 +530,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
- livepatch: '$MOD_LIVEPATCH': completing patching transition
- $MOD_LIVEPATCH: post_patch_callback: vmlinux
- livepatch: '$MOD_LIVEPATCH': patching complete
--% insmod test_modules/$MOD_LIVEPATCH2.ko replace=1
-+% insmod test_modules/$MOD_LIVEPATCH2.ko replace_set=0
- livepatch: enabling patch '$MOD_LIVEPATCH2'
- livepatch: '$MOD_LIVEPATCH2': initializing patching transition
- $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
-diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-index c44c5341a2f1..4f8fb5620c6e 100755
---- a/tools/testing/selftests/livepatch/test-livepatch.sh
-+++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-@@ -5,8 +5,6 @@
- . $(dirname $0)/functions.sh
- 
- MOD_LIVEPATCH1=test_klp_livepatch
--MOD_LIVEPATCH2=test_klp_syscall
--MOD_LIVEPATCH3=test_klp_callbacks_demo
- MOD_REPLACE=test_klp_atomic_replace
- MOD_TARGET=test_klp_mod_target
- MOD_TARGET_PATCH=test_klp_mod_patch
-@@ -57,12 +55,12 @@ livepatch: '$MOD_LIVEPATCH1': unpatching complete
- 
- start_test "multiple livepatches"
- 
--load_lp $MOD_LIVEPATCH1
-+load_lp $MOD_LIVEPATCH1 replace_set=0
- 
- grep 'live patched' /proc/cmdline > /dev/kmsg
- grep 'live patched' /proc/meminfo > /dev/kmsg
- 
--load_lp $MOD_REPLACE replace=0
-+load_lp $MOD_REPLACE replace_set=1
- 
- grep 'live patched' /proc/cmdline > /dev/kmsg
- grep 'live patched' /proc/meminfo > /dev/kmsg
-@@ -79,14 +77,14 @@ unload_lp $MOD_LIVEPATCH1
- grep 'live patched' /proc/cmdline > /dev/kmsg
- grep 'live patched' /proc/meminfo > /dev/kmsg
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko
-+check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko replace_set=0
- livepatch: enabling patch '$MOD_LIVEPATCH1'
- livepatch: '$MOD_LIVEPATCH1': initializing patching transition
- livepatch: '$MOD_LIVEPATCH1': starting patching transition
- livepatch: '$MOD_LIVEPATCH1': completing patching transition
- livepatch: '$MOD_LIVEPATCH1': patching complete
- $MOD_LIVEPATCH1: this has been live patched
--% insmod test_modules/$MOD_REPLACE.ko replace=0
-+% insmod test_modules/$MOD_REPLACE.ko replace_set=1
- livepatch: enabling patch '$MOD_REPLACE'
- livepatch: '$MOD_REPLACE': initializing patching transition
- livepatch: '$MOD_REPLACE': starting patching transition
-@@ -108,96 +106,6 @@ livepatch: '$MOD_LIVEPATCH1': completing unpatching transition
- livepatch: '$MOD_LIVEPATCH1': unpatching complete
- % rmmod $MOD_LIVEPATCH1"
- 
--
--# - load a livepatch that modifies the output from /proc/cmdline and
--#   verify correct behavior
--# - load two additional livepatches and check the number of livepatch modules
--#   applied
--# - load an atomic replace livepatch and check that the other three modules were
--#   disabled
--# - remove all livepatches besides the atomic replace one and verify that the
--#   atomic replace livepatch is still active
--# - remove the atomic replace livepatch and verify that none are active
--
--start_test "atomic replace livepatch"
--
--load_lp $MOD_LIVEPATCH1
--
--grep 'live patched' /proc/cmdline > /dev/kmsg
--grep 'live patched' /proc/meminfo > /dev/kmsg
--
--for mod in $MOD_LIVEPATCH2 $MOD_LIVEPATCH3; do
--	load_lp "$mod"
--done
--
--mods=($SYSFS_KLP_DIR/*)
--nmods=${#mods[@]}
--if [ "$nmods" -ne 3 ]; then
--	die "Expecting three modules listed, found $nmods"
--fi
--
--load_lp $MOD_REPLACE replace=1
--
--grep 'live patched' /proc/cmdline > /dev/kmsg
--grep 'live patched' /proc/meminfo > /dev/kmsg
--
--loop_until 'mods=($SYSFS_KLP_DIR/*); nmods=${#mods[@]}; [[ "$nmods" -eq 1 ]]' ||
--        die "Expecting only one moduled listed, found $nmods"
--
--# These modules were disabled by the atomic replace
--for mod in $MOD_LIVEPATCH3 $MOD_LIVEPATCH2 $MOD_LIVEPATCH1; do
--	unload_lp "$mod"
--done
--
--grep 'live patched' /proc/cmdline > /dev/kmsg
--grep 'live patched' /proc/meminfo > /dev/kmsg
--
--disable_lp $MOD_REPLACE
--unload_lp $MOD_REPLACE
--
--grep 'live patched' /proc/cmdline > /dev/kmsg
--grep 'live patched' /proc/meminfo > /dev/kmsg
--
--check_result "% insmod test_modules/$MOD_LIVEPATCH1.ko
--livepatch: enabling patch '$MOD_LIVEPATCH1'
--livepatch: '$MOD_LIVEPATCH1': initializing patching transition
--livepatch: '$MOD_LIVEPATCH1': starting patching transition
--livepatch: '$MOD_LIVEPATCH1': completing patching transition
--livepatch: '$MOD_LIVEPATCH1': patching complete
--$MOD_LIVEPATCH1: this has been live patched
--% insmod test_modules/$MOD_LIVEPATCH2.ko
--livepatch: enabling patch '$MOD_LIVEPATCH2'
--livepatch: '$MOD_LIVEPATCH2': initializing patching transition
--livepatch: '$MOD_LIVEPATCH2': starting patching transition
--livepatch: '$MOD_LIVEPATCH2': completing patching transition
--livepatch: '$MOD_LIVEPATCH2': patching complete
--% insmod test_modules/$MOD_LIVEPATCH3.ko
--livepatch: enabling patch '$MOD_LIVEPATCH3'
--livepatch: '$MOD_LIVEPATCH3': initializing patching transition
--$MOD_LIVEPATCH3: pre_patch_callback: vmlinux
--livepatch: '$MOD_LIVEPATCH3': starting patching transition
--livepatch: '$MOD_LIVEPATCH3': completing patching transition
--$MOD_LIVEPATCH3: post_patch_callback: vmlinux
--livepatch: '$MOD_LIVEPATCH3': patching complete
--% insmod test_modules/$MOD_REPLACE.ko replace=1
--livepatch: enabling patch '$MOD_REPLACE'
--livepatch: '$MOD_REPLACE': initializing patching transition
--livepatch: '$MOD_REPLACE': starting patching transition
--livepatch: '$MOD_REPLACE': completing patching transition
--livepatch: '$MOD_REPLACE': patching complete
--$MOD_REPLACE: this has been live patched
--% rmmod $MOD_LIVEPATCH3
--% rmmod $MOD_LIVEPATCH2
--% rmmod $MOD_LIVEPATCH1
--$MOD_REPLACE: this has been live patched
--% echo 0 > $SYSFS_KLP_DIR/$MOD_REPLACE/enabled
--livepatch: '$MOD_REPLACE': initializing unpatching transition
--livepatch: '$MOD_REPLACE': starting unpatching transition
--livepatch: '$MOD_REPLACE': completing unpatching transition
--livepatch: '$MOD_REPLACE': unpatching complete
--% rmmod $MOD_REPLACE"
--
--
- # - load a target module that provides /proc/test_klp_mod_target with
- #   original output
- # - load a livepatch that patches the target module's show function
-diff --git a/tools/testing/selftests/livepatch/test-sysfs.sh b/tools/testing/selftests/livepatch/test-sysfs.sh
-index 0c31759f34f6..37425ad89f58 100755
---- a/tools/testing/selftests/livepatch/test-sysfs.sh
-+++ b/tools/testing/selftests/livepatch/test-sysfs.sh
-@@ -20,7 +20,7 @@ check_sysfs_rights "$MOD_LIVEPATCH" "" "drwxr-xr-x"
- check_sysfs_rights "$MOD_LIVEPATCH" "enabled" "-rw-r--r--"
- check_sysfs_value  "$MOD_LIVEPATCH" "enabled" "1"
- check_sysfs_rights "$MOD_LIVEPATCH" "force" "--w-------"
--check_sysfs_rights "$MOD_LIVEPATCH" "replace" "-r--r--r--"
-+check_sysfs_rights "$MOD_LIVEPATCH" "replace_set" "-r--r--r--"
- check_sysfs_rights "$MOD_LIVEPATCH" "transition" "-r--r--r--"
- check_sysfs_value  "$MOD_LIVEPATCH" "transition" "0"
- check_sysfs_rights "$MOD_LIVEPATCH" "vmlinux/patched" "-r--r--r--"
-@@ -86,18 +86,18 @@ test_klp_callbacks_demo: post_unpatch_callback: vmlinux
- livepatch: 'test_klp_callbacks_demo': unpatching complete
- % rmmod test_klp_callbacks_demo"
- 
--start_test "sysfs test replace enabled"
-+start_test "sysfs test replace_set 0"
- 
- MOD_LIVEPATCH=test_klp_atomic_replace
--load_lp $MOD_LIVEPATCH replace=1
-+load_lp $MOD_LIVEPATCH replace_set=0
- 
--check_sysfs_rights "$MOD_LIVEPATCH" "replace" "-r--r--r--"
--check_sysfs_value  "$MOD_LIVEPATCH" "replace" "1"
-+check_sysfs_rights "$MOD_LIVEPATCH" "replace_set" "-r--r--r--"
-+check_sysfs_value  "$MOD_LIVEPATCH" "replace_set" "0"
- 
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace=1
-+check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace_set=0
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
- livepatch: '$MOD_LIVEPATCH': starting patching transition
-@@ -110,17 +110,17 @@ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
- livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
- 
--start_test "sysfs test replace disabled"
-+start_test "sysfs test replace_set 1234"
- 
--load_lp $MOD_LIVEPATCH replace=0
-+load_lp $MOD_LIVEPATCH replace_set=1234
- 
--check_sysfs_rights "$MOD_LIVEPATCH" "replace" "-r--r--r--"
--check_sysfs_value  "$MOD_LIVEPATCH" "replace" "0"
-+check_sysfs_rights "$MOD_LIVEPATCH" "replace_set" "-r--r--r--"
-+check_sysfs_value  "$MOD_LIVEPATCH" "replace_set" "1234"
- 
- disable_lp $MOD_LIVEPATCH
- unload_lp $MOD_LIVEPATCH
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace=0
-+check_result "% insmod test_modules/$MOD_LIVEPATCH.ko replace_set=1234
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
- livepatch: '$MOD_LIVEPATCH': starting patching transition
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c b/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
-index 5af7093ca00c..5333503f193a 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
-@@ -7,9 +7,9 @@
- #include <linux/kernel.h>
- #include <linux/livepatch.h>
- 
--static int replace;
--module_param(replace, int, 0644);
--MODULE_PARM_DESC(replace, "replace (default=0)");
-+static int replace_set;
-+module_param(replace_set, int, 0644);
-+MODULE_PARM_DESC(replace_set, "replace_set (default=0)");
- 
- #include <linux/seq_file.h>
- static int livepatch_meminfo_proc_show(struct seq_file *m, void *v)
-@@ -36,12 +36,12 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
--	/* set .replace in the init function below for demo purposes */
-+	/* set .replace_set in the init function below for demo purposes */
- };
- 
- static int test_klp_atomic_replace_init(void)
- {
--	patch.replace = replace;
-+	patch.replace_set = replace_set;
- 	return klp_enable_patch(&patch);
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-index 3fd8fe1cd1cc..5c3324aa4d75 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
-@@ -7,6 +7,10 @@
- #include <linux/kernel.h>
- #include <linux/livepatch.h>
- 
-+static int replace_set;
-+module_param(replace_set, int, 0644);
-+MODULE_PARM_DESC(replace_set, "replace_set (default=0)");
++# livepatches with different replace_set sharing the same state ID
 +
- static int pre_patch_ret;
- module_param(pre_patch_ret, int, 0644);
- MODULE_PARM_DESC(pre_patch_ret, "pre_patch_ret (default=0)");
-@@ -102,10 +106,12 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
-+	/* set .replace_set in the init function below for demo purposes */
- };
- 
- static int test_klp_callbacks_demo_init(void)
- {
-+	patch.replace_set = replace_set;
- 	return klp_enable_patch(&patch);
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-index 5417573e80af..31347e2131a7 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-@@ -7,9 +7,9 @@
- #include <linux/kernel.h>
- #include <linux/livepatch.h>
- 
--static int replace;
--module_param(replace, int, 0644);
--MODULE_PARM_DESC(replace, "replace (default=0)");
-+static int replace_set;
-+module_param(replace_set, int, 0644);
-+MODULE_PARM_DESC(replace_set, "replace_set (default=0)");
- 
- static const char *const module_state[] = {
- 	[MODULE_STATE_LIVE]	= "[MODULE_STATE_LIVE] Normal state",
-@@ -72,12 +72,12 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
--	/* set .replace in the init function below for demo purposes */
-+	/* set .replace_set in the init function below for demo purposes */
- };
- 
- static int test_klp_callbacks_demo2_init(void)
- {
--	patch.replace = replace;
-+	patch.replace_set = replace_set;
- 	return klp_enable_patch(&patch);
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c b/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
-index aff08199de71..fedd2494d187 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
-@@ -15,6 +15,10 @@ static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
- 	return 0;
- }
- 
-+static int replace_set;
-+module_param(replace_set, int, 0644);
-+MODULE_PARM_DESC(replace_set, "replace_set (default=0)");
++start_test "livepatches state compatibility "
 +
- static struct klp_func funcs[] = {
- 	{
- 		.old_name = "cmdline_proc_show",
-@@ -32,10 +36,12 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
-+	/* set .replace_set in the init function below for demo purposes */
- };
++load_lp $MOD_LIVEPATCH
++load_failing_mod $MOD_LIVEPATCH4
++disable_lp $MOD_LIVEPATCH
++unload_lp $MOD_LIVEPATCH
++
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++$MOD_LIVEPATCH: pre_patch_callback: vmlinux
++$MOD_LIVEPATCH: allocate_loglevel_state: allocating space to store console_loglevel
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++$MOD_LIVEPATCH: post_patch_callback: vmlinux
++$MOD_LIVEPATCH: fix_console_loglevel: fixing console_loglevel
++livepatch: '$MOD_LIVEPATCH': patching complete
++% insmod test_modules/$MOD_LIVEPATCH4.ko
++livepatch: Livepatch patch ($MOD_LIVEPATCH4) is not compatible with the already installed livepatches.
++insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH4.ko: Invalid parameters
++% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
++livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++$MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
++$MOD_LIVEPATCH: restore_console_loglevel: restoring console_loglevel
++livepatch: '$MOD_LIVEPATCH': starting unpatching transition
++livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++$MOD_LIVEPATCH: post_unpatch_callback: vmlinux
++$MOD_LIVEPATCH: free_loglevel_state: freeing space for the stored console_loglevel
++livepatch: '$MOD_LIVEPATCH': unpatching complete
++% rmmod $MOD_LIVEPATCH"
++
+ exit 0
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+index a13d398585dc..bdc5ae37311e 100644
+--- a/tools/testing/selftests/livepatch/test_modules/Makefile
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -14,6 +14,7 @@ obj-m += test_klp_atomic_replace.o \
+ 	test_klp_state.o \
+ 	test_klp_state2.o \
+ 	test_klp_state3.o \
++	test_klp_state4.o \
+ 	test_klp_syscall.o
  
- static int test_klp_livepatch_init(void)
- {
-+	patch.replace_set = replace_set;
- 	return klp_enable_patch(&patch);
- }
- 
+ # Ensure that KDIR exists, otherwise skip the compilation
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-index 57a4253acb01..8c8829c3ec43 100644
+index 8c8829c3ec43..6ef3059483de 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-@@ -142,7 +142,7 @@ static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
- 	.states = states,
--	.replace = true,
-+	.replace_set = 0,
- };
+@@ -39,7 +39,7 @@ static int allocate_loglevel_state(void)
+ 	if (!loglevel_state)
+ 		return -EINVAL;
  
- static int test_klp_callbacks_demo_init(void)
+-	loglevel_state->data = kzalloc(sizeof(console_loglevel), GFP_KERNEL);
++	loglevel_state->data = kzalloc_obj(console_loglevel, GFP_KERNEL);
+ 	if (!loglevel_state->data)
+ 		return -ENOMEM;
+ 
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-index c978ea4d5e67..8a79d7dcce33 100644
+index 8a79d7dcce33..908d79bc7540 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-@@ -171,7 +171,7 @@ static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
- 	.states = states,
--	.replace = true,
-+	.replace_set = 0,
- };
+@@ -46,7 +46,7 @@ static int allocate_loglevel_state(void)
+ 	if (!loglevel_state)
+ 		return -EINVAL;
  
- static int test_klp_callbacks_demo_init(void)
+-	loglevel_state->data = kzalloc(sizeof(console_loglevel), GFP_KERNEL);
++	loglevel_state->data = kzalloc_obj(console_loglevel, GFP_KERNEL);
+ 	if (!loglevel_state->data)
+ 		return -ENOMEM;
+ 
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state4.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state4.c
+new file mode 100644
+index 000000000000..010d1e13f6ec
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state4.c
+@@ -0,0 +1,163 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This test is identical to test_klp_state4.c, except that replace_set is
++ * set to 4 instead of 0.
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/slab.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/printk.h>
++#include <linux/livepatch.h>
++
++#define CONSOLE_LOGLEVEL_STATE 1
++#define CONSOLE_LOGLEVEL_STATE_VERSION 4
++
++static const char *const module_state[] = {
++	[MODULE_STATE_LIVE]	= "[MODULE_STATE_LIVE] Normal state",
++	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
++	[MODULE_STATE_GOING]	= "[MODULE_STATE_GOING] Going away",
++	[MODULE_STATE_UNFORMED]	= "[MODULE_STATE_UNFORMED] Still setting it up",
++};
++
++static void callback_info(const char *callback, struct klp_object *obj)
++{
++	if (obj->mod)
++		pr_info("%s: %s -> %s\n", callback, obj->mod->name,
++			module_state[obj->mod->state]);
++	else
++		pr_info("%s: vmlinux\n", callback);
++}
++
++static struct klp_patch patch;
++
++static int allocate_loglevel_state(void)
++{
++	struct klp_state *loglevel_state;
++
++	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
++	if (!loglevel_state)
++		return -EINVAL;
++
++	loglevel_state->data = kzalloc_obj(console_loglevel, GFP_KERNEL);
++	if (!loglevel_state->data)
++		return -ENOMEM;
++
++	pr_info("%s: allocating space to store console_loglevel\n",
++		__func__);
++	return 0;
++}
++
++static void fix_console_loglevel(void)
++{
++	struct klp_state *loglevel_state;
++
++	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
++	if (!loglevel_state)
++		return;
++
++	pr_info("%s: fixing console_loglevel\n", __func__);
++	*(int *)loglevel_state->data = console_loglevel;
++	console_loglevel = CONSOLE_LOGLEVEL_MOTORMOUTH;
++}
++
++static void restore_console_loglevel(void)
++{
++	struct klp_state *loglevel_state;
++
++	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
++	if (!loglevel_state)
++		return;
++
++	pr_info("%s: restoring console_loglevel\n", __func__);
++	console_loglevel = *(int *)loglevel_state->data;
++}
++
++static void free_loglevel_state(void)
++{
++	struct klp_state *loglevel_state;
++
++	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
++	if (!loglevel_state)
++		return;
++
++	pr_info("%s: freeing space for the stored console_loglevel\n",
++		__func__);
++	kfree(loglevel_state->data);
++}
++
++/* Executed on object patching (ie, patch enablement) */
++static int pre_patch_callback(struct klp_object *obj)
++{
++	callback_info(__func__, obj);
++	return allocate_loglevel_state();
++}
++
++/* Executed on object unpatching (ie, patch disablement) */
++static void post_patch_callback(struct klp_object *obj)
++{
++	callback_info(__func__, obj);
++	fix_console_loglevel();
++}
++
++/* Executed on object unpatching (ie, patch disablement) */
++static void pre_unpatch_callback(struct klp_object *obj)
++{
++	callback_info(__func__, obj);
++	restore_console_loglevel();
++}
++
++/* Executed on object unpatching (ie, patch disablement) */
++static void post_unpatch_callback(struct klp_object *obj)
++{
++	callback_info(__func__, obj);
++	free_loglevel_state();
++}
++
++static struct klp_func no_funcs[] = {
++	{}
++};
++
++static struct klp_object objs[] = {
++	{
++		.name = NULL,	/* vmlinux */
++		.funcs = no_funcs,
++		.callbacks = {
++			.pre_patch = pre_patch_callback,
++			.post_patch = post_patch_callback,
++			.pre_unpatch = pre_unpatch_callback,
++			.post_unpatch = post_unpatch_callback,
++		},
++	}, { }
++};
++
++static struct klp_state states[] = {
++	{
++		.id = CONSOLE_LOGLEVEL_STATE,
++		.version = CONSOLE_LOGLEVEL_STATE_VERSION,
++	}, { }
++};
++
++static struct klp_patch patch = {
++	.mod = THIS_MODULE,
++	.objs = objs,
++	.states = states,
++	.replace_set = 4,
++};
++
++static int test_klp_callbacks_demo_init(void)
++{
++	return klp_enable_patch(&patch);
++}
++
++static void test_klp_callbacks_demo_exit(void)
++{
++}
++
++module_init(test_klp_callbacks_demo_init);
++module_exit(test_klp_callbacks_demo_exit);
++MODULE_LICENSE("GPL");
++MODULE_INFO(livepatch, "Y");
++MODULE_DESCRIPTION("Livepatch test: system state compatibility verification");
 -- 
 2.52.0
 
