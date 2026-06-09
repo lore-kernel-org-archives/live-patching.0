@@ -1,95 +1,159 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F54831F992;
-	Tue,  9 Jun 2026 14:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A2447DFB1
+	for <live-patching@vger.kernel.org>; Tue,  9 Jun 2026 15:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781014900; cv=none; b=iC+YWsPtV8P3kxiJp6nSG7n3hVOhRdKtznTwxjymrDl9BQwarnFHU/kYQYGIoGI8Bl5LopG8l+2EFzZ4KBveEDyrFEwb+ubYO9NY1ze9NV12hORUUM7q9fgYivlevt94/KmYycJcRg7MWffBDjhR70YVRYB/x7IY6qw7PliqUgk=
+	t=1781018933; cv=none; b=HeSmcJoHXjTl5P06RpKY4Ms8FjtL8G2rKskqPLdW68FDH/ErD6i9Cc00r6nl8ZKSLTx4itn6fwAKaeQbGlXdYf4MvYjV3h/PV4E9YkoZ7s9zuA1UvT27izrKgbjDyxzJ64MRHDs/5QN62h8ziopAviWi7OMS6oV6fwS6BSAVKws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781014900; c=relaxed/simple;
-	bh=RZQdR2RKKQFK1T///gJQrEsaJ+JbvCh3icAhhy8YLwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Fs2JXqXtVynUnWwRtCUj7XkAJFE4uzDXiQUBO1CyL9jD+C5JqpEw/qlPN4n3JoRxFPezVaI0tlmGE2YaI28F0NaxWW+DrGr55aJdtLtuDTxXb8mesWF6I+eyewqBUCiUxoBcgkecH3QJ3Yn0bK7qHQ3NmXGgwXkylETV2lEsaEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id C49AD8F3F9;
-	Tue,  9 Jun 2026 14:21:28 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id 19B1E20025;
-	Tue,  9 Jun 2026 14:21:20 +0000 (UTC)
-Date: Tue, 9 Jun 2026 10:21:20 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuai Xue <xueshuai@linux.alibaba.com>
-Cc: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Chen Pei <cp0613@linux.alibaba.com>, Andy Chiu
- <andybnac@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>, Deepak Gupta <debug@rivosinc.com>, Puranjay Mohan
- <puranjay@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, Miroslav
- Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
- <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
- Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com,
- jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable
- ftrace entries
-Message-ID: <20260609102120.359f3c4c@fedora>
-In-Reply-To: <6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
-	<20260528082310.1994388-2-wanghan@linux.alibaba.com>
-	<0a913398-3d0c-472e-89c4-062052eae04d@linux.alibaba.com>
-	<20260601095746.70c01d24@fedora>
-	<6753385b-c2ab-4ed0-9400-78ce967450ba@linux.alibaba.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1781018933; c=relaxed/simple;
+	bh=kuXfQqs4b2oIGzrMrRN+9NXnualCAir2vJGhe9CniH0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pRoPIO7QD6NWvNOMYrwcmtwXsXuH2UKFO6SdpmNjPlLEHVoxrx1Ip65YBqmz2o+BoQfyMdmNTDezQGX6FaWbcXsyBVQFoTAllLH/T4pGdLG1WO7B8wI4TDkM1uzj0SCxO52nRmH+96UFB5V2mgxHN6lgJEu4RcizJkZ+vXh21VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SWGrDuIW; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SWGrDuIW"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-45ef5146b56so4260395f8f.0
+        for <live-patching@vger.kernel.org>; Tue, 09 Jun 2026 08:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1781018930; x=1781623730; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GfPAQQD8KsPMrENU7N3gfz/A70JMxK71C95rI/qe550=;
+        b=SWGrDuIWefbP6ZjjQJQU2EhOZDufqNEeG99Yn7RnAKz4KV6l4yUDlCKN3OhlnvA4CA
+         3P3LoOH8CzLOj9mtfNPpP2Gjg4vU8zqO+VQqX4s5nR1PRwSI5kF8M9NNefpdPvnloYuj
+         Mdz6sEN7JvEC9k7E6VfTGFTCNY7pZ1sEefxjkuSBWqPCnLr7/r3BsJm7bbc7Iz7qPZfV
+         EfiH5/D/+CxIYdmzph9rbgbnIKC1uEPfTyZUTzzopfKoeiimspQqkDt1b8R1JzNmrgFH
+         DAnwoxF/G50jm0FH46gLYf+EobcSToya5XF5lVpXe+jGOSs1m+lujAa2Sb9kL0Wcd6GP
+         hqKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781018930; x=1781623730;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GfPAQQD8KsPMrENU7N3gfz/A70JMxK71C95rI/qe550=;
+        b=I7LkwTiu6TZaxPEUOnDF1/nRkqZbNC6DdOK6E0W3ulc/ixZ8ov5t3zWdn55v+weomb
+         g6iQ7HKJ7d5JoqzjthPCpFGodPYD/Z+13ujEEd+QHUugpIZ7AZw/MaG8aIMVbPsbCE25
+         F086HZ4o2RXFWCzRYjr3sit6ssRpidPXMHl8rhlfb4g5XJ6dYDyH3Z8u0ejyG9XipOs2
+         VzRCebtUKWArNNfhNlzR34F4FmotMbD7nVCoLFAnhv6aT0SJ6lDS2qR54O+toAuZjUo1
+         zd1tNf21Mw3VkM9Miu+1c4bbCh0G8cIIyBWCnBQ5AElqqTpCojOQ55fTY3XbkbTVSEwa
+         u4YA==
+X-Forwarded-Encrypted: i=1; AFNElJ8Utn4pPNlrM5UURdiBsD/PXOWuWAlnyQpHl9KJixi/EDHNz0p9dipooo4pOFgwJpxtxy/4vPJDZrpziTrf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiqJ8UNoZ3rWGyhD7fE5jXJK0eyzncRGy0hidofdEJKjs2Hh94
+	oql/tG3zkeiCeX1hij7qZ0i4zvSqbNLCMgr2gRtpeCLVdjk/xTBkrarxkHlORsbGxZXC/7Q67Ez
+	EpRWg
+X-Gm-Gg: Acq92OGRXY4R9J4kNo0WDIQGIbox43dVT4ai9+k2hs8/AJz3lOAh8rHOftLqWQf6ex/
+	8E7TRoGCifJfglIq5VpvgL48utE/mrbNkWsF3V6QlzDQVjyK9yLvH81je1oiPPcj9mYH9IQjFn4
+	+gg/4qgubPnuZijchNqB85oaRjBMGszLFWshW/pDt0eaxch8+4Zx2W8jYWG4sbe03kXD/sw4Hhu
+	vGtjOAGFbG90l/8FJixZnd28VHl7513WaNOYNYUmqGpPjNfcksrjQWvd1YGfcH6rpzerWrXyeQX
+	h8jVVA42Y+F1pZ50M6d06O1OdeVAmeyWP2Et8ei5rPEXMEGcZPBa/KwxLB682xX61fWPdD1qOYn
+	4CIpMOlMJdXDFR0ffPvWFDMHX2cY7gBliB83+PoDH5fjQnXNiYtDMKaIIrPsUErcj7kQxqxe0fm
+	gs6bLzA/DK1x0E3iS8ejrcei6ANMMkF8e9t1T3
+X-Received: by 2002:a05:6000:478a:b0:460:2e53:a6f6 with SMTP id ffacd0b85a97d-46032da275cmr16377084f8f.12.1781018930347;
+        Tue, 09 Jun 2026 08:28:50 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2e4b18sm49632819f8f.10.2026.06.09.08.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jun 2026 08:28:49 -0700 (PDT)
+Date: Tue, 9 Jun 2026 17:28:47 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, song@kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] livepatch: Move klp_find_func() into core.h
+Message-ID: <aigxL-BRGq_Qn9Dq@pathway.suse.cz>
+References: <20260607131659.29281-1-laoar.shao@gmail.com>
+ <20260607131659.29281-3-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 45xon1xuzxd7bgbg6edxpht5trjjyge4
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 19B1E20025
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/HKKn7GymGBUtkbeNr+MEsQdyMhp17MdU=
-X-HE-Tag: 1781014880-666201
-X-HE-Meta: U2FsdGVkX1+rK/eN1BdojHWIcLwqDes8ikyUSWOVgDM2z/pUIyOFyAee0s6My7Xxv1XzzZB08fnXey3byMofDxmK30CuRFQCjWETw/qIBkjcJV57g+7dTfTdypOfD2pf0hdNCmgUxgCz/J3/gcLcZYfC0zSHjnyQIlGUv9j+Isx5nTYNWn+1B1CJbxTLmg+8dEzmXK9YwAdspV+E77PvKlOsfl9CkgQt5e9eMdCkHTeHy4Zg+CZjBhu/tSKVgIrKau/2+NoIvgk/ss8SC2tb8MP0B6hSQKNl7Zy5c1VIBSaVQ8O0do7KHzUUkMExhc5OsUmLw+L6MoGJv5Tz/LKKkj6b4PH6Qkyj5rBcgmOV845Q9MeB4BlbRCOS2hCWeUjRAg8fESSRucIKnZULyjZjNw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260607131659.29281-3-laoar.shao@gmail.com>
 
-On Wed, 3 Jun 2026 10:10:44 +0800
-Shuai Xue <xueshuai@linux.alibaba.com> wrote:
-
-> It's a pure comment cosmetic, not worth a respin on its own. But for the
-
-I don't know. I've respinned for better comments before.
-
-> rest of the feedback on this series (the frame-record metadata contract
-> in patch 2 and the dead state->regs field / Call Trace output change in
-> patch 6) are the ones actually worth a new version.
+On Sun 2026-06-07 21:16:54, Yafang Shao wrote:
+> This function will be used in other source file in the following patch.
 > 
-> Just to get the routing straight: are you planning to pick this one up
-> through the tracing tree on its own?
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>  kernel/livepatch/core.c | 21 ---------------------
+>  kernel/livepatch/core.h | 21 +++++++++++++++++++++
+>  2 files changed, 21 insertions(+), 21 deletions(-)
 > 
-> It feels like a good candidate for that -- it's an independent
-> regression fix (Fixes: 0ca1724b56af) that breaks *all* RISC-V dynamic
-> ftrace, not just livepatch, so it shouldn't have to wait on the rest of
-> the livepatch series.
+> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> index 95117f7a5b00..6e15ae96a0a7 100644
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
+> @@ -82,27 +82,6 @@ static bool klp_initialized(void)
+>  	return !!klp_root_kobj;
+>  }
+>  
+> -static struct klp_func *klp_find_func(struct klp_object *obj,
+> -				      struct klp_func *old_func)
+> -{
+> -	struct klp_func *func;
+> -
+> -	klp_for_each_func(obj, func) {
+> -		/*
+> -		 * Besides identical old_sympos, also consider old_sympos
+> -		 * of 0 and 1 are identical.
+> -		 */
+> -		if ((func->old_name && strcmp(old_func->old_name, func->old_name) == 0) &&
+> -		    ((old_func->old_sympos == func->old_sympos) ||
+> -		     (old_func->old_sympos == 0 && func->old_sympos == 1) ||
+> -		     (old_func->old_sympos == 1 && func->old_sympos == 0))) {
+> -			return func;
+> -		}
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+>  static struct klp_object *klp_find_object(struct klp_patch *patch,
+>  					  struct klp_object *old_obj)
+>  {
+> diff --git a/kernel/livepatch/core.h b/kernel/livepatch/core.h
+> index 38209c7361b6..8f01eae875eb 100644
+> --- a/kernel/livepatch/core.h
+> +++ b/kernel/livepatch/core.h
+> @@ -56,4 +56,25 @@ static inline void klp_post_unpatch_callback(struct klp_object *obj)
+>  	obj->callbacks.post_unpatch_enabled = false;
+>  }
+>  
+> +static inline struct klp_func *klp_find_func(struct klp_object *obj,
+> +					     struct klp_func *old_func)
+> +{
+> +	struct klp_func *func;
+> +
+> +	klp_for_each_func(obj, func) {
+> +		/*
+> +		 * Besides identical old_sympos, also consider old_sympos
+> +		 * of 0 and 1 are identical.
+> +		 */
+> +		if ((func->old_name && strcmp(old_func->old_name, func->old_name) == 0) &&
+> +		    ((old_func->old_sympos == func->old_sympos) ||
+> +		     (old_func->old_sympos == 0 && func->old_sympos == 1) ||
+> +		     (old_func->old_sympos == 1 && func->old_sympos == 0))) {
+> +			return func;
+> +		}
+> +	}
+> +
+> +	return NULL;
+> +}
 
-As it affects RISCV and I don't have a RISCV to test, I would feel more
-comfortable with it going through a RISCV tree that can test the patch.
+This is too big for in-lining to my taste. I would prefer to just
+remove the static and declare it in the header file.
 
-Feel free to add:
+Also it would be nice to add a description of the function when we are
+going to use it on more locations. Especially, if we allow to pass
+errors via ERR_PTR.
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
-
--- Steve
+Best Regards,
+Petr
