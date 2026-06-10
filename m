@@ -1,73 +1,72 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DECA358363
-	for <live-patching@vger.kernel.org>; Wed, 10 Jun 2026 14:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234DA3DDDBD
+	for <live-patching@vger.kernel.org>; Wed, 10 Jun 2026 15:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781102765; cv=none; b=MFxJOpFj1OWTvPn4NGqZcl69hJMc2SPzUFedCCWVOagsODuCnUStoydSBOXviKYHj5ZWxokb2eZyRpgZapPumGDrylBlVIpqPc3+kTmnUZEssx/DR6rhFYeuG5HVzJFlLd2vuELhUsEyEJQ4a5FEzOVcf92+iG/6UtvYj8apc0o=
+	t=1781104287; cv=none; b=PV4PJ1GTjx7Wf/9B/Gk8RKrI+jgh7O3Buh7elh5SbSAcQNXvxGn6q/Rs8cn78k6y/8PP3qmwS6a+Zjnb5snVVJI0PWlCa0Vy4rX1YB4gJrprTjFTEs1hbsXVkOEHrvBFeXJ4dD23WSTksWt68Y8O5Sl2vUPp7CXwBaDwgREmrc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781102765; c=relaxed/simple;
-	bh=gBYPnkyUjGF9t+Re3em0UhYqTdz9ijNR+Edzpqu6jfU=;
+	s=arc-20240116; t=1781104287; c=relaxed/simple;
+	bh=XtOuG3Pa0/9FGDwOiEwFLcGWjJku5xg5mLLqn9k4Rx0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V6FPsNr3tiSs3PrmW69bNjB33SNSViF78RBjoQxO0Y49jA4xYVBwYGBPBA1ml5CDKPZKJoAWb+6l25wNLo0ve28bDTULls4E9nGIp6bUQ9hCbD2xwAszVrGo1VHBQN7kI5boLCoNOIKtON6QOqmxU6Qek+cvWHnS2mnGK11DLhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HUdXntMS; arc=none smtp.client-ip=209.85.221.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRW5fbo2IRtFqNg6WwuptulwOnnvme5uCr/h0tKVud6Ph4SxYw4lp7V23w9xalQNXp0EnAufcthDuVNbvHxt13zoHugynKBcJDRaBi2USy+TOhhGjjgm9zHYWZiMGiyH37Aapse7OYhYWohG5IqgFUMMde5avS2/lHDu5u3wtj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M0sW5Hm/; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HUdXntMS"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-45eecb8bf67so5198685f8f.2
-        for <live-patching@vger.kernel.org>; Wed, 10 Jun 2026 07:46:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M0sW5Hm/"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-490b2b037d2so60566375e9.3
+        for <live-patching@vger.kernel.org>; Wed, 10 Jun 2026 08:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781102759; x=1781707559; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1781104283; x=1781709083; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHviteDo9sRtHYMVs15OACepiXc/N29PQJ4BwLqhqYo=;
-        b=HUdXntMSEY44jom4bf0hCBI5OrZ5qdv7OeEPkO43IRKylPAVqOelUyVSeLilQw2IlF
-         eYb21hTjBs7KhOxmpdd+8hDgY0ohHNTUWQ9eY7zscQjaS2kvz0nC73aQ/XlT8dFPzbfv
-         gNgiMJD7cNIsLR8OkUaV3NJVCAiDYK1luOkH54PrddfF34tEouQ/wKyYP6ZPxPEbL0bl
-         tYBBXQL8nXH/B/ft5N5ZSzjIGCSVVVCPjBsPS6XprBICBO57kDIKVGta7GUolf4FnFeI
-         yQvyQf0jBzlcx7UL5TNi4kQ2VO2EjOJIYaHo8yDP/8NGaOW+DpxY32GUn0m/wEJHL32W
-         exnA==
+        bh=AiqXdnp2dHGKk1jGCgGLz1NGSJJAmrvEAWUBysB25OE=;
+        b=M0sW5Hm/DyYtiBr+JGIW7MTqCFyrSBO9XQhaCVL2829eybpiEpDuieP/Ydy+EgMJtQ
+         57QzruuanyX2b2NDTRb+BoYC1V4NLf2GwpLp81biofCojrVKubHIfWOexiHkhmUDtxAK
+         nXAbw7NNEqsSsu4a+kGvvKqFirCv3M32ko3WQlze1LnGWlYNx4HZ8Skz8aBhnitELlo5
+         2lo+E6SvLtX5oXKVmdPioNIrn7Njzi99ZwdWMf0yVWfbv4bpdFJ2+0L4HtDe39Ie4OVT
+         +xfhKEd7/miAZaL1n+bfNh8MiIobHpiXZF65/+eu1bWEwF0a0TBlQAbTI4VKO6ZSAt3w
+         utkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781102760; x=1781707560;
+        d=1e100.net; s=20251104; t=1781104283; x=1781709083;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OHviteDo9sRtHYMVs15OACepiXc/N29PQJ4BwLqhqYo=;
-        b=kOx7bB6No1Zm6gmRNiFjmakGHjZq5exVm+l+K+DxNL2g5DVoo9f8KQtZWm9bNfSnjO
-         USHVeLGL2ToMeooLsVEYpu0c7B3O2ACZ4ItkMra4agc4ea4Z6XjYuD1N+gKPRJ3xzROr
-         uJX535oHI9MkuUY0pi/hct+Q5sKMy01PTOh72M1yN/ypNXWa6Jj1rh4bYetF8WkX3OOF
-         EdmJIViyPby2iXewqDcuMi5S5rBMugaXqfS7JoM9dtYPVkPAjsoWUi7PG17aKhzYyHjS
-         KZW4j0F+4q23AJ5fPsrCj9t90nGCpTnMmnglzzHLByY6v7CKEjYLoiY+VDYPyNHTeZXR
-         n1Ng==
-X-Forwarded-Encrypted: i=1; AFNElJ/2805x/Q+FWhxL8sJ1m8z4fGmvJAM+oN2N3UMkZF1sSpOzIOh1hRnHipV+4/6x01Yg3dOKaAPb25ACc7qe@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX4+AxQ4OBMozN59iJM7CGZL3ys5adEF2DF3sMwOWNrB1XGV3k
-	gfGB6ugDAC3XcUiVBAYvgQAWI4TTv/4FZRc3w22HmhBIH3ICshRrRygjNq0lZJ7O0H0=
-X-Gm-Gg: Acq92OGM7FnNc3h5ggUOCxgcqiavpU8PezMs6wdG/IpsPgzT0pSNwKKkly8hunZig9h
-	WVx03RfFqb0TfxoT3seD3H1uN8oh494LHxopNWaYYWgiUGSK26rTncZ5iQwcTx27frsE/bkD28u
-	m2jcaGXiawP3sGeEhbD/E09bymBp71gHtuUTCdfZKde1LMlxASlfOZFdEL1V4ks01j5GElt5bkQ
-	EJ65+vGz7GLgjs58Z6phwWbcFoL1l2AMaMqWAhWbhvx2PfN6mxfR/rHWqf1U5Rk3UAVxHUIUIX7
-	txaw8vygGiERagPHavoQLv12vyEv5LPvbPhU1+ZRcFQRu+WzFyIAyLVb/Y1rZP/dduGL9kYvf6n
-	ArM2BJuX6/QPr40/49X5ZHLBU1HGf+UaxNoQZsc+C0MQ9xeRsMUcR7nRWZfmO0FByRKkKSEDRgl
-	xaz9i/dztyFDnOcm0C6/Zmm0rCWr719Qh6pJgi
-X-Received: by 2002:a5d:53cb:0:b0:45e:b215:12e9 with SMTP id ffacd0b85a97d-460302dcb18mr27430239f8f.6.1781102759439;
-        Wed, 10 Jun 2026 07:45:59 -0700 (PDT)
+        bh=AiqXdnp2dHGKk1jGCgGLz1NGSJJAmrvEAWUBysB25OE=;
+        b=A2BO2PjS69huWwfCqbyb+Fi0nl5cnRGTX/MGGaynjW46ssql10AP+d88Qz4oqoUNyD
+         dvpnUpADSwKIodtRIyNhI+vJPGdWDahRwvg7C6C90PBsOHlxti3iYT47g2cuC8+p3/sP
+         ehetEVioJIB6Mexxy7RqnGseX4GlpPnE3oq8MZ9xjzoBdpXYndcoAleaZc7TRceiRPq3
+         AuYknQc309C9zQs0vGmt5SP0xIA9FRNiZqpEaLS4IJ/LXv5qc9RlL/9Qi3aMf1RC/pMl
+         2BeNbB6uiKnRhe4vYXkM1D5OQES2xsOFaMi8ygPxEUZWmdK4WmgqK7GuSOs+5OwYPiR2
+         jyXQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9nOXZTm/mwPEHjQYvf0I/hrpYXdEce6E4ybVsEJVe6T00/Z2poiu/RoJJAgrIlwGe8D/KHrMX/8mdxIcyh@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiXSsZdI1Lc2GKfNIExYc6MM7ZoiuysWQAMC+R9jJ9729ZTigj
+	xvZtDJa1v2ar7I7ZE8jSGMncMaLsA/wr2A2ioJqBSyshEqKBzK4o6+mb8xU3xktCdgc=
+X-Gm-Gg: Acq92OFWIjpt4DZVv532QgXwdgbkF+wRqvNuhB60mb+c5R/ZwHjVBn3GVmtKFtIpdf0
+	86z8WQFPRDe7D8pGET0x4VIGk44fw+zZSbzrUgmeCncXAER94suhrHeX6e5hZeLq7RMlkPumZSI
+	1HCEKTVUroq8UBOt55X0hojDZ6jba7pzah3HEFNz/Atm4v5Gr3GVRm4I/N0AofgX6sS/oFNrf2Q
+	/L/Hzsn9KR/e5iZUlobCFA8bED7A5surksE+F0CmRC+C2EVO3UBV8gNC/Q76nbP8TlRx4qPcE9a
+	Zxf34JF0kfK58K2rlQ3AiK0g9q9IjEP7bavh+YHgZ7XJmfSBRmxiY43FxTbzwY9rX0ETWqW0Q8A
+	NLUSUOdOKKjXxa1d93bgQ7zKQ6zn3M442MMDkg3EbgBk5vDCNVhfOKppACoL/c3eIdYCqRyNbtB
+	bLBRck/uKTLZoWZ1GVodZu/lRtanHt/U1dluymJ1UTyyOcF/Y=
+X-Received: by 2002:a05:600c:c491:b0:490:bb44:3f8b with SMTP id 5b1f17b1804b1-490c2605385mr415074145e9.17.1781104283539;
+        Wed, 10 Jun 2026 08:11:23 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4601f2eadefsm74632954f8f.11.2026.06.10.07.45.58
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490bc3c1149sm503433395e9.4.2026.06.10.08.11.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2026 07:45:59 -0700 (PDT)
-Date: Wed, 10 Jun 2026 16:45:57 +0200
+        Wed, 10 Jun 2026 08:11:23 -0700 (PDT)
+Date: Wed, 10 Jun 2026 17:11:21 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
 	joe.lawrence@redhat.com, song@kernel.org,
-	live-patching@vger.kernel.org
-Subject: code review: was: Re: [PATCH v3 3/7] livepatch: Support scoped
- atomic replace using replace_set
-Message-ID: <ail4pUt-t-0AB2wi@pathway.suse.cz>
+	live-patching@vger.kernel.org, Wardenjohn <zhangwarden@gmail.com>
+Subject: Re: [PATCH v3 4/7] livepatch: Deprecate stack_order
+Message-ID: <ail-mQ77SQR7WkiM@pathway.suse.cz>
 References: <20260607131659.29281-1-laoar.shao@gmail.com>
- <20260607131659.29281-4-laoar.shao@gmail.com>
+ <20260607131659.29281-5-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -76,290 +75,80 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260607131659.29281-4-laoar.shao@gmail.com>
+In-Reply-To: <20260607131659.29281-5-laoar.shao@gmail.com>
 
-On Sun 2026-06-07 21:16:55, Yafang Shao wrote:
-> Convert the replace attribute from a boolean to a u32 to function as a
-> "replace set." A newly loaded livepatch will now atomically replace any
-> existing patch belonging to the same set. There can only ever be one active
-> livepatch for a given replace_set number.
-> 
-> This change currently supports function replacement only. Livepatches that
-> belong to different replace sets cannot modify the same function. If a new
-> livepatch attempts to modify a function already modified by an older
-> livepatch from a different replace_set, the loading of the new livepatch
-> will be refused.
-> 
-> Similarly, for the KLP state, livepatches belonging to different replace
-> sets cannot use the same state ID. The system will refuse to load a new
-> livepatch if it uses a state ID already in use by an older livepatch from
-> a different replace_set.
-> 
-> For the KLP shadow variable mechanism, developers must assign unique shadow
-> IDs to livepatches that belong to different replace sets.
-> 
-> Support for replace_set compatibility with KLP state and shadow variables
-> will be implemented after Petr's KLP state transfer work is completed [0].
-> 
-> Other user-visible changes include:
-> - The non-replace model is now deprecated
-> - /sys/kernel/livepatch/livepatch_XXX/replace attribute is replaced by
->   /sys/kernel/livepatch/livepatch_XXX/replace_set
-> 
-> --- a/Documentation/ABI/testing/sysfs-kernel-livepatch
-> +++ b/Documentation/ABI/testing/sysfs-kernel-livepatch
-> @@ -47,13 +47,12 @@ Description:
->  		disabled when the feature is used. See
->  		Documentation/livepatch/livepatch.rst for more information.
+On Sun 2026-06-07 21:16:56, Yafang Shao wrote:
+> stack_order is no longer needed for atomic-replace livepatches, as a
+> single function can only be modified by a unique replace_set.
+> To maintain backward compatibility, print a dummy value, as suggested by
+> sashiko-bot.
+
+I would personally remove it completely. I believe that there are
+only few users around the world. And they will need to update
+the tooling/strategy for the new "replace_set" anyway.
+
+> --- /dev/null
+> +++ b/Documentation/ABI/removed/sysfs-kernel-livepatch
+> @@ -0,0 +1,9 @@
+> +What:		/sys/kernel/livepatch/<patch>/stack_order
+> +Date:		Jan 2025
+> +KernelVersion:	6.14.0
+> +Description:
+> +		This attribute specifies the sequence in which live patch modules
+> +		are applied to the system. If multiple live patches modify the same
+> +		function, the implementation with the biggest 'stack_order' number
+> +		is used, unless a transition is currently in progress.
+
+I was not aware of this ABI/removed part. We should put here also
+the livepatch/replace interface which was removed in the 3rd patch.
+
+> --- a/tools/testing/selftests/livepatch/test-sysfs.sh
+> +++ b/tools/testing/selftests/livepatch/test-sysfs.sh
+> @@ -21,8 +21,6 @@ check_sysfs_rights "$MOD_LIVEPATCH" "enabled" "-rw-r--r--"
+>  check_sysfs_value  "$MOD_LIVEPATCH" "enabled" "1"
+>  check_sysfs_rights "$MOD_LIVEPATCH" "force" "--w-------"
+>  check_sysfs_rights "$MOD_LIVEPATCH" "replace" "-r--r--r--"
+> -check_sysfs_rights "$MOD_LIVEPATCH" "stack_order" "-r--r--r--"
+> -check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
+>  check_sysfs_rights "$MOD_LIVEPATCH" "transition" "-r--r--r--"
+>  check_sysfs_value  "$MOD_LIVEPATCH" "transition" "0"
+>  check_sysfs_rights "$MOD_LIVEPATCH" "vmlinux/patched" "-r--r--r--"
+> @@ -135,71 +133,4 @@ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+>  livepatch: '$MOD_LIVEPATCH': unpatching complete
+>  % rmmod $MOD_LIVEPATCH"
 >  
-> -What:		/sys/kernel/livepatch/<patch>/replace
-> +What:		/sys/kernel/livepatch/<patch>/replace_set
->  Date:		Jun 2024
->  KernelVersion:	6.11.0
+> -start_test "sysfs test stack_order value"
+> -
 
-The Date and KernelVersion should be upsated as well.
-It is a new attribute...
+This is not longer needed in linux-next. Marcos made the test optional,
+see
+https://lore.kernel.org/all/20260504-lp-tests-old-fixes-v5-6-0be26d94ab9a@suse.com/
 
->  Contact:	live-patching@vger.kernel.org
->  Description:
-> -		An attribute which indicates whether the patch supports
-> -		atomic-replace.
-> +		An attribute to show the replace_set of this livepatch.
->  
->  What:		/sys/kernel/livepatch/<patch>/stack_order
->  Date:		Jan 2025
-> diff --git a/Documentation/livepatch/cumulative-patches.rst b/Documentation/livepatch/cumulative-patches.rst
-> index 1931f318976a..0361adb12f6d 100644
-> --- a/Documentation/livepatch/cumulative-patches.rst
-> +++ b/Documentation/livepatch/cumulative-patches.rst
-> @@ -17,18 +17,20 @@ from all older livepatches and completely replace them in one transition.
+The changes are queued for 7.2 merge window which will likely start
+next week.
 
-We need to update also the introduction part above. I propose
-the following text:
-
-<proposal>
-Livepatches are used to fix kernel bugs. New fixes need to be added over time.
-The fixes might be independent, but they might also depend on each other. This
-brings a challenge of how to keep the livepatched system safe and consistent.
-
-Part of the solution is the "Atomic Replace" feature, which allows the kernel to
-atomically replace an existing livepatch with another one. These newer
-livepatches are designed as "Cumulative Patches". They include all wanted
-changes from all older livepatches and completely replace them in one
-transition.
-
-The second part of the solution is the newly introduced ``replace_set`` feature,
-which allows the installation of multiple livepatches in parallel. A livepatch
-will only replace other livepatches that share the same ``replace_set`` number.
-This might be used to fix independent problems separately, for example, the
-livepatches might be prepared by separate teams focusing on particular
-functionality or a subsystem.
-
-It should be emphasized that the preferred and most secure way is to always use
-the default ``replace_set = 0``. In this mode, any livepatch replaces any other
-livepatch, preventing any unexpected interactions between incompatible
-livepatches.
-</proposal>
-
->  Usage
->  -----
-
-I would split the "Usage" section into two new sections, see below.
-
-> -The atomic replace can be enabled by setting "replace" flag in struct klp_patch,
-> -for example::
-> +The "replace_set" attribute in ``struct klp_patch`` acts as a **replace_set**,
-> +defining the scope of the replacement. By default, the replace_set is 0.
-> +
-> +For example::
->  
->  	static struct klp_patch patch = {
->  		.mod = THIS_MODULE,
->  		.objs = objs,
-> -		.replace = true,
-> +		.replace_set = 0,
->  	};
-
-I would use the above text in a new section called "Replace Set":
-
-<proposal>
-Replace Set
------------
-
-The "replace_set" attribute in ``struct klp_patch`` acts as a **replace_set**,
-defining the scope of the replacement. By default, the replace_set is 0.
-
-For example::
-
-	static struct klp_patch patch = {
-		.mod = THIS_MODULE,
-		.objs = objs,
-		.replace_set = 0,
-	};
-
-Any ``replace_set`` value might be associated with a set of livepatched symbols,
-callbacks, shadow variables, and state IDs. By definition, there can only ever
-be one active livepatch for a given ``replace_set`` number.
-
-On the contrary, livepatches with a different ``replace_set`` number must not
-modify the same function, or use the state with the same ID. Any attempt to
-load an incompatible livepatch will be rejected by the kernel.
-</proposal>
-
-And the rest would be in a new section called:
-
-Atomic Replace
---------------
-
->  All processes are then migrated to use the code only from the new patch.
-> -Once the transition is finished, all older patches are automatically
-> -disabled.
-> +Once the transition is finished, all older patches with the same replace
-> +set are automatically disabled. Patches with different tags remain active.
-
-There always could be only one livepatch with the given replace set.
-I would write something like:
-
-<proposal>
-A livepatch with a given ``replace_set`` number is replaced by another
-livepatch using the same number. All processes are migrated to use
-the code only from the new patch. Once the transition is finished,
-the older patch. Patches with different replace sets are not affected
-and remain active.
-</proposal>
-
->  Ftrace handlers are transparently removed from functions that are no
->  longer modified by the new cumulative patch.
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -600,6 +600,8 @@ static int klp_add_nops(struct klp_patch *patch)
->  		klp_for_each_object(old_patch, old_obj) {
->  			int err;
->  
-> +			if (patch->replace_set != old_patch->replace_set)
-> +				continue;
-
-This should be checked on the klp_for_each_patch(old_patch) level.
-The result is the same for each old_obj from the given old_patch...
-
->  			err = klp_add_object_nops(patch, old_obj);
->  			if (err)
->  				return err;
-> @@ -1174,6 +1176,8 @@ void klp_unpatch_replaced_patches(struct klp_patch *new_patch)
->  		if (old_patch == new_patch)
->  			return;
->  
-
-Nit: Remove the empty line here.
-
-> +		if (old_patch->replace_set != new_patch->replace_set)
-> +			continue;
-
-Nit: And put it here instead. To separate if/return/continue part from
-     the changes done for the eligible old_patch.
-
->  		old_patch->enabled = false;
->  		klp_unpatch_objects(old_patch);
->  	}
-> diff --git a/kernel/livepatch/state.c b/kernel/livepatch/state.c
-> index 2565d039ade0..a1ac46637336 100644
-> --- a/kernel/livepatch/state.c
-> +++ b/kernel/livepatch/state.c
-> @@ -85,34 +85,65 @@ EXPORT_SYMBOL_GPL(klp_get_prev_state);
->  
->  /* Check if the patch is able to deal with the existing system state. */
->  static bool klp_is_state_compatible(struct klp_patch *patch,
-> +				    struct klp_patch *old_patch,
->  				    struct klp_state *old_state)
->  {
->  	struct klp_state *state;
->  
->  	state = klp_get_state(patch, old_state->id);
-> +	if (patch->replace_set == old_patch->replace_set) {
-> +		/*
-> +		 * If the new livepatch shares a state set with an existing
-> +		 * one, it must maintain compatibility with all states
-> +		 * modified by the old patch.
-> +		 */
-> +		if (!state)
-> +			return false;
-> +		return state->version >= old_state->version;
->  
-> -	/* A cumulative livepatch must handle all already modified states. */
-> -	if (!state)
-> -		return !patch->replace;
-> +	}
->  
-> -	return state->version >= old_state->version;
-> +	/*
-> +	 * Two livepatches with a different "replace_set" must _not_ use
-> +	 * the same "state->id.
-> +	 */
-> +	return !state;
->  }
->  
-> -/*
-> - * Check that the new livepatch will not break the existing system states.
-> - * Cumulative patches must handle all already modified states.
-> - * Non-cumulative patches can touch already modified states.
-> - */
-> +/* Check that the new livepatch will not break the existing system states. */
->  bool klp_is_patch_compatible(struct klp_patch *patch)
->  {
-> +	struct klp_object *obj, *old_obj;
->  	struct klp_patch *old_patch;
->  	struct klp_state *old_state;
-> +	struct klp_func *func;
->  
->  	klp_for_each_patch(old_patch) {
->  		klp_for_each_state(old_patch, old_state) {
-> -			if (!klp_is_state_compatible(patch, old_state))
-> +			if (!klp_is_state_compatible(patch, old_patch, old_state))
->  				return false;
->  		}
-> +
-> +		if (old_patch->replace_set == patch->replace_set)
-> +			continue;
-> +
-> +		/*
-> +		 * Refuse loading a livepatch which would want to modify a
-> +		 * function which is already livepatched with the livepatch
-> +		 * with another "replace_set".
-> +		 */
-> +		klp_for_each_object_static(patch, obj) {
-> +			klp_for_each_object(old_patch, old_obj) {
-> +				if (!!obj->name != !!old_obj->name)
-> +					continue;
-> +				if (obj->name && strcmp(obj->name, old_obj->name))
-> +					continue;
-> +				klp_for_each_func_static(obj, func) {
-> +					if (klp_find_func(old_obj, func))
-> +						return false;
-> +				}
-
-The combination of for_each_() and for_each_*_static() variants look
-correct but it is a bit scarry.
-
-I think about calling klp_init_patch_early() before
-klp_is_patch_compatible() so that we could use the non-static
-for_each_*() variants even for the new patch. It would make the life
-easier. But I do not have strong opinion about it.
-
-> +			}
-
-Anyway, please, put the new check into a separate function, something
-like:
-
-bool klp_has_function_conflict(struct klp_patch *patch,
-			       struct klp_patch *old_patch);
+I suggest to wait with v4 until the change is merged. We should wait
+for opinion from others (Miroslav, Josh, Joe, Song) anyway. We
+need to be sure that the change of the semantic is acceptable
+in general.
 
 
-> +		}
->  	}
->  
->  	return true;
+> -load_lp $MOD_LIVEPATCH
+> -
+> -check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
+> -
+> -load_lp $MOD_LIVEPATCH2
+> -
+> -check_sysfs_value  "$MOD_LIVEPATCH2" "stack_order" "2"
+> -
+> -load_lp $MOD_LIVEPATCH3
 
-The rest looks good.
+Nit: It seems that MOD_LIVEPATCH2 and MOD_LIVEPATCH3 are not longer used
+     at least in this test-sysfs.sh file. Well, I guess that we will
+     keep this test optional for older kernels.
+
+> -check_sysfs_value  "$MOD_LIVEPATCH3" "stack_order" "3"
+> -
 
 Best Regards,
 Petr
