@@ -1,125 +1,134 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1C12D0C72;
-	Wed, 10 Jun 2026 01:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1512C34104E;
+	Wed, 10 Jun 2026 01:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781055452; cv=none; b=qZkzvhKgVLZZ1h5MU86e+Ms1VmN94G3qmNTu1H9XbR3J0l1GOymZ2F9/79Z2nkn3W192BhlzAWihXG3GQWT18U78r+pQEF6lbCbxAECvxICA6MDde+Wtl8spLZIrNSouGN3gqOW60OGpxAY59DMHP/sgVuZQlq+C5OVzqOBABb0=
+	t=1781056238; cv=none; b=prBG4DPCM6+5x+o9gRnbHAGSbq0vVVk7OKrVmCIuPtqQxYki4lbXzAFRZ+gz2Ne1TmrYNHWiHsEP7GyEWSIS432K2hTDoWDVvB5EIBwdZddYHNv8VPxBJet1l9zRN6d7lzzjCc3WOaRZoermHORMbHa/Ug6inzEHk2l0rQGzaNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781055452; c=relaxed/simple;
-	bh=0EJIh8+ZTp1QVJEf/l9vyxcyEI/1RpP1pN26Zm4qSHo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NoTyomu3URlkW0EoCRoGaPfz122Sxr181bgMDXG/5G62H9Y0SYA8sgnsReCZK2tHtNHYZ2znLoYLxILCxHkdUWLg6GJc06PL6g30qXXQg0rJH/nokU3PEbwNDpdd7cGfnIH3pNpd7y2MS0HZ8e+BCyRGxDIXAPCahcbTxE8cpOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gZpKR14g4zKHMKD;
-	Wed, 10 Jun 2026 09:36:43 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 8543E4056E;
-	Wed, 10 Jun 2026 09:37:19 +0800 (CST)
-Received: from huawei.com (unknown [7.197.88.80])
-	by APP4 (Coremail) with SMTP id gCh0CgD3S4DIvyhqbecCBQ--.23582S2;
-	Wed, 10 Jun 2026 09:37:18 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Mladek <pmladek@suse.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4] rethook: Remove the running task check in rethook_find_ret_addr()
-Date: Wed, 10 Jun 2026 09:36:58 +0800
-Message-Id: <20260610013658.1837963-1-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1781056238; c=relaxed/simple;
+	bh=b33+8C8hYqiZMqsjPjrDGMAFFkeIz/tBwMU4lzafHo4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lqD1+YfwO14LVz4P4xqTcuJa+HpeJfjIlTymPgwGn2lffA+77WUK7+GuzCBgYhvjKZCXZ57cNPoII2B7TDTTQP/n4bG1pHNrm6f29FWiUCtriIzbBB5qROLWE5KCJ4POvUvjlBH2jA/rJsc4JD8VeEEk1J/lIqcEHtkVcb3yV/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvcnC51W; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvcnC51W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BFAA1F00893;
+	Wed, 10 Jun 2026 01:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781056232;
+	bh=uQRZpUaWAAh52NFpBhfqMgmHhKKGlFKdcGllajNVugk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DvcnC51WcrwDTe06NtbnRJWdbh2dPzIwWwCxaGEMVSRyzaPQf08EOAPQIF6sHprVz
+	 qx++gjSauKXPUgvRaQMmglwk5rujpzqePhQgBmcb0SKHhO6gREO0DeBfEJ5Jys7qah
+	 VOfwxB7KTCLbZQgM7LYikGpoHworMZH9NRONX71wzltlbhIF19orRaeZag4av5I54P
+	 MpdxqLBQZScQl9xUc6W7hMxBvft8yO8eM1YbsgBrsVhTK4M09+O0O8n9sC8kbWHq11
+	 LbQne4Efk67mGufgSxodriglaaxLq9jXmvUQDwt9dgiEauyxy83zySocVJgO4VwnMp
+	 qejjNG+UucXQw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4] rethook: Remove the running task check in
+ rethook_find_ret_addr()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Masami Hiramatsu" <mhiramat@kernel.org>, "Petr Mladek" <pmladek@suse.com>, "Peter
+ Zijlstra" <peterz@infradead.org>
+Cc: "Tengda Wu" <wutengda@huaweicloud.com>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org
+In-Reply-To: <20260610013658.1837963-1-wutengda@huaweicloud.com>
+References: <20260610013658.1837963-1-wutengda@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 10 Jun 2026 01:50:31 +0000
+Message-Id: <20260610015032.4BFAA1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3S4DIvyhqbecCBQ--.23582S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF15CF1UAry8CFWUGF15urg_yoW5XF4fpF
-	4xKw1FkF1qyr10yw1qvw4rZ3y5ZrZ5tw43WanrGw1Fkrs0qr4q9ry2g3WYvF4rurZ7G34a
-	qFW2vrWDCFnrZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
-	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
-	VFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The current check in rethook_find_ret_addr() prevents obtaining a return
-address when the target task is marked as running. However, this condition
-is both insufficient for correctness and unnecessary for its intended
-purpose.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-The check is inherently racy: a task can begin running on another CPU
-immediately after task_is_running() returns false, potentially leading to
-concurrent modification of rethook data structures while the iteration is
-in progress.
+Pre-existing issues:
+- [High] Removing `task_is_running()` from `rethook_find_ret_addr()` expose=
+s stack unwinders to use-after-free, wild pointer dereferences, and list co=
+rruption when unwinding running tasks, because `rethook_node` recycling and=
+ unwinding lack adequate RCU synchronization.
+--
 
-Rather than trying to fix this unreliable check deep in the unwinding
-path, simply remove it. The iteration is already safe from crashes because
-unwind_next_frame() holds RCU and rethook_node structures are RCU-freed;
-even if the iteration goes off the rails and returns invalid information,
-it will not crash. Callers that require consistency must provide a safe
-context themselves.
+commit 83e1fac9c64377191cc2b41ef9da781c46f1e95a
+Author: Tengda Wu <wutengda@huaweicloud.com>
 
-Fixes: 54ecbe6f1ed5 ("rethook: Add a generic return hook")
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
-v4: Also update the function description in the comment.
-v3: https://lore.kernel.org/all/20260609084953.901576-1-wutengda@huaweicloud.com/
-v2: https://lore.kernel.org/all/20260609005728.458962-1-wutengda@huaweicloud.com/
-v1: https://lore.kernel.org/all/20260525132253.1889726-1-wutengda@huaweicloud.com/
+rethook: Remove the running task check in rethook_find_ret_addr()
 
- kernel/trace/rethook.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+This commit removes the task_is_running() check from rethook_find_ret_addr(=
+).
+The commit message states the check is unnecessary because unwinders hold R=
+CU
+and rethook_node structures are RCU-freed. Callers are expected to provide
+their own safe context.
 
-diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-index 5a8bdf88999a..1e7fdebe3cd5 100644
---- a/kernel/trace/rethook.c
-+++ b/kernel/trace/rethook.c
-@@ -233,9 +233,10 @@ NOKPROBE_SYMBOL(__rethook_find_ret_addr);
-  *
-  * Find the correct return address modified by a rethook on @tsk in unsigned
-  * long type.
-- * The @tsk must be 'current' or a task which is not running. @frame is a hint
-- * to get the currect return address - which is compared with the
-- * rethook::frame field. The @cur is a loop cursor for searching the
-+ * @tsk can be any task (any state). If not 'current', the result may be
-+ * unreliable. Callers requiring reliability must ensure a safe context.
-+ * @frame is a hint to get the correct return address - which is compared with
-+ * the rethook::frame field. The @cur is a loop cursor for searching the
-  * kretprobe return addresses on the @tsk. The '*@cur' should be NULL at the
-  * first call, but '@cur' itself must NOT NULL.
-  *
-@@ -250,9 +251,6 @@ unsigned long rethook_find_ret_addr(struct task_struct *tsk, unsigned long frame
- 	if (WARN_ON_ONCE(!cur))
- 		return 0;
- 
--	if (tsk != current && task_is_running(tsk))
--		return 0;
--
- 	do {
- 		ret = __rethook_find_ret_addr(tsk, cur);
- 		if (!ret)
--- 
-2.34.1
+> The iteration is already safe from crashes because
+> unwind_next_frame() holds RCU and rethook_node structures are RCU-freed;
+> even if the iteration goes off the rails and returns invalid information,
+> it will not crash. Callers that require consistency must provide a safe
+> context themselves.
 
+[ ... ]
+
+> diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> index 5a8bdf88999a9..1e7fdebe3cd5d 100644
+> --- a/kernel/trace/rethook.c
+> +++ b/kernel/trace/rethook.c
+[ ... ]
+> @@ -250,9 +251,6 @@ unsigned long rethook_find_ret_addr(struct task_struc=
+t *tsk, unsigned long frame
+>  	if (WARN_ON_ONCE(!cur))
+>  		return 0;
+> =20
+> -	if (tsk !=3D current && task_is_running(tsk))
+> -		return 0;
+> -
+>  	do {
+>  		ret =3D __rethook_find_ret_addr(tsk, cur);
+
+[Severity: High]
+This is a pre-existing issue, but does removing this check entirely expose
+the stack unwinders to a use-after-free and list corruption?
+
+The commit message mentions that rethook_node structures are RCU-freed, but
+looking at rethook_recycle(), the nodes appear to be immediately pushed back
+to the lockless objpool without an RCU grace period:
+
+kernel/trace/rethook.c:rethook_recycle() {
+    ...
+    objpool_push(node, &node->rethook->pool);
+}
+
+Additionally, while unwind_next_frame() does hold RCU for a single frame
+iteration, stack unwinders like x86 ORC drop the read lock between frames:
+
+arch/x86/kernel/unwind_orc.c:unwind_next_frame() {
+    ...
+    guard(rcu)();
+    ...
+}
+
+Because the unwinder retains the list cursor (*cur) across frame iterations
+while RCU is dropped, could unwinding a running task allow the target task
+to recycle the node?
+
+If the node is recycled and instantly reallocated to another task, the next
+call to __rethook_find_ret_addr() would execute:
+
+kernel/trace/rethook.c:__rethook_find_ret_addr() {
+    ...
+    node =3D node->next;
+
+on a stale pointer. Could removing this check turn a theoretical race into
+an easily triggered use-after-free when reading /proc/<pid>/stack for tasks
+executing kretprobes?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260610013658.1837=
+963-1-wutengda@huaweicloud.com?part=3D1
