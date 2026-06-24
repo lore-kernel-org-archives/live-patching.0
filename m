@@ -1,264 +1,124 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7877A36923B
-	for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 14:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE9E3A1DB
+	for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 20:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782311012; cv=none; b=L90DaTM5o/3GJoH1TqoceZdRtcUyb+3H0LQ2zwwH3alQl0nAgXEuxn4mrnVuyYVrSDgsMx2jN8zPjQldJh+hOUrxayoanz8xK9ywj57NiFYIcsFaUpMRP1dh8ga8iAfaTbK2b4Nad9r5yNqpnYFkH19h7oBwwj070qJ8Z4Z+dmA=
+	t=1782331984; cv=none; b=k8KEcrCdBtvjhSs3m/fhxW54SY10DwsVQ3dW67LnLjvwuwlWb+4kjGDEtr6l8o4XyYiiEG+XI0gCVzO6SCYEgZD6Zejv/emnYX40eXjjdBQBZOfeGoUkL2bARSkxe6x0CS1eRTKOm6yOarJZLgRdlWlxyFYKk7dbUi7UKbzYs94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782311012; c=relaxed/simple;
-	bh=ANcnDbJl1GrE6afhpUmaNktn53Zw0TE+IUnQR7Lyflk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fXMCV6j7wVfUfG1owAwCozTqC5dqyCtjZRS11pfuBCr6gZ/wRD9kGqQ1GJgnMT+P0dEaGWHn9BHfbB2meFT/kEot8ImQ7Xk5yBQhQl6eRNqwRa+ph5pnQvgMBF9LgXcG/twJ8vTwhPXX/dRJVNFgnedKnU7NgzoN4ttloQGnlbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CK1QgHuI; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782331984; c=relaxed/simple;
+	bh=YY1C5v75W3mnHcnXZ+5t8u6QmuYSf91omqmWfC6cA0o=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-type; b=QIPMdADpx4FQCYP13IkWHNPJo64zM1mKb1HFpLzTpf9WgFn25VsAaHapIPC5joF6iMNDWcPFSouym5I+Ms7xGj+QOAyfqC7DeRVjN0I3jYu1xTdX1rDH732Lcu5wcrMPm43nRpiEHaN+iRujqX7Av70tW+77Nj8RVPv9SQytPTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sc0zcAS3; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CK1QgHuI"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-46cacc39191so163982f8f.0
-        for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 07:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782311007; x=1782915807; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Per6MI6n5CBZ4jce2Yah0coKW3mXxHCaIKwWKmwmsgQ=;
-        b=CK1QgHuIU3L+Hoq9eyhLAP/tW60WuHCUI7tfWelD/UEnl2Wy0NhsVkfh8AA22XEOA2
-         hDg0I3Qw0c8thCpYKIRQF2GB97/jDtHq3N7sH/zC33OPWPVMkUtDc/wZajKMWaLEVhh+
-         9ZNJdTbT7ze+PrqZ/wGdLFb1rAwCCMVFvHdTBfoD6HTQegbltGhdwjkQ+PvECoQiudJB
-         SKRNGqOXEB2kF2ZVf2qCX1biZAaWtJawZh0E366EpIQ4SAIrWsXVO2ZBPpaWDzupv+RC
-         TaMQybC2UB1JHLVfYACnBxKWlff5n5TZv8mwnhHgObgWNzrtct1UvpEaaP+EMi+/wDnr
-         NuMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782311007; x=1782915807;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Per6MI6n5CBZ4jce2Yah0coKW3mXxHCaIKwWKmwmsgQ=;
-        b=KyzDmR4J2mWW0mZrf38EJPdeD5ImMAB4EBF4tAYPLRosZxMjxSPg8RXSsFqBkJWZhr
-         TGnDZZZDO0sW3GTRzjrM7QhM/4souiUkc10nGTye//Cf61oJKjMLILiLBHMB3QZsLInw
-         +oaWD81w03nV29z+4Y943qrRiypfMiMSRCpevYOLZXA2RsG1hQaGIUS0bEmmZWtDzy2D
-         HBMZg5/b8X6EjnLWCVFR/U+JIsVWmfehxf3V9N1N3Htt3EvGgnLNSVF6orTIhFma4esw
-         plcHJ2eQRUR6PhRUvIjyTnIflRRki2jpJJo6AxdhO6Oy1BVJHuR/rNVMCoO2DoVcd7ei
-         VSeg==
-X-Forwarded-Encrypted: i=1; AHgh+Rol+RKrkOGe2v5Td7CnoT1nx4UDZMmPsJD92CoH0vCso7DRQHYemyvrjB9wkdJ27+MzBJKTycD3z5bFaVpS@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxlkt4uCdmzPTcDovKroip0V7IARa7BALezpuBuxx2t+vaaAlh8
-	RXWSydZr1K66xYSWwkgIdAkQvdM6IQ+2po2L7LHkD9AD27lgjhRzmnQa
-X-Gm-Gg: AfdE7clHNy4eYUiLpBblf8IQ8WrFc4vrvoyKKoCbm42wGxXTJgWIze5s8mJ7eWbzoaJ
-	j+T8mPKoqVLNRzVJj5sYBy8nUY2uM3etl7TrKq5QQqpmHoWr5vH8bEX4ZNCZDXPIHWzqe3BErIa
-	1okfyvd9J7iFPrY1PVyFsPJafu3Ux9R+PqjkevBXRGJIT9yhpTUUXH+eIoSnZiyB3dW56DELXMO
-	uV9mEw6sexQsmBZ1YIInTyO+3fM5P8XqTWGwStAq5clbM29tn2s0rH219cXj5TFbwS/J0mXvzwr
-	KSFLlkHssZanwTa4ye68+zroGxL0SA+ppQD+8bPJauVH0XlG/v/Cf7K855Z5lJVVoVAlIkd2kA+
-	vL4xYRWqPkGJQ/RSsojQAferQdxJ7eX7D/3Mp18WxXzGdEDHKfUSsFVXHWb7h1nhZe9ZQckBCKG
-	AwbeRTJr4+klJlZTqgcpHHCFt1je6IOZgQU8ciZbnbqsEwyjkXpQ==
-X-Received: by 2002:a05:6000:471a:b0:460:2e53:a6f6 with SMTP id ffacd0b85a97d-46d04583b35mr1261972f8f.12.1782311006854;
-        Wed, 24 Jun 2026 07:23:26 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c221d9405sm8183744f8f.22.2026.06.24.07.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 07:23:26 -0700 (PDT)
-Date: Wed, 24 Jun 2026 15:23:24 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Kaitao Cheng <kaitao.cheng@linux.dev>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jens
- Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
- <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Juri Lelli
- <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, Paul
- Moore <paul@paul-moore.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, David Howells
- <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
- <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Philipp
- Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kexec@lists.infradead.org, live-patching@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
- llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
-Message-ID: <20260624152324.3def88ce@pumpkin>
-In-Reply-To: <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
-	<20260622040533.29824-2-kaitao.cheng@linux.dev>
-	<20260622094242.64531b9a@pumpkin>
-	<351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
-	<cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sc0zcAS3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782331982;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=W0GXuJv5UDxvc9Rlg8693/s/vmTKfkYVUYav87nVFDc=;
+	b=Sc0zcAS32sL9arZy8IkQ4NVOhxiqJTHo4lJ/ILONsF+7de3LLVlIX3phomSeSq3GH88wnz
+	qB7Swc0HheGiRtLzBISOJzK+0PEo9b5BlEY++GmUB0GTeJuLBRFKBiPLumF/KAa+v1VBon
+	LHar2xHLHV8aiEMFwAagsOOx/HMPf18=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-8-cEqbm0HuNk-sscslkSV8cw-1; Wed,
+ 24 Jun 2026 16:13:00 -0400
+X-MC-Unique: cEqbm0HuNk-sscslkSV8cw-1
+X-Mimecast-MFC-AGG-ID: cEqbm0HuNk-sscslkSV8cw_1782331979
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 471631955E91;
+	Wed, 24 Jun 2026 20:12:59 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 713C730002DD;
+	Wed, 24 Jun 2026 20:12:58 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org
+Subject: [PATCH] perf symbols: ignore livepatch symbols
+Date: Wed, 24 Jun 2026 16:12:54 -0400
+Message-ID: <20260624201254.472576-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, 24 Jun 2026 15:23:47 +0200
-Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
+Livepatch modules contain special symbols (prefixed by ".klp.sym.") that
+act as relocation placeholders.  Once resolved, they point to the same
+addresses as the original kernel symbols they reference. [1]
 
-> On 6/24/26 15:14, Kaitao Cheng wrote:
-> >=20
-> >=20
-> > =E5=9C=A8 2026/6/22 16:42, David Laight =E5=86=99=E9=81=93: =20
-> >> On Mon, 22 Jun 2026 12:05:31 +0800
-> >> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
-> >> =20
-> >>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >>>
-> >>> The list_for_each*_safe() helpers are used when the loop body may
-> >>> remove the current entry.  Their API exposes the temporary cursor at
-> >>> every call site, even though most users only need it for the iterator
-> >>> implementation and never reference it in the loop body.
-> >>>
-> >>> Add *_mutable() variants for list and hlist iteration.  The new helpe=
-rs
-> >>> support both forms: callers may keep passing an explicit temporary cu=
-rsor
-> >>> when they need to inspect or reset it, or omit it and let the helper =
-use
-> >>> a unique internal cursor. =20
-> >>
-> >> I'm not really sure 'mutable' means anything either.
-> >> It is possible to make it valid for the loop body (or even other threa=
-ds)
-> >> to delete arbitrary list items - but that needs significant extra over=
-heads.
-> >>
-> >> It might be worth doing something that doesn't need the extra variable,
-> >> but there is little point doing all the churn just to rename things.
-> >> =20
-> >>>
-> >>> This makes call sites that only mutate the list through the current e=
-ntry
-> >>> less noisy, while keeping the existing *_safe() helpers available for
-> >>> compatibility.
-> >>>
-> >>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >>> ---
-> >>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++----=
---
-> >>>  1 file changed, 231 insertions(+), 38 deletions(-)
-> >>>
-> >>> diff --git a/include/linux/list.h b/include/linux/list.h
-> >>> index 09d979976b3b..1081def7cea9 100644
-> >>> --- a/include/linux/list.h
-> >>> +++ b/include/linux/list.h
-> >>> @@ -7,6 +7,7 @@
-> >>>  #include <linux/stddef.h>
-> >>>  #include <linux/poison.h>
-> >>>  #include <linux/const.h>
-> >>> +#include <linux/args.h>
-> >>> =20
-> >>>  #include <asm/barrier.h>
-> >>> =20
-> >>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct=
- list_head *list,
-> >>>  #define list_for_each_prev(pos, head) \
-> >>>  	for (pos =3D (head)->prev; !list_is_head(pos, (head)); pos =3D pos-=
->prev)
-> >>> =20
-> >>> -/**
-> >>> - * list_for_each_safe - iterate over a list safe against removal of =
-list entry
-> >>> - * @pos:	the &struct list_head to use as a loop cursor.
-> >>> - * @n:		another &struct list_head to use as temporary storage
-> >>> - * @head:	the head for your list.
-> >>> +/*
-> >>> + * list_for_each_safe is an old interface, use list_for_each_mutable=
- instead.
-> >>>   */
-> >>>  #define list_for_each_safe(pos, n, head) \
-> >>>  	for (pos =3D (head)->next, n =3D pos->next; \
-> >>>  	     !list_is_head(pos, (head)); \
-> >>>  	     pos =3D n, n =3D pos->next)
-> >>> =20
-> >>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
-> >>> +	for (typeof(pos) tmp =3D (pos =3D (head)->next)->next;		\ =20
-> >>
-> >> Use auto
-> >> =20
-> >>> +	     !list_is_head(pos, (head));				\
-> >>> +	     pos =3D tmp, tmp =3D pos->next)
-> >>> +
-> >>> +#define __list_for_each_mutable1(pos, head)				\
-> >>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
-> >>> +
-> >>> +#define __list_for_each_mutable2(pos, next, head)			\
-> >>> +	list_for_each_safe(pos, next, head)
-> >>> +
-> >>>  /**
-> >>> - * list_for_each_prev_safe - iterate over a list backwards safe agai=
-nst removal of list entry
-> >>> + * list_for_each_mutable - iterate over a list safe against entry re=
-moval
-> >>>   * @pos:	the &struct list_head to use as a loop cursor.
-> >>> - * @n:		another &struct list_head to use as temporary storage
-> >>> - * @head:	the head for your list.
-> >>> + * @...:	either (head) or (next, head)
-> >>> + *
-> >>> + * next:	another &struct list_head to use as optional temporary stor=
-age.
-> >>> + *		The temporary cursor is internal unless explicitly supplied by
-> >>> + *		the caller.
-> >>> + * head:	the head for your list.
-> >>> + */
-> >>> +#define list_for_each_mutable(pos, ...)					\
-> >>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
-> >>> +		(pos, __VA_ARGS__) =20
-> >>
-> >> The variable argument count logic really just slows down compilation.
-> >> Maybe there aren't enough copies of this code to make that significant.
-> >> But just because you can do it doesn't mean it is a gooD idea.
-> >> I'm also not sure it really adds anything to the readability.
-> >>
-> >> And, it you are going to make the middle argument optional there is
-> >> no need to change the macro name. =20
-> >=20
-> > Christian K=C3=B6nig and Jani Nikula also disagree with the variadic-ar=
-gument
-> > implementation approach. If we abandon that method, it means we will
-> > inevitably need to add some new macros. If mutable is not a good name,
-> > suggestions for better alternatives would be welcome; coming up with a
-> > suitable name is indeed rather tricky. =20
->=20
-> I don't think you need to add a new macro for the specific use case that =
-people want to modify the next element of the iteration.
->=20
-> If I remember your numbers correctly that is a really corner case and kee=
-ping using the existing *_safe() macros for that sounds perfectly fine to m=
-e.
+These special symbols confuse the 'vmlinux symtab matches kallsyms' perf
+test as kallsyms may report multiple symbols sharing a single kernel
+address.  For example:
 
-IIRC currently you have a choice of either:
-	define               Item that can't be deleted
-	list_for_each()	     The current item.
-	list_for_each_safe() The next item.
-There is also likely to be code that updates the variables to allow
-for other scenarios.
+  kallsyms (without livepatch)
+  ----------------------------
+  ffffffff81a41110 T __pfx_arch_release_task_struct
+> ffffffff81a41120 T arch_release_task_struct
+  ffffffff81a41140 T __pfx_exit_thread
+  ffffffff81a41150 T exit_thread
 
-Note that if increase a reference count and release a lock then list_for_ea=
-ch()
-is likely safer than list_for_each_safe() :-)
+  kallsyms (with livepatch loaded)
+  ---------------------------------
+  ffffffff81a41110 T __pfx_arch_release_task_struct
+> ffffffff81a41120 T arch_release_task_struct
+  ffffffff81a41140 T __pfx_exit_thread
+  ffffffff81a41150 T exit_thread
+> ffffffff81a41120 w .klp.sym.vmlinux.arch_release_task_struct,0  [kpatch_5_14_0_570_94_1_1_3]
 
-list.h has 9 variants of the 'safe' loop.
-The bloat of another 9 is getting excessive.
+When perf loads kallsyms, both symbols are inserted into the
+symbol table at the same address, corrupting symbol end-address
+calculations and causing test failures.
 
-It has to be said that this is one of my least favourite type of list...
+Filter out symbols prefixed with ".klp.sym." when loading kallsyms, as
+they alias existing kernel symbols.
 
-	David
+Link: https://docs.kernel.org/livepatch/module-elf-format.html#livepatch-symbols [1]
+Reported-and-tested-by: Ben Procknow <bprockno@redhat.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ tools/perf/util/symbol.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->=20
-> Regards,
-> Christian.
+From Ben's tests:
+
+  Without patch:
+  ./tools/perf/perf test 1
+   1: vmlinux symtab matches kallsyms                                 : FAILED!
+
+  With patch:
+  ./tools/perf/perf test 1
+   1: vmlinux symtab matches kallsyms                                 : Ok
+
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index fcaeeddbbb6b..eeaed3f5cf50 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -774,6 +774,10 @@ static int map__process_kallsym_symbol(void *arg, const char *name,
+ 	if (name[0] == '$')
+ 		return 0;
+ 
++	/* Ignore livepatch symbols */
++	if (strstarts(name, ".klp.sym."))
++		return 0;
++
+ 	/*
+ 	 * module symbols are not sorted so we add all
+ 	 * symbols, setting length to 0, and rely on
+-- 
+2.54.0
 
