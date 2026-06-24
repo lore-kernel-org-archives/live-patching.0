@@ -1,274 +1,227 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012049.outbound.protection.outlook.com [52.101.48.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6961DF736;
-	Wed, 24 Jun 2026 13:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782307449; cv=fail; b=MqassYjNgYgM4A0iLJnQq1GgcjByPW0hXaKse8Wqmui5CTO1MLqdi3sySzrUpJbHVp/X+7CrieX4Sxoqqu/o74gNEEJnloqJbriNt5vK7S4+jDRWZCAczPzHXliZLFa05d3BvE18rMujlCz0fQQxG/HYPetveM0sz1WydCEUNFM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782307449; c=relaxed/simple;
-	bh=fa+S84HJ16sURB3PNA9C1IyPsffcIgr7c2Etm3JmKEY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=L0gCvisSSTG3J1SvZz7tLsLkSfbzU40ffJjmc3aeYG6GKzzKsSNRtnpUdjc9FiKf8hFk6eg54bIBocEOLXv7OPxNwZUNPVDTC53OTFI9o87fmhYbVjwP/ZVxl8cmn9LcsKAa/Odp8NPtRPDYM/feAQ40E2iSWi9l5j25gAh1x4A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Dc94bJtD; arc=fail smtp.client-ip=52.101.48.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07403624C2
+	for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 13:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782309376; cv=none; b=u/TEjkntjBVoW+VxoSgB8SLVknis5+yycwwHdI19lN2KkqgA4EyAKmX+BfV5INvnWYb5EvtQVsKi8Zb1hR1iFXjmn8ZEz7AaMyCvJsOs1JjwGeTUVjUiHJZZPXjCXjlLD1xMFZzD1DOKQ+Vti6uLH4LePahMThqX73CDP0c2bOI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782309376; c=relaxed/simple;
+	bh=C/9M3/amxP1OAVQAthHHKpK5OgmWfdU/PasElRh8Unk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3hdQZyh7LARszkGI7WSSoaPRfQ9CGDKjlKgLJ6qSeRv1oGWqRKp8G2Z2FVmTMqh9McDS0ppz/1hUdn0C6EextO/a0LtmToRNNjLT7UtqGvGkAcoGXEk9TD5rpw5UMjJapJRpvLeldtHXnQjTYqjD0hIf6C9R1jNzmXcU0nfhE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gYg/8oDp; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Dc94bJtD"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tdaAv+ecVA6DZauEGCo9T7B1nQOcCSUU7hNraj6tRtvtEUHeUQj+rFIXvoWnfPqY2jhC6wTt7R5+xcBY+VelRctKrARIr4wFZbaANqvwzrGcUf8rtxtOhVqHYalcx7RfsOmd6Os93RNh+K5OUkebyCKH5NBEKXytYF2j5Rl+jRyvcQ+Gg7v73Tj8YrP+mR/51jOvdRVdZWEAYjMDLVFBpPhzlgphh9Ezf7NC47k8IaCF0Cb/w30LBjYjWpROP/SPaCTetRgg0ltq47Ri5yeOwV9IFjbZYyh7A9G7Qtv/+Nc4zu08kN5H6K8BBSZyZ3m2G2dF3Zq4uRjqZvsALTPMuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d81CM1+AT4WllJ72uDv8AXVKFPVvGK8TiKbKmP7zRcI=;
- b=sFfEVVxRwsOYnMcorSkPi3qRpCppWOTlauZ7YwzcPjJrepWy2banawSRiQaamujWLzH7Yovh7ENxhyducOetDdXtV1XFbL6iapW7G5HTFQCirdpvpTOYs0YHy+RcrflhBaARVWO1RdbVKvKoyb0fO3BmNMTIBGYfvpvol1u53nhVZ42cRILUOyxRtQ74yozN+rK428+aL8CCErpNEkNAh3+LLelktq5N4ng84SmLdBgXMssQz2zLSrS/mxXQQA3bLevLyLpOyjc+nB7gvgns33sblaC7Wq4xCrlSwG65uV7dd0XfLPQl5XraQD47voUHwmBSQWUTshtT8HLMy4gGog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d81CM1+AT4WllJ72uDv8AXVKFPVvGK8TiKbKmP7zRcI=;
- b=Dc94bJtDtzGF6zztoUX5l/0+u8PChmvdYrmw4RV69JMcqBPpaCuwM6m7FYCD96iE76/DFmIb1NLF2TM8ns09RKOhlAtoUYlKIt5NKISj2tBRmfTa33pXQr/2q01X23GhzczSPuaJVh7I8h1G2u/xxf1sPPYPTJNjJHQLYY2EQXs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by CH3PR12MB7570.namprd12.prod.outlook.com (2603:10b6:610:149::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.159.14; Wed, 24 Jun
- 2026 13:24:01 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0139.018; Wed, 24 Jun 2026
- 13:24:01 +0000
-Message-ID: <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
-Date: Wed, 24 Jun 2026 15:23:47 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
-To: Kaitao Cheng <kaitao.cheng@linux.dev>,
- David Laight <david.laight.linux@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
- Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Paul Moore <paul@paul-moore.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>, David Howells <dhowells@redhat.com>,
- Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
- <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kexec@lists.infradead.org, live-patching@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
- llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
- <20260622040533.29824-2-kaitao.cheng@linux.dev>
- <20260622094242.64531b9a@pumpkin>
- <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BL1PR13CA0270.namprd13.prod.outlook.com
- (2603:10b6:208:2ba::35) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gYg/8oDp"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49241dbf9c1so8943455e9.2
+        for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 06:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1782309373; x=1782914173; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DzS0IrPXzLvwOk9ygCaJpomrcePV/yR6t2T0hbYCUzs=;
+        b=gYg/8oDpivM3wAvbtH404EKbuh/K3izUOkx7LR/QK8hF0dVchOnLuc/RFB29mfr4F1
+         83FggDk7BU+uFC4WtEArf+uetMXs76nCyu1FU4d4VQPRl+PDlXlaJIf2xN+2+VrR6fBi
+         nLPjfEhpWjQxWyMslgfrTlyQPdlmiGr+5USdYdTaiBdt9yj5/Q0/6H/lanqOHmjtLH3Y
+         5gSTVIp2gEEibstXLg1QvtBFqpIW+bFk3RIraZDFLMZoNFf9pblu8BMkJFqPCzL0j6/i
+         sMjQYYoLffdASJ1mqeKOcUhlt95+LFJ84eRuCtYRS+0wwy8irf4/vi+1wq7rLsVjyyIr
+         6/TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782309373; x=1782914173;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DzS0IrPXzLvwOk9ygCaJpomrcePV/yR6t2T0hbYCUzs=;
+        b=lm/YBDgVIc0ZFymZbsSjZ8CWX0zdn7iEbpZczw5SwyqVQ5Z67KfTuV5talAHFLvpfu
+         BcFbFYPXy9uV6rwxmXmNIXYgtla5CWWB79FF5ck/4UiB8Lq+hO1iOVK7rmfZpj3cubgG
+         s8ZSB6jhaUODNnk8v5IFgWSO5EqckCj+3Nz1iGFCu8YdqlZexS+WTV9XumsADWBvTiVH
+         kY4+Wr3VOWWtDOmdliVyo9VFWK00SlWedmIWYLtGHGNeGSXQrc17kCo1YonwjZW9aUW7
+         GynVCBfwdsxxNAZq9A8SzmCh2XwZvUamFowlXH1tSyDSbRTCVDOKkExeoYJt52HzSV7q
+         ZrnQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+JpX3KU5gEwHm0zsVHP0LjFWUEI8xX6uhFPMy6PiX2fKDS1YqvVLFEk2xb9hrk/v9BAjRvZxZsmnoblK0O@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcndN4oPy2XZfoH2LuoASgevEMcAF2YsCSMHCRzq8ut9yOPmuE
+	b5H1NW6+egwbcYJvSqVwO33B2fwi2cfmRmmvfpAsegqiPquMdUs1oflFsz+tT2EXyEtS5BlC1y0
+	rnQhJ
+X-Gm-Gg: AfdE7cnyk6Mwwy1Y0dzciKgqkRA3QyHN1MiuboPrmmhWtJ4uWnCrshs7DdHLjDlV5BS
+	bBiD+8gXCnggpTRcqZef1fS3zOlxIXvPHlVrTwSXtZLGQR8AuYJD93DY0S8P0enl0rz75ao4DAA
+	y1I3qdzS/HSiut6ZIjGqBNurzMsnwWCpO7vmGwkqpvft9FccTsRROqxuMLKQu8Q57Xfz07c1Qzw
+	B40NKNKMCCkeMdAmJqyXZx9ZBJGhE/v2zR7qGT1Lu6KGhG+e6EZDhyzA7AMmLGUbtOsCUzXWB9s
+	bd2+164loVnfbFVH9hcbxf0ANQibYvf1nGxsezbzUee3FpfmwuD5av9cH2cDulK/x5mG9hp7gM0
+	6BfbhYnaLtE8lJ20LNZ047UjUzTDDU9S/lRrEq92VdsbEaoARIGrJbgjcgZHIGodkexMomREeYY
+	k9UrWzPQdqf3guvbQ=
+X-Received: by 2002:a05:600c:4686:b0:492:3fcb:22fe with SMTP id 5b1f17b1804b1-49260849d7bmr51274575e9.1.1782309373195;
+        Wed, 24 Jun 2026 06:56:13 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4923fd30078sm457546265e9.7.2026.06.24.06.56.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2026 06:56:12 -0700 (PDT)
+Date: Wed, 24 Jun 2026 15:56:10 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org,
+	jikos@kernel.org, joe.lawrence@redhat.com, song@kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v3 3/7] livepatch: Support scoped atomic replace using
+ replace_set
+Message-ID: <ajvh-mMT2blBXJ3x@pathway.suse.cz>
+References: <20260607131659.29281-1-laoar.shao@gmail.com>
+ <20260607131659.29281-4-laoar.shao@gmail.com>
+ <alpine.LSU.2.21.2606231124200.1711@pobox.suse.cz>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB7570:EE_
-X-MS-Office365-Filtering-Correlation-Id: 715eed2d-514b-4810-2f08-08ded1f3da78
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|1800799024|376014|7416014|6133799003|18002099003|22082099003|56012099006|4143699003|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	vjRMDzmTxaLO3rG//AE977uAg8zKrEwMP6cu1AOblab8SZ491Cs0rYGIPxYvAFRNxWSVQ1WdRjVkW8uINOWaaO1LcWyt/wIKFnqXxociABOHsobehPc8e61s3GnfEfviv/vYUJs1BYtORVJs0+rNk2XGq+ZYcvNpXg6oKMgBd60P6S9UAXXOjUalPunVJcruSBXhU+03Db/ZLAvwRMJ4LkyKp9X8urTD29nI1sVli23YRzfr6f7QlYt1NE8z2tjj+tTOuaopcIYaTyRREeh1LTyJGLjXPTHttj/0qGSJWH0dbU2PQ16weT2vE/oUJQOd55L87wLEkz7iKzhzNzwmoRCxnEYaTxhqUK/d7fhbS49r2+o+otSyW6oXmfcTSEh+A13SwWrC412pRamXap2Sq7vEAcnU53bRd7aSf1zOxgJJbd60qry1G7yF8/wahybuHwktLDMb87yqpcxhBNlskColY6z/ieQl9ZLrsRjxsFjJ4g1BGfi6PGkW4cNzSNGwUDfb3g0kKQ3RXayJ1mvTgK+cHwyZAOuPrNH+rmrGsOoC7gIXksGzl1YSqQT/guiSOvjYJs2VkcDleBwpXa21FkM2F/IXE9BjHNUkTuuA2CqTou5m5AUIIvTJkWTeEcpphCrCfaZcRkBjaZAv/XpqW1HguK/RVMJYVXXsSyz8H8k=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(376014)(7416014)(6133799003)(18002099003)(22082099003)(56012099006)(4143699003)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YWxibmFPMnl4Z04zVXpKQXBkcXNhV1dTQ1o4RW0vQ3czTkIvQVQ4KytXc2dV?=
- =?utf-8?B?QlIwYmFNbGQwSVNPbVd3MXlQMmJjZWJNTXA3Z0VRTjZSQnVNU1FmejFKNzh3?=
- =?utf-8?B?ejRvMkY3NHNNSjNSaThtY0xPaTcvNU9BeldYNGx4VW8xZXJmSzJmaWNDV0Z1?=
- =?utf-8?B?QVdzQzZuUTljZUF6UXIyZzd4OEVwRS9oT2pFdWVPNERlUjBrZjVsSUZ4M1Aw?=
- =?utf-8?B?VmR2bFl4aFVEd2dmV2Q2NHNUWVE5d3BVTXQvcVFqR0E3blVnUXJRVUhKdmN3?=
- =?utf-8?B?U251WFF0SlhUc3J0MjdwdXB5UmFFbDRSeGxSckpQSHZ1RXlkTUV4RXZvdkxa?=
- =?utf-8?B?U1ZZK2NIWlB2cFZDUHNxL2J1MVEzRnp0Z2k2SzFCemtvN3I2M0htRUVrcWlE?=
- =?utf-8?B?TjVpOGhaNFdnUFR4Zk5WWGpEU2NObC9WM3Z6eHFsbVRkS0NxZGpENi8yR3Qz?=
- =?utf-8?B?Tmp0cEpqMFcrbnRhQStMV2xWYk1qTHhOdlh4dGtHQWNIS1VEVFJ5UzZXeVEw?=
- =?utf-8?B?RUc4aUtQS3BmMnlPTXVpNVFDcXJNbDRiR3FuWmVVLytDUm5CdFI3dGltV0xO?=
- =?utf-8?B?T25rMFhVNXpCaGxlUjM4cEJUK0ozdXF2SEdhRG9MLzNHdVphcDNGVjh3M1hj?=
- =?utf-8?B?YWozS3Nma2dZMmx2VmdhMmxaTXRVbTByalA5YklaM1hwVk9KNXNyQk1xbnli?=
- =?utf-8?B?eVFxWkIwdTJBckZuZFVsaEllNnl1cFhNdGkzeEdaeVVRckM0V0d1czZxaFRi?=
- =?utf-8?B?MmxjdHV1SjNnQnJieTE4K0w1YmdCK0FQbFZsL3QvcTB3dityclIrdHp2dFZo?=
- =?utf-8?B?WTV5Q043cFNaVm5keXZISjFLZXJzRDZKd3Q3R0pIYzVMZ2tBcDBvaG5vU2ll?=
- =?utf-8?B?b1VCOUV5VnRyVll5Y3lOTmE3c1RNbzlkWUFwVWRtWXdxSllWK3ZjOS93TUVw?=
- =?utf-8?B?dnMyekZZSHF1bHU3Q3kxVzZwWkZsWk9ndjZHV21aYzdlMDV2Q0MvVEFTWHVu?=
- =?utf-8?B?WkN5Qm9LOTZ1am5nL2NaYktHS0thc0FVNEtDcStzMEcrRWY3MDIzdklSL2I0?=
- =?utf-8?B?ak4xck1qd001enVONE1HeHJMc0xMa2tYTjRQTm9vMGZpNlR5WFV4KzA3aUhy?=
- =?utf-8?B?MitMSHc3MnFaSjRaemlZWDFRaXVEc0xEeHY4YlpoeHdxa0xEcjJrajVQYkM5?=
- =?utf-8?B?Qi9ISWE2ODFNYWV1aWNWQ1NGOExiM3E5YzhJODRjcVhOR3YyMk9IbFlFMG10?=
- =?utf-8?B?czFvWVhOd1UzQU1WU05ZYW1odXBrdXpObXZtVkIwcklLa21XNG5wSmphWHJD?=
- =?utf-8?B?aGJOajZqSTVmb2gvdHc0WTQySjlHQ2VIRWY3SHZScW1YUlBoL3ErdDFmYUFO?=
- =?utf-8?B?cTl6WHNGaEtZTVNvVk1sV1NXblB6WG0zRlZnNUVPV3hnSEJYRG10a3RhaXA2?=
- =?utf-8?B?WU82ZjFqYWdGaXZ6TExybGVNWTk2QzJRTlk4SE9WVUJtV1FRVU1tbkZlTnp1?=
- =?utf-8?B?bFhTczlvYUttdEU3bEZwTnp3ZjN1MmxQQnk4MGlMYk9Ga3h0YkdDUFk0bWJN?=
- =?utf-8?B?cWVmR1dWdHVWV1IveHlnWnBla3grZGtqWW85ZkYyQnhWSEtzTlRYa1dhenlP?=
- =?utf-8?B?Y3FDaXJxSkJiUjdQNktaNUpDVFk3eGpUYWNnOWtramhxZ0RWc0daaW4rY3BX?=
- =?utf-8?B?cEtsdG81L1lRNCtiTEMvYTNHcVY4MmpuaFZvVTVySlVpVVlkcTNQajhGb08w?=
- =?utf-8?B?WGFBNERTSGxLc3cvakQzZjRwbzEvMUMvZ2o2SnFzM3RHY1k1YWlYck1KQjJp?=
- =?utf-8?B?alVWRDFVYXFkOVBLRlY4MkRGQSsvb2Y4SEZ2T2pkemZNU3FnVjJTR2NWU2M1?=
- =?utf-8?B?RjVpMjdCemZBWXErMndvbkJkaFk5ZnJRck4yYXU5V2FqVzJ2Y1pjQkhSTUEx?=
- =?utf-8?B?ZmdFZ3lrc2JjL1lpb1R2alpYNUFidDVCNXdFaXdyNk9yWjl1Z2p4Y0FqdEZB?=
- =?utf-8?B?T0JmTk9xK3MwRGxrL0tqZGFWK3BXZlUyNWlITzBzUHY4ZjYzNkw4MW5ZVVFv?=
- =?utf-8?B?NFhsR2tPaEFKY3EwRDJOYlVhOU1LUUtDMVRqeVNCZXdnY2lML2k2VU9tbzFI?=
- =?utf-8?B?WlZOOXBScmUyd3B6bEl2eURzOVB2VzRnLzFGQTZaS1VVd0ZaaVplWExGZ1pQ?=
- =?utf-8?B?U3RTNWlFaitwNVRqREs4c0RHMFlKVjMyeENKbzk4bjIvL2FkRDExcitRdXA4?=
- =?utf-8?B?Yys0Rm5zUmtIRkpVYzVKSEhHNmlsbFVvZHpWTHl3SUZkdkxWNndJUUpENkl6?=
- =?utf-8?Q?cSgurPjmbMLoRmPxTI?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 715eed2d-514b-4810-2f08-08ded1f3da78
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2026 13:24:00.9068
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QVhBEK/2F/j8PEv/furwKNhQwAwxU3hZSEqW50n8SOx5hinzeiYl4lrFCu6sDpFf
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7570
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2606231124200.1711@pobox.suse.cz>
 
-On 6/24/26 15:14, Kaitao Cheng wrote:
+On Tue 2026-06-23 11:40:31, Miroslav Benes wrote:
+> Hi,
 > 
+> On Sun, 7 Jun 2026, Yafang Shao wrote:
 > 
-> 在 2026/6/22 16:42, David Laight 写道:
->> On Mon, 22 Jun 2026 12:05:31 +0800
->> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
->>
->>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
->>>
->>> The list_for_each*_safe() helpers are used when the loop body may
->>> remove the current entry.  Their API exposes the temporary cursor at
->>> every call site, even though most users only need it for the iterator
->>> implementation and never reference it in the loop body.
->>>
->>> Add *_mutable() variants for list and hlist iteration.  The new helpers
->>> support both forms: callers may keep passing an explicit temporary cursor
->>> when they need to inspect or reset it, or omit it and let the helper use
->>> a unique internal cursor.
->>
->> I'm not really sure 'mutable' means anything either.
->> It is possible to make it valid for the loop body (or even other threads)
->> to delete arbitrary list items - but that needs significant extra overheads.
->>
->> It might be worth doing something that doesn't need the extra variable,
->> but there is little point doing all the churn just to rename things.
->>
->>>
->>> This makes call sites that only mutate the list through the current entry
->>> less noisy, while keeping the existing *_safe() helpers available for
->>> compatibility.
->>>
->>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
->>> ---
->>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++------
->>>  1 file changed, 231 insertions(+), 38 deletions(-)
->>>
->>> diff --git a/include/linux/list.h b/include/linux/list.h
->>> index 09d979976b3b..1081def7cea9 100644
->>> --- a/include/linux/list.h
->>> +++ b/include/linux/list.h
->>> @@ -7,6 +7,7 @@
->>>  #include <linux/stddef.h>
->>>  #include <linux/poison.h>
->>>  #include <linux/const.h>
->>> +#include <linux/args.h>
->>>  
->>>  #include <asm/barrier.h>
->>>  
->>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct list_head *list,
->>>  #define list_for_each_prev(pos, head) \
->>>  	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
->>>  
->>> -/**
->>> - * list_for_each_safe - iterate over a list safe against removal of list entry
->>> - * @pos:	the &struct list_head to use as a loop cursor.
->>> - * @n:		another &struct list_head to use as temporary storage
->>> - * @head:	the head for your list.
->>> +/*
->>> + * list_for_each_safe is an old interface, use list_for_each_mutable instead.
->>>   */
->>>  #define list_for_each_safe(pos, n, head) \
->>>  	for (pos = (head)->next, n = pos->next; \
->>>  	     !list_is_head(pos, (head)); \
->>>  	     pos = n, n = pos->next)
->>>  
->>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
->>> +	for (typeof(pos) tmp = (pos = (head)->next)->next;		\
->>
->> Use auto
->>
->>> +	     !list_is_head(pos, (head));				\
->>> +	     pos = tmp, tmp = pos->next)
->>> +
->>> +#define __list_for_each_mutable1(pos, head)				\
->>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
->>> +
->>> +#define __list_for_each_mutable2(pos, next, head)			\
->>> +	list_for_each_safe(pos, next, head)
->>> +
->>>  /**
->>> - * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
->>> + * list_for_each_mutable - iterate over a list safe against entry removal
->>>   * @pos:	the &struct list_head to use as a loop cursor.
->>> - * @n:		another &struct list_head to use as temporary storage
->>> - * @head:	the head for your list.
->>> + * @...:	either (head) or (next, head)
->>> + *
->>> + * next:	another &struct list_head to use as optional temporary storage.
->>> + *		The temporary cursor is internal unless explicitly supplied by
->>> + *		the caller.
->>> + * head:	the head for your list.
->>> + */
->>> +#define list_for_each_mutable(pos, ...)					\
->>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
->>> +		(pos, __VA_ARGS__)
->>
->> The variable argument count logic really just slows down compilation.
->> Maybe there aren't enough copies of this code to make that significant.
->> But just because you can do it doesn't mean it is a gooD idea.
->> I'm also not sure it really adds anything to the readability.
->>
->> And, it you are going to make the middle argument optional there is
->> no need to change the macro name.
+> > Convert the replace attribute from a boolean to a u32 to function as a
+> > "replace set." A newly loaded livepatch will now atomically replace any
+> > existing patch belonging to the same set. There can only ever be one active
+> > livepatch for a given replace_set number.
+> > 
+> > This change currently supports function replacement only. Livepatches that
+> > belong to different replace sets cannot modify the same function. If a new
+> > livepatch attempts to modify a function already modified by an older
+> > livepatch from a different replace_set, the loading of the new livepatch
+> > will be refused.
+> > 
+> > Similarly, for the KLP state, livepatches belonging to different replace
+> > sets cannot use the same state ID. The system will refuse to load a new
+> > livepatch if it uses a state ID already in use by an older livepatch from
+> > a different replace_set.
+> > 
+> > For the KLP shadow variable mechanism, developers must assign unique shadow
+> > IDs to livepatches that belong to different replace sets.
+> > 
+> > Support for replace_set compatibility with KLP state and shadow variables
+> > will be implemented after Petr's KLP state transfer work is completed [0].
+> > 
+> > Other user-visible changes include:
+> > - The non-replace model is now deprecated
+> > - /sys/kernel/livepatch/livepatch_XXX/replace attribute is replaced by
+> >   /sys/kernel/livepatch/livepatch_XXX/replace_set
 > 
-> Christian König and Jani Nikula also disagree with the variadic-argument
-> implementation approach. If we abandon that method, it means we will
-> inevitably need to add some new macros. If mutable is not a good name,
-> suggestions for better alternatives would be welcome; coming up with a
-> suitable name is indeed rather tricky.
+> I will add my feedback here because the thread where it would belong to is 
+> more about details now. I am sorry that I got to it later than I wanted 
+> to.
+> 
+> What I like about the current state (non-replace and replace_all patches) 
+> is that it is simple when it comes to the code and it is agnostic to 
+> different use cases as we know them. Yes, it can lead to really 
+> problematic scenarios on users' side but the kernel code is 
+> relatively simple and flexible to allow that. As a distributor we chose 
+> something that suits our needs and what we think suits our customers as 
+> well. However, it is a downstream choice and implementation.
+> 
+> Now we learnt that some users would welcome a specific use case of keeping 
+> parallel live patches applied on their system and they lack the kernel 
+> support for that. That is ok and we should do something about that. There 
+> are two things which I am concerned about though.
+> 
+> 1. I think that we should not leave our existing users (which we do not 
+> know much about) behind and regress. I mean we should still allow the same 
+> level of flexibility. If not possible, it should be seriously thought 
+> through. I am talking about non-replace patches here.
 
-I don't think you need to add a new macro for the specific use case that people want to modify the next element of the iteration.
+Good point! We do not know about all existing users.
 
-If I remember your numbers correctly that is a really corner case and keeping using the existing *_safe() macros for that sounds perfectly fine to me.
+We have already changed the behavior in the past but it has been
+relatively long time ago. And it was related to introducing
+the "atomic replace":
 
-Regards,
-Christian.
+  + commit 0b3d52790e1cfd6b ("livepatch: Remove signal sysfs attribute
+	[Jan 2019]
+  + commit d67a53720966f2ef ("livepatch: Remove ordering (stacking)
+	of the livepatches")  [Jan 2019]
+  + commit e1452b607c48c642c ("livepatch: Add atomic replace")
+	[Jan 2019]
+  + commit 958ef1e39d24d6cb8 ("livepatch: Simplify API by removing
+	registration step") [Jan 2019]
+
+IMHO, we hoped that people would start using the concept of
+"cumulative livepatches" and stop using the no-replace mode at all.
+
+Obviously, some users keep using the no-replace mode. And it causes
+problems. I am pretty sure that it motivated the following changes:
+
+  + commit 3dae09de4061671 ("livepatch: Add stack_order sysfs
+	attribute") [Oct 2024. Wardenjohn <zhangwarden@gmail.com>]
+  + commit adb68ed26a3e922 ("livepatch: Add "replace" sysfs
+	attribute") [Jun 2024, Yafang Shao <laoar.shao@gmail.com>]
+
+I am not sure if Wardenjohn and Yafang made the changes for the same
+user or they were independent.
+
+Another question is whether there are other users who are managing
+the dependencies another way or were not able to contribute
+to the kernel.
+
+My view:
+
+I believe that there are only very few users who create livepatches.
+And they should have capable kernel developers. Because creating
+livepatches is not trivial, requires kernel development knowledge,
+and some infrastructure.
+
+It is clear that some companies use the non-replace mode for some
+reason. But I believe that they have problems to manage them
+a safe way.
+
+
+> 2. Slightly connected. We should not optimize too much for specific 
+> scenarios. It seems perfectly fine to introduce a specific feature which 
+> helps someone but I am concerned about restricting different use cases at 
+> the same time. The latest discussion next door dives into very specific 
+> scenarios and my question is "Do we really care?". The user (either a 
+> distributor or anyone else) can choose what they want to implement in the 
+> end (policy) and how to maintain it (a distributor will typically refuse 
+> to support a system with a user applied live patches not provided by the 
+> distributor).
+
+> I think that latest proposals in the other thread go in the right 
+> direction if I understand them correctly but I also think that we should 
+> keep the above in mind (or disagree with me please).
+
+I personally see the proposed changes as another evolution/replacement
+of the too-wild and hard-to-manage no-replace mode.
+
+IMHO, the gain is:
+
+    + atomic replace even for livepatches installed in parallel
+    + more safety by avoiding conflicts in livepatched functions
+	and shadow variable IDs.
+
+the drawback is:
+
+   + loose of a complete freedom (jungle)
+   + atomic replace must be used to replace already livepatched function
+   + two or more livepatches need to be replaced using a single
+     cumulative livepatch when a new change brings dependency
+     between them
+
+
+> It might be difficult to keep the code simple and maintainable in the end 
+> and it certainly would not have benefits as the original replace_set 
+> proposal where it would all be very simple in the end (only one live patch 
+> per function allowed which might lead to substantial code simplification 
+> all around the stack).
+
+I agree that we do not want to maintain three modes. We should add the
+new approach only when it replaces to old unrestricted no-replace mode.
+
+I personally believe that it is a good step forward and it should be
+acceptable. 
+
+Best Regards,
+Petr
