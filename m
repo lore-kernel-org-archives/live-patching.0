@@ -1,124 +1,287 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE9E3A1DB
-	for <live-patching@vger.kernel.org>; Wed, 24 Jun 2026 20:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BEC314B6D
+	for <live-patching@vger.kernel.org>; Thu, 25 Jun 2026 03:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782331984; cv=none; b=k8KEcrCdBtvjhSs3m/fhxW54SY10DwsVQ3dW67LnLjvwuwlWb+4kjGDEtr6l8o4XyYiiEG+XI0gCVzO6SCYEgZD6Zejv/emnYX40eXjjdBQBZOfeGoUkL2bARSkxe6x0CS1eRTKOm6yOarJZLgRdlWlxyFYKk7dbUi7UKbzYs94=
+	t=1782356556; cv=none; b=S4Y68NFIxlPWu/oNgeYjsXmysssGV4aFJdt98s7Xfqw3sue1l3BIrHN91c0kPrd3i/5DahaytTeHOOSklRUCaVGUP9N94ztAf3wT3+ezYRigEknmvWkYnTpBOkc2Du6S43J0jc4kRw3W+ND1jE6O/b4CRgwZuqAlOYy8sbnHJ1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782331984; c=relaxed/simple;
-	bh=YY1C5v75W3mnHcnXZ+5t8u6QmuYSf91omqmWfC6cA0o=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-type; b=QIPMdADpx4FQCYP13IkWHNPJo64zM1mKb1HFpLzTpf9WgFn25VsAaHapIPC5joF6iMNDWcPFSouym5I+Ms7xGj+QOAyfqC7DeRVjN0I3jYu1xTdX1rDH732Lcu5wcrMPm43nRpiEHaN+iRujqX7Av70tW+77Nj8RVPv9SQytPTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sc0zcAS3; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782356556; c=relaxed/simple;
+	bh=AJ5z7v+xj1bwU2aG0Bcmfo35foG9ftC+wsjfKkRv/5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NP79f8ZmsAokTnuhRcGfeAC7c24JUr56Wo9HOG4D+3RUaifa1bDYi6XJXlbERCi0/jlgNquXm9XBTBd0Se8X4fSTgt+4QN29PrQONBjVjZ2oURTC21rH1spXiNQT2QmZUOQFrTpMBHDSBUUbQ+/zOCsZ83URj23ZgQtH1JeYKrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f3XfhSe6; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sc0zcAS3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782331982;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f3XfhSe6"
+Message-ID: <0ed6b5c3-e955-46e2-9fc6-075a0dfd1c4f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782356535;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=W0GXuJv5UDxvc9Rlg8693/s/vmTKfkYVUYav87nVFDc=;
-	b=Sc0zcAS32sL9arZy8IkQ4NVOhxiqJTHo4lJ/ILONsF+7de3LLVlIX3phomSeSq3GH88wnz
-	qB7Swc0HheGiRtLzBISOJzK+0PEo9b5BlEY++GmUB0GTeJuLBRFKBiPLumF/KAa+v1VBon
-	LHar2xHLHV8aiEMFwAagsOOx/HMPf18=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-8-cEqbm0HuNk-sscslkSV8cw-1; Wed,
- 24 Jun 2026 16:13:00 -0400
-X-MC-Unique: cEqbm0HuNk-sscslkSV8cw-1
-X-Mimecast-MFC-AGG-ID: cEqbm0HuNk-sscslkSV8cw_1782331979
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 471631955E91;
-	Wed, 24 Jun 2026 20:12:59 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 713C730002DD;
-	Wed, 24 Jun 2026 20:12:58 +0000 (UTC)
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org
-Subject: [PATCH] perf symbols: ignore livepatch symbols
-Date: Wed, 24 Jun 2026 16:12:54 -0400
-Message-ID: <20260624201254.472576-1-joe.lawrence@redhat.com>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bg7TU7hDzDNv/08FHHH/On04xmb+0Xhy9JCW39bnqOs=;
+	b=f3XfhSe6G7brFNVp6GZqjOXNU3vcFca4poUFfkwgVZymI1EYtq9zeoyJzoopay7HWx5JvC
+	E0YJXxuEv9p9ioc24zHIhHD7MfpA8W6eQqa3vo59Vdd3bvTmswHZxeWqPUReOxJ21Oxizv
+	nnsvKa6R3D4a+gLxizvgKiVabRJ3kcE=
+Date: Thu, 25 Jun 2026 11:01:21 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
+Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
+To: David Laight <david.laight.linux@gmail.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ "David Hildenbrand (Arm)" <david@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+ Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Shakeel Butt <shakeel.butt@linux.dev>, David Howells <dhowells@redhat.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
+ <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kexec@lists.infradead.org, live-patching@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
+ linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
+ llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>,
+ Muchun Song <muchun.song@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <20260622040533.29824-2-kaitao.cheng@linux.dev>
+ <20260622094242.64531b9a@pumpkin>
+ <351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
+ <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
+ <20260624152324.3def88ce@pumpkin>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <20260624152324.3def88ce@pumpkin>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Migadu-Flow: FLOW_OUT
 
-Livepatch modules contain special symbols (prefixed by ".klp.sym.") that
-act as relocation placeholders.  Once resolved, they point to the same
-addresses as the original kernel symbols they reference. [1]
+在 2026/6/24 22:23, David Laight 写道:
+> On Wed, 24 Jun 2026 15:23:47 +0200
+> Christian König <christian.koenig@amd.com> wrote:
+>> On 6/24/26 15:14, Kaitao Cheng wrote:
+>>> 在 2026/6/22 16:42, David Laight 写道:  
+>>>> On Mon, 22 Jun 2026 12:05:31 +0800
+>>>> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+>>>>  
+>>>>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>>
+>>>>> The list_for_each*_safe() helpers are used when the loop body may
+>>>>> remove the current entry.  Their API exposes the temporary cursor at
+>>>>> every call site, even though most users only need it for the iterator
+>>>>> implementation and never reference it in the loop body.
+>>>>>
+>>>>> Add *_mutable() variants for list and hlist iteration.  The new helpers
+>>>>> support both forms: callers may keep passing an explicit temporary cursor
+>>>>> when they need to inspect or reset it, or omit it and let the helper use
+>>>>> a unique internal cursor.  
+>>>>
+>>>> I'm not really sure 'mutable' means anything either.
+>>>> It is possible to make it valid for the loop body (or even other threads)
+>>>> to delete arbitrary list items - but that needs significant extra overheads.
+>>>>
+>>>> It might be worth doing something that doesn't need the extra variable,
+>>>> but there is little point doing all the churn just to rename things.
+>>>>  
+>>>>>
+>>>>> This makes call sites that only mutate the list through the current entry
+>>>>> less noisy, while keeping the existing *_safe() helpers available for
+>>>>> compatibility.
+>>>>>
+>>>>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+>>>>> ---
+>>>>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++------
+>>>>>  1 file changed, 231 insertions(+), 38 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/list.h b/include/linux/list.h
+>>>>> index 09d979976b3b..1081def7cea9 100644
+>>>>> --- a/include/linux/list.h
+>>>>> +++ b/include/linux/list.h
+>>>>> @@ -7,6 +7,7 @@
+>>>>>  #include <linux/stddef.h>
+>>>>>  #include <linux/poison.h>
+>>>>>  #include <linux/const.h>
+>>>>> +#include <linux/args.h>
+>>>>>  
+>>>>>  #include <asm/barrier.h>
+>>>>>  
+>>>>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct list_head *list,
+>>>>>  #define list_for_each_prev(pos, head) \
+>>>>>  	for (pos = (head)->prev; !list_is_head(pos, (head)); pos = pos->prev)
+>>>>>  
+>>>>> -/**
+>>>>> - * list_for_each_safe - iterate over a list safe against removal of list entry
+>>>>> - * @pos:	the &struct list_head to use as a loop cursor.
+>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>> - * @head:	the head for your list.
+>>>>> +/*
+>>>>> + * list_for_each_safe is an old interface, use list_for_each_mutable instead.
+>>>>>   */
+>>>>>  #define list_for_each_safe(pos, n, head) \
+>>>>>  	for (pos = (head)->next, n = pos->next; \
+>>>>>  	     !list_is_head(pos, (head)); \
+>>>>>  	     pos = n, n = pos->next)
+>>>>>  
+>>>>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
+>>>>> +	for (typeof(pos) tmp = (pos = (head)->next)->next;		\  
+>>>>
+>>>> Use auto
+>>>>  
+>>>>> +	     !list_is_head(pos, (head));				\
+>>>>> +	     pos = tmp, tmp = pos->next)
+>>>>> +
+>>>>> +#define __list_for_each_mutable1(pos, head)				\
+>>>>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
+>>>>> +
+>>>>> +#define __list_for_each_mutable2(pos, next, head)			\
+>>>>> +	list_for_each_safe(pos, next, head)
+>>>>> +
+>>>>>  /**
+>>>>> - * list_for_each_prev_safe - iterate over a list backwards safe against removal of list entry
+>>>>> + * list_for_each_mutable - iterate over a list safe against entry removal
+>>>>>   * @pos:	the &struct list_head to use as a loop cursor.
+>>>>> - * @n:		another &struct list_head to use as temporary storage
+>>>>> - * @head:	the head for your list.
+>>>>> + * @...:	either (head) or (next, head)
+>>>>> + *
+>>>>> + * next:	another &struct list_head to use as optional temporary storage.
+>>>>> + *		The temporary cursor is internal unless explicitly supplied by
+>>>>> + *		the caller.
+>>>>> + * head:	the head for your list.
+>>>>> + */
+>>>>> +#define list_for_each_mutable(pos, ...)					\
+>>>>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
+>>>>> +		(pos, __VA_ARGS__)  
+>>>>
+>>>> The variable argument count logic really just slows down compilation.
+>>>> Maybe there aren't enough copies of this code to make that significant.
+>>>> But just because you can do it doesn't mean it is a gooD idea.
+>>>> I'm also not sure it really adds anything to the readability.
+>>>>
+>>>> And, it you are going to make the middle argument optional there is
+>>>> no need to change the macro name.  
+>>>
+>>> Christian König and Jani Nikula also disagree with the variadic-argument
+>>> implementation approach. If we abandon that method, it means we will
+>>> inevitably need to add some new macros. If mutable is not a good name,
+>>> suggestions for better alternatives would be welcome; coming up with a
+>>> suitable name is indeed rather tricky.  
+>>
+>> I don't think you need to add a new macro for the specific use case that people want to modify the next element of the iteration.
+>>
+>> If I remember your numbers correctly that is a really corner case and keeping using the existing *_safe() macros for that sounds perfectly fine to me.
+> 
+> IIRC currently you have a choice of either:
+> 	define               Item that can't be deleted
+> 	list_for_each()	     The current item.
+> 	list_for_each_safe() The next item.
+> There is also likely to be code that updates the variables to allow
+> for other scenarios.
+> 
+> Note that if increase a reference count and release a lock then list_for_each()
+> is likely safer than list_for_each_safe() :-)
+> 
+> list.h has 9 variants of the 'safe' loop.
+> The bloat of another 9 is getting excessive.
+> 
+> It has to be said that this is one of my least favourite type of list...
 
-These special symbols confuse the 'vmlinux symtab matches kallsyms' perf
-test as kallsyms may report multiple symbols sharing a single kernel
-address.  For example:
+Hi Christian König, David Laight, Jani Nikula, David Hildenbrand,
+Andy Shevchenko, Alexei Starovoitov
 
-  kallsyms (without livepatch)
-  ----------------------------
-  ffffffff81a41110 T __pfx_arch_release_task_struct
-> ffffffff81a41120 T arch_release_task_struct
-  ffffffff81a41140 T __pfx_exit_thread
-  ffffffff81a41150 T exit_thread
+For ease of discussion, I need to summarize the currently possible
+approaches and briefly describe their respective pros and cons,
+using the list_for_each_entry* interfaces as examples.
 
-  kallsyms (with livepatch loaded)
-  ---------------------------------
-  ffffffff81a41110 T __pfx_arch_release_task_struct
-> ffffffff81a41120 T arch_release_task_struct
-  ffffffff81a41140 T __pfx_exit_thread
-  ffffffff81a41150 T exit_thread
-> ffffffff81a41120 w .klp.sym.vmlinux.arch_release_task_struct,0  [kpatch_5_14_0_570_94_1_1_3]
+1. Add list_for_each_entry_mutable, while keeping list_for_each_entry
+and list_for_each_entry_safe unchanged. list_for_each_entry_mutable
+would be used specifically for safe deletion scenarios that do not
+need to expose the temporary cursor externally. The code can refer to
+the v1 version.
 
-When perf loads kallsyms, both symbols are inserted into the
-symbol table at the same address, corrupting symbol end-address
-calculations and causing test failures.
+Pros: Does not depend on immediate per-subsystem adaptation and can be
+      merged directly.
+Cons: Requires adding a whole set of mutable interfaces, which makes the
+      code somewhat redundant.
 
-Filter out symbols prefixed with ".klp.sym." when loading kallsyms, as
-they alias existing kernel symbols.
+2. Directly optimize away the temporary cursor in list_for_each_entry_safe
+and define it inside the loop instead, changing the interface from four
+arguments to three.
 
-Link: https://docs.kernel.org/livepatch/module-elf-format.html#livepatch-symbols [1]
-Reported-and-tested-by: Ben Procknow <bprockno@redhat.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- tools/perf/util/symbol.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Pros: Does not add redundant interfaces.
+Cons: (1) Users need to manually update special cases that use the
+      traversal variable of list_for_each_entry_safe, the new
+      list_for_each_entry_safe would no longer apply there and would
+      need to be open-coded.
+      (2) Because the macro arguments changes, all list_for_each_entry_safe
+      callers would need to be modified and merged together, making it
+      difficult to merge such a large amount of code at once.
 
-From Ben's tests:
+3. Use a variadic macro approach to optimize list_for_each_entry_safe,
+so that it supports both three and four arguments.
 
-  Without patch:
-  ./tools/perf/perf test 1
-   1: vmlinux symtab matches kallsyms                                 : FAILED!
+Pros: (1) Does not add redundant interfaces.
+      (2) Does not depend on immediate per-subsystem adaptation and can
+      be merged directly.
+Cons: (1) Increases compile time.
+      (2) Makes the interface harder for users to use.
 
-  With patch:
-  ./tools/perf/perf test 1
-   1: vmlinux symtab matches kallsyms                                 : Ok
+4. Optimize list_for_each_entry by defining the temporary cursor internally,
+making it compatible with the functionality of list_for_each_entry_safe.
+The code can refer to the v2 version.
 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index fcaeeddbbb6b..eeaed3f5cf50 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -774,6 +774,10 @@ static int map__process_kallsym_symbol(void *arg, const char *name,
- 	if (name[0] == '$')
- 		return 0;
- 
-+	/* Ignore livepatch symbols */
-+	if (strstarts(name, ".klp.sym."))
-+		return 0;
-+
- 	/*
- 	 * module symbols are not sorted so we add all
- 	 * symbols, setting length to 0, and rely on
+Pros: (1) Does not add redundant interfaces.
+      (2) The number of externally visible arguments of list_for_each_entry
+      remains unchanged, still three.
+Cons: (1) list_for_each_entry and list_for_each_entry_safe would be merged
+      into one, and list_for_each_entry_safe would gradually be deprecated.
+      (2) Users need to manually update special cases that use the traversal
+      variable of list_for_each_entry, the new list_for_each_entry would no
+      longer apply there and would need to be open-coded. There are 15 such
+      cases in total.
+
+5. Use a variadic macro approach to optimize list_for_each_entry, so that
+it supports both three and four arguments.
+
+Pros: (1) Does not add redundant interfaces.
+      (2) Does not depend on immediate per-subsystem adaptation and can be
+      merged directly.
+Cons: (1) Increases compile time.
+      (2) list_for_each_entry and list_for_each_entry_safe would be merged
+      into one, and list_for_each_entry_safe would gradually be deprecated.
+
+6. Make no changes, keep the current logic unchanged, and close the current
+email discussion.
+
+
+Which of the six solutions above do people prefer?
+
 -- 
-2.54.0
+Thanks
+Kaitao Cheng
 
