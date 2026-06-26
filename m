@@ -1,57 +1,53 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F283BFACC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61D53BFE33
 	for <live-patching@vger.kernel.org>; Fri, 26 Jun 2026 21:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782508913; cv=none; b=j77HSLBt5rsD7V1bLTxIacyd/kKtrJFV1QZ+/klh0J9V14E9/dQsHth12OX7bXTTXVBQ6ayhR9zognrHjxg3FtLJ+xRAQqfPoKfLpx9vjyrHLMDTtJ05GoMES2IxuEDDucTLA1LzVCrvuxbGxKHb42+X0oGW0G24/VtVuO5MV34=
+	t=1782508914; cv=none; b=LDY3Ya+W7+j55AwQ4y2Vl+z5tD3CsXDfGlkNH5VpoRy34jvzAiGoRAjjJ/5hYoGdjfzU6lzTO3NvWfov2UsvRhES1Qw0YXavU8vapLCPnqtTCNWp/aGYU2F4bQ4s7yG9/WvIGJtoaq051ph2jd51aRacFbeH6hc2SversThqXxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782508913; c=relaxed/simple;
-	bh=IQ+YlRTkhOtS5j7y3KCmiif4l9ioHYIvTflD4F3rLlE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=eEFg4piBIgYBFoyjXSyWfnEjAv47HHAHDIkcAoNcKuu6QZVPLhx+xaCgzOlO0ipqNEHPA5GZJjcp3UciuUO6b2ktraSOLEMaP2JjvgePIdDXu23E9iijMnSf0z2/BpFX+Bxn+1loordiZPlCDTYYAPtuoaBG1ChNIL25B9Fy3fs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bqwKhIkN; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1782508914; c=relaxed/simple;
+	bh=6GVTC47qlV1pQumjALukweWv4s/9l+o+NFaGVbsi4M0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=uooCq4KRR9iknUxmLf1wkYQ/2RgJmL6Kkc20H+6DQi7TFc87l4+6kv9qQdQot2s7HwnyCdcjdWHDRQ2g2ib/XKnTlfK0HUSDU41h40ILFCwceeJUo6AoI0OgZ0HFsne8rplppvruJ0EF0IvH1vr4twfh8vmF6RYJFl+6V7/Y6zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f7fl6MTM; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bqwKhIkN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f7fl6MTM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1782508908;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LrTWomlBk7S9jw5Ip9X2ez9NPEgRX+ioaewKXBGxPnM=;
-	b=bqwKhIkN699yHsr4oD9leBb8mQ+erOqU5fiVvMmTp6kj0owN9fj3QdjyZ1ti/sf0x5HGAh
-	l0Vzz7po/ijgI88wcV+RZeFPqxleiR2lXSICcXuN3peR3Pa7neV/u3/j4U8HJroX2vKOT3
-	4wfZ2OvZbjvhWx45upc6d+xWKS13cYg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=q3NBEytlStUojtnwwOhPBFn4LsuQQbV+BpKsigqLdc0=;
+	b=f7fl6MTMfjfvWtYGfRkpvVp4GQ+3ZYo+WVMChgp+RPN4RRWrNYv7uSn8Fl4C/Gluox3Gjk
+	XAqM19NyckclthIZc4qCjhQ1/UIu1BtWn6sNAXajberRrzpOS8+R4P4Dk3G7AWNJ9G0dxO
+	MULYbAOMXCbIyqFb4SIR+75HQSOPrqw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-444-OAJViUvuOu-mBthn0kTrYg-1; Fri,
- 26 Jun 2026 17:21:45 -0400
-X-MC-Unique: OAJViUvuOu-mBthn0kTrYg-1
-X-Mimecast-MFC-AGG-ID: OAJViUvuOu-mBthn0kTrYg_1782508904
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-139-bJzWEoOdMKG_YfANMYEk-w-1; Fri,
+ 26 Jun 2026 17:21:43 -0400
+X-MC-Unique: bJzWEoOdMKG_YfANMYEk-w-1
+X-Mimecast-MFC-AGG-ID: bJzWEoOdMKG_YfANMYEk-w_1782508902
 Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6FF481954AF7;
-	Fri, 26 Jun 2026 21:21:44 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F1D518003FC;
+	Fri, 26 Jun 2026 21:21:42 +0000 (UTC)
 Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AA382364CC;
-	Fri, 26 Jun 2026 21:21:43 +0000 (UTC)
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9C5B21774;
+	Fri, 26 Jun 2026 21:21:41 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	live-patching@vger.kernel.org
 Cc: Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 2/2] perf symbols: skip livepatch symbols in kcore_copy kallsyms processing
-Date: Fri, 26 Jun 2026 17:21:40 -0400
-Message-ID: <20260626212140.1380094-3-joe.lawrence@redhat.com>
-In-Reply-To: <20260626212140.1380094-1-joe.lawrence@redhat.com>
-References: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+Subject: [PATCH v2 0/2] perf symbols: skip livepatch symbols
+Date: Fri, 26 Jun 2026 17:21:38 -0400
+Message-ID: <20260626212140.1380094-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -62,61 +58,106 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Livepatch symbols (.klp.sym.*) carry a [module] tag but resolve to core
-kernel text addresses.  When kcore_copy__process_kallsyms() encounters
-these symbols, they are treated as module symbols, pulling the
-first_module_symbol down to a kernel text address.
+This patchset fixes two minor perf bugs when livepatches containing
+special so-called livepatch symbols are loaded.  In both cases, perf
+should ignore these symbols as they resolve as relocations to kernel
+addresses and not module space.
 
-This corrupts the module memory range used to build the kcore PT_LOAD
-segments.  For example, with a kpatch module containing a
-".klp.sym.vmlinux.arch_release_task_struct,0" livepatch symbol loaded:
+- Patch 1 fixes `perf test 1`
+- Patch 2 fixes `perf record --kcore` bloat
 
-  kernel symbols
-    ...
-    ffffffffb4a41120  arch_release_task_struct
-    ...                 ^
-    ...                 | aliased by .klp.sym
-    ...                 | drags first_module_symbol here
-                        |
-    (43M gap)           | bloated kcore segment
-                        |
-  module symbols        |
-    ffffffffc047b000  <-- correct first_module_symbol
-    ...
-    ...
 
-This causes the module PT_LOAD segment to start at the .klp.sym address
-and not the real first module address, bloating the kcore copy:
+Testing notes
+=============
 
-  Baseline (no livepatch):   VirtAddr ffffffffc047b000, 8.5M
-  Bloated  (with livepatch): VirtAddr ffffffffb4a41000, 54M
-  Post-fix (with livepatch): VirtAddr ffffffffc047b000, 8.9M
+("perf symbols: skip livepatch symbols when loading kallsyms"):
 
-Filter livepatch symbols early in kcore_copy__process_kallsyms() before
-they can affect module boundary tracking.
+  Without patch:
+  ./tools/perf/perf test 1
+    1: vmlinux symtab matches kallsyms                     : FAILED!
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://sashiko.dev/#/patchset/20260624201254.472576-1-joe.lawrence@redhat.com?part=1
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- tools/perf/util/symbol-elf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+  With patch:
+  ./tools/perf/perf test 1
+    1: vmlinux symtab matches kallsyms                     : Ok
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 39562bdec8b9..f6f6b54da131 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -2216,6 +2216,10 @@ static int kcore_copy__process_kallsyms(void *arg, const char *name, char type,
- 	if (!kallsyms__is_function(type))
- 		return 0;
- 
-+	/* Ignore livepatch symbols */
-+	if (is_livepatch_symbol(name))
-+		return 0;
-+
- 	if (strchr(name, '[')) {
- 		if (!kci->first_module_symbol || start < kci->first_module_symbol)
- 			kci->first_module_symbol = start;
+("perf symbols: skip livepatch symbols in kcore_copy")
+
+  1. Baseline = pre-patch perf, no livepatch
+  ------------------------------------------
+  
+  $ ./tools/perf/perf record --kcore -a -o /tmp/baseline.data -- sleep 1
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.221 MB /tmp/baseline.data (1717 samples) ]
+  
+  $ tree --noreport -h /tmp/baseline.data
+  /tmp/baseline.data
+  |-- [ 235K]  data
+  `-- [   50]  kcore_dir
+      |-- [  11M]  kallsyms
+      |-- [  25M]  kcore
+      `-- [ 1.7K]  modules
+  
+  
+  2. Bloated kcore = pre-patch perf, with livepatch
+  -------------------------------------------------
+  
+  $ insmod kpatch-5_14_0-570_94_1-1-3.ko
+  $ ./tools/perf/perf record --kcore -a -o /tmp/klp-bloated.data -- sleep 1
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.274 MB /tmp/klp-bloated.data (2757 samples) ]
+  
+  $ tree --noreport  -h /tmp/klp-bloated.data
+  /tmp/klp-bloated.data
+  |-- [ 288K]  data
+  `-- [   50]  kcore_dir
+      |-- [  11M]  kallsyms
+      |-- [  68M]  kcore
+      `-- [ 1.8K]  modules
+  
+  
+  3. Post-fix = patched perf, with livepatch
+  ------------------------------------------
+  
+  [ kpatch-5_14_0-570_94_1-1-3.ko still loaded from test (2) ]
+  
+  $ ./tools/perf/perf record --kcore -a -o /tmp/postfix.data -- sleep 1
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.274 MB /tmp/postfix.data (2763 samples) ]
+  
+  $ tree --noreport -h /tmp/postfix.data
+  /tmp/postfix.data
+  |-- [ 289K]  data
+  `-- [   50]  kcore_dir
+      |-- [  11M]  kallsyms
+      |-- [  25M]  kcore
+      `-- [ 1.8K]  modules
+
+Changes
+=======
+
+v2:
+- Move klp symbol check into tools/perf/util/symbol.h alongside similar
+  is_ignored_kernel_symbol() check [Petr]
+- Use KLP_SYM_PREFIX instead of inlining it [Petr]
+- Add similar check to kcore_copy__process_kallsyms() [Sashiko]
+
+- Note: Sashiko flagged a pre-existing off-by-one in kallsyms__parse()
+  where the symbol-name loop could write past symbol_name[] on overlong
+  entries. That issue is unrelated to livepatch symbols and was already
+  fixed by Rui Qi's 68018df3f55e ("perf: Fix off-by-one stack buffer
+  overflow in kallsyms__parse()").
+
+v1: https://lore.kernel.org/linux-perf-users/ajzwjNncrI3Bob_o@pathway.suse.cz/T/#t
+
+Joe Lawrence (2):
+  perf symbols: skip livepatch symbols when loading kallsyms
+  perf symbols: skip livepatch symbols in kcore_copy kallsyms processing
+
+ tools/perf/util/symbol-elf.c |  4 ++++
+ tools/perf/util/symbol.c     |  4 ++--
+ tools/perf/util/symbol.h     | 12 ++++++++++++
+ 3 files changed, 18 insertions(+), 2 deletions(-)
+
 -- 
 2.54.0
 
