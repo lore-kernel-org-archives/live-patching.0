@@ -1,101 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776F83E4C7D;
-	Fri, 26 Jun 2026 08:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF78E3BB123
+	for <live-patching@vger.kernel.org>; Fri, 26 Jun 2026 21:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782462087; cv=none; b=CrZB1H/dP7Do9zNWAeL55pnMYtBtuHH27WkO1nuncKdIktsKwQclhyftEIPNOep0OoPUttTntibLQBO+nZxbvSwW64CVF5TkrHqBkRa8PJtzenFE5OtOMuw7y9/noyULlJPwGN1Jed87kGseEk6fb7Vs2GQ2fvkvWG85oA/w3QE=
+	t=1782508910; cv=none; b=e3DTW41PyQXeL2G7FFU0nc7eldlB55rFY6bNXuJlSUXsuYeOCzIFwLWMUjr/AEjoKPrJAjzx+5awrZJL1iqPuTPqoqqlyZiYhakpvqvGLIbFYWPyNsWUy/EWrAj7T6J8AGMM30PgehFugrGEMA7JSrUMLJ6NS+PrbHqX1irqUyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782462087; c=relaxed/simple;
-	bh=puOmygpcg/vCV8OR9zslKD7qIGXEOW9zhKfCu64CNRM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GOc3NlFx8ZkvNJYgP+LGUbjUUkkDqbpreR3q2Nxzd7+UmVxz73tVC9bN6y/ftZOhqwLPrwmgKNEANA8sqC6XN2UyqF7jGHKOUHGrpn+kH+ThBEbUTNhBUPRO2yPxeR/36hzuGc9NJPplGZAfKW5VSqiNpLmOS88M1jzw8rx++mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1bqmy0K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782508910; c=relaxed/simple;
+	bh=aYldpcIbe2ZKhGw0Zoz+4cxt5dW/oWNaqGsM7A0AK0U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-type; b=O+hM1KLW+aE110NnjULhxikid3vebqYTpFYqzdiqmSvnfkJWTnXd8bldBz3VhZSUyHMs9EqYIisUx/X/9u62j0eymqipobDpUcUz2QiC5j5cL7Jl2ReFF45wJRHtRKD47UnKhD0dTO1unWPTgNMkUAtCx/xC3vtUV4GI5w179iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jFku8CUN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1bqmy0K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5728E1F00A3E;
-	Fri, 26 Jun 2026 08:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782462086;
-	bh=zsScqxEdMhuN7RDDDXh0ed+YZPuMqpL3ArI4WO1ybVk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=g1bqmy0Kp4g9VaQu2yr2zVYlOynszE/KmM+iSDj7cw4DeRLc4KFm1BsQgAROhaNI6
-	 1yvnhJG2UuOI9kPmeK04S3ASG4+TheDpFXvEHORJR/QLZrCLgz7sxklwE9eb0KnOXi
-	 aSKpnA7KG4QvZ0a638RFUEXrNszZG+KJAo+vN6fTzmKxTtrKWbpJU+BGzFzfm1jhcm
-	 yo1A+sBu9dg1V0bomrp2Dwvti6FJW/YCk6S68SoQSO+mIIjXXKuvMJjB5mis2Y2RuK
-	 3dbrOHshP7pPbr70ugmFP3C6DwmE9z0RboUWZQFtkaZk7UPGNLRK8rNGDjDytS/uIz
-	 sMJSMjqZKWAgQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93C0839389E8;
-	Fri, 26 Jun 2026 08:21:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jFku8CUN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782508907;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GYMN+tXHlnWxWuVJ8ktb46H00NTdvAkRR2KqH25M1u4=;
+	b=jFku8CUNl2arI/dRDQXFFOl0f7m/jhmbewrtB4iavBWFM7LGE/uviCLKUKbJBPUTm3U4pR
+	4tE7CCflMGVuTpVdK+JRovsXC+HwXYxtHqqesyk/z2V81nr0vfc3AlW6brqljOv3MVcOFo
+	oFI9Qh0agz8mBR+XzUjzBmOkK8rN0KI=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-388-AcZmgXV7N9mSCZhERp9KuQ-1; Fri,
+ 26 Jun 2026 17:21:44 -0400
+X-MC-Unique: AcZmgXV7N9mSCZhERp9KuQ-1
+X-Mimecast-MFC-AGG-ID: AcZmgXV7N9mSCZhERp9KuQ_1782508903
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7491E19560BB;
+	Fri, 26 Jun 2026 21:21:43 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9D2AA1774;
+	Fri, 26 Jun 2026 21:21:42 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org
+Cc: Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v2 1/2] perf symbols: skip livepatch symbols when loading kallsyms
+Date: Fri, 26 Jun 2026 17:21:39 -0400
+Message-ID: <20260626212140.1380094-2-joe.lawrence@redhat.com>
+In-Reply-To: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+References: <20260626212140.1380094-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 1/8] scripts/sorttable: Handle RISC-V patchable ftrace
- entries
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <178246207319.3816447.13538002278089334459.git-patchwork-notify@kernel.org>
-Date: Fri, 26 Jun 2026 08:21:13 +0000
-References: <20260609063002.3943001-1-wanghan@linux.alibaba.com>
-In-Reply-To: <20260609063002.3943001-1-wanghan@linux.alibaba.com>
-To: Wang Han <wanghan@linux.alibaba.com>
-Cc: linux-riscv@lists.infradead.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, rostedt@goodmis.org, alex@ghiti.fr,
- mhiramat@kernel.org, mark.rutland@arm.com, catalin.marinas@arm.com,
- cp0613@linux.alibaba.com, andybnac@gmail.com, bjorn@rivosinc.com,
- debug@rivosinc.com, puranjay@kernel.org, conor.dooley@microchip.com,
- jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
- joe.lawrence@redhat.com, shuah@kernel.org, peterz@infradead.org,
- mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
- oliver.yang@linux.alibaba.com, xueshuai@linux.alibaba.com,
- zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-perf-users@vger.kernel.org
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-Hello:
+Livepatch modules contain special symbols (prefixed by ".klp.sym.") that
+act as relocation placeholders.  Once resolved, they point to the same
+addresses as the original kernel symbols they reference. [1]
 
-This series was applied to riscv/linux.git (fixes)
-by Paul Walmsley <pjw@kernel.org>:
+These special symbols confuse the 'vmlinux symtab matches kallsyms' perf
+test as kallsyms may report multiple symbols sharing a single kernel
+address.  For example:
 
-On Tue,  9 Jun 2026 14:29:52 +0800 you wrote:
-> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-> patchable NOP area starts 8 bytes before the function symbol address.
-> The __mcount_loc entries therefore point at the patchable NOP area
-> associated with a function, while nm reports the function symbol at the
-> entry address used for the function range check.
-> 
-> [...]
+  kallsyms (without livepatch)
+  ----------------------------
+  ffffffff81a41110 T __pfx_arch_release_task_struct
+> ffffffff81a41120 T arch_release_task_struct
+  ffffffff81a41140 T __pfx_exit_thread
+  ffffffff81a41150 T exit_thread
 
-Here is the summary with links:
-  - [v3,1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
-    https://git.kernel.org/riscv/c/57ad674d032b
-  - [v3,2/8] riscv: stacktrace: Add frame record metadata
-    (no matching commit)
-  - [v3,3/8] riscv: stacktrace: disable KASAN and KCOV instrumentation for stacktrace.o
-    (no matching commit)
-  - [v3,4/8] riscv: ftrace: always preserve s0 in dynamic ftrace register frame
-    (no matching commit)
-  - [v3,5/8] riscv: stacktrace: introduce stack-bound tracking helpers
-    (no matching commit)
-  - [v3,6/8] riscv: stacktrace: switch to frame-pointer based unwinder
-    (no matching commit)
-  - [v3,7/8] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
-    (no matching commit)
-  - [v3,8/8] selftests/livepatch: Add RISC-V syscall wrapper prefix
-    (no matching commit)
+  kallsyms (with livepatch loaded)
+  ---------------------------------
+  ffffffff81a41110 T __pfx_arch_release_task_struct
+> ffffffff81a41120 T arch_release_task_struct
+  ffffffff81a41140 T __pfx_exit_thread
+  ffffffff81a41150 T exit_thread
+> ffffffff81a41120 w .klp.sym.vmlinux.arch_release_task_struct,0  [kpatch_5_14_0_570_94_1_1_3]
 
-You are awesome, thank you!
+When perf loads kallsyms, both symbols are inserted into the symbol
+table at the same address, corrupting symbol end-address calculations
+and causing test failures.
+
+Filter out symbols prefixed with ".klp.sym." when loading kallsyms, as
+they alias existing kernel symbols.
+
+Link: https://docs.kernel.org/livepatch/module-elf-format.html#livepatch-symbols [1]
+Reported-and-tested-by: Ben Procknow <bprockno@redhat.com> [downstream backport]
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ tools/perf/util/symbol.c |  4 ++--
+ tools/perf/util/symbol.h | 12 ++++++++++++
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+index cd379ced19e5..a562702b4841 100644
+--- a/tools/perf/util/symbol.c
++++ b/tools/perf/util/symbol.c
+@@ -880,8 +880,8 @@ static int map__process_kallsym_symbol(void *arg, const char *name,
+ 	if (!symbol_type__filter(type))
+ 		return 0;
+ 
+-	/* Ignore mapping symbols in kallsyms */
+-	if (is_ignored_kernel_symbol(name))
++	/* Ignore mapping and livepatch symbols in kallsyms */
++	if (is_ignored_kernel_symbol(name) || is_livepatch_symbol(name))
+ 		return 0;
+ 
+ 	/*
+diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
+index a71525335703..d0bac824c79c 100644
+--- a/tools/perf/util/symbol.h
++++ b/tools/perf/util/symbol.h
+@@ -8,7 +8,9 @@
+ #include <stdint.h>
+ #include <stdatomic.h>
+ #include <linux/list.h>
++#include <linux/livepatch_external.h>
+ #include <linux/rbtree.h>
++#include <linux/string.h>
+ #include <stdio.h>
+ #include <errno.h>
+ #include "addr_location.h"
+@@ -45,6 +47,16 @@ static inline bool is_ignored_kernel_symbol(const char *str)
+ 	return str[0] == '$';
+ }
+ 
++/*
++ * Livepatch symbols (.klp.sym.*) are relocation placeholders whose resolved
++ * addresses alias existing kernel symbols.  They carry a [module] tag which
++ * confuses module boundary tracking and symbol table lookups.
++ */
++static inline bool is_livepatch_symbol(const char *str)
++{
++	return strstarts(str, KLP_SYM_PREFIX);
++}
++
+ /*
+  * libelf 0.8.x and earlier do not support ELF_C_READ_MMAP;
+  * for newer versions we can use mmap to reduce memory usage:
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.54.0
 
