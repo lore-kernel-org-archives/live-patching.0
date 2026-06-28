@@ -1,163 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61D53BFE33
-	for <live-patching@vger.kernel.org>; Fri, 26 Jun 2026 21:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A630040D579
+	for <live-patching@vger.kernel.org>; Sun, 28 Jun 2026 11:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782508914; cv=none; b=LDY3Ya+W7+j55AwQ4y2Vl+z5tD3CsXDfGlkNH5VpoRy34jvzAiGoRAjjJ/5hYoGdjfzU6lzTO3NvWfov2UsvRhES1Qw0YXavU8vapLCPnqtTCNWp/aGYU2F4bQ4s7yG9/WvIGJtoaq051ph2jd51aRacFbeH6hc2SversThqXxs=
+	t=1782647211; cv=none; b=Yy5TGZoEMXMmP7nyAXjXu/NUkz27+rqSQo+ORwIzsLtXfwncRqqTiZgAvRyTIqOX3yZaCYwp0sFGovjOOWV6pJ0/PT+Tbw3N93Sq7f4UM8+Hr3WdDdlRQsaUV7hWXKvD9yEIpTi8zqcgXizl8XnlN7K3qMhmBdzullpWT6zYWvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782508914; c=relaxed/simple;
-	bh=6GVTC47qlV1pQumjALukweWv4s/9l+o+NFaGVbsi4M0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=uooCq4KRR9iknUxmLf1wkYQ/2RgJmL6Kkc20H+6DQi7TFc87l4+6kv9qQdQot2s7HwnyCdcjdWHDRQ2g2ib/XKnTlfK0HUSDU41h40ILFCwceeJUo6AoI0OgZ0HFsne8rplppvruJ0EF0IvH1vr4twfh8vmF6RYJFl+6V7/Y6zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f7fl6MTM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782647211; c=relaxed/simple;
+	bh=npevS0g+Qb1DmEe/P3T10TcG9H/zLbRVndpiO/6/k1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dlZo+tVhn8qbzVU/Co0xUOMg3bhuh+i/K0QPJJh8fCKnXXKPF7Ck/3KQT1qwotT/F4LajA+ERzkYGV5C9V8vHCz333RXVO7ayMPQj4XoL/XvVMPTCkgdeLUxbin6QC1I2zmT8EL9fII5c5xnEVibund6z63ZqIyR1XJkzOFFt4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKBdtDUC; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f7fl6MTM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782508908;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=q3NBEytlStUojtnwwOhPBFn4LsuQQbV+BpKsigqLdc0=;
-	b=f7fl6MTMfjfvWtYGfRkpvVp4GQ+3ZYo+WVMChgp+RPN4RRWrNYv7uSn8Fl4C/Gluox3Gjk
-	XAqM19NyckclthIZc4qCjhQ1/UIu1BtWn6sNAXajberRrzpOS8+R4P4Dk3G7AWNJ9G0dxO
-	MULYbAOMXCbIyqFb4SIR+75HQSOPrqw=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-139-bJzWEoOdMKG_YfANMYEk-w-1; Fri,
- 26 Jun 2026 17:21:43 -0400
-X-MC-Unique: bJzWEoOdMKG_YfANMYEk-w-1
-X-Mimecast-MFC-AGG-ID: bJzWEoOdMKG_YfANMYEk-w_1782508902
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8F1D518003FC;
-	Fri, 26 Jun 2026 21:21:42 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9C5B21774;
-	Fri, 26 Jun 2026 21:21:41 +0000 (UTC)
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org
-Cc: Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 0/2] perf symbols: skip livepatch symbols
-Date: Fri, 26 Jun 2026 17:21:38 -0400
-Message-ID: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKBdtDUC"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c9f44ddf26so464925ad.3
+        for <live-patching@vger.kernel.org>; Sun, 28 Jun 2026 04:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782647209; x=1783252009; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=25C7IirL8rOn5zwPULJZIDdW9SkThkTR+uI3t1if5BQ=;
+        b=hKBdtDUCX/KB5YwDd8PqUR60sZ7pLjN04upKMxe2Uw6WF47R/vJJFfexykRbtMai7L
+         sbMIrP8Kz8Ir4Yp3cpxn4ZaGyKcPWDlyaCJnDo+zDb+TQhVPYIlJcWjHeTnp45Cu8Pgt
+         15lHYJfnNvuL79fgvKCh2PRMgph6R008AvWv4YSQDy3aExxRf2ajt8Zjw93w/mOuZSy7
+         cl9fgb2dQThkn1/bmIh5Y4Dqy6VpJQLXMbX/r4RHY4bJuXhgTFDt4COuHDk/IPo7B/+v
+         AJtfwTClICV+Nh2M4KkhwdVztHewIrYkdmzEnVLgch3X4Q8OPEScWkv7zwW13Z0Vd3v+
+         2Tyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782647209; x=1783252009;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=25C7IirL8rOn5zwPULJZIDdW9SkThkTR+uI3t1if5BQ=;
+        b=s0LOwdeEzfbHWRtsiGtu3CngAy35J+vZeQtIowqKWSkRK/HFhw/5ru0C9i4GowiOYI
+         niFEIw6myp8JDjUwtjG2jeaeOS3YaDYCYNQnZVHFKHRZRDtGzOHP5mva4vEUHndE2fpg
+         q6FSFjvS4vfkw5mpOcXQOqtmbH39Ba537aX4Hm/HlstoS7oaITrA9ihRczeDAtXemlH8
+         Xp+2/duV2VQEU9EsQNykFDwRniDXnewuJbvztPXXhIh6KiRBbOuCWKkEPzLev6sQuIIz
+         ziozlPRz/S8htOVgfPyzbA6gyLj5MsqI4u19liYDgG/pJ9IhgHTqB/8z21U0mq6Jq5UO
+         p63w==
+X-Forwarded-Encrypted: i=1; AHgh+RqQK8bu3e6nwYpf7LgCeaM6tHYUM5zCJFOcvA2xsbq+QXJ9wq6zo/Jl/5iDe3XhxIpTsspN3Fep+kCWBXWb@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ+HW2T/jmvIj/EPchCddi0ksuQLrx6XiBwsqyZMp6UnYWf69L
+	0rnkGAJBsR2w9pkY9eXqKGVm7yjeMi1qdLOaVEtUeFtiBv39YQYxajOC
+X-Gm-Gg: AfdE7clSIhWDUmFPfQjjwdGj5iyI/2eIgMZAPXFUcjivxITeXKSatbQrjIc9iPaszRf
+	U+JrW5ttFLYZ8bTjFAjmv7UZAxh1Zrki0LtLq462WHzYT5k0RSGJhS0HOGhRyVfY0AVLW8wl0Mk
+	S2X3V2e/A6MepxUwHxIULzK3lHdzoi4t/SKnaEaCt6OZu1nErTxqiR9qh/5GqHZcKSJoJNI2kCx
+	RvDj9E70YtmO90VXjdHz5oOMGqqjTxk2thtVGglNrYdMtQnO0+t1a2KGWK/Wc0oLQwkKOHrFKQb
+	BV0JAKDRC32S63vFhErwJdoTcLKpzdLL31T6tEYoMxI5jiuAmw3IXdZr7c6Aqe3SLMvcIcO5KB6
+	QRencb3bIDZj361wlNsPsUzFTWdkhiQNKTP5Wi3E2krBkc3UO79se0g2UWiPbozU3tvhFyX5Rj6
+	i+KNmKfKn+HuErA+lb+dy00IT79Uu6BhMgXLe4Y+MyKZmbZ4SCr+Yponb6B3BRKlM4
+X-Received: by 2002:a17:903:946:b0:2c7:ef3b:e17f with SMTP id d9443c01a7336-2c7fc791633mr120783835ad.36.1782647209535;
+        Sun, 28 Jun 2026 04:46:49 -0700 (PDT)
+Received: from yafangs-Air ([240e:46d:2600:2cf1:e090:433d:67ed:863a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f5ae2092sm72767235ad.20.2026.06.28.04.46.46
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 28 Jun 2026 04:46:49 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: mbenes@suse.cz
+Cc: jikos@kernel.org,
+	joe.lawrence@redhat.com,
+	jpoimboe@kernel.org,
+	laoar.shao@gmail.com,
+	live-patching@vger.kernel.org,
+	pmladek@suse.com,
+	sashiko-bot@kernel.org,
+	song@kernel.org
+Subject: [PATCH v2] livepatch: Fix NULL pointer dereference in klp_find_func()
+Date: Sun, 28 Jun 2026 19:46:35 +0800
+Message-ID: <20260628114635.33572-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <alpine.LSU.2.21.2606251523310.18862@pobox.suse.cz>
+References: <alpine.LSU.2.21.2606251523310.18862@pobox.suse.cz>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-This patchset fixes two minor perf bugs when livepatches containing
-special so-called livepatch symbols are loaded.  In both cases, perf
-should ignore these symbols as they resolve as relocations to kernel
-addresses and not module space.
+A NULL old_name in a newly loaded livepatch's function entry causes a
+NULL pointer dereference in strcmp():
 
-- Patch 1 fixes `perf test 1`
-- Patch 2 fixes `perf record --kcore` bloat
+  klp_init_patch()
+    klp_add_nops()
+      klp_find_func()
+        strcmp(old_func->old_name, func->old_name)
 
+Add klp_check_patch() at the beginning of klp_enable_patch() to reject
+patches with NULL old_name before they reach this code path.
 
-Testing notes
-=============
+Reported-by: sashiko-bot <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/live-patching/20260529040130.95A9C1F00893@smtp.kernel.org/
+Suggested-by: Petr Mladek <pmladek@suse.com>
+Suggested-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+---
+ kernel/livepatch/core.c | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
-("perf symbols: skip livepatch symbols when loading kallsyms"):
-
-  Without patch:
-  ./tools/perf/perf test 1
-    1: vmlinux symtab matches kallsyms                     : FAILED!
-
-  With patch:
-  ./tools/perf/perf test 1
-    1: vmlinux symtab matches kallsyms                     : Ok
-
-("perf symbols: skip livepatch symbols in kcore_copy")
-
-  1. Baseline = pre-patch perf, no livepatch
-  ------------------------------------------
-  
-  $ ./tools/perf/perf record --kcore -a -o /tmp/baseline.data -- sleep 1
-  [ perf record: Woken up 1 times to write data ]
-  [ perf record: Captured and wrote 0.221 MB /tmp/baseline.data (1717 samples) ]
-  
-  $ tree --noreport -h /tmp/baseline.data
-  /tmp/baseline.data
-  |-- [ 235K]  data
-  `-- [   50]  kcore_dir
-      |-- [  11M]  kallsyms
-      |-- [  25M]  kcore
-      `-- [ 1.7K]  modules
-  
-  
-  2. Bloated kcore = pre-patch perf, with livepatch
-  -------------------------------------------------
-  
-  $ insmod kpatch-5_14_0-570_94_1-1-3.ko
-  $ ./tools/perf/perf record --kcore -a -o /tmp/klp-bloated.data -- sleep 1
-  [ perf record: Woken up 1 times to write data ]
-  [ perf record: Captured and wrote 0.274 MB /tmp/klp-bloated.data (2757 samples) ]
-  
-  $ tree --noreport  -h /tmp/klp-bloated.data
-  /tmp/klp-bloated.data
-  |-- [ 288K]  data
-  `-- [   50]  kcore_dir
-      |-- [  11M]  kallsyms
-      |-- [  68M]  kcore
-      `-- [ 1.8K]  modules
-  
-  
-  3. Post-fix = patched perf, with livepatch
-  ------------------------------------------
-  
-  [ kpatch-5_14_0-570_94_1-1-3.ko still loaded from test (2) ]
-  
-  $ ./tools/perf/perf record --kcore -a -o /tmp/postfix.data -- sleep 1
-  [ perf record: Woken up 1 times to write data ]
-  [ perf record: Captured and wrote 0.274 MB /tmp/postfix.data (2763 samples) ]
-  
-  $ tree --noreport -h /tmp/postfix.data
-  /tmp/postfix.data
-  |-- [ 289K]  data
-  `-- [   50]  kcore_dir
-      |-- [  11M]  kallsyms
-      |-- [  25M]  kcore
-      `-- [ 1.8K]  modules
-
-Changes
-=======
-
-v2:
-- Move klp symbol check into tools/perf/util/symbol.h alongside similar
-  is_ignored_kernel_symbol() check [Petr]
-- Use KLP_SYM_PREFIX instead of inlining it [Petr]
-- Add similar check to kcore_copy__process_kallsyms() [Sashiko]
-
-- Note: Sashiko flagged a pre-existing off-by-one in kallsyms__parse()
-  where the symbol-name loop could write past symbol_name[] on overlong
-  entries. That issue is unrelated to livepatch symbols and was already
-  fixed by Rui Qi's 68018df3f55e ("perf: Fix off-by-one stack buffer
-  overflow in kallsyms__parse()").
-
-v1: https://lore.kernel.org/linux-perf-users/ajzwjNncrI3Bob_o@pathway.suse.cz/T/#t
-
-Joe Lawrence (2):
-  perf symbols: skip livepatch symbols when loading kallsyms
-  perf symbols: skip livepatch symbols in kcore_copy kallsyms processing
-
- tools/perf/util/symbol-elf.c |  4 ++++
- tools/perf/util/symbol.c     |  4 ++--
- tools/perf/util/symbol.h     | 12 ++++++++++++
- 3 files changed, 18 insertions(+), 2 deletions(-)
-
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index 28d15ba58a26..a240d1144e89 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -799,9 +799,6 @@ void klp_free_replaced_patches_async(struct klp_patch *new_patch)
+ 
+ static int klp_init_func(struct klp_object *obj, struct klp_func *func)
+ {
+-	if (!func->old_name)
+-		return -EINVAL;
+-
+ 	/*
+ 	 * NOPs get the address later. The patched module must be loaded,
+ 	 * see klp_init_object_loaded().
+@@ -1092,6 +1089,25 @@ static int __klp_enable_patch(struct klp_patch *patch)
+ 	return ret;
+ }
+ 
++static int klp_check_patch(struct klp_patch *patch)
++{
++	struct klp_object *obj;
++	struct klp_func *func;
++
++	if (!patch || !patch->mod || !patch->objs)
++		return -EINVAL;
++
++	klp_for_each_object_static(patch, obj) {
++		if (!obj->funcs)
++			return -EINVAL;
++		klp_for_each_func_static(obj, func) {
++			if (!func->old_name)
++				return -EINVAL;
++		}
++	}
++	return 0;
++}
++
+ /**
+  * klp_enable_patch() - enable the livepatch
+  * @patch:	patch to be enabled
+@@ -1108,16 +1124,10 @@ static int __klp_enable_patch(struct klp_patch *patch)
+ int klp_enable_patch(struct klp_patch *patch)
+ {
+ 	int ret;
+-	struct klp_object *obj;
+-
+-	if (!patch || !patch->mod || !patch->objs)
+-		return -EINVAL;
+-
+-	klp_for_each_object_static(patch, obj) {
+-		if (!obj->funcs)
+-			return -EINVAL;
+-	}
+ 
++	ret = klp_check_patch(patch);
++	if (ret)
++		return ret;
+ 
+ 	if (!is_livepatch_module(patch->mod)) {
+ 		pr_err("module %s is not marked as a livepatch module\n",
 -- 
-2.54.0
+2.52.0
 
