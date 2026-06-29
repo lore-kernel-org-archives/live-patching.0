@@ -1,30 +1,30 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921BA33CE8A;
-	Mon, 29 Jun 2026 07:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993B43451A9;
+	Mon, 29 Jun 2026 07:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782718448; cv=none; b=ls3CA2g+Rgd+OW99xxhVOmA6Y5hoQRNOedGGIJYnO/4Fqbf/Zqp7NNVZ2JNK9lrNTVDIHKOHqIHjFBjIXSCn4P9efld4m8F/qhLqD9zchtWXQ+wRxJJQ4xhY2lX1vprGsY2CdL3KrfVfiBOQ+T4S9wOHzfOLhGnTyBKOoOqzw44=
+	t=1782718457; cv=none; b=VBc6rupP5Y02jqBRwE84a19jo3hO+AlKHKSUgyJPQsb2n928rE35113lwQ40SEaJNSgXvajM9c52QwDrsfUpjHj0uTL03cZuNQOpPrZ51Kz6yM28jI68G198g96Co+zBjd52G+s/kLMJloj8Q31OV7VcbG7+kit1OAnR0CDLW+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782718448; c=relaxed/simple;
-	bh=S9PPBd03nshTXdebHu0IRlNHz4qa/HrTIvMxXIyLevQ=;
+	s=arc-20240116; t=1782718457; c=relaxed/simple;
+	bh=08k0xw9LFq6C72qks0xPJ3bNAKGrB4AtmqLfkB/CTks=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VZ7ncbcrVHK9/3EynTSJ5eMZCk1ak4t8j2uIT/uhvFk4Gt9IR2cED7hfs8CiFU1NNDrdOsGHO6QWXx7nfNkOGdV1uGXtLyEEPvDxBXvyNG3jn1exkMhCWDFlrEMpQEWc2j70VRBqwF3zQgTHYSgHaLtlQuB4e0SarIQSjVxbaKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=lGP+MwqT; arc=none smtp.client-ip=115.124.30.97
+	 MIME-Version; b=br3i+EtStPraxhVG7knTt8sqzXz/SGoGyPmISmM3Nv5A+tqZ1i72QpgNGqg+oEacWKmWPvJdWa+GfmP0iTJlDdiYJShxD69Sui5z6kNbFUJ3ehB0b5qYgQr/S+S0FMarZWbwhKVPMvy3R8yoOh8P8PFR9x7PmLHyUsbyZrybcC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=x43Uoqdm; arc=none smtp.client-ip=115.124.30.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="lGP+MwqT"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="x43Uoqdm"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1782718439; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=cs5txbx9bpKaRI7bmx5ga6+SdBKGKPqwgmoXTwT+GtE=;
-	b=lGP+MwqTqCfUFPxWgMwDGJshk2H+e6utSdu0aJG0eqs79Ek/xr/laekWcXeAcxTXT+G6ZqUTo4hsYVD4NhrecyBvhWTBGSa23cb2Omxa2kGYUHV8nSHVXD8VAUPxU5VgAweSowXVwpkZlqU9p76L3p3GS1q53Zgb1uStNptJNF8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R631e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5oo1N-_1782718108;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5oo1N-_1782718108 cluster:ay36)
+	t=1782718447; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=MQtuIWmKp0yK/pGFuoUioKxVm/GbD9KEgakpTzJtQ9I=;
+	b=x43UoqdmANxaiwblvTqrNmc8MBV4qJPPiu+ZQRouQxyzzlUuGEDb1hiNVUAM1CVPGLyq29G60yz9WEJ0eW4E3E/+uIONlkv/qRoTKgp24aoj70wOHk7qP6bW75yblHoG0/P69p8e6WFx/0a0d0B4DZMMIAdhv7LReGNEjMe0TpM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5oo1TO_1782718117;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5oo1TO_1782718117 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Mon, 29 Jun 2026 15:28:30 +0800
+          Mon, 29 Jun 2026 15:28:39 +0800
 From: Wang Han <wanghan@linux.alibaba.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -60,9 +60,9 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>,
 	linux-perf-users@vger.kernel.org,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 RESEND 3/7] riscv: ftrace: always preserve s0 in dynamic ftrace register frame
-Date: Mon, 29 Jun 2026 15:27:09 +0800
-Message-ID: <20260629072713.3273743-4-wanghan@linux.alibaba.com>
+Subject: [PATCH v4 RESEND 6/7] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+Date: Mon, 29 Jun 2026 15:27:12 +0800
+Message-ID: <20260629072713.3273743-7-wanghan@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
 References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
@@ -74,57 +74,59 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-struct __arch_ftrace_regs declares s0 unconditionally, and both
-ftrace_regs_get_frame_pointer() and ftrace_partial_regs() read it
-unconditionally. But the SAVE_ABI_REGS / RESTORE_ABI_REGS macros in
-mcount-dyn.S only stored s0 under HAVE_FUNCTION_GRAPH_FP_TEST
-(CONFIG_FUNCTION_GRAPH_TRACER && CONFIG_FRAME_POINTER). With
-CONFIG_FRAME_POINTER=n the slot held whatever was on the stack before,
-so any callback going through ftrace_partial_regs() saw a garbage
-regs->s0. RISC-V kernels default to FRAME_POINTER=y, which is why this
-has not bitten in practice.
+Now that the metadata frame records, the kunwind state machine and
+arch_stack_walk_reliable() are all in place, advertise the capability
+to the rest of the kernel:
 
-Save and restore s0 unconditionally in the dynamic ftrace ABI register
-frame. This fixes the latent garbage-s0 case, brings the dynamic ftrace
-path in line with the static _mcount path (mcount.S SAVE_ABI_STATE
-already saves s0 unconditionally), and matches the frame layout already
-documented in the comment above SAVE_ABI_REGS. It is also a prerequisite
-for the upcoming reliable unwinder, which reads
-ftrace_regs_get_frame_pointer(fregs) directly.
+  * select HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT, so
+    only the configurations with the tested metadata records and
+    FP-based reliable walker enable it.
+  * select HAVE_LIVEPATCH under the same condition and source
+    kernel/livepatch/Kconfig so the livepatch menu is reachable from
+    the RISC-V configuration.
 
-The cost is one extra REG_S/REG_L pair per traced call, negligible
-compared to the overall ftrace cost; the existing FREGS_SIZE_ON_STACK
-already reserved the slot, so no extra stack space is used.
+The 64BIT dependency is conservative scoping rather than a hard
+technical requirement: the metadata frame record, kunwind state machine
+and arch_stack_walk_reliable() also build on RV32, and the IRQ-stack
+frame-record adjustment fixes a latent RV32 issue. However, the syscall
+livepatch selftest and module relocation path have only been exercised
+on RV64 QEMU virt so far. The 64BIT gate can be relaxed in a follow-up
+once RV32 has equivalent coverage.
+
+This is split out from the unwinder change so the policy decision and
+the implementation can be reviewed and reverted independently.
 
 Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 ---
- arch/riscv/kernel/mcount-dyn.S | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/riscv/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 082fe0b0e3c0..26c55fba8fec 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -85,9 +85,7 @@
- 	addi	sp, sp, -FREGS_SIZE_ON_STACK
- 	REG_S	t0,  FREGS_EPC(sp)
- 	REG_S	x1,  FREGS_RA(sp)
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
- 	REG_S	x8,  FREGS_S0(sp)
--#endif
- 	REG_S	x6,  FREGS_T1(sp)
- #ifdef CONFIG_CC_IS_CLANG
- 	REG_S	x7,  FREGS_T2(sp)
-@@ -113,9 +111,7 @@
- 	.macro RESTORE_ABI_REGS
- 	REG_L	t0, FREGS_EPC(sp)
- 	REG_L	x1, FREGS_RA(sp)
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
- 	REG_L	x8, FREGS_S0(sp)
--#endif
- 	REG_L	x6,  FREGS_T1(sp)
- #ifdef CONFIG_CC_IS_CLANG
- 	REG_L	x7,  FREGS_T2(sp)
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index cb3d85abf595..4d09fab682ac 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -186,6 +186,7 @@ config RISCV
+ 	select HAVE_KRETPROBES
+ 	# https://github.com/ClangBuiltLinux/linux/issues/1881
+ 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
++	select HAVE_LIVEPATCH if FRAME_POINTER && 64BIT
+ 	select HAVE_MOVE_PMD
+ 	select HAVE_MOVE_PUD
+ 	select HAVE_PAGE_SIZE_4KB
+@@ -196,6 +197,7 @@ config RISCV
+ 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+ 	select HAVE_PREEMPT_DYNAMIC_KEY
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
++	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && 64BIT
+ 	select HAVE_RETHOOK
+ 	select HAVE_RSEQ
+ 	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
+@@ -1392,3 +1394,5 @@ endmenu # "CPU Power Management"
+ source "arch/riscv/kvm/Kconfig"
+ 
+ source "drivers/acpi/Kconfig"
++
++source "kernel/livepatch/Kconfig"
 -- 
 2.43.0
