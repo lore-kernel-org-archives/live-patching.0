@@ -1,29 +1,29 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6752F33EB06;
-	Mon, 29 Jun 2026 06:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532E83A783F;
+	Mon, 29 Jun 2026 06:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782715687; cv=none; b=c5XpMFl06Zwdvr5tPiCJNUq2xLUX9TW1boosXVArFJ55qCWFx+7Av1iZ/H/Rh8plON3kB7iytpfWA5mfDBq0jMMwRoTTY+eJcFk+X+UoU5XRFbeBt3x3axwdbx25X5bITEs5x0VSCtIQIgzryqh74ms0T82ogPGDgJuydamYtc8=
+	t=1782715699; cv=none; b=e1XuyoPVlMFi8XmW58tM9EKtalyMAZOzUzZvBUfPZommtcxEQZKrh8uLJldEi0r8a74S4F6QrZPeZqfdNnJtwzq8t/Rfqbg0e91FHzAMFCbL4YyrLXQ3XqCrwW2VcBrkyCqmqP5T4Yjy438Ql4Icw8Tpi54/uFRPQzD+zyUffJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782715687; c=relaxed/simple;
-	bh=60/tQJT+pBD3JHn44peDiqufsFiUBQqwVY9huzpJtFI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CS7XT0/gr7Xj7ZMn8yOSIojtckbM7Ts1MwJi8CyD8TQp+B6lVnK28meSTHzwP1EKOytcRygEysD9ggnpiymcG64yMXxbrryRswrFMefcgxlOG6+sorS6ZekV4H50mTZIqSywffwiUSfxC4tCCCBB77qKKqvIW5cQCFqDiR/Qo0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ITBtWDVA; arc=none smtp.client-ip=115.124.30.99
+	s=arc-20240116; t=1782715699; c=relaxed/simple;
+	bh=3DpKqJX3SspM/fLNa9qTLgaiGLPAHBFyo/K1eGecJ6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N+42X55lGhv7CgysxdN/NaJTs+cfJaq3Y/r5ho1iEPgYqI4zW8S0s/2krhHsojtsWJEaGlg7MxNHawIYEwy2Kgnv6qlc1K3ws0yLfPsdFdQyvlgWlACZGRAQJ9Gi9fW0kJG/sz3TDtgPk8zzO/a+rnGlzneD3Nxjw68Civdw+kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=KmeOzQmp; arc=none smtp.client-ip=115.124.30.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ITBtWDVA"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="KmeOzQmp"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1782715682; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=KIcV+3NRZXBNcTf//ZDsIrmsDWjU6kdknsnEf4IWrYw=;
-	b=ITBtWDVAiMrLdmBLKNgMRlKXusZiBSzh1XIbb6DRT62u9ViYYm2qD8cpB0ciNjBZt8Ddh6LZqDo0owqRLt89ITCgEG9cJxKQVTltlTxe8qWE86NOOaOsOt2zIpb4c3mWF9F6SpvG3xUMWQed5T6LdcKuyZlqv0GGzc0U8SicrrY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5nWtb9_1782715352;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5nWtb9_1782715352 cluster:ay36)
+	t=1782715686; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=qBj946KF5YK6pCu0C47fwX406Kmu+l+2HGjOYPhAqVw=;
+	b=KmeOzQmpJMGBV0OozNjeaNHlg+DIFnS/ieaXcdV4q5l6lWh2u0C93z76wCH+2zkgWv/yOvd+Cz2Z4udz2LMPzJIQS7UpnfvPGDZj7OHWxlDQrcylot/9fOZJgOJNUnvRMJJ02XG1g9kHeqMtX/cfFZtwjoUzyglqgE7as7uRa3U=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5nWtdX_1782715359;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5nWtdX_1782715359 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Mon, 29 Jun 2026 14:42:33 +0800
+          Mon, 29 Jun 2026 14:42:40 +0800
 From: Wang Han <wanghan@linux.alibaba.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -59,9 +59,9 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>,
 	linux-perf-users@vger.kernel.org,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 1/7] riscv: stacktrace: Add frame record metadata
-Date: Mon, 29 Jun 2026 14:42:22 +0800
-Message-ID: <20260629064228.3195856-2-wanghan@linux.alibaba.com>
+Subject: [PATCH v4 5/7] riscv: stacktrace: switch to frame-pointer based unwinder
+Date: Mon, 29 Jun 2026 14:42:26 +0800
+Message-ID: <20260629064228.3195856-6-wanghan@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
@@ -71,333 +71,690 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Reliable frame-pointer unwinding needs an explicit way to identify
-exception boundaries and the final entry frame. The existing unwinder
-infers those boundaries from return addresses, which is too loose for a
-future reliable unwinder.
+Replace the open-coded frame-pointer walker in arch_stack_walk() with a
+robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
+and retargeted to the RISC-V {fp, ra} frame record convention. The new
+walker tracks stack bounds, consumes frame records monotonically,
+understands the metadata pt_regs records added in the previous frame
+record metadata patch, and recovers return addresses replaced by
+function graph tracing and kretprobes.
 
-Add a small metadata frame record to pt_regs and initialize it on
-exception entry, kernel stack overflow, kernel thread fork, user fork,
-and early idle task setup. The record uses a zero {fp, ra} sentinel plus
-a type field so a later unwinder can distinguish a final user-to-kernel
-boundary from a nested kernel pt_regs boundary.
+This commit introduces arch_stack_walk_reliable() but does not yet
+select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
+patch so this commit can be reviewed and bisected as a pure unwinder
+replacement. Until that Kconfig change lands, livepatch is not yet
+enabled and arch_stack_walk_reliable() has no in-tree caller.
 
-This follows the arm64 metadata frame-record model, adapted to the
-RISC-V {fp, ra} frame record convention.
+Three related callers are updated to keep the same frame-record
+assumptions everywhere:
 
-The metadata is established at the RISC-V entry boundaries that need an
-explicit unwind marker:
+  * Function graph tracing: the old RISC-V unwinder matched function
+    graph return-stack entries by the saved return-address slot. That
+    was consistent with the static mcount path, but not with the dynamic
+    ftrace path where the parent slot is ftrace_regs::ra. Use the
+    architectural frame pointer as the function graph return-address
+    cookie, matching the kunwind walker.
 
-  * exception entry clears the metadata {fp, ra} pair and uses SPP
-    (or MPP in M-mode) to record whether the pt_regs frame is the final
-    user-to-kernel boundary or a nested kernel boundary;
-  * the kernel stack overflow path builds a nested pt_regs metadata
-    record on the overflow stack so an unwinder can resume from the
-    pre-overflow s0 saved in PT_S0;
-  * _start_kernel builds the init task's final metadata record, while
-    the secondary CPU path sets up s0 before smp_callin() so idle-task
-    unwinding does not inherit an undefined caller frame;
-  * copy_thread creates matching final metadata records for new kernel
-    and user tasks, and keeps s0 available for the frame-pointer chain.
+  * Perf callchains: route kernel callchain collection through
+    arch_stack_walk() so perf sees the same frame-pointer unwind
+    behaviour as dump_stack() and the upcoming livepatch path.
 
-Keep the embedded metadata-record field offsets distinct from the
-s0-relative STACKFRAME_* offsets used by call_on_irq_stack(), because
-the latter describe a frame record relative to s0 rather than to the
-record base.
+  * dump_backtrace() / __get_wchan() / show_stack(): these now go
+    through arch_stack_walk(); the explicit "Call Trace:" header is
+    moved into dump_backtrace() to preserve the original output.
 
-These changes keep s0 reserved for the frame-pointer chain at task and
-exception boundaries.
+The non-frame-pointer fallback walker is kept untouched for
+!CONFIG_FRAME_POINTER builds.
 
 Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 ---
- arch/riscv/include/asm/ptrace.h           |  9 ++++
- arch/riscv/include/asm/stacktrace/frame.h | 53 +++++++++++++++++++++++
- arch/riscv/kernel/asm-offsets.c           |  6 +++
- arch/riscv/kernel/entry.S                 | 39 ++++++++++++++++-
- arch/riscv/kernel/head.S                  | 23 ++++++++++
- arch/riscv/kernel/process.c               | 33 +++++++++++++-
- 6 files changed, 159 insertions(+), 4 deletions(-)
- create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+ arch/riscv/kernel/ftrace.c         |   6 +-
+ arch/riscv/kernel/perf_callchain.c |   2 +-
+ arch/riscv/kernel/stacktrace.c     | 559 ++++++++++++++++++++++++-----
+ 3 files changed, 471 insertions(+), 96 deletions(-)
 
-diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-index addc8188152f..4b9b0f279214 100644
---- a/arch/riscv/include/asm/ptrace.h
-+++ b/arch/riscv/include/asm/ptrace.h
-@@ -8,6 +8,7 @@
+diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+index b430edfb83f4..5d55199a9230 100644
+--- a/arch/riscv/kernel/ftrace.c
++++ b/arch/riscv/kernel/ftrace.c
+@@ -242,7 +242,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+ 	 */
+ 	old = *parent;
  
- #include <uapi/asm/ptrace.h>
- #include <asm/csr.h>
-+#include <asm/stacktrace/frame.h>
- #include <linux/compiler.h>
+-	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
++	if (!function_graph_enter(old, self_addr, frame_pointer,
++				  (void *)frame_pointer))
+ 		*parent = return_hooker;
+ }
  
- #ifndef __ASSEMBLER__
-@@ -53,6 +54,14 @@ struct pt_regs {
- 	unsigned long cause;
- 	/* a0 value before the syscall */
- 	unsigned long orig_a0;
-+
-+	/*
-+	 * This frame record is entirely zeroed on exception entry, allowing the
-+	 * unwinder to identify exception boundaries. The type field encodes
-+	 * whether the exception was taken from user (FINAL) or kernel (PT_REGS)
-+	 * mode.
-+	 */
-+	struct frame_record_meta stackframe;
- };
+@@ -264,7 +265,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+ 	 */
+ 	old = *parent;
  
- #define PTRACE_SYSEMU			0x1f
-diff --git a/arch/riscv/include/asm/stacktrace/frame.h b/arch/riscv/include/asm/stacktrace/frame.h
-new file mode 100644
-index 000000000000..5720a6c65fe8
---- /dev/null
-+++ b/arch/riscv/include/asm/stacktrace/frame.h
-@@ -0,0 +1,53 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_RISCV_STACKTRACE_FRAME_H
-+#define __ASM_RISCV_STACKTRACE_FRAME_H
-+
-+/*
-+ * See: arch/arm64/include/asm/stacktrace/frame.h for the reference
-+ * implementation.
-+ */
-+
-+/*
-+ * - FRAME_META_TYPE_NONE
-+ *
-+ *   This value is reserved.
-+ *
-+ * - FRAME_META_TYPE_FINAL
-+ *
-+ *   The record is the last entry on the stack.
-+ *   Unwinding should terminate successfully.
-+ *
-+ * - FRAME_META_TYPE_PT_REGS
-+ *
-+ *   The record is embedded within a struct pt_regs, recording the registers at
-+ *   an arbitrary point in time.
-+ *   Unwinding should consume pt_regs::epc, followed by pt_regs::ra.
-+ *
-+ * Note: all other values are reserved and should result in unwinding
-+ * terminating with an error.
-+ */
-+#define FRAME_META_TYPE_NONE		0
-+#define FRAME_META_TYPE_FINAL		1
-+#define FRAME_META_TYPE_PT_REGS		2
-+
-+#ifndef __ASSEMBLER__
-+/*
-+ * A standard RISC-V frame record.
-+ */
-+struct frame_record {
-+	unsigned long fp;
-+	unsigned long ra;
-+};
-+
-+/*
-+ * A metadata frame record indicating a special unwind.
-+ * The record::{fp,ra} fields must be zero to indicate the presence of
-+ * metadata.
-+ */
-+struct frame_record_meta {
-+	struct frame_record record;
-+	unsigned long type;
-+};
-+#endif /* __ASSEMBLER__ */
-+
-+#endif /* __ASM_RISCV_STACKTRACE_FRAME_H */
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index a75f0cfea1e9..bc8e8cd7130a 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -131,6 +131,9 @@ void asm_offsets(void)
- 	OFFSET(PT_BADADDR, pt_regs, badaddr);
- 	OFFSET(PT_CAUSE, pt_regs, cause);
- 
-+	DEFINE(S_STACKFRAME,		offsetof(struct pt_regs, stackframe));
-+	DEFINE(S_STACKFRAME_TYPE,	offsetof(struct pt_regs, stackframe.type));
-+
- 	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
- 
- 	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-@@ -503,6 +506,9 @@ void asm_offsets(void)
- 	DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
- 	DEFINE(STACKFRAME_FP, offsetof(struct stackframe, fp) - sizeof(struct stackframe));
- 	DEFINE(STACKFRAME_RA, offsetof(struct stackframe, ra) - sizeof(struct stackframe));
-+	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct stackframe));
-+	OFFSET(FRAME_RECORD_FP, frame_record, fp);
-+	OFFSET(FRAME_RECORD_RA, frame_record, ra);
- #ifdef CONFIG_FUNCTION_TRACER
- 	DEFINE(FTRACE_OPS_FUNC,		offsetof(struct ftrace_ops, func));
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 08df724e13b9..d1cfb28f9180 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -11,6 +11,7 @@
- #include <asm/asm.h>
- #include <asm/csr.h>
- #include <asm/scs.h>
-+#include <asm/stacktrace/frame.h>
- #include <asm/unistd.h>
- #include <asm/page.h>
- #include <asm/thread_info.h>
-@@ -198,6 +199,27 @@ SYM_CODE_START(handle_exception)
- 	REG_S s4, PT_CAUSE(sp)
- 	REG_S s5, PT_TP(sp)
- 
-+	/*
-+	 * Create a metadata frame record. The unwinder will use this to
-+	 * identify and unwind exception boundaries.
-+	 */
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp) /* stackframe.record.fp = 0 */
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp) /* stackframe.record.ra = 0 */
-+#ifdef CONFIG_RISCV_M_MODE
-+	li t0, SR_MPP
-+	and t0, s1, t0
-+#else
-+	andi t0, s1, SR_SPP
-+#endif
-+	bnez t0, 1f
-+	li t0, FRAME_META_TYPE_FINAL
-+	j 2f
-+1:
-+	li t0, FRAME_META_TYPE_PT_REGS
-+2:
-+	REG_S t0, S_STACKFRAME_TYPE(sp)
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
-+
- 	/*
- 	 * Set the scratch register to 0, so that if a recursive exception
- 	 * occurs, the exception vector knows it came from the kernel
-@@ -354,6 +376,19 @@ SYM_CODE_START_LOCAL(handle_kernel_stack_overflow)
- 	REG_S s3, PT_BADADDR(sp)
- 	REG_S s4, PT_CAUSE(sp)
- 	REG_S s5, PT_TP(sp)
-+
-+	/*
-+	 * Create a metadata frame record for the overflow pt_regs. The
-+	 * overflow path is entered from kernel context, so this is a nested
-+	 * pt_regs boundary and the unwinder can resume from the pre-overflow
-+	 * frame pointer saved in PT_S0.
-+	 */
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
-+	li t0, FRAME_META_TYPE_PT_REGS
-+	REG_S t0, S_STACKFRAME_TYPE(sp)
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
-+
- 	move a0, sp
- 	tail handle_bad_stack
- SYM_CODE_END(handle_kernel_stack_overflow)
-@@ -362,8 +397,8 @@ ASM_NOKPROBE(handle_kernel_stack_overflow)
- 
- SYM_CODE_START(ret_from_fork_kernel_asm)
- 	call schedule_tail
--	move a0, s1 /* fn_arg */
--	move a1, s0 /* fn */
-+	move a0, s3 /* fn_arg */
-+	move a1, s2 /* fn */
- 	move a2, sp /* pt_regs */
- 	call ret_from_fork_kernel
- 	j ret_from_exception
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index f6a8ca49e627..341b2d3facbc 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -14,6 +14,7 @@
- #include <asm/hwcap.h>
- #include <asm/image.h>
- #include <asm/scs.h>
-+#include <asm/stacktrace/frame.h>
- #include <asm/usercfi.h>
- #include "efi-header.S"
- 
-@@ -177,6 +178,14 @@ secondary_start_sbi:
- 	REG_S a0, (a1)
- 1:
- #endif
-+
-+	/*
-+	 * Set up the frame pointer for the secondary idle task so reliable
-+	 * stack unwinding terminates at the metadata frame in task_pt_regs().
-+	 * Without this, the first frame records can inherit an undefined caller
-+	 * fp and unwind past smp_callin() into .Lsecondary_park.
-+	 */
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
- 	scs_load_current
- 	call smp_callin
- #endif /* CONFIG_SMP */
-@@ -305,6 +314,20 @@ SYM_CODE_START(_start_kernel)
- 	la tp, init_task
- 	la sp, init_thread_union + THREAD_SIZE
- 	addi sp, sp, -PT_SIZE_ON_STACK
-+
-+	/*
-+	 * Set up a metadata frame record for the init task so that
-+	 * the unwinder can identify the outermost frame by its
-+	 * {fp, ra} = {0, 0} sentinel at the bottom of pt_regs.
-+	 * fp/s0 points above the metadata record (RISC-V
-+	 * convention).
-+	 */
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
-+	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
-+	li t0, FRAME_META_TYPE_FINAL
-+	REG_S t0, S_STACKFRAME_TYPE(sp)
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
-+
- #if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_USER_CFI)
- 	li a7, SBI_EXT_FWFT
- 	li a6, SBI_EXT_FWFT_SET
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index b2df7f72241a..0dc90bf7a652 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -258,8 +258,23 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		/* Supervisor/Machine, irqs on: */
- 		childregs->status = SR_PP | SR_PIE;
- 
--		p->thread.s[0] = (unsigned long)args->fn;
--		p->thread.s[1] = (unsigned long)args->fn_arg;
-+		/*
-+		 * Set up a metadata frame record at the bottom of the
-+		 * stack for the unwinder. Use FRAME_META_TYPE_FINAL
-+		 * since this is the outermost kernel entry for the new
-+		 * task. The frame_record::{fp,ra} are already zero from
-+		 * memset().
-+		 *
-+		 * fp/s0 points above the metadata record (RISC-V
-+		 * convention). fn and fn_arg are passed via s2/s3,
-+		 * keeping s0 available for the frame pointer chain.
-+		 */
-+		childregs->stackframe.type = FRAME_META_TYPE_FINAL;
-+
-+		p->thread.s[0] = (unsigned long)(&childregs->stackframe)
-+				+ sizeof(struct frame_record);
-+		p->thread.s[2] = (unsigned long)args->fn;
-+		p->thread.s[3] = (unsigned long)args->fn_arg;
- 		p->thread.ra = (unsigned long)ret_from_fork_kernel_asm;
- 	} else {
- 		/* allocate new shadow stack if needed. In case of CLONE_VM we have to */
-@@ -278,6 +293,20 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		if (clone_flags & CLONE_SETTLS)
- 			childregs->tp = tls;
- 		childregs->a0 = 0; /* Return value of fork() */
-+
-+		/*
-+		 * Set up the unwind boundary: ensure the metadata
-+		 * frame record has its {fp,ra} sentinel zeroed and
-+		 * point fp/s0 above the metadata record. Mark it as
-+		 * FINAL since this is the outermost kernel entry for
-+		 * the new task.
-+		 */
-+		childregs->stackframe.record.fp = 0;
-+		childregs->stackframe.record.ra = 0;
-+		childregs->stackframe.type = FRAME_META_TYPE_FINAL;
-+		p->thread.s[0] = (unsigned long)(&childregs->stackframe)
-+				+ sizeof(struct frame_record);
-+
- 		p->thread.ra = (unsigned long)ret_from_fork_user_asm;
+-	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
++	if (!function_graph_enter_regs(old, ip, frame_pointer,
++				       (void *)frame_pointer, fregs))
+ 		*parent = return_hooker;
+ }
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
+index b465bc9eb870..436af96ea59c 100644
+--- a/arch/riscv/kernel/perf_callchain.c
++++ b/arch/riscv/kernel/perf_callchain.c
+@@ -44,5 +44,5 @@ void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
+ 		return;
  	}
- 	p->thread.riscv_v_flags = 0;
+ 
+-	walk_stackframe(NULL, regs, fill_callchain, entry);
++	arch_stack_walk(fill_callchain, entry, NULL, regs);
+ }
+diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+index c7555447149b..c43bf9a84207 100644
+--- a/arch/riscv/kernel/stacktrace.c
++++ b/arch/riscv/kernel/stacktrace.c
+@@ -11,98 +11,16 @@
+ #include <linux/sched/task_stack.h>
+ #include <linux/stacktrace.h>
+ #include <linux/ftrace.h>
++#include <linux/kprobes.h>
++#include <linux/llist.h>
+ 
+ #include <asm/stacktrace.h>
+ 
+-#ifdef CONFIG_FRAME_POINTER
+-
+ /*
+- * This disables KASAN checking when reading a value from another task's stack,
+- * since the other task could be running on another CPU and could have poisoned
+- * the stack in the meantime.
++ * Non-frame-pointer fallback unwinder.
++ * Only compiled when CONFIG_FRAME_POINTER is not enabled.
+  */
+-#define READ_ONCE_TASK_STACK(task, x)			\
+-({							\
+-	unsigned long val;				\
+-	unsigned long addr = x;				\
+-	if ((task) == current)				\
+-		val = READ_ONCE(addr);			\
+-	else						\
+-		val = READ_ONCE_NOCHECK(addr);		\
+-	val;						\
+-})
+-
+-extern asmlinkage void handle_exception(void);
+-extern unsigned long ret_from_exception_end;
+-
+-static inline int fp_is_valid(unsigned long fp, unsigned long sp)
+-{
+-	unsigned long low, high;
+-
+-	low = sp + sizeof(struct stackframe);
+-	high = ALIGN(sp, THREAD_SIZE);
+-
+-	return !(fp < low || fp > high || fp & 0x07);
+-}
+-
+-void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+-			     bool (*fn)(void *, unsigned long), void *arg)
+-{
+-	unsigned long fp, sp, pc;
+-	int graph_idx = 0;
+-	int level = 0;
+-
+-	if (regs) {
+-		fp = frame_pointer(regs);
+-		sp = user_stack_pointer(regs);
+-		pc = instruction_pointer(regs);
+-	} else if (task == NULL || task == current) {
+-		fp = (unsigned long)__builtin_frame_address(0);
+-		sp = current_stack_pointer;
+-		pc = (unsigned long)walk_stackframe;
+-		level = -1;
+-	} else {
+-		/* task blocked in __switch_to */
+-		fp = task->thread.s[0];
+-		sp = task->thread.sp;
+-		pc = task->thread.ra;
+-	}
+-
+-	for (;;) {
+-		struct stackframe *frame;
+-
+-		if (unlikely(!__kernel_text_address(pc) || (level++ >= 0 && !fn(arg, pc))))
+-			break;
+-
+-		if (unlikely(!fp_is_valid(fp, sp)))
+-			break;
+-
+-		/* Unwind stack frame */
+-		frame = (struct stackframe *)fp - 1;
+-		sp = fp;
+-		if (regs && (regs->epc == pc) && fp_is_valid(frame->ra, sp)) {
+-			/* We hit function where ra is not saved on the stack */
+-			fp = frame->ra;
+-			pc = regs->ra;
+-		} else {
+-			fp = READ_ONCE_TASK_STACK(task, frame->fp);
+-			pc = READ_ONCE_TASK_STACK(task, frame->ra);
+-			pc = ftrace_graph_ret_addr(task, &graph_idx, pc,
+-						   &frame->ra);
+-			if (pc >= (unsigned long)handle_exception &&
+-			    pc < (unsigned long)&ret_from_exception_end) {
+-				if (unlikely(!fn(arg, pc)))
+-					break;
+-
+-				pc = ((struct pt_regs *)sp)->epc;
+-				fp = ((struct pt_regs *)sp)->s0;
+-			}
+-		}
+-
+-	}
+-}
+-
+-#else /* !CONFIG_FRAME_POINTER */
++#ifndef CONFIG_FRAME_POINTER
+ 
+ void notrace walk_stackframe(struct task_struct *task,
+ 	struct pt_regs *regs, bool (*fn)(void *, unsigned long), void *arg)
+@@ -133,7 +51,12 @@ void notrace walk_stackframe(struct task_struct *task,
+ 	}
+ }
+ 
+-#endif /* CONFIG_FRAME_POINTER */
++#endif /* !CONFIG_FRAME_POINTER */
++
++/*
++ * Common trace helpers.
++ * These are used by both the FP (kunwind) and non-FP (walk_stackframe) paths.
++ */
+ 
+ static bool print_trace_address(void *arg, unsigned long pc)
+ {
+@@ -146,12 +69,12 @@ static bool print_trace_address(void *arg, unsigned long pc)
+ noinline void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+ 		    const char *loglvl)
+ {
+-	walk_stackframe(task, regs, print_trace_address, (void *)loglvl);
++	printk("%sCall Trace:\n", loglvl);
++	arch_stack_walk(print_trace_address, (void *)loglvl, task, regs);
+ }
+ 
+ void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
+ {
+-	pr_cont("%sCall Trace:\n", loglvl);
+ 	dump_backtrace(NULL, task, loglvl);
+ }
+ 
+@@ -171,17 +94,467 @@ unsigned long __get_wchan(struct task_struct *task)
+ 
+ 	if (!try_get_task_stack(task))
+ 		return 0;
+-	walk_stackframe(task, NULL, save_wchan, &pc);
++	arch_stack_walk(save_wchan, &pc, task, NULL);
+ 	put_task_stack(task);
+ 	return pc;
+ }
+ 
+-noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
+-		     struct task_struct *task, struct pt_regs *regs)
++/*
++ * Frame-pointer-based kernel unwind infrastructure.
++ * Only compiled when CONFIG_FRAME_POINTER is enabled.
++ *
++ * See: arch/arm64/kernel/stacktrace.c for the reference implementation.
++ */
++#ifdef CONFIG_FRAME_POINTER
++
++/*
++ * Per-cpu stacks are only accessible when unwinding the current task in a
++ * non-preemptible context.
++ */
++#define STACKINFO_CPU(task, name)				\
++	({							\
++		(((task) == current) && !preemptible())		\
++			? stackinfo_get_##name()		\
++			: stackinfo_get_unknown();		\
++	})
++
++enum kunwind_source {
++	KUNWIND_SOURCE_UNKNOWN,
++	KUNWIND_SOURCE_FRAME,
++	KUNWIND_SOURCE_CALLER,
++	KUNWIND_SOURCE_TASK,
++	KUNWIND_SOURCE_REGS_PC,
++};
++
++union unwind_flags {
++	unsigned long	all;
++	struct {
++		unsigned long	fgraph : 1,
++				kretprobe : 1;
++	};
++};
++
++/*
++ * Kernel unwind state
++ *
++ * @common:    Common unwind state.
++ * @task:      The task being unwound.
++ * @graph_idx: Used by ftrace_graph_ret_addr() for optimized stack unwinding.
++ * @kr_cur:    When KRETPROBES is selected, holds the kretprobe instance
++ *             associated with the most recently encountered replacement ra
++ *             value.
++ */
++struct kunwind_state {
++	struct unwind_state common;
++	struct task_struct *task;
++	int graph_idx;
++#ifdef CONFIG_KRETPROBES
++	struct llist_node *kr_cur;
++#endif
++	enum kunwind_source source;
++	union unwind_flags flags;
++	struct pt_regs *regs;
++};
++
++static __always_inline void
++kunwind_init(struct kunwind_state *state,
++	     struct task_struct *task)
++{
++	unwind_init_common(&state->common);
++	state->task = task;
++	state->source = KUNWIND_SOURCE_UNKNOWN;
++	state->flags.all = 0;
++	state->regs = NULL;
++}
++
++/*
++ * Start an unwind from a pt_regs.
++ *
++ * The unwind will begin at the PC within the regs.
++ *
++ * The regs must be on a stack currently owned by the calling task.
++ */
++static __always_inline void
++kunwind_init_from_regs(struct kunwind_state *state,
++		       struct pt_regs *regs)
++{
++	kunwind_init(state, current);
++
++	state->regs = regs;
++	state->common.fp = frame_pointer(regs);
++	state->common.pc = instruction_pointer(regs);
++	state->source = KUNWIND_SOURCE_REGS_PC;
++}
++
++/*
++ * Start an unwind from a caller.
++ *
++ * The unwind will begin at the caller of whichever function this is inlined
++ * into.
++ *
++ * The function which invokes this must be noinline.
++ */
++static __always_inline void
++kunwind_init_from_caller(struct kunwind_state *state)
++{
++	unsigned long fp = (unsigned long)__builtin_frame_address(0);
++	struct frame_record *record = (struct frame_record *)fp - 1;
++
++	kunwind_init(state, current);
++
++	state->common.fp = READ_ONCE(record->fp);
++	state->common.pc = READ_ONCE(record->ra);
++	state->source = KUNWIND_SOURCE_CALLER;
++}
++
++/*
++ * Start an unwind from a blocked task.
++ *
++ * The unwind will begin at the blocked task's saved PC (i.e. the caller of
++ * __switch_to).
++ *
++ * The caller should ensure the task is blocked in __switch_to for the
++ * duration of the unwind, or the unwind will be bogus. It is never valid to
++ * call this for the current task.
++ */
++static __always_inline void
++kunwind_init_from_task(struct kunwind_state *state,
++		       struct task_struct *task)
++{
++	kunwind_init(state, task);
++
++	state->common.fp = task->thread.s[0];
++	state->common.pc = task->thread.ra;
++	state->source = KUNWIND_SOURCE_TASK;
++}
++
++static __always_inline int
++kunwind_recover_return_address(struct kunwind_state *state)
++{
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
++	if (state->task->ret_stack &&
++	    state->common.pc == (unsigned long)return_to_handler) {
++		unsigned long orig_pc;
++
++		orig_pc = ftrace_graph_ret_addr(state->task, &state->graph_idx,
++						state->common.pc,
++						(void *)state->common.fp);
++		if (state->common.pc == orig_pc) {
++			WARN_ON_ONCE(state->task == current);
++			return -EINVAL;
++		}
++		state->common.pc = orig_pc;
++		state->flags.fgraph = 1;
++	}
++#endif /* CONFIG_FUNCTION_GRAPH_TRACER */
++
++#ifdef CONFIG_KRETPROBES
++	if (is_kretprobe_trampoline(state->common.pc)) {
++		unsigned long orig_pc;
++
++		orig_pc = kretprobe_find_ret_addr(state->task,
++						  (void *)state->common.fp,
++						  &state->kr_cur);
++		if (!orig_pc)
++			return -EINVAL;
++		state->common.pc = orig_pc;
++		state->flags.kretprobe = 1;
++	}
++#endif /* CONFIG_KRETPROBES */
++
++	return 0;
++}
++
++/*
++ * When we reach an exception boundary marked by a metadata frame record,
++ * extract pt_regs from the stack and continue unwinding from the saved
++ * context (epc and s0/fp).
++ *
++ * On RISC-V, fp points above the metadata record, so the record's
++ * frame_record portion is at fp - sizeof(struct frame_record).
++ */
++static __always_inline int
++kunwind_next_regs_pc(struct kunwind_state *state)
++{
++	struct stack_info *info;
++	unsigned long fp = state->common.fp;
++	struct pt_regs *regs;
++
++	regs = container_of((unsigned long *)(fp - sizeof(struct frame_record)),
++			    struct pt_regs, stackframe.record.fp);
++
++	info = unwind_find_stack(&state->common, (unsigned long)regs,
++				 sizeof(*regs));
++	if (!info)
++		return -EINVAL;
++
++	unwind_consume_stack(&state->common, info, (unsigned long)regs,
++			     sizeof(*regs));
++
++	state->regs = regs;
++	state->common.pc = regs->epc;
++	state->common.fp = frame_pointer(regs);
++	state->source = KUNWIND_SOURCE_REGS_PC;
++	return 0;
++}
++
++/*
++ * Handle a metadata frame record embedded in pt_regs.
++ *
++ * On RISC-V, fp points above the record (fp = metadata + 16), so the
++ * frame_record_meta starts at fp - sizeof(struct frame_record).
++ *
++ * FRAME_META_TYPE_FINAL: This is the outermost exception entry
++ *   (user -> kernel). Unwinding terminates successfully.
++ * FRAME_META_TYPE_PT_REGS: This is a nested exception entry
++ *   (kernel -> kernel). Continue unwinding from the saved context.
++ */
++static __always_inline int
++kunwind_next_frame_record_meta(struct kunwind_state *state)
++{
++	struct task_struct *tsk = state->task;
++	unsigned long fp = state->common.fp;
++	unsigned long meta_base = fp - sizeof(struct frame_record);
++	struct frame_record_meta *meta;
++	struct stack_info *info;
++
++	info = unwind_find_stack(&state->common, meta_base, sizeof(*meta));
++	if (!info)
++		return -EINVAL;
++
++	meta = (struct frame_record_meta *)meta_base;
++	switch (READ_ONCE(meta->type)) {
++	case FRAME_META_TYPE_FINAL:
++		if (meta == &task_pt_regs(tsk)->stackframe)
++			return -ENOENT;
++		WARN_ON_ONCE(tsk == current);
++		return -EINVAL;
++	case FRAME_META_TYPE_PT_REGS:
++		return kunwind_next_regs_pc(state);
++	default:
++		WARN_ON_ONCE(tsk == current);
++		return -EINVAL;
++	}
++}
++
++/*
++ * Unwind from one frame record to the next.
++ *
++ * On RISC-V, the frame record sits at fp - sizeof(struct frame_record),
++ * immediately below the address pointed to by fp/s0. This applies to both
++ * normal frame records and metadata frame records (embedded in pt_regs).
++ *
++ * A metadata record is identified by both fp and ra being zero in the
++ * frame_record portion, with a type value following at fp + 16.
++ */
++static __always_inline int
++kunwind_next_frame_record(struct kunwind_state *state)
++{
++	unsigned long fp = state->common.fp;
++	struct frame_record *record;
++	struct stack_info *info;
++	unsigned long new_fp, new_pc;
++	unsigned long record_base;
++
++	if (fp & 0x7)
++		return -EINVAL;
++
++	record_base = fp - sizeof(*record);
++
++	info = unwind_find_stack(&state->common, record_base, sizeof(*record));
++	if (!info)
++		return -EINVAL;
++
++	record = (struct frame_record *)record_base;
++	new_fp = READ_ONCE(record->fp);
++	new_pc = READ_ONCE(record->ra);
++
++	if (!new_fp && !new_pc)
++		return kunwind_next_frame_record_meta(state);
++
++	unwind_consume_stack(&state->common, info, record_base,
++			     sizeof(*record));
++
++	state->common.fp = new_fp;
++	state->common.pc = new_pc;
++	state->source = KUNWIND_SOURCE_FRAME;
++
++	return 0;
++}
++
++/*
++ * Unwind from one frame record (A) to the next frame record (B).
++ *
++ * We terminate early if the location of B indicates a malformed chain of frame
++ * records (e.g. a cycle), determined based on the location and fp value of A
++ * and the location (but not the fp value) of B.
++ */
++static __always_inline int
++kunwind_next(struct kunwind_state *state)
++{
++	int err;
++
++	state->flags.all = 0;
++
++	switch (state->source) {
++	case KUNWIND_SOURCE_FRAME:
++	case KUNWIND_SOURCE_CALLER:
++	case KUNWIND_SOURCE_TASK:
++	case KUNWIND_SOURCE_REGS_PC:
++		err = kunwind_next_frame_record(state);
++		break;
++	default:
++		err = -EINVAL;
++	}
++
++	if (err)
++		return err;
++
++	return kunwind_recover_return_address(state);
++}
++
++typedef bool (*kunwind_consume_fn)(const struct kunwind_state *state, void *cookie);
++
++static __always_inline int
++do_kunwind(struct kunwind_state *state, kunwind_consume_fn consume_state,
++	   void *cookie)
++{
++	int ret;
++
++	ret = kunwind_recover_return_address(state);
++	if (ret)
++		return ret;
++
++	while (1) {
++		if (!consume_state(state, cookie))
++			return -EINVAL;
++		ret = kunwind_next(state);
++		if (ret == -ENOENT)
++			return 0;
++		if (ret < 0)
++			return ret;
++	}
++}
++
++static __always_inline int
++kunwind_stack_walk(kunwind_consume_fn consume_state,
++		   void *cookie, struct task_struct *task,
++		   struct pt_regs *regs)
++{
++	struct task_struct *tsk = task ?: current;
++	struct stack_info stacks[] = {
++		stackinfo_get_task(tsk),
++		STACKINFO_CPU(tsk, irq),
++#ifdef CONFIG_VMAP_STACK
++		STACKINFO_CPU(tsk, overflow),
++#endif
++	};
++	struct kunwind_state state = {
++		.common = {
++			.stacks = stacks,
++			.nr_stacks = ARRAY_SIZE(stacks),
++		},
++	};
++
++	if (regs) {
++		if (tsk != current)
++			return -EINVAL;
++		kunwind_init_from_regs(&state, regs);
++	} else if (tsk == current) {
++		kunwind_init_from_caller(&state);
++	} else {
++		kunwind_init_from_task(&state, tsk);
++	}
++
++	return do_kunwind(&state, consume_state, cookie);
++}
++
++struct kunwind_consume_entry_data {
++	stack_trace_consume_fn consume_entry;
++	void *cookie;
++};
++
++static __always_inline bool
++arch_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
++{
++	struct kunwind_consume_entry_data *data = cookie;
++
++	return data->consume_entry(data->cookie, state->common.pc);
++}
++
++static __always_inline bool
++arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, void *cookie)
++{
++	/*
++	 * At an exception boundary we can reliably consume the saved PC. We do
++	 * not know whether ra was live when the exception was taken, and
++	 * so we cannot perform the next unwind step reliably.
++	 *
++	 * All that matters is whether the *entire* unwind is reliable, so give
++	 * up as soon as we hit an exception boundary.
++	 */
++	if (state->source == KUNWIND_SOURCE_REGS_PC)
++		return false;
++
++	return arch_kunwind_consume_entry(state, cookie);
++}
++
++#endif /* CONFIG_FRAME_POINTER */
++
++/*
++ * arch_stack_walk - dual implementation.
++ *
++ * When CONFIG_FRAME_POINTER is enabled, uses the kunwind infrastructure for
++ * robust frame-pointer-based unwinding, consistent with arch_stack_walk_reliable.
++ *
++ * When CONFIG_FRAME_POINTER is disabled, falls back to the simple stack scan
++ * in walk_stackframe().
++ */
++#ifdef CONFIG_FRAME_POINTER
++
++noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
++				      void *cookie, struct task_struct *task,
++				      struct pt_regs *regs)
++{
++	struct kunwind_consume_entry_data data = {
++		.consume_entry = consume_entry,
++		.cookie = cookie,
++	};
++
++	kunwind_stack_walk(arch_kunwind_consume_entry, &data, task, regs);
++}
++
++#else
++
++noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
++				      void *cookie, struct task_struct *task,
++				      struct pt_regs *regs)
+ {
+ 	walk_stackframe(task, regs, consume_entry, cookie);
+ }
+ 
++#endif /* CONFIG_FRAME_POINTER */
++
++/*
++ * Reliable stack walk for livepatch (CONFIG_FRAME_POINTER only).
++ */
++#ifdef CONFIG_FRAME_POINTER
++
++noinline noinstr int arch_stack_walk_reliable(stack_trace_consume_fn consume_entry,
++					      void *cookie,
++					      struct task_struct *task)
++{
++	struct kunwind_consume_entry_data data = {
++		.consume_entry = consume_entry,
++		.cookie = cookie,
++	};
++
++	return kunwind_stack_walk(arch_reliable_kunwind_consume_entry, &data,
++				  task, NULL);
++}
++
++#endif /* CONFIG_FRAME_POINTER */
++
+ /*
+  * Get the return address for a single stackframe and return a pointer to the
+  * next frame tail.
 -- 
 2.43.0
