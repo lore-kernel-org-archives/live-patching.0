@@ -1,79 +1,68 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A630040D579
-	for <live-patching@vger.kernel.org>; Sun, 28 Jun 2026 11:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D72430E0D6;
+	Mon, 29 Jun 2026 06:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782647211; cv=none; b=Yy5TGZoEMXMmP7nyAXjXu/NUkz27+rqSQo+ORwIzsLtXfwncRqqTiZgAvRyTIqOX3yZaCYwp0sFGovjOOWV6pJ0/PT+Tbw3N93Sq7f4UM8+Hr3WdDdlRQsaUV7hWXKvD9yEIpTi8zqcgXizl8XnlN7K3qMhmBdzullpWT6zYWvA=
+	t=1782715368; cv=none; b=LS329jGi2NDHBGd5PfiduNw/IxDYNA5qBmBjFwZQVUnW05TjVWztNopl9poiyC1woncYV9fvHy/ZwIbHInKT9Cgm3DZ65ewL3Q/oks9FUQFNt7zGZlGhj/3jdzkbwT/ZUKrxwfTX+xolaiCcElFCxpkevYe7UL1W+vYXtvuxLCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782647211; c=relaxed/simple;
-	bh=npevS0g+Qb1DmEe/P3T10TcG9H/zLbRVndpiO/6/k1c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dlZo+tVhn8qbzVU/Co0xUOMg3bhuh+i/K0QPJJh8fCKnXXKPF7Ck/3KQT1qwotT/F4LajA+ERzkYGV5C9V8vHCz333RXVO7ayMPQj4XoL/XvVMPTCkgdeLUxbin6QC1I2zmT8EL9fII5c5xnEVibund6z63ZqIyR1XJkzOFFt4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKBdtDUC; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782715368; c=relaxed/simple;
+	bh=8gUFQfhcKCWl+SQPGfcUr9oaqzBY5sgciJASbO4/7I0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rzsnipHpLWthANLTw3Uo02MKn0AGlpM/am1R4r5xrj2R1WES76yJ9X/d0JqfceH+VRbrnD9PLFAYv5bOBtdJS8rG51dEvE/Nq4YKVkSz2jtm9qTZorNTBPb8P+ZJsjiJduXRRtyKQsqTZ9+4i9iG6DCP1GQtgDCk88GSGTQgJSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bX+arkOK; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKBdtDUC"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2c9f44ddf26so464925ad.3
-        for <live-patching@vger.kernel.org>; Sun, 28 Jun 2026 04:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782647209; x=1783252009; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=25C7IirL8rOn5zwPULJZIDdW9SkThkTR+uI3t1if5BQ=;
-        b=hKBdtDUCX/KB5YwDd8PqUR60sZ7pLjN04upKMxe2Uw6WF47R/vJJFfexykRbtMai7L
-         sbMIrP8Kz8Ir4Yp3cpxn4ZaGyKcPWDlyaCJnDo+zDb+TQhVPYIlJcWjHeTnp45Cu8Pgt
-         15lHYJfnNvuL79fgvKCh2PRMgph6R008AvWv4YSQDy3aExxRf2ajt8Zjw93w/mOuZSy7
-         cl9fgb2dQThkn1/bmIh5Y4Dqy6VpJQLXMbX/r4RHY4bJuXhgTFDt4COuHDk/IPo7B/+v
-         AJtfwTClICV+Nh2M4KkhwdVztHewIrYkdmzEnVLgch3X4Q8OPEScWkv7zwW13Z0Vd3v+
-         2Tyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782647209; x=1783252009;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=25C7IirL8rOn5zwPULJZIDdW9SkThkTR+uI3t1if5BQ=;
-        b=s0LOwdeEzfbHWRtsiGtu3CngAy35J+vZeQtIowqKWSkRK/HFhw/5ru0C9i4GowiOYI
-         niFEIw6myp8JDjUwtjG2jeaeOS3YaDYCYNQnZVHFKHRZRDtGzOHP5mva4vEUHndE2fpg
-         q6FSFjvS4vfkw5mpOcXQOqtmbH39Ba537aX4Hm/HlstoS7oaITrA9ihRczeDAtXemlH8
-         Xp+2/duV2VQEU9EsQNykFDwRniDXnewuJbvztPXXhIh6KiRBbOuCWKkEPzLev6sQuIIz
-         ziozlPRz/S8htOVgfPyzbA6gyLj5MsqI4u19liYDgG/pJ9IhgHTqB/8z21U0mq6Jq5UO
-         p63w==
-X-Forwarded-Encrypted: i=1; AHgh+RqQK8bu3e6nwYpf7LgCeaM6tHYUM5zCJFOcvA2xsbq+QXJ9wq6zo/Jl/5iDe3XhxIpTsspN3Fep+kCWBXWb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ+HW2T/jmvIj/EPchCddi0ksuQLrx6XiBwsqyZMp6UnYWf69L
-	0rnkGAJBsR2w9pkY9eXqKGVm7yjeMi1qdLOaVEtUeFtiBv39YQYxajOC
-X-Gm-Gg: AfdE7clSIhWDUmFPfQjjwdGj5iyI/2eIgMZAPXFUcjivxITeXKSatbQrjIc9iPaszRf
-	U+JrW5ttFLYZ8bTjFAjmv7UZAxh1Zrki0LtLq462WHzYT5k0RSGJhS0HOGhRyVfY0AVLW8wl0Mk
-	S2X3V2e/A6MepxUwHxIULzK3lHdzoi4t/SKnaEaCt6OZu1nErTxqiR9qh/5GqHZcKSJoJNI2kCx
-	RvDj9E70YtmO90VXjdHz5oOMGqqjTxk2thtVGglNrYdMtQnO0+t1a2KGWK/Wc0oLQwkKOHrFKQb
-	BV0JAKDRC32S63vFhErwJdoTcLKpzdLL31T6tEYoMxI5jiuAmw3IXdZr7c6Aqe3SLMvcIcO5KB6
-	QRencb3bIDZj361wlNsPsUzFTWdkhiQNKTP5Wi3E2krBkc3UO79se0g2UWiPbozU3tvhFyX5Rj6
-	i+KNmKfKn+HuErA+lb+dy00IT79Uu6BhMgXLe4Y+MyKZmbZ4SCr+Yponb6B3BRKlM4
-X-Received: by 2002:a17:903:946:b0:2c7:ef3b:e17f with SMTP id d9443c01a7336-2c7fc791633mr120783835ad.36.1782647209535;
-        Sun, 28 Jun 2026 04:46:49 -0700 (PDT)
-Received: from yafangs-Air ([240e:46d:2600:2cf1:e090:433d:67ed:863a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f5ae2092sm72767235ad.20.2026.06.28.04.46.46
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 28 Jun 2026 04:46:49 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: mbenes@suse.cz
-Cc: jikos@kernel.org,
-	joe.lawrence@redhat.com,
-	jpoimboe@kernel.org,
-	laoar.shao@gmail.com,
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bX+arkOK"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1782715357; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=m8pnWfAyIRGdD3GPjP0E4M3+tZYcgxHxMKpoX0zv1+E=;
+	b=bX+arkOKtV/Jt9vugk3GxJA9UahbB64LRo+649pOgm3DGpGhY5gcFOknLjnmqFcEQN+IE7drzUz7kvUv0lQlojoLvqasSODEc8hoLC9KMoQ7PwRAQ1s144fzGZm+lXNaDliXiPliMY9O5Njw/10ScXrWGaKR7k3K6v7idOe/8Rs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X5nWtbk_1782715354;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X5nWtbk_1782715354 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 29 Jun 2026 14:42:35 +0800
+From: Wang Han <wanghan@linux.alibaba.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org,
+	Oleg Nesterov <oleg@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	oliver.yang@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com,
+	jkchen@linux.alibaba.com,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
 	live-patching@vger.kernel.org,
-	pmladek@suse.com,
-	sashiko-bot@kernel.org,
-	song@kernel.org
-Subject: [PATCH v2] livepatch: Fix NULL pointer dereference in klp_find_func()
-Date: Sun, 28 Jun 2026 19:46:35 +0800
-Message-ID: <20260628114635.33572-1-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <alpine.LSU.2.21.2606251523310.18862@pobox.suse.cz>
-References: <alpine.LSU.2.21.2606251523310.18862@pobox.suse.cz>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 2/7] riscv: stacktrace: disable KASAN and KCOV instrumentation for stacktrace.o
+Date: Mon, 29 Jun 2026 14:42:23 +0800
+Message-ID: <20260629064228.3195856-3-wanghan@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -82,87 +71,42 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A NULL old_name in a newly loaded livepatch's function entry causes a
-NULL pointer dereference in strcmp():
+KASAN records stack traces for every alloc/free, which means it walks
+the unwinder very frequently. Instrumenting the stack trace collection
+code itself adds substantial overhead and makes the traces themselves
+noisier.
 
-  klp_init_patch()
-    klp_add_nops()
-      klp_find_func()
-        strcmp(old_func->old_name, func->old_name)
+KCOV instruments every basic-block edge. The unwinder is a hot path,
+especially with KASAN enabled, so KCOV instrumentation has the same kind
+of cost and noise problem here.
 
-Add klp_check_patch() at the beginning of klp_enable_patch() to reject
-patches with NULL old_name before they reach this code path.
+Mark stacktrace.o as not KASAN- or KCOV-instrumented, matching the x86
+treatment of its stack unwinding code. RISC-V keeps the relevant unwinder
+code in stacktrace.o, so a single translation-unit annotation covers the
+equivalent scope. This is a prerequisite preference for the upcoming
+reliable unwinder, but the change is valid on its own.
 
-Reported-by: sashiko-bot <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/live-patching/20260529040130.95A9C1F00893@smtp.kernel.org/
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Suggested-by: Miroslav Benes <mbenes@suse.cz>
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 ---
- kernel/livepatch/core.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ arch/riscv/kernel/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 28d15ba58a26..a240d1144e89 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -799,9 +799,6 @@ void klp_free_replaced_patches_async(struct klp_patch *new_patch)
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index cabb99cadfb6..c565a72a36f3 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -44,6 +44,12 @@ CFLAGS_REMOVE_return_address.o	= $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_sbi_ecall.o = $(CC_FLAGS_FTRACE)
+ endif
  
- static int klp_init_func(struct klp_object *obj, struct klp_func *func)
- {
--	if (!func->old_name)
--		return -EINVAL;
--
- 	/*
- 	 * NOPs get the address later. The patched module must be loaded,
- 	 * see klp_init_object_loaded().
-@@ -1092,6 +1089,25 @@ static int __klp_enable_patch(struct klp_patch *patch)
- 	return ret;
- }
- 
-+static int klp_check_patch(struct klp_patch *patch)
-+{
-+	struct klp_object *obj;
-+	struct klp_func *func;
++# When KASAN is enabled, a stack trace is recorded for every alloc/free, which
++# can significantly impact performance. Avoid instrumenting the stack trace
++# collection code to minimize this impact.
++KASAN_SANITIZE_stacktrace.o := n
++KCOV_INSTRUMENT_stacktrace.o := n
 +
-+	if (!patch || !patch->mod || !patch->objs)
-+		return -EINVAL;
-+
-+	klp_for_each_object_static(patch, obj) {
-+		if (!obj->funcs)
-+			return -EINVAL;
-+		klp_for_each_func_static(obj, func) {
-+			if (!func->old_name)
-+				return -EINVAL;
-+		}
-+	}
-+	return 0;
-+}
-+
- /**
-  * klp_enable_patch() - enable the livepatch
-  * @patch:	patch to be enabled
-@@ -1108,16 +1124,10 @@ static int __klp_enable_patch(struct klp_patch *patch)
- int klp_enable_patch(struct klp_patch *patch)
- {
- 	int ret;
--	struct klp_object *obj;
--
--	if (!patch || !patch->mod || !patch->objs)
--		return -EINVAL;
--
--	klp_for_each_object_static(patch, obj) {
--		if (!obj->funcs)
--			return -EINVAL;
--	}
+ always-$(KBUILD_BUILTIN) += vmlinux.lds
  
-+	ret = klp_check_patch(patch);
-+	if (ret)
-+		return ret;
- 
- 	if (!is_livepatch_module(patch->mod)) {
- 		pr_err("module %s is not marked as a livepatch module\n",
+ obj-y	+= head.o
 -- 
-2.52.0
-
+2.43.0
