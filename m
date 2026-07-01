@@ -1,153 +1,226 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2D63BA222
-	for <live-patching@vger.kernel.org>; Wed,  1 Jul 2026 11:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D37416D02
+	for <live-patching@vger.kernel.org>; Wed,  1 Jul 2026 15:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782906893; cv=none; b=LyQgnimAtBcqhyuuYVSaHdtam8y/+HqRcryQ72RO9qpzV0X/R9eAJ5PVMLQaG+0fl+3LJo//zE5cBr3ZQzxwGyE/4emuo6nwiGj7ZqugEArQem8bL2NYEgr5m89oHY4C1UECVgQaVd2yRJwwfPaa/I7ICX/8UxVLD2v7xdrSasQ=
+	t=1782918870; cv=none; b=Bcxh1DqMs748vc+dp6O4cKwa3QFLcL7149L1kGNKLegYqOGmgoDSlnTAU8EIlnehcorbv1BWAfBa39bySivfIVyfIrxI7Rm/m9oDk4UGN24dbXUJ4BIuf3w+TEwSfwNJG+n/pE220oOmZi9klHwBKddLff7sumKZ6aacGgrMOtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782906893; c=relaxed/simple;
-	bh=oj2FAOWXmH78DzWdpY7oGUb2l7fWvFJUutUiG2lXiH8=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=tiiOUksytGGPhAFpfBVMMux0xcRulYY+7YtaXFnu5g/fED4k3AjQV9PbuxoKf6oz0cjlwZjm3JNaSKjfJOgUIDuUC5xrrmGEgvbHdtCTv1QcbrGPLs7hi/E8w/lXbFJk1w2TLkOdcw8WuujcdeFDpWYEMmDi7jQ4bc6O4nhyl8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XNqiGZrA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=dOxuWTKA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=zgvbsoZ9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ps24t3FQ; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1782918870; c=relaxed/simple;
+	bh=usd6Og46zgL8OHwYEQAfxolvwYRP5G/TAyvCg/TextU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ptYFeetrAUTg8kW86f+ocFVw8jtAyTHUa32x6ZH0k9HUOsLeTb1RkHC5Up5C3EmNuQonWY0ZGldxnkT6/NcY1XWRjTn8VBlmSrwaQUc3K8ViylxQirPFrJC78mcLd5TT3qhBq1I8U1deCnK/ck+YkWJV63YU/y9CVgieYP+d3BQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OnD1l4rK; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XNqiGZrA";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="dOxuWTKA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="zgvbsoZ9";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ps24t3FQ"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:2b::1244])
-	by smtp-out2.suse.de (Postfix) with ESMTP id E0A7175AA5;
-	Wed,  1 Jul 2026 11:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1782906885; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ivg26ZNQWMEyEItXVQvx5FtMQXYGgbQx4HQqdkjS20g=;
-	b=XNqiGZrAyQALvIs4HWSqHlRvX7jPfd0oBs/tO1bN/QDEKXsEXTKNYDBZogaIW49OATNP3s
-	Zqsom2VheqJ3m8CKA/IlXeQk3pS0CT4UwnnnNGCUreqw3BAZ5qinsLwnjn2wF7//NYfWpd
-	WcOKTAlK883bwcvhah0p6ZKib4vWVn4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1782906885;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ivg26ZNQWMEyEItXVQvx5FtMQXYGgbQx4HQqdkjS20g=;
-	b=dOxuWTKAQ9r9zceJNCCT3EsS75QAN6CVEdpTcMpsLIwPQ1a42w13zdNAXTBEuFECUYWOcA
-	jgVj1F/BMtP0JJAw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=zgvbsoZ9;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Ps24t3FQ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1782906884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ivg26ZNQWMEyEItXVQvx5FtMQXYGgbQx4HQqdkjS20g=;
-	b=zgvbsoZ9VP2TWD85ywtDzpVVLLZXTl7a7GmhaUaTgP8rfC7bafu9ESU9Sf6C0lfAzEBUgj
-	23CsveQGBlbhik8TCq+1288T6+Xmn21dzW0GgEe0t+cNQS3ZvFP15WIYtpYQLc3jQkt2bo
-	ntW3jevZPoQ8NOvmVUkLmvQo4nosTKk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1782906884;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ivg26ZNQWMEyEItXVQvx5FtMQXYGgbQx4HQqdkjS20g=;
-	b=Ps24t3FQfHe6UTzyoUOfHZW26Mf7d82U5zWaX8FKiFB/S8nm6EfUQu/0j1LNzIybQm8uje
-	WxDx8IaGzpiuptAw==
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OnD1l4rK"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-473dc4cf238so489148f8f.3
+        for <live-patching@vger.kernel.org>; Wed, 01 Jul 2026 08:14:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1782918867; x=1783523667; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4uOOS0i9hpZWdGU1QnLKFN1aQHTMiBN/08DuR6TYPb0=;
+        b=OnD1l4rK4mZyoVxa93LfsPS4E0YOaE4GkT/euRQ0MWfe4pBifO067RaEUeOiCuWmm+
+         533D4X78VpJ63v2ujCsqXFAheGavUSXfWS2YdZ3aWmvPJpWaQkyCQwknOyByDy54RAsf
+         DiNrgCyNGCBVD+P/yM3KiQgq7SDinGDzCIQH5BrH0h5XlborLavNps4apouMiDbRA8G4
+         jydSYYN7A2QXHVkpgylH2VWFDfU4ndk9D38AfRgUBPHim79ESYzE79bAx8DLx5Y3ubjM
+         0xONr2EQ+x6u18DdKd9ww6+307x10UsXksPn5IusnKkaPpI9qCHqeFfrDLYb8uLlXqBz
+         J1Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782918867; x=1783523667;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4uOOS0i9hpZWdGU1QnLKFN1aQHTMiBN/08DuR6TYPb0=;
+        b=ESh1+MGDdymSW2BoSFaE3chvk1r0u4bj1iCC+pwH9kn28nUSmN+vL5FzgRH5fu4wA5
+         kaKwodU0XdEhYmUopzZS+fHk6JVqjnJBvFNCfg2LmhUJ9Emk7snIM5TDXbbpUfsF0lGp
+         RdYiJDZFfFM1DaDfoBOsDChMaZc/v0UMpUZX7RR34JRLOMChAL2M/7xhyo67bQbNj7eA
+         cLjm3LonXKsLUCpFMR1xm5QqAlZldY+H7JC8NaMkVKTygoijESA3+OJNw4SlyAdzncOu
+         JkI21FqkgGoFg/cyvuAurzU/My9RPNvz9cfu9LymX6tZy4/W+nf7j7gg5OU2prWMoJ27
+         qrYw==
+X-Forwarded-Encrypted: i=1; AFNElJ9f7qmRX+/KtoBlCG3D0BLU06r/O5NQ0hDbVIbV7AHFb4+Frs5anw2+EzFa+LU4w1GKeA2kF8wPq7ZCZArp@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrAmFKyKzds423lpzCev8ZIvuZZdHXEsf/w9H4B86QiKtlM3TO
+	zrtF6cTaarbIj85yfreOUCOjgeLaugRW08IoSpORvLrNIyBJtq8ScTOvrYCJxtO00DQfheRwWrF
+	/YhzlA4M=
+X-Gm-Gg: AfdE7cmfaIVsB9HUrWwqO3e2fc52CAQAfePXfjcuyudmZTOUrPNMXVfYfWobH+ofVCm
+	b0P4JMVY7gVV/k1FmjljxzlyzQpEHDPVvbkBVcSaW8zp4sE/PqRhKBB1T7wRA1qS90CkR/Yuxr9
+	oqn82m4uf4mXVyfiJAtXfWf0trx+BTkvwafxJNcCtgZ4jZUsKiOZqIJ+XZsFWVKVTTuC+43ddZU
+	ICoWUr48IXvGjqcWjfqnqbLsF0QJPf1QrKO23ExPteHWX6kHhMx2PsfRJQb84nJjwtJQLkOz7JZ
+	h1SQMXVTN4GO324Z2YwxfwnwEv+Y6rao8ZOh5+XfaJ4PDUig3fgIx3zjUX/+r537Gwiz7J9DCZj
+	1GsLkws87qVmxzVK2yLXdPLlDa3IqeS7ufuXFmKJF6/murGq6ZTLtw86WCmAJLolAjgBVBCEtW7
+	s4S/YcuSrBOx8cpaM=
+X-Received: by 2002:a05:600c:35d0:b0:493:c3cb:409e with SMTP id 5b1f17b1804b1-493c3cb42d9mr20649135e9.15.1782918867006;
+        Wed, 01 Jul 2026 08:14:27 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493be810be8sm78287565e9.9.2026.07.01.08.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 08:14:26 -0700 (PDT)
+Date: Wed, 1 Jul 2026 17:14:24 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Zelin Deng <zelin.deng@linux.alibaba.com>,
+	Miroslav Benes <mbenes@suse.cz>, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
+	mpdesouza@suse.com, Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
+ level Makefile be overwritten
+Message-ID: <akUu0DEYrhd9cLCL@pathway.suse.cz>
+References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
+ <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
+ <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
+ <akPTcJjrIAI1ZNyH@pathway.suse.cz>
+ <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 04/21] arm64: Rename TRAMP_VALIAS ->
- TRAMP_VALIAS_ASM in asm-offsets
-From: Miroslav Benes <mbenes@suse.cz>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
- live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, Mark Rutland <mark.rutland@arm.com>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-In-Reply-To: <74623fad8c45d26a3da6c5420b00156d8f7c2150.1778642120.git.jpoimboe@kernel.org>
-References: <cover.1778642120.git.jpoimboe@kernel.org>
- <74623fad8c45d26a3da6c5420b00156d8f7c2150.1778642120.git.jpoimboe@kernel.org>
-Date: Wed, 01 Jul 2026 13:54:41 +0200
-Message-Id: <178290688141.34581.8116654132662243314.b4-review@b4>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=566; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=oj2FAOWXmH78DzWdpY7oGUb2l7fWvFJUutUiG2lXiH8=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhixXBpZeA7eToT3+1nMaA06ZLbo1a+uaDZ0un/nEjh26G
- CSd+HtnJ6M/CwMjB4OlmCLL673OcoZTcg00q9/dhRnEygQyRVqkgQEIWBj4chPzSo10jPRMtQ31
- DIEMHSMGLk4BmGr/s+z/g0z4t29Ym/Ms5tK6M4lZsYtC3C02xAa1bE7bstH9nynHqgl7dh2fbcR
- wXMIzxs1/mwxT8K+DB87/k7HpaVvxq14paWnD5/r2rUs2HzPQcbWb7hx8Q0/RtMvJT+zsORfnC4
- 9OLLeObZ38xZg93PjeZwvTX0lTpZk60hVXbloZ3R4XYctU/DJ059VTM9W+7dV/N0NPY/mTIy4u/
- vfNFJs9vSWzbqUuu5/VbaKe6jSp8Jmui8LMxtQKhcfhQes2Ln4dNEPHwe2OTvdHi/ogFs1plUvj
- Tl8VDp0W9mOX1cxNy77eXj/xTq2txwm2dNlFR6Z+mpkun+h19trx7TP+XHJ5v13lSu/57yunLVP
- a2aq7GQA=
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Flag: YES
-X-Rspamd-Action: add header
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [17.39 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_SPAM_SHORT(3.00)[1.000];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b2bf:2b::1244:from];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLy6ogssk6jotd4tofw6wwi5bg)];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_EQ_ENVFROM(0.00)[];
-	DIRECT_TO_MX(0.00)[b4 0.15.2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:2b::1244:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:helo,suse.cz:email,suse.cz:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: E0A7175AA5
-X-Spam-Score: 17.39
-X-Spam: Yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
 
-On Tue, 12 May 2026 20:34:00 -0700, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> Rename the asm-offsets TRAMP_VALIAS macro to TRAMP_VALIAS_ASM, following
-> the naming convention already used by PIE_E0_ASM and PIE_E1_ASM.  This
-> disambiguates the asm-offsets-generated constant from the C macro of the
-> same name defined in fixmap.h and vectors.h.
+On Tue 2026-06-30 18:12:46, Thomas Weißschuh wrote:
+> Hi Zelin,
 > 
-> This is needed by a later patch which adds new includes to asm-offsets.c
-> that would otherwise conflict with the C version.
+> On Tue, Jun 30, 2026 at 04:32:16PM +0200, Petr Mladek wrote:
+> > Added some people involved in "filechk_makefile" feature into Cc.
+> > 
+> > For the new people, see the whole thread at
+> > https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
 > 
-> [...]
+> Thanks for the report and forwarding it.
+> 
+> > On Sun 2026-06-21 22:36:24, Zelin Deng wrote:
+> > > 
+> > > 在 2026/6/19 22:42, Miroslav Benes 写道:
+> > > > On Mon, 25 May 2026, Zelin Deng wrote:
+> > > Here're how I reproduce the issue:
+> > > 
+> > > 1. pull linux-next, reset to HEAD, for example
+> > > 3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
+> > > 
+> > > 2. at linux-next tree: make all -j$(nproc) && make modules_install
+> > > headers_install -j$(nproc) && make install && reboot
+> > > 
+> > > 3. at linux-next tree: make kselftest-all
+> > > 
+> > > 4. top level Makefile in linux-next has been overwritten by
+> > > 
+> > >     export KBUILD_OUTPUT = .
+> > >     export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+> > >     export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+> > >     include /home/shiyu.dzl/linux-next/Makefile
+> > > 
+> > > it is a stub generated by filechk_makefile.
+> > 
+> > It seems that "filechk_makefile" has reached mainline in v7.1-rc1,
+> > see the commit c9bb03ac2c66bc5aa81b ("kbuild: reduce output spam when
+> > building out of tree").
+> > 
+> > The commit message says:
+> > 
+> > <paste>
+> >     The Makefile is now created even if the build is aborted due to an
+> >     unclean working tree. That should not make a difference in practice.
+> >  </paste>
+> > 
+> > It seems that is actually makes a difference in the livepatch selftest
+> > case.
+> > 
+> > Sigh, the Makefile rules are a maze to me. It is possible that
+> > we do something wrong in
+> > tools/testing/selftests/livepatch/test_modules/Makefile. Namely
+> > with:
+> > 
+> > ifneq ("$(wildcard $(KDIR))", "")
+> > 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+> > endif
+> > 
+> > But I see "$(MAKE) -C ..." called in many other makefiles.
+> > 
+> > Best Regards,
+> > Petr
+> > 
+> > > I'm not quite sure that it could be related to my toolchain (like make
+> > > version ?), I briefed analysis the root cause on my environment (KDIR
+> > > '/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to my
+> > > kernel source -> '/home/shiyu.dzl/linux-next'):
+> > > 
+> > >   1. sub_make_done leaks via environment. The top-level Makefile sets export
+> > > sub_make_done := 1 after its first-pass initialization.
+> > >   Because it is exported, every child make process inherits it.
+> > >   2. livepatch test_modules re-invokes the top-level Makefile. The call
+> > > chain is: top-level Makefile → kselftest-% pattern rule →
+> > >   tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) -C
+> > > $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level Makefile to
+> > >   build an external module.
+> > >   3. The inherited sub_make_done=1 skips critical initialization. The
+> > > top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
+> > >   skipped entirely. This block is responsible for correctly parsing
+> > > command-line variables and setting up KBUILD_EXTMOD-related paths.
+> > >   4. Path mismatch triggers false out-of-tree detection. With the
+> > > initialization skipped, srcroot and CURDIR end up with mismatched values
+> > > (e.g.,
+> > >   absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR)))
+> > > fails, so building_out_of_srctree is incorrectly set to 1.
+> > >   5. outputmakefile overwrites the source tree's Makefile. Because
+> > > building_out_of_srctree is set, the filechk_makefile rule fires and replaces
+> > > the
+> > >   real top-level Makefile with a generated stub containing KBUILD_OUTPUT,
+> > > KBUILD_EXTMOD, and an include directive.
+> > > 
+> > >   Why make -C tools/testing/selftests/ all is unaffected: it enters the
+> > > selftests directory directly without ever executing the top-level Makefile
+> > >   first, so sub_make_done is never exported into the environment. When
+> > > livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level
+> > > Makefile
+> > >   runs its full initialization normally.
+> 
+> Can you try this:
+> 
+> diff --git a/Makefile b/Makefile
+> index b9c5792c79e0..f717a4dc96d6 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1591,10 +1591,10 @@ tools/%: FORCE
+>  
+>  PHONY += kselftest
+>  kselftest: headers
+> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>  
+>  kselftest-%: headers FORCE
+> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
+>  
+>  PHONY += kselftest-merge
+>  kselftest-merge:
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
+Heh, this is exactly the same change which Zelin Deng proposed as
+well, see
+https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
 
--- 
-Miroslav
+> The same is done for cmd_install.
 
+I guess that this is related to the commit 14ccc638b02f9ec ("kbuild:
+cancel sub_make_done for the install target to fix DKMS"). Which
+is related to the commit bcf637f54f6d2515d ("kbuild: parse C= and M=
+before changing the working directory").
+
+Honestly, it all looks like a wild magic to me. I would need much
+better understanding of the Makefile maze to get on top of it.
+
+But it seems that it is a reasonable fix after all. It solves the
+original problem. It does not break my workflow. So, I tend to add:
+
+Acked-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
