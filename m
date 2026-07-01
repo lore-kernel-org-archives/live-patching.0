@@ -1,172 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F44434CFD1
-	for <live-patching@vger.kernel.org>; Wed,  1 Jul 2026 23:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB2632B13E;
+	Wed,  1 Jul 2026 23:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782947237; cv=none; b=lRhxqap0XVuAyPQThoEKtxtatiHrb7itbt+9uzqTc470kc7eGvPcB6xn28TcWwNvow+C/bAkwEqlwGVM8nazNTptOQclrxDcR5e9RZrzj1ytmKHjh/RhtDVrLWBz7PzfkcJls2GUU5cdzb1oZvZoyHKZxctRt5rVS8uCxK61WA0=
+	t=1782950045; cv=none; b=BbuzyQBIvTe5hpEwIGH1o1DEtkbNfgJk4Y8ZCeeKxwoa/E8yGoIj/FYYoPChchY43M5AMezrtIx2WFg6OGGAifloQbh5CF/1DQMJIl3k6UlFoKOIgLRdpovvfJxrovVI7Ya9TJaVW6ixbLKqTCwcSUGgqLg4H2pRT5CXydBjMhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782947237; c=relaxed/simple;
-	bh=kDc1uEwwsz+khShkTHZMmtl904cSBkx8DaTp4B39jNY=;
+	s=arc-20240116; t=1782950045; c=relaxed/simple;
+	bh=p3ezXwrNdjRRY7TlGmHhCyhsYIU7/WYzR/e3JIoC/k0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IdsnCiQWnaFfpY3ASTa3ygzgHZPoij2u489PI7ZjbhyUCHc3J4uIT0mdtkNj0dOsxw7hh1cAfMxLuX08T/wKeyg3XMalTAwuIJ2CbWRGHIWWBx4MLa3kY5Z3ITkJRYeGqZBQPYw0TQEOZRZywFz+B4LQkQd2PAhHdkKhhmSmx9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UCVBsZLV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=QHC3M6Wq6a9+Wvwl545qvpL6mJYsXod9+6/ZD1E8o2FFDKepYNH9bFU45dge0mgfedEL/MD/vIYP0gvWEpCBoNqIA6sDUbYBKJt+h9jaxagn/GF8DrBoY/QtWjw/XngUP5eHtrFcsTDqNoF7sM0HRPavYAtwMQNl7PkwIExBjyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAygV4hI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UCVBsZLV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782947234;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8B65/I8GYURpH/ouE1U4pYhV4f5bwOGTW8eYQjqr3mc=;
-	b=UCVBsZLV5R03Se6O8mjlheOj6TX2IdfaOaYFBC2CLI/PxM08MTljWTyiXkVDIyPDpHwYlc
-	wN9I2yfks01ZNX0cTETPRAAZIsnn4lDHZDwt3YKtS0UsU0qPCg8ex+KKz3w5IGjHtVjxpo
-	yE01538xhnfPBs0CxMyJSzmaBUYqVNM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-618-DupFlTDBOlCJkburwWwXtA-1; Wed,
- 01 Jul 2026 19:07:11 -0400
-X-MC-Unique: DupFlTDBOlCJkburwWwXtA-1
-X-Mimecast-MFC-AGG-ID: DupFlTDBOlCJkburwWwXtA_1782947228
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ECFF6185D69E;
-	Wed,  1 Jul 2026 23:07:06 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5399230001BE;
-	Wed,  1 Jul 2026 23:07:00 +0000 (UTC)
-Date: Wed, 1 Jul 2026 19:06:58 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
-	wangyuli@aosc.io, loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] LoongArch: Mark special sections for KLP support
-Message-ID: <akWdkjS4zXYoj0-O@redhat.com>
-References: <20260608100852.325413-1-dongtai.guo@linux.dev>
- <20260608100852.325413-3-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAygV4hI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF711F000E9;
+	Wed,  1 Jul 2026 23:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782950043;
+	bh=u2PUelh4EikJk8VRL0BrzFZUq8c3iUvAtS1lbzPhPjM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mAygV4hIV6YoyWb7/ecIGCOT08GKdyIneBmGL+osXMoVLENJRBm8A+wOpFyst6Nex
+	 C6ZuRpozBgYFj0ufvAbUht95C8MqOSp9VKXcvElrSAF+h9vVZ59bR7HxjsiM/f13yk
+	 /gxEOJb/nkLghcVsO9W5/0kO2qenjkSOU1tzsC+I8KIpi1+kdvcdLe1mSUyUhIbcw6
+	 +VemCi/iIanLDO72nOtYp5iH9Qy4Ha5SK7n35BziIx0zuo/tJNjBg8drT1cjnNuldO
+	 81YyQmyyvdaVTXPO4NDhvbBq50R6UT73EbV/DjSeoRicSWUT+G7LnReQDrdvaaVsRD
+	 pELSIJqmn1N8w==
+Date: Wed, 1 Jul 2026 16:54:02 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Petr Mladek <pmladek@suse.com>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v2 0/2] perf symbols: skip livepatch symbols
+Message-ID: <akWomlgaxlvkBwkX@google.com>
+References: <20260626212140.1380094-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260608100852.325413-3-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20260626212140.1380094-1-joe.lawrence@redhat.com>
 
-On Mon, Jun 08, 2026 at 06:08:46PM +0800, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
->
-> objtool needs to split the kernel's special sections into per-entry
-> symbols when generating livepatch modules. Mark them so it can:
->
->  - .altinstructions and __ex_table are read-only, so set an explicit
->    entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
->
->  - __bug_table and __jump_table are writable. SHF_MERGE cannot be
->    combined with SHF_WRITE (Clang rejects it), so annotate each entry
->    with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
->
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
+Hello,
 
-Hi George,
+On Fri, Jun 26, 2026 at 05:21:38PM -0400, Joe Lawrence wrote:
+> This patchset fixes two minor perf bugs when livepatches containing
+> special so-called livepatch symbols are loaded.  In both cases, perf
+> should ignore these symbols as they resolve as relocations to kernel
+> addresses and not module space.
+> 
+> - Patch 1 fixes `perf test 1`
+> - Patch 2 fixes `perf record --kcore` bloat
+> 
+> 
+> Testing notes
+> =============
+> 
+> ("perf symbols: skip livepatch symbols when loading kallsyms"):
+> 
+>   Without patch:
+>   ./tools/perf/perf test 1
+>     1: vmlinux symtab matches kallsyms                     : FAILED!
+> 
+>   With patch:
+>   ./tools/perf/perf test 1
+>     1: vmlinux symtab matches kallsyms                     : Ok
+> 
+> ("perf symbols: skip livepatch symbols in kcore_copy")
+> 
+>   1. Baseline = pre-patch perf, no livepatch
+>   ------------------------------------------
+>   
+>   $ ./tools/perf/perf record --kcore -a -o /tmp/baseline.data -- sleep 1
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.221 MB /tmp/baseline.data (1717 samples) ]
+>   
+>   $ tree --noreport -h /tmp/baseline.data
+>   /tmp/baseline.data
+>   |-- [ 235K]  data
+>   `-- [   50]  kcore_dir
+>       |-- [  11M]  kallsyms
+>       |-- [  25M]  kcore
+>       `-- [ 1.7K]  modules
+>   
+>   
+>   2. Bloated kcore = pre-patch perf, with livepatch
+>   -------------------------------------------------
+>   
+>   $ insmod kpatch-5_14_0-570_94_1-1-3.ko
+>   $ ./tools/perf/perf record --kcore -a -o /tmp/klp-bloated.data -- sleep 1
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.274 MB /tmp/klp-bloated.data (2757 samples) ]
+>   
+>   $ tree --noreport  -h /tmp/klp-bloated.data
+>   /tmp/klp-bloated.data
+>   |-- [ 288K]  data
+>   `-- [   50]  kcore_dir
+>       |-- [  11M]  kallsyms
+>       |-- [  68M]  kcore
+>       `-- [ 1.8K]  modules
+>   
+>   
+>   3. Post-fix = patched perf, with livepatch
+>   ------------------------------------------
+>   
+>   [ kpatch-5_14_0-570_94_1-1-3.ko still loaded from test (2) ]
+>   
+>   $ ./tools/perf/perf record --kcore -a -o /tmp/postfix.data -- sleep 1
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.274 MB /tmp/postfix.data (2763 samples) ]
+>   
+>   $ tree --noreport -h /tmp/postfix.data
+>   /tmp/postfix.data
+>   |-- [ 289K]  data
+>   `-- [   50]  kcore_dir
+>       |-- [  11M]  kallsyms
+>       |-- [  25M]  kcore
+>       `-- [ 1.8K]  modules
+> 
+> Changes
+> =======
+> 
+> v2:
+> - Move klp symbol check into tools/perf/util/symbol.h alongside similar
+>   is_ignored_kernel_symbol() check [Petr]
+> - Use KLP_SYM_PREFIX instead of inlining it [Petr]
+> - Add similar check to kcore_copy__process_kallsyms() [Sashiko]
+> 
+> - Note: Sashiko flagged a pre-existing off-by-one in kallsyms__parse()
+>   where the symbol-name loop could write past symbol_name[] on overlong
+>   entries. That issue is unrelated to livepatch symbols and was already
+>   fixed by Rui Qi's 68018df3f55e ("perf: Fix off-by-one stack buffer
+>   overflow in kallsyms__parse()").
 
-Disclaimer: I don't have LoongArch hardware, so the best I can do with
-this patchset is to read and poke at it with (cross) compilation.
+Petr, are you ok with this change?
 
-For the special sections, said cross compiler (loongarch64-linux-gnu-gcc
-(GCC) 15.2.1 20250808 (Red Hat Cross 15.2.1-1)) is interesting as it
-appears to emit relocs in special sections (__ex_table,
-.altinstructions, __bug_table, __jump_table) that point to local
-assembler labels in the function's text section rather than the section
-symbol + offset.
+Thanks,
+Namhyung
 
-An example gcc / loongarch .rela__ex_table section looks like:
-
-  Relocation section '.rela__ex_table' at offset 0x6a28 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000005d00000063 R_LARCH_32_PCREL       00000000000011f0 .L1^B4 + 0
-  0000000000000004  0000005e00000063 R_LARCH_32_PCREL       00000000000011f4 .L2^B1 + 0
-  [ ... snip ... ]
-
-Unlike everywhere else ...
-
-llvm / loongarch:
-
-  Relocation section '.rela__ex_table' at offset 0x5710 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a70
-  0000000000000004  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a74
-
-gcc / x86:
-
-  Relocation section '.rela__ex_table' at offset 0x40f50 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 1596
-  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 159b
-
-llvm / x86:
-
-  Relocation section '.rela__ex_table' at offset 0x343d8 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231a
-  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231f
-
-gcc / aarch64:
-
-  Relocation section '.rela__ex_table' at offset 0x448c8 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 24bc
-  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2524
-  [ ... snip ... ]
-
-llvm / aarch64 Relocation section '.rela__ex_table' at offset 0x37760 contains 10 entries:
-
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2730
-  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 264c
-  [ ... snip ... ]
-
-The objtool/klp-diff.c implications is that
-convert_reloc_secsym_to_sym() doesn't handle such non-section symbol
-relocs in special sections:
-
-	if (!is_sec_sym(sym))
-		return 0;
-
-That early return leaves the reloc pointing at a .L* symbol that is
-never cloned into the output livepatch object.  When
-clone_special_section() later calls should_keep_special_sym() to decide
-whether to include each table entry, it cannot map the reloc to an
-included function and silently drops it.  In the __ex_table case above,
-the patched function's entries are missing from the .ko.  As far as I
-can tell, this problem applies to other special sections (like
-.altinstructions, etc.) as well.
-
-If not GCC / GAS is to be supported, then klp-diff will need to handle
-this alternate relocation format.  Perhaps these could be pre-converted
-in convert_reloc_secsym_to_sym() to the general form (func_sym +
-(label_offset - func_offset)) that is expected?  I don't know if that's
-enough to keep everything hanging together, but might be a place to
-start.
-
---
-Joe
-
+> 
+> v1: https://lore.kernel.org/linux-perf-users/ajzwjNncrI3Bob_o@pathway.suse.cz/T/#t
+> 
+> Joe Lawrence (2):
+>   perf symbols: skip livepatch symbols when loading kallsyms
+>   perf symbols: skip livepatch symbols in kcore_copy kallsyms processing
+> 
+>  tools/perf/util/symbol-elf.c |  4 ++++
+>  tools/perf/util/symbol.c     |  4 ++--
+>  tools/perf/util/symbol.h     | 12 ++++++++++++
+>  3 files changed, 18 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.54.0
+> 
