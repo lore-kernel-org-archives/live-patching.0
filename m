@@ -1,79 +1,101 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3063540B6D4;
-	Thu,  2 Jul 2026 08:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E3E363C53
+	for <live-patching@vger.kernel.org>; Thu,  2 Jul 2026 08:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782979762; cv=none; b=IPLMtVyZWvI3xLMOjAlke7ho0lVAnJ6trg8dgZCOzX0Nsibbq6avq61lH4pDRDCuF/G1zSN1lVfJkIv8xQuumR1rosm6ea9wlaFfv5yYDcexIMJIz113hh1tVq7uZDMEiPoi8qhHDwdtASBxse1mK5rD6XmqxLENXQeQ9rYiT20=
+	t=1782982432; cv=none; b=dkM9XKH6tmnOgH8ZAVRBb2w1NM+P/wtJVk3CTcJaNPFiiWb1LHEDCoytXGbnGL1+EpfR7DEUYwyI0DNhX8GzohD7mlbEnr8eHY853SCwfn3PaGA1t4MKaWVEwWJ9NlhkAY05a7k+H58/CBZgBE7ZSW+P9AUdy/7QsznLkbXgd6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782979762; c=relaxed/simple;
-	bh=9T7gA4muJccQ4K4ae0eZRd7SuZ58LOq1/A0SRcA8Uh8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UEUsLLBbZTLihpIwHND+X7t8eluZT9zhDJ65zK0JnNp/+wLiiiolUIGRY/VpgBFghQsGKAkm0GO9qCkuppVr/hBiFBnv+B7NrJ+M44elLnJ9aDdKSdINbZOgLrsN4EKk0lYzm/f0EkiTnLORRvGEpwiBayhqG+U5n5k3xkdUJTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=I2/muGzC; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1782982432; c=relaxed/simple;
+	bh=rov0SKtp0WCrSeUtguI5KKAUut3DCO+J4TuhaZONMYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gYB++u4dD/YRwyU2l89+CZ9vDL7htfmZWbqg86h2eD8VPFNB5g0dVHZ7HFPXz2BYBpC6tjB7hhsFAeMgE944V8sPd1f0jyj6t/TBrqigEzbBjXM/AtMuCNTOwhzvZXGh3daFm2eh/1vqqxPLT8vdOx1UYVUhIzfYQLrE7V9nFdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gppB/Qzm; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="I2/muGzC"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1782979756; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=/J7MfHrQKnYa9EwxkBIvK2Sjd7rLZop5blBuGuYOdos=;
-	b=I2/muGzCYZ7lHb0E7e8/ABsVzPkmvKOcspI3UUWJiGY2FLtMtUQT2LMXOPnDpKjTkLttsIcr4HrFoLRE/Zdz+GH2oYVkgB5n6PuaWY8XbA+Zd64k8X3qcYFXf+5aXtNG1plGweP2/CZx0W9WTUcX/hSunlYi/3BO7QnskEDZRko=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X6DcFaW_1782979755;
-Received: from 30.74.129.76(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X6DcFaW_1782979755 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 02 Jul 2026 16:09:15 +0800
-Message-ID: <b808a990-2bf7-4c6c-91c2-e8120fff03f5@linux.alibaba.com>
-Date: Thu, 2 Jul 2026 16:09:14 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gppB/Qzm"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493b7612475so12271595e9.3
+        for <live-patching@vger.kernel.org>; Thu, 02 Jul 2026 01:53:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1782982429; x=1783587229; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IHxRFl9zIjTGoNOfS7dr/1CZ2RxtO6RDzq3aysrtq3Y=;
+        b=gppB/Qzmvyh1Nk7lomYLKEOuEiYURBgPcFpcWMmKLBjiJJRQhYjp9JcANCHaL9SvST
+         /j0zhTM6vaNIiUhWp21k6FPE5DMEUroPT76pBWXxflV8Eld364G4RYnRvbQeNUc5TZat
+         iYUGgrPHuzLDTyQgPTMTOFt/T1yJ47baEfYcjLQ9uNXKBtJfMlqcoKSCNvmD0nRc7eon
+         +5SZZzI9QugAYAPl+YIDCiAmIBk0tHmNpVhZeLOBNqWieWk9j2T1n6MHg+LobrEzacmF
+         4Te548C7p0coBytfn6V7rwq37AEbflG1HcZoX1NkJkR6LPqDpyd76y/bpHLBPWXRu/dQ
+         n1UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782982429; x=1783587229;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IHxRFl9zIjTGoNOfS7dr/1CZ2RxtO6RDzq3aysrtq3Y=;
+        b=QTPNN1Mn2++zOisB9YlDGrLImX/ysgl6s5lkV1kyTsUiMjXjQfzDs625n6LYooNiCD
+         XO1Uel9QVkcCVlua7FPqCbqK36GKce3FFquBcFtfHkR9FxxlYN+hwffiP7gwPRWbWXR4
+         yGP3wnQjwliI9y0Uj/uU0gNwI1ulb+KyGtegSlqUEHL5yEfAxXbjY0apAItdMozWxde+
+         w5leIpDgBMV5WIiH/8bff5poEXzEV6VNwACIA+zOPMvSyCTiHZmJqG39mMiu/yQ1Cqzq
+         fcpVka3pN4ULWAoPd5r+1l+21vdRAbEX01ql0ZdEP1bzd9I3xvm53Vv4Tr4TcKvSXwOI
+         nOyA==
+X-Forwarded-Encrypted: i=1; AFNElJ9QUcc8EUkf56l7802rK0BIjIxU4AmcogdYWej5KdDUx8t1oCWug0e0Mo6nFw5iMK7QEbxHgZDeGb3snqw6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA4PmMVnomRv0jssDhuywl1nGq2BQR+/CRznSmbcRfi0IbOcCg
+	Yjor/jQzsdUdoSz5i2b2VRW6AU/MiXRBOVS9G6mudbYr0JVziKUGXK3VFoED7Z67BIw=
+X-Gm-Gg: AfdE7ckD8CMwjrkGtg2ODDXE+LcLPZNWRrGfke0tZleJMrXylJUWpkpQZ/QwWqBnWD2
+	hQ7XA4W/6Y6yuKu9s8h9tRPFcHmRw52ZTFE9kpAgTIJyXO/3pCGVGO/epRj+iDlO7vwLM+nOOHw
+	7WzBt5o5PkK66YfE1S4am15dIdL44NAeX/HkFalEe1zzyYQ3xW3FjBgxEWDGMclr4OFbZJTUAuq
+	PGHVwwWbmex0BL/CUUKtMHAfeNV9mFUHHPtgEtdxQUk8AvSEywoOXF2ySgzmeKnbMrJVzBIR5JB
+	/y4uFj4Mp99cmQ/F15q7MI//xPBBVB8/lurnHHz3cY7qEhPvWl/vaE602wSPUJej/gUSYYcC+D+
+	yvvERVA63i2Pr4baEbxEj0i4ssEXSm4KxIH8gsTvydLhNTiMyVzgpkmBjfigTVZTmC7ILky5sL4
+	h5ZZ4UMKi8ORb33xE=
+X-Received: by 2002:a05:600c:c3cc:20b0:493:bd03:c0d9 with SMTP id 5b1f17b1804b1-493c2b38ea9mr55340275e9.7.1782982428873;
+        Thu, 02 Jul 2026 01:53:48 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c636ec8asm26652265e9.1.2026.07.02.01.53.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 01:53:48 -0700 (PDT)
+Date: Thu, 2 Jul 2026 10:53:46 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Shihao Ren <rsh15355756202@163.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] livepatch/klp-build: Fix wrong index in error cleanup
+ loop
+Message-ID: <akYnGv_tDPouw8nM@pathway.suse.cz>
+References: <20260701060655.2343093-1-rsh15355756202@163.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
- level Makefile be overwritten
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Petr Mladek <pmladek@suse.com>, Miroslav Benes <mbenes@suse.cz>,
- shuah@kernel.org, linux-kselftest@vger.kernel.org,
- live-patching@vger.kernel.org, mpdesouza@suse.com,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- linux-kbuild@vger.kernel.org
-References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
- <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
- <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
- <akPTcJjrIAI1ZNyH@pathway.suse.cz>
- <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
- <akUu0DEYrhd9cLCL@pathway.suse.cz>
- <20260701171713-7dd2f65f-abe2-4ae6-bcd4-e0bcdada6bed@linutronix.de>
- <ec834cd5-27ba-4bae-8c19-f6b97f098139@linux.alibaba.com>
- <20260702090852-9fe31739-3a7c-4604-9afa-805a6dcd8755@linutronix.de>
-From: Zelin Deng <zelin.deng@linux.alibaba.com>
-In-Reply-To: <20260702090852-9fe31739-3a7c-4604-9afa-805a6dcd8755@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260701060655.2343093-1-rsh15355756202@163.com>
 
+On Wed 2026-07-01 14:06:55, Shihao Ren wrote:
+> In the funcs allocation failure path, the cleanup loop iterates with
+> 'j' but frees objs[i].funcs, which uses the outer loop index 'i'
+> instead of the loop variable 'j'. As a result the just-failed (NULL)
+> entry is freed repeatedly, while the funcs buffers already allocated
+> for objs[0..i-1] are leaked.
+> 
+> Use objs[j].funcs so the previously allocated entries are correctly
+> released.
+> 
+> Fixes: 59adee07b568 ("livepatch/klp-build: Add stub init code for livepatch modules")
+> Signed-off-by: Shihao Ren <rsh15355756202@163.com>
 
-On 2026/7/2 15:11, Thomas Weißschuh wrote:
-> On Thu, Jul 02, 2026 at 10:40:21AM +0800, Zelin Deng wrote:
->> 在 2026/7/1 23:19, Thomas Weißschuh 写道:
-> (...)
-:) Now client language has changed.
->> I had verify your proposal, it worked well - liveupatch kmod was built
->> successfully and top-level Makefile wasn't overwritten any more.
-> Thanks for testing!
->
->> Petr thank you for your Ack, I think Thomas's proposal is better than mine,
->> we don't have to do the quirk everytime when new selftest kmod is added.
->>
->> Thomas, so do I have to send a updated patch or you will do it by youself?
-> Your choice. You did most of the work, so should be credited as author.
-> If you don't want I can do it, too.
-Never mind, it will be good if you can do the change, so please do it 
-thank you. I'm just glad to report the issue and get some positive 
-feedbacks.
->
-> Thomas
+Great catch!
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+I assume that Josh would take this together with other klp-build
+related changes.
+
+Best Regards,
+Petr
