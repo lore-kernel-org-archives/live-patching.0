@@ -1,89 +1,181 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397BB38F92A;
-	Thu,  2 Jul 2026 07:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D793D45C5
+	for <live-patching@vger.kernel.org>; Thu,  2 Jul 2026 07:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782976281; cv=none; b=IErz6h2lBfLFF2KV+2QizbpcN4IA07z+ng6yXeHwrJDffqP8f8V6wFtFYIKzykLsxzD/OtkfUHhPL6U62y2MiiPHV6ZSzBY0L8Qefftftts77rrvKvVlFJFQfJiRKfQH26/KRrD9z2vruvD4U1eVaiaYZcFXvpGOzIIwdHAAP98=
+	t=1782979178; cv=none; b=d9buEHS7CbgP4bQIz8KYQBX+dx2UJiBRHGGlQ5juuhJ//P0shd0MipdyvYx1Ebgiuqi73X4w/aJ7bncSO0ubFVQmg4uN8oRQB+Gml1wR+oJD0pFrJXMjQE8TPNm4FkhELqiIidC8VRJzCamAf/9W9G+/iRmmJVx3AgwfuI8bY64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782976281; c=relaxed/simple;
-	bh=ryQ+/9WSBoxIeE12cWLb2E7hFjV2q9TcaCgJgnCt6+0=;
+	s=arc-20240116; t=1782979178; c=relaxed/simple;
+	bh=vRg8ejT1okP8H1BKFX7RnjGT4nGLmJ/GIqUOTUeg+rA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nt5GPCPjWVO6WDvjMlQk/seSWXV/CIPsLfO/TWnE3oXuIQrNuFa1ybeuiB5oJIuHOEfnkt8aUyXCjj7faYrpije7L54vXjhnd/HoJB4ayQXCssHro8zgRQIpjUSyY8X1SjnO5IhjsRNK0CuFeguj/V+G9h/atZlrttLPpEM0Tkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zuBVLDKQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gJ8QKkjN; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=tVvtVzysZ45mDOvpQ7ShmvyYQ88FzQEwXwVTUOpLDxidZ08LyNsjRx9A7SwPonG0Mx/d8ZdEVeM+gjYxCMxduC6BdpWb4h/vIFdOsT7KDyJ07IEahNbfEY1gWRiK7U/9Nk3gYVufpOwaNh74H91GvSjPDsBbYCIJsdVXPf4VzdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cZo8RGxU; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zuBVLDKQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gJ8QKkjN"
-Date: Thu, 2 Jul 2026 09:11:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1782976278;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dEVlPZpnyQaxZeVTQhjq1fHlGmzV7NkcyeGTlWvZMLg=;
-	b=zuBVLDKQl19fPGCv2VyQIj6Ju+IuIrLQTHdDWP2kFohNaOLOBDxuOwIAZ8EhngxKR8aKR8
-	ofDQV+OoY5yAq3d+1t9/i1K32IQ2lcySf23EPQ83dcx1OfVx7qiZaNKF1oerMPQd68MJEL
-	vfok4Jw9NpeoNHsxMsOJ8uFefqROYjWOpXIt5hYV3AfhyQ+aEDLGkbqGT+f14GBjgASKuJ
-	G6xObcH8r3iYv5XMvuRr92KjzZ5y6M2ENQiaJKfihQKLXoMCm7JQ4Z02iQNREz943NDCkP
-	pyqLJFCCcbg+Of/nezHxfcLE7rFilvKFQdn4kSvhPGfnNMdZjcAoIiUvuRbUVg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1782976278;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dEVlPZpnyQaxZeVTQhjq1fHlGmzV7NkcyeGTlWvZMLg=;
-	b=gJ8QKkjNYtS/6jtfDnl4HAVt6OTPvQDImvDnfZNhujLimJMD4vUQcFrthOj7QuIKJHjVwS
-	t76Q+A97BZZ9BrDg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Zelin Deng <zelin.deng@linux.alibaba.com>
-Cc: Petr Mladek <pmladek@suse.com>, Miroslav Benes <mbenes@suse.cz>, 
-	shuah@kernel.org, linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org, 
-	mpdesouza@suse.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
- level Makefile be overwritten
-Message-ID: <20260702090852-9fe31739-3a7c-4604-9afa-805a6dcd8755@linutronix.de>
-References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
- <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
- <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
- <akPTcJjrIAI1ZNyH@pathway.suse.cz>
- <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
- <akUu0DEYrhd9cLCL@pathway.suse.cz>
- <20260701171713-7dd2f65f-abe2-4ae6-bcd4-e0bcdada6bed@linutronix.de>
- <ec834cd5-27ba-4bae-8c19-f6b97f098139@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cZo8RGxU"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-490b1bbcf3aso8153225e9.1
+        for <live-patching@vger.kernel.org>; Thu, 02 Jul 2026 00:59:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1782979175; x=1783583975; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YKEK/klaSvR3KuXzn9lBRdKv/DAV0otTqYE5Q9JYbWE=;
+        b=cZo8RGxUYvhTa3g25cb7mgXWFIp95k2Vo8KiN22NvDp/JHTpx704992vzKMWFOKvaS
+         hs6rsKSWNuhf2GfTq1wrwrFb2I3kWD7SmoRGyNhv8tUrOtbtWvpiFnze+nklIJXaYtnp
+         IRWv8i7156SAV00ltFmGS9gyb6P3HoCAkJ6VD6/KXJMkfz4eQmx68QSSnHBCpvuMV9h3
+         tHtuEJLhGatfNrSAfq6y6owcJih4R9oMTDqnqeg8udgTENCgBq5Xcb1C7DaHw/96H4Iy
+         JXe4/Lb/yJ7y/T3yu4BGrvGqn2WwlpSBC/FLOOJ/2BszDJ/F+RYHwyuph9tX3Ol3l8wW
+         uZgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782979175; x=1783583975;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YKEK/klaSvR3KuXzn9lBRdKv/DAV0otTqYE5Q9JYbWE=;
+        b=WKwYXNbJU5JpgrIgYuo0g1HRhOXRt18incPbteGl+upG79bFBmd8V9bcGcv+bvd53Y
+         jSitlH8TyET6ZKjXSqpL/nSV4yCBcX+TWskx+kiHWcYclaM2YqCrS6RV2vhK03PJd79G
+         RtsiJNpR9/favPIOYJFITUjIk1ixJokz3BbnhJj7tg8JlBuOcvcybHX1/yjhc23tqtoL
+         Pmbjtec3L956viy7gXLqs9WIzedPHyY4ZxmuUOrRDlptWMIMiU0TMEiq8tPg9f6enH/4
+         EVZULP8o4HBxEvEz+GchbbfgNWAW8YWyqZowzFGJ2RD5PGzvehSFHeiUQ4tukCN/al3y
+         /+Sg==
+X-Forwarded-Encrypted: i=1; AFNElJ9uhSNJ6aHcELve30cduv594cS1QnRiZm1lvpWPrWZS5blv2DIAbQA3AGdb0L2RJsRguC9VJh6IAGwT/Oxx@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRYyWllY8irSGhnxLlBhKt0PDZA89oQrssPUALr3JZ3u34Wo05
+	Hdh6Ic4FfpcfR28R4Qgrrpp4ybx+jP7Cd7tceZJ0fGTsVPm/MbLI3QR6L0rFYhDDgxyFSo3FZdr
+	Ign5Bexk=
+X-Gm-Gg: AfdE7cmee1x1GJc/6yzXYDvO1wDpf6R+k1gLuMqPXcHeIs0o47DE7wBVMQTaotYmOx2
+	HaMmAmxsBZbMnfveXdWDabFvxIPtTJJ6FXPkYwx+r0Ev055gDSiSBRdW3IvII4egt2vSO/Ev7yT
+	EUP+Ct3LkUXGuFQC7PvN18QPffiVz8hkVQ3xZNv7dFxLJMm7PWEFXkGMY3oUAZq8iArgSqU0fxw
+	hTusoJuegogAbaH6kUGo0iIHcnFlGHXWiJe8i+s1AOpf90ogfYNzjfs+YQUIwe8nWimZLe09GLe
+	nFgBDD9PFTHTEoCaCiFw8FXbfA3WjSXbPf/Yub4fQQkxEmA+m0TCH4i0KSui3eCN8bnkzmOwwyb
+	690DdKDv687e/n2DZ7hAe3og1tI7+mIl/9A6f2LTcJ8YL6lWCCEGlWJdy2Q1d0ps4qI/iQaUTJo
+	UIDFzcQokNfuQI6r4=
+X-Received: by 2002:a05:600d:8649:10b0:48a:5565:ec3d with SMTP id 5b1f17b1804b1-493c2b904e7mr57036485e9.22.1782979175224;
+        Thu, 02 Jul 2026 00:59:35 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493c6372368sm31052355e9.12.2026.07.02.00.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2026 00:59:34 -0700 (PDT)
+Date: Thu, 2 Jul 2026 09:59:33 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Subject: Re: [PATCH v2 0/2] perf symbols: skip livepatch symbols
+Message-ID: <akYaZf228lnNLQbp@pathway.suse.cz>
+References: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+ <akWomlgaxlvkBwkX@google.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ec834cd5-27ba-4bae-8c19-f6b97f098139@linux.alibaba.com>
+In-Reply-To: <akWomlgaxlvkBwkX@google.com>
 
-On Thu, Jul 02, 2026 at 10:40:21AM +0800, Zelin Deng wrote:
-> 在 2026/7/1 23:19, Thomas Weißschuh 写道:
-
-(...)
-
-> I had verify your proposal, it worked well - liveupatch kmod was built
-> successfully and top-level Makefile wasn't overwritten any more.
-
-Thanks for testing!
-
-> Petr thank you for your Ack, I think Thomas's proposal is better than mine,
-> we don't have to do the quirk everytime when new selftest kmod is added.
+On Wed 2026-07-01 16:54:02, Namhyung Kim wrote:
+> Hello,
 > 
-> Thomas, so do I have to send a updated patch or you will do it by youself?
+> On Fri, Jun 26, 2026 at 05:21:38PM -0400, Joe Lawrence wrote:
+> > This patchset fixes two minor perf bugs when livepatches containing
+> > special so-called livepatch symbols are loaded.  In both cases, perf
+> > should ignore these symbols as they resolve as relocations to kernel
+> > addresses and not module space.
+> > 
+> > - Patch 1 fixes `perf test 1`
+> > - Patch 2 fixes `perf record --kcore` bloat
+> > 
+> > 
+> > Testing notes
+> > =============
+> > 
+> > ("perf symbols: skip livepatch symbols when loading kallsyms"):
+> > 
+> >   Without patch:
+> >   ./tools/perf/perf test 1
+> >     1: vmlinux symtab matches kallsyms                     : FAILED!
+> > 
+> >   With patch:
+> >   ./tools/perf/perf test 1
+> >     1: vmlinux symtab matches kallsyms                     : Ok
+> > 
+> > ("perf symbols: skip livepatch symbols in kcore_copy")
+> > 
+> >   1. Baseline = pre-patch perf, no livepatch
+> >   ------------------------------------------
+> >   
+> >   $ ./tools/perf/perf record --kcore -a -o /tmp/baseline.data -- sleep 1
+> >   [ perf record: Woken up 1 times to write data ]
+> >   [ perf record: Captured and wrote 0.221 MB /tmp/baseline.data (1717 samples) ]
+> >   
+> >   $ tree --noreport -h /tmp/baseline.data
+> >   /tmp/baseline.data
+> >   |-- [ 235K]  data
+> >   `-- [   50]  kcore_dir
+> >       |-- [  11M]  kallsyms
+> >       |-- [  25M]  kcore
+> >       `-- [ 1.7K]  modules
+> >   
+> >   
+> >   2. Bloated kcore = pre-patch perf, with livepatch
+> >   -------------------------------------------------
+> >   
+> >   $ insmod kpatch-5_14_0-570_94_1-1-3.ko
+> >   $ ./tools/perf/perf record --kcore -a -o /tmp/klp-bloated.data -- sleep 1
+> >   [ perf record: Woken up 1 times to write data ]
+> >   [ perf record: Captured and wrote 0.274 MB /tmp/klp-bloated.data (2757 samples) ]
+> >   
+> >   $ tree --noreport  -h /tmp/klp-bloated.data
+> >   /tmp/klp-bloated.data
+> >   |-- [ 288K]  data
+> >   `-- [   50]  kcore_dir
+> >       |-- [  11M]  kallsyms
+> >       |-- [  68M]  kcore
+> >       `-- [ 1.8K]  modules
+> >   
+> >   
+> >   3. Post-fix = patched perf, with livepatch
+> >   ------------------------------------------
+> >   
+> >   [ kpatch-5_14_0-570_94_1-1-3.ko still loaded from test (2) ]
+> >   
+> >   $ ./tools/perf/perf record --kcore -a -o /tmp/postfix.data -- sleep 1
+> >   [ perf record: Woken up 1 times to write data ]
+> >   [ perf record: Captured and wrote 0.274 MB /tmp/postfix.data (2763 samples) ]
+> >   
+> >   $ tree --noreport -h /tmp/postfix.data
+> >   /tmp/postfix.data
+> >   |-- [ 289K]  data
+> >   `-- [   50]  kcore_dir
+> >       |-- [  11M]  kallsyms
+> >       |-- [  25M]  kcore
+> >       `-- [ 1.8K]  modules
+> > 
+> > Changes
+> > =======
+> > 
+> > v2:
+> > - Move klp symbol check into tools/perf/util/symbol.h alongside similar
+> >   is_ignored_kernel_symbol() check [Petr]
+> > - Use KLP_SYM_PREFIX instead of inlining it [Petr]
+> > - Add similar check to kcore_copy__process_kallsyms() [Sashiko]
+> > 
+> > - Note: Sashiko flagged a pre-existing off-by-one in kallsyms__parse()
+> >   where the symbol-name loop could write past symbol_name[] on overlong
+> >   entries. That issue is unrelated to livepatch symbols and was already
+> >   fixed by Rui Qi's 68018df3f55e ("perf: Fix off-by-one stack buffer
+> >   overflow in kallsyms__parse()").
+> 
+> Petr, are you ok with this change?
 
-Your choice. You did most of the work, so should be credited as author.
-If you don't want I can do it, too.
+Yup, both changes look good to me. Feel free to use:
 
+Acked-by: Petr Mladek <pmladek@suse.com>
 
-Thomas
+Best Regards,
+Petr
