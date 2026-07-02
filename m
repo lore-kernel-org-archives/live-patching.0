@@ -1,159 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB2632B13E;
-	Wed,  1 Jul 2026 23:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AC318D636;
+	Thu,  2 Jul 2026 02:40:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782950045; cv=none; b=BbuzyQBIvTe5hpEwIGH1o1DEtkbNfgJk4Y8ZCeeKxwoa/E8yGoIj/FYYoPChchY43M5AMezrtIx2WFg6OGGAifloQbh5CF/1DQMJIl3k6UlFoKOIgLRdpovvfJxrovVI7Ya9TJaVW6ixbLKqTCwcSUGgqLg4H2pRT5CXydBjMhE=
+	t=1782960031; cv=none; b=mpmamsrKtVwPMgeBFrH29aLQuW30N4mTr+mwnTGDU8bHOcYfz/jaiJ4aNVwTApjbfrvfkJVio1mjvsDL1UAE0ch7MtzkUYuEXCIo7YpYvQ0R55PEPQAhcAbkTxxPtN6/3BKCrCtVx+n8NAi1kM5lkBNkvfmrJwVx4PsasqxD++8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782950045; c=relaxed/simple;
-	bh=p3ezXwrNdjRRY7TlGmHhCyhsYIU7/WYzR/e3JIoC/k0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QHC3M6Wq6a9+Wvwl545qvpL6mJYsXod9+6/ZD1E8o2FFDKepYNH9bFU45dge0mgfedEL/MD/vIYP0gvWEpCBoNqIA6sDUbYBKJt+h9jaxagn/GF8DrBoY/QtWjw/XngUP5eHtrFcsTDqNoF7sM0HRPavYAtwMQNl7PkwIExBjyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAygV4hI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782960031; c=relaxed/simple;
+	bh=9afQM0SA0eBKolIOuWMN/Ikm4rmRjOdVM8h12KJYNFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oRzilwsW6Zt1m51Eh3aTsC6AAuhwpfyChkWdFJQLpzL5hERCL/hMFfupIgsf/1oh9rlt/Ow+gJVlzQ5M4Q37oNlv4ieVZ5OU++385dLk9+FIZ2i0wNfSqsMBPYgErJLPqmszE8laGBHg5rD1NfOdGghEM1rnPJNgfp3aMLw2hkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=JfWG3+PG; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAygV4hI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF711F000E9;
-	Wed,  1 Jul 2026 23:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782950043;
-	bh=u2PUelh4EikJk8VRL0BrzFZUq8c3iUvAtS1lbzPhPjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mAygV4hIV6YoyWb7/ecIGCOT08GKdyIneBmGL+osXMoVLENJRBm8A+wOpFyst6Nex
-	 C6ZuRpozBgYFj0ufvAbUht95C8MqOSp9VKXcvElrSAF+h9vVZ59bR7HxjsiM/f13yk
-	 /gxEOJb/nkLghcVsO9W5/0kO2qenjkSOU1tzsC+I8KIpi1+kdvcdLe1mSUyUhIbcw6
-	 +VemCi/iIanLDO72nOtYp5iH9Qy4Ha5SK7n35BziIx0zuo/tJNjBg8drT1cjnNuldO
-	 81YyQmyyvdaVTXPO4NDhvbBq50R6UT73EbV/DjSeoRicSWUT+G7LnReQDrdvaaVsRD
-	 pELSIJqmn1N8w==
-Date: Wed, 1 Jul 2026 16:54:02 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Petr Mladek <pmladek@suse.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 0/2] perf symbols: skip livepatch symbols
-Message-ID: <akWomlgaxlvkBwkX@google.com>
-References: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="JfWG3+PG"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1782960025; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=TkcylkSmU8L8WnUwuXjPBQPuPFMLUrZHX9Qy3nwXozE=;
+	b=JfWG3+PGnxeKNKdlwWW8MnSUngU2k5U5huiwGoj7piVqY6M0I4xY7P0F7rWu+DLZxHlnNlPMKWkPs17xZA9+yq9J0OXp3yKnQZiJ1K7+7H0nqvdtmMn0fmWsG/JdbqH7yxt/DE7anVqAhTD/gouam7CMifbk1o8FNJXDIsDxBTo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R781e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0X6COITJ_1782960024;
+Received: from 30.74.129.76(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X6COITJ_1782960024 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 02 Jul 2026 10:40:25 +0800
+Message-ID: <ec834cd5-27ba-4bae-8c19-f6b97f098139@linux.alibaba.com>
+Date: Thu, 2 Jul 2026 10:40:21 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260626212140.1380094-1-joe.lawrence@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: livepatch: unset sub_make_done in case top
+ level Makefile be overwritten
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Petr Mladek <pmladek@suse.com>
+Cc: Miroslav Benes <mbenes@suse.cz>, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
+ mpdesouza@suse.com, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org
+References: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
+ <alpine.LSU.2.21.2606191638540.26638@pobox.suse.cz>
+ <ccfed9b6-9a73-4299-b305-da7b593a52fd@linux.alibaba.com>
+ <akPTcJjrIAI1ZNyH@pathway.suse.cz>
+ <20260630181125-a7a41726-4270-4bb7-92fe-17ec28cbe176@linutronix.de>
+ <akUu0DEYrhd9cLCL@pathway.suse.cz>
+ <20260701171713-7dd2f65f-abe2-4ae6-bcd4-e0bcdada6bed@linutronix.de>
+From: Zelin Deng <zelin.deng@linux.alibaba.com>
+In-Reply-To: <20260701171713-7dd2f65f-abe2-4ae6-bcd4-e0bcdada6bed@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello,
+在 2026/7/1 23:19, Thomas Weißschuh 写道:
 
-On Fri, Jun 26, 2026 at 05:21:38PM -0400, Joe Lawrence wrote:
-> This patchset fixes two minor perf bugs when livepatches containing
-> special so-called livepatch symbols are loaded.  In both cases, perf
-> should ignore these symbols as they resolve as relocations to kernel
-> addresses and not module space.
-> 
-> - Patch 1 fixes `perf test 1`
-> - Patch 2 fixes `perf record --kcore` bloat
-> 
-> 
-> Testing notes
-> =============
-> 
-> ("perf symbols: skip livepatch symbols when loading kallsyms"):
-> 
->   Without patch:
->   ./tools/perf/perf test 1
->     1: vmlinux symtab matches kallsyms                     : FAILED!
-> 
->   With patch:
->   ./tools/perf/perf test 1
->     1: vmlinux symtab matches kallsyms                     : Ok
-> 
-> ("perf symbols: skip livepatch symbols in kcore_copy")
-> 
->   1. Baseline = pre-patch perf, no livepatch
->   ------------------------------------------
->   
->   $ ./tools/perf/perf record --kcore -a -o /tmp/baseline.data -- sleep 1
->   [ perf record: Woken up 1 times to write data ]
->   [ perf record: Captured and wrote 0.221 MB /tmp/baseline.data (1717 samples) ]
->   
->   $ tree --noreport -h /tmp/baseline.data
->   /tmp/baseline.data
->   |-- [ 235K]  data
->   `-- [   50]  kcore_dir
->       |-- [  11M]  kallsyms
->       |-- [  25M]  kcore
->       `-- [ 1.7K]  modules
->   
->   
->   2. Bloated kcore = pre-patch perf, with livepatch
->   -------------------------------------------------
->   
->   $ insmod kpatch-5_14_0-570_94_1-1-3.ko
->   $ ./tools/perf/perf record --kcore -a -o /tmp/klp-bloated.data -- sleep 1
->   [ perf record: Woken up 1 times to write data ]
->   [ perf record: Captured and wrote 0.274 MB /tmp/klp-bloated.data (2757 samples) ]
->   
->   $ tree --noreport  -h /tmp/klp-bloated.data
->   /tmp/klp-bloated.data
->   |-- [ 288K]  data
->   `-- [   50]  kcore_dir
->       |-- [  11M]  kallsyms
->       |-- [  68M]  kcore
->       `-- [ 1.8K]  modules
->   
->   
->   3. Post-fix = patched perf, with livepatch
->   ------------------------------------------
->   
->   [ kpatch-5_14_0-570_94_1-1-3.ko still loaded from test (2) ]
->   
->   $ ./tools/perf/perf record --kcore -a -o /tmp/postfix.data -- sleep 1
->   [ perf record: Woken up 1 times to write data ]
->   [ perf record: Captured and wrote 0.274 MB /tmp/postfix.data (2763 samples) ]
->   
->   $ tree --noreport -h /tmp/postfix.data
->   /tmp/postfix.data
->   |-- [ 289K]  data
->   `-- [   50]  kcore_dir
->       |-- [  11M]  kallsyms
->       |-- [  25M]  kcore
->       `-- [ 1.8K]  modules
-> 
-> Changes
-> =======
-> 
-> v2:
-> - Move klp symbol check into tools/perf/util/symbol.h alongside similar
->   is_ignored_kernel_symbol() check [Petr]
-> - Use KLP_SYM_PREFIX instead of inlining it [Petr]
-> - Add similar check to kcore_copy__process_kallsyms() [Sashiko]
-> 
-> - Note: Sashiko flagged a pre-existing off-by-one in kallsyms__parse()
->   where the symbol-name loop could write past symbol_name[] on overlong
->   entries. That issue is unrelated to livepatch symbols and was already
->   fixed by Rui Qi's 68018df3f55e ("perf: Fix off-by-one stack buffer
->   overflow in kallsyms__parse()").
+> On Wed, Jul 01, 2026 at 05:14:24PM +0200, Petr Mladek wrote:
+>> On Tue 2026-06-30 18:12:46, Thomas Weißschuh wrote:
+>>> Hi Zelin,
+>>>
+>>> On Tue, Jun 30, 2026 at 04:32:16PM +0200, Petr Mladek wrote:
+>>>> Added some people involved in "filechk_makefile" feature into Cc.
+>>>>
+>>>> For the new people, see the whole thread at
+>>>> https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+>>> Thanks for the report and forwarding it.
+>>>
+>>>> On Sun 2026-06-21 22:36:24, Zelin Deng wrote:
+>>>>> 在 2026/6/19 22:42, Miroslav Benes 写道:
+>>>>>> On Mon, 25 May 2026, Zelin Deng wrote:
+>>>>> Here're how I reproduce the issue:
+>>>>>
+>>>>> 1. pull linux-next, reset to HEAD, for example
+>>>>> 3ce97bd3c4f18608335e709c24d6a40e7036cab8 (tag next-20260619)
+>>>>>
+>>>>> 2. at linux-next tree: make all -j$(nproc) && make modules_install
+>>>>> headers_install -j$(nproc) && make install && reboot
+>>>>>
+>>>>> 3. at linux-next tree: make kselftest-all
+>>>>>
+>>>>> 4. top level Makefile in linux-next has been overwritten by
+>>>>>
+>>>>>      export KBUILD_OUTPUT = .
+>>>>>      export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+>>>>>      export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+>>>>>      include /home/shiyu.dzl/linux-next/Makefile
+>>>>>
+>>>>> it is a stub generated by filechk_makefile.
+>>>> It seems that "filechk_makefile" has reached mainline in v7.1-rc1,
+>>>> see the commit c9bb03ac2c66bc5aa81b ("kbuild: reduce output spam when
+>>>> building out of tree").
+>>>>
+>>>> The commit message says:
+>>>>
+>>>> <paste>
+>>>>      The Makefile is now created even if the build is aborted due to an
+>>>>      unclean working tree. That should not make a difference in practice.
+>>>>   </paste>
+>>>>
+>>>> It seems that is actually makes a difference in the livepatch selftest
+>>>> case.
+>>>>
+>>>> Sigh, the Makefile rules are a maze to me. It is possible that
+>>>> we do something wrong in
+>>>> tools/testing/selftests/livepatch/test_modules/Makefile. Namely
+>>>> with:
+>>>>
+>>>> ifneq ("$(wildcard $(KDIR))", "")
+>>>> 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+>>>> endif
+>>>>
+>>>> But I see "$(MAKE) -C ..." called in many other makefiles.
+>>>>
+>>>> Best Regards,
+>>>> Petr
+>>>>
+>>>>> I'm not quite sure that it could be related to my toolchain (like make
+>>>>> version ?), I briefed analysis the root cause on my environment (KDIR
+>>>>> '/lib/modules/7.1.0-next-20260619/build' which actually a symbol link to my
+>>>>> kernel source -> '/home/shiyu.dzl/linux-next'):
+>>>>>
+>>>>>    1. sub_make_done leaks via environment. The top-level Makefile sets export
+>>>>> sub_make_done := 1 after its first-pass initialization.
+>>>>>    Because it is exported, every child make process inherits it.
+>>>>>    2. livepatch test_modules re-invokes the top-level Makefile. The call
+>>>>> chain is: top-level Makefile → kselftest-% pattern rule →
+>>>>>    tools/testing/selftests/ → livepatch test_modules/Makefile → $(MAKE) -C
+>>>>> $(KDIR) modules KBUILD_EXTMOD=..., which re-enters the top-level Makefile to
+>>>>>    build an external module.
+>>>>>    3. The inherited sub_make_done=1 skips critical initialization. The
+>>>>> top-level Makefile's first-pass block (ifneq ($(sub_make_done),1)) is
+>>>>>    skipped entirely. This block is responsible for correctly parsing
+>>>>> command-line variables and setting up KBUILD_EXTMOD-related paths.
+>>>>>    4. Path mismatch triggers false out-of-tree detection. With the
+>>>>> initialization skipped, srcroot and CURDIR end up with mismatched values
+>>>>> (e.g.,
+>>>>>    absolute vs. relative). The comparison (ifeq ($(srcroot),$(CURDIR)))
+>>>>> fails, so building_out_of_srctree is incorrectly set to 1.
+>>>>>    5. outputmakefile overwrites the source tree's Makefile. Because
+>>>>> building_out_of_srctree is set, the filechk_makefile rule fires and replaces
+>>>>> the
+>>>>>    real top-level Makefile with a generated stub containing KBUILD_OUTPUT,
+>>>>> KBUILD_EXTMOD, and an include directive.
+>>>>>
+>>>>>    Why make -C tools/testing/selftests/ all is unaffected: it enters the
+>>>>> selftests directory directly without ever executing the top-level Makefile
+>>>>>    first, so sub_make_done is never exported into the environment. When
+>>>>> livepatch test_modules later invokes $(MAKE) -C $(KDIR), the top-level
+>>>>> Makefile
+>>>>>    runs its full initialization normally.
+>>> Can you try this:
+>>>
+>>> diff --git a/Makefile b/Makefile
+>>> index b9c5792c79e0..f717a4dc96d6 100644
+>>> --- a/Makefile
+>>> +++ b/Makefile
+>>> @@ -1591,10 +1591,10 @@ tools/%: FORCE
+>>>   
+>>>   PHONY += kselftest
+>>>   kselftest: headers
+>>> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>>> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+>>>   
+>>>   kselftest-%: headers FORCE
+>>> -	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+>>> +	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
+>>>   
+>>>   PHONY += kselftest-merge
+>>>   kselftest-merge:
+>> Heh, this is exactly the same change which Zelin Deng proposed as
+>> well, see
+>> https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+> The difference is that my proposal is in the toplevel Makefile while
+> Zelin's is in the selftest one. The toplevel one should fix all selftests at
+> the same time.
+Thank you Petr. Yeah, Thomas's proposal is in top-level Makefile - if 
+any other selftest also re-invokes the top-level Makefile with 
+KBUILD_EXTMOD, it'd be covered too.
+>
+>>> The same is done for cmd_install.
+>> I guess that this is related to the commit 14ccc638b02f9ec ("kbuild:
+>> cancel sub_make_done for the install target to fix DKMS"). Which
+>> is related to the commit bcf637f54f6d2515d ("kbuild: parse C= and M=
+>> before changing the working directory").
+>>
+>> Honestly, it all looks like a wild magic to me. I would need much
+>> better understanding of the Makefile maze to get on top of it.
+> I was not able to reproduce the issue yet. My proposal is just a guess.
+> We'll need feedback from Zelin.
 
-Petr, are you ok with this change?
+I had verify your proposal, it worked well - liveupatch kmod was built 
+successfully and top-level Makefile wasn't overwritten any more.
 
-Thanks,
-Namhyung
+Petr thank you for your Ack, I think Thomas's proposal is better than 
+mine, we don't have to do the quirk everytime when new selftest kmod is 
+added.
 
-> 
-> v1: https://lore.kernel.org/linux-perf-users/ajzwjNncrI3Bob_o@pathway.suse.cz/T/#t
-> 
-> Joe Lawrence (2):
->   perf symbols: skip livepatch symbols when loading kallsyms
->   perf symbols: skip livepatch symbols in kcore_copy kallsyms processing
-> 
->  tools/perf/util/symbol-elf.c |  4 ++++
->  tools/perf/util/symbol.c     |  4 ++--
->  tools/perf/util/symbol.h     | 12 ++++++++++++
->  3 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.54.0
-> 
+Thomas, so do I have to send a updated patch or you will do it by youself?
+
+>
+>> But it seems that it is a reasonable fix after all. It solves the
+>> original problem. It does not break my workflow. So, I tend to add:
+>>
+>> Acked-by: Petr Mladek <pmladek@suse.com>
+>
+> Thomas
