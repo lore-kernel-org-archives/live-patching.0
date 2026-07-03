@@ -1,194 +1,112 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0087478
-	for <live-patching@vger.kernel.org>; Thu,  2 Jul 2026 20:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A729B3655EA;
+	Fri,  3 Jul 2026 06:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783022428; cv=none; b=LRdZHM7nmHqloBUF7Re63ddUMVAW0H3XG05S4xoIf25jRUtZ0FhjPqHaxKoGq9KUo7yZdiLeXISQsQKdjHFdIB/gpvVc1R6kdzDl/OHBCd2eGH+LAcRw1vlmLFbsaeZowOZdqFn2nlrWFzFMkKDM5f498q/f2mhokcdPNsiFHKs=
+	t=1783058665; cv=none; b=iD9fhnzLIK7yBDNyHmWNxxFhTIUKqSc9KlyyRH8477dPMNO2PGjTsT8stS+YqOtO+XlgxEyB4LR963npgoI4jpIn6uSK7NgIBPp4Etn5wyLXf5lSd5GaP07+2R/m3iFVUY/8A3mzl5TkdrG8jdAdltnifnwLJOo0zvbtQSNOhlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783022428; c=relaxed/simple;
-	bh=rACSdKpoLnV/hBjV8rM9vAK5K4UQ0NdFBrLa4EE/F8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nRSP3VfRpCSFxSOiNu2WUYr6cQCWoObb4+EZrG0BLJZjF/p7qPcbewPIgEU9zQcyYD2ok2ou65juL8miYQvqlmY/D/C8AYUCCQcIkYbNze2GBLGOiU5PA7HfwAO02bUG0cieCQQ3fneRSwfQYVWodMlNkwVfMVMNXHDfmVyyvqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ODKVAGY3; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783058665; c=relaxed/simple;
+	bh=0xv7uP9Oaijvxl1OZ7odzKCoFJhpt++ekmtViYEMvv0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=k9Nwx0K/zss6i2+5Klpc3/ZONKth85N+S4r1E4TpKGqYjHidPnu1DgSOQ+VASw1LGO7RMSnZ2DJaQnr/oVOqEWb7MN6JlbfUQ5y22sn1NWJUE7U1K8m9AUA91ogQlKsfCYZ+kOyGWfY4lX/4HDFlchtGu8IaQv/jkYzZ9E8M4tE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZdXxfLXn; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=HTNUD6EB; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ODKVAGY3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783022424;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZdXxfLXn";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="HTNUD6EB"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1783058661;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l/lB8bTJ0EyNsIX6BYhLdG+YbNBS2otPFvnCug1uqq4=;
-	b=ODKVAGY3hWW673GeLdk24xjAArlCNNKo4JELqLF9rxMWdvowkyQWRw0+KJpcnj0y42904g
-	4tyt5ZpXhGfZWmgdDjoO5+5WKfol4GAUf2BkluLu81L9NnkczlwA8ThtRlFuAzEw4GcTC+
-	UgMhu+Z3Mmdx+yKDLH/iRtrqMz8ByJY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-43-XxULGeL9MfegSBDwmfEAEw-1; Thu,
- 02 Jul 2026 16:00:19 -0400
-X-MC-Unique: XxULGeL9MfegSBDwmfEAEw-1
-X-Mimecast-MFC-AGG-ID: XxULGeL9MfegSBDwmfEAEw_1783022416
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D1ED195419B;
-	Thu,  2 Jul 2026 20:00:14 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B0153002D2F;
-	Thu,  2 Jul 2026 20:00:07 +0000 (UTC)
-Date: Thu, 2 Jul 2026 16:00:04 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
-	wangyuli@aosc.io, loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] LoongArch: Add livepatch build (KLP) support
-Message-ID: <akbDROiVKjbkqMZL@redhat.com>
-References: <20260608100852.325413-1-dongtai.guo@linux.dev>
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rj3q4njGKF+XfKqAgwZeMSjHfycU6n05olq8I7af1q8=;
+	b=ZdXxfLXnI4zn/WxPN2fkvhgjZTvTV/3WHJMyNI7h5Kwj/kLDR8ZvhqtM1d9EIqVQ8o2zWj
+	xTOaIUvbiYoutNKzIOutoaJDty83Fgs8G+w0UqYdZ4XPzGx+m2nWuBHuRy75BGN33xK05p
+	aHILt4/VwpuSXYwzuCluYMOsFljivJf0UsKFEcg8fdXcQVHFswQWw1TlKNJT+iqTnmbz5N
+	4jgpZpvxzuxbpEeMSo+YrsC+Q1yGmDQtHoJFkwpw7jmXwCG+lW8OOowS/SZ5Leyq+YhCyL
+	HAgN6DUIZ/2uJ5iaTdzw755byVRIMhS9rRPQ02UOOTBz1vQ9Bl0BUa4kaxmYLg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1783058661;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=rj3q4njGKF+XfKqAgwZeMSjHfycU6n05olq8I7af1q8=;
+	b=HTNUD6EBuhPwDD4noLZOrJYSsHTD1oqZktHi9MIg+uoJ4WI0vQzE9Fe/cRFQ8i3dCiuNs2
+	GGHiPxSmCd8vHSDw==
+Date: Fri, 03 Jul 2026 08:04:08 +0200
+Subject: [PATCH] kbuild: unset sub_make_done before calling kselftest build
+ system
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260608100852.325413-1-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260703-makefile-unset-submake-done-v1-1-6899248f3d6a@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MywrCMBAAf6XsuQtJxAb9Fekhj1UXNZGsESHk3
+ 017nGGYBkKFSeA8NSj0ZeGcBuh5gnB36UbIcTAYZRZllcGXe9CVn4Q1CX1Qqt8MxpwIgw/Knw7
+ 2uGgL4/AuI/3t98va+x8OBuv+bQAAAA==
+X-Change-ID: 20260702-makefile-unset-submake-done-cbc0b9375617
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ live-patching@vger.kernel.org, shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org, Zelin Deng <zelin.deng@linux.alibaba.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1783058655; l=1536;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=0xv7uP9Oaijvxl1OZ7odzKCoFJhpt++ekmtViYEMvv0=;
+ b=5bGET+Pivq1os2f+IEA0g9q5IHSwh81+wA/fca9SS8z/ObGDCWiZmxRCL9RjjW7Wvmct+ZKHH
+ mg+uGzaek4PAx0OjOJCgWvIHl/YxpYbhdgwMRGYh8RQLXIUKIOaJZga
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Mon, Jun 08, 2026 at 06:08:44PM +0800, George Guo wrote:
-> This series adds LoongArch support for the klp-build livepatch tooling,
-> enabling automated livepatch module generation using objtool on
-> LoongArch.
->
-> It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
-> below) and extends it with the LoongArch-specific objtool and build
-> pieces, plus a few LoongArch toolchain/relocation fixes required to make
-> livepatch modules load and run correctly.
->
+The kselftest build system may recourse back into kbuild when building
+test modules. In that case kbuild needs to parse the new flags passed
+from the command line, instead of using the ones inherited from the
+kbuild invocation.
 
-Ok, what am I doing wrong here:
+Force that command line reevaluation.
 
-- Git tree is jpoimboe/klp-build-arm64 + this patchset
-- Using clang v21.1.8 and a defconfig + CONFIG_LIVEPATCH requirements
-- A simple patch to net/core/dev.c :: netif_rx_internal()
+The same was done for scripts/install.sh in commit 14ccc638b02f9ec
+("kbuild: cancel sub_make_done for the install target to fix DKMS")
 
-$ clang --version
-clang version 21.1.8 (Fedora 21.1.8-4.fc43)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
+Reported-by: Zelin Deng <zelin.deng@linux.alibaba.com>
+Closes: https://lore.kernel.org/all/20260525083721.27857-1-zelin.deng@linux.alibaba.com/
+Fixes: c9bb03ac2c66 ("kbuild: reduce output spam when building out of tree")
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Setup and build the reference kernel:
+diff --git a/Makefile b/Makefile
+index b9c5792c79e0..f717a4dc96d6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1591,10 +1591,10 @@ tools/%: FORCE
+ 
+ PHONY += kselftest
+ kselftest: headers
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
++	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+ 
+ kselftest-%: headers FORCE
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
++	$(Q)unset sub_make_done; $(MAKE) -C $(srctree)/tools/testing/selftests $*
+ 
+ PHONY += kselftest-merge
+ kselftest-merge:
 
-  $ ARCH=loongarch LLVM=1 make defconfig
-  $ ./scripts/config --file .config \
-           --set-val CONFIG_FTRACE y \
-           --set-val CONFIG_KALLSYMS_ALL y \
-           --set-val CONFIG_FUNCTION_TRACER y \
-           --set-val CONFIG_DYNAMIC_FTRACE y \
-           --set-val CONFIG_DYNAMIC_DEBUG y \
-           --set-val CONFIG_LIVEPATCH y
-  $ ARCH=loongarch LLVM=1 make olddefconfig
-  $ grep LIVEPATCH .config
-  CONFIG_HAVE_LIVEPATCH=y
-  CONFIG_LIVEPATCH=y
+---
+base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+change-id: 20260702-makefile-unset-submake-done-cbc0b9375617
 
-  $ ARCH=loongarch LLVM=1 make -j$(nproc)
-  ...
-
-Then provide this small patch:
-
-  $ cat test.patch
-  diff --git a/net/core/dev.c b/net/core/dev.c
-  index 06c195906231..14fd3d5f351a 100644
-  --- a/net/core/dev.c
-  +++ b/net/core/dev.c
-  @@ -5717,6 +5717,7 @@ static int netif_rx_internal(struct sk_buff *skb)
-                  unsigned int qtail;
-
-                  ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
-  +               pr_info("test");
-          }
-          return ret;
-   }
-
-to klp-build:
-
-  $ ARCH=loongarch LLVM=1 ./scripts/livepatch/klp-build -T test.patch
-  Validating patch(es)
-  Building original kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  Cannot find symbol for section 5: .text.sched_clock.
-  kernel/sched/build_utility.o: failed
-
-The "Cannot find symbol for section" error message comes out of the
-recordmcount script.
-
-What's strange is that arch/loongarch/Makefile wants to use patchable
-function entry:
-
-  ifdef CONFIG_DYNAMIC_FTRACE
-  KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-  CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-  endif
-
-but Kconfig doesn't set it up for LoongArch.  If I select when
-DYNAMIC_FTRACE is turned on, like:
-
-  diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-  index 1dbf51ba9d6a..6d9bc4a580d9 100644
-  --- a/arch/loongarch/Kconfig
-  +++ b/arch/loongarch/Kconfig
-  @@ -139,6 +139,7 @@ config LOONGARCH
-          select HAVE_DMA_CONTIGUOUS
-          select HAVE_DYNAMIC_FTRACE
-          select HAVE_DYNAMIC_FTRACE_WITH_ARGS
-  +       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
-          select HAVE_FTRACE_REGS_HAVING_PT_REGS
-          select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-          select HAVE_DYNAMIC_FTRACE_WITH_REGS
-
-then rebuild the kernel and retry klp-build, it at least completes the
-original and patched kernel builds:
-
-  $ ARCH=loongarch LLVM=1 ./scripts/livepatch/klp-build -T test.patch
-  Validating patch(es)
-  Building original kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  vmlinux.o: warning: objtool: __efistub_efi_boot_kernel(): unexpected end of section .init.text.efi_boot_kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  vmlinux.o: warning: objtool: __efistub_efi_boot_kernel(): unexpected end of section .init.text.efi_boot_kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  vmlinux.o: changed function: netif_rx_internal
-  vmlinux.o: error: objtool: __jump_table_23683+0x8: duplicate reloc
-  error: klp-build: objtool klp diff failed
-  error: klp-build: line 829: '( cd "$ORIG_CSUM_DIR"; [[ -v VERBOSE ]] && echo "cd $ORIG_CSUM_DIR && ${cmd[*]}"; "${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" | "${filter[@]}" 1>&2) || die "objtool klp diff failed" )'
-
-but ends with a new error on "duplicate reloc" out of klp-build.
-
-What compiler / kernel config should I be trying with this patchset?
-
-Thanks,
-
---
-Joe
+Best regards,
+--  
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
