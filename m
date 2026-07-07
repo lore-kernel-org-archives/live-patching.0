@@ -1,32 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F315417373;
-	Tue,  7 Jul 2026 07:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB5C41D4DA
+	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783408990; cv=none; b=IUp4Ag/WxFAE6lcCLuu5G0W3u34dAjaBqteUKrWQ0vWEQ2NdyCP8gFbOeNRPSGD19t68K+ymHa65nGcp57KyF6s+VQKA8AdyCIyGDZ0mh5ubRKZ3QV7iYGqsBMs0BWzYxMy3SlMirubFpMO8M0rYKD/Q3xqLnFSDIHhF/bPgq/I=
+	t=1783408996; cv=none; b=CV1B6tfsNeNybviBPf+UCcBGeeATZOQoHFEx0iSF2ZZ5gvLj+Q5xqML3eq72gr4y6xD5dmH2DLLDr/UgmR8QL+elg2MjuNC1/6raVudtEQFDU75bzL4K3WlDtpZo6TaTELx9n4p3huZzvhAQb4kN0oJgC/zm/M4vDJkFndWTYg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783408990; c=relaxed/simple;
-	bh=CEIAnlvL0rhnO6ZzKUdVEs7J/+earQCHbO4otn4jgzY=;
+	s=arc-20240116; t=1783408996; c=relaxed/simple;
+	bh=S9ZliVa47d0SGAYCUBwLf9Gw+JpT5whQngWervdzPRg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dG3nOoa1zUobxnuY0uvA/an7ltDyHhFCcKuBb9qOcCNr0zr4lAdHQFj2GpWf1Gzd/W4UtOsKE9w45gSLJYxOt153LB3d51kGeaCPf4jnrmQte8iyLiDfHdEKTHQEK12cEQs52nFDpfQRn8O++FkD2lddK5af0j0XnhuFfecwwz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LHUIJ8/A; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version; b=BG47WAlPt60OiobDvjuAcCQNNy0O5qZhCrl+6rqTPTVstT0VYsYlLm4XS0sSsaGcMAN4KQUBqZ+KLN8D+Du8pSQtFZgtO74Qf36a1BtHIqWwPNcTe51b1EuHe4aDv6azeYm178i6gilYUUReB0Wd8TkFKFJh9DY7YBHU73owOk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qCdO3UCz; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LHUIJ8/A"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qCdO3UCz"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783408980;
+	t=1783408985;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BZal1eUFT5zCvAjnUL3zj5MffVR6wFyaxSxRBYF+dwo=;
-	b=LHUIJ8/Al7b5qM5Trz9ljpyGxHPfiqbFUiCiaeABuQ3JOjCb1KBSvT9tWx67pp+qVHig2t
-	A6vH8R97zNnHLUDjQhP7zacsbNvqgsZ4chTlZ7zNoM5y0rsZ9IUQScB7IO4XHLjY8fPXan
-	hecPxUdaPOUHEM9EJuiymdkjvQX2QlY=
+	bh=uMbW/H+GCbToYAqi5eBrRRT1/+wIz2K7Jphm3eDdq44=;
+	b=qCdO3UCz4GmzV+ybQHMh34RtDao+acNknbhNe6WrfnoHKap1oFi/RwNZxD+zsPISUILVK9
+	P4BcsrMqYnbvVvhEl9qsSVdPuMoVAQNbDk80PwG9MO2RYKo150tfRhwVM2Kj329Q2TNd7Z
+	khORXEcewUuAZZhO9JyXz4m0y4fm9Hk=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -50,9 +50,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 08/12] LoongArch: Add livepatch build (KLP) support
-Date: Tue,  7 Jul 2026 15:20:27 +0800
-Message-Id: <20260707072031.231066-9-dongtai.guo@linux.dev>
+Subject: [PATCH v3 09/12] LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+Date: Tue,  7 Jul 2026 15:20:28 +0800
+Message-Id: <20260707072031.231066-10-dongtai.guo@linux.dev>
 In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -66,42 +66,49 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-This allows automated livepatch module generation using objtool.
+arch/loongarch/Makefile uses -fpatchable-function-entry=2 when
+CONFIG_DYNAMIC_FTRACE is set, but nothing selects
+FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY, so kbuild falls back to
+FTRACE_MCOUNT_USE_RECORDMCOUNT and runs recordmcount on every object.
+The pass is useless here: there are no _mcount calls to find, and the
+real ftrace sites come from the __patchable_function_entries section
+anyway.
 
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+It is not just wasted time.  recordmcount needs a non-weak symbol in
+each text section, to use as the base of the __mcount_loc relocations
+it writes (see find_secsym_ndx()).  GAS emits a section symbol for
+every section, so GCC objects always have one.  Clang's integrated
+assembler drops unreferenced section symbols, so a clang object must
+use the function's own symbol -- but find_secsym_ndx() skips weak
+symbols.  So with -ffunction-sections (which klp-build uses), a __weak
+function like sched_clock is alone in its section with no usable
+symbol, and recordmcount fails:
+
+  Cannot find symbol for section 5: .text.sched_clock.
+  kernel/sched/build_utility.o: failed
+
+Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY like arm64 and riscv
+do, which disables the recordmcount pass altogether.
+
+Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
+Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
  arch/loongarch/Kconfig | 1 +
- tools/objtool/Makefile | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 3b042dbb2c41..1dbf51ba9d6a 100644
+index 1dbf51ba9d6a..a1549003c871 100644
 --- a/arch/loongarch/Kconfig
 +++ b/arch/loongarch/Kconfig
-@@ -159,6 +159,7 @@ config LOONGARCH
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
-+	select HAVE_KLP_BUILD
- 	select HAVE_KPROBES
- 	select HAVE_KPROBES_ON_FTRACE
- 	select HAVE_KRETPROBES
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index 94aabeee9736..83d645675ed9 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -8,7 +8,8 @@ ifeq ($(SRCARCH),x86)
- endif
- 
- ifeq ($(SRCARCH),loongarch)
--	BUILD_ORC	   := y
-+	BUILD_ORC    := y
-+	ARCH_HAS_KLP := y
- endif
- 
- ifeq ($(SRCARCH),arm64)
+@@ -88,6 +88,7 @@ config LOONGARCH
+ 	select CPU_PM
+ 	select EDAC_SUPPORT
+ 	select EFI
++	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
+ 	select GENERIC_ATOMIC64 if 32BIT
+ 	select GENERIC_CLOCKEVENTS
+ 	select GENERIC_CMOS_UPDATE
 -- 
 2.25.1
 
