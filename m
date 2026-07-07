@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E2F3B6BF0
-	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5BC3C5DC5
+	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783408917; cv=none; b=ErKlXl34Js8vxF4Dm23+we8LF7GYAxXevHyR1jLDKgh2ykvMOCDX9jhpB/zUGwiQd9BBb6VODYVIIqCK2hQSo+jA1erUlMgcVMf9Q1O2Q+ebD1FcJ0LcRk/N1TsCkJGRrQW1+s5UtiyWWf1cHiXXH7tuEOiwuCV0MrN9dDljI0k=
+	t=1783408945; cv=none; b=eHQoyG/14HwSlKAetGodZmiN0BgcJdzDW4UhMhEycsjWaAPbHa6A1ZlFWW4gAP7AmUU+FK5tmw6CbWs8KxAr8wzzWPoMurDlusPsIQbIThMDzAm79DefKYJQihGDOZcXK8XbrWd0RJNoE3aYjgobJPGvGoeimKxdPgK9BHd2r5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783408917; c=relaxed/simple;
-	bh=cbS69o5iESsfbUbRgcNuv3uKnv/pE5hU4jIiUR0Ij9M=;
+	s=arc-20240116; t=1783408945; c=relaxed/simple;
+	bh=IHLYESyNMmGxuJYeJijedDOoRnGzEZCb+5sp2A7HReM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iMIE5t5OFJMrQgR+CKB5B8NbL8CqEWpolXOtr6jn5iIxd599+1z1cvRpgKeoi8jH/ZEJs3+nQ7f4gblwK+051q/rTf1chnnWJNG4p6s3ogr+Mmki/bdvquqgCtc2hTi6a9p4shsZ10XVllq8y3DH4zEbDZdq5IdfBtowB6KMxzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wSpcN6vQ; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=ce5dGwah6dVpnZtn5Ei3tTkpTV8bybMiG0fU4oeVm24PhQrlQyLDWVmUEN/zR686tOr6r4zT6JqqHa5P9/LntJ1SxTGDrU0Yu4YltFXu7tvNI3P0XvrjCFFHli6i91CxPJHh+Ic8XJxcOF8OuBfjZbwce4hTjM/9LTUADR7YU7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p3pFzAP+; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wSpcN6vQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p3pFzAP+"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783408903;
+	t=1783408932;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/3FyhKq1xd5fu9klCT0mfTqjvkusYJv3Ps48W8w3NkU=;
-	b=wSpcN6vQJ3fp2fmHTozakjNRkKSWF3WP3kpAcWK2kwjEQPk6iqy2KWn6o7whq5HsNspbP8
-	tubgqnmw5NnmoYIX61roz/Df0X8XOY7vSEmjqXHEenDI3NWxZlNOANcfrea6i2CkXTFU3b
-	NpgRDWWtlVJ0OBV0c0jS7NdGlEniPSs=
+	bh=W/A5BoghaajR9Ddy9nspxCIBWrNoZbyGWfMB/YfIBjk=;
+	b=p3pFzAP+whqDeVhCJXGzdQtC2UvtnbgyWtFflTciPJ2xcmXk5vSw8Erxqd4JomScmfurpu
+	7cO0OPrP2Growc26ONCEBTpkjbbierHuczIkM+u54eIOeal2SJOY6S5DKBMGUoWVN3WLGP
+	SHKXsdCy6cRUP4Lakfesu+9uNTuYnnI=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -50,9 +50,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
-Date: Tue,  7 Jul 2026 15:20:21 +0800
-Message-Id: <20260707072031.231066-3-dongtai.guo@linux.dev>
+Subject: [PATCH v3 04/12] livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect symbol references
+Date: Tue,  7 Jul 2026 15:20:23 +0800
+Message-Id: <20260707072031.231066-5-dongtai.guo@linux.dev>
 In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -66,180 +66,75 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-objtool needs to split the kernel's special sections into per-entry
-symbols when generating livepatch modules. Mark them so it can:
+On LoongArch, klp-build livepatch modules panic when a patched function
+references a global defined in the same compilation unit (e.g.
+SYSCALL_DEFINE1(newuname) -> 'uts_sem' in kernel/sys.c).
 
- - .altinstructions and __ex_table are read-only, so set an explicit
-   entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
+With CONFIG_RELOCATABLE=y the kernel is already -fPIE, so this is not
+absolute addressing; the problem is GOT indirection. For a same-unit
+global, -fPIE emits a direct PC-relative reference (R_LARCH_PCALA_*) and
+skips the GOT, while -fPIC routes it through the GOT (R_LARCH_GOT_PC_*).
+klp-build extracts the patched function into a separate module while
+'uts_sem' stays in the core kernel, and the klp relocation machinery can
+only redirect such a cross-object reference through a GOT entry. The
+direct -fPIE reference has no GOT slot to fix up, so once the function is
+relocated its target is wrong and it faults.
 
- - __bug_table and __jump_table are writable. SHF_MERGE cannot be
-   combined with SHF_WRITE (Clang rejects it), so annotate each entry
-   with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
+Force -fPIC for LoongArch KLP builds; -fPIE is not enough, as it
+optimizes away the very GOT indirection KLP relies on.
+
+This depends on the preceding patch: -fPIC is passed via KCFLAGS, but the
+arch adds -fPIE via KBUILD_CFLAGS_KERNEL, which kbuild applies after
+KCFLAGS (so -fPIE would win). That patch's command-line
+KBUILD_CFLAGS_KERNEL= assignment replaces the arch value and drops -fPIE,
+letting -fPIC take effect. The two patches must stay together.
 
 Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/include/asm/alternative-asm.h |  5 +++--
- arch/loongarch/include/asm/alternative.h     |  6 ++++--
- arch/loongarch/include/asm/asm-extable.h     | 10 ++++++++--
- arch/loongarch/include/asm/bug.h             |  1 +
- arch/loongarch/include/asm/jump_label.h      |  2 ++
- arch/loongarch/kernel/asm-offsets.c          | 20 ++++++++++++++++++++
- 6 files changed, 38 insertions(+), 6 deletions(-)
+ scripts/livepatch/klp-build | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
-index 7dc29bd9b2f0..d940d9d2c0e1 100644
---- a/arch/loongarch/include/asm/alternative-asm.h
-+++ b/arch/loongarch/include/asm/alternative-asm.h
-@@ -5,6 +5,7 @@
- #ifdef __ASSEMBLER__
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index 27fe8824ef12..42cd58aff3d8 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -557,8 +557,15 @@ build_kernel() {
+ 	local cmd=()
  
- #include <asm/asm.h>
-+#include <generated/asm-offsets.h>
+ 	local ARCH_KBUILD_CFLAGS_KERNEL=""
++	local ARCH_KCFLAGS=""
  
- /*
-  * Issue one struct alt_instr descriptor entry (need to put it into
-@@ -33,7 +34,7 @@
- 	.fill - (((144f-143f)-(141b-140b)) > 0) * ((144f-143f)-(141b-140b)) / 4, 4, 0x03400000
- 142 :
- 
--	.pushsection .altinstructions, "a"
-+	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
- 	altinstruction_entry 140b, 143f, \feature, 142b-140b, 144f-143f
- 	.popsection
- 
-@@ -63,7 +64,7 @@
- 		(alt_max_short(new_len1, new_len2) - (old_len)) / 4, 4, 0x03400000
- 142 :
- 
--	.pushsection .altinstructions, "a"
-+	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
- 	altinstruction_entry 140b, 143f, \feature1, 142b-140b, 144f-143f, 142b-141b
- 	altinstruction_entry 140b, 144f, \feature2, 142b-140b, 145f-144f, 142b-141b
- 	.popsection
-diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
-index b5bae21fb3c8..8f7712ed2f4e 100644
---- a/arch/loongarch/include/asm/alternative.h
-+++ b/arch/loongarch/include/asm/alternative.h
-@@ -70,7 +70,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- /* alternative assembly primitive: */
- #define ALTERNATIVE(oldinstr, newinstr, feature)			\
- 	OLDINSTR(oldinstr, 1)						\
--	".pushsection .altinstructions,\"a\"\n"				\
-+	".pushsection .altinstructions, \"aM\", @progbits, "            \
-+		 __stringify(ALT_INSTR_SIZE) "\n"                       \
- 	ALTINSTR_ENTRY(feature, 1)					\
- 	".popsection\n"							\
- 	".subsection 1\n" \
-@@ -79,7 +80,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- 
- #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
- 	OLDINSTR_2(oldinstr, 1, 2)					\
--	".pushsection .altinstructions,\"a\"\n"				\
-+	".pushsection .altinstructions, \"aM\", @progbits, "            \
-+			__stringify(ALT_INSTR_SIZE) "\n"                \
- 	ALTINSTR_ENTRY(feature1, 1)					\
- 	ALTINSTR_ENTRY(feature2, 2)					\
- 	".popsection\n"							\
-diff --git a/arch/loongarch/include/asm/asm-extable.h b/arch/loongarch/include/asm/asm-extable.h
-index d60bdf2e6377..2d7eef7c0b39 100644
---- a/arch/loongarch/include/asm/asm-extable.h
-+++ b/arch/loongarch/include/asm/asm-extable.h
-@@ -7,10 +7,15 @@
- #define EX_TYPE_UACCESS_ERR_ZERO	2
- #define EX_TYPE_BPF			3
- 
-+#ifndef COMPILE_OFFSETS
-+#include <asm/asm-offsets.h>
-+#endif
+ 	if [[ -v CONFIG_LOONGARCH && "$CONFIG_LOONGARCH" == "y" ]]; then
++		# -fPIC replaces the kernel's -fPIE (added under CONFIG_RELOCATABLE);
++		# without that config there is no -fPIE to replace.
++		[[ "${CONFIG_RELOCATABLE:-}" == "y" ]] || \
++			die "LoongArch klp-build requires CONFIG_RELOCATABLE=y"
++		ARCH_KCFLAGS="-fPIC"
 +
- #ifdef __ASSEMBLER__
+ 		# -mdirect-extern-access only exists under explicit relocs, and this
+ 		# function replaces KBUILD_CFLAGS_KERNEL wholesale (safe only then;
+ 		# the non-explicit build puts -Wa,-mla-global-with-pcrel there).
+@@ -599,8 +606,16 @@ build_kernel() {
+ 		cmd+=("-s")
+ 	fi
+ 	cmd+=("-j$JOBS")
+-	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections")
+-	cmd+=("KBUILD_CFLAGS_KERNEL=$ARCH_KBUILD_CFLAGS_KERNEL")
++	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections${ARCH_KCFLAGS:+ $ARCH_KCFLAGS}")
++	# -fPIC is added for KLP via KCFLAGS above; the arch adds -fPIE via
++	# KBUILD_CFLAGS_KERNEL, which kbuild places after KCFLAGS on the
++	# built-in compile line.  -fPIC/-fPIE is last-one-wins, so -fPIE would
++	# win.  Setting KBUILD_CFLAGS_KERNEL on the command line replaces the
++	# arch value (not append), which drops -fPIE and lets -fPIC win.  Only
++	# do this when an arch needs it (LoongArch).
++	if [[ -n "$ARCH_KBUILD_CFLAGS_KERNEL" ]]; then
++		cmd+=("KBUILD_CFLAGS_KERNEL=$ARCH_KBUILD_CFLAGS_KERNEL")
++	fi
+ 	cmd+=("vmlinux")
+ 	cmd+=("modules")
  
- #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
--	.pushsection	__ex_table, "a";		\
-+	.pushsection    __ex_table, "aM", @progbits,    \
-+			EXTABLE_SIZE;                   \
- 	.balign		4;				\
- 	.long		((insn) - .);			\
- 	.long		((fixup) - .);			\
-@@ -29,7 +34,8 @@
- #include <asm/gpr-num.h>
- 
- #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
--	".pushsection	__ex_table, \"a\"\n"		\
-+	".pushsection   __ex_table, \"aM\", @progbits, "\
-+	 __stringify(EXTABLE_SIZE) "\n"                 \
- 	".balign	4\n"				\
- 	".long		((" insn ") - .)\n"		\
- 	".long		((" fixup ") - .)\n"		\
-diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
-index d090a5bec5eb..14e3acbaad8d 100644
---- a/arch/loongarch/include/asm/bug.h
-+++ b/arch/loongarch/include/asm/bug.h
-@@ -25,6 +25,7 @@
- #define __BUG_ENTRY(cond_str, flags)				\
- 		.pushsection __bug_table, "aw";			\
- 		.align 2;					\
-+		__ANNOTATE_DATA_SPECIAL;				\
- 	10000:	.long 10001f - .;				\
- 		_BUGVERBOSE_LOCATION(WARN_CONDITION_STR(cond_str) __FILE__, __LINE__) \
- 		.short flags;					\
-diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
-index 7ef4ae3abf08..d20f0fa24b6b 100644
---- a/arch/loongarch/include/asm/jump_label.h
-+++ b/arch/loongarch/include/asm/jump_label.h
-@@ -12,6 +12,7 @@
- #include <linux/types.h>
- #include <linux/stringify.h>
- #include <asm/asm.h>
-+#include <linux/objtool.h>
- 
- #define HAVE_JUMP_LABEL_BATCH
- 
-@@ -27,6 +28,7 @@
- #define JUMP_TABLE_ENTRY(key, label)			\
- 	 ".pushsection	__jump_table, \"aw\"	\n\t"	\
- 	 ".align	" __stringify(PTRLOG) "	\n\t"	\
-+	 ANNOTATE_DATA_SPECIAL "\n\t"			\
- 	 ".long		1b - ., " label " - .	\n\t"	\
- 	 JUMP_LABEL_TYPE  key " - .		\n\t"	\
- 	 ".popsection				\n\t"
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-index 2cc953f113ac..470323aa022c 100644
---- a/arch/loongarch/kernel/asm-offsets.c
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -18,6 +18,8 @@
- #include <asm/ftrace.h>
- #include <asm/sigframe.h>
- #include <vdso/datapage.h>
-+#include <asm/alternative.h>
-+#include <asm/extable.h>
- 
- static void __used output_ptreg_defines(void)
- {
-@@ -323,3 +325,21 @@ static void __used output_vdso_defines(void)
- 	DEFINE(__VDSO_PAGES, VDSO_NR_PAGES);
- 	BLANK();
- }
-+
-+static void __used output_extable_defines(void)
-+{
-+	COMMENT("LoongArch exception table entry offsets.");
-+
-+	DEFINE(EXTABLE_SIZE, sizeof(struct exception_table_entry));
-+	BLANK();
-+}
-+
-+static void __used output_alt_instr_defines(void)
-+{
-+	COMMENT("LoongArch alternative instructions offsets.");
-+
-+	DEFINE(ALT_INSTR_SIZE, sizeof(struct alt_instr));
-+	BLANK();
-+}
-+
-+
 -- 
 2.25.1
 
