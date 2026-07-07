@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB5C41D4DA
-	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EE43C555B
+	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783408996; cv=none; b=CV1B6tfsNeNybviBPf+UCcBGeeATZOQoHFEx0iSF2ZZ5gvLj+Q5xqML3eq72gr4y6xD5dmH2DLLDr/UgmR8QL+elg2MjuNC1/6raVudtEQFDU75bzL4K3WlDtpZo6TaTELx9n4p3huZzvhAQb4kN0oJgC/zm/M4vDJkFndWTYg4=
+	t=1783409001; cv=none; b=gshZ/FPMG9V/dvCEq5PC+P8NHu6TpqXpMmVOslRwxHZgkWr6rHA4QYvgwyIfyLqN+jFC7ad9iwEPXp86iSOkC0y5z8I+SG3a8ScXfatPq22pLDk7DSZn/sFyd+OY195i9P0qUuJkU0d3xeXUdQ77rfGweSDCZDml5SJyCs9BigE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783408996; c=relaxed/simple;
-	bh=S9ZliVa47d0SGAYCUBwLf9Gw+JpT5whQngWervdzPRg=;
+	s=arc-20240116; t=1783409001; c=relaxed/simple;
+	bh=oJfRTd/YfCpRQIlHUU0EhRdn+cxmTArmqxlE5cFyjUE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BG47WAlPt60OiobDvjuAcCQNNy0O5qZhCrl+6rqTPTVstT0VYsYlLm4XS0sSsaGcMAN4KQUBqZ+KLN8D+Du8pSQtFZgtO74Qf36a1BtHIqWwPNcTe51b1EuHe4aDv6azeYm178i6gilYUUReB0Wd8TkFKFJh9DY7YBHU73owOk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qCdO3UCz; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=N1nkWiH3ouT2sF48otLBhuxI811uSLL9HVUGrsIyiuGuhODf4alhZVeuC6DEiJyP3B6vbEW/+DuiXyIHR1ERzG2iUSXm1SOh7aLkuwPvlIShXvfLAi98yrS49k6DbxCUeXTUQgS/sx/zozWJttibBnwhFjoZJZyVNdrgKFm7duE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fmAjCcjR; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qCdO3UCz"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fmAjCcjR"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783408985;
+	t=1783408991;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uMbW/H+GCbToYAqi5eBrRRT1/+wIz2K7Jphm3eDdq44=;
-	b=qCdO3UCz4GmzV+ybQHMh34RtDao+acNknbhNe6WrfnoHKap1oFi/RwNZxD+zsPISUILVK9
-	P4BcsrMqYnbvVvhEl9qsSVdPuMoVAQNbDk80PwG9MO2RYKo150tfRhwVM2Kj329Q2TNd7Z
-	khORXEcewUuAZZhO9JyXz4m0y4fm9Hk=
+	bh=omd/IYAr8HFNM9DotDwvj76ZFJM2G5dGzr6lUjILi60=;
+	b=fmAjCcjR9cbDf5NazGB/ImTERibPDSjn9Ub1+5xRAqpo43QWGh3HW0nVZWTuJG0Z5kfIwO
+	y4lMf8IUDE1iyves59uzlfmsHwGZi16xNW0N86d3z81HmuWCMg7U0pIoDaGlpXbS+qMwWd
+	tscN0Pw7zXDfVvLzjg5o0Qrj/tuOrN4=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -50,9 +50,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 09/12] LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-Date: Tue,  7 Jul 2026 15:20:28 +0800
-Message-Id: <20260707072031.231066-10-dongtai.guo@linux.dev>
+Subject: [PATCH v3 10/12] objtool/klp: Convert local label references in special sections
+Date: Tue,  7 Jul 2026 15:20:29 +0800
+Message-Id: <20260707072031.231066-11-dongtai.guo@linux.dev>
 In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -66,49 +66,82 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-arch/loongarch/Makefile uses -fpatchable-function-entry=2 when
-CONFIG_DYNAMIC_FTRACE is set, but nothing selects
-FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY, so kbuild falls back to
-FTRACE_MCOUNT_USE_RECORDMCOUNT and runs recordmcount on every object.
-The pass is useless here: there are no _mcount calls to find, and the
-real ftrace sites come from the __patchable_function_entries section
-anyway.
+GCC/GAS on LoongArch references special section entries (__ex_table,
+__bug_table, __jump_table, .altinstructions) through local text labels
+(.L*) instead of a section symbol plus offset.  The assembler keeps the
+label because of linker relaxation: a "section + constant offset"
+reference would go stale when the linker deletes or shrinks
+instructions, while a symbol reference can be recomputed after
+relaxation.
 
-It is not just wasted time.  recordmcount needs a non-weak symbol in
-each text section, to use as the base of the __mcount_loc relocations
-it writes (see find_secsym_ndx()).  GAS emits a section symbol for
-every section, so GCC objects always have one.  Clang's integrated
-assembler drops unreferenced section symbols, so a clang object must
-use the function's own symbol -- but find_secsym_ndx() skips weak
-symbols.  So with -ffunction-sections (which klp-build uses), a __weak
-function like sched_clock is alone in its section with no usable
-symbol, and recordmcount fails:
+convert_reloc_secsym_to_sym() only handles the section symbol form and
+returns early for such label references.  The label is never cloned
+into the livepatch object, so should_keep_special_sym() cannot
+correlate the entry with an included function and silently drops it: a
+GCC-built livepatch module ends up missing the patched function's
+__ex_table / __bug_table / __jump_table entries, with no error at
+build or load time.
 
-  Cannot find symbol for section 5: .text.sched_clock.
-  kernel/sched/build_utility.o: failed
-
-Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY like arm64 and riscv
-do, which disables the recordmcount pass altogether.
+Redirect label references in text sections to the containing function
+symbol, mirroring the section symbol case.  A label with no containing
+function symbol (e.g. hand-written asm in a plain .text section) can't
+be correlated; skip it rather than failing, since such entries belong
+to unchanged code and are dropped anyway.
 
 Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
 Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ tools/objtool/klp-diff.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 1dbf51ba9d6a..a1549003c871 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -88,6 +88,7 @@ config LOONGARCH
- 	select CPU_PM
- 	select EDAC_SUPPORT
- 	select EFI
-+	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
- 	select GENERIC_ATOMIC64 if 32BIT
- 	select GENERIC_CLOCKEVENTS
- 	select GENERIC_CMOS_UPDATE
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index b9624bd9439b..05fd70e24326 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -1423,8 +1423,41 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
+ 	if (!strcmp(reloc->sec->name, ".rela__patchable_function_entries"))
+ 		return convert_pfe_reloc(elf, reloc);
+ 
+-	if (!is_sec_sym(sym))
++	if (!is_sec_sym(sym)) {
++		/*
++		 * Most toolchains reference special-section entries via the
++		 * section symbol plus an offset.  GCC/GAS on LoongArch instead
++		 * references a local text label (.L*): LoongArch linker
++		 * relaxation is the reason GAS keeps the label rather than
++		 * reducing it to a section symbol reference.  Such a label is
++		 * never cloned into the livepatch object, so the entry would be
++		 * silently dropped.  Redirect the relocation to the containing
++		 * function, mirroring the section-symbol case below.
++		 */
++		if (is_local_label(sym) && is_text_sec(sec)) {
++			unsigned long offset = sym->offset + reloc_addend(reloc);
++
++			sym = find_symbol_containing_inclusive(sec, offset);
++			if (!sym) {
++				/*
++				 * A local label with no containing function
++				 * symbol (e.g. hand-written asm in a plain .text
++				 * section).  It can't be correlated to a function,
++				 * so skip it rather than failing the build; such
++				 * entries belong to unchanged code and are dropped
++				 * anyway.
++				 */
++				return 1;
++			}
++
++			reloc->sym = sym;
++			set_reloc_sym(elf, reloc, sym->idx);
++			set_reloc_addend(elf, reloc, offset - sym->offset);
++			return 0;
++		}
++
+ 		return 0;
++	}
+ 
+ 	sym = find_symbol_containing_inclusive(sec, arch_adjusted_addend(reloc));
+ 	if (!sym) {
 -- 
 2.25.1
 
