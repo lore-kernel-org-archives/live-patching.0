@@ -1,32 +1,32 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B464426410
-	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5292B414DCC
+	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783409011; cv=none; b=shyyOeaxyF0G7YGUnbwnAHK7w4yYJ35SW28k0om1Gb2PSLpUHYkuC62lldtk6fYbOHwInclYfmRPGCU++EXAQB0wNuJanWrjCw5Cgvs6TrW4yDmMI2cgs77/e4q6NSs9tSEsjswNXpE6/THXqWcnUjdey2/JqX9inGI84+y7aiw=
+	t=1783409033; cv=none; b=qKCgpq0ZMZ9SYKUMttCiFyWtJOgaXDntEFndNG6YKRC21EJlQwIyQW310wWdFEZWOPlIH8nmYEmVxG/6JczIiGkFVT8xRXmRDfDs10NMS2gpONla3RC9C1ed5w6+WiWgcRDWbzGb9JhMYa/MSt/XZ3kaFedFTjR6g6/RaOdMKYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783409011; c=relaxed/simple;
-	bh=TRE+wZe3+sfxk7zHnpCBwh2hoKCbh/nUceOcRYeIhj4=;
+	s=arc-20240116; t=1783409033; c=relaxed/simple;
+	bh=4xpsKQT0sIXN8YfZqyI5uDhGSFAUCUDLKrsALoCftLI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HQFZM5MmF8GVFh0R+L7t2bPEYZX5FyrXBH3smusxxAusKFs/SLEoS873Cl/N49muImltr0PZRwalmi/1KQVKod0OeuTtonR+g+64+jcO3q2tSl98dfdwAUqRmef0ILnHnXXHLGlvB4IyZa73/mSpX16tf7WLk9awmM7R6NrBvQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p+tEWRW2; arc=none smtp.client-ip=95.215.58.173
+	 MIME-Version; b=T09T3ijs7IHdGOrerBkYKOmcjvMr4YrOX2QWRQq5UNF7nlWGLebow1g939s54wdiS4/LC6SmPtQntcxtWZOaRrK7+3jxpQ6weJADVqxd/pVgs4zEf8i58k2Dhh1ot4SHd73stW0Rc70Q2Qkhhiy2GtQRXkY/0g/qkXSfbd2MagE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l/gsU6+/; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p+tEWRW2"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l/gsU6+/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783409002;
+	t=1783409024;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NqmMptp8s2GmzxQeh1yY9uXsTdD6pQF4qnsThOVdAvU=;
-	b=p+tEWRW2iYSNFld7ifHAzmdRGYOTwqxUlzjdjLM0LVSHjibVW4EROLLUGD2C29WxkoWPp9
-	MC/j46e971j1l4tSNEQPSM/puTT1f0ibCRjBo37tgGc+ffkZDBMooG4I525wSM4rLqdFSv
-	QEMOv8S5Hob8d4uRSi0LTVXVghQF9ro=
+	bh=9FJ2LdWpihcFZMdGQ2dBam2UiMhzklP1ri1WDx8T5rI=;
+	b=l/gsU6+/SC0eCHB4Jdda35a+zuTvRw4uiCZQKeo4brLFpug/LxSNHtwJdPqiSf4YeUfgPw
+	pG6LMIAxR0k91NzvxZtXgtMwNPvfare5fgH/AVWZrN/5ahEfhUe9C/IW8yXe7qDBoWerkl
+	H3k8LJdzQt03xjnt4PdVg27J84VnX68=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -50,9 +50,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 11/12] objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label references
-Date: Tue,  7 Jul 2026 15:20:30 +0800
-Message-Id: <20260707072031.231066-12-dongtai.guo@linux.dev>
+Subject: [PATCH v3 12/12] objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
+Date: Tue,  7 Jul 2026 15:20:31 +0800
+Message-Id: <20260707072031.231066-13-dongtai.guo@linux.dev>
 In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -66,56 +66,172 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-create_fake_symbols() takes each annotated entry's offset from the
-annotate relocation's addend alone.  That works only when the
-relocation points at the special section's section symbol.  GCC/GAS
-on LoongArch points it at the entry's local label instead, with a
-zero addend: every entry then gets offset 0, the "distance to the
-next annotation" size becomes 0, and the fallback sets the size to
-the rest of the section.
+On LoongArch, the "key - ." field of a __jump_table entry can come out
+as two relocations at the same offset, R_LARCH_ADD64 plus
+R_LARCH_SUB64.  clang's integrated assembler emits this pair when the
+key symbol is not defined in the same translation unit (for example
+__tracepoint_netif_rx); GAS, and clang for locally-defined keys,
+produce a single R_LARCH_64_PCREL instead, which is why GCC builds do
+not hit this.  objtool's elf_create_reloc() allows only one relocation
+per offset, so cloning such an entry fails with:
 
-So every fake symbol starts at offset 0 and covers the whole special
-section.  If any entry in the section belongs to a patched function,
-should_keep_special_sym() keeps such a symbol, and the output module
-gets the entire __bug_table (thousands of entries and klp
-relocations) instead of just the patched function's entries.
+  vmlinux.o: error: objtool: __jump_table_23683+0x8: duplicate reloc
 
-Compute the offset as sym->offset + addend, which handles both the
-section symbol form (sym->offset == 0) and the local label form
-(addend == 0).
+When the SUB half points at the relocation's own position (the
+"sym - ." pattern), the pair means the same thing as one PC-relative
+relocation.  Add arch_normalize_paired_reloc() which rewrites the ADD
+half to R_LARCH_32_PCREL/R_LARCH_64_PCREL and skips the SUB half.  The
+LoongArch module loader supports both forms.
 
 Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/objtool/klp-diff.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/objtool/arch/loongarch/decode.c         | 62 +++++++++++++++++++
+ .../objtool/arch/loongarch/include/arch/elf.h | 18 ++++++
+ tools/objtool/klp-diff.c                      | 13 ++++
+ 3 files changed, 93 insertions(+)
 
+diff --git a/tools/objtool/arch/loongarch/decode.c b/tools/objtool/arch/loongarch/decode.c
+index 12facd0cc8d1..273398ea4486 100644
+--- a/tools/objtool/arch/loongarch/decode.c
++++ b/tools/objtool/arch/loongarch/decode.c
+@@ -39,6 +39,68 @@ u64 arch_adjusted_addend(struct reloc *reloc)
+ 	return reloc_addend(reloc);
+ }
+ 
++/*
++ * A cross-section difference like the "key - ." field of a __jump_table
++ * entry may come out as a paired R_LARCH_ADD plus R_LARCH_SUB relocation
++ * at the same offset: clang's integrated assembler does this when the
++ * symbol is not defined in the same translation unit (GAS, and clang for
++ * locally-defined symbols, emit a single PCREL instead).  objtool allows
++ * only one relocation per offset, so the pair breaks cloning.
++ *
++ * When the SUB half points at the reloc's own position ("sym - ."), the
++ * pair means the same as a single PC-relative relocation, which the
++ * module loader also supports: rewrite the ADD half to R_LARCH_*_PCREL
++ * and tell the caller to skip the SUB half.
++ *
++ * Return 1 to skip the reloc, 0 to proceed, -1 on error.
++ */
++int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc)
++{
++	struct section *rsec = reloc->sec;
++	unsigned int sub_type, pcrel_type;
++	struct reloc *sub, *add;
++
++	switch (reloc_type(reloc)) {
++	case R_LARCH_ADD32:
++		sub_type = R_LARCH_SUB32;
++		pcrel_type = R_LARCH_32_PCREL;
++		break;
++	case R_LARCH_ADD64:
++		sub_type = R_LARCH_SUB64;
++		pcrel_type = R_LARCH_64_PCREL;
++		break;
++	case R_LARCH_SUB32:
++	case R_LARCH_SUB64:
++		/*
++		 * Skip only if the paired ADD (the preceding reloc) has
++		 * been rewritten to PCREL; otherwise leave the pair
++		 * intact so a failed conversion stays loud.
++		 */
++		add = reloc_idx(reloc) ? reloc - 1 : NULL;
++		if (add && reloc_offset(add) == reloc_offset(reloc) &&
++		    (reloc_type(add) == R_LARCH_32_PCREL ||
++		     reloc_type(add) == R_LARCH_64_PCREL))
++			return 1;
++		return 0;
++	default:
++		return 0;
++	}
++
++	/* The paired SUB reloc immediately follows the ADD */
++	sub = rsec_next_reloc(rsec, reloc);
++	if (!sub || reloc_offset(sub) != reloc_offset(reloc) ||
++	    reloc_type(sub) != sub_type)
++		return 0;
++
++	/* Only a "sym - ." difference is PC-relative */
++	if (sub->sym->sec != rsec->base ||
++	    sub->sym->offset + reloc_addend(sub) != reloc_offset(sub))
++		return 0;
++
++	set_reloc_type(elf, reloc, pcrel_type);
++	return 0;
++}
++
+ bool arch_pc_relative_reloc(struct reloc *reloc)
+ {
+ 	return false;
+diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
+index ec79062c9554..0103f27fccfc 100644
+--- a/tools/objtool/arch/loongarch/include/arch/elf.h
++++ b/tools/objtool/arch/loongarch/include/arch/elf.h
+@@ -15,6 +15,18 @@
+ #ifndef R_LARCH_64
+ #define R_LARCH_64		2
+ #endif
++#ifndef R_LARCH_ADD32
++#define R_LARCH_ADD32		50
++#endif
++#ifndef R_LARCH_ADD64
++#define R_LARCH_ADD64		51
++#endif
++#ifndef R_LARCH_SUB32
++#define R_LARCH_SUB32		55
++#endif
++#ifndef R_LARCH_SUB64
++#define R_LARCH_SUB64		56
++#endif
+ #ifndef R_LARCH_32_PCREL
+ #define R_LARCH_32_PCREL	99
+ #endif
+@@ -34,4 +46,10 @@
+ #define R_TEXT32		R_LARCH_32_PCREL
+ #define R_TEXT64		R_LARCH_32_PCREL
+ 
++#define ARCH_HAS_PAIRED_RELOCS	1
++
++struct elf;
++struct reloc;
++int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc);
++
+ #endif /* _OBJTOOL_ARCH_ELF_H */
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 05fd70e24326..0fa3ce324346 100644
+index 0fa3ce324346..02b2150e3ca3 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -1863,7 +1863,12 @@ static int create_fake_symbols(struct elf *elf)
- 		if (annotype(elf, sec, reloc) != ANNOTYPE_DATA_SPECIAL)
- 			continue;
+@@ -1504,6 +1504,13 @@ static bool is_uncorrelated_section(struct section *sec)
+ 	       strstarts(sec->name, ".data..Lanon.");		/* Clang */
+ }
  
--		offset = reloc_addend(reloc);
-+		/*
-+		 * The annotated location may be referenced via the section
-+		 * symbol plus addend, or via a local label (GCC/GAS on
-+		 * LoongArch): sym->offset + addend covers both forms.
-+		 */
-+		offset = reloc->sym->offset + reloc_addend(reloc);
++#ifndef ARCH_HAS_PAIRED_RELOCS
++static inline int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc)
++{
++	return 0;
++}
++#endif
++
+ /*
+  * Convert a relocation symbol reference to the needed format: either a section
+  * symbol or the underlying symbol itself.  Return -1 error, 0 success, 1 skip.
+@@ -1511,10 +1518,16 @@ static bool is_uncorrelated_section(struct section *sec)
+ static int convert_reloc_sym(struct elf *elf, struct reloc *reloc)
+ {
+ 	struct section *sec = reloc->sym->sec;
++	int ret;
  
- 		size = 0;
- 		next_reloc = reloc;
-@@ -1875,7 +1880,7 @@ static int create_fake_symbols(struct elf *elf)
- 			    next_reloc->sym->sec != reloc->sym->sec)
- 				continue;
+ 	if (reloc_type(reloc) == R_NONE)
+ 		return 1;
  
--			size = reloc_addend(next_reloc) - offset;
-+			size = (next_reloc->sym->offset + reloc_addend(next_reloc)) - offset;
- 			break;
- 		}
++	/* Fold paired ADD/SUB relocs (LoongArch) into a single PCREL */
++	ret = arch_normalize_paired_reloc(elf, reloc);
++	if (ret)
++		return ret;
++
+ 	if (is_uncorrelated_section(sec))
+ 		return convert_reloc_sym_to_secsym(elf, reloc);
  
 -- 
 2.25.1
