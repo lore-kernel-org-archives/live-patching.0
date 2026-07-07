@@ -1,32 +1,32 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EE43C555B
-	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B464426410
+	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 07:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783409001; cv=none; b=gshZ/FPMG9V/dvCEq5PC+P8NHu6TpqXpMmVOslRwxHZgkWr6rHA4QYvgwyIfyLqN+jFC7ad9iwEPXp86iSOkC0y5z8I+SG3a8ScXfatPq22pLDk7DSZn/sFyd+OY195i9P0qUuJkU0d3xeXUdQ77rfGweSDCZDml5SJyCs9BigE=
+	t=1783409011; cv=none; b=shyyOeaxyF0G7YGUnbwnAHK7w4yYJ35SW28k0om1Gb2PSLpUHYkuC62lldtk6fYbOHwInclYfmRPGCU++EXAQB0wNuJanWrjCw5Cgvs6TrW4yDmMI2cgs77/e4q6NSs9tSEsjswNXpE6/THXqWcnUjdey2/JqX9inGI84+y7aiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783409001; c=relaxed/simple;
-	bh=oJfRTd/YfCpRQIlHUU0EhRdn+cxmTArmqxlE5cFyjUE=;
+	s=arc-20240116; t=1783409011; c=relaxed/simple;
+	bh=TRE+wZe3+sfxk7zHnpCBwh2hoKCbh/nUceOcRYeIhj4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=N1nkWiH3ouT2sF48otLBhuxI811uSLL9HVUGrsIyiuGuhODf4alhZVeuC6DEiJyP3B6vbEW/+DuiXyIHR1ERzG2iUSXm1SOh7aLkuwPvlIShXvfLAi98yrS49k6DbxCUeXTUQgS/sx/zozWJttibBnwhFjoZJZyVNdrgKFm7duE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fmAjCcjR; arc=none smtp.client-ip=91.218.175.189
+	 MIME-Version; b=HQFZM5MmF8GVFh0R+L7t2bPEYZX5FyrXBH3smusxxAusKFs/SLEoS873Cl/N49muImltr0PZRwalmi/1KQVKod0OeuTtonR+g+64+jcO3q2tSl98dfdwAUqRmef0ILnHnXXHLGlvB4IyZa73/mSpX16tf7WLk9awmM7R6NrBvQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p+tEWRW2; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fmAjCcjR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p+tEWRW2"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783408991;
+	t=1783409002;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=omd/IYAr8HFNM9DotDwvj76ZFJM2G5dGzr6lUjILi60=;
-	b=fmAjCcjR9cbDf5NazGB/ImTERibPDSjn9Ub1+5xRAqpo43QWGh3HW0nVZWTuJG0Z5kfIwO
-	y4lMf8IUDE1iyves59uzlfmsHwGZi16xNW0N86d3z81HmuWCMg7U0pIoDaGlpXbS+qMwWd
-	tscN0Pw7zXDfVvLzjg5o0Qrj/tuOrN4=
+	bh=NqmMptp8s2GmzxQeh1yY9uXsTdD6pQF4qnsThOVdAvU=;
+	b=p+tEWRW2iYSNFld7ifHAzmdRGYOTwqxUlzjdjLM0LVSHjibVW4EROLLUGD2C29WxkoWPp9
+	MC/j46e971j1l4tSNEQPSM/puTT1f0ibCRjBo37tgGc+ffkZDBMooG4I525wSM4rLqdFSv
+	QEMOv8S5Hob8d4uRSi0LTVXVghQF9ro=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -50,9 +50,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 10/12] objtool/klp: Convert local label references in special sections
-Date: Tue,  7 Jul 2026 15:20:29 +0800
-Message-Id: <20260707072031.231066-11-dongtai.guo@linux.dev>
+Subject: [PATCH v3 11/12] objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label references
+Date: Tue,  7 Jul 2026 15:20:30 +0800
+Message-Id: <20260707072031.231066-12-dongtai.guo@linux.dev>
 In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -66,82 +66,57 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-GCC/GAS on LoongArch references special section entries (__ex_table,
-__bug_table, __jump_table, .altinstructions) through local text labels
-(.L*) instead of a section symbol plus offset.  The assembler keeps the
-label because of linker relaxation: a "section + constant offset"
-reference would go stale when the linker deletes or shrinks
-instructions, while a symbol reference can be recomputed after
-relaxation.
+create_fake_symbols() takes each annotated entry's offset from the
+annotate relocation's addend alone.  That works only when the
+relocation points at the special section's section symbol.  GCC/GAS
+on LoongArch points it at the entry's local label instead, with a
+zero addend: every entry then gets offset 0, the "distance to the
+next annotation" size becomes 0, and the fallback sets the size to
+the rest of the section.
 
-convert_reloc_secsym_to_sym() only handles the section symbol form and
-returns early for such label references.  The label is never cloned
-into the livepatch object, so should_keep_special_sym() cannot
-correlate the entry with an included function and silently drops it: a
-GCC-built livepatch module ends up missing the patched function's
-__ex_table / __bug_table / __jump_table entries, with no error at
-build or load time.
+So every fake symbol starts at offset 0 and covers the whole special
+section.  If any entry in the section belongs to a patched function,
+should_keep_special_sym() keeps such a symbol, and the output module
+gets the entire __bug_table (thousands of entries and klp
+relocations) instead of just the patched function's entries.
 
-Redirect label references in text sections to the containing function
-symbol, mirroring the section symbol case.  A label with no containing
-function symbol (e.g. hand-written asm in a plain .text section) can't
-be correlated; skip it rather than failing, since such entries belong
-to unchanged code and are dropped anyway.
+Compute the offset as sym->offset + addend, which handles both the
+section symbol form (sym->offset == 0) and the local label form
+(addend == 0).
 
 Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
-Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/objtool/klp-diff.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ tools/objtool/klp-diff.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index b9624bd9439b..05fd70e24326 100644
+index 05fd70e24326..0fa3ce324346 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -1423,8 +1423,41 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
- 	if (!strcmp(reloc->sec->name, ".rela__patchable_function_entries"))
- 		return convert_pfe_reloc(elf, reloc);
+@@ -1863,7 +1863,12 @@ static int create_fake_symbols(struct elf *elf)
+ 		if (annotype(elf, sec, reloc) != ANNOTYPE_DATA_SPECIAL)
+ 			continue;
  
--	if (!is_sec_sym(sym))
-+	if (!is_sec_sym(sym)) {
+-		offset = reloc_addend(reloc);
 +		/*
-+		 * Most toolchains reference special-section entries via the
-+		 * section symbol plus an offset.  GCC/GAS on LoongArch instead
-+		 * references a local text label (.L*): LoongArch linker
-+		 * relaxation is the reason GAS keeps the label rather than
-+		 * reducing it to a section symbol reference.  Such a label is
-+		 * never cloned into the livepatch object, so the entry would be
-+		 * silently dropped.  Redirect the relocation to the containing
-+		 * function, mirroring the section-symbol case below.
++		 * The annotated location may be referenced via the section
++		 * symbol plus addend, or via a local label (GCC/GAS on
++		 * LoongArch): sym->offset + addend covers both forms.
 +		 */
-+		if (is_local_label(sym) && is_text_sec(sec)) {
-+			unsigned long offset = sym->offset + reloc_addend(reloc);
-+
-+			sym = find_symbol_containing_inclusive(sec, offset);
-+			if (!sym) {
-+				/*
-+				 * A local label with no containing function
-+				 * symbol (e.g. hand-written asm in a plain .text
-+				 * section).  It can't be correlated to a function,
-+				 * so skip it rather than failing the build; such
-+				 * entries belong to unchanged code and are dropped
-+				 * anyway.
-+				 */
-+				return 1;
-+			}
-+
-+			reloc->sym = sym;
-+			set_reloc_sym(elf, reloc, sym->idx);
-+			set_reloc_addend(elf, reloc, offset - sym->offset);
-+			return 0;
-+		}
-+
- 		return 0;
-+	}
++		offset = reloc->sym->offset + reloc_addend(reloc);
  
- 	sym = find_symbol_containing_inclusive(sec, arch_adjusted_addend(reloc));
- 	if (!sym) {
+ 		size = 0;
+ 		next_reloc = reloc;
+@@ -1875,7 +1880,7 @@ static int create_fake_symbols(struct elf *elf)
+ 			    next_reloc->sym->sec != reloc->sym->sec)
+ 				continue;
+ 
+-			size = reloc_addend(next_reloc) - offset;
++			size = (next_reloc->sym->offset + reloc_addend(next_reloc)) - offset;
+ 			break;
+ 		}
+ 
 -- 
 2.25.1
 
