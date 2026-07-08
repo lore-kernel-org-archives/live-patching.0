@@ -1,106 +1,139 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00C23E00B4
-	for <live-patching@vger.kernel.org>; Tue,  7 Jul 2026 12:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531353E6DD8;
+	Wed,  8 Jul 2026 07:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783426219; cv=none; b=QF5Bd1WEb3MTtYQr9knkBHnEwpfbtWF5KtR9P1r+QBm3vDM/qH4TT7FuFTSR+827Ef5dWU0llLCe1dL7bbGYmBvjL0gMPcAlkN1UPoAIiAyKxY6siWjGrNd1K66LEgbJ0390IYslhd+aUHkxRMGgwDTgtkwLJm9PJHb7yIOBGuI=
+	t=1783494310; cv=none; b=lwWG6HFUgqJDEzA44/9lHNAJ8rMjadZRHvtQjMqC/3P6eCsGazeXq0IK1EReubVaQ+fROxHemPGqso+6xGBS3V79WKkLuH6+LVRVWE6C1b3rjBiIXtZWZPhwZ+2uq48wgXcotKMUZEyctgEa5PNVHvMrYTnbCiIEh402P/ShwfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783426219; c=relaxed/simple;
-	bh=QBVwa8Ft1AGgMXzNG3GdojzheiVnMyLI2i3p2LMHu7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AsXB+IPpJVxX9E6i6swunTt9rdX3rNxdNAdUdKD+e1WXxc5QiPgCGi6QtJdDR6O4ZYMRdBtxyDVbsP7w5hGUEHrMKoN7vCJaORua32nFDsEOAgpyqWyNW/o3ES1lALLj1ah/bf0sSxDd9Bcma/NyLcW7dy3WCEBqQI8J5IqqdRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cGIhqa+7; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1783494310; c=relaxed/simple;
+	bh=Kfrb3+5tYPOiLtvz4HJtKv6RKCL/qDqvGfR0DV4LxG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rfcs8RGURAXefMa4tLHfhjCfZMvU/USe4Q9FIWx5aykqchHhySf9DH1u5H3wqO8sm/jZ+zybsznFvm9rmGBXy98+XmvhHfgvMPv/AoewzB0wkVYAIBF93zIyMQQXaFJ4yo61wgjo2SQ7v7vBKRKfgEhZEsB98wfX1Xjx0F2opfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ldyH6F58; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cGIhqa+7"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493b786d6c0so22215175e9.2
-        for <live-patching@vger.kernel.org>; Tue, 07 Jul 2026 05:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783426216; x=1784031016; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5Gog4VR+uyDqdPTQz30iAA295+f27YE55oou1sV/LnU=;
-        b=cGIhqa+7ct9uLDutrcIsEbgZ5vVYdcQr5YBet9AjqKzziFpZX5B+9bYG4Wi21xNUxG
-         PU1+iyehY7IN5l6UvX94Z5buLxvBoEeMBJ5FubgUNErbu4w4Hn4Drs8DmMYnVMCKOiOc
-         0tXBT+64COfIde7Nl0h7lx94YpDXuZ6uwtELEMFxV6qCEcUCSm8OqO9On6guPnIkfwUo
-         aQIgBP/bX3Eeuok33nMR48LCvRz4yZ3D8W0z/AZ9/2EMFYQx4TIxF9kvBqdLj3PVyt34
-         zW0KNi+TtRQJw7PQoCPS64cNs9aFMRPjbnLabZzJJmw+C2EFdhVI4u285iRWK5is2M3R
-         uOxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783426216; x=1784031016;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5Gog4VR+uyDqdPTQz30iAA295+f27YE55oou1sV/LnU=;
-        b=Tf0nEjUf70pPKxRmNCdGrEMHZWf1/QmquVqMFxRtPIl7G5N2I04NvXak9dGePT+wZI
-         wMh7uv/7cJH1REi7WKSxJVNT7yckMjMtZaUpINiwGio2PYAnvXxI57AkQjcDVr0RbPwO
-         6gRoqkUOuOXOiHZWCjJ34wm2gnxUQgz1bydbw0tP7VL42Oxe+fWGk4aUqlWe61hL1R/M
-         /xuDD4OLr5FXW923Dj3Do/HNnXd47PHRQdWj0Nz9Ft+KvtE37DrRq8ozHt5VKkDJDFj4
-         fiEOOd+zBExtu8n1WiRC6xE58TyjaXZdOum/OU8TXlbs8W3WCidBZoGnGpUHAX8IFD7T
-         20eA==
-X-Forwarded-Encrypted: i=1; AHgh+RrP3+uJx9FHve5dYv/sJ/IVVeGreRHy+kgdnJ0amf8PUczvVfjGUhVWyBvh1nu6GHhkr6rDHRiyNlARZ8X7@vger.kernel.org
-X-Gm-Message-State: AOJu0YxawRxUeA6Ilp3T5f7RBNEJds15fBKqRnQQtOi+cyDw76WwrdiA
-	zYX3wdB7REj7t9roUT26gexLGmVmKK3Cm2R+6fs5KcLW00FTihtI2PbkXfnlNFub4gk=
-X-Gm-Gg: AfdE7cnsrcQx98xQjc/r8ItiY+epQnFmMoNdfFDsQ5Hna1SdMSJoKIYMwlpxyUGhafa
-	oz02Bwmr+I8dydGacpnccjyMkfIxcLWLUf0SFeWmusGk1tp40QU/tCslZVEdQ1hNv3S7MDjq3Kc
-	d/2LVgFkmQPWDynZV8WwzrQ+mYoJU0MxO19y7W4evhvXmmDfCbFKHoBRltltD7ZBdoJY1kM8WwJ
-	KCh2qsji3HbOc3baqMslY2LTdNfOo2W+7GEaNckQRG4mZe2kjA7D6cUKydtMNbJ+ZV7ntREymMU
-	1hKDLGznY7QOH9XPS3BRXadklb8SX4bS/OpprxTIRKUAc9K2BE1nDdlBuk3iCT0IWNHK69cbY7I
-	SvQySYwx8R/PuhqQ7UFqqjd6Q9wQu3PGtjx84pLNEDaQxxpnBZxseaPNKuhMb+CjtRtfHTYJy63
-	UEFtmZKatxT+L6l/s=
-X-Received: by 2002:a05:600c:8b62:b0:493:bacb:1341 with SMTP id 5b1f17b1804b1-493df06699dmr54032755e9.4.1783426216116;
-        Tue, 07 Jul 2026 05:10:16 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47aa0f21543sm31884081f8f.35.2026.07.07.05.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 05:10:15 -0700 (PDT)
-Date: Tue, 7 Jul 2026 14:10:13 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: mbenes@suse.cz, jikos@kernel.org, joe.lawrence@redhat.com,
-	jpoimboe@kernel.org, live-patching@vger.kernel.org,
-	sashiko-bot@kernel.org, song@kernel.org
-Subject: Re: [PATCH v2] livepatch: Fix NULL pointer dereference in
- klp_find_func()
-Message-ID: <akzspX63bvi_OobU@pathway.suse.cz>
-References: <alpine.LSU.2.21.2606251523310.18862@pobox.suse.cz>
- <20260628114635.33572-1-laoar.shao@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ldyH6F58"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1783494285; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=VqOzBHcezIdJbCw9H20f4ApkMFhu+ojhnSlVxGo7tKM=;
+	b=ldyH6F58hjVNhnMeZOfXhTo4aBYq11lEHFs+602BQUdrjf3OxaHRpFCr3mJwm120e22u8mM0r99KRz3T4Zxx4yALrToHw7sbXOdQfyR+AVEPXCUx84dzb/XwDOnj4gnJOkBOBjax/baNiaaKv7NoURMDXsSWTjKRVJ0E3cLHAo0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X6gnBaq_1783493952;
+Received: from 30.246.161.237(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X6gnBaq_1783493952 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 08 Jul 2026 14:59:14 +0800
+Message-ID: <9228c07a-8879-41de-ba87-b9f879648ba8@linux.alibaba.com>
+Date: Wed, 8 Jul 2026 14:59:11 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260628114635.33572-1-laoar.shao@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 RESEND 4/7] riscv: stacktrace: introduce stack-bound
+ tracking helpers
+To: Wang Han <wanghan@linux.alibaba.com>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org,
+ Oleg Nesterov <oleg@redhat.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ Marcos Paulo de Souza <mpdesouza@suse.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260629072713.3273743-1-wanghan@linux.alibaba.com>
+ <20260629072713.3273743-5-wanghan@linux.alibaba.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20260629072713.3273743-5-wanghan@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun 2026-06-28 19:46:35, Yafang Shao wrote:
-> A NULL old_name in a newly loaded livepatch's function entry causes a
-> NULL pointer dereference in strcmp():
-> 
->   klp_init_patch()
->     klp_add_nops()
->       klp_find_func()
->         strcmp(old_func->old_name, func->old_name)
-> 
-> Add klp_check_patch() at the beginning of klp_enable_patch() to reject
-> patches with NULL old_name before they reach this code path.
-> 
-> Reported-by: sashiko-bot <sashiko-bot@kernel.org>
-> Closes: https://lore.kernel.org/live-patching/20260529040130.95A9C1F00893@smtp.kernel.org/
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Suggested-by: Miroslav Benes <mbenes@suse.cz>
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-JFYI, the patch has been committed into livepatching.git,
-branch for-7.3/trivial.
 
-Best Regards,
-Petr
+On 6/29/26 3:27 PM, Wang Han wrote:
+> A reliable unwinder needs to validate that every frame record it reads
+> is fully contained in a known kernel stack, and it needs to refuse to
+> walk back into a stack it has already left. Add the building blocks
+> for that:
+> 
+>    * struct stack_info / struct unwind_state in a new
+>      asm/stacktrace/common.h, modelled on the arm64 reference
+>      implementation.
+>    * stackinfo_get_irq() / stackinfo_get_task() / stackinfo_get_overflow()
+>      plus the corresponding on_*_stack() predicates in asm/stacktrace.h,
+>      so callers can ask "is this object on stack X?" by stack kind
+>      rather than open-coded address arithmetic.
+>    * unwind_init_common(), unwind_find_stack() and
+>      unwind_consume_stack() helpers that enforce the
+>      forward-progress-only invariant required for reliability.
+> 
+> No existing user is wired up to these helpers in this commit; the
+> unwinder switch comes in a follow-up. The header changes leave
+> on_thread_stack() with the same semantics as before, just expressed in
+> terms of the new helpers.
+> 
+> Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+> ---
+>   arch/riscv/include/asm/stacktrace.h        |  65 ++++++++-
+>   arch/riscv/include/asm/stacktrace/common.h | 159 +++++++++++++++++++++
+>   2 files changed, 222 insertions(+), 2 deletions(-)
+>   create mode 100644 arch/riscv/include/asm/stacktrace/common.h
+> 
+> diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
+> index b1495a7e06ce..bc87c4940379 100644
+> --- a/arch/riscv/include/asm/stacktrace.h
+> +++ b/arch/riscv/include/asm/stacktrace.h
+> @@ -3,8 +3,13 @@
+>   #ifndef _ASM_RISCV_STACKTRACE_H
+>   #define _ASM_RISCV_STACKTRACE_H
+>   
+> +#include <linux/percpu.h>
+>   #include <linux/sched.h>
+> +#include <linux/sched/task_stack.h>
+> +
+> +#include <asm/irq_stack.h>
+>   #include <asm/ptrace.h>
+> +#include <asm/stacktrace/common.h>
+>   
+>   struct stackframe {
+>   	unsigned long fp;
+> @@ -16,14 +21,70 @@ extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *re
+>   extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+>   			   const char *loglvl);
+>   
+> -static inline bool on_thread_stack(void)
+> +/*
+> + * IRQ stack accessors
+> + */
+> +static inline struct stack_info stackinfo_get_irq(void)
+> +{
+> +	unsigned long low = (unsigned long)raw_cpu_read(irq_stack_ptr);
+
+ From https://sashiko.dev/#/patchset/20260629072713.3273743-1-wanghan%40linux.alibaba.com
+
+Will this cause a link error when CONFIG_IRQ_STACKS is disabled?
+Looking at arch/riscv/kernel/irq.c, irq_stack_ptr is defined inside an
+#ifdef CONFIG_IRQ_STACKS block. Since stackinfo_get_irq() unconditionally
+references it here, it seems this might result in an undefined reference
+to irq_stack_ptr during linking.
+
+Should this accessor be conditionally compiled, or should it provide a
+fallback when CONFIG_IRQ_STACKS is not set?
+
+Thanks.
+Shuai
