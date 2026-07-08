@@ -1,81 +1,105 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05A73451C6;
-	Wed,  8 Jul 2026 13:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8C23F58C5
+	for <live-patching@vger.kernel.org>; Wed,  8 Jul 2026 13:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783517405; cv=none; b=F8MklljX4jIxEezm8CzRQ1j3UmSN7N7yO6cDRGI+kltgIjGo2MJn0ilbk21SM7nyKz4rJe9utw9/muM1u649juPTbwfYXuzwSr7UORLMmLyv7IFTEdQfs7PG8nlRHOwd17XpUkHlL95O+KS6zVc6y4xzq+0hi6uLBm8hwNJPqmA=
+	t=1783518882; cv=none; b=FAPNohk+M2NE5Lp2ORw4FQcqZDAEx9RQY+fJJPsI7o2yZ18A3kbjrnhDxhmJtXkn9lhvf8Nfboo2E2l3EqouFKaXcg8R5vejMP39JTcO7BI52gC+20xUJshpN2ZaVvabOtJDay4gR8vjo+7mVXvhjei1lVPIEIiKkNaSFagyXIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783517405; c=relaxed/simple;
-	bh=M03bABgfeH1vQxaRx91yzwdNJMV3GDWiz437kVa1sM0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=vBdvcyvH//YHBsm9rhRkX0cw061/DOgtCJI5RdLeZ0QMi7PUUzG/247u/wQj+/WJFfKceYtsn2kbNmq9DKpMzdnG0H/psduSj+pSpgWyrHjNyxU0cVArHNakurNLDk0juwZUrfvnPypjBWKNoQWgnBbm6J7iq6eUhY/8jfyfOO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=eyeorHBz; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1783518882; c=relaxed/simple;
+	bh=SjiW6ERHS9Z2yaDAhoQdEShUzxO6v2nFKQKuoJ2Vge8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L+Rfgkos8Ic8V5ZM5lzSU7JxgAUa5s2PzTl+HJcbQj/YA4AKxsLJbSXFdRB24SBtUb5pjtURunM32uAj2Bp/jL9lHv7d31t/yQ7W9jsoGRGWhGGcrtSHhowpwMsmaJq5NxVc+B8y8SRSxzSOfqFnxToNUc1XbrQyCI4mDbVEz6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IuNSH5ky; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="eyeorHBz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1783517394;
-	bh=0lsf6gGfCY3XhTEU6LMoC5aiZhuoVlhT4fXzJilHE54=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=eyeorHBzJEORaM3YlQMfELGV8ZwrD5OmxmzXnx/2jbHdNOpc/JlU/Pzga4pmsjYoE
-	 KMiml60/VVobuG+Kqx29FrZBBhN7W1G6IeEhfbJSG5BSi2SDDnQsDmmuxqPSovhne4
-	 0Kn03tXoo+kZJSQbabxS1baL5Mxvk9UJJyf8YcwM=
-Received: from [127.0.0.1] (2607-8700-5500-e873-0000-0000-0000-1001.16clouds.com [IPv6:2607:8700:5500:e873::1001])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IuNSH5ky"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783518874;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KDn+ZB5QDmMZlAymNbimx46tA1OJX7SIC3YtbFxxLtw=;
+	b=IuNSH5kyQ98zEW0IGbDxKfPLVEcdAuyAsVEpeHLtjgbq2duvrhPHqeWdakx0C+SjFwmVtB
+	bIFRY+6Lywon+f6GkSklJq4J5fNQdThz8qQipJzgyGRQlPOJMpRDbj70emLGjzC/VUqKfU
+	vLENwyC0w0iVxE/j35TcpAF7D1r8bIY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-304-2nD2FG_uMEybatzCU5d3YA-1; Wed,
+ 08 Jul 2026 09:54:29 -0400
+X-MC-Unique: 2nD2FG_uMEybatzCU5d3YA-1
+X-Mimecast-MFC-AGG-ID: 2nD2FG_uMEybatzCU5d3YA_1783518866
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 830E765B57;
-	Wed,  8 Jul 2026 09:29:48 -0400 (EDT)
-Message-ID: <d89e9c660f06489c59c2f1f7fae0547abbefac71.camel@xry111.site>
-Subject: Re: [PATCH v3 12/12] objtool/klp: Fold LoongArch paired ADD/SUB
- relocations into PCREL
-From: Xi Ruoyao <xry111@xry111.site>
-To: WANG Rui <wangrui@loongson.cn>, George Guo <dongtai.guo@linux.dev>, 
-	chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
- jikos@kernel.org, 	mbenes@suse.cz, pmladek@suse.com
-Cc: kernel@xen0n.name, joe.lawrence@redhat.com, rostedt@goodmis.org, 
-	ardb@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com, liukexin@kylinos.cn, 
-	guodongtai@kylinos.cn, wangyuli@aosc.io, loongarch@lists.linux.dev, 
-	live-patching@vger.kernel.org, llvm@lists.linux.dev, 
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 838B01800EF8;
+	Wed,  8 Jul 2026 13:54:24 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.80.46])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 98BA31800347;
+	Wed,  8 Jul 2026 13:54:18 +0000 (UTC)
+Date: Wed, 8 Jul 2026 09:54:16 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
+	wangyuli@aosc.io, loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org, llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Date: Wed, 08 Jul 2026 21:29:46 +0800
-In-Reply-To: <20260707072031.231066-13-dongtai.guo@linux.dev>
+Subject: Re: [PATCH v3 05/12] LoongArch: Fix EFI linking with -fdata-sections
+Message-ID: <ak5WiNb51kGB1p2f@redhat.com>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
-	 <20260707072031.231066-13-dongtai.guo@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 
+ <20260707072031.231066-6-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260707072031.231066-6-dongtai.guo@linux.dev>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Tue, 2026-07-07 at 15:20 +0800, George Guo wrote:
+On Tue, Jul 07, 2026 at 03:20:24PM +0800, George Guo wrote:
 > From: George Guo <guodongtai@kylinos.cn>
->=20
-> On LoongArch, the "key - ." field of a __jump_table entry can come out
-> as two relocations at the same offset, R_LARCH_ADD64 plus
-> R_LARCH_SUB64.=C2=A0 clang's integrated assembler emits this pair when th=
-e
-> key symbol is not defined in the same translation unit (for example
-> __tracepoint_netif_rx); GAS, and clang for locally-defined keys,
-> produce a single R_LARCH_64_PCREL instead, which is why GCC builds do
-> not hit this.
+> 
+> When building with func-fdata-sections, the .init.bss section gets split
 
-Hmm, is this a flaw in LLVM?  We have
+nit: s/func-fdata-sections/-fdata-sections
 
-config AS_HAS_THIN_ADD_SUB
-    def_bool $(cc-option,-Wa$(comma)-mthin-add-sub) || AS_IS_LLVM
+> up into a bunch of .init.bss.<var> sections.  Make sure they get linked
+> into .init.data.
+> 
+> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> ---
+>  arch/loongarch/kernel/vmlinux.lds.S | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+> index 840d944c2f73..dc5fa017db94 100644
+> --- a/arch/loongarch/kernel/vmlinux.lds.S
+> +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> @@ -96,7 +96,7 @@ SECTIONS
+>  #endif
+>  
+>  	.init.bss : {
+> -		*(.init.bss)
+> +		*(.init.bss .init.bss.*)
 
-so we are already expecting LLVM to emit R_LARCH_64_PCREL always instead
-of ADD64/SUB64.
+Both arch/arm64/kernel/vmlinux.lds.S and
+arch/loongarch/kernel/vmlinux.lds.S contain a "/* from the EFI stub */"
+comment documenting the wildcard.  Might be worth adding for v4.
 
---=20
-Xi Ruoyao <xry111@xry111.site>
+--
+Joe
+
