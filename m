@@ -1,351 +1,275 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F2B3FAE0A
-	for <live-patching@vger.kernel.org>; Wed,  8 Jul 2026 22:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0D83F39DF
+	for <live-patching@vger.kernel.org>; Thu,  9 Jul 2026 09:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783549980; cv=none; b=AgAk1KjyqM+jRTRrjkL2MCGVWlQ6ki+48i3adi74hxYQN7Iun1RH90bho1vUYkKxpn8IZwJY/KkB6pN2qnmrWHfs6lKhQU85kBGE7EWIAIFSJ+rQ0DbdQemMm1Jn0rPupIS1HTTjC4OcO391X4phBIRP7vYgAX+vU+CUP/twGAY=
+	t=1783590174; cv=none; b=nu7aIvhNFNqcRPYQJi6wVXdDIIAQ/H9ltbm0VD+M2rd45jazVNQTAnxsHPBpPtPpRfcMi7NMEJ+LDd/+YrM6ytISBAmWtOaqPgJdjKK+3Ke94KBO/s6Gz/yBuvcO7R1EMB+Nw58MW0ArXauviLJOMWC3JCAX3hBp4sHqEfM6vqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783549980; c=relaxed/simple;
-	bh=swODgbekQmS1CFeZ9iG/ZEs5COm4cAVix6GliQDtetY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dRzkqIWziVdhMwK4/EHd0VAfHlhuwMcbzav05Zrzt6RqS80koFYQLpCymqYI6ha1xIGGiZ1Iz24v0faKuv2z3Qb8431DAB++bzgBxKpd4Y3jyzwlPvXwL+4+uqJRBJZtP45e/OjyA5c84KBRwGmixOolI4xqCweaHDc7As7UQPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L+ZNi+Rh; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783590174; c=relaxed/simple;
+	bh=qT5BDaXPn1ONcLA/bARRkjnpTvkOFKvXSWfoM5gw4cI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pnILttXnZeb+FEDNMP4NbH8pfwAuJ0OS8zAnPK3LGOmU/e6pHGOurvSoQ443DPbmaLsd9v6ZPTambwOIgvKL3I4eWH88eb4HgL8iSZ8wsa8A+mRedLJLf8ykYRcE9A/lVjy4BD5Q+By90Wls4wxWLxqZSHHI+r0xKh6ucVYJO4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4vhMsuL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L+ZNi+Rh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783549977;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E/T4EWXW79x7TDZV95U66XrCatSBiUQKKPW4UkScdA4=;
-	b=L+ZNi+RhEZILNzxGv0+5bseuEFTVO0rHXajtEtweKSg2At8o026khmRDBouh4pLPZ51ho7
-	ISPYAeRf2LGUsAVP63suC1uDHJGUeUetmICK2RFUuaZrYuEO8AkYxweX766G/6xOTA35w9
-	29DIf4JB/0XnmXprZZVvHMdlh82t2Fo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-152-c4VGxBctPoqaxYYIYg0UGQ-1; Wed,
- 08 Jul 2026 18:32:51 -0400
-X-MC-Unique: c4VGxBctPoqaxYYIYg0UGQ-1
-X-Mimecast-MFC-AGG-ID: c4VGxBctPoqaxYYIYg0UGQ_1783549969
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA54F1956041;
-	Wed,  8 Jul 2026 22:32:46 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C1BA1800592;
-	Wed,  8 Jul 2026 22:32:40 +0000 (UTC)
-Date: Wed, 8 Jul 2026 18:32:37 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
-	wangyuli@aosc.io, loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
-Message-ID: <ak7QBSm3mmDlB-4u@redhat.com>
-References: <20260707072031.231066-1-dongtai.guo@linux.dev>
- <20260707072031.231066-3-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4vhMsuL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A91C1F01558
+	for <live-patching@vger.kernel.org>; Thu,  9 Jul 2026 09:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783590173;
+	bh=ayx7l7YqCvr1Xl2Dcnlb0jt6sFQfGazJlldsyxYrWG0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=U4vhMsuLCq0VJ6p4+Pxf1pUedzt+RbkNX+LlvgsHhdcA+IUa59Ci6kFR8k6K7ZNY0
+	 4gL+5zifsZck7/4nrjnlBkjBAyxHBQ+1t9aMOzT8LD4CzfEl2BWRruovVnzptDS8rH
+	 XNW10uL10Reoa/c19pxCpofDGHXdl1hIrXXOsHzgrgj4pwUriDicFAm1Ms8VMPU4fK
+	 uI83C+fHdXDVEJnAHoKieQAbC6Dwb7CKWUL8GUMh8HL4jRZdRJS/rLYDLjteBAcPiY
+	 sfD3D2hDXONoq6yKI3NP5ht5ZOVvLVznefSUcVK8K8f0y8DiCmaMcqvJpSGENV7BwZ
+	 TB1WmCJ967k5g==
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-698bf7a1a2dso2249834a12.0
+        for <live-patching@vger.kernel.org>; Thu, 09 Jul 2026 02:42:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqCI2grw4D4qe4h1kJZD9HKt/FrSAMCA6R3xrUUrXbXAZ8uol9MggbKqSG/GpRar+lCqYX886AgM4Phvi2q@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJyX8FOA/KUosmQwSuQtnI/3LuNNQRf4rA/EbIrmLGyk5JLYFX
+	d2xiLotn0xCu0r70zO+gg3PQUL035nerBH4Npa66m2ZXm4nbPPzXmpt0bUcMmVeC8gWSi6jCYfn
+	sYdLr7MpLpekRmBf0xq7TQXEUmoFVBCw=
+X-Received: by 2002:a05:6402:4348:b0:698:aa88:56d1 with SMTP id
+ 4fb4d7f45d1cf-69ab44a1fcfmr2562569a12.25.1783590171440; Thu, 09 Jul 2026
+ 02:42:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260707072031.231066-3-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20260707072031.231066-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260707072031.231066-1-dongtai.guo@linux.dev>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 9 Jul 2026 17:43:17 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4cr9xBkM-SEUHXm9t0yQ=r3B9pkNdmUDftP00hvVsZrQ@mail.gmail.com>
+X-Gm-Features: AUfX_mzzGMlpt_hQFMS3WXIM7ZWh8ao7409y42aJ59WbwsixnrrcDfoeDPCPPHY
+Message-ID: <CAAhV-H4cr9xBkM-SEUHXm9t0yQ=r3B9pkNdmUDftP00hvVsZrQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/12] LoongArch: Add livepatch build (KLP) support
+To: George Guo <dongtai.guo@linux.dev>
+Cc: jpoimboe@kernel.org, peterz@infradead.org, jikos@kernel.org, 
+	mbenes@suse.cz, pmladek@suse.com, kernel@xen0n.name, joe.lawrence@redhat.com, 
+	rostedt@goodmis.org, ardb@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, yangtiezhu@loongson.cn, 
+	jiaxun.yang@flygoat.com, liukexin@kylinos.cn, guodongtai@kylinos.cn, 
+	xry111@xry111.site, wangyuli@aosc.io, loongarch@lists.linux.dev, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 07, 2026 at 03:20:21PM +0800, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
-> 
-> objtool needs to split the kernel's special sections into per-entry
-> symbols when generating livepatch modules. Mark them so it can:
-> 
->  - .altinstructions and __ex_table are read-only, so set an explicit
->    entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
-> 
->  - __bug_table and __jump_table are writable. SHF_MERGE cannot be
->    combined with SHF_WRITE (Clang rejects it), so annotate each entry
->    with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
-> 
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->  arch/loongarch/include/asm/alternative-asm.h |  5 +++--
->  arch/loongarch/include/asm/alternative.h     |  6 ++++--
->  arch/loongarch/include/asm/asm-extable.h     | 10 ++++++++--
->  arch/loongarch/include/asm/bug.h             |  1 +
->  arch/loongarch/include/asm/jump_label.h      |  2 ++
->  arch/loongarch/kernel/asm-offsets.c          | 20 ++++++++++++++++++++
->  6 files changed, 38 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
-> index 7dc29bd9b2f0..d940d9d2c0e1 100644
-> --- a/arch/loongarch/include/asm/alternative-asm.h
-> +++ b/arch/loongarch/include/asm/alternative-asm.h
-> @@ -5,6 +5,7 @@
->  #ifdef __ASSEMBLER__
->  
->  #include <asm/asm.h>
-> +#include <generated/asm-offsets.h>
->  
->  /*
->   * Issue one struct alt_instr descriptor entry (need to put it into
-> @@ -33,7 +34,7 @@
->  	.fill - (((144f-143f)-(141b-140b)) > 0) * ((144f-143f)-(141b-140b)) / 4, 4, 0x03400000
->  142 :
->  
-> -	.pushsection .altinstructions, "a"
-> +	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
->  	altinstruction_entry 140b, 143f, \feature, 142b-140b, 144f-143f
->  	.popsection
->  
-> @@ -63,7 +64,7 @@
->  		(alt_max_short(new_len1, new_len2) - (old_len)) / 4, 4, 0x03400000
->  142 :
->  
-> -	.pushsection .altinstructions, "a"
-> +	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
->  	altinstruction_entry 140b, 143f, \feature1, 142b-140b, 144f-143f, 142b-141b
->  	altinstruction_entry 140b, 144f, \feature2, 142b-140b, 145f-144f, 142b-141b
->  	.popsection
-> diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
-> index b5bae21fb3c8..8f7712ed2f4e 100644
-> --- a/arch/loongarch/include/asm/alternative.h
-> +++ b/arch/loongarch/include/asm/alternative.h
-> @@ -70,7 +70,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
->  /* alternative assembly primitive: */
->  #define ALTERNATIVE(oldinstr, newinstr, feature)			\
->  	OLDINSTR(oldinstr, 1)						\
-> -	".pushsection .altinstructions,\"a\"\n"				\
-> +	".pushsection .altinstructions, \"aM\", @progbits, "            \
-> +		 __stringify(ALT_INSTR_SIZE) "\n"                       \
->  	ALTINSTR_ENTRY(feature, 1)					\
->  	".popsection\n"							\
->  	".subsection 1\n" \
-> @@ -79,7 +80,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
->  
->  #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
->  	OLDINSTR_2(oldinstr, 1, 2)					\
-> -	".pushsection .altinstructions,\"a\"\n"				\
-> +	".pushsection .altinstructions, \"aM\", @progbits, "            \
-> +			__stringify(ALT_INSTR_SIZE) "\n"                \
->  	ALTINSTR_ENTRY(feature1, 1)					\
->  	ALTINSTR_ENTRY(feature2, 2)					\
->  	".popsection\n"							\
-> diff --git a/arch/loongarch/include/asm/asm-extable.h b/arch/loongarch/include/asm/asm-extable.h
-> index d60bdf2e6377..2d7eef7c0b39 100644
-> --- a/arch/loongarch/include/asm/asm-extable.h
-> +++ b/arch/loongarch/include/asm/asm-extable.h
-> @@ -7,10 +7,15 @@
->  #define EX_TYPE_UACCESS_ERR_ZERO	2
->  #define EX_TYPE_BPF			3
->  
-> +#ifndef COMPILE_OFFSETS
-> +#include <asm/asm-offsets.h>
-> +#endif
-> +
->  #ifdef __ASSEMBLER__
->  
->  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
-> -	.pushsection	__ex_table, "a";		\
-> +	.pushsection    __ex_table, "aM", @progbits,    \
-> +			EXTABLE_SIZE;                   \
->  	.balign		4;				\
->  	.long		((insn) - .);			\
->  	.long		((fixup) - .);			\
-> @@ -29,7 +34,8 @@
->  #include <asm/gpr-num.h>
->  
->  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
-> -	".pushsection	__ex_table, \"a\"\n"		\
-> +	".pushsection   __ex_table, \"aM\", @progbits, "\
-> +	 __stringify(EXTABLE_SIZE) "\n"                 \
->  	".balign	4\n"				\
->  	".long		((" insn ") - .)\n"		\
->  	".long		((" fixup ") - .)\n"		\
-> diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
-> index d090a5bec5eb..14e3acbaad8d 100644
-> --- a/arch/loongarch/include/asm/bug.h
-> +++ b/arch/loongarch/include/asm/bug.h
-> @@ -25,6 +25,7 @@
->  #define __BUG_ENTRY(cond_str, flags)				\
->  		.pushsection __bug_table, "aw";			\
->  		.align 2;					\
-> +		__ANNOTATE_DATA_SPECIAL;				\
->  	10000:	.long 10001f - .;				\
->  		_BUGVERBOSE_LOCATION(WARN_CONDITION_STR(cond_str) __FILE__, __LINE__) \
->  		.short flags;					\
-> diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
-> index 7ef4ae3abf08..d20f0fa24b6b 100644
-> --- a/arch/loongarch/include/asm/jump_label.h
-> +++ b/arch/loongarch/include/asm/jump_label.h
-> @@ -12,6 +12,7 @@
->  #include <linux/types.h>
->  #include <linux/stringify.h>
->  #include <asm/asm.h>
-> +#include <linux/objtool.h>
->  
->  #define HAVE_JUMP_LABEL_BATCH
->  
-> @@ -27,6 +28,7 @@
->  #define JUMP_TABLE_ENTRY(key, label)			\
->  	 ".pushsection	__jump_table, \"aw\"	\n\t"	\
->  	 ".align	" __stringify(PTRLOG) "	\n\t"	\
-> +	 ANNOTATE_DATA_SPECIAL "\n\t"			\
->  	 ".long		1b - ., " label " - .	\n\t"	\
->  	 JUMP_LABEL_TYPE  key " - .		\n\t"	\
->  	 ".popsection				\n\t"
-> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-> index 2cc953f113ac..470323aa022c 100644
-> --- a/arch/loongarch/kernel/asm-offsets.c
-> +++ b/arch/loongarch/kernel/asm-offsets.c
-> @@ -18,6 +18,8 @@
->  #include <asm/ftrace.h>
->  #include <asm/sigframe.h>
->  #include <vdso/datapage.h>
-> +#include <asm/alternative.h>
-> +#include <asm/extable.h>
->  
->  static void __used output_ptreg_defines(void)
->  {
-> @@ -323,3 +325,21 @@ static void __used output_vdso_defines(void)
->  	DEFINE(__VDSO_PAGES, VDSO_NR_PAGES);
->  	BLANK();
->  }
-> +
-> +static void __used output_extable_defines(void)
-> +{
-> +	COMMENT("LoongArch exception table entry offsets.");
-> +
-> +	DEFINE(EXTABLE_SIZE, sizeof(struct exception_table_entry));
-> +	BLANK();
-> +}
-> +
-> +static void __used output_alt_instr_defines(void)
-> +{
-> +	COMMENT("LoongArch alternative instructions offsets.");
-> +
-> +	DEFINE(ALT_INSTR_SIZE, sizeof(struct alt_instr));
-> +	BLANK();
-> +}
-> +
-> +
-> -- 
+Hi,George,
+
+On Tue, Jul 7, 2026 at 3:21=E2=80=AFPM George Guo <dongtai.guo@linux.dev> w=
+rote:
+>
+> This series adds LoongArch support for the klp-build livepatch tooling,
+> enabling automated livepatch module generation using objtool on
+> LoongArch.
+>
+> It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
+> below, unchanged from v1/v2) and extends it with the LoongArch-specific
+> objtool and build pieces, plus toolchain/relocation fixes required to
+> make livepatch modules load, generate, and run correctly under both GCC
+> and Clang.
+1. Wang Yuli released his version first; re-releasing it without any
+prior communication is simply rude.
+https://lore.kernel.org/loongarch/20251203091039.125259-1-wangyuli@aosc.io/
+
+2. Perhaps you were genuinely unaware about his earlier patches, but
+Wang Yuli had already alerted you in your v1. At that point, you had
+two options: a) abandon your own patches and let Wang Yuli continue
+his development, or b) thank Wang Yuli for the reminder and
+assistance, then seek to collaborate on development. However, you did
+neither; instead, you released new versions on your own again and
+again. This is highly unethical.
+
+3. You might argue that Wang Yuli=E2=80=99s version is incomplete, but is
+yours complete? Since you=E2=80=99re releasing v3, it=E2=80=99s clear that =
+ your v1
+and v2 were also incomplete. If you can simply take over someone
+else=E2=80=99s project just because their version is incomplete, does that
+mean Wang Yuli can now throw yours in the trash when he releases his
+v2?
+
+
+Huacai
+
+>
+> Overview:
+>
+>  - Patches 1-8 are unchanged from v2 [3]: the LoongArch objtool hooks,
+>    special-section marking, the -fPIC/-mdirect-extern-access fixes,
+>    EFI linking, KLP_SYSCALL_DEFINEx() support, and finally wiring up
+>    LoongArch klp-build (kept last so the series stays bisectable).
+>  - Patches 9-12 are new in v3, fixing issues Joe Lawrence found across
+>    two rounds of review by actually running the full klp-build flow
+>    (see Changes since v2 below for details).
+>
+> All new patches (9-12) fix bugs in objtool/klp-diff.c and the LoongArch
+> Kconfig; none of them touch other architectures.
+>
+> Testing:
+>
+> GCC on LoongArch hardware: livepatch modules generated, loaded, and
+> exercised (unchanged from v2).
+>
+> Clang 21.1.8 on LoongArch hardware, reproduced end to end with Joe's
+> exact test case (test-joe.patch below), since it happens to exercise
+> patches 10-12 together: netif_rx_internal() has __ex_table entries,
+> a __bug_table entry, and three __jump_table static keys, one of which
+> (a tracepoint's key) is unexported and not defined in the same
+> translation unit -- exactly the case patch 12 fixes.
+>
+>   $ cat test-joe.patch
+>   diff --git a/net/core/dev.c b/net/core/dev.c
+>   index 06c195906231..14fd3d5f351a 100644
+>   --- a/net/core/dev.c
+>   +++ b/net/core/dev.c
+>   @@ -5717,6 +5717,7 @@ static int netif_rx_internal(struct sk_buff *skb)
+>                   unsigned int qtail;
+>
+>                   ret =3D enqueue_to_backlog(skb, smp_processor_id(), &qt=
+ail);
+>   +               pr_info("test");
+>           }
+>           return ret;
+>    }
+>
+>   $ LLVM=3D/path/to/clang-21/bin/ ./scripts/livepatch/klp-build -T test-j=
+oe.patch
+>   ...
+>   $ ls livepatch-test-joe.ko
+>
+> klp-build completes cleanly: no "duplicate reloc" (patch 12), no
+> "Cannot find symbol for section" (patch 9), and the __ex_table/
+> __jump_table entries for netif_rx_internal are present in the output
+> module (patches 10-11).  The module was then loaded into a VM running
+> a matching Clang-built kernel:
+>
+>   # insmod livepatch-test-joe.ko
+>   [  105.584252] livepatch: enabling patch 'livepatch_test_joe'
+>   [  105.586141] livepatch: 'livepatch_test_joe': starting patching trans=
+ition
+>   [  106.824310] livepatch: 'livepatch_test_joe': patching complete
+>   [  120.036530] test
+>
+>   # cat /sys/kernel/livepatch/livepatch_test_joe/{enabled,transition}
+>   1
+>   0
+>
+> Toggling the netif_rx tracepoint exercises the jump-table relocation
+> patch 12 folds for the unexported __tracepoint_netif_rx key, and lets
+> us cross-check the patch's own pr_info() against independent evidence
+> that the static branch actually flipped:
+>
+>   # echo 1 > /sys/kernel/debug/tracing/events/net/netif_rx/enable
+>   # ping -c2 127.0.0.1
+>   # cat /sys/kernel/debug/tracing/trace | tail -4
+>               ping-1267    [001] b....   472.753651: netif_rx: dev=3Dlo s=
+kbaddr=3D... len=3D84
+>               ping-1267    [001] b.s2.   472.753671: netif_rx: dev=3Dlo s=
+kbaddr=3D... len=3D84
+>               ping-1267    [001] b....   473.762993: netif_rx: dev=3Dlo s=
+kbaddr=3D... len=3D84
+>               ping-1267    [001] b.s2.   473.763096: netif_rx: dev=3Dlo s=
+kbaddr=3D... len=3D84
+>   # dmesg | tail -4
+>   [  472.753653] test
+>   [  472.753671] test
+>   [  473.762994] test
+>   [  473.763096] test
+>
+> Each traced packet has a matching "test" line at the same timestamp
+> (microsecond-aligned), confirming the tracepoint's static-key
+> relocation and the patch's own code path are both live at once.
+> Disabling and unloading works cleanly:
+>
+>   # echo 0 > /sys/kernel/livepatch/livepatch_test_joe/enabled
+>   [  557.922932] livepatch: 'livepatch_test_joe': starting unpatching tra=
+nsition
+>   [  558.905248] livepatch: 'livepatch_test_joe': unpatching complete
+>   # rmmod livepatch_test_joe
+>
+> Changes since v2 [3]:
+>  - Patches 1-8 are unchanged.
+>  - New patch 9: select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY.
+>    arch/loongarch/Makefile already builds with
+>    -fpatchable-function-entry=3D2, but nothing selected this, so kbuild
+>    ran a pointless recordmcount pass on every object.  Harmless under
+>    GCC (GAS always emits a section symbol for recordmcount to anchor
+>    on), but it fails under Clang with -ffunction-sections (as klp-build
+>    uses) for any __weak function that ends up alone in its section,
+>    e.g. sched_clock.  (Joe Lawrence)
+>  - New patch 10: convert local-label references in special sections.
+>    GCC/GAS on LoongArch reference __ex_table/__bug_table/__jump_table
+>    entries via a local text label instead of the usual "section symbol
+>    + offset" that objtool's klp-diff.c assumes; the label is never
+>    cloned into the livepatch module, so such entries were silently
+>    dropped from GCC-built modules with no error at build or load time.
+>    (Joe Lawrence)
+>  - New patch 11: fix ANNOTATE_DATA_SPECIAL parsing for the same local
+>    label references.  create_fake_symbols() computed each annotated
+>    entry's offset from the relocation's addend alone, which is only
+>    correct for the section-symbol form; with local labels, every entry
+>    in a special section got offset 0, producing a single fake symbol
+>    that covered (and pulled into the output module) the section's
+>    entire contents instead of just the patched function's entries.
+>    Found while verifying patch 10 with a real special-section entry.
+>  - New patch 12: fold LoongArch's paired ADD/SUB relocations into a
+>    single PC-relative one.  The "key - ." field of a __jump_table entry
+>    can come out as two relocations at the same offset (R_LARCH_ADD64 +
+>    R_LARCH_SUB64) when Clang's integrated assembler encounters a key
+>    that isn't defined in the same translation unit (e.g. a tracepoint's
+>    static key); objtool only allows one relocation per offset, so
+>    cloning such an entry failed with "duplicate reloc".  (Joe Lawrence)
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/lo=
+g/?h=3Dklp-build-arm64
+> [2] https://lore.kernel.org/all/20260604065317.219777-1-dongtai.guo@linux=
+.dev/
+> [3] https://lore.kernel.org/all/20260608100852.325413-1-dongtai.guo@linux=
+.dev/
+>
+> George Guo (12):
+>   objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+>   LoongArch: Mark special sections for KLP support
+>   livepatch/klp-build: disable direct-extern-access for LoongArch to fix
+>     kernel panic
+>   livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect
+>     symbol references
+>   LoongArch: Fix EFI linking with -fdata-sections
+>   objtool/klp: Add LoongArch jump opcode bytes support
+>   klp-build: Add LoongArch syscall patching macro
+>   LoongArch: Add livepatch build (KLP) support
+>   LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+>   objtool/klp: Convert local label references in special sections
+>   objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label
+>     references
+>   objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
+>
+>  arch/loongarch/Kconfig                        |   2 +
+>  arch/loongarch/include/asm/alternative-asm.h  |   5 +-
+>  arch/loongarch/include/asm/alternative.h      |   6 +-
+>  arch/loongarch/include/asm/asm-extable.h      |  10 +-
+>  arch/loongarch/include/asm/bug.h              |   1 +
+>  arch/loongarch/include/asm/jump_label.h       |   2 +
+>  arch/loongarch/kernel/asm-offsets.c           |  20 ++++
+>  arch/loongarch/kernel/vmlinux.lds.S           |   2 +-
+>  include/linux/livepatch_helpers.h             |  22 ++++
+>  scripts/livepatch/klp-build                   |  36 +++++-
+>  tools/objtool/Makefile                        |   3 +-
+>  tools/objtool/arch/loongarch/decode.c         | 108 ++++++++++++++++++
+>  .../objtool/arch/loongarch/include/arch/elf.h |  18 +++
+>  tools/objtool/klp-diff.c                      |  57 ++++++++-
+>  14 files changed, 280 insertions(+), 12 deletions(-)
+>
+>
+> base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
+> --
 > 2.25.1
-> 
-
-Hello George,
-
-I've run into another test case while exercising v3 on LoongArch (Clang
-build).I
-       a
-Setup
-=====
-
-Maybe my config was too small, but I couldn't find any existing vmlinux
-.c file that emits .altinstructions on LoongArch, all in-tree
-ALTERNATIVE() sites are in arch/loongarch/lib/*.S, which we can't modify
-with klp-build.
-
-I added a minimal dummy function to arch/loongarch/kernel/alternative.c
-so I could test:
-
-  $ cat base-vmlinux.patch
-  diff --git a/arch/loongarch/kernel/alternative.c b/arch/loongarch/kernel/alternative.c
-  index 0e0c766df1e3..01d81db79b3f 100644
-  --- a/arch/loongarch/kernel/alternative.c
-  +++ b/arch/loongarch/kernel/alternative.c
-  @@ -3,6 +3,7 @@
-   #include <linux/mm.h>
-   #include <linux/module.h>
-   #include <asm/alternative.h>
-  +#include <asm/cpu.h>
-   #include <asm/cacheflush.h>
-   #include <asm/inst.h>
-   #include <asm/sections.h>
-  @@ -245,3 +246,15 @@ void __init alternative_instructions(void)
-   
-          alternatives_patched = 1;
-   }
-  +
-  +/*
-  + * klp-build repro hook: vmlinux .c function with ALTERNATIVE().
-  + */I
-  +staatic int klp_build_alt_test_base = 10;
-  +
-  +static noinline int __used klp_build_alt_test_compute(int input)
-  +{
-  +       asm volatile(ALTERNATIVE("nop", "nop", CPU_FEATURE_FPU) : : : "memory");
-  +
-  +       return input + klp_build_alt_test_base;
-  +}
-
-Then a one-line klp-build patch to modify the function:
-
-  $ cat test-alternatives.patch
-  diff --git a/arch/loongarch/kernel/alternative.c b/arch/loongarch/kernel/alternative.c
-  index 01d81db79b3f..f5d5c4f0d8ef 100644
-  --- a/arch/loongarch/kernel/alternative.c
-  +++ b/arch/loongarch/kernel/alternative.c
-  @@ -256,5 +256,5 @@ static noinline int __used klp_build_alt_test_compute(int input)
-   {
-          asm volatile(ALTERNATIVE("nop", "nop", CPU_FEATURE_FPU) : : : "memory");
-   
-  -       return input + klp_build_alt_test_base;
-  +       return input + klp_build_alt_test_base + 1;
-
-Repro
-=====
-
-Build the kernel as usual, then klp-build the test-alternatives.patch:
-
-  $ patch -p1 < base-vmlinux.patch
-  patching file arch/loongarch/kernel/alternative.c
-  $ ARCH=loongarch LLVM=1 make -j$(nproc)
-  ...
-  $ ARCH=loongarch LLVM=1 ./sIcripts/livepatch/klp-build -T test-alternatives.patch
-                             a
-Result
-======
-
-klp-build gets through the diff step, then fails linking the livepatch
-module:
-
-  ...
-  Diffing objects
-  vmlinux.o: changed function: klp_build_alt_test_compute
-  Building patch module: livepatch-test-alternatives.ko
-  livepatch-test-alternatives.o: error: objtool: .text.klp_build_alt_test_compute+0x14: special: can't find new instruction
-  make[3]: *** [/home/jolawren/src/linux/scripts/Makefile.build:507: livepatch-test-alternatives.o] Error 255
-  make[3]: *** Deleting file 'livepatch-test-alternatives.o'
-  make[2]: *** [/home/jolawren/src/linux/Makefile:2141: .] Error 2
-  make[1]: *** [/home/jolawren/src/linux/Makefile:248: __sub-make] Error 2
-  make: *** [Makefile:248: __sub-make] Error 2
-  error: klp-build: line 964: '"${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" 1>&2)'
-
-Should v3 (or a follow-up patch) include the inline alternative
-cloning support?  Or is patching functions that contain ALTERNATIVE()
-intentionally out of scope for LoongArch KLP for now?
-
-If the latter, it would be worth calling out explicitly as this patch
-reads as though .altinstructions is supported end-to-end. 
-
-Regards,
---
-Joe
-
+>
+>
