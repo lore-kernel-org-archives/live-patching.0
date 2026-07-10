@@ -1,177 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AEA426D18
-	for <live-patching@vger.kernel.org>; Fri, 10 Jul 2026 15:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00304302EE
+	for <live-patching@vger.kernel.org>; Fri, 10 Jul 2026 15:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783697457; cv=none; b=YT00B9/aGmQUqk20PzCacEhnb2BFN2RtlOJlPnW8HTjkOAsvlvriAlbnVFen08pI0LbEocS5ioEW39iZeyxjKJxXUnb8wV49UPyTx5lZBRJHj1WS+27KxKv1YJwtxHTXZQzFJP4wF1B2VqOVXDchFPz9Doq50kCuq5zwNGJfTsc=
+	t=1783698042; cv=none; b=lKh8F5bVEK387GQdGhsyYUPzLbSTHpUtK5f/xkUODTQt5ERqotYVpSsiSTbBNg8PUOKNu9wJ69qGAoO1k+y6s9rbFVQu6lmopvzLZ1agkWOLdcWptiMF1JyNFP7ZZXkFWSYZ3iC9d5p7nwgGKaZ2FVr39OBjMFoj/o1x+nV0WQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783697457; c=relaxed/simple;
-	bh=6D0bYmb9vZegfdMg+//HExNwenYnsZ1ut+zep41d+lI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=QFPzgxWNFkzzG+6NqTMYfpQASBzu4C/600k3XC3c+skchyy72ssvCgxm4ip7NC21CoZ/pkzq9q4FZw7k8LlSFB40xK079FqJ0TgwdiQi1U9UlKeoAAeolf6TCfcEPVMLZXonZys2DBcSEVLZWB2xuLAb2zLgOde728rTDGe2Wss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T8vell2W; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783698042; c=relaxed/simple;
+	bh=OhG8mawE7zN2V84gmP2Jd1sldDXjf7wjd/uhmTHwU7s=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=OfmvcFSBbAyoZ5x+LlIN6M7kFC11lDWy7dZWCYp1B+lkII14K3zWyBdH2da7m0unair8SXuxmRqpeXjlq0cr+W+wFLjrKXMiqioLU8Hsm7bfnUKlbg0lME8v3T8SP2clvLB6NPSjqiG8/OWAD5uMtKanOUCfQrnv7rFr2iidLA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYncu20a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T8vell2W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783697454;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PSuw1KTZMIZEHY5vQDqQEDoRw7vaXwg5efrajhEM0pY=;
-	b=T8vell2WF6GPUJj1ixurKNjNjJTCF7/5duLJqEp1lpEslDWSQfBZrERUx3/TnlaBkxgbC6
-	NOicZ7BcoceJWcNHKjrSRh/bYmRKhA2/h29TgjB1zmbnskx4rQ7WQNlvqbN9Wr8wCI4/+5
-	p6un9is0BUh5R2qse3eWhYBUJ9aK1Jc=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-MFI8O26iPw-iNx68Viy9kg-1; Fri,
- 10 Jul 2026 11:30:49 -0400
-X-MC-Unique: MFI8O26iPw-iNx68Viy9kg-1
-X-Mimecast-MFC-AGG-ID: MFI8O26iPw-iNx68Viy9kg_1783697446
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C185018052E7;
-	Fri, 10 Jul 2026 15:30:46 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4387F1800594;
-	Fri, 10 Jul 2026 15:30:45 +0000 (UTC)
-From: Joe Lawrence <joe.lawrence@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYncu20a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB1A31F00A3D;
+	Fri, 10 Jul 2026 15:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783698034;
+	bh=3jhejkGBqyjZHIGI8D45BrRMo33Wqeb9/CP1bcAJvhU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fYncu20ar+lslSdUPMZI1UhhDVtCmYTkjplhLKwvWCwRducHKVr0tdyj6bTh44J18
+	 g/M6ZJ4ciRi/xDJrO5nImaccrsiepR9sx5zwuJJ08YXN3dQIlWwSmJcMIHNG1SIrGZ
+	 f6k2oDSM7w53G1dVo/1YYbhxv21C7h7gqc5S8KifpMwjcqpDonSXNAcGWLzNm7dBHs
+	 oVx9zOlRfB2OPktX4ew4hUyH9zXlTjGjPpUwQkTuPSzvhhiQP3GR0SysKbSUr/7hRL
+	 WribKCnu/gH4Xf6+Z4UoVj9W8l7iV3iRfUbTgJTWvSazPW26fPblVxgmQl0loGTRwP
+	 y/JzOd1XJsNKw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 1/1] objtool/klp: fix symbol ordering for data symbols
+Reply-To: sashiko-reviews@lists.linux.dev
 To: live-patching@vger.kernel.org
-Cc: Ben Procknow <bprockno@redhat.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Song Liu <song@kernel.org>
-Subject: [PATCH 0/1] Mitigate klp-build data sympos bug
-Date: Fri, 10 Jul 2026 11:30:41 -0400
-Message-ID: <20260710153042.3156788-1-joe.lawrence@redhat.com>
+Cc: "Jiri Kosina" <jikos@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Song
+ Liu" <song@kernel.org>, "Petr Mladek" <pmladek@suse.com>, "Miroslav Benes" <mbenes@suse.cz>, "Ben
+ Procknow" <bprockno@redhat.com>
+In-Reply-To: <20260710153042.3156788-2-joe.lawrence@redhat.com>
+References: <20260710153042.3156788-1-joe.lawrence@redhat.com>
+ <20260710153042.3156788-2-joe.lawrence@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 10 Jul 2026 15:40:33 +0000
+Message-Id: <20260710154033.AB1A31F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Hi Josh,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-This is an upstream reproducer of a downstream bug report from Ben.  He
-encountered a sympos bug on rhel-10 with the same pwq_cache variable.
-Here I distilled it down to minimal (upstream) reproducer config and
-patch.
+New issues:
+- [High] The new multi-pass sympos calculation for data symbols hardcodes a=
+n incorrect section ordering that prioritizes `.data..ro_after_init` over `=
+.rodata`, and lumps other distinct data sections together, failing to match=
+ kallsyms address ordering.
 
-From what I can tell, function symbols already have a "HACK" disclaimer
-around their workaround -- the attached patch tries to extend the same
-idea to data symbols.  It may not have 100% coverage, and it's certainly
-brittle as it assumes ordering as per the linker script.  But the idea
-is to band-aid the problem until a more robust fix is ready.
+Pre-existing issues:
+- [High] Calculating `sympos` for cross-type duplicates (e.g., a function a=
+nd a variable sharing the same name) yields contradictory results because t=
+he iteration passes diverge based on the queried symbol's type without filt=
+ering the counted symbols.
+--
 
-The comment in find_sympos() suggests leveraging the checksum mechanism
-as a better fix, but perhaps we could also pass the vmlinux file through
-and read the ordering from the post-linked object?  I can work on that
-for a v2, but in the meantime do you think this bandaid would be
-sufficient for at least downstream use?
+--- Patch [1]: [PATCH 1/1] objtool/klp: fix symbol ordering for data symbol=
+s ---
+commit c98091d5ce8ba2d91968d3bbc6e227ed2bf27934
+Author: Joe Lawrence <joe.lawrence@redhat.com>
 
+objtool/klp: fix symbol ordering for data symbols
 
-Config
-======
+The find_sympos() function calculates a sympos (symbol position) used by
+livepatch to disambiguate duplicate symbol names. This commit extends the
+existing section ordering workaround to handle data symbols, counting
+.data..ro_after_init first, then other .data, then .bss.
 
-Basic default x86 configuration and livepatch dependencies:
+> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+> index f8787d7d14547..034778885e922 100644
+> --- a/tools/objtool/klp-diff.c
+> +++ b/tools/objtool/klp-diff.c
+> @@ -873,6 +873,8 @@ static unsigned long find_sympos(struct elf *elf, str=
+uct symbol *sym)
+> =20
+>  	if (sym->bind !=3D STB_LOCAL)
+>  		return 0;
+> =20
+>  	if (vmlinux && is_func_sym(sym)) {
 
-  $ make defconfig
-  $ ./scripts/config --file .config \
-             --set-val CONFIG_FTRACE y \
-             --set-val CONFIG_KALLSYMS_ALL y \
-             --set-val CONFIG_FUNCTION_TRACER y \
-             --set-val CONFIG_DYNAMIC_FTRACE y \
-             --set-val CONFIG_DYNAMIC_DEBUG y \
-             --set-val CONFIG_LIVEPATCH y
-  $ make olddefconfig
+[Severity: High]
+This is a pre-existing issue, but does this logic cause collisions when a
+function and a variable share the same name?
 
+The branches here decide which sections are prioritized during counting bas=
+ed
+on the queried symbol's type (is_func_sym vs is_object_sym). However, the
+inner loops count all duplicates blindly by name without filtering the coun=
+ted
+symbols by type.
 
-Base kernel and livepatch build
-===============================
+If there is a cross-type duplicate, the function and the variable could each
+be found first during their respective queries because the passes iterate
+sections in different orders. Would this result in both getting the exact s=
+ame
+sympos?
 
-Build the reference kernel:
+Since klp_find_object_symbol doesn't filter by type in the kernel, could a
+request to patch the variable erroneously resolve to the function?
 
-  $ make -j$(nproc)
+[ ... ]
 
-and a minimal patch to fs/eventpoll.c :: ep_unregister_pollwait() to
-provoke klp-relocation reference to pwq_cache:
+> @@ -905,6 +907,46 @@ static unsigned long find_sympos(struct elf *elf, st=
+ruct symbol *sym)
+>  					has_dup =3D true;
+>  			}
+>  		}
+> +	} else if (vmlinux && is_object_sym(sym)) {
+> +		/*
+> +		 * HACK: Similarly, data symbol ordering can differ between
+> +		 * vmlinux.o and vmlinux.  The linker script places sections:
+> +		 *   .data..ro_after_init (lowest address)
+> +		 *   .data* sections
+> +		 *   .bss* sections       (highest address)
+> +		 * Count in that order.
+> +		 */
 
-  $ cat test.patch
-  diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-  index 1234567..abcdefg 100644
-  --- a/fs/eventpoll.c
-  +++ b/fs/eventpoll.c
-  @@ -684,6 +684,7 @@ static void ep_unregister_pollwait(struct eventpoll *ep, struct epitem *epi)
-          while ((pwq = *p) != NULL) {
-                  *p = pwq->next;
-                  ep_remove_wait_queue(pwq);
-  +               WARN_ON_ONCE(!pwq_cache);
-                  kmem_cache_free(pwq_cache, pwq);
-          }
-   }
+[Severity: High]
+Does this hardcoded section ordering match the actual kallsyms address
+ordering?
 
-  $ ./scripts/livepatch/klp-build -T test.patch 
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  vmlinux.o: new function: ep_unregister_pollwait.isra.0
-  vmlinux.o: changed function: ep_remove
-  vmlinux.o: changed function: ep_clear_and_put
-  vmlinux.o: changed function: eventpoll_release_file
-  Building patch module: livepatch-test.ko
-  SUCCESS
+In the kernel linker script, .rodata is placed before RO_AFTER_INIT_DATA,
+meaning .rodata symbols will appear before .data..ro_after_init symbols sin=
+ce
+kallsyms sorts strictly by address.
 
-sympos inspection
-=================
+If a livepatch contains duplicate static data symbols where one is in .roda=
+ta
+and another is in .data..ro_after_init, this patch will count
+.data..ro_after_init first.
 
-klp-build assigns sympos=2 to the pwq_cache klp-relocation:
+Could this assign sympos=3D1 to the .data..ro_after_init symbol and sympos=
+=3D2 to
+the .rodata symbol, causing livepatch to patch the wrong variable when it a=
+sks
+for sympos=3D2?
 
-  $ readelf --wide --relocs livepatch-test.ko | grep -w '.klp.sym.vmlinux.pwq_cache'
-  0000000000000008  0000006600000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
-  0000000000000069  0000006600000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
+> +		for_each_sym(elf, s) {
+> +			if (strstarts(s->sec->name, ".data..ro_after_init") &&
+> +			    !strcmp(s->name, sym->name)) {
+> +				nr_matches++;
 
-but check out the ordering difference between vmlinux.o and the
-post-linked vmlinux [sympos denoted]:
-
-  vmlinux.o (symbol table order, what objtool uses):
-
-    $ objdump -t vmlinux.o | awk '/\.c$/{file=$NF}; /pwq_cache/{print file": "$0}' | column -t
-    workqueue.c:  0000000000012ae0  l  O  .bss                  0000000000000008  pwq_cache      << sympos=1
-    eventpoll.c:  000000000000fb40  l  O  .data..ro_after_init  0000000000000008  pwq_cache      << sympos=2
-
-  vmlinux (address order, what kallsyms uses *):
-
-    $ objdump -t vmlinux | awk '/\.c$/{file=$NF}; /pwq_cache/{print file": "$0}' | column -t | sort -k2
-    eventpoll.c:  ffffffff82b77b40  l  O  .rodata  0000000000000008  pwq_cache                   << sympos=1
-    workqueue.c:  ffffffff83a85ae0  l  O  .bss     0000000000000008  pwq_cache                   << sympos=2
-    * Note: .data..ro_after_init becomes .rodata after linking
-
-With that, I think find_sympos() needs the same considerations for data
-symbols as it currently has for function symbols.
- 
-Joe Lawrence (1):
-  objtool/klp: fix symbol ordering for data symbols
-
- tools/objtool/klp-diff.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
--- 
-2.54.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260710153042.3156=
+788-1-joe.lawrence@redhat.com?part=3D1
