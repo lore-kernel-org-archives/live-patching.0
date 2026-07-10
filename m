@@ -1,32 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83ACA194AE6
-	for <live-patching@vger.kernel.org>; Fri, 10 Jul 2026 07:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945153C945B
+	for <live-patching@vger.kernel.org>; Fri, 10 Jul 2026 07:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783669140; cv=none; b=LkeQosTsjJZCShZTVHYRx8VFUxKx7x21a58o1IiRONy8YTEiVlzrgrYDJqxuSyVQXkZtwUkhDNjsSlP8XJIP5RuO4B7KWcNxq0i67D8CD1QInIILyy0lzfTdxAQuQGjQU5iRe5vDxWdSOXKkSRImLs8QHX0LQqa8Of47b/GqyBM=
+	t=1783669634; cv=none; b=Sun5QXV+0ocauU/uoDH8lV8UiMwubSG+WznBVhVpYouJqorqizNd8beN5OCSydPftW59qcMx79bfgPgiBNUJAWwiPUZYJE/QkARmqAX2XWpMbOloON8ojBIgyJqfBYZfpBb0L2FFk729aX//TOtliBIT0Kk0gIybdPY6jQaaJAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783669140; c=relaxed/simple;
-	bh=xSNIeyQeUHQgZHGjLA322pu93/7oHBT7D8w6q7YwSZU=;
+	s=arc-20240116; t=1783669634; c=relaxed/simple;
+	bh=e9b7s/MJ/pK6CknYTC1TBjZb12JwoLLMzcbxDwaP2Tg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MfchZ8op2OGOcvK0FyQoMf4bFLRBEJipIlYOBZ9Kb3NEDSntK3ZXWgYeSV4YZPjlppUWCgwFfisRGpyJknb8e4RfF71ZF7MmQ2cRyMJCvz3FjdfZ0Otmh30BuKM1Th15ylb3Vbw5TALZUE9YDrMnqaqHCgkZ29LIFA8pXcXVSBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KCdmfVNq; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version; b=Ac5d+EujI5wsviOONDtbcMX6cQrTBDoTN0CqD+2Bi9jYquKLy8KmIxETnmswevJfVoGIshUcm3u/xu6rXQyCb/COMVz06FGsk7i8AFld7NYMwuJwSEKKaNa1imWhBXleEundlYqRP9m1Or/kGbIWHem1XhD5hqLezAeRVGIRMZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o2WG+44B; arc=none smtp.client-ip=91.218.175.184
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KCdmfVNq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o2WG+44B"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783669127;
+	t=1783669620;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xSNIeyQeUHQgZHGjLA322pu93/7oHBT7D8w6q7YwSZU=;
-	b=KCdmfVNqyUT+aXz3av1Mlph3kPfUMFvt9IgSgl9i9QJvbLNnPzbn5BL/edpQDexUYk5Hsd
-	foiRM5fDCMMMM50djFYVXvJXBq4Jqc6CAfYRiBVdkmkv81vVneipr84BsiWqiSPCTiqm1t
-	32MvIDJjIvV1wzIg9suxmuSZ+bGKH1U=
+	bh=e9b7s/MJ/pK6CknYTC1TBjZb12JwoLLMzcbxDwaP2Tg=;
+	b=o2WG+44BIkkS3thmCKDyGG3TIshOx+dgmxs2/dJet58r6CMJQ2JHYtwN6K5GGlBooGE0t2
+	5NJQ3EnVB5UU1oCWDPJbvlgF3b/58jRrfGq4j+x1TdMg34GRga7WKcXbyG+NcCbXJ4eI1G
+	XAlGEsf1ILvmpAP01QC3OsIRLV+RtrI=
 From: George Guo <dongtai.guo@linux.dev>
 To: joe.lawrence@redhat.com
 Cc: chenhuacai@kernel.org,
@@ -50,11 +50,11 @@ Cc: chenhuacai@kernel.org,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/12] livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect symbol references
-Date: Fri, 10 Jul 2026 15:38:27 +0800
-Message-ID: <20260710073827.27064-1-dongtai.guo@linux.dev>
-In-Reply-To: <ak5nH60j4Rdn50n-@redhat.com>
-References: <ak5nH60j4Rdn50n-@redhat.com>
+Subject: Re: [PATCH v3 05/12] LoongArch: Fix EFI linking with -fdata-sections
+Date: Fri, 10 Jul 2026 15:46:51 +0800
+Message-ID: <20260710074651.27483-1-dongtai.guo@linux.dev>
+In-Reply-To: <ak51uLgw09N8gCqQ@redhat.com>
+References: <ak51uLgw09N8gCqQ@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -66,24 +66,23 @@ X-Migadu-Flow: FLOW_OUT
 
 Hi Joe,
 
-> This might be my personal preference, but I think it would be quicker to
-> review patches: [...] if they were squashed into one patch.
+> nit: s/func-fdata-sections/-fdata-sections
 [...]
-> the combined commit remains complete thought, i.e. for LoongArch
-> KLP builds, replace the arch's KBUILD_CFLAGS_KERNEL (dropping -fPIE and
-> -mdirect-extern-access) and add -fPIC via KCFLAGS instead.
+> Also the commit message says, "Make sure they get linked into
+> .init.data," but should that read, "... into .init.bss"?
 
-Makes sense. I'll squash patches 03 and 04 into a single patch and drop
-the forward/backward references from the commit message.
+Yes to both. I'll fix the "func-fdata-sections" typo and change
+".init.data" to ".init.bss" in the commit message -- the .init.bss.*
+globs land in .init.bss, not .init.data.
 
-> I'd also pull out the configuration checks into validate_config() to be
-> consistent:
+> Both arch/arm64/kernel/vmlinux.lds.S and
+> arch/loongarch/kernel/vmlinux.lds.S contain a "/* from the EFI stub */"
+> comment documenting the wildcard.
 [...]
-> and then build_kernel() only needs to adjust the cmd / flags accordingly.
+> ^^ typo: I meant the riscv version as well
 
-Agreed. I'll move the CONFIG_RELOCATABLE / CONFIG_AS_HAS_EXPLICIT_RELOCS
-checks into validate_config() and leave build_kernel() to just set the
-flags.
+Will do -- I'll add the "/* from the EFI stub */" comment next to the
+wildcard, matching arm64 and riscv.
 
 Thanks,
 George
