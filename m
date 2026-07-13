@@ -1,205 +1,167 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370D2265629
-	for <live-patching@vger.kernel.org>; Mon, 13 Jul 2026 14:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47157374A0B
+	for <live-patching@vger.kernel.org>; Mon, 13 Jul 2026 21:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783953218; cv=none; b=gb20c0bTij6rmOiGSm75/SOwvz160h7LQNV3/qKIP5etvkVNXpH/TnNzWWwADmseK0+z3dMYnHJlf3VzPAttrfwI/Amr6INbOJILRvBkyrQ4fYHWL86g6T2zGbuzyvYFrsZ816gSugBQwM4ZjrSDmnSeDwShynNsBUBjnAwgdnw=
+	t=1783978302; cv=none; b=FBXMRo+Q8kI27/nXO0DhGaKj2d50zhWcpr8rtC+MhT7aPwyRNpVZXwgOELcxvNp6Q3caX/SPtr/50S7r6WG809wyYbC+iQURcjqY1XpYrMwlMqj6kVkZlXxq8zDMMffR97+45TIuVeZYoPl8wuLhJY3fRrywcKm5b2IUH/gcwlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783953218; c=relaxed/simple;
-	bh=rcYOTNdcj2ibiwqJfeJZQ8JuzAGrI+5pZvaHR/F+XvE=;
+	s=arc-20240116; t=1783978302; c=relaxed/simple;
+	bh=6DNl4R2PRmzpI3kHireIJMrDAGXJPhiKkaLf3kNgkWw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B96xT5BCWytTDwOoaKCox02E8UJQwWAXxHEoIfwYYC1KI3OvaYczNEUTG/rWMiUzRZe4Swfx/VA/flLhREgERPqpYqFCwJ+NMN7Hifn1yBi3hqVfec0HvgU1dHmmtdrNP+P63tYyLDSNMU4Ky54/tt6QG2w1gtrIX+Z5FvFty0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X7+Ieqn2; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version:Content-type; b=maq/P5LqHtjQydAFYlVxh8iGccYZID2f1zHYci7/CkuRHRPEAm5BE3g7OJC197aJnLZD6aL0QQSlqaddNqNfZ2S10WJ4k0Mpc7LxOUy0Tbb6Iu2ce2Yd7B13g34sgG/NlVoaoPPCIkBnYZNn4ZJc383P30ChFavNSkwbX8FxPLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+lTzEmU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X7+Ieqn2"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783953214;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+lTzEmU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783978297;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z8Y2MZq+OsXMv1ZBbMCu0RMLJ/nz8XEP3l5zITko3Sw=;
-	b=X7+Ieqn2v0Wu1W6tHVlyw6iottaQb0tPXKJZesrNF2HkF3USEoUZjtGDnDH7XsdRVy+8j/
-	qtD6hZT0sEd3k3mKs+0FnNKF23xY6ToyG7UxbbYQ9+zS7rQ+Hb3Dguxe3q9V7ZATdfiGyT
-	pI6WUWfimaeww3e9EbYAx4C7nxKr4Ok=
-From: George Guo <dongtai.guo@linux.dev>
-To: joe.lawrence@redhat.com
-Cc: chenhuacai@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	kernel@xen0n.name,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn,
-	jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn,
-	guodongtai@kylinos.cn,
-	xry111@xry111.site,
-	wangyuli@aosc.io,
-	loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
-Date: Mon, 13 Jul 2026 22:33:24 +0800
-Message-ID: <20260713143324.16887-1-dongtai.guo@linux.dev>
-In-Reply-To: <ak7QBSm3mmDlB-4u@redhat.com>
-References: <ak7QBSm3mmDlB-4u@redhat.com>
+	bh=pejB6K7tZNEKx1Gu59ezgt+2BlcSYZTWqKl94LZxYAg=;
+	b=J+lTzEmUwpVBjjEhFlTbz4ZK06n1lKmKddmdSnV3XhB5PcNvsFQtXfntlUfG/z9b1vFtwh
+	vX6Hb4tSwJlvvearPnnUyTd8zYGhHBwBiIAUPgH3AQP+cOSgm2vRy49pJ/UVAEtsXr+DCB
+	6+lsolK19ZiiMc8IA/SeHzQSp5Rnt8k=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-464-uU5D_f1KNiun0oX91bxoLQ-1; Mon,
+ 13 Jul 2026 17:31:35 -0400
+X-MC-Unique: uU5D_f1KNiun0oX91bxoLQ-1
+X-Mimecast-MFC-AGG-ID: uU5D_f1KNiun0oX91bxoLQ_1783978294
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1ED0319560B9;
+	Mon, 13 Jul 2026 21:31:34 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BA1021956044;
+	Mon, 13 Jul 2026 21:31:32 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: live-patching@vger.kernel.org
+Cc: Ben Procknow <bprockno@redhat.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Song Liu <song@kernel.org>
+Subject: [PATCH 1/1] objtool/klp-diff: normalize Module.symvers paths to module names
+Date: Mon, 13 Jul 2026 17:31:28 -0400
+Message-ID: <20260713213128.3529250-2-joe.lawrence@redhat.com>
+In-Reply-To: <20260713213128.3529250-1-joe.lawrence@redhat.com>
+References: <20260713213128.3529250-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Hi Joe,
+Module.symvers contains build-tree object paths as module identifiers
+(e.g., "arch/x86/kvm/kvm") rather than runtime module names ("kvm").
+Objtool's clone_reloc_klp() uses this field directly for exported
+symbols, while unexported symbols correctly go through __find_modname().
 
-Thanks for the test case.
+This means that exported symbol relocations may land in a .klp.rela
+section named with the build path rather than the module name.  That is
+a crash waiting to happen: the kernel's livepatch loader silently skips
+this relocation because it doesn't match the expected klp_object name.
+The unresolved relocation sits in the newly activated code, crashing
+when executed.
 
-> Should v3 (or a follow-up patch) include the inline alternative
-> cloning support?  Or is patching functions that contain ALTERNATIVE()
-> intentionally out of scope for LoongArch KLP for now?
+Normalize export->mod at Module.symvers read time using the same logic
+as __find_modname() (refactored into a shared normalize_modname()
+helper).
 
-It should be supported.  It is a real gap, and there is a fix.
-
-LoongArch emits the ALTERNATIVE replacement into ".subsection 1", the
-same as arm64.  The replacement is appended to the function's own
-section, after the body.  objtool already handles that layout for arm64,
-through two pieces that LoongArch was missing:
-
-  - arm64's ALTERNATIVE macros wrap the replacement with
-    ANNOTATE_DATA_SPECIAL / ANNOTATE_DATA_SPECIAL_END, so
-    create_fake_symbols() makes a fake symbol for the replacement block.
-  - arm64 defines ARCH_HAS_INLINE_ALTS, so clone_inline_alternatives()
-    clones that block after the function.
-
-LoongArch had neither.  So clone_inline_alternatives() was a no-op, the
-replacement was never cloned, and objtool reported "can't find new
-instruction".
-
-The fix adds both, matching arm64: annotate the replacement in the
-ALTERNATIVE and ALTERNATIVE_2 macros (asm and inline-asm), and define
-ARCH_HAS_INLINE_ALTS in objtool.  It keeps the .subsection layout, so no
-objtool logic changes.
-
-With it, your exact test case builds.  I verified on LoongArch hardware
-with Clang 21.  The replacement is cloned as its own fake symbol, and the
-.altinstructions entry points at it:
-
-  DEBUG: vmlinux.o: _text_klp_build_alt_test_compute_110 [+DATA]
-  DEBUG: vmlinux.o:  .altinstructions+0x4: _text_klp_build_alt_test_compute_110+0x0 [NOTYPE LOCAL]
-  vmlinux.o: changed function: klp_build_alt_test_compute
-  Building patch module: livepatch-test-alternatives.ko
-  SUCCESS
-
-I will fold this into the next revision.  In the series it splits in two:
-the annotation goes with the special-section marking, which is this patch
-(LoongArch: Mark special sections for KLP support), and the
-ARCH_HAS_INLINE_ALTS define goes with the objtool arch hooks.
-
-Diff below.
-
+Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+Reported-by: Ben Procknow <bprockno@redhat.com>
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- arch/loongarch/include/asm/alternative-asm.h  | 5 ++++-
- arch/loongarch/include/asm/alternative.h      | 5 ++++-
- tools/objtool/arch/loongarch/include/arch/elf.h | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
-index d940d9d2c0e1..92122a258a8e 100644
---- a/arch/loongarch/include/asm/alternative-asm.h
-+++ b/arch/loongarch/include/asm/alternative-asm.h
-@@ -6,6 +6,7 @@
+Note on the fix and existing gotchas for the review bots: The
+normalize_modname() helper is a direct refactoring of the pre-existing
+loop in __find_modname().  To keep this critical bug fix short and
+safe for stable backporting, I've kept the string manipulation logic
+identical to what has already been proven stable in objtool.
 
- #include <asm/asm.h>
- #include <generated/asm-offsets.h>
-+#include <linux/annotate.h>
+ tools/objtool/klp-diff.c | 42 ++++++++++++++++++++++++++++------------
+ 1 file changed, 30 insertions(+), 12 deletions(-)
 
- /*
-  * Issue one struct alt_instr descriptor entry (need to put it into
-@@ -39,9 +40,11 @@
- 	.popsection
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index c2c4e4968bc2..2f3b5e69ab2d 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -83,6 +83,32 @@ static char *escape_str(const char *orig)
+ 	return new;
+ }
+ 
++/*
++ * Convert a build-tree object path to a runtime module name: strip
++ * directory components, replace '-' with '_', and remove file
++ * extensions.  Examples:
++ *
++ *   "arch/x86/kvm/kvm" -> "kvm"
++ *   "arch/x86/kvm/kvm-intel" -> "kvm_intel".
++ *
++ * Used by read_exports() to normalize Module.symvers entries and by
++ * __find_modname() as a fallback when .modinfo lacks a "name=" tag.
++ */
++static char *normalize_modname(char *name)
++{
++	for (char *c = name; *c; c++) {
++		if (*c == '/')
++			name = c + 1;
++		else if (*c == '-')
++			*c = '_';
++		else if (*c == '.') {
++			*c = '\0';
++			break;
++		}
++	}
++	return name;
++}
++
+ static int read_exports(void)
+ {
+ 	const char *symvers = "Module.symvers";
+@@ -150,6 +176,9 @@ static int read_exports(void)
+ 			return -1;
+ 		}
+ 
++		if (strcmp(export->mod, "vmlinux"))
++			export->mod = normalize_modname(export->mod);
++
+ 		export->sym = strdup(sym);
+ 		if (!export->sym) {
+ 			ERROR_GLIBC("strdup");
+@@ -790,18 +819,7 @@ static const char *__find_modname(struct elfs *e)
+ 		return NULL;
+ 	}
+ 
+-	for (char *c = name; *c; c++) {
+-		if (*c == '/')
+-			name = c + 1;
+-		else if (*c == '-')
+-			*c = '_';
+-		else if (*c == '.') {
+-			*c = '\0';
+-			break;
+-		}
+-	}
+-
+-	return name;
++	return normalize_modname(name);
+ }
+ 
+ /* Get the object's module name as defined by the kernel (and klp_object) */
+-- 
+2.54.0
 
- 	.subsection 1
-+	ANNOTATE_DATA_SPECIAL
- 143 :
- 	\newinstr
- 144 :
-+	ANNOTATE_DATA_SPECIAL_END
- 	.previous
- .endm
-
-@@ -70,11 +73,13 @@
- 	.popsection
-
- 	.subsection 1
-+	ANNOTATE_DATA_SPECIAL
- 143 :
- 	\newinstr1
- 144 :
- 	\newinstr2
- 145 :
-+	ANNOTATE_DATA_SPECIAL_END
- 	.previous
- .endm
-
-diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
-index 8f7712ed2f4e..1d3ac2f667d1 100644
---- a/arch/loongarch/include/asm/alternative.h
-+++ b/arch/loongarch/include/asm/alternative.h
-@@ -7,6 +7,7 @@
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <linux/stringify.h>
-+#include <linux/objtool.h>
- #include <asm/asm.h>
-
- struct alt_instr {
-@@ -75,7 +76,9 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- 	ALTINSTR_ENTRY(feature, 1)					\
- 	".popsection\n"							\
- 	".subsection 1\n" \
-+	ANNOTATE_DATA_SPECIAL "\n" \
- 	ALTINSTR_REPLACEMENT(newinstr, feature, 1)			\
-+	ANNOTATE_DATA_SPECIAL_END "\n" \
- 	".previous\n"
-
- #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
-@@ -86,8 +89,10 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- 	ALTINSTR_ENTRY(feature2, 2)					\
- 	".popsection\n"							\
- 	".subsection 1\n" \
-+	ANNOTATE_DATA_SPECIAL "\n" \
- 	ALTINSTR_REPLACEMENT(newinstr1, feature1, 1)			\
- 	ALTINSTR_REPLACEMENT(newinstr2, feature2, 2)			\
-+	ANNOTATE_DATA_SPECIAL_END "\n" \
- 	".previous\n"
-
- /*
-diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
-index 0103f27fccfc..e2843679f24e 100644
---- a/tools/objtool/arch/loongarch/include/arch/elf.h
-+++ b/tools/objtool/arch/loongarch/include/arch/elf.h
-@@ -46,6 +46,7 @@
- #define R_TEXT32		R_LARCH_32_PCREL
- #define R_TEXT64		R_LARCH_32_PCREL
-
-+#define ARCH_HAS_INLINE_ALTS	1
- #define ARCH_HAS_PAIRED_RELOCS	1
-
- struct elf;
-
-Thanks,
-George
