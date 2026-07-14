@@ -1,253 +1,222 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA95F1E0DE8
-	for <live-patching@vger.kernel.org>; Mon, 13 Jul 2026 21:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB751DE8BF
+	for <live-patching@vger.kernel.org>; Tue, 14 Jul 2026 00:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783978312; cv=none; b=aMEPMUUxilA4BrWIg364+5etpZOZL8F5Nxhre//nyJrLavGla6KZm5ip8dV3RiUt79x7kwU/13DWH/3PWYyQFPaTyhyb/6Yh6p+ofNstPIHchOKuoP6rC42T1K8YWbwLof4CYBoZIhcteDm0izjpLY7T+6b6B+v05vxpQiY4AKA=
+	t=1783988928; cv=none; b=FXe9G4oWjfYThcahZEMEpk0R5h80r4hMEeYBli+xoqkjfSUQGrfSeXhUnpZ9zGkZbs9GwJeouJrIIbVFPrL2m6zKYs8HAcpPPu1BkxDevH3g/LeqTSHCBFIisQIp0baVvZoxt7VlGtHoS4wd8Qk2ud4iFfO2BtJHEPBfSbQtCzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783978312; c=relaxed/simple;
-	bh=qELT8NVIlrF1qYk23bi2uooH3q0/btzM7Q6hnDHxXbg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=kHPknvxv9tp3A9SEURfOlxvbr4/a2LhSJKzp5atwMesMy0DzaSwV27sejbyeY3XCQNJWMp4WPynyn5OkTmg9UAiQ195sHGCf76xYv8u/O/XoTfcnxX0sDnofoait0N8v2pSjSxU2P2b+mdUB3tG2OvoBJAyJWolWNvdAnomHUdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PEbeNU6b; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783988928; c=relaxed/simple;
+	bh=36MCrMLUPiWMv/YeGFcP8R+p3e0PbBLgemBah4u0ZP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=alI0CSBadyjRsdCGwNlUWK/wSxsbNENZxtIY8VEQ6xhKQxpgqnSnG9PSkr5EhqgrJA3WRyrF+WoGiTPmKiHz0psZK6wkB4udBNg0QoFpBi7riaYZSa96wp7290B4iyW/qdw9icr9fHelQxcXesOcHVwhuckcJKjjAr848Ud3OII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=F/12HbvM; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PEbeNU6b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783978298;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IXuFEOqs+B0Wip5pAcFw5Vle4O0AKryBsKKzv5Qjktc=;
-	b=PEbeNU6bx1xKoB26OJDHtapb6vrDM/gr/JN5lKNwaxHcpVuHPwP8UQc6wclpHjaufgslNa
-	0laUhKGJWn7hOb6gdygAfk47I8cn2e+L9sJYntat1nn5Rk9WRUCGYm9CUGXWrASKIWcFgl
-	7tcbRr9RG64okHdZRKSFxONbrjP3sGY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-691-u3FX9bfUN-y3i6gL0KhN4w-1; Mon,
- 13 Jul 2026 17:31:33 -0400
-X-MC-Unique: u3FX9bfUN-y3i6gL0KhN4w-1
-X-Mimecast-MFC-AGG-ID: u3FX9bfUN-y3i6gL0KhN4w_1783978292
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7547F195608D;
-	Mon, 13 Jul 2026 21:31:32 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.46])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A3E151956044;
-	Mon, 13 Jul 2026 21:31:30 +0000 (UTC)
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: live-patching@vger.kernel.org
-Cc: Ben Procknow <bprockno@redhat.com>,
-	Jiri Kosina <jikos@kernel.org>,
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F/12HbvM"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ceb096e675so25452785ad.0
+        for <live-patching@vger.kernel.org>; Mon, 13 Jul 2026 17:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1783988925; x=1784593725; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/KLAlmdqk7zVgY56HlRPXq3QqECg7aFAIKoSOWepQBw=;
+        b=F/12HbvMaploI5Fhz0F9bqeyBqN3wcaGS5a7eyl7oeorkcXAlDvPAjBafY4WxVED3d
+         oiGvd7xh5uNPQhU7/32BOjgTsgmvXCJK7UAZLzEifbcd+M8vfhVtMJQbcsST3sqHCvqH
+         nRrpamcW+fVvcXZ9h1Rbla2xOHvU8rUfJKU3c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783988925; x=1784593725;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/KLAlmdqk7zVgY56HlRPXq3QqECg7aFAIKoSOWepQBw=;
+        b=BUEy/JXM7ZRJXj1vYq4Wy0CCaAoYiFynQyNMraHCi8maZ7zOUzhLr14vsBpzybDh/I
+         +za4Xa82sCwgUeSAGLGwfJNbx7p1HEcFJRb87jDr2pN/TemsN1TFKEB878ATjdSJo5uY
+         PmlzNeKW852DXwN8SYf0obk6mJLMGEHoJWqz3cwBnA6kzt9vf1Jmw+pRzvpVxn6jQg2A
+         ND4j4aaMf+R6LfTN0cGiZML5v5uwL1GU85QDS4+E+mwPcGOn1wMLogU+TwNu41I/IT8J
+         lLPvN5mJnckqKSnxTC6OZW+h3s1lMyeFGjMikBiYfS00S/IsX+GvyLHtXnezrutZpd+D
+         1Kjg==
+X-Forwarded-Encrypted: i=1; AHgh+Ron1P2hZSskYMNxPQufFARbUtJ3C4RNpmmgLEiV/NL7e+zKdzYRRWCNvdB2vM4X7bIGItFnWH7A8ub2RvQK@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZmfDOCSeecKbLptpvwsMms4e89fd+2V64+x+Q1aA8EIF2BTGg
+	Sc4ZEFZNb/aXGoR0ICgqGFQI07UoW7R7+oAu4vOgVXmFYEZSBleBEquei+nLF3v+Rg==
+X-Gm-Gg: AfdE7cmga0hno6HoYWYFHC5faZ81wTHFAnPJDFtZ2dR6h62Nmq/u9XR2ggj7WPASspx
+	L7nUl0SgU0dL+ka7YCHbVw1DabeMlyJDpjKzhGhR+9urOUF5asQuD25SmcfIIsBPEtpUhoZ1TvX
+	ysS3UWvl7dlggcTDSMRvJ8AUkKm+Ko93cpIPRVLKiiK+N+uRxCXh546MZm/6EnUMD84zkIMrxE0
+	qtMf+AgCWLBQ6iBMy8wPB8g9xPuSbFduLtUStZJt9XoYs4REeQVeebWw3aiN6qZ+JXFgRU+nwP6
+	1TyCHn7+eu929kH3OFDY8iUA97hpa9COHTHccIsS+F1Q6Xe2ys4lWjJHR1iw3UDWJ00E+B8Herz
+	bE2pf81cX1Ctxb1DMmQjXpdbGWC1Vxooda4/RGGoYjOejjUACLyFNzKpX8DDbJvMnFE42bEMZpu
+	XCztV6avOrBGwCsclT9BPVq1GafGeIzT+oScnCgEPWHLDLQMN+hL8=
+X-Received: by 2002:a05:6a21:d82:b0:3bf:6c08:fb98 with SMTP id adf61e73a8af0-3c110a1b5d2mr12532962637.58.1783988924631;
+        Mon, 13 Jul 2026 17:28:44 -0700 (PDT)
+Received: from localhost ([2a00:79e0:2e7c:8:5106:b6e9:abed:6332])
+        by smtp.gmail.com with UTF8SMTPSA id a92af1059eb24-13b659c865asm80749507c88.11.2026.07.13.17.28.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2026 17:28:43 -0700 (PDT)
+Date: Mon, 13 Jul 2026 17:28:40 -0700
+From: Brian Norris <briannorris@chromium.org>
+To: Jens Remus <jremus@linux.ibm.com>
+Cc: Dylan Hatch <dylanbhatch@google.com>,
+	Mostafa Saleh <smostafa@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Weinan Liu <wnliu@google.com>, Will Deacon <will@kernel.org>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Song Liu <song@kernel.org>
-Subject: [PATCH 0/1] Fix exported symbol klp-relocation bug
-Date: Mon, 13 Jul 2026 17:31:27 -0400
-Message-ID: <20260713213128.3529250-1-joe.lawrence@redhat.com>
+	Indu Bhagat <ibhagatgnu@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Jiri Kosina <jikos@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
+	Puranjay Mohan <puranjay@kernel.org>, Song Liu <song@kernel.org>,
+	joe.lawrence@redhat.com, linux-toolchains@vger.kernel.org,
+	linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v5 0/8] unwind, arm64: add sframe unwinder for kernel
+Message-ID: <alWCuAA7r1otvROg@google.com>
+References: <20260428183643.3796063-1-dylanbhatch@google.com>
+ <agcEMEl-QR0g6DgF@google.com>
+ <CADBMgpx38SUUuYYCm612STqh01jqv817WnJeeXYTD7Uc1r-fug@mail.gmail.com>
+ <4f429a50-df5d-411f-b40e-048d3cad5133@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <4f429a50-df5d-411f-b40e-048d3cad5133@linux.ibm.com>
 
-Here is another klp-build bug reported downstream by Ben and reproduced
-upstream by me:
+Hi Jens,
 
-Config
-======
+On Tue, May 19, 2026 at 01:05:23PM +0200, Jens Remus wrote:
+> Hi Dylan and Mostafa!
 
-Default-ish config, note the KVM modules and allowing missing module NS
-imports (more on that later):
+I also work at the same company as Dylan and Mostafa, and am therefore
+probably using the same company-maintained Linux distribution.
 
-  $ make defconfig
-  $ ./scripts/config --file .config \
-             --set-val CONFIG_FTRACE y \
-             --set-val CONFIG_KALLSYMS_ALL y \
-             --set-val CONFIG_FUNCTION_TRACER y \
-             --set-val CONFIG_DYNAMIC_FTRACE y \
-             --set-val CONFIG_DYNAMIC_DEBUG y \
-             --set-val CONFIG_LIVEPATCH y \
-             --set-val CONFIG_KVM m \
-             --set-val CONFIG_KVM_INTEL m \
-             --set-val CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS y
-  $ make olddefconfig
+> On 5/18/2026 7:55 PM, Dylan Hatch wrote:
+> > On Fri, May 15, 2026 at 4:32=E2=80=AFAM Mostafa Saleh <smostafa@google.=
+com> wrote:
+> >> Not sure if related, but after updating my toolchain
+> >> (aarch64-linux-gnu-gcc (Debian 15.2.0-4) 15.2.0), I hit link errors:
+> >> ld.lld: error: arch/arm64/kernel/vdso/vgettimeofday.o:(.sframe) is bei=
+ng placed in '.sframe'
+> >> ld.lld: error: arch/arm64/kernel/vdso/vgetrandom.o:(.sframe) is being =
+placed in '.sframe`
 
+I've also been hitting this for some time, and I'd like to see if I can
+figure out what's going wrong. My current workaround is:
 
-Base kernel and livepatch build
-===============================
+--- a/Makefile
++++ b/Makefile
+@@ -946,6 +946,8 @@ ifdef CONFIG_CC_IS_GCC
+ KBUILD_CFLAGS	+=3D $(call cc-option,--param=3Dallow-store-data-races=3D0)
+ KBUILD_CFLAGS	+=3D $(call cc-option,-fno-allow-store-data-races)
+ endif
++# No sframe generation for kernel if enabled by default
++KBUILD_CFLAGS	+=3D $(call cc-option,-Xassembler --gsframe=3Dno)
+=20
+ ifdef CONFIG_READABLE_ASM
+ # Disable optimizations that make assembler listings hard to read.
 
-  $ make -j$(nproc)
+> > Previously when developing against the SFrame V2 format, I had fixed
+> > these warnings with the VDSO Makefile change currently in this series:
+> >=20
+> > diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/M=
+akefile
+> > index 7dec05dd33b7..c60ef921956f 100644
+> > --- a/arch/arm64/kernel/vdso/Makefile
+> > +++ b/arch/arm64/kernel/vdso/Makefile
+> > @@ -38,7 +38,7 @@ ccflags-y +=3D -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+> >  CC_FLAGS_REMOVE_VDSO :=3D $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
+> >                         $(RANDSTRUCT_CFLAGS) $(KSTACK_ERASE_CFLAGS) \
+> >                         $(GCC_PLUGINS_CFLAGS) \
+> > -                       $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
+> > +                       $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(CC_FLAGS_SFRA=
+ME) \
+> >                         -Wmissing-prototypes -Wmissing-declarations
+> >=20
+> >  CC_FLAGS_ADD_VDSO :=3D -O2 -mcmodel=3Dtiny -fasynchronous-unwind-tables
+> >=20
+> > But the warnings seem to have returned after upgrading my toolchain,
+> > possibly due to SFrame V3 or some confounding change in GCC. The
+> > --gsframe in the assembler should be set to 'no' by default, so
+> > perhaps GCC is providing an override --gsframe internally?
+>=20
+> Could it be that your build of binutils was configured with
+> --enable-default-sframe, so that the GNU assembler defaults to generate
+> .sframe?  AFAIK this configure option was meant for distributors and
+> package maintainers.
+>=20
+> You can check as follows whether --gsframe defaults to "no" or "yes":
+>=20
+> $ as --help | grep -A1 gsframe
+>   --gsframe[=3D{no|yes}]    whether to generate SFrame stack trace inform=
+ation
+>                           (default: no)
+> ...
 
-Build a small patch to kvm :: mmu.c that introduces a call to
-kvm_flush_remote_tlbs():
+$ aarch64-linux-gnu-as --help | grep -A1 gsframe
+  --gsframe[=3D{no|yes}]    whether to generate SFrame stack trace informat=
+ion
+                          (default: no)
+--
+  --gsframe-<N>           generate SFrame version <N> information. 3 =3D=3D=
+ <N>
+  --scfi=3Dexperimental     Synthesize DWARF CFI for hand-written asm
 
-  $ cat minimal-kvm-repro.patch
-  diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-  index 24fbc9ea502a..3f11b8c051ce 100644
-  --- a/arch/x86/kvm/mmu/mmu.c
-  +++ b/arch/x86/kvm/mmu/mmu.c
-  @@ -2553,6 +2553,9 @@ static void __link_shadow_page(struct kvm *kvm,
-                  drop_large_spte(kvm, sptep, flush);
+> Maybe build the VDSO separately with V=3D1 to see what assembler/compiler
+> options are effectively used (e.g. for vgettimeofday.o and vgetrandom.o
+> mentioned in the linker error message above)?
 
-          spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-  +
-  +       if (flush)
-  +               kvm_flush_remote_tlbs(kvm);
+A slightly tweaked version of my vgetrandom.o build line:
 
-          mmu_spte_set(sptep, spte);
+# CC      arch/arm64/kernel/vdso/vgetrandom.o
+  aarch64-linux-gnu-gcc -Wp,-MMD,arch/arm64/kernel/vdso/.vgetrandom.o.d -no=
+stdinc -I./arch/arm64/include -I./arch/arm64/include/generated -I./include =
+-I./include -I./arch/arm64/include/uapi -I./arch/arm64/include/generated/ua=
+pi -I./include/uapi -I./include/generated/uapi -include ./include/linux/com=
+piler-version.h -include ./include/linux/kconfig.h -include ./include/linux=
+/compiler_types.h -D__KERNEL__ -mlittle-endian -DCC_USING_PATCHABLE_FUNCTIO=
+N_ENTRY -DKASAN_SHADOW_SCALE_SHIFT=3D -Werror -fshort-wchar -funsigned-char=
+ -fno-common -fno-PIE -fno-strict-aliasing -std=3Dgnu11 -fms-extensions -mg=
+eneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=3D1 -Wno-psabi -mabi=3Dlp64 -=
+fno-asynchronous-unwind-tables -fno-unwind-tables -mbranch-protection=3Dpac=
+-ret -Wa,-march=3Darmv8.5-a -DARM64_ASM_ARCH=3D'"armv8.5-a"' -DKASAN_SHADOW=
+_SCALE_SHIFT=3D -fno-delete-null-pointer-checks -O2 -fno-allow-store-data-r=
+aces -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling=
+-calls -ftrivial-auto-var-init=3Dzero -fzero-init-padding-bits=3Dall -fno-s=
+tack-clash-protection -fno-inline-functions-called-once -fmin-function-alig=
+nment=3D8 -fstrict-flex-arrays=3D3 -fno-strict-overflow -fno-stack-check -f=
+conserve-stack -fno-builtin-wcslen -Wall -Wextra -Wundef -Werror=3Dimplicit=
+-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -Werror=
+=3Dstrict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address=
+ -Wno-address-of-packed-member -Wframe-larger-than=3D2048 -Wno-main -Wno-ty=
+pe-limits -Wno-dangling-pointer -Wvla-larger-than=3D1 -Wno-pointer-sign -Wc=
+ast-function-type -Wno-unterminated-string-initialization -Wno-array-bounds=
+ -Wno-stringop-overflow -Wno-alloc-size-larger-than -Wimplicit-fallthrough=
+=3D5 -Werror=3Ddate-time -Werror=3Dincompatible-pointer-types -Werror=3Ddes=
+ignated-init -Wenum-conversion -Wunused -Wno-unused-but-set-variable -Wno-u=
+nused-const-variable -Wno-packed-not-aligned -Wno-format-overflow -Wno-form=
+at-truncation -Wno-stringop-truncation -Wno-override-init -Wno-missing-fiel=
+d-initializers -Wno-shift-negative-value -Wno-maybe-uninitialized -Wno-sign=
+-compare -Wno-unused-parameter -g -mstack-protector-guard=3Dsysreg -mstack-=
+protector-guard-reg=3Dsp_el0 -mstack-protector-guard-offset=3D1344 -fno-com=
+mon -fno-builtin -fno-stack-protector -ffixed-x18 -DDISABLE_BRANCH_PROFILIN=
+G -DBUILD_VDSO -O2 -mcmodel=3Dtiny -fasynchronous-unwind-tables -include ./=
+lib/vdso/getrandom.c   -I./arch/arm64/kernel/vdso -Iarch/arm64/kernel/vdso =
+   -DKBUILD_MODFILE=3D'"arch/arm64/kernel/vdso/vgetrandom"' -DKBUILD_BASENA=
+ME=3D'"vgetrandom"' -DKBUILD_MODNAME=3D'"vgetrandom"' -D__KBUILD_MODNAME=3D=
+vgetrandom -c -o arch/arm64/kernel/vdso/vgetrandom.o ./arch/arm64/kernel/vd=
+so/vgetrandom.c
 
-Ignore the namespace complaint for now:
+I mostly don't know what I'm looking for w.r.t. gsframe features, but
+I'm willing to poke at my compiler/assembler/build-process.
 
-  $ ./scripts/livepatch/klp-build -T minimal-kvm-repro.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  arch/x86/kvm/kvm.o: changed function: __link_shadow_page
-  Building patch module: livepatch-minimal-kvm-repro.ko
-  WARNING: modpost: module livepatch-minimal-kvm-repro uses symbol kvm_flush_remote_tlbs from namespace module:kvm-intel, but does not import it.
-  SUCCESS
-
-klp-relocation inspection
-=========================
-
-Take a look at the generated klp-relocation symbols:
-
-  $ readelf --wide --symbols livepatch-minimal-kvm-repro.ko | grep -o '.klp.sym.*'
-  .klp.sym.kvm.kvm_flush_remote_tlbs_sptep,0
-  .klp.sym.kvm.make_nonleaf_spte,0
-  .klp.sym.kvm.drop_spte,0
-  .klp.sym.arch/x86/kvm/kvm.kvm_flush_remote_tlbs,0        << "arch/x86/kvm/kvm" what?!
-  .klp.sym.kvm.pte_list_add.isra.0,0
-  .klp.sym.kvm.kvm_mmu_mark_parents_unsync,0
-
-Oddly, the klp-relocation looks like the pathname / Module.symvers:
-
-  $ grep kvm_flush_remote_tlbs Module.symvers
-  0x00000000      kvm_flush_remote_tlbs   arch/x86/kvm/kvm        EXPORT_SYMBOL_GPL       module:kvm-intel
-                                          ^^^^^^^^^^^^^^^^
-
-
-klp-diff
-========
-
-In klp-diff.c :: clone_reloc_klp() there are two paths for grabbing a
-symbol's module name, depending on whether it's been exported or not:
-
-  	/*
-  	 * Create the KLP symbol.
-  	 */
-
-  	if (export) {
-  		sym_modname = export->mod;
-  		sym_orig_name = export->sym;
-  		sympos = 0;
-  	} else {
-  		sym_modname = find_modname(e);
-  		if (!sym_modname)
-  			return -1;
-
-where the !export path calls find_modname() and __find_modname contains
-some string manipulation at the end to form a simple, normalized kernel
-module name:
-
-  	for (char *c = name; *c; c++) {
-  		if (*c == '/')
-  			name = c + 1;
-  		else if (*c == '-')
-  			*c = '_';
-  		else if (*c == '.') {
-  			*c = '\0';
-  			break;
-  		}
-  	}
-
-but the export path assigns export->mod directly, which was originally
-extracted from the Modules.symvers file in read_exports() with no such
-string simplification.
-
-AFAICT no where does klp-diff expect to handle export->mod as a path and
-not a normalized module name.
-
-
-Fix
-===
-
-With that, the attached patch extracts the string code from
-__find_modname() into a helper function that both it and read_exports()
-can call.
-
-  $ ./scripts/livepatch/klp-build -T minimal-kvm-repro.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  arch/x86/kvm/kvm.o: changed function: __link_shadow_page
-  Building patch module: livepatch-minimal-kvm-repro.ko
-  WARNING: modpost: module livepatch-minimal-kvm-repro uses symbol kvm_flush_remote_tlbs from namespace module:kvm-intel, but does not import it.
-  SUCCESS
-
-  $ readelf --wide --symbols livepatch-minimal-kvm-repro.ko | grep -o '.klp.sym.*'
-  .klp.sym.kvm.kvm_flush_remote_tlbs_sptep,0
-  .klp.sym.kvm.make_nonleaf_spte,0
-  .klp.sym.kvm.kvm_flush_remote_tlbs,0                     << fixed
-  .klp.sym.kvm.drop_spte,0
-  .klp.sym.kvm.pte_list_add.isra.0,0
-  .klp.sym.kvm.kvm_mmu_mark_parents_unsync,0
-
-
-Next: symbol namespaces
-=======================
-
-Now a harder question, I think, about symbol namespaces.  In the past,
-kpatch-build had supported patching symbols in namespace where
-MODULE_IMPORT_NS() is allowed.  Looking at kvm :: mmu.c
-::kvm_flush_remote_tlbs(), that is annotated with
-EXPORT_SYMBOL_FOR_KVM_INTERNAL() instead.
-
-Should we make an effort to support klp-relocations / patching to this
-use-case?
-
-If modpost were to let klp-relocation symbols through, I *think*
-(untested) that might be enough... but it seems like that may violate
-the spirit of what the namespacing effort is trying to achieve.
-
-Note that klp-post-link converts these symbols to SHN_LIVEPATCH before
-the module is loaded, so the kernel module loader already skips them in
-simplify_symbols() (see SHN_LIVEPATCH case).  AFAICT, the namespace
-check in modpost is the only enforcement point, and it's checking a
-symbol that will never be resolved through the normal module loading
-path anyway.
-
-Regards,
-
-Joe Lawrence (1):
-  objtool/klp-diff: normalize Module.symvers paths to module names
-
- tools/objtool/klp-diff.c | 42 ++++++++++++++++++++++++++++------------
- 1 file changed, 30 insertions(+), 12 deletions(-)
-
--- 
-2.54.0
-
+Brian
