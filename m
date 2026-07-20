@@ -1,45 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634EC3B9D99
-	for <live-patching@vger.kernel.org>; Mon, 20 Jul 2026 14:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BCE3B9D99
+	for <live-patching@vger.kernel.org>; Mon, 20 Jul 2026 14:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784559429; cv=none; b=qGcmvIHYgQigkzQP2wGkv3uD6SHggns+ind/QwFyFo3rNJaQT+gXMRoB5IErUD0pOiH08BFqIhoeYyyXjyY9D0fI77mDsMiXInYD6rUpP61EsFonjTF+AvKKHD0eC+o3z34RLde8CFseURQo8Wza1mLqS8kVB2/tWUNLGp5cO4E=
+	t=1784559431; cv=none; b=D4J4D9uAHIweWm0PSZIThoSC2daB/FLpz+oq4LRorL23an2eFDBewxL0rB50LgEpMXObOcSBt9y06oIZC6i2NCsvzdNwVH4n4rP7LB4lVqiFPBohnxP0cAzCjEKJaVkO0vFAEvsY9SjRlD3pWQKFhGAYDXD70q4OnptjoslDm1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784559429; c=relaxed/simple;
-	bh=EBCw4ahKd0mk6lFsFMU8bF8GJ5Gy4/x6bw7MxSjOUjk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=dYNofW37NvFLNwivmN1OKlVYoVU8wGquj1Chvrxm71bymD3J9d8jNjlYOkpSEXS9bkvIKdspBLBYanbV5YnWLjXKHe6A6yuMkz7v6W9xowSN7zrfKheR9UemFMYtVd/dpo9KKcVOfdnekHDl3/On4fUVcXx4F7FTvMzs3UA1xYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XazaHdRV; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1784559431; c=relaxed/simple;
+	bh=ccOTXCloV3Q8Y9+ZidxjG4P446U0/Oq1O23ST+SPoJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-type; b=ggkxtAFX+tw+MmHy/y4LQcsuh0hg/4OuMKetrECDWLoqrwyfEsuc8fr3LyvWCACi+80U0i91hINF0ZZ+7E5m4R5JQyPLqjrF0PXMHUGMRydW8w6dyxEfNBZXrUh43DHQM2Lz/M0fIOesxGpBiRHFJpLoDjFx/CV+zlmvsUr8CRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GYJXB42z; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XazaHdRV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GYJXB42z"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784559426;
+	s=mimecast20190719; t=1784559428;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=YE4fqRbTdQHm92PtONqCeX2PzCW9M/UiuKneTBVCf8U=;
-	b=XazaHdRVcORsGTGj7hTgBeyv7Ud4/UBJ5+fwq7F7KOf3KWOD0L/rRAlmJJBDPAEIudlg8S
-	FGRbNGuUEuDwKlzfeWsQtU8OafnJDbeSxiIM1XCfdgsAiUhwVnU8yA++lgsxCg/AwcZw2Z
-	xf1+QJq+oNgqiHQ4iQhnnkARRfatFow=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JwDPRVkzqg0QoROJHAR7xhshkzmLC5Chs0EiSVtmE7A=;
+	b=GYJXB42znAXXSTt+ZMfT2KR5pt6WO/jI0yjfKy0F49OiF91S/J/inlXfFL3fmX1a9lXnse
+	IJ+PHrgx47WnZsI7W/9QWLKc6upUYZZSeK9cVoT3oqYNSyedsq+qZ0AbYfOwXnwXj2rxAb
+	mGvr5R7+vTSs9dgyUu7LZhqlXV99qVg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-54-llpFmAXZN0qFiQ9oBLulag-1; Mon,
- 20 Jul 2026 10:57:02 -0400
-X-MC-Unique: llpFmAXZN0qFiQ9oBLulag-1
-X-Mimecast-MFC-AGG-ID: llpFmAXZN0qFiQ9oBLulag_1784559421
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-31-4AVDySb-N06B7q1aGd3_Bw-1; Mon,
+ 20 Jul 2026 10:57:04 -0400
+X-MC-Unique: 4AVDySb-N06B7q1aGd3_Bw-1
+X-Mimecast-MFC-AGG-ID: 4AVDySb-N06B7q1aGd3_Bw_1784559423
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91B891802A98;
-	Mon, 20 Jul 2026 14:57:01 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D452B193E88A;
+	Mon, 20 Jul 2026 14:57:02 +0000 (UTC)
 Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.207])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 82A7930001BE;
-	Mon, 20 Jul 2026 14:57:00 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C7AE1300418D;
+	Mon, 20 Jul 2026 14:57:01 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Jiri Kosina <jikos@kernel.org>,
@@ -47,9 +49,11 @@ Cc: Jiri Kosina <jikos@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 0/4] klp-build: klp-relocation fixups
-Date: Mon, 20 Jul 2026 10:56:54 -0400
-Message-ID: <20260720145658.1103243-1-joe.lawrence@redhat.com>
+Subject: [PATCH 1/4] objtool/klp: use patched module name for klp-relocation section naming
+Date: Mon, 20 Jul 2026 10:56:55 -0400
+Message-ID: <20260720145658.1103243-2-joe.lawrence@redhat.com>
+In-Reply-To: <20260720145658.1103243-1-joe.lawrence@redhat.com>
+References: <20260720145658.1103243-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -60,415 +64,197 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-This is a combination bug report and patchset (apologies for the
-cover-letter length).
-
-The problem space is klp-build, klp-relocations, exported symbols and
-everyone's favorite, late-module patching :(
-
-The first two patches could probably stand on their own, but the last
-two make policy decisions that I could have gotten wrong, or require
-some further discussion.  The final patch was AI-created as I just
-wanted something out there to demo a potential fix.  I'm sure Sashiko
-will have something to say and the bots can critic each other :D 
-
-
-Summary
-=======
-
-Patch1
-------
-Fix klp-relocation section handling so that the <objname> piece refers
-to the patched object, and not the parent object of the symbol.
-Otherwise they may not be processed by the kernel (which is iterating
-over livepatch klp_objects, not all loaded kernel objects).
-
-Patch2
-------
-Relax a twin-symbol check when the livepatch adds a new reference to an
-exported module symbol.  This restriction doesn't exist for non-exported
-symbols, so we should allow it.
-
-Patch3 & 4
-----------
-These could be considered for squashing, but I've kept them separate for
-their initial triage / review.
-
-Existing cross-module references (i.e. from can-isotp.ko to can.ko)
-produced klp-relocations that modpost turned into depends= entries.  This
-meant that the livepatch module inherited an explicit module dependency
-on those referenced modules, breaking late-module patching for such
-livepatches.
-
-Restore late-module patching by stripping the module dependencies
-specifically introduced by klp-relocations (leave other dependencies
-untouched).  At the same time, reject patches that would introduce
-references to modules the patched target doesn't already depend on (i.e.
-do not allow klp-build to introduce new module dependencies).
-
-Together this allows the livepatch to load before its target's
-dependency chain is present, while still maintaining safety: when the
-target module eventually loads, its own dependencies guarantee the
-klp-relocation targets are available.
-
-
-Config
-======
-
-The patchset and reproducers were based on top of:
-  393988901632 (jpoimboe/objtool/urgent) objtool/klp: normalize Module.symvers paths to module names
-
-Start with a default x86 config, add livepatch requirements, and build
-the can and can-isotp modules:
-
-  $ make defconfig
-  $ ./scripts/config --file .config \
-               --set-val CONFIG_FTRACE y \
-               --set-val CONFIG_KALLSYMS_ALL y \
-               --set-val CONFIG_FUNCTION_TRACER y \
-               --set-val CONFIG_DYNAMIC_FTRACE y \
-               --set-val CONFIG_DYNAMIC_DEBUG y \
-               --set-val CONFIG_LIVEPATCH y \
-               --set-val CONFIG_CAN m \
-               --set-val CONFIG_CAN_ISOTP m
-  $ make olddefconfig
-
-
-Patch1: existing-xmod-ref.patch
-================================
-
-Build a small patch to can-isotp :: isotp.c to do anything:
-
-  $ cat existing-xmod-ref.patch
-  diff --git a/net/can/isotp.c b/net/can/isotp.c
-  index c48b4a818297..3e216e11be98 100644
-  --- a/net/can/isotp.c
-  +++ b/net/can/isotp.c
-  @@ -1195,6 +1195,8 @@ static int isotp_release(struct socket *sock)
-   	struct isotp_sock *so;
-   	struct net *net;
-
-  +	pr_info("klp-build test");
-  +
-   	if (!sk)
-   		return 0;
-
-  $ ./scripts/livepatch/klp-build -T existing-xmod-ref.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  net/can/can-isotp.o: changed function: isotp_release
-  Building patch module: livepatch-existing-xmod-ref.ko
-  SUCCESS
-
-klp-relocation inspection
--------------------------
-The build succeeds, the correct function marked as changed, but the
-corresponding klp-relocations are saved across two sections:
-
-  $ readelf --wide --relocs livepatch-existing-xmod-ref.ko
-
-  [ ... snip ... ]
-
-  Relocation section '.klp.rela.can_isotp..text' at offset 0x30a0 contains 7 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  00000000000000f6  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  0000000000000112  0000004100000002 R_X86_64_PC32          0000000000000000 .klp.sym.can_isotp.isotp_busy_notifier,0 - 4
-  000000000000011b  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  0000000000000131  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  000000000000014d  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  00000000000001c9  0000003c0000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv,0 + 0
-  00000000000001f5  000000370000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv_echo,0 + 0
-
-  Relocation section '.klp.rela.can..text' at offset 0x3148 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  00000000000001df  0000005a00000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-  000000000000020b  0000005a00000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-
-Note that the same patch built with kpatch-build puts them into a single
-section:
-
-  Relocation section '.klp.rela.can_isotp..text.isotp_release' at offset 0xe12e8 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  00000000000000c1  000000610000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,1 + 0
-  00000000000000d7  0000006200000002 R_X86_64_PC32          0000000000000000 .klp.sym.can_isotp.isotp_busy_notifier,1 - 4
-  00000000000000e0  000000610000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,1 + 0
-  00000000000000f6  000000610000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,1 + 0
-  0000000000000102  0000006200000002 R_X86_64_PC32          0000000000000000 .klp.sym.can_isotp.isotp_busy_notifier,1 - 4
-  000000000000013a  000000610000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,1 + 0
-  00000000000002b4  000000630000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv,1 + 0
-  00000000000002ca  0000009500000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-  00000000000002e0  000000640000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv_echo,1 + 0
-  00000000000002f6  0000009500000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-
-which aligns with the Documentation/livepatch/module-elf-format.rst
-definition:
-
-  The name of a livepatch relocation section must conform to the following
-  format::
+Documentation/livepatch/module-elf-format.rst states (and the kernel
+currently implements) that the name of a livepatch relocation section
+must conform to the following format:
 
     .klp.rela.objname.section_name
-    ^        ^^     ^ ^          ^
-    |________||_____| |__________|
-       [A]      [B]        [C]
 
-  [A]
-    The relocation section name is prefixed with the string ".klp.rela."
+where "objname" determines when the kernel applies the relocations in
+this section (i.e., when the "objname" module loads).  This allows
+relocations not only for currently loaded kernel objects (like vmlinux
+and loaded device drivers), but also for lazy resolution to facilitate
+late-module livepatching (for modules loaded after the livepatch).
 
-  [B]
-    The name of the object (i.e. "vmlinux" or name of module) to
-    which the relocation section belongs follows immediately after the prefix.
+Previously, objtool's KLP post-link step derived the "objname" from the
+klp symbol name, which encoded where the symbol *lives* rather than
+which module is being *patched*.  This broke cross-module references
+(e.g., can_isotp.ko calling can_rx_unregister() from can.ko),
+incorrectly placing them in the .klp.rela.can..text section instead of
+.klp.rela.can_isotp..text.
 
-  [C]
-    The actual name of the section to which this relocation section applies.
+Fix this by adding an 'obj_name' field to the intermediate 'klp_reloc'
+struct.  klp-diff populates this field using find_modname(), and
+klp-post-link reads it directly to generate the .klp.rela section name.
+As a result, each relocation correctly carries its own target module,
+regardless of where the referenced symbol originates.
 
-and its example:
+Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ tools/objtool/include/objtool/klp.h |  1 +
+ tools/objtool/klp-diff.c            | 66 +++++++++++++++++++++++------
+ tools/objtool/klp-post-link.c       | 20 +++++----
+ 3 files changed, 65 insertions(+), 22 deletions(-)
 
-  Relocation section '.klp.rela.btrfs.text.btrfs_feature_attr_show' at offset 0x2ba0 contains 4 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  000000000000001f  0000005e00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.printk,0 - 4
-  0000000000000028  0000003d0000000b R_X86_64_32S           0000000000000000 .klp.sym.btrfs.btrfs_ktype,0 + 0
-  0000000000000036  0000003b00000002 R_X86_64_PC32          0000000000000000 .klp.sym.btrfs.can_modify_feature.isra.3,0 - 4
-  000000000000004c  0000004900000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.snprintf,0 - 4
-
-So as I understand it, there are two objnames with two different roles:
-
-    (section name) .klp.rela.objname.section_name
-                             ^^^^^^^
-                             WHICH object is being patched
-
-    (symbol name)  .klp.sym.objname.symbol_name,sympos
-                            ^^^^^^^
-                            WHERE the symbol lives
-
-The kernel only applies .klp.rela.<objname>.* sections when it processes
-a matching klp_object.  The reproducer livepatch module's
-.init.klp_objects only declares can_isotp (the patched module).  There
-is no klp_object for can (only a module dependency), and so only the
-.klp.rela.can_isotp..text relocations get resolved.
-
-With fix
---------
-Unfortunately while klp-diff knows the patched module name, it cannot
-create the final .klp.rela.* / SHN_LIVEPATCH yet (the module link would
-not preserve them).  So klp-post-link creates those KLP relocations after
-linking, but by then the original object's name is gone from the .ko.
-
-I think the easiest solution is to stash the patched module name in the
-struct klp_reloc during klp-diff, then the klp-post-link can simply read
-the per-rela modname and assign to the correct klp-relocation section
-accordingly.
-
-Here is the same klp-relocation section with the attached patch:
-
-  Relocation section '.klp.rela.can_isotp..text' at offset 0x3208 contains 9 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  00000000000000f6  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  0000000000000112  0000004100000002 R_X86_64_PC32          0000000000000000 .klp.sym.can_isotp.isotp_busy_notifier,0 - 4
-  000000000000011b  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  0000000000000131  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  000000000000014d  000000590000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_notifier_lock,0 + 0
-  00000000000001c9  0000003c0000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv,0 + 0
-  00000000000001df  0000005a00000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-  00000000000001f5  000000370000000b R_X86_64_32S           0000000000000000 .klp.sym.can_isotp.isotp_rcv_echo,0 + 0
-  000000000000020b  0000005a00000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_rx_unregister,0 - 4
-
-
-Patch2: new-xmod-ref.patch
-=================================
-
-Build a patch to can-isotp :: isotp.c to call an exported function in
-the can module:
-
-  $ cat new-xmod-ref.patch
-  diff --git a/net/can/isotp.c b/net/can/isotp.c
-  index c48b4a818297..b54236e9e1d0 100644
-  --- a/net/can/isotp.c
-  +++ b/net/can/isotp.c
-  @@ -1195,6 +1195,8 @@ static int isotp_release(struct socket *sock)
-   	struct isotp_sock *so;
-   	struct net *net;
-
-  +	can_set_skb_uid(NULL);
-  +
-   	if (!sk)
-   		return 0;
-
-  $ ./scripts/livepatch/klp-build -T new-xmod-ref.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  net/can/can-isotp.o: error: objtool: unexpected klp reloc for new symbol can_set_skb_uid
-  net/can/can-isotp.o: changed function: isotp_release
-  error: klp-build: objtool klp diff failed
-  error: klp-build: line 729: '( cd "$ORIG_CSUM_DIR"; [[ -v VERBOSE ]] && echo "cd $ORIG_CSUM_DIR && ${cmd[*]}"; "${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" | "${filter[@]}" 1>&2) || die "objtool klp diff failed" )'
-
-Error explanation
------------------
-This error is emitted by klp-diff :: clone_reloc_klp(), when it's asked
-to clone a klp-relocation for a patched symbol that has no twin:
-
-  	if (!patched_sym->twin) {
-  		ERROR("unexpected klp reloc for new symbol %s", patched_sym->name);
-  		return -1;
-  	}
-
-(just to confirm):
-
-  $ readelf --wide --symbols ./klp-tmp/1-orig/net/can/can-isotp.o | grep can_set_skb_uid
-  (nothing)
-  $ readelf --wide --symbols ./klp-tmp/2-patched/net/can/can-isotp.o | grep can_set_skb_uid
-     188: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND can_set_skb_uid
-
-With fix
---------
-For this specific case, I believe that we can safely relax the check to
-allow for new klp-relocations to exported symbols*.
-
-  $ ./scripts/livepatch/klp-build -T new-xmod-ref.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  net/can/can-isotp.o: changed function: isotp_release
-  Building patch module: livepatch-new-xmod-ref.ko
-  SUCCESS
-
-and there's a klp-relocation generated for the exported symbol:
-
-  $ readelf --wide --relocs livepatch-new-xmod-ref.ko
-  [ ... snip ... ]
-  Relocation section '.klp.rela.can_isotp..text' at offset 0x33a0 contains 11 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  000000000000005a  0000005b00000004 R_X86_64_PLT32         0000000000000000 .klp.sym.can.can_set_skb_uid,0 - 4
-  [ ... snip ... ]
-
-* note the following module dependency info ...
-
-ratsai
-Module dependency side-effect
-=============================
-
-Note that cross-module klp-relocations currently introduce a livepatch
-module dependency through modpost.  For example, the Patch 1 livepatch
-module:
-
-  $ modinfo -F depends livepatch-existing-xmod-ref.ko
-  can
-
-This occurs because clone_reloc_klp() creates STB_WEAK UNDEF placeholder
-symbols (so the linker/objtool are happy before post-link).  modpost
-runs before post-link and adds depends= from these weak undefs.
-
-(For comparison, kpatch-build avoided this by stripping the original
-relocation symbols entirely before linking.)
-
-On the one hand, the module dependency introduces a refcount that
-prevents the can driver from unloading while the livepatch is loaded,
-turning the implicit klp-relocation dependency into an explicit one.  On
-the other hand, it prevents the late-module patching scenario for any
-realistically complex livepatch that patches a module and not vmlinux.
-
-IMHO, the best of both worlds is to strip the module dependencies
-introduced only by klp-relocations, while rejecting patches that would
-reference a module the livepatch target doesn't already depend on.
-Patches 3 and 4 implement this: klp-post-link strips the spurious
-depends= entries, and klp-diff validates that new export references stay
-within the target's existing dependency chain.
-
-(Alternatively, we could allow livepatch module dependencies for new
-cross-module references.  That should be safe and still allow partial
-late-module patching (of the original target module's other
-dependencies).  That said, the permutations of late-module patching make
-the head spin, so this v1 patchset keeps it simple.)
-
-
-Patch3 & Patch4
-===============
-
-These two (squashable?) patches seek to restore late-module patching to
-selective livepatche scenarios that contain cross-module references to
-exported functions:
-
-  0- (regression test) livepatch adds a klp-relocation to vmlinux
-     exported function, can-isotp.ko -> vmlinux:
-
-     existing-xmod-ref.patch - OK
-     $ modinfo -F depends livepatch-existing-xmod-ref.ko
-     (nothing)
-
-  1- (now passes) livepatch adds another klp-relocation to an existing
-     cross-module dependency, can-isotp.ko -> can.ko:
-
-     new-xmod-ref.patch - OK
-     $ modinfo -F depends livepatch-new-xmod-ref.ko
-     (nothing)
-
-  2- (expected failure) livepatch adds a klp-relocation cross-module to a
-     new cross-module dependency, can-isotp.ko -> can-dev.ko:
-
-     $ cat new-xmod-dep.patch
-     diff --git a/net/can/isotp.c b/net/can/isotp.c
-     index c48b4a818297..6ea83d55a714 100644
-     --- a/net/can/isotp.c
-     +++ b/net/can/isotp.c
-     @@ -1195,6 +1195,10 @@ static int isotp_release(struct socket *sock)
-      	struct isotp_sock *so;
-      	struct net *net;
-
-     +	extern struct net_device *alloc_candev_mqs(int, unsigned int, unsigned int);
-     +
-     +	pr_info("can-dev export: %px\n", alloc_candev_mqs);
-     +
-      	if (!sk)
-      		return 0;
-
-     ./scripts/livepatch/klp-build -T new-xmod-dep.patch
-     Validating patch(es)
-     Building original kernel
-     Copying original object files
-     Fixing patch(es)
-     Building patched kernel
-     Copying patched object files
-     Generating original checksums
-     Generating patched checksums
-     Diffing objects
-     net/can/can-isotp.o: changed function: isotp_release
-     net/can/can-isotp.o: error: objtool: alloc_candev_mqs: new reference to alloc_candev_mqs (exported by can_dev) would create an undeclared module dependency
-     error: klp-build: objtool klp diff failed
-     error: klp-build: line 729: '( cd "$ORIG_CSUM_DIR"; [[ -v VERBOSE ]] && echo "cd $ORIG_CSUM_DIR && ${cmd[*]}"; "${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" | "${filter[@]}" 1>&2) || die "objtool klp diff failed" )'
-
-
-Joe Lawrence (4):
-  objtool/klp: use patched module name for klp-relocation section naming
-  objtool/klp: allow new references to module exports
-  objtool/klp: reject new cross-module references without existing
-    dependency
-  objtool/klp: strip klp-induced module dependencies from livepatch
-    modules
-
- tools/objtool/include/objtool/klp.h |   1 +
- tools/objtool/klp-diff.c            |  98 ++++++++++++--
- tools/objtool/klp-post-link.c       | 195 ++++++++++++++++++++++++++--
- 3 files changed, 271 insertions(+), 23 deletions(-)
-
+diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
+index 6f60cf05db86..bf655b2a7590 100644
+--- a/tools/objtool/include/objtool/klp.h
++++ b/tools/objtool/include/objtool/klp.h
+@@ -26,6 +26,7 @@
+ struct klp_reloc {
+ 	void *offset;
+ 	void *sym;
++	void *obj_name;
+ 	u32 type;
+ };
+ 
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index 819f6f167e8c..c5cc54ee562e 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -1518,13 +1518,15 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+ {
+ 	struct symbol *patched_sym = patched_reloc->sym;
+ 	s64 addend = reloc_addend(patched_reloc);
+-	const char *sym_modname, *sym_orig_name;
+-	static struct section *klp_relocs;
++	const char *sym_modname, *sym_orig_name, *patched_modname;
++	static struct section *klp_relocs, *klp_strs;
++	static struct symbol *klp_strs_sym;
+ 	struct symbol *sym, *klp_sym;
+ 	unsigned long klp_reloc_off;
+ 	char sym_name[SYM_NAME_LEN];
+ 	struct klp_reloc klp_reloc;
+ 	unsigned long sympos;
++	s64 str_addend;
+ 
+ 	if (!patched_sym->twin) {
+ 		ERROR("unexpected klp reloc for new symbol %s", patched_sym->name);
+@@ -1603,6 +1605,24 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+ 						0, SHT_PROGBITS, 8, SHF_ALLOC);
+ 		if (!klp_relocs)
+ 			return -1;
++
++		klp_strs = find_section_by_name(e->out, KLP_STRINGS_SEC);
++		if (!klp_strs) {
++			klp_strs = elf_create_section(e->out, KLP_STRINGS_SEC,
++						      0, 0, SHT_PROGBITS, 1,
++						      SHF_ALLOC | SHF_STRINGS | SHF_MERGE);
++			if (!klp_strs)
++				return -1;
++			if (elf_add_string(e->out, klp_strs, "") == -1)
++				return -1;
++		}
++
++		klp_strs_sym = klp_strs->sym;
++		if (!klp_strs_sym) {
++			klp_strs_sym = elf_create_section_symbol(e->out, klp_strs);
++			if (!klp_strs_sym)
++				return -1;
++		}
+ 	}
+ 
+ 	klp_reloc_off = sec_size(klp_relocs);
+@@ -1627,6 +1647,20 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+ 			      klp_sym, addend, R_ABS64))
+ 		return -1;
+ 
++	/* klp_reloc.obj_name: the patched module, for .klp.rela section naming */
++	patched_modname = find_modname(e);
++	if (!patched_modname)
++		return -1;
++
++	str_addend = elf_add_string(e->out, klp_strs, patched_modname);
++	if (str_addend == -1)
++		return -1;
++
++	if (!elf_create_reloc(e->out, klp_relocs,
++			      klp_reloc_off + offsetof(struct klp_reloc, obj_name),
++			      klp_strs_sym, str_addend, R_ABS64))
++		return -1;
++
+ 	return 0;
+ }
+ 
+@@ -2177,18 +2211,24 @@ static int create_klp_sections(struct elfs *e)
+ 	if (!funcs_sym)
+ 		return -1;
+ 
+-	str_sec = elf_create_section(e->out, KLP_STRINGS_SEC, 0, 0,
+-				     SHT_PROGBITS, 1,
+-				     SHF_ALLOC | SHF_STRINGS | SHF_MERGE);
+-	if (!str_sec)
+-		return -1;
+-
+-	if (elf_add_string(e->out, str_sec, "") == -1)
+-		return -1;
++	/* clone_reloc_klp() may have already created this section */
++	str_sec = find_section_by_name(e->out, KLP_STRINGS_SEC);
++	if (!str_sec) {
++		str_sec = elf_create_section(e->out, KLP_STRINGS_SEC, 0, 0,
++					     SHT_PROGBITS, 1,
++					     SHF_ALLOC | SHF_STRINGS | SHF_MERGE);
++		if (!str_sec)
++			return -1;
++		if (elf_add_string(e->out, str_sec, "") == -1)
++			return -1;
++	}
+ 
+-	str_sym = elf_create_section_symbol(e->out, str_sec);
+-	if (!str_sym)
+-		return -1;
++	str_sym = str_sec->sym;
++	if (!str_sym) {
++		str_sym = elf_create_section_symbol(e->out, str_sec);
++		if (!str_sym)
++			return -1;
++	}
+ 
+ 	/* allocate klp_object_ext */
+ 	obj_data = elf_add_data(e->out, obj_sec, NULL, obj_size, true);
+diff --git a/tools/objtool/klp-post-link.c b/tools/objtool/klp-post-link.c
+index c013e39957b1..141b0a46ca52 100644
+--- a/tools/objtool/klp-post-link.c
++++ b/tools/objtool/klp-post-link.c
+@@ -39,7 +39,7 @@ static int fix_klp_relocs(struct elf *elf)
+ 		struct section *sec, *tmp, *klp_rsec;
+ 		unsigned long offset;
+ 		struct reloc *reloc;
+-		char sym_modname[64];
++		const char *sec_objname;
+ 		char rsec_name[SEC_NAME_LEN];
+ 		u64 addend;
+ 		struct symbol *sym, *klp_sym;
+@@ -73,18 +73,20 @@ static int fix_klp_relocs(struct elf *elf)
+ 		klp_sym = reloc->sym;
+ 		addend = reloc_addend(reloc);
+ 
+-		/* symbol format: .klp.sym.modname.sym_name,sympos */
+-		if (sscanf(klp_sym->name + strlen(KLP_SYM_PREFIX), "%55[^.]", sym_modname) != 1)
+-			ERROR("can't find modname in klp symbol '%s'", klp_sym->name);
+-
+-		/*
+-		 * Create the KLP rela:
+-		 */
++		/* klp_reloc.obj_name: the patched module name */
++		reloc = find_reloc_by_dest(elf, klp_relocs,
++					   klp_reloc_off + offsetof(struct klp_reloc, obj_name));
++		if (!reloc) {
++			ERROR("malformed " KLP_RELOCS_SEC " section");
++			return -1;
++		}
++		sec_objname = (const char *)reloc->sym->sec->data->d_buf +
++			      reloc_addend(reloc);
+ 
+ 		/* section format: .klp.rela.sec_objname.section_name */
+ 		if (snprintf_check(rsec_name, SEC_NAME_LEN,
+ 				   KLP_RELOC_SEC_PREFIX "%s.%s",
+-				   sym_modname, sec->name))
++				   sec_objname, sec->name))
+ 			return -1;
+ 
+ 		klp_rsec = find_section_by_name(elf, rsec_name);
 -- 
 2.54.0
 
