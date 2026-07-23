@@ -1,85 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD3D1C01
-	for <live-patching@vger.kernel.org>; Wed, 22 Jul 2026 05:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8963BE154
+	for <live-patching@vger.kernel.org>; Thu, 23 Jul 2026 09:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784699177; cv=none; b=jqCaea+IkyJNiGFlV3vEFDTqqqcMNAa/DiOVpO2T90WEPrTnVC60fexDmD9UTyOPxCeCJOaP4VKjAfzJSKLs5t3Qd0jm9LyXjP6O8Xaj5cFW8m2/13BGjhZsQysZyA37yH19BHvbLUedt4d7xHnTD1kJDq1bQBibdVmGi+m1WVs=
+	t=1784798734; cv=none; b=S71qBtG5S7FhzlmNcmw+rFxmkv682eQ+dRw/7Csio6kIm3LftGdMg7vxcHXaQVni53SpMbcXhW+epSfRkCm+5jm6TBRLzCN0sDHka6idjxK/9+NJPDOD4nd8ujg9mKuuI9kAQ/oCsUdeZjTTZT5vfD/HTRxDsWXjEx7yE+efMHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784699177; c=relaxed/simple;
-	bh=YWy8PyJleVGrfMZJHukRmcBrWBWZcGzFSqS4LXB3bt4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/X/I7uO3XuS4SERWVmgtqQZRuIwC5buiomgKGovFs+82mSGZXSW2dfNjZ+xl6cUhuBpvNnAybfQ8BRi+dTW/AijnW43E6yorUNWLZasjuALsM8UJtdhOOir3XqeKsoQ3lox3D4mdl7pLBya4kFgOCwevcu0xXiwkI5/URCOItk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJrxzRwa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784798734; c=relaxed/simple;
+	bh=Y1rhxqMPINo4Mp+TzcP1ApVCBEJHVxeylvzBt73UpQE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=LtVDpg5j6sYNpNC64/t49c1ESe0gnx3bPUYcWXQIUbGS/qZmKYriPcc7CBab5hsOlzkfkU1wYVM6qZPmfaxXLfKqZ7zvZf2w6VezQBpI091XUuSZKhI7Y+ZEaeh6hID5p0k+MfYdMKHrUWg5Y0ZGM0vEn0kqqWFW+zQh9dzpELQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a1P3OWK5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ITB3d4SQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a1P3OWK5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ITB3d4SQ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJrxzRwa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3CC1F000E9;
-	Wed, 22 Jul 2026 05:46:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784699176;
-	bh=T3PlQm5kKmiL5FP3sPdgJjLa8XWv+uzHVtF786vsS8w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JJrxzRwaQ6u6sKtijk8pB8s8tyVnofuo1kbbtXlGLtBrsYItnvLCbNXSlQKmBstWi
-	 5yrw9lwYuLsotZpDrdoiBz0uSFgkMfnuHhpmjtOY+re9942lUUlbOrBItnZusuR565
-	 FU14+L36qUzvhQSnZifWoCQ2xZIjttzEOYYaKiOLR1lThM1cdDoHTqDiRRNAhrOdBZ
-	 Es/3Q/NPvEdZIoAtdkejJH4xssbuYalr90UEkJhh/roC5rrX9oY3wgWOE+/250mwfh
-	 kPCIGS5oosz6GMR4iKnhUJswokrYwxX/L9Niz09bbuPX/bDle5RVTzIEpNRgN4i/nt
-	 kPMfwVWY/pO1Q==
-Date: Tue, 21 Jul 2026 22:46:13 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a1P3OWK5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ITB3d4SQ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a1P3OWK5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ITB3d4SQ"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id AD98A7AFD7;
+	Thu, 23 Jul 2026 09:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1784798725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
+	b=a1P3OWK5yjkWliSSwV6cHtdhDU7FeWfbYfDsIkrtdUzvFNIwd+L8/TnbPpuZqEXGht3REd
+	vu2p4OJUSFNxUewPXXkYZ0GFtkW3PjGNZwL3/kXb31LiICyrhN78n4cY/MWrK8SRxc3xtg
+	BKIHcGEM7EeSGgzyjZK+0BiuO2aHIvQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1784798725;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
+	b=ITB3d4SQgb5LxB6FXw6p1qgnIM4LcrJNsLhiQRS1xapg7c2mIABOJRN/efxanIjNJvobNL
+	JGogDwKRlpIxE2Dg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1784798725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
+	b=a1P3OWK5yjkWliSSwV6cHtdhDU7FeWfbYfDsIkrtdUzvFNIwd+L8/TnbPpuZqEXGht3REd
+	vu2p4OJUSFNxUewPXXkYZ0GFtkW3PjGNZwL3/kXb31LiICyrhN78n4cY/MWrK8SRxc3xtg
+	BKIHcGEM7EeSGgzyjZK+0BiuO2aHIvQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1784798725;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
+	b=ITB3d4SQgb5LxB6FXw6p1qgnIM4LcrJNsLhiQRS1xapg7c2mIABOJRN/efxanIjNJvobNL
+	JGogDwKRlpIxE2Dg==
+Date: Thu, 23 Jul 2026 11:25:25 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
 To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: live-patching@vger.kernel.org, Ben Procknow <bprockno@redhat.com>, 
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Song Liu <song@kernel.org>
-Subject: Re: [PATCH 0/1] Mitigate klp-build data sympos bug
-Message-ID: <ini7aoz6vvowmu5dvxoxpi6l4ednsov6omjcoffmuod3d2iaof@vflcrwqktqsl>
-References: <20260710153042.3156788-1-joe.lawrence@redhat.com>
+cc: live-patching@vger.kernel.org, Ben Procknow <bprockno@redhat.com>, 
+    Jiri Kosina <jikos@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH 0/1] Fix exported symbol klp-relocation bug
+In-Reply-To: <20260713213128.3529250-1-joe.lawrence@redhat.com>
+Message-ID: <alpine.LSU.2.21.2607231109210.6525@pobox.suse.cz>
+References: <20260713213128.3529250-1-joe.lawrence@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260710153042.3156788-1-joe.lawrence@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-4.29 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.19)[-0.972];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:mid,pobox.suse.cz:helo,suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Score: -4.29
+X-Spam-Level: 
 
-On Fri, Jul 10, 2026 at 11:30:41AM -0400, Joe Lawrence wrote:
-> Hi Josh,
+Hi,
+
+> Next: symbol namespaces
+> =======================
 > 
-> This is an upstream reproducer of a downstream bug report from Ben.  He
-> encountered a sympos bug on rhel-10 with the same pwq_cache variable.
-> Here I distilled it down to minimal (upstream) reproducer config and
-> patch.
+> Now a harder question, I think, about symbol namespaces.  In the past,
+> kpatch-build had supported patching symbols in namespace where
+> MODULE_IMPORT_NS() is allowed.  Looking at kvm :: mmu.c
+> ::kvm_flush_remote_tlbs(), that is annotated with
+> EXPORT_SYMBOL_FOR_KVM_INTERNAL() instead.
 > 
-> From what I can tell, function symbols already have a "HACK" disclaimer
-> around their workaround -- the attached patch tries to extend the same
-> idea to data symbols.  It may not have 100% coverage, and it's certainly
-> brittle as it assumes ordering as per the linker script.  But the idea
-> is to band-aid the problem until a more robust fix is ready.
+> Should we make an effort to support klp-relocations / patching to this
+> use-case?
 > 
-> The comment in find_sympos() suggests leveraging the checksum mechanism
-> as a better fix, but perhaps we could also pass the vmlinux file through
-> and read the ordering from the post-linked object?  I can work on that
-> for a v2, but in the meantime do you think this bandaid would be
-> sufficient for at least downstream use?
+> If modpost were to let klp-relocation symbols through, I *think*
+> (untested) that might be enough... but it seems like that may violate
+> the spirit of what the namespacing effort is trying to achieve.
+> 
+> Note that klp-post-link converts these symbols to SHN_LIVEPATCH before
+> the module is loaded, so the kernel module loader already skips them in
+> simplify_symbols() (see SHN_LIVEPATCH case).  AFAICT, the namespace
+> check in modpost is the only enforcement point, and it's checking a
+> symbol that will never be resolved through the normal module loading
+> path anyway.
 
-As far as downstream goes, if you're 100% sure that you've got all the
-different sections covered and in the right order for the right arch for
-the right kernel version, then yeah I suppose extending the HACK could
-work.
+I think we will see more and more EXPORT_SYMBOL_FOR_MODULES() in the 
+kernel. kvm is probably by far the most interesting one for us as of now.
 
-Though I suspect the proper fix won't be too hard.  So rather than
-propagate my original hack even further, we should probably just fix it
-properly.
+Tough. All changes in upstream so far, as I remember, around reducing the 
+possibility to use internal symbols for OOT modules (like kallsyms API but 
+there are probably more) have been done with KLP usage in mind. Or at 
+least people tried. However, there is a limit to it. If we introduce a 
+workaround in upstream for this, people will definitely use it to get 
+around the enforcement in their OOT modules. We should avoid that in my 
+opinion.
 
-I'm not sure about my original idea to replace sympos with checksums, as
-there can be duplicate checksums.  But as you alluded to, I do think we
-could have some special section(s) created by the main objtool run for
-vmlinux.o/vmlinux which could be used by klp-diff to disambiguate and
-set the sympos accordingly.  Let me know if you'd like me to work up
-some patches for that.
+So I would keep whatever we come up with in downstream.
 
--- 
-Josh
+Reviewed-by: Miroslav Benes <mbenes@suse.cz> for the patch. Josh has 
+already taken it so just for the record.
+
+Miroslav
