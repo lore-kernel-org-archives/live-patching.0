@@ -1,141 +1,130 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-oi2-f2.google.com (mail-oi2-f2.google.com [74.125.231.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8963BE154
-	for <live-patching@vger.kernel.org>; Thu, 23 Jul 2026 09:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784798734; cv=none; b=S71qBtG5S7FhzlmNcmw+rFxmkv682eQ+dRw/7Csio6kIm3LftGdMg7vxcHXaQVni53SpMbcXhW+epSfRkCm+5jm6TBRLzCN0sDHka6idjxK/9+NJPDOD4nd8ujg9mKuuI9kAQ/oCsUdeZjTTZT5vfD/HTRxDsWXjEx7yE+efMHU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784798734; c=relaxed/simple;
-	bh=Y1rhxqMPINo4Mp+TzcP1ApVCBEJHVxeylvzBt73UpQE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=LtVDpg5j6sYNpNC64/t49c1ESe0gnx3bPUYcWXQIUbGS/qZmKYriPcc7CBab5hsOlzkfkU1wYVM6qZPmfaxXLfKqZ7zvZf2w6VezQBpI091XUuSZKhI7Y+ZEaeh6hID5p0k+MfYdMKHrUWg5Y0ZGM0vEn0kqqWFW+zQh9dzpELQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a1P3OWK5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ITB3d4SQ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=a1P3OWK5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ITB3d4SQ; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C9D2E542C
+	for <live-patching@vger.kernel.org>; Thu, 23 Jul 2026 12:29:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.194
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784809756; cv=pass; b=rNbmr4GkV68EXVaoD61EZzx5zpE5t5c3TUIkzg2Bq9qkIe5GbKUBo3wJCHtJL61IIHd34/xaZ3+wWOl4dvEc1wdj/kxV58GwyGIyQacmP0oBNWuqwPuheNwapXPwHbouI0SS1CruPKVA6/2hGwq0OcTBB/4GtvZFzjEHI2ES6xk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784809756; c=relaxed/simple;
+	bh=ZIDN8CV1SrFjWQOUyz5PXma2ADtIjb6QXnGFDr1fjoo=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NrfGil3FsEjxvoDI4etC+4c2oT+OlDcth+ov/AavaqPmE6QJcrG+ZHcxFZodPdAwdb+AyYbW1LKYZwiMRQ5c7VpRUp9Og/VQpIpo+Qr9YcMCq+3EPZt9an9JlAKUBS4eYtvgELwp+0/U3hYM1Q2TX0GzrvZS9+zTNaiUFzZXw+M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZOXoCXmq; arc=pass smtp.client-ip=74.125.231.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a1P3OWK5";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ITB3d4SQ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="a1P3OWK5";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ITB3d4SQ"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id AD98A7AFD7;
-	Thu, 23 Jul 2026 09:25:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1784798725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
-	b=a1P3OWK5yjkWliSSwV6cHtdhDU7FeWfbYfDsIkrtdUzvFNIwd+L8/TnbPpuZqEXGht3REd
-	vu2p4OJUSFNxUewPXXkYZ0GFtkW3PjGNZwL3/kXb31LiICyrhN78n4cY/MWrK8SRxc3xtg
-	BKIHcGEM7EeSGgzyjZK+0BiuO2aHIvQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1784798725;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
-	b=ITB3d4SQgb5LxB6FXw6p1qgnIM4LcrJNsLhiQRS1xapg7c2mIABOJRN/efxanIjNJvobNL
-	JGogDwKRlpIxE2Dg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1784798725; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
-	b=a1P3OWK5yjkWliSSwV6cHtdhDU7FeWfbYfDsIkrtdUzvFNIwd+L8/TnbPpuZqEXGht3REd
-	vu2p4OJUSFNxUewPXXkYZ0GFtkW3PjGNZwL3/kXb31LiICyrhN78n4cY/MWrK8SRxc3xtg
-	BKIHcGEM7EeSGgzyjZK+0BiuO2aHIvQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1784798725;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=agYnmbZHoo3NkbJowVuMnHvtte67OKAH8RgoXBSjqW4=;
-	b=ITB3d4SQgb5LxB6FXw6p1qgnIM4LcrJNsLhiQRS1xapg7c2mIABOJRN/efxanIjNJvobNL
-	JGogDwKRlpIxE2Dg==
-Date: Thu, 23 Jul 2026 11:25:25 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-cc: live-patching@vger.kernel.org, Ben Procknow <bprockno@redhat.com>, 
-    Jiri Kosina <jikos@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
-Subject: Re: [PATCH 0/1] Fix exported symbol klp-relocation bug
-In-Reply-To: <20260713213128.3529250-1-joe.lawrence@redhat.com>
-Message-ID: <alpine.LSU.2.21.2607231109210.6525@pobox.suse.cz>
-References: <20260713213128.3529250-1-joe.lawrence@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZOXoCXmq"
+Received: by mail-oi2-f2.google.com with SMTP id 5614622812f47-495d5d27acfso234743b6e.1
+        for <live-patching@vger.kernel.org>; Thu, 23 Jul 2026 05:29:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784809753; cv=none;
+        d=google.com; s=arc-20260327;
+        b=A/WLwkGu+NjpddKhMh7ggRVPZ0pP1BFDXlP+ExzSLzgKzbp4J0vCDSOCtm4Js8ab7A
+         xaEF/HQMm3LxrZyFL1jeb+I9VC8DJQCJ+rsgszVvVQQZRkG2iiGQugBl/jPG1bdSAQ00
+         WXEg3aPlM/hsG95CcbxsM8isNWgCf5LhzTTGR15mKXpFNDuwxN034lajwlvdb8WXZOqo
+         AzFyPYSjSku37MC0vUTo7lqHTPAbzaNluH90np16hk2x2crYSN5SmQEVCiLMdhxLegBF
+         MBB2/yVKyQh5lDCSWYnbqlKRPYGPKdCqWLil96K7t6OGWP9Iw0m2+W+LGVyX7E3kktte
+         IEmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=ZIDN8CV1SrFjWQOUyz5PXma2ADtIjb6QXnGFDr1fjoo=;
+        fh=GaVfQ0ka75cucmszUcedaoe/iet7Nq2MyXjmqokrSnA=;
+        b=nkzq4LS9HJxa6FBnN6OjD+BI9lw7bBnb6UT/LRRjc/joboSXmF45KUAHjShtnhcgZz
+         CCljT24TiawZ+brfLg9RVkDYU9n90iCsaj9SdYDR83Y3OZKqgV5hY1VaxIz59XDu76UX
+         lctF/GdT8JgUIrM533VhkFxqT+IAkWpG1+qTDi4o7rEM1mkAcKP13ykTrtT2+Ci0KgfR
+         8Shl0GxNzPXHZ9V6V6h8kEuTFqCnUxPhSzaLWqS8IVdL/lJgCxMYHvmgDT8PZqwqnFVU
+         d0NsGb/R9fJ8POQKJ8YCxl5f9KhNFY+C8zNen3NZmKYiUzxDZzc64YbMNC0yji79XoeS
+         hJiw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784809753; x=1785414553; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZIDN8CV1SrFjWQOUyz5PXma2ADtIjb6QXnGFDr1fjoo=;
+        b=ZOXoCXmqBuqJA1a5SmECXFl5upyJdFqI9u1dP3f3OBNLCc6xF3rP2NiOPFIoRGOA17
+         T/urHjf7Uiq2pSUjh0+S/AlpyBoP7/BgugtoTa0hNN8orOyoJtvaJKYtOdpItHLsPvkE
+         cJE1plgDFbGHmz+unVckM+N7Kr3Qta40rd7mb/ORq7M/TZFLhefNnGrP2LBpezOH+4OF
+         9ov6lPdBZz5H6agEO6WHGerxluM9g0CwzeDlacRLq/5uP4C2oROIcn4x2wImCVHJHaAl
+         JFpmYt1OoQaQ5QaqKgMy0vxFGkCJJNf3sD8sYI2EiHMREUPaRIz9btyviTMYtlN/6uZp
+         B+1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784809753; x=1785414553;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ZIDN8CV1SrFjWQOUyz5PXma2ADtIjb6QXnGFDr1fjoo=;
+        b=sdd8tYiGwIGmOJb8/pnd8X3ZvXdht63tnT7OlfZfNVxalEkTFhoxqNem/vj40zRgdO
+         vYNBkz4JB5iGD0f/kfGffi5luCvIW+zojvmjBndC84VnzcAYwXvCfCai2UKayyz5A/xt
+         JNrlWYilLdn0QNYmI4rQJSmq5Rk2EP1LXXfFdCPKYGx5RYCS4Oxl1eYS/KRM4AUDmFkh
+         n1ZqCaoNWMQ1bLs8wiylnrt8X3O3OxtSKnK3cXIc/tsISFGJWf59f5jPbxzDqmcCikPZ
+         PdZ83uYiRtzDyj7NHOyfy1ZlD3KzC7bVfTdVRNBbANy4NM7LmCkWP3DIywN6zMEhJNEL
+         NUuQ==
+X-Gm-Message-State: AOJu0Yxy7+3ZNk6tJjvBGiw5X/jeY04pcxqtAYWA1WkKU3JuZQvz/ZZM
+	+k2+w615V2a81c9hTMYfxYpeBUVoD0+IPxNDNo/poDVVzMsfU7S5Np+3Sw8MtMRD91eR/5f7Kz1
+	OGf7kIRo+ByDRCnAdnIebLpBDDc5H6bHyHATN02y6Ax/V
+X-Gm-Gg: AR+sD13GLl1KRsDvrn34EYOxd1063wPOkPJqVDxeD7WQslAojp62UaSeQHJrOAv8v5i
+	8dX73WzrpQSrVVLOxyg4Dg163UiFvGRZrABPCmQE0lBFPP2+FkCXoZ/vE2K0GjQI3CdlIAEMtsT
+	93FHCFRAz9MJSxvuvzlDzI2kWSUS0yIG62MwU9rE2vhF0Xuvvwkix3VB53lf228vzyndGB1/JGf
+	HJxbSdu9uv0D535zb/D0MM1r8ny0nKJGJ3Jv3go83bKEg4DYxvkDhQDfaBQ5DhMmJct6Gvf
+X-Received: by 2002:a05:6808:1523:b0:4a4:ed9a:e790 with SMTP id
+ 5614622812f47-4ab354921c3mr1449565b6e.29.1784809753275; Thu, 23 Jul 2026
+ 05:29:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-4.29 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.19)[-0.972];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:mid,pobox.suse.cz:helo,suse.cz:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.29
-X-Spam-Level: 
+From: ahamed <ahamedr0809@gmail.com>
+Date: Thu, 23 Jul 2026 17:58:58 +0530
+X-Gm-Features: AUfX_mz6kZDPQ9B2YO1kpqkbCIEFYRzK_xKqXGJZOFeUqtWtcImot0XpOnqq2wY
+Message-ID: <CAL0stzsJ_hJidg0hyJbaSWKHU=qqhh1G5BhKnJRsWS66PJh3oA@mail.gmail.com>
+Subject: Query Regarding Backporting klp-build from Linux 6.19 to 6.12.x
+To: jpoimboe@kernel.org
+Cc: live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Josh,
 
-> Next: symbol namespaces
-> =======================
-> 
-> Now a harder question, I think, about symbol namespaces.  In the past,
-> kpatch-build had supported patching symbols in namespace where
-> MODULE_IMPORT_NS() is allowed.  Looking at kvm :: mmu.c
-> ::kvm_flush_remote_tlbs(), that is annotated with
-> EXPORT_SYMBOL_FOR_KVM_INTERNAL() instead.
-> 
-> Should we make an effort to support klp-relocations / patching to this
-> use-case?
-> 
-> If modpost were to let klp-relocation symbols through, I *think*
-> (untested) that might be enough... but it seems like that may violate
-> the spirit of what the namespacing effort is trying to achieve.
-> 
-> Note that klp-post-link converts these symbols to SHN_LIVEPATCH before
-> the module is loaded, so the kernel module loader already skips them in
-> simplify_symbols() (see SHN_LIVEPATCH case).  AFAICT, the namespace
-> check in modpost is the only enforcement point, and it's checking a
-> symbol that will never be resolved through the normal module loading
-> path anyway.
+I hope you're doing well.
 
-I think we will see more and more EXPORT_SYMBOL_FOR_MODULES() in the 
-kernel. kvm is probably by far the most interesting one for us as of now.
+We're currently using Linux kernel versions 6.12.74 and 6.12.90 in our
+environment. We have been using kpatch-build for livepatch generation,
+but it doesn't work on these kernels because CONFIG_X86_KERNEL_IBT is
+enabled.
 
-Tough. All changes in upstream so far, as I remember, around reducing the 
-possibility to use internal symbols for OOT modules (like kallsyms API but 
-there are probably more) have been done with KLP usage in mind. Or at 
-least people tried. However, there is a limit to it. If we introduce a 
-workaround in upstream for this, people will definitely use it to get 
-around the enforcement in their OOT modules. We should avoid that in my 
-opinion.
+Since IBT is an important security feature, disabling
+CONFIG_X86_KERNEL_IBT is not an option for us.
 
-So I would keep whatever we come up with in downstream.
+While looking for alternatives, I came across the new klp-build
+infrastructure that was introduced upstream in Linux 6.19. I also
+found your patch series:
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz> for the patch. Josh has 
-already taken it so just for the record.
+https://lists.openwall.net/linux-kernel/2025/06/26/1920
 
-Miroslav
+From what I understand, this series introduces the new klp-build
+workflow along with the required objtool and livepatch infrastructure.
+
+I wanted to ask whether it would be feasible to backport this entire
+patch series to Linux 6.12.74/6.12.90.
+
+Specifically:
+
+Would backporting the complete klp-build patch series be sufficient to
+make klp-build functional on a 6.12 kernel?
+Are there any additional dependencies or upstream changes outside this
+patch series that would also need to be backported?
+Have you or anyone else attempted such a backport, or would you expect
+significant compatibility issues with the 6.12 stable kernel?
+In your opinion, is backporting klp-build to 6.12 a practical
+approach, or would you recommend another solution?
+
+Any guidance or recommendations would be greatly appreciated.
+
+Thank you for your time and for all the work you've done on the new
+livepatch infrastructure.
+
+Best regards,
+
+Ahamed
