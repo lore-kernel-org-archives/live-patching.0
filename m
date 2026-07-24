@@ -1,45 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AE630149F
-	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 22:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8EF34107D
+	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 22:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784931462; cv=none; b=TmevrlaPIDKd1NbQeWDUNYqpXo0isEdsp3NSbi+TM28bZORsRTq9bh9YISjLMpNpYaEN+7C2HLpC1EP1kqc9WQiBdCwdFVlUow5iLwv8fdC/0Q2LOMpWyAMtXByT3ONDJuQTiddqQ9fZsM7HVt8ASLSCNcX21R48cbfR2mxEpnc=
+	t=1784931465; cv=none; b=csc27/cc3tzNzhjdHpboE6HtKOzPCpvTwu6LUVS3Jr56ZsN+nwZ40eKqVa2/Y6Nv9PDUlkzsC1CaiKzkcxQivV05cPzRqLfmvPcQ/ocGGmHzw52vNFlTJVmEJb6h3MRc1nmlLxp/L49PGsoIhMGxFua+LEv/R4a6d6MNW3+KN44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784931462; c=relaxed/simple;
-	bh=TNimib0kIbnVRZ6Rs9ngiAVqMNzswl4jrAeDKRpTJpM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=PzaMQxt5WOAUQCv80O4Hwgj6rCpysfovDh96uV8NLfFBHGSU6NF5AfYKuBIbAosmya8d1ZLAwR8Z0vW2ASW+/qRVM8SWPVbynjdeNIr+VciRvy79S4RQSYa6O1aOnW43PaW5W/0b9Dto3bIfavRlE/w3FIyfEk4wFbqJ5fOpAkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VxLvA2X+; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1784931465; c=relaxed/simple;
+	bh=/NruI5F7S+zZEoGT1fOt+wR0YlQhA/gIAu7vpe7feR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-type; b=ll4HNPx1fRJLS+yx6pncK0RoUkiFLRkQsP0ItA1/rqHqiPxwUC0F2E0PnM/San0sCa6VmYijfOSqZKG/S7OrHJt4xeMWn9Zf4N7F/pK1EZZxcWBj/2IFcluAjhchrNikdg9SeaAYLoVxXiSJzMrN9OFbZWXFVnGw7Ljx9PYiVDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=W0i1oPD9; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VxLvA2X+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="W0i1oPD9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784931459;
+	s=mimecast20190719; t=1784931462;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fsk+4SZ49bGTt24iVuRNykleuq00KRYLAQi8m/58gEQ=;
-	b=VxLvA2X+JtG0CfYQZNjGasCi6ImXCIqAPoFEH0m+2m/SNF+1S3JHV72RBNFkcbce2QFeKH
-	hNFb37fN1U4Z8qEDTspArXm2PSgnqG+Xk8nF2GaxUlxWheJEMg6cCpnD5lXWhUzN+C5bHv
-	D9RqoVCxibcwo3DvmTzcxPBbVlosstA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iwznLleuFUe77MewAtJ2/0W3z1ScjZPgr7xxRXkm1i0=;
+	b=W0i1oPD9+VpTbyrnXNIGK/6ItJgxmCvi/jMRoyFZDaI52sWyeYWIfcBWxSCfd0jrIb884Z
+	Ia39r9UZp2e+F1hK9utYp9LrVfti3YXshv5aUz2psQhSECjEIm/j5S6qYx2JBUiz/lNZ90
+	BiVM9gfeNXE6VjjQZaNoLbWW0HlWKQo=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-629-eQOofWfbP4qJeQMHhYaPBA-1; Fri,
- 24 Jul 2026 18:17:38 -0400
-X-MC-Unique: eQOofWfbP4qJeQMHhYaPBA-1
-X-Mimecast-MFC-AGG-ID: eQOofWfbP4qJeQMHhYaPBA_1784931456
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-686-dXk3zd_UNIa4Lh-aZGx8aQ-1; Fri,
+ 24 Jul 2026 18:17:39 -0400
+X-MC-Unique: dXk3zd_UNIa4Lh-aZGx8aQ-1
+X-Mimecast-MFC-AGG-ID: dXk3zd_UNIa4Lh-aZGx8aQ_1784931458
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8841A1851153;
-	Fri, 24 Jul 2026 22:17:36 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D83BD1955F76;
+	Fri, 24 Jul 2026 22:17:37 +0000 (UTC)
 Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.207])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3878B1800634;
-	Fri, 24 Jul 2026 22:17:35 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BDA371800635;
+	Fri, 24 Jul 2026 22:17:36 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Ben Procknow <bprockno@redhat.com>,
@@ -48,9 +50,11 @@ Cc: Ben Procknow <bprockno@redhat.com>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 0/1] objtool/klp-diff: fix klp-build data sympos bug
-Date: Fri, 24 Jul 2026 18:17:29 -0400
-Message-ID: <20260724221730.3126529-1-joe.lawrence@redhat.com>
+Subject: [PATCH v2 1/1] objtool/klp: compute sympos during checksum phase
+Date: Fri, 24 Jul 2026 18:17:30 -0400
+Message-ID: <20260724221730.3126529-2-joe.lawrence@redhat.com>
+In-Reply-To: <20260724221730.3126529-1-joe.lawrence@redhat.com>
+References: <20260724221730.3126529-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -61,327 +65,497 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hi Josh,
+The sympos value tells livepatch which instance of a duplicate local
+symbol to target.  Previously, klp-diff determined sympos by iterating
+through the vmlinux.o symbol table and applying heuristics to infer the
+linked binary's ordering.  This was fragile and incorrect for data
+symbols whose sections get reordered by the linker script.
 
-Here's v2 addressing your feedback, rather than extending the
-section-ordering HACK, this computes sympos during the checksum phase as
-passes it through with that.
+Fix this by computing sympos during the checksum phase, while the
+original linked objects (vmlinux, .ko) are still intact.  Add a
+--linked-obj option to `objtool klp checksum` which opens the linked
+binary, determines the correct ordering (by address for vmlinux, by
+symbol table index for modules), and writes a .discard.sym_order section
+into the checksummed .o file.
 
-This adds --linked-obj to `objtool klp checksum`.  (Not sure if there is
-any other way other than to pass that around.)  It opens the linked
-binary (vmlinux or .ko), finds all duplicate local symbols matching the
-.o being checksummed, sorts them to match the kallsyms order, and writes
-the result into a .discard.sym_order section.  klp-diff then reads this
-section instead of trying to determine the order from vmlinux.o's symbol
-table.
+Later, `objtool klp diff` reads .discard.sym_order from the orig
+checksummed file for sympos lookups.  This replaces the old heuristic
+entirely.
 
-Note that the sort order matches what the livepatch core sees when
-loading the patch:
-
-- For vmlinux, sort by address: this matches
-  kallsyms_on_each_match_symbol() which loops through the symbols in
-  address order, counting dupes until it hits the target sympos.
-
-- For modules, sort by symtab index: this matches
-  module_kallsyms_on_each_symbol() which iterates the .ko's symtab
-  as-is.
-
-With this, the section-ordering HACK is completely removed.
-
-On the klp-build side, the script now stashes the original vmlinux/.ko
-into 1-orig/ during copy_orig_objects before the patched rebuild
-overwrites them, then passes --linked-obj pointing there during the
-original checksum pass.  As mentioned earlier, I'm not sure if there is
-a better way to do this.
-
-Finally, this doesn't address the age-old, same source-file::symbol-name
-problem.  That was astutely flagged by one of our internal AI reviews :)
-But it's Friday and I don't think I need to solve that one today, too.
-
-
-v1: https://lore.kernel.org/live-patching/ini7aoz6vvowmu5dvxoxpi6l4ednsov6omjcoffmuod3d2iaof@vflcrwqktqsl/T/#t
-- Complete rewrite and change of approach to stashing sympos with the
-  checksum [Josh]
-
-Joe Lawrence (1):
-  objtool/klp: compute sympos during checksum phase
-
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
  scripts/livepatch/klp-build                   |  36 +++-
  .../objtool/include/objtool/checksum_types.h  |   6 +
  tools/objtool/klp-checksum.c                  | 195 +++++++++++++++++-
  tools/objtool/klp-diff.c                      |  88 ++++----
  4 files changed, 267 insertions(+), 58 deletions(-)
 
-
-Reproducer and analysis
-=======================
-
-Config
-------
-Basic config plus a DM module for testing:
-
-  $ make defconfig
-  $ ./scripts/config --file .config \
-             --set-val CONFIG_FTRACE y \
-             --set-val CONFIG_KALLSYMS_ALL y \
-             --set-val CONFIG_FUNCTION_TRACER y \
-             --set-val CONFIG_DYNAMIC_FTRACE y \
-             --set-val CONFIG_DYNAMIC_DEBUG y \
-             --set-val CONFIG_LIVEPATCH y \
-             --set-val CONFIG_DM_THIN_PROVISIONING m
-  $ make olddefconfig
-
-Helper debug functions
-----------------------
-These help shorten some of the analysis below:
-
-  # Symbol table order
-  $ dump_sym() { objdump -t "$1" | awk -vSYM="$2" '/\.c$/{file=$NF}; $NF==SYM {print file": "$0}' | column -t | sort -k2; }
-
-  # Kallsyms address-sorted order
-  $ dump_sym_addr_sort() { dump_sym "$1" "$2" | sort -k2; }
-
-  # Magic spell to coax pahole into pretty-printing the klp_func_ext struct
-  $ dump_klp_func_ext() {
-    echo '#include "include/linux/livepatch_external.h"
-    struct klp_func_ext dummy;' | gcc -g -c -x c -include linux/types.h - -o /tmp/type.o
-    objcopy -O binary --only-section=.init.klp_funcs "$1" /tmp/funcs.bin
-    pahole -F dwarf -C klp_func_ext /tmp/type.o --prettify /tmp/funcs.bin 2>/dev/null
-  }
-
-
-Find initial sympos
--------------------
-Find the symbol positions for pwq_cache symbols and unregister_vclock
-functions:
-
-  $ dump_sym_addr_sort vmlinux pwq_cache
-  eventpoll.c:  ffffffff82b8ab40  l  O  .rodata  0000000000000008  pwq_cache        << sympos=1
-  workqueue.c:  ffffffff83a99b00  l  O  .bss     0000000000000008  pwq_cache        << sympos=2
-
-  $ dump_sym_addr_sort vmlinux unregister_vclock
-  ptp_sysfs.c:  ffffffff81265a00  l  F  .text  0000000000000056  unregister_vclock  << sympos=1
-  ptp_clock.c:  ffffffff81f01680  l  F  .text  0000000000000024  unregister_vclock  << sympos=2
-
-Test 1: vmlinux sympos=1
-------------------------
-
-  $ cat test-sympos-vmlinux-1.patch
-  diff --git a/drivers/ptp/ptp_sysfs.c b/drivers/ptp/ptp_sysfs.c
-  index dc398c6b7528..b3267430f4c2 100644
-  --- a/drivers/ptp/ptp_sysfs.c
-  +++ b/drivers/ptp/ptp_sysfs.c
-  @@ -177,6 +177,7 @@ static int unregister_vclock(struct device *dev, void *data)
-   	ptp_vclock_unregister(vclock);
-   	(*num)--;
-
-  +	pr_info("klp-build test");
-   	/* For break. Not error. */
-   	if (*num == 0)
-   		return -EINVAL;
-  diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-  index 0e65c7431dfc..b99bfe757c50 100644
-  --- a/fs/eventpoll.c
-  +++ b/fs/eventpoll.c
-  @@ -905,6 +905,7 @@ static void ep_unregister_pollwait(struct eventpoll *ep, struct epitem *epi)
-   	while ((pwq = *p) != NULL) {
-   		*p = pwq->next;
-   		ep_remove_wait_queue(pwq);
-  +		WARN_ON_ONCE(!pwq_cache);
-   		kmem_cache_free(pwq_cache, pwq);
-   	}
-   }
-
-  $ ./scripts/livepatch/klp-build -T test-sympos-vmlinux-1.patch
-
-Check the pwq_cache symbol klp-relocation sympos:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-1.ko | grep -w '.klp.sym.vmlinux.pwq_cache'
-  0000000000000008  0000006100000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
-  0000000000000069  0000006100000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
-
-Check the unregister_vclock function sympos, first dump out the klp_funcs
-relocations to figure out the entries in the array:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-1.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
-  Relocation section '.rela.init.klp_funcs' at offset 0x1b0 contains 8 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 9c
-  0000000000000008  0000002b00000001 R_X86_64_64            00000000000000a0 ep_remove + 0
-  0000000000000018  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + a6
-  0000000000000020  0000002d00000001 R_X86_64_64            0000000000000140 ep_clear_and_put + 0
-  0000000000000030  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + b7
-  0000000000000038  0000002f00000001 R_X86_64_64            0000000000000210 unregister_vclock + 0
-  0000000000000048  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + c9
-  0000000000000050  0000006800000001 R_X86_64_64            0000000000000280 eventpoll_release_file + 0
-
-and then pretty-print the klp_func_ext struct:
-
-  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-1.ko
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00, 
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_remove
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_clear_and_put
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
-          .sympos = 1,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << eventpoll_release_file
-          .sympos = 0,
-  },
-
-
-Test2: vmlinux sympos=2
------------------------
-
-  $ cat test-sympos-vmlinux-2.patch
-  diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
-  index d6f54ccaf93b..69c4d1f75e15 100644
-  --- a/drivers/ptp/ptp_clock.c
-  +++ b/drivers/ptp/ptp_clock.c
-  @@ -490,6 +490,7 @@ static int unregister_vclock(struct device *dev, void *data)
-   {
-   	struct ptp_clock *ptp = dev_get_drvdata(dev);
-
-  +	pr_info("klp-build test");
-   	ptp_vclock_unregister(info_to_vclock(ptp->info));
-   	return 0;
-   }
-  diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-  index 78068ae8f28a..2068c7aa8d6d 100644
-  --- a/kernel/workqueue.c
-  +++ b/kernel/workqueue.c
-  @@ -5310,6 +5310,7 @@ static struct pool_workqueue *alloc_unbound_pwq(struct workqueue_struct *wq,
-   	if (!pool)
-   		return NULL;
-
-  +	WARN_ON(!pwq_cache);
-   	pwq = kmem_cache_alloc_node(pwq_cache, GFP_KERNEL, pool->node);
-   	if (!pwq) {
-   		put_unbound_pool(pool);
-
-  $ make -j$(nproc) && ./scripts/livepatch/klp-build -T test-sympos-vmlinux-2.patch
-
-Check the pwq_cache symbol klp-relocation sympos:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-2.ko | grep -w '.klp.sym.vmlinux.pwq_cache'
-  0000000000000038  0000005a00000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
-  0000000000000167  0000005a00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
-
-Check the unregister_vclock function sympos, first dump out the klp_funcs
-relocations to figure out the entries in the array:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-2.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
-  Relocation section '.rela.init.klp_funcs' at offset 0x128 contains 4 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000d00000001 R_X86_64_64            0000000000000000 .rodata + 74
-  0000000000000008  0000002700000001 R_X86_64_64            0000000000000040 alloc_unbound_pwq + 0
-  0000000000000018  0000000d00000001 R_X86_64_64            0000000000000000 .rodata + 86
-  0000000000000020  0000002900000001 R_X86_64_64            0000000000000370 unregister_vclock + 0
-
-and then pretty-print the klp_func_ext struct:
-
-  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-2.ko
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .sympos = 2,
-  },
-
-Test3: Test1 + Test2 + module sympos=1
---------------------------------------
-
-This last test combines the vmlinux test cases and then adds a module
-case on top.
-
-Dump the klp-relocations, we should see the vmlinux.pwq_cache,1 and ,2
-as well as dm_bio_prison._cell_cache,1 for the module:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-module.ko | \
-    grep -w -e '.klp.sym.vmlinux.pwq_cache' -e '.klp.sym.dm_bio_prison._cell_cache'
-  0000000000000008  0000007100000001 R_X86_64_64            0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 5
-  0000000000000020  0000007100000001 R_X86_64_64            0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 4
-  0000000000000068  0000009000000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
-  00000000000001b8  0000007a00000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
-  000000000000004c  0000007100000002 R_X86_64_PC32          0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 5
-  00000000000000f1  0000007100000002 R_X86_64_PC32          0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 4
-  0000000000000287  0000009000000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
-  00000000000004c9  0000007a00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
-
-Finally dump the klp_func_ext struct to see that it's got the correct
-sympos for both module unregister_vclock cases:
-
-  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-module.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
-  Relocation section '.rela.init.klp_funcs' at offset 0x250 contains 14 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 62
-  0000000000000008  0000005800000001 R_X86_64_64            0000000000000040 dm_bio_prison_create + 0
-  0000000000000018  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 78
-  0000000000000020  0000002b00000001 R_X86_64_64            0000000000000160 alloc_unbound_pwq + 0
-  0000000000000030  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 8a
-  0000000000000038  0000002f00000001 R_X86_64_64            0000000000000500 ep_remove + 0
-  0000000000000048  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 94
-  0000000000000050  0000003100000001 R_X86_64_64            00000000000005a0 ep_clear_and_put + 0
-  0000000000000060  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + a5
-  0000000000000068  0000003300000001 R_X86_64_64            0000000000000670 unregister_vclock + 0
-  0000000000000078  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + b7
-  0000000000000080  0000003500000001 R_X86_64_64            00000000000006c0 unregister_vclock + 0
-  0000000000000090  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + c9
-  0000000000000098  0000008900000001 R_X86_64_64            0000000000000730 eventpoll_release_file + 0
-  
-  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-module.ko 
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << dm_bio_prison_create
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << alloc_unbound_pwq
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_remove
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_clear_and_put
-          .sympos = 0,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
-          .sympos = 2,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
-          .sympos = 1,
-  },
-  {
-          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
-          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << eventpoll_release_file
-          .sympos = 0,
-  },
-
-
-base-commit: 393988901632138e76d55518d5a0c6cc07cd3ad3
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index c4a7acf8edc3..a5ddde6bf7c4 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -582,7 +582,8 @@ find_objects() {
+ 		    -printf '%P\n'
+ }
+ 
+-# Copy all .o archives to $ORIG_DIR
++# Copy all .o archives to $ORIG_DIR, plus the linked vmlinux/.ko binaries
++# needed later for address-based (vmlinux) / index-based (.ko) sympos.
+ copy_orig_objects() {
+ 	local files=()
+ 
+@@ -602,6 +603,16 @@ copy_orig_objects() {
+ 
+ 		mkdir -p "$orig_dir"
+ 		cp -f "$file" "$orig_dir"
++
++		if [[ "$_file" == "vmlinux.o" ]]; then
++			[[ ! -f "$PWD/vmlinux" ]] && die "missing vmlinux"
++			cp -f "$PWD/vmlinux" "$ORIG_DIR/vmlinux"
++		else
++			local ko="${_file%.*}.ko"
++			[[ ! -f "$PWD/$ko" ]] && die "missing $ko"
++			mkdir -p "$(dirname "$ORIG_DIR/$ko")"
++			cp -f "$PWD/$ko" "$ORIG_DIR/$ko"
++		fi
+ 	done
+ 	xtrace_restore
+ 
+@@ -650,13 +661,15 @@ copy_patched_objects() {
+ }
+ 
+ # Copy .o files to a separate directory and run "objtool klp checksum" on each
+-# copy.  The checksums are written to a .discard.sym_checksum section.
++# copy.  The checksums are written to a .discard.sym_checksum section, and
++# duplicate-symbol sympos values (from --linked-obj) to .discard.sym_order.
+ #
+ # If match_dir is given, only process files which also exist there.
+ generate_checksums() {
+ 	local src_dir="$1"
+ 	local dest_dir="$2"
+-	local match_dir="${3:-}"
++	local linked_root="$3"
++	local match_dir="${4:-}"
+ 	local files=()
+ 	local file
+ 
+@@ -667,12 +680,23 @@ generate_checksums() {
+ 	for file in "${files[@]}"; do
+ 		local rel="${file#"$src_dir"/}"
+ 		local dest="$dest_dir/$rel"
++		local linked_obj
++		local linked_obj_arg=()
+ 
+ 		[[ -n "$match_dir" && ! -f "$match_dir/$rel" ]] && continue
+ 
+ 		mkdir -p "$(dirname "$dest")"
+ 		cp -f "$file" "$dest"
+-		"$OBJTOOL" klp checksum "$dest"
++
++		if [[ "$rel" == "vmlinux.o" ]]; then
++			linked_obj="$linked_root/vmlinux"
++		else
++			linked_obj="$linked_root/${rel%.*}.ko"
++		fi
++		[[ ! -f "$linked_obj" ]] && die "missing linked object: $linked_obj"
++		linked_obj_arg=(--linked-obj "$linked_obj")
++
++		"$OBJTOOL" klp checksum "${linked_obj_arg[@]}" "$dest"
+ 	done
+ 
+ 	touch "$dest_dir/.complete"
+@@ -911,9 +935,9 @@ fi
+ 
+ if (( SHORT_CIRCUIT <= 3 )); then
+ 	status "Generating original checksums"
+-	generate_checksums "$ORIG_DIR" "$ORIG_CSUM_DIR" "$PATCHED_DIR"
++	generate_checksums "$ORIG_DIR" "$ORIG_CSUM_DIR" "$ORIG_DIR" "$PATCHED_DIR"
+ 	status "Generating patched checksums"
+-	generate_checksums "$PATCHED_DIR" "$PATCHED_CSUM_DIR"
++	generate_checksums "$PATCHED_DIR" "$PATCHED_CSUM_DIR" "$PWD"
+ fi
+ 
+ if (( SHORT_CIRCUIT <= 4 )); then
+diff --git a/tools/objtool/include/objtool/checksum_types.h b/tools/objtool/include/objtool/checksum_types.h
+index 507efdd8ab5b..2eb5c1cce0c6 100644
+--- a/tools/objtool/include/objtool/checksum_types.h
++++ b/tools/objtool/include/objtool/checksum_types.h
+@@ -7,6 +7,12 @@ struct sym_checksum {
+ 	u64 checksum;
+ };
+ 
++struct sym_sympos {
++	u64 addr;
++	u32 sympos;
++	u32 pad;
++};
++
+ #ifdef BUILD_KLP
+ 
+ #include <xxhash.h>
+diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
+index b8e47f28997e..d16f00a3bb2a 100644
+--- a/tools/objtool/klp-checksum.c
++++ b/tools/objtool/klp-checksum.c
+@@ -1,5 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ #include <string.h>
++#include <stdlib.h>
++#include <fcntl.h>
+ #include <subcmd/parse-options.h>
+ 
+ #include <objtool/arch.h>
+@@ -11,6 +13,10 @@
+ #include <objtool/warn.h>
+ #include <objtool/checksum.h>
+ 
++#include <linux/string.h>
++
++static const char *linked_obj_name;
++
+ static int checksum_debug_init(struct objtool_file *file)
+ {
+ 	char *dup, *s;
+@@ -250,6 +256,183 @@ int calculate_checksums(struct objtool_file *file)
+ 	return 0;
+ }
+ 
++struct linked_sym_entry {
++	unsigned long key;
++	unsigned int sort_idx;
++	const char *file_name;
++};
++
++static int create_sym_order_section(struct objtool_file *file)
++{
++	struct elf *linked_elf;
++	struct section *sec;
++	struct symbol *sym, *lsym;
++	size_t entsize = sizeof(struct sym_sympos);
++	unsigned int idx = 0;
++	bool by_address;
++	int ret = -1;
++
++	sec = find_section_by_name(file->elf, ".discard.sym_order");
++	if (sec) {
++		WARN("file already has .discard.sym_order section, skipping");
++		return 0;
++	}
++
++	linked_elf = elf_open_read(linked_obj_name, O_RDONLY);
++	if (!linked_elf)
++		return -1;
++
++	/*
++	 * For vmlinux, index by address as per:
++	 * kernel/kallsyms.c:kallsyms_on_each_match_symbol()
++	 *
++	 * For modules, index by symtab index as per:
++	 * kernel/module/kallsyms.c:module_kallsyms_on_each_symbol()
++	 */
++	by_address = str_ends_with(linked_obj_name, "vmlinux");
++
++	/*
++	 * Count local symbols in file.o that have duplicates in the linked
++	 * object (vmlinux or .ko).  Only those need sympos.
++	 */
++	for_each_sym(file->elf, sym) {
++		int nr = 0;
++
++		if (sym->bind != STB_LOCAL)
++			continue;
++		if (!is_func_sym(sym) && !is_object_sym(sym))
++			continue;
++
++		for_each_sym_by_name(linked_elf, sym->name, lsym) {
++			if (lsym->bind != STB_LOCAL)
++				continue;
++			if (!is_func_sym(lsym) && !is_object_sym(lsym))
++				continue;
++			nr++;
++		}
++
++		if (nr > 1)
++			idx++;
++	}
++
++	if (!idx) {
++		ret = 0;
++		goto out;
++	}
++
++	sec = elf_create_section_pair(file->elf, ".discard.sym_order", entsize,
++				      idx, idx);
++	if (!sec)
++		goto out;
++
++	/*
++	 * For each local symbol with homonyms in the linked binary, determine
++	 * its sympos: sort the duplicates by address (vmlinux) or symtab
++	 * index (modules), then find our position by filename.
++	 */
++	idx = 0;
++	for_each_sym(file->elf, sym) {
++		struct linked_sym_entry *entries;
++		const char *sym_file_name;
++		struct sym_sympos *entry;
++		int nr = 0, i;
++		long pos = -1;
++
++		if (sym->bind != STB_LOCAL)
++			continue;
++		if (!is_func_sym(sym) && !is_object_sym(sym))
++			continue;
++
++		/* First pass: count to size entries[] */
++		for_each_sym_by_name(linked_elf, sym->name, lsym) {
++			if (lsym->bind != STB_LOCAL)
++				continue;
++			if (!is_func_sym(lsym) && !is_object_sym(lsym))
++				continue;
++			nr++;
++		}
++
++		if (nr <= 1)
++			continue;
++
++		entries = calloc(nr, sizeof(*entries));
++		if (!entries) {
++			ERROR_GLIBC("calloc");
++			goto out;
++		}
++
++		/* Second pass: collect address/index and filename for dupes */
++		nr = 0;
++		for_each_sym_by_name(linked_elf, sym->name, lsym) {
++			if (lsym->bind != STB_LOCAL)
++				continue;
++			if (!is_func_sym(lsym) && !is_object_sym(lsym))
++				continue;
++			entries[nr].key = by_address ? lsym->sym.st_value : lsym->idx;
++			entries[nr].sort_idx = lsym->idx;
++			entries[nr].file_name = lsym->file ? lsym->file->name : NULL;
++			nr++;
++		}
++
++		/* Insertion sort by key, tie-break by symtab index */
++		for (i = 1; i < nr; i++) {
++			struct linked_sym_entry tmp = entries[i];
++			int j = i - 1;
++
++			while (j >= 0 && (entries[j].key > tmp.key ||
++					  (entries[j].key == tmp.key &&
++					   entries[j].sort_idx > tmp.sort_idx))) {
++				entries[j + 1] = entries[j];
++				j--;
++			}
++			entries[j + 1] = tmp;
++		}
++
++		/* Match our compilation unit's filename against sorted entries */
++		sym_file_name = sym->file ? sym->file->name : NULL;
++		for (i = 0; i < nr; i++) {
++			bool match;
++
++			if (sym_file_name && entries[i].file_name)
++				match = !strcmp(sym_file_name, entries[i].file_name);
++			else if (!sym_file_name && !entries[i].file_name)
++				match = true;
++			else
++				match = false;
++
++			if (match) {
++				pos = i + 1;
++				break;
++			}
++		}
++
++		free(entries);
++
++		if (pos < 0) {
++			ERROR("can't determine sympos for %s", sym->name);
++			goto out;
++		}
++
++		/* Emit reloc pointing to sym, with its sympos in the data entry */
++		if (!elf_init_reloc(file->elf, sec->rsec, idx, idx * entsize,
++				    sym, 0, R_TEXT64))
++			goto out;
++
++		entry = (struct sym_sympos *)sec->data->d_buf + idx;
++		entry->addr = 0; /* reloc */
++		entry->sympos = (u32)pos;
++		entry->pad = 0;
++
++		mark_sec_changed(file->elf, sec, true);
++		idx++;
++	}
++
++	ret = 0;
++out:
++	elf_close(linked_elf);
++	return ret;
++}
++
+ int create_sym_checksum_section(struct objtool_file *file)
+ {
+ 	struct section *sec;
+@@ -297,7 +480,7 @@ int create_sym_checksum_section(struct objtool_file *file)
+ }
+ 
+ static const char * const klp_checksum_usage[] = {
+-	"objtool klp checksum [<options>] file.o",
++	"objtool klp checksum --linked-obj <vmlinux|file.ko> [<options>] file.o",
+ 	NULL,
+ };
+ 
+@@ -309,6 +492,7 @@ int cmd_klp_checksum(int argc, const char **argv)
+ 	const struct option options[] = {
+ 		OPT_STRING(0,	"debug-checksum", &opts.debug_checksum,	"syms", "enable checksum debug output"),
+ 		OPT_BOOLEAN(0,	"dry-run", &opts.dryrun, "don't write modifications"),
++		OPT_STRING(0,	"linked-obj", &linked_obj_name, "file", "linked binary (vmlinux or .ko) for sympos ordering"),
+ 		OPT_END(),
+ 	};
+ 
+@@ -316,6 +500,11 @@ int cmd_klp_checksum(int argc, const char **argv)
+ 	if (argc != 1)
+ 		usage_with_options(klp_checksum_usage, options);
+ 
++	if (!linked_obj_name) {
++		ERROR("--linked-obj is required");
++		usage_with_options(klp_checksum_usage, options);
++	}
++
+ 	opts.checksum = true;
+ 
+ 	objname = argv[0];
+@@ -332,6 +521,10 @@ int cmd_klp_checksum(int argc, const char **argv)
+ 	if (ret)
+ 		goto out;
+ 
++	ret = create_sym_order_section(file);
++	if (ret)
++		goto out;
++
+ 	ret = create_sym_checksum_section(file);
+ 
+ out:
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index f7a02c4a2429..89fb43eb4e71 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -242,6 +242,41 @@ static int read_sym_checksums(struct elf *elf)
+ 	return 0;
+ }
+ 
++/*
++ * Look up a symbol's sympos from the .discard.sym_order section.
++ * Returns > 0 for the position among duplicates, or 0 if the symbol is
++ * unique (either not in the section or the section doesn't exist).
++ */
++static long find_sympos_from_order_section(struct elf *elf, struct symbol *sym)
++{
++	struct section *sec;
++	int nr;
++
++	sec = find_section_by_name(elf, ".discard.sym_order");
++	if (!sec)
++		return 0;
++
++	if (!sec->rsec)
++		return 0;
++
++	nr = sec_size(sec) / sizeof(struct sym_sympos);
++	for (int i = 0; i < nr; i++) {
++		struct sym_sympos *entry;
++		struct reloc *reloc;
++
++		reloc = find_reloc_by_dest(elf, sec, i * sizeof(struct sym_sympos));
++		if (!reloc)
++			continue;
++
++		if (reloc->sym == sym) {
++			entry = (struct sym_sympos *)sec->data->d_buf + i;
++			return (long)entry->sympos;
++		}
++	}
++
++	return 0;
++}
++
+ static struct symbol *first_file_symbol(struct elf *elf)
+ {
+ 	struct symbol *sym;
+@@ -344,6 +379,7 @@ static bool is_special_section(struct section *sec)
+ 	static const char * const non_special_discards[] = {
+ 		".discard.addressable",
+ 		".discard.sym_checksum",
++		".discard.sym_order",
+ 	};
+ 
+ 	if (is_text_sec(sec))
+@@ -898,60 +934,10 @@ static int correlate_symbols(struct elfs *e)
+ /* "sympos" is used by livepatch to disambiguate duplicate symbol names */
+ static unsigned long find_sympos(struct elf *elf, struct symbol *sym)
+ {
+-	bool vmlinux = str_ends_with(objname, "vmlinux.o");
+-	unsigned long sympos = 0, nr_matches = 0;
+-	bool has_dup = false;
+-	struct symbol *s;
+-
+ 	if (sym->bind != STB_LOCAL)
+ 		return 0;
+ 
+-	if (vmlinux && is_func_sym(sym)) {
+-		/*
+-		 * HACK: Unfortunately, symbol ordering can differ between
+-		 * vmlinux.o and vmlinux due to the linker script emitting
+-		 * .text.unlikely* before .text*.  Count .text.unlikely* first.
+-		 *
+-		 * TODO: Disambiguate symbols more reliably (checksums?)
+-		 */
+-		for_each_sym(elf, s) {
+-			if (strstarts(s->sec->name, ".text.unlikely") &&
+-			    !strcmp(s->name, sym->name)) {
+-				nr_matches++;
+-				if (s == sym)
+-					sympos = nr_matches;
+-				else
+-					has_dup = true;
+-			}
+-		}
+-		for_each_sym(elf, s) {
+-			if (!strstarts(s->sec->name, ".text.unlikely") &&
+-			    !strcmp(s->name, sym->name)) {
+-				nr_matches++;
+-				if (s == sym)
+-					sympos = nr_matches;
+-				else
+-					has_dup = true;
+-			}
+-		}
+-	} else {
+-		for_each_sym(elf, s) {
+-			if (!strcmp(s->name, sym->name)) {
+-				nr_matches++;
+-				if (s == sym)
+-					sympos = nr_matches;
+-				else
+-					has_dup = true;
+-			}
+-		}
+-	}
+-
+-	if (!sympos) {
+-		ERROR("can't find sympos for %s", sym->name);
+-		return ULONG_MAX;
+-	}
+-
+-	return has_dup ? sympos : 0;
++	return (unsigned long)find_sympos_from_order_section(elf, sym);
+ }
+ 
+ static int clone_sym_relocs(struct elfs *e, struct symbol *patched_sym);
 -- 
 2.54.0
 
