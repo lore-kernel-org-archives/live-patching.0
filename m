@@ -1,32 +1,32 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CC237E5F9
-	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF3F3DC850
+	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784893545; cv=none; b=KWHys62Pz6iME1mzsg1TR4PBtmoGNlvpfmbAjuR3EbA/WM0/mFBBoFr6CvamelI/To2PcZwQsCISt/6yGZM6TGDdPEBeyYPU/osp1m4+MBGJKYeo7+4Pq2YtSFBT8tq9U2HNNTqTF9IBTgY828k/4kYq9LmuPUTyxISIUNEdmJI=
+	t=1784893552; cv=none; b=WGlh1yOg+F8uLq0Rsm4M1/sjp6Gl5PA+QaZl7oWjc8BP+shOWgeCgPUYzKLllmeDK2Zw7q3KerSfPmK6cIhj9JCbFcOmmH4eWS1NoRbupFXUeiFSyUA7jc7DeaLtUyhSNQYbid+jodSAdGowP98yS3f/6VS9CU++aeM5EgNKUNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784893545; c=relaxed/simple;
-	bh=16rzf+qzWNXObKuK83MOC2na7VFzAB9eGdvs8zN80YM=;
+	s=arc-20240116; t=1784893552; c=relaxed/simple;
+	bh=+EwcJGyjyyjcMkO5A9AdRmuju22Ek3rMbdBo+iANy7E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fttL++urweF2adOivD0ySm5G8oLQEwG5vYHUCv6ZX6x2PhlADz8xbZnQLwkgebViY46RmeEm9L2z5ZdfClIlukYZgDpoQk+ISl0s3O7iyJUDziBVfafoeSYHXUeLGWZFWuLBEUVg8fw6p3NnpuPqMcqpUlMNWwk3AmVE/9+xeVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eEMnYHAy; arc=none smtp.client-ip=91.218.175.178
+	 MIME-Version; b=AD9cbBIKpXI2p0BErJgC2tFFoxELMVaLp1j443bZIPcPHmPodNlK73zewzHVGXYRU4GPxE/0NhgKWIXMRCvTS2TgCPi6vcN8zz0Lzon4ovJf4Wy5wMXtSxE254gIwXzHa6/DLjM/39BUvSOusbNM7RLl3m39Ft9wQhlutIaM7Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r9MfNsHR; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eEMnYHAy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r9MfNsHR"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784893541;
+	t=1784893536;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wgzBqynfoZaxFoS1KfD08vyQRws3QN+VgwIwrElk/Ts=;
-	b=eEMnYHAyZAMi3vx73G3SFKcesdVsn0xu9Wfqj3DwfvCGeXAKvIrmiEapK5YLQLi0myYaRu
-	mYDZKkstdpWgumyWdlOpvw2gF5Z9ab6PdmHzElEyWN3IWrvnBVZ3KV9I+Y4gxdY0hEa8gy
-	3594ymNp0/DY6uVRHppxMhkyF/k2+68=
+	bh=18qWUBFyGokEbNhqKGAmxikEqxfS9peDgddO3aKzKXI=;
+	b=r9MfNsHRhsBDq6cWq1zcTg9PYKqeMeK1ZHXHQis0l1F7aVefvkXlyphPGW4VGon19odeLH
+	WTSubANUtPohjXeAxDNhIzXNpeNGSUn+9BbRbjvas+J0YhsKDmDnAP1t2ZE4TOntL0Khz5
+	GsEQ0XurjW8QgSz3s9yBSUBpMW+d1vM=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -51,9 +51,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 13/14] objtool/klp: Keep LoongArch tablejump annotation table entries
-Date: Fri, 24 Jul 2026 19:41:26 +0800
-Message-ID: <20260724114128.31451-14-dongtai.guo@linux.dev>
+Subject: [PATCH v4 12/14] objtool/LoongArch: Enable inline alternative cloning for KLP
+Date: Fri, 24 Jul 2026 19:41:25 +0800
+Message-ID: <20260724114128.31451-13-dongtai.guo@linux.dev>
 In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
 References: <20260724114128.31451-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -67,88 +67,39 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-With -mannotate-tablejump, LoongArch compilers emit a
-.discard.tablejump_annotate section.  Each entry is a pair of 8-byte
-words: the address of a jump instruction and the address of its jump
-table.  objtool reads these pairs to find switch jump tables when
-decoding.
+An ALTERNATIVE() emits its replacement instructions into a .subsection 1
+placed after the patched function.  When objtool clones the function into
+a livepatch module, clone_inline_alternatives() clones that replacement
+block too, but only for architectures that define ARCH_HAS_INLINE_ALTS.
 
-klp-diff creates one fake symbol per 8-byte word and clones a word only
-if should_keep_special_sym() accepts it.  The default rule keeps a word
-only if it references a function that was cloned into the output
-module.  The instruction-side word references the function and is
-kept.  The table-side word references the jump table via its .rodata
-section symbol, which is not a function symbol, so it is dropped.
+LoongArch uses the same .subsection layout as arm64, and its alternative
+macros now mark the replacement with ANNOTATE_DATA_SPECIAL (see "LoongArch:
+Mark special sections for KLP support").  Define ARCH_HAS_INLINE_ALTS so
+the replacement is cloned; otherwise a livepatch for a function containing
+an ALTERNATIVE() fails to build with "can't find new instruction".
 
-The cloned annotate section then holds only instruction-side words,
-compacted together.  The pairing is destroyed.  Parsing the malformed
-section crashes objtool on the patch module and no .ko is produced:
+Reproduced by building a livepatch for a function containing an
+ALTERNATIVE() (the base-vmlinux test).
+Link: https://lore.kernel.org/all/ak7QBSm3mmDlB-4u@redhat.com
 
-  Building patch module: livepatch-shadow-newpid.ko
-  livepatch-shadow-newpid.o: error: SIGSEGV: objtool crash!
-
-Keep all .discard.tablejump_annotate words whose referenced symbol has
-been cloned.
-
-Reproduced with the shadow-newpid test, which patches
-proc_pid_status().  That function contains two switch jump tables.
-
-Before, klp-diff clones only the instruction-side words:
-
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57441 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x0: proc_pid_status+0xc70 [FUNC GLOBAL]
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57443 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x8: proc_pid_status+0xd2c [FUNC GLOBAL]
-
-After, the full pairs are kept, including the .rodata table words:
-
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57441 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x0: proc_pid_status+0xc70 [FUNC GLOBAL]
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57442 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x8: .rodata.proc_pid_status+0x0 [SECTION]
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57443 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x10: proc_pid_status+0xd2c [FUNC GLOBAL]
-  DEBUG: vmlinux.o: _discard_tablejump_annotate_57444 [+DATA]
-  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x18: .rodata.proc_pid_status+0x80 [SECTION]
-
-and the patch module builds.
-
-Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/objtool/klp-diff.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/objtool/arch/loongarch/include/arch/elf.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 92cf0fc3ff2f..f151ffc71184 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1956,6 +1956,7 @@ static int create_fake_symbols(struct elf *elf)
- static bool should_keep_special_sym(struct elf *elf, struct symbol *sym)
- {
- 	bool annotate_insn = !strcmp(sym->sec->name, ".discard.annotate_insn");
-+	bool tablejump_annotate = !strcmp(sym->sec->name, ".discard.tablejump_annotate");
- 	struct reloc *reloc;
+diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
+index 0103f27fccfc..e2843679f24e 100644
+--- a/tools/objtool/arch/loongarch/include/arch/elf.h
++++ b/tools/objtool/arch/loongarch/include/arch/elf.h
+@@ -46,6 +46,7 @@
+ #define R_TEXT32		R_LARCH_32_PCREL
+ #define R_TEXT64		R_LARCH_32_PCREL
  
- 	if (is_sec_sym(sym) || !sym->sec->rsec)
-@@ -1968,6 +1969,16 @@ static bool should_keep_special_sym(struct elf *elf, struct symbol *sym)
- 		if (!reloc->sym->clone || is_undef_sym(reloc->sym->clone))
- 			continue;
++#define ARCH_HAS_INLINE_ALTS	1
+ #define ARCH_HAS_PAIRED_RELOCS	1
  
-+		/*
-+		 * .discard.tablejump_annotate (LoongArch -mannotate-tablejump)
-+		 * holds pairs of words: a jump instruction and its jump table.
-+		 * The table word references the table via its .rodata section
-+		 * symbol, which the is_func_sym() rule below would drop,
-+		 * breaking the pairing.  Keep both words of each entry.
-+		 */
-+		if (tablejump_annotate)
-+			return true;
-+
- 		/*
- 		 * Keep special section references to cloned functions.
- 		 * In some cases annotate_insn can also reference cloned alt
+ struct elf;
 -- 
 2.53.0
 
