@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E089429036
-	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCDA42AFA0
+	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784893375; cv=none; b=Fxs57xZ5wB/MtJGO33C8L/QUfTEqQdcDcI9E8zcmnyM7CfU9Lm3lph8vnJJrhDPq+lYih/Kl1HLuZWU1MI5gc6j8Ct8qwPe+U8gFz/KxSPYb+sBvXn7dEyJH8We8phRYkoFt6do1mM6ABuBVE1ogu/Df2o1T9WM1PydAZi4pr6A=
+	t=1784893392; cv=none; b=AdTFMy3qrkB+14DqXELHGFrJnMsD/QjBuQHTIhIV8ecdnS1rOIHJFvUzSQXG/ea/ZKwjobGqqCdU1UlgTNKA7/fnv1KlR/TZZnCM1p6x7NvaHNAnn6dKwqbk269iIgPNacmSDIj2nEKF+yHliJSeUa2DVbu9gq6ff2otUj8GCmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784893375; c=relaxed/simple;
-	bh=Gv4lC9BvcinQAa/Ch0YFAmnZsxbAsTD/Je/O7YwLvcY=;
+	s=arc-20240116; t=1784893392; c=relaxed/simple;
+	bh=Bb78+cO275HEQbSq6ijCG4Le87X/mYGTAx1uSh3BzgU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J3mypOguKh4RAYfLviXIiMCLId9dY8+9mbkplSznxyopja9bvzbdz67fa96YcUHSPSxGb95E85Jk88Yz5EYlvF1wDb/X05nNU6XFMxeB/o82OfAUzDqXrrP3o2i3VwXEjY0GEwQDF4uaCWIndsF6MU9IlCkCD5WK7PO/bPKGs/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Tb9Yg+Ft; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=rJPqCDGBDJwLgvtJE2UK7ngPYPx+NSscu4JA7j8FOa2p9U6kTmMOzGQ602mKr9ubJiyMvKDWI9t9OZnynz3M+xpmFP5mM2C/b/IdSpGCUPOZUUY7NX2bIWL/4mhCppHyNz6j717IkHj5OQrIvskh7neN4VZn1fQVWPxmMmzk438=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yuy2Gvuh; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Tb9Yg+Ft"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yuy2Gvuh"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784893362;
+	t=1784893383;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Dg8mnRfhKOXtjhnJODwnJEoqXKaAueIbRF1/0IO5Wm4=;
-	b=Tb9Yg+Ftj7cpUt+/LJTOq4vkeyVaDsyy39Td8jYEqol4PGaNk+9u4G8yrB0+YgTROOWeET
-	5ctg1fwY4lYaj4N2CWiqAMW1wPClBvgqpWzHvIGw1btjCPI8BORwmsaHG62VvyLyHq/5NP
-	sfkabW+6WZbkBkNwbLRkOsUh5AZp/ZY=
+	bh=HOw/Zcv6a4N4ORviF7azimVASXV/RZlA1Vn92xRQ/yk=;
+	b=Yuy2GvuhW6oJDgSuWJcmZomaFQ/EBi5Lhovflvk4eSVRFchbZuOE9s4JaP6WtHf1o7we9b
+	A3xNOqDUUDZX6hFBlBO/08wpKcz9Y1Fq4Ivctwpu7rlmRTa48lFXgbRu9ZIHdnVDP0yQZZ
+	ex5Tq/dr2bTz2aw3eLxj9as1fQnkMwo=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -51,9 +51,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 03/14] livepatch/klp-build: use -fPIC and drop direct-extern-access on LoongArch
-Date: Fri, 24 Jul 2026 19:41:16 +0800
-Message-ID: <20260724114128.31451-4-dongtai.guo@linux.dev>
+Subject: [PATCH v4 04/14] LoongArch: Fix EFI linking with -fdata-sections
+Date: Fri, 24 Jul 2026 19:41:17 +0800
+Message-ID: <20260724114128.31451-5-dongtai.guo@linux.dev>
 In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
 References: <20260724114128.31451-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -67,111 +67,30 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-On LoongArch, the klp relocation machinery redirects a livepatch's
-reference to a core-kernel symbol through a GOT entry. klp-build extracts
-the patched function into a separate module while the referenced symbol
-stays in the core kernel, so the reference must be GOT-indirect for that
-redirect to work. Two default compiler behaviours defeat this and make a
-loaded livepatch module fault.
-
-The first is a same-unit global (the syscall test patches sys_newuname()
-in kernel/sys.c, which reads 'uts_sem', a rw_semaphore defined in the
-same file). With CONFIG_RELOCATABLE=y the kernel is built -fPIE. For
-a global defined in the same unit, -fPIE emits a direct PC-relative
-reference (R_LARCH_PCALA_*) and skips the GOT, while -fPIC routes it
-through the GOT (R_LARCH_GOT_PC_*). Once klp-build moves the patched
-function into the livepatch module, the direct reference has no GOT
-slot to redirect and faults.
-
-The second is an extern global. -mdirect-extern-access replaces GOT-based
-external symbol access with direct addressing. A livepatch reference to
-such a symbol then has no GOT slot to fix up, and the wrong address faults
-the kernel. This optimization was added by commit 38b10b269d04
-("LoongArch: Tweak CFLAGS for Clang compatibility") as a nice-to-have that
-reduces GOT accesses.
-
-For LoongArch KLP builds, keep both forms GOT-indirect:
-
- - Add -fPIC via KCFLAGS. -fPIE is not enough; it optimizes away the very
-   GOT indirection KLP relies on.
- - Disable direct-extern-access: -mno-direct-extern-access for GCC,
-   -fno-direct-access-external-data for Clang.
+When building with -fdata-sections, the .init.bss section gets split
+up into a bunch of .init.bss.<var> sections.  Make sure they get linked
+into .init.bss.
 
 Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- scripts/livepatch/klp-build | 43 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ arch/loongarch/kernel/vmlinux.lds.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index e83973567c87..27463def08f8 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -278,6 +278,13 @@ validate_config() {
- 	[[ -x "$OBJTOOL" ]] && "$OBJTOOL" klp 2>&1 | command grep -q "not implemented" && \
- 		die "objtool not built with KLP support; install xxhash-devel/libxxhash-dev (version >= 0.8) and recompile"
+diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+index 840d944c2f73..570f936df34e 100644
+--- a/arch/loongarch/kernel/vmlinux.lds.S
++++ b/arch/loongarch/kernel/vmlinux.lds.S
+@@ -96,7 +96,7 @@ SECTIONS
+ #endif
  
-+	if [[ -v CONFIG_LOONGARCH ]]; then
-+		[[ -v CONFIG_AS_HAS_EXPLICIT_RELOCS ]] ||	\
-+			die "LoongArch klp-build requires CONFIG_AS_HAS_EXPLICIT_RELOCS=y"
-+		[[ -v CONFIG_RELOCATABLE ]] ||			\
-+			die "LoongArch klp-build requires CONFIG_RELOCATABLE=y"
-+	fi
-+
- 	return 0
- }
- 
-@@ -556,6 +563,31 @@ build_kernel() {
- 	local log="$TMP_DIR/build.log"
- 	local cmd=()
- 
-+	local ARCH_KBUILD_CFLAGS_KERNEL=""
-+	local ARCH_KCFLAGS=""
-+
-+	# For KLP, LoongArch symbol references must stay GOT-indirect so the klp
-+	# relocation machinery can redirect a cross-object reference through a
-+	# GOT entry.  Two default behaviours defeat that (CONFIG_RELOCATABLE and
-+	# CONFIG_AS_HAS_EXPLICIT_RELOCS are checked in validate_config()):
-+	#
-+	#  - -fPIE (added under CONFIG_RELOCATABLE) emits a direct PC-relative
-+	#    reference for a same-unit global and skips the GOT; -fPIC routes it
-+	#    through the GOT.  Add -fPIC via KCFLAGS.
-+	#  - -mdirect-extern-access replaces GOT access for an extern global with
-+	#    direct addressing.  Disable it.
-+	if [[ -v CONFIG_LOONGARCH ]]; then
-+		ARCH_KCFLAGS="-fPIC"
-+
-+		if [[ "${CONFIG_CC_IS_CLANG:-}" == "y" ]]; then
-+			ARCH_KBUILD_CFLAGS_KERNEL="-fno-direct-access-external-data"
-+		else
-+			ARCH_KBUILD_CFLAGS_KERNEL="-mno-direct-extern-access"
-+		fi
-+
-+		status "LoongArch detected: adding $ARCH_KBUILD_CFLAGS_KERNEL to KBUILD_CFLAGS_KERNEL"
-+	fi
-+
- 	cmd=("make")
- 
- 	# When a patch to a kernel module references a newly created unexported
-@@ -581,7 +613,16 @@ build_kernel() {
- 		cmd+=("-s")
- 	fi
- 	cmd+=("-j$JOBS")
--	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections")
-+	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections${ARCH_KCFLAGS:+ $ARCH_KCFLAGS}")
-+	# -fPIC is added for KLP via KCFLAGS above; the arch adds -fPIE via
-+	# KBUILD_CFLAGS_KERNEL, which kbuild places after KCFLAGS on the
-+	# built-in compile line.  -fPIC/-fPIE is last-one-wins, so -fPIE would
-+	# win.  Setting KBUILD_CFLAGS_KERNEL on the command line replaces the
-+	# arch value (not append), which drops -fPIE and lets -fPIC win.  Only
-+	# do this when an arch needs it (LoongArch).
-+	if [[ -n "$ARCH_KBUILD_CFLAGS_KERNEL" ]]; then
-+		cmd+=("KBUILD_CFLAGS_KERNEL=$ARCH_KBUILD_CFLAGS_KERNEL")
-+	fi
- 	cmd+=("vmlinux")
- 	cmd+=("modules")
- 
+ 	.init.bss : {
+-		*(.init.bss)
++		*(.init.bss .init.bss.*)	/* from the EFI stub */
+ 	}
+ 	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	__initdata_end = .;
 -- 
 2.53.0
 
