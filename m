@@ -1,372 +1,387 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225D2346E75
-	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82AE630149F
+	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 22:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784893552; cv=none; b=XPbu9nGQ72uURqK7Q6lUjnpqRe/04u7b7fbNRreXtZh+jUulKNgbrjHMYEm1zzxUxJmj8a5L7V81X5rA+PH659u0HlP0xsLJnnZoc6lQGpEQUlZmmRsPE7J6GqA0zMggMrz7GDzh5DrpUjMAr2KZXWfdbPaM+2KgxPaRXUtkLbg=
+	t=1784931462; cv=none; b=TmevrlaPIDKd1NbQeWDUNYqpXo0isEdsp3NSbi+TM28bZORsRTq9bh9YISjLMpNpYaEN+7C2HLpC1EP1kqc9WQiBdCwdFVlUow5iLwv8fdC/0Q2LOMpWyAMtXByT3ONDJuQTiddqQ9fZsM7HVt8ASLSCNcX21R48cbfR2mxEpnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784893552; c=relaxed/simple;
-	bh=bMdIMN3HQu5vLCUuxN14UQxRrmpE/mPqNXKEvoYv2tA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C4ZHoKtF2ppgfMXkSKp3UvMePi9wcBEkPSDCSFwYqJTn/a4AxZEcPe/7ESoqd5yvV3GJEOgMOx8417azmITmYlqukZBuXiUz4NZflTsaewyrjZoR97A4XK+aojY5GsKAc+Bh6VlAiaL4XuSFvkwHXrpGvdpg1nhRZW7MCdYITU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ak7Lvi6Z; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784931462; c=relaxed/simple;
+	bh=TNimib0kIbnVRZ6Rs9ngiAVqMNzswl4jrAeDKRpTJpM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=PzaMQxt5WOAUQCv80O4Hwgj6rCpysfovDh96uV8NLfFBHGSU6NF5AfYKuBIbAosmya8d1ZLAwR8Z0vW2ASW+/qRVM8SWPVbynjdeNIr+VciRvy79S4RQSYa6O1aOnW43PaW5W/0b9Dto3bIfavRlE/w3FIyfEk4wFbqJ5fOpAkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VxLvA2X+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ak7Lvi6Z"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784893546;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VxLvA2X+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784931459;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LIo2KtyLunyD7pJOq9hd/zxxpBKhcVHigJ3J1NZnnHA=;
-	b=ak7Lvi6ZviCnhDVhkWQJVAhooQLajLD1k22QrQZy/zbqs+vgEc0THLZgOWgwNZyL8ciR3Q
-	gyJSbMhYMAVzGH2mFuGXiA7+KBq3eIHJBPx1dJeiz6sR3YiGUpfPh+yQjL0kQmA9e0cal4
-	2HEWi5X3eZhP005mtgIC2SpCRmUJJw0=
-From: George Guo <dongtai.guo@linux.dev>
-To: chenhuacai@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com
-Cc: kernel@xen0n.name,
-	joe.lawrence@redhat.com,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn,
-	jiaxun.yang@flygoat.com,
-	wangrui@loongson.cn,
-	liukexin@kylinos.cn,
-	guodongtai@kylinos.cn,
-	xry111@xry111.site,
-	wangyuli@aosc.io,
-	loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 14/14] objtool/klp: Rewrite PC-relative data references to GOT on LoongArch
-Date: Fri, 24 Jul 2026 19:41:27 +0800
-Message-ID: <20260724114128.31451-15-dongtai.guo@linux.dev>
-In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
-References: <20260724114128.31451-1-dongtai.guo@linux.dev>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fsk+4SZ49bGTt24iVuRNykleuq00KRYLAQi8m/58gEQ=;
+	b=VxLvA2X+JtG0CfYQZNjGasCi6ImXCIqAPoFEH0m+2m/SNF+1S3JHV72RBNFkcbce2QFeKH
+	hNFb37fN1U4Z8qEDTspArXm2PSgnqG+Xk8nF2GaxUlxWheJEMg6cCpnD5lXWhUzN+C5bHv
+	D9RqoVCxibcwo3DvmTzcxPBbVlosstA=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-629-eQOofWfbP4qJeQMHhYaPBA-1; Fri,
+ 24 Jul 2026 18:17:38 -0400
+X-MC-Unique: eQOofWfbP4qJeQMHhYaPBA-1
+X-Mimecast-MFC-AGG-ID: eQOofWfbP4qJeQMHhYaPBA_1784931456
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8841A1851153;
+	Fri, 24 Jul 2026 22:17:36 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.207])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3878B1800634;
+	Fri, 24 Jul 2026 22:17:35 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: live-patching@vger.kernel.org
+Cc: Ben Procknow <bprockno@redhat.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v2 0/1] objtool/klp-diff: fix klp-build data sympos bug
+Date: Fri, 24 Jul 2026 18:17:29 -0400
+Message-ID: <20260724221730.3126529-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: George Guo <guodongtai@kylinos.cn>
+Hi Josh,
 
-A livepatch module is mapped far more than the +-2GB reachable by a
-pcalau12i/addi.d pair, so a klp relocation that resolves to a symbol in
-vmlinux cannot be reached PC-relatively: the relocation overflows and
-the patched function computes a wild pointer.  Far calls are already
-handled by the module loader, which redirects them through a PLT stub,
-but there is no such indirection for data, whose address is
-materialized inline.
+Here's v2 addressing your feedback, rather than extending the
+section-ordering HACK, this computes sympos during the checksum phase as
+passes it through with that.
 
-Compilers emit the direct PC-relative form for any symbol they consider
-local.  In particular file-local 'static' data is never interposable, so
--fPIC does not route it through the GOT.  This is correct for vmlinux and
-for ordinary modules; it only breaks once klp-diff extracts the function
-into the far livepatch module while its data stays behind.  It is not
-Clang-specific: GCC emits the same PC-relative form.
+This adds --linked-obj to `objtool klp checksum`.  (Not sure if there is
+any other way other than to pass that around.)  It opens the linked
+binary (vmlinux or .ko), finds all duplicate local symbols matching the
+.o being checksummed, sorts them to match the kallsyms order, and writes
+the result into a .discard.sym_order section.  klp-diff then reads this
+section instead of trying to determine the order from vmlinux.o's symbol
+table.
 
-Add an arch hook, arch_klp_convert_reloc_to_got(), invoked when a klp
-relocation is created, and implement it for LoongArch: rewrite the
-reference to its GOT-indirect equivalent, which loads the full 64-bit
-address from a GOT slot the module loader fills in:
+Note that the sort order matches what the livepatch core sees when
+loading the patch:
 
-	pcalau12i rd, %pc_hi20(sym)      ->  pcalau12i rd, %got_pc_hi20(sym)
-	addi.d    rd, rj, %pc_lo12(sym)  ->  ld.d      rd, rj, %got_pc_lo12(sym)
+- For vmlinux, sort by address: this matches
+  kallsyms_on_each_match_symbol() which loops through the symbols in
+  address order, counting dupes until it hits the target sympos.
 
-The loader already sizes the module GOT from every SHT_RELA section that
-targets executable code, including .klp.rela.*, so the slot is reserved
-at load time and filled when the patch is enabled.
+- For modules, sort by symtab index: this matches
+  module_kallsyms_on_each_symbol() which iterates the .ko's symtab
+  as-is.
 
-Only an adjacent, register-consistent pcalau12i/addi.d pair that
-materializes an address can be converted.  A PCALA_LO12 on any other
-instruction is a load or store that reads the symbol directly; going
-through the GOT there needs an extra instruction to dereference the
-slot, and the function cannot grow without shifting every offset,
-relocation and ORC entry.  A pcalau12i shared by several addi.d with
-different addends would likewise need one GOT slot per addend, which a
-single GOT_PC_HI20 cannot express.  Reject both rather than emit a
-livepatch that is quietly broken.
+With this, the section-ordering HACK is completely removed.
 
-The LoongArch decoder in tools/ lacks the reg1i20 instruction format
-used to identify pcalau12i; add it to the tools/ copy of asm/inst.h.
+On the klp-build side, the script now stashes the original vmlinux/.ko
+into 1-orig/ during copy_orig_objects before the patched rebuild
+overwrites them, then passes --linked-obj pointing there during the
+original checksum pass.  As mentioned earlier, I'm not sure if there is
+a better way to do this.
 
-Reproduced by a livepatch for proc_pid_status() (the shadow-newpid
-test), which reads the file-local task_state_array[].
+Finally, this doesn't address the age-old, same source-file::symbol-name
+problem.  That was astutely flagged by one of our internal AI reviews :)
+But it's Friday and I don't think I need to solve that one today, too.
 
-Signed-off-by: George Guo <guodongtai@kylinos.cn>
----
- tools/arch/loongarch/include/asm/inst.h       |  11 ++
- tools/objtool/arch/loongarch/decode.c         | 104 ++++++++++++++++++
- .../objtool/arch/loongarch/include/arch/elf.h |  16 +++
- tools/objtool/klp-diff.c                      |  23 +++-
- 4 files changed, 152 insertions(+), 2 deletions(-)
 
-diff --git a/tools/arch/loongarch/include/asm/inst.h b/tools/arch/loongarch/include/asm/inst.h
-index d68fad63c8b7..0d4caa6522f1 100644
---- a/tools/arch/loongarch/include/asm/inst.h
-+++ b/tools/arch/loongarch/include/asm/inst.h
-@@ -25,6 +25,10 @@ enum reg1i21_op {
- 	bcnez_op	= 0x12, /* bits[9:8] = 0x01 */
- };
- 
-+enum reg1i20_op {
-+	pcalau12i_op	= 0x0d,
-+};
-+
- enum reg2_op {
- 	ertn_op		= 0x1920e,
- };
-@@ -66,6 +70,12 @@ struct reg0i26_format {
- 	unsigned int opcode : 6;
- };
- 
-+struct reg1i20_format {
-+	unsigned int rd : 5;
-+	unsigned int immediate : 20;
-+	unsigned int opcode : 7;
-+};
-+
- struct reg1i21_format {
- 	unsigned int immediate_h  : 5;
- 	unsigned int rj : 5;
-@@ -111,6 +121,7 @@ union loongarch_instruction {
- 	unsigned int word;
- 	struct reg0i15_format	reg0i15_format;
- 	struct reg0i26_format	reg0i26_format;
-+	struct reg1i20_format	reg1i20_format;
- 	struct reg1i21_format	reg1i21_format;
- 	struct reg2_format	reg2_format;
- 	struct reg2i12_format	reg2i12_format;
-diff --git a/tools/objtool/arch/loongarch/decode.c b/tools/objtool/arch/loongarch/decode.c
-index 273398ea4486..99765b13058c 100644
---- a/tools/objtool/arch/loongarch/decode.c
-+++ b/tools/objtool/arch/loongarch/decode.c
-@@ -101,6 +101,110 @@ int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc)
- 	return 0;
- }
- 
-+static bool klp_read_insn(struct section *sec, unsigned long offset,
-+			  union loongarch_instruction *insn)
-+{
-+	if (offset + sizeof(*insn) > sec_size(sec))
-+		return false;
-+
-+	memcpy(insn, sec->data->d_buf + offset, sizeof(*insn));
-+	return true;
-+}
-+
-+/*
-+ * A livepatch module is mapped far more than the +-2GB reachable by
-+ * pcalau12i/addi.d, so a klp reloc which resolves to a symbol in vmlinux cannot
-+ * be reached PC-relatively: the relocation overflows and the patched function
-+ * computes a wild pointer.  Far calls are already handled by the module loader,
-+ * which redirects them through a PLT stub, but there is no such indirection for
-+ * data: the address is materialized inline.
-+ *
-+ * Compilers emit the direct PC-relative form for any symbol they consider local
-+ * (in particular file-local 'static' data, which is never interposable, so
-+ * -fPIC does not route it through the GOT).  This is correct for vmlinux and
-+ * for ordinary modules; it only breaks once klp-diff extracts the function into
-+ * a far away livepatch module while its data stays behind.
-+ *
-+ * Convert the reference to its GOT-indirect equivalent, which loads the full
-+ * 64-bit address from a GOT slot the module loader fills in and so works at any
-+ * distance:
-+ *
-+ *	pcalau12i rd, %pc_hi20(sym)	->  pcalau12i rd, %got_pc_hi20(sym)
-+ *	addi.d    rd, rj, %pc_lo12(sym)	->  ld.d      rd, rj, %got_pc_lo12(sym)
-+ *
-+ * Only an adjacent pcalau12i/addi.d pair which materializes an address can be
-+ * converted, and only that exact shape is accepted:
-+ *
-+ *  - A PCALA_LO12 on anything but addi.d is a load or store reading the symbol
-+ *    directly.  Going through the GOT would need an extra instruction to
-+ *    dereference the slot, and the function cannot grow without shifting every
-+ *    offset, relocation and ORC entry.
-+ *
-+ *  - The pair must be adjacent and register-consistent.  If one pcalau12i is
-+ *    shared by several addi.d with different addends, each needs its own GOT
-+ *    slot, but the single GOT_PC_HI20 only spans one page: the result would be
-+ *    correct only if those slots happened to share a page.  Requiring
-+ *    adjacency rejects that (the second addi.d is not preceded by a pcalau12i),
-+ *    as well as a pair the compiler scheduled apart.
-+ *
-+ * Bail out on anything else instead of emitting a livepatch which is quietly
-+ * broken.
-+ */
-+int arch_klp_convert_reloc_to_got(struct elf *elf, struct section *sec,
-+				  unsigned long offset, unsigned int *type)
-+{
-+	union loongarch_instruction hi, lo;
-+	unsigned long hi_offset, lo_offset;
-+
-+	switch (*type) {
-+	case R_LARCH_PCALA_HI20:
-+		hi_offset = offset;
-+		lo_offset = offset + LOONGARCH_INSN_SIZE;
-+		break;
-+
-+	case R_LARCH_PCALA_LO12:
-+		if (offset < LOONGARCH_INSN_SIZE) {
-+			ERROR("%s+0x%lx: PCALA_LO12 with no preceding instruction",
-+			      sec->name, offset);
-+			return -1;
-+		}
-+		hi_offset = offset - LOONGARCH_INSN_SIZE;
-+		lo_offset = offset;
-+		break;
-+
-+	default:
-+		return 0;
-+	}
-+
-+	if (!klp_read_insn(sec, hi_offset, &hi) ||
-+	    !klp_read_insn(sec, lo_offset, &lo)) {
-+		ERROR("%s+0x%lx: PCALA pair runs past end of section",
-+		      sec->name, offset);
-+		return -1;
-+	}
-+
-+	if (hi.reg1i20_format.opcode != pcalau12i_op ||
-+	    lo.reg2i12_format.opcode != addid_op ||
-+	    lo.reg2i12_format.rj != hi.reg1i20_format.rd) {
-+		ERROR("%s+0x%lx: cannot make klp reference GOT-indirect: expected an adjacent pcalau12i/addi.d pair, found 0x%08x/0x%08x",
-+		      sec->name, offset, hi.word, lo.word);
-+		return -1;
-+	}
-+
-+	if (*type == R_LARCH_PCALA_HI20) {
-+		*type = R_LARCH_GOT_PC_HI20;
-+		return 0;
-+	}
-+
-+	/* addi.d rd, rj, %pc_lo12(sym) -> ld.d rd, rj, %got_pc_lo12(sym) */
-+	lo.reg2i12_format.opcode = ldd_op;
-+	if (elf_write_insn(elf, sec, lo_offset, sizeof(lo), (const char *)&lo))
-+		return -1;
-+
-+	*type = R_LARCH_GOT_PC_LO12;
-+	return 0;
-+}
-+
- bool arch_pc_relative_reloc(struct reloc *reloc)
- {
- 	return false;
-diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
-index e2843679f24e..7a97cf69dc86 100644
---- a/tools/objtool/arch/loongarch/include/arch/elf.h
-+++ b/tools/objtool/arch/loongarch/include/arch/elf.h
-@@ -27,6 +27,18 @@
- #ifndef R_LARCH_SUB64
- #define R_LARCH_SUB64		56
- #endif
-+#ifndef R_LARCH_PCALA_HI20
-+#define R_LARCH_PCALA_HI20	71
-+#endif
-+#ifndef R_LARCH_PCALA_LO12
-+#define R_LARCH_PCALA_LO12	72
-+#endif
-+#ifndef R_LARCH_GOT_PC_HI20
-+#define R_LARCH_GOT_PC_HI20	75
-+#endif
-+#ifndef R_LARCH_GOT_PC_LO12
-+#define R_LARCH_GOT_PC_LO12	76
-+#endif
- #ifndef R_LARCH_32_PCREL
- #define R_LARCH_32_PCREL	99
- #endif
-@@ -48,9 +60,13 @@
- 
- #define ARCH_HAS_INLINE_ALTS	1
- #define ARCH_HAS_PAIRED_RELOCS	1
-+#define ARCH_HAS_KLP_GOT_RELOCS	1
- 
- struct elf;
- struct reloc;
-+struct section;
- int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc);
-+int arch_klp_convert_reloc_to_got(struct elf *elf, struct section *sec,
-+				  unsigned long offset, unsigned int *type);
- 
- #endif /* _OBJTOOL_ARCH_ELF_H */
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index f151ffc71184..1538f8f92f1f 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1525,6 +1525,14 @@ static inline int arch_normalize_paired_reloc(struct elf *elf, struct reloc *rel
- }
- #endif
- 
-+#ifndef ARCH_HAS_KLP_GOT_RELOCS
-+static inline int arch_klp_convert_reloc_to_got(struct elf *elf, struct section *sec,
-+						unsigned long offset, unsigned int *type)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * Convert a relocation symbol reference to the needed format: either a section
-  * symbol or the underlying symbol itself.  Return -1 error, 0 success, 1 skip.
-@@ -1565,12 +1573,23 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 	char sym_name[SYM_NAME_LEN];
- 	struct klp_reloc klp_reloc;
- 	unsigned long sympos;
-+	unsigned int type;
- 
- 	if (!patched_sym->twin) {
- 		ERROR("unexpected klp reloc for new symbol %s", patched_sym->name);
- 		return -1;
- 	}
- 
-+	/*
-+	 * This reference resolves to a symbol which stays in the patched
-+	 * object, arbitrarily far from the livepatch module.  Give the arch a
-+	 * chance to convert a PC-relative reference into an indirect one which
-+	 * can reach it (LoongArch: PCALA -> GOT).
-+	 */
-+	type = reloc_type(patched_reloc);
-+	if (arch_klp_convert_reloc_to_got(e->out, sec, offset, &type))
-+		return -1;
-+
- 	/*
- 	 * Keep the original reloc intact for now to avoid breaking objtool run
- 	 * which relies on proper relocations for many of its features.  This
-@@ -1591,7 +1610,7 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 		sym->clone = patched_sym;
- 	}
- 
--	if (!elf_create_reloc(e->out, sec, offset, sym, addend, reloc_type(patched_reloc)))
-+	if (!elf_create_reloc(e->out, sec, offset, sym, addend, type))
- 		return -1;
- 
- 	/*
-@@ -1648,7 +1667,7 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 	klp_reloc_off = sec_size(klp_relocs);
- 	memset(&klp_reloc, 0, sizeof(klp_reloc));
- 
--	klp_reloc.type = reloc_type(patched_reloc);
-+	klp_reloc.type = type;
- 	if (!elf_add_data(e->out, klp_relocs, &klp_reloc, sizeof(klp_reloc), true))
- 		return -1;
- 
+v1: https://lore.kernel.org/live-patching/ini7aoz6vvowmu5dvxoxpi6l4ednsov6omjcoffmuod3d2iaof@vflcrwqktqsl/T/#t
+- Complete rewrite and change of approach to stashing sympos with the
+  checksum [Josh]
+
+Joe Lawrence (1):
+  objtool/klp: compute sympos during checksum phase
+
+ scripts/livepatch/klp-build                   |  36 +++-
+ .../objtool/include/objtool/checksum_types.h  |   6 +
+ tools/objtool/klp-checksum.c                  | 195 +++++++++++++++++-
+ tools/objtool/klp-diff.c                      |  88 ++++----
+ 4 files changed, 267 insertions(+), 58 deletions(-)
+
+
+Reproducer and analysis
+=======================
+
+Config
+------
+Basic config plus a DM module for testing:
+
+  $ make defconfig
+  $ ./scripts/config --file .config \
+             --set-val CONFIG_FTRACE y \
+             --set-val CONFIG_KALLSYMS_ALL y \
+             --set-val CONFIG_FUNCTION_TRACER y \
+             --set-val CONFIG_DYNAMIC_FTRACE y \
+             --set-val CONFIG_DYNAMIC_DEBUG y \
+             --set-val CONFIG_LIVEPATCH y \
+             --set-val CONFIG_DM_THIN_PROVISIONING m
+  $ make olddefconfig
+
+Helper debug functions
+----------------------
+These help shorten some of the analysis below:
+
+  # Symbol table order
+  $ dump_sym() { objdump -t "$1" | awk -vSYM="$2" '/\.c$/{file=$NF}; $NF==SYM {print file": "$0}' | column -t | sort -k2; }
+
+  # Kallsyms address-sorted order
+  $ dump_sym_addr_sort() { dump_sym "$1" "$2" | sort -k2; }
+
+  # Magic spell to coax pahole into pretty-printing the klp_func_ext struct
+  $ dump_klp_func_ext() {
+    echo '#include "include/linux/livepatch_external.h"
+    struct klp_func_ext dummy;' | gcc -g -c -x c -include linux/types.h - -o /tmp/type.o
+    objcopy -O binary --only-section=.init.klp_funcs "$1" /tmp/funcs.bin
+    pahole -F dwarf -C klp_func_ext /tmp/type.o --prettify /tmp/funcs.bin 2>/dev/null
+  }
+
+
+Find initial sympos
+-------------------
+Find the symbol positions for pwq_cache symbols and unregister_vclock
+functions:
+
+  $ dump_sym_addr_sort vmlinux pwq_cache
+  eventpoll.c:  ffffffff82b8ab40  l  O  .rodata  0000000000000008  pwq_cache        << sympos=1
+  workqueue.c:  ffffffff83a99b00  l  O  .bss     0000000000000008  pwq_cache        << sympos=2
+
+  $ dump_sym_addr_sort vmlinux unregister_vclock
+  ptp_sysfs.c:  ffffffff81265a00  l  F  .text  0000000000000056  unregister_vclock  << sympos=1
+  ptp_clock.c:  ffffffff81f01680  l  F  .text  0000000000000024  unregister_vclock  << sympos=2
+
+Test 1: vmlinux sympos=1
+------------------------
+
+  $ cat test-sympos-vmlinux-1.patch
+  diff --git a/drivers/ptp/ptp_sysfs.c b/drivers/ptp/ptp_sysfs.c
+  index dc398c6b7528..b3267430f4c2 100644
+  --- a/drivers/ptp/ptp_sysfs.c
+  +++ b/drivers/ptp/ptp_sysfs.c
+  @@ -177,6 +177,7 @@ static int unregister_vclock(struct device *dev, void *data)
+   	ptp_vclock_unregister(vclock);
+   	(*num)--;
+
+  +	pr_info("klp-build test");
+   	/* For break. Not error. */
+   	if (*num == 0)
+   		return -EINVAL;
+  diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+  index 0e65c7431dfc..b99bfe757c50 100644
+  --- a/fs/eventpoll.c
+  +++ b/fs/eventpoll.c
+  @@ -905,6 +905,7 @@ static void ep_unregister_pollwait(struct eventpoll *ep, struct epitem *epi)
+   	while ((pwq = *p) != NULL) {
+   		*p = pwq->next;
+   		ep_remove_wait_queue(pwq);
+  +		WARN_ON_ONCE(!pwq_cache);
+   		kmem_cache_free(pwq_cache, pwq);
+   	}
+   }
+
+  $ ./scripts/livepatch/klp-build -T test-sympos-vmlinux-1.patch
+
+Check the pwq_cache symbol klp-relocation sympos:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-1.ko | grep -w '.klp.sym.vmlinux.pwq_cache'
+  0000000000000008  0000006100000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
+  0000000000000069  0000006100000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
+
+Check the unregister_vclock function sympos, first dump out the klp_funcs
+relocations to figure out the entries in the array:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-1.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
+  Relocation section '.rela.init.klp_funcs' at offset 0x1b0 contains 8 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 9c
+  0000000000000008  0000002b00000001 R_X86_64_64            00000000000000a0 ep_remove + 0
+  0000000000000018  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + a6
+  0000000000000020  0000002d00000001 R_X86_64_64            0000000000000140 ep_clear_and_put + 0
+  0000000000000030  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + b7
+  0000000000000038  0000002f00000001 R_X86_64_64            0000000000000210 unregister_vclock + 0
+  0000000000000048  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + c9
+  0000000000000050  0000006800000001 R_X86_64_64            0000000000000280 eventpoll_release_file + 0
+
+and then pretty-print the klp_func_ext struct:
+
+  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-1.ko
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00, 
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_remove
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_clear_and_put
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
+          .sympos = 1,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << eventpoll_release_file
+          .sympos = 0,
+  },
+
+
+Test2: vmlinux sympos=2
+-----------------------
+
+  $ cat test-sympos-vmlinux-2.patch
+  diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+  index d6f54ccaf93b..69c4d1f75e15 100644
+  --- a/drivers/ptp/ptp_clock.c
+  +++ b/drivers/ptp/ptp_clock.c
+  @@ -490,6 +490,7 @@ static int unregister_vclock(struct device *dev, void *data)
+   {
+   	struct ptp_clock *ptp = dev_get_drvdata(dev);
+
+  +	pr_info("klp-build test");
+   	ptp_vclock_unregister(info_to_vclock(ptp->info));
+   	return 0;
+   }
+  diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+  index 78068ae8f28a..2068c7aa8d6d 100644
+  --- a/kernel/workqueue.c
+  +++ b/kernel/workqueue.c
+  @@ -5310,6 +5310,7 @@ static struct pool_workqueue *alloc_unbound_pwq(struct workqueue_struct *wq,
+   	if (!pool)
+   		return NULL;
+
+  +	WARN_ON(!pwq_cache);
+   	pwq = kmem_cache_alloc_node(pwq_cache, GFP_KERNEL, pool->node);
+   	if (!pwq) {
+   		put_unbound_pool(pool);
+
+  $ make -j$(nproc) && ./scripts/livepatch/klp-build -T test-sympos-vmlinux-2.patch
+
+Check the pwq_cache symbol klp-relocation sympos:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-2.ko | grep -w '.klp.sym.vmlinux.pwq_cache'
+  0000000000000038  0000005a00000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
+  0000000000000167  0000005a00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
+
+Check the unregister_vclock function sympos, first dump out the klp_funcs
+relocations to figure out the entries in the array:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-2.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
+  Relocation section '.rela.init.klp_funcs' at offset 0x128 contains 4 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000d00000001 R_X86_64_64            0000000000000000 .rodata + 74
+  0000000000000008  0000002700000001 R_X86_64_64            0000000000000040 alloc_unbound_pwq + 0
+  0000000000000018  0000000d00000001 R_X86_64_64            0000000000000000 .rodata + 86
+  0000000000000020  0000002900000001 R_X86_64_64            0000000000000370 unregister_vclock + 0
+
+and then pretty-print the klp_func_ext struct:
+
+  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-2.ko
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .sympos = 2,
+  },
+
+Test3: Test1 + Test2 + module sympos=1
+--------------------------------------
+
+This last test combines the vmlinux test cases and then adds a module
+case on top.
+
+Dump the klp-relocations, we should see the vmlinux.pwq_cache,1 and ,2
+as well as dm_bio_prison._cell_cache,1 for the module:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-module.ko | \
+    grep -w -e '.klp.sym.vmlinux.pwq_cache' -e '.klp.sym.dm_bio_prison._cell_cache'
+  0000000000000008  0000007100000001 R_X86_64_64            0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 5
+  0000000000000020  0000007100000001 R_X86_64_64            0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 4
+  0000000000000068  0000009000000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
+  00000000000001b8  0000007a00000001 R_X86_64_64            0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
+  000000000000004c  0000007100000002 R_X86_64_PC32          0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 5
+  00000000000000f1  0000007100000002 R_X86_64_PC32          0000000000000000 .klp.sym.dm_bio_prison._cell_cache,1 - 4
+  0000000000000287  0000009000000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,2 - 4
+  00000000000004c9  0000007a00000002 R_X86_64_PC32          0000000000000000 .klp.sym.vmlinux.pwq_cache,1 - 4
+
+Finally dump the klp_func_ext struct to see that it's got the correct
+sympos for both module unregister_vclock cases:
+
+  $ readelf --wide --relocs livepatch-test-sympos-vmlinux-module.ko | awk '/.rela.init.klp_funcs/' RS="\n\n" ORS="\n\n"
+  Relocation section '.rela.init.klp_funcs' at offset 0x250 contains 14 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 62
+  0000000000000008  0000005800000001 R_X86_64_64            0000000000000040 dm_bio_prison_create + 0
+  0000000000000018  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 78
+  0000000000000020  0000002b00000001 R_X86_64_64            0000000000000160 alloc_unbound_pwq + 0
+  0000000000000030  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 8a
+  0000000000000038  0000002f00000001 R_X86_64_64            0000000000000500 ep_remove + 0
+  0000000000000048  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + 94
+  0000000000000050  0000003100000001 R_X86_64_64            00000000000005a0 ep_clear_and_put + 0
+  0000000000000060  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + a5
+  0000000000000068  0000003300000001 R_X86_64_64            0000000000000670 unregister_vclock + 0
+  0000000000000078  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + b7
+  0000000000000080  0000003500000001 R_X86_64_64            00000000000006c0 unregister_vclock + 0
+  0000000000000090  0000000e00000001 R_X86_64_64            0000000000000000 .rodata + c9
+  0000000000000098  0000008900000001 R_X86_64_64            0000000000000730 eventpoll_release_file + 0
+  
+  $ dump_klp_func_ext livepatch-test-sympos-vmlinux-module.ko 
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << dm_bio_prison_create
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << alloc_unbound_pwq
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_remove
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << ep_clear_and_put
+          .sympos = 0,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
+          .sympos = 2,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << unregister_vclock
+          .sympos = 1,
+  },
+  {
+          .old_name = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,
+          .new_func = 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00,    << eventpoll_release_file
+          .sympos = 0,
+  },
+
+
+base-commit: 393988901632138e76d55518d5a0c6cc07cd3ad3
 -- 
-2.53.0
+2.54.0
 
