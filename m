@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84284378D8E;
-	Fri, 24 Jul 2026 11:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5CC237E5F9
+	for <live-patching@vger.kernel.org>; Fri, 24 Jul 2026 11:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784893533; cv=none; b=kGR1lPYviAqNpUFmIuUD+qCyDWtv12pxTocXUdYHw0SzL2x9vD6XDj6MHw8QzU/NuyRCIwy46wfhqBApbzHxYw/XZuZOybZMM0ovCZhUvc933SYffqXRxiyNCoDFqED7xg9XPISBXz2VfBldvK/4DI5LoAwmMoK3Cdpf8e3mcRQ=
+	t=1784893545; cv=none; b=KWHys62Pz6iME1mzsg1TR4PBtmoGNlvpfmbAjuR3EbA/WM0/mFBBoFr6CvamelI/To2PcZwQsCISt/6yGZM6TGDdPEBeyYPU/osp1m4+MBGJKYeo7+4Pq2YtSFBT8tq9U2HNNTqTF9IBTgY828k/4kYq9LmuPUTyxISIUNEdmJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784893533; c=relaxed/simple;
-	bh=1zECCi6Ex7mHqMuO1WEpHBQ0n6CgHagqiye0NBchq9E=;
+	s=arc-20240116; t=1784893545; c=relaxed/simple;
+	bh=16rzf+qzWNXObKuK83MOC2na7VFzAB9eGdvs8zN80YM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FjhXHRmze8PInM1fq0hXLPKdFuki+lYzByjsBJo9Wz+1XuH6Q4NyMYp9BBTVYfj2cKowTUOMpmjg8d8OnTVuidr2AJGTs/0nmZY3qokxFAOoi0GD3X2sYoaWVWd3jZE8yt2lQ4PYgOpqrh2h4e0DKWegKiKjHySPKl+Amj2jNmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t5R7uASp; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=fttL++urweF2adOivD0ySm5G8oLQEwG5vYHUCv6ZX6x2PhlADz8xbZnQLwkgebViY46RmeEm9L2z5ZdfClIlukYZgDpoQk+ISl0s3O7iyJUDziBVfafoeSYHXUeLGWZFWuLBEUVg8fw6p3NnpuPqMcqpUlMNWwk3AmVE/9+xeVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eEMnYHAy; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t5R7uASp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eEMnYHAy"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784893529;
+	t=1784893541;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=3K5wGN9XWFfzaBYR/egLQZSf83uwFZjqG2cXWqC5y/I=;
-	b=t5R7uASpLGLvqdCNP++RUKeR4X0OuB+dPFuO7S5FkEycdTKYyvqSVQgzOSniOeTOL0ixeC
-	pJOp0TF8s1eDLyoqcxGpM6oMyTCYdHqzUTkMPuRi442b6bw7U21J1/ODqhVaSbBVp3Te7w
-	hEDzbYDicN3HpEoDFAJ5fsRuq2gP9As=
+	bh=wgzBqynfoZaxFoS1KfD08vyQRws3QN+VgwIwrElk/Ts=;
+	b=eEMnYHAyZAMi3vx73G3SFKcesdVsn0xu9Wfqj3DwfvCGeXAKvIrmiEapK5YLQLi0myYaRu
+	mYDZKkstdpWgumyWdlOpvw2gF5Z9ab6PdmHzElEyWN3IWrvnBVZ3KV9I+Y4gxdY0hEa8gy
+	3594ymNp0/DY6uVRHppxMhkyF/k2+68=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	jpoimboe@kernel.org,
@@ -51,9 +51,9 @@ Cc: kernel@xen0n.name,
 	live-patching@vger.kernel.org,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 11/14] objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
-Date: Fri, 24 Jul 2026 19:41:24 +0800
-Message-ID: <20260724114128.31451-12-dongtai.guo@linux.dev>
+Subject: [PATCH v4 13/14] objtool/klp: Keep LoongArch tablejump annotation table entries
+Date: Fri, 24 Jul 2026 19:41:26 +0800
+Message-ID: <20260724114128.31451-14-dongtai.guo@linux.dev>
 In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
 References: <20260724114128.31451-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -67,173 +67,88 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-On LoongArch, the "key - ." field of a __jump_table entry can come out
-as two relocations at the same offset, R_LARCH_ADD64 plus
-R_LARCH_SUB64.  clang's integrated assembler emits this pair when the
-key symbol is not defined in the same translation unit (for example
-__tracepoint_netif_rx); GAS, and clang for locally-defined keys,
-produce a single R_LARCH_64_PCREL instead, which is why GCC builds do
-not hit this.  objtool's elf_create_reloc() allows only one relocation
-per offset, so cloning such an entry fails with:
+With -mannotate-tablejump, LoongArch compilers emit a
+.discard.tablejump_annotate section.  Each entry is a pair of 8-byte
+words: the address of a jump instruction and the address of its jump
+table.  objtool reads these pairs to find switch jump tables when
+decoding.
 
-  vmlinux.o: error: objtool: __jump_table_23683+0x8: duplicate reloc
+klp-diff creates one fake symbol per 8-byte word and clones a word only
+if should_keep_special_sym() accepts it.  The default rule keeps a word
+only if it references a function that was cloned into the output
+module.  The instruction-side word references the function and is
+kept.  The table-side word references the jump table via its .rodata
+section symbol, which is not a function symbol, so it is dropped.
 
-When the SUB half points at the relocation's own position (the
-"sym - ." pattern), the pair means the same thing as one PC-relative
-relocation.  Add arch_normalize_paired_reloc() which rewrites the ADD
-half to R_LARCH_32_PCREL/R_LARCH_64_PCREL and skips the SUB half.  The
-LoongArch module loader supports both forms.
+The cloned annotate section then holds only instruction-side words,
+compacted together.  The pairing is destroyed.  Parsing the malformed
+section crashes objtool on the patch module and no .ko is produced:
 
-Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
+  Building patch module: livepatch-shadow-newpid.ko
+  livepatch-shadow-newpid.o: error: SIGSEGV: objtool crash!
+
+Keep all .discard.tablejump_annotate words whose referenced symbol has
+been cloned.
+
+Reproduced with the shadow-newpid test, which patches
+proc_pid_status().  That function contains two switch jump tables.
+
+Before, klp-diff clones only the instruction-side words:
+
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57441 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x0: proc_pid_status+0xc70 [FUNC GLOBAL]
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57443 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x8: proc_pid_status+0xd2c [FUNC GLOBAL]
+
+After, the full pairs are kept, including the .rodata table words:
+
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57441 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x0: proc_pid_status+0xc70 [FUNC GLOBAL]
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57442 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x8: .rodata.proc_pid_status+0x0 [SECTION]
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57443 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x10: proc_pid_status+0xd2c [FUNC GLOBAL]
+  DEBUG: vmlinux.o: _discard_tablejump_annotate_57444 [+DATA]
+  DEBUG: vmlinux.o:         .discard.tablejump_annotate+0x18: .rodata.proc_pid_status+0x80 [SECTION]
+
+and the patch module builds.
+
+Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- tools/objtool/arch/loongarch/decode.c         | 62 +++++++++++++++++++
- .../objtool/arch/loongarch/include/arch/elf.h | 18 ++++++
- tools/objtool/klp-diff.c                      | 13 ++++
- 3 files changed, 93 insertions(+)
+ tools/objtool/klp-diff.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/objtool/arch/loongarch/decode.c b/tools/objtool/arch/loongarch/decode.c
-index 12facd0cc8d1..273398ea4486 100644
---- a/tools/objtool/arch/loongarch/decode.c
-+++ b/tools/objtool/arch/loongarch/decode.c
-@@ -39,6 +39,68 @@ u64 arch_adjusted_addend(struct reloc *reloc)
- 	return reloc_addend(reloc);
- }
- 
-+/*
-+ * A cross-section difference like the "key - ." field of a __jump_table
-+ * entry may come out as a paired R_LARCH_ADD plus R_LARCH_SUB relocation
-+ * at the same offset: clang's integrated assembler does this when the
-+ * symbol is not defined in the same translation unit (GAS, and clang for
-+ * locally-defined symbols, emit a single PCREL instead).  objtool allows
-+ * only one relocation per offset, so the pair breaks cloning.
-+ *
-+ * When the SUB half points at the reloc's own position ("sym - ."), the
-+ * pair means the same as a single PC-relative relocation, which the
-+ * module loader also supports: rewrite the ADD half to R_LARCH_*_PCREL
-+ * and tell the caller to skip the SUB half.
-+ *
-+ * Return 1 to skip the reloc, 0 to proceed, -1 on error.
-+ */
-+int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc)
-+{
-+	struct section *rsec = reloc->sec;
-+	unsigned int sub_type, pcrel_type;
-+	struct reloc *sub, *add;
-+
-+	switch (reloc_type(reloc)) {
-+	case R_LARCH_ADD32:
-+		sub_type = R_LARCH_SUB32;
-+		pcrel_type = R_LARCH_32_PCREL;
-+		break;
-+	case R_LARCH_ADD64:
-+		sub_type = R_LARCH_SUB64;
-+		pcrel_type = R_LARCH_64_PCREL;
-+		break;
-+	case R_LARCH_SUB32:
-+	case R_LARCH_SUB64:
-+		/*
-+		 * Skip only if the paired ADD (the preceding reloc) has
-+		 * been rewritten to PCREL; otherwise leave the pair
-+		 * intact so a failed conversion stays loud.
-+		 */
-+		add = reloc_idx(reloc) ? reloc - 1 : NULL;
-+		if (add && reloc_offset(add) == reloc_offset(reloc) &&
-+		    (reloc_type(add) == R_LARCH_32_PCREL ||
-+		     reloc_type(add) == R_LARCH_64_PCREL))
-+			return 1;
-+		return 0;
-+	default:
-+		return 0;
-+	}
-+
-+	/* The paired SUB reloc immediately follows the ADD */
-+	sub = rsec_next_reloc(rsec, reloc);
-+	if (!sub || reloc_offset(sub) != reloc_offset(reloc) ||
-+	    reloc_type(sub) != sub_type)
-+		return 0;
-+
-+	/* Only a "sym - ." difference is PC-relative */
-+	if (sub->sym->sec != rsec->base ||
-+	    sub->sym->offset + reloc_addend(sub) != reloc_offset(sub))
-+		return 0;
-+
-+	set_reloc_type(elf, reloc, pcrel_type);
-+	return 0;
-+}
-+
- bool arch_pc_relative_reloc(struct reloc *reloc)
- {
- 	return false;
-diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
-index ec79062c9554..0103f27fccfc 100644
---- a/tools/objtool/arch/loongarch/include/arch/elf.h
-+++ b/tools/objtool/arch/loongarch/include/arch/elf.h
-@@ -15,6 +15,18 @@
- #ifndef R_LARCH_64
- #define R_LARCH_64		2
- #endif
-+#ifndef R_LARCH_ADD32
-+#define R_LARCH_ADD32		50
-+#endif
-+#ifndef R_LARCH_ADD64
-+#define R_LARCH_ADD64		51
-+#endif
-+#ifndef R_LARCH_SUB32
-+#define R_LARCH_SUB32		55
-+#endif
-+#ifndef R_LARCH_SUB64
-+#define R_LARCH_SUB64		56
-+#endif
- #ifndef R_LARCH_32_PCREL
- #define R_LARCH_32_PCREL	99
- #endif
-@@ -34,4 +46,10 @@
- #define R_TEXT32		R_LARCH_32_PCREL
- #define R_TEXT64		R_LARCH_32_PCREL
- 
-+#define ARCH_HAS_PAIRED_RELOCS	1
-+
-+struct elf;
-+struct reloc;
-+int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc);
-+
- #endif /* _OBJTOOL_ARCH_ELF_H */
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index a952e680e8a6..92cf0fc3ff2f 100644
+index 92cf0fc3ff2f..f151ffc71184 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -1518,6 +1518,13 @@ static bool is_uncorrelated_section(struct section *sec)
- 	       strstarts(sec->name, ".data..Lanon.");		/* Clang */
- }
- 
-+#ifndef ARCH_HAS_PAIRED_RELOCS
-+static inline int arch_normalize_paired_reloc(struct elf *elf, struct reloc *reloc)
-+{
-+	return 0;
-+}
-+#endif
-+
- /*
-  * Convert a relocation symbol reference to the needed format: either a section
-  * symbol or the underlying symbol itself.  Return -1 error, 0 success, 1 skip.
-@@ -1525,10 +1532,16 @@ static bool is_uncorrelated_section(struct section *sec)
- static int convert_reloc_sym(struct elf *elf, struct reloc *reloc)
+@@ -1956,6 +1956,7 @@ static int create_fake_symbols(struct elf *elf)
+ static bool should_keep_special_sym(struct elf *elf, struct symbol *sym)
  {
- 	struct section *sec = reloc->sym->sec;
-+	int ret;
+ 	bool annotate_insn = !strcmp(sym->sec->name, ".discard.annotate_insn");
++	bool tablejump_annotate = !strcmp(sym->sec->name, ".discard.tablejump_annotate");
+ 	struct reloc *reloc;
  
- 	if (reloc_type(reloc) == R_NONE)
- 		return 1;
+ 	if (is_sec_sym(sym) || !sym->sec->rsec)
+@@ -1968,6 +1969,16 @@ static bool should_keep_special_sym(struct elf *elf, struct symbol *sym)
+ 		if (!reloc->sym->clone || is_undef_sym(reloc->sym->clone))
+ 			continue;
  
-+	/* Fold paired ADD/SUB relocs (LoongArch) into a single PCREL */
-+	ret = arch_normalize_paired_reloc(elf, reloc);
-+	if (ret)
-+		return ret;
++		/*
++		 * .discard.tablejump_annotate (LoongArch -mannotate-tablejump)
++		 * holds pairs of words: a jump instruction and its jump table.
++		 * The table word references the table via its .rodata section
++		 * symbol, which the is_func_sym() rule below would drop,
++		 * breaking the pairing.  Keep both words of each entry.
++		 */
++		if (tablejump_annotate)
++			return true;
 +
- 	if (is_uncorrelated_section(sec))
- 		return convert_reloc_sym_to_secsym(elf, reloc);
- 
+ 		/*
+ 		 * Keep special section references to cloned functions.
+ 		 * In some cases annotate_insn can also reference cloned alt
 -- 
 2.53.0
 
