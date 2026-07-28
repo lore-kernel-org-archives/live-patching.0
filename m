@@ -1,217 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5E0334C3D
-	for <live-patching@vger.kernel.org>; Mon, 27 Jul 2026 14:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79574302F2
+	for <live-patching@vger.kernel.org>; Tue, 28 Jul 2026 12:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785161715; cv=none; b=ke8jM0ws+FLjekgHZzdZZrv7RNmOGSJXh/ZXWGhAIy/fdXb+HLguNBTeBxMjHJWb2LIGC5Iwf/4KFDcibZymn/Db+pQy0FgGE4bcnij5AHFpOz4wnakeStDU9QZqMh48OKE1GNbKQxIMspZaaGDx2dES+sUaT8kWBTdRsTfgkjs=
+	t=1785241095; cv=none; b=refSUqjsDoKu4NaGgxdLNilSKKXEjzSNpMHfl9qTVh/+lZCIb1cVObZelaPFoZWRocrvq/tuihTYiozzIzQY5zj7EbFL6WeRDW022Y862O7lLLjx23JBPRVLYp8Qg0S+1T2pAkUHnmrZgmxOlrnWioVcy9FbQhYsnA0ugBKNDbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785161715; c=relaxed/simple;
-	bh=Uyoxg0VngG1eblhnsxq/0sNeZxIxf2r+M6vCgv3jgbo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=idXSeqg9zIxF57jJDnBgDq2TdnzOxjH09f8gr9cqNWgkH3hwp5J7qqF6spHxTKpWCQkwG9DCqJ6wuPMZJzKojHYihC1h32IopR9kwjSf0gzT5xOMYHJEIaQpwo0jvQfGvi6phtxKkV2MxmS6v6L7eCAaMUqdVYGh0PGlGAQQbf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URD8+qSN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785241095; c=relaxed/simple;
+	bh=VhNkV4XPm3xUVTc3b7IDiV3MAQuX5l4QKkgbHRgTZ7A=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=PpLyWhzUdgO3tQwPu0/pSV9/YaX5LxWZblZdn439AAVxg+0DLiP4QoFPgTxkxWLa2mmW6FgfE9h/cDV565Fic7WYJmKlMuRcXRxnptTlUZ3usQd2RpbSACDNnipIpdsRzvgIwfRByXIbE5J1by/Pd4e4emB5vZ/vhs0GRrZVOO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HGOVwTop; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Vo/viatn; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YU/2timu; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=xbvRpKiP; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URD8+qSN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EF31F00ACA
-	for <live-patching@vger.kernel.org>; Mon, 27 Jul 2026 14:15:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785161712;
-	bh=5bBuDYxkCou9htY5z2TUBhK6y1aRMfiXwIPI1z4yTEg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=URD8+qSNLYcweeHJznng7pr9aTMLGBMhwJlzn6jlWFmPuNbfnusc6yOSG2LA7DJAC
-	 lnErVx22LuV7p4qKUK830Lr0Wog1gCXBP7FrhX9XfrSH3hTBkwkGS4UiclVn6mB0hE
-	 k0kCyH6AcI8LOy1u2769HNFIpkvINIfs4He8TlY6CPO2otOgGq0QEnZgikiJOciuJU
-	 Rq/a/k6afB0wR4LZpsJoW0OmPZrID2ik3pOymq46YUdsqaxRK2KMG4koVuZKwbtkr6
-	 O+HWwLOCF/M6Qlmkw8iy6dIcGGr2/YA/lkIsWWVS03jcAvJrsYjTzWyzADrbhQj3gD
-	 lNeoINe54DB5Q==
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-69f2c67650aso4266333a12.2
-        for <live-patching@vger.kernel.org>; Mon, 27 Jul 2026 07:15:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrbV6ZDgosFcHNGugnm7QXbrvgriDgyZIhTdVJdI3Gr3ghnd62Y1nmimYCG4dSK9gviRj/WJuoqHM5pGwUP@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLWANRgcX2P0+6nV3IJXcBIEqrl/PCHXioVkb2sbRz6ATMuN/n
-	301xSixiBhFZdwINuyr35rIeT4T8tskVRz6HmMnYxSF5FR77E7Iax3Tg54vhZtBXdLqoW0tSBqF
-	5aJDnCCP00HHtsDpArZei95TnG7ROb3M=
-X-Received: by 2002:a05:6402:51ca:b0:69f:2c1d:d821 with SMTP id
- 4fb4d7f45d1cf-69fc116f808mr3787084a12.35.1785161711450; Mon, 27 Jul 2026
- 07:15:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HGOVwTop";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Vo/viatn";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YU/2timu";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="xbvRpKiP"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 74A237C26B;
+	Tue, 28 Jul 2026 12:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785241087; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CCa5vDTIvNK9Oou/ApkLmK0YQPo38UTLhrXv8nAWuUU=;
+	b=HGOVwTopIibaUuJNJruD+OAXh6LXnQ9BH0i+U8/gVQb5+NCRmf8BVL3gDveUDh4+RvbZ2Y
+	Gqumlp/rXpkkR9K5S1GBKYG+MSgxeZLCbyXBuhmjX0tdaJaPfdBXXJv+0OCxIhCMA7JHG8
+	X0HGJSbJDaVrdd3efGst5PR2wYwOWk8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785241087;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CCa5vDTIvNK9Oou/ApkLmK0YQPo38UTLhrXv8nAWuUU=;
+	b=Vo/viatnHXJqmsXQvEb2t0a8+bIluyaTwL+Ak5dRO6Rdhy+6iJyQVqjqeElBkbXNwGCacH
+	NITKWk008Ri/lvDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785241083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CCa5vDTIvNK9Oou/ApkLmK0YQPo38UTLhrXv8nAWuUU=;
+	b=YU/2timumP9nBOI7pyrMineZR5jwpDp4lP0EjovuAVlXjNidfOrremx6LTnTX9/VlmGMZ8
+	XClNSQWzi8EIRWRRvjgNhUysXJjv+CfBufB+DRzp3WeXxCFNhih2XJqk0sPnjtkvxDlPwH
+	NTGHnDlAxfxyxpNs9ADlNllIBZVdWVo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785241083;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CCa5vDTIvNK9Oou/ApkLmK0YQPo38UTLhrXv8nAWuUU=;
+	b=xbvRpKiPJYcSFImqCc2mWrldT2gPFWGlAO+ifPJrvKBb71oMeOvwlDfgfb1Hs4X2QZbS6q
+	93FitRwsJZno5WCA==
+Date: Tue, 28 Jul 2026 14:18:03 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+cc: Joe Lawrence <joe.lawrence@redhat.com>, live-patching@vger.kernel.org, 
+    Ben Procknow <bprockno@redhat.com>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH 0/1] Fix exported symbol klp-relocation bug
+In-Reply-To: <6kbyujrfzo7on5p24wb5e4iadzomjewpuwkofktgodiit3qlta@3uxl4foryfq6>
+Message-ID: <alpine.LSU.2.21.2607281417130.10979@pobox.suse.cz>
+References: <20260713213128.3529250-1-joe.lawrence@redhat.com> <alpine.LSU.2.21.2607231109210.6525@pobox.suse.cz> <6kbyujrfzo7on5p24wb5e4iadzomjewpuwkofktgodiit3qlta@3uxl4foryfq6>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260724114128.31451-1-dongtai.guo@linux.dev>
-In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 27 Jul 2026 22:15:03 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7=WxEov9S3TTMxd1GORov-0dtuRWTgFH-B31teXpVNQw@mail.gmail.com>
-X-Gm-Features: AUfX_mzFw-Ljy9Z5wQ5sfW9LGBkrPdKlUKDzxIUYfv0QustQ-NnObo9gN15ufjA
-Message-ID: <CAAhV-H7=WxEov9S3TTMxd1GORov-0dtuRWTgFH-B31teXpVNQw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] LoongArch: Add livepatch build (KLP) support
-To: George Guo <dongtai.guo@linux.dev>
-Cc: jpoimboe@kernel.org, peterz@infradead.org, jikos@kernel.org, 
-	mbenes@suse.cz, pmladek@suse.com, kernel@xen0n.name, joe.lawrence@redhat.com, 
-	rostedt@goodmis.org, ardb@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, yangtiezhu@loongson.cn, 
-	jiaxun.yang@flygoat.com, wangrui@loongson.cn, liukexin@kylinos.cn, 
-	guodongtai@kylinos.cn, xry111@xry111.site, wangyuli@aosc.io, 
-	loongarch@lists.linux.dev, live-patching@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.992];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid];
+	TO_DN_SOME(0.00)[]
 
-Hi, George,
+On Fri, 24 Jul 2026, Josh Poimboeuf wrote:
 
-On Fri, Jul 24, 2026 at 7:41=E2=80=AFPM George Guo <dongtai.guo@linux.dev> =
-wrote:
->
-> This series adds LoongArch support for the klp-build livepatch tooling,
-> enabling automated livepatch module generation using objtool on
-> LoongArch.
->
-> It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
-> below, unchanged from v1-v3) and extends it with the LoongArch-specific
-> objtool and build pieces, plus the toolchain and relocation fixes
-> required to make livepatch modules load, generate, and run correctly
-> under both GCC and Clang.
->
-> Collaboration
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> Patch 1 ("objtool/LoongArch: Add arch_adjusted_addend() for KLP support")
-> and patch 7 ("LoongArch: Add livepatch build (KLP) support") overlap with
-> WangYuli's earlier LoongArch KLP work [2]. Both now carry
-> Co-developed-by/Signed-off-by: WangYuli.
->
-> WangYuli, please check that the attribution is recorded correctly. If you
-> consider any other patch in this series to overlap your work, point it ou=
-t
-> and I will add the tags in the final version.
->
-> Overview
-> =3D=3D=3D=3D=3D=3D=3D=3D
->
->  - Patches 1-8: the LoongArch objtool hooks, special-section marking
->    (including the inline ALTERNATIVE() replacement), the combined
->    -fPIC / -mno-direct-extern-access build fix, EFI linking, the syscall
->    patching macro, and wiring up LoongArch klp-build.
->  - Patches 9-14: objtool/klp-diff fixes found by running the full
->    klp-build flow under GCC and Clang.
->
-> Testing
-> =3D=3D=3D=3D=3D=3D=3D
->
-> The klp-build integration tests were run on LoongArch under both GCC and
-> Clang: cmdline-string, proc-version, data-new, gcc-static-local-var-6,
-> syscall, new-globals, new-function, and shadow-newpid. All of them now
-> generate a livepatch module, load it, and run.
->
-> new-function and shadow-newpid did not build under Clang before this
-> version; the new objtool/klp-diff patches fix the Clang-specific
-> failures the suite surfaced. Joe Lawrence's test case was also
-> reproduced end to end on a Clang-built kernel in a VM (patch load,
-> tracepoint toggle, clean unload).
->
-> Changes since v3 [3]
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->  - Merged the two build-flag patches (-mno-direct-extern-access and
->    -fPIC) into one. The combined patch is one complete thought: for
->    LoongArch KLP builds, replace the arch's KBUILD_CFLAGS_KERNEL (droppin=
-g
->    -fPIE and -mdirect-extern-access) and add -fPIC via KCFLAGS. (Joe
->    Lawrence)
->  - Moved the LoongArch config checks (CONFIG_RELOCATABLE,
->    CONFIG_AS_HAS_EXPLICIT_RELOCS) into validate_config(). (Joe Lawrence)
->  - Patch 4 (EFI): fixed the changelog wording and added the
->    "/* from the EFI stub */" comment on the wildcard, matching arm64 and
->    riscv. (Joe Lawrence)
->  - Patch 6 (syscall macro): pad the line continuations with tabs. (Joe
->    Lawrence)
->  - New patch 12: enable inline ALTERNATIVE() cloning. Joe hit
->    "can't find new instruction" livepatching a function that contains an
->    ALTERNATIVE(). Mark the .subsection 1 replacement with
->    ANNOTATE_DATA_SPECIAL (patch 2) and define ARCH_HAS_INLINE_ALTS for
->    LoongArch objtool (patch 12), mirroring arm64. (Joe Lawrence)
->  - New patch 13: keep the tablejump annotation table entries. klp-diff
->    dropped the table-side word of each .discard.tablejump_annotate pair,
->    which crashed objtool on the patch module.
->  - New patch 14: rewrite PC-relative data references to GOT. File-local
->    static data uses a direct pcalau12i/addi.d pair that cannot reach
->    vmlinux from the far livepatch module; convert it to a GOT-indirect
->    load when the klp relocation is created. This affects GCC and Clang.
->
-> On patch 11 (fold paired ADD/SUB relocations): Clang's integrated
-> assembler emits the ADD64/SUB64 pair for a "sym - ." whose symbol is
-> undefined in the current object, where GAS with -mthin-add-sub emits a
-> single R_LARCH_64_PCREL. Reported to LLVM as issue #210052 [4]. The fold
-> is kept regardless, since shipping Clang emits the pair.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/lo=
-g/?h=3Dklp-build-arm64
-> [2] https://lore.kernel.org/loongarch/20251203091039.125259-1-wangyuli@ao=
-sc.io/
-> [3] https://lore.kernel.org/all/20260707072031.231066-1-dongtai.guo@linux=
-.dev/
-> [4] https://github.com/llvm/llvm-project/issues/210052
->
-> George Guo (14):
->   objtool/LoongArch: Add arch_adjusted_addend() for KLP support
->   LoongArch: Mark special sections for KLP support
->   livepatch/klp-build: use -fPIC and drop direct-extern-access on
->     LoongArch
->   LoongArch: Fix EFI linking with -fdata-sections
->   objtool/klp: Add LoongArch jump opcode bytes support
->   klp-build: Add LoongArch syscall patching macro
->   LoongArch: Add livepatch build (KLP) support
->   LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
->   objtool/klp: Convert local label references
->   objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label
->     references
->   objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
->   objtool/LoongArch: Enable inline alternative cloning for KLP
->   objtool/klp: Keep LoongArch tablejump annotation table entries
->   objtool/klp: Rewrite PC-relative data references to GOT on LoongArch
+> On Thu, Jul 23, 2026 at 11:25:25AM +0200, Miroslav Benes wrote:
+> > Hi,
+> > 
+> > > Next: symbol namespaces
+> > > =======================
+> > > 
+> > > Now a harder question, I think, about symbol namespaces.  In the past,
+> > > kpatch-build had supported patching symbols in namespace where
+> > > MODULE_IMPORT_NS() is allowed.  Looking at kvm :: mmu.c
+> > > ::kvm_flush_remote_tlbs(), that is annotated with
+> > > EXPORT_SYMBOL_FOR_KVM_INTERNAL() instead.
+> > > 
+> > > Should we make an effort to support klp-relocations / patching to this
+> > > use-case?
+> > > 
+> > > If modpost were to let klp-relocation symbols through, I *think*
+> > > (untested) that might be enough... but it seems like that may violate
+> > > the spirit of what the namespacing effort is trying to achieve.
+> > > 
+> > > Note that klp-post-link converts these symbols to SHN_LIVEPATCH before
+> > > the module is loaded, so the kernel module loader already skips them in
+> > > simplify_symbols() (see SHN_LIVEPATCH case).  AFAICT, the namespace
+> > > check in modpost is the only enforcement point, and it's checking a
+> > > symbol that will never be resolved through the normal module loading
+> > > path anyway.
+> > 
+> > I think we will see more and more EXPORT_SYMBOL_FOR_MODULES() in the 
+> > kernel. kvm is probably by far the most interesting one for us as of now.
+> > 
+> > Tough. All changes in upstream so far, as I remember, around reducing the 
+> > possibility to use internal symbols for OOT modules (like kallsyms API but 
+> > there are probably more) have been done with KLP usage in mind. Or at 
+> > least people tried. However, there is a limit to it. If we introduce a 
+> > workaround in upstream for this, people will definitely use it to get 
+> > around the enforcement in their OOT modules. We should avoid that in my 
+> > opinion.
+> > 
+> > So I would keep whatever we come up with in downstream.
+> 
+> klp relocs are already designed to enable accessing those.
+> 
+> The symbols being warned about by modpost are basically placeholder
+> tombstone symbols which are only needed so as not to confuse objtool
+> when it runs on the patch module.  They otherwise have no functional
+> runtime purpose, as they are replaced by klp symbols/relocs.  So it's
+> probably fine to just rename them to avoid triggering modpost:
 
-It is better to reorganize this series like this:
+Ok.
+ 
+> diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
+> index 6f60cf05db86..aab6db42052d 100644
+> --- a/tools/objtool/include/objtool/klp.h
+> +++ b/tools/objtool/include/objtool/klp.h
+> @@ -23,6 +23,8 @@
+>  #define KLP_RELOCS_SEC	"__klp_relocs"
+>  #define KLP_STRINGS_SEC	".rodata.klp.str1.1"
+>  
+> +#define KLP_TOMBSTONE_PREFIX	".klp.tombstone."
+> +
+>  struct klp_reloc {
+>  	void *offset;
+>  	void *sym;
+> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+> index f7a02c4a2429..505553f9bdc1 100644
+> --- a/tools/objtool/klp-diff.c
+> +++ b/tools/objtool/klp-diff.c
+> @@ -1359,6 +1359,7 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+>  	s64 addend = reloc_addend(patched_reloc);
+>  	const char *sym_modname, *sym_orig_name;
+>  	static struct section *klp_relocs;
+> +	char tombstone_name[SYM_NAME_LEN];
+>  	struct symbol *sym, *klp_sym;
+>  	unsigned long klp_reloc_off;
+>  	char sym_name[SYM_NAME_LEN];
+> @@ -1373,15 +1374,21 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+>  	/*
+>  	 * Keep the original reloc intact for now to avoid breaking objtool run
+>  	 * which relies on proper relocations for many of its features.  This
+> -	 * will be disabled later by "objtool klp post-link".
+> +	 * reloc now targets a functionally dead tombstone symbol and will be
+> +	 * disabled later by "objtool klp post-link".
+>  	 *
+> -	 * Convert it to UNDEF (and WEAK to avoid modpost warnings).
+> +	 * To avoid modpost warnings, convert the symbol to UNDEF/WEAK and
+> +	 * rename to .klp.tombstone.sym_name to prevent modpost from creating a
+> +	 * false module dependency or warning about module namespaces.
+>  	 */
+>  
+>  	sym = patched_sym->clone;
+>  	if (!sym) {
+> -		/* STB_WEAK: avoid modpost undefined symbol warnings */
+> -		sym = elf_create_symbol(e->out, patched_sym->name, NULL,
+> +		if (snprintf_check(tombstone_name, SYM_NAME_LEN,
+> +				   KLP_TOMBSTONE_PREFIX "%s", patched_sym->name))
+> +			return -1;
+> +
+> +		sym = elf_create_symbol(e->out, tombstone_name, NULL,
+>  					STB_WEAK, patched_sym->type, 0, 0);
+>  		if (!sym)
+>  			return -1;
 
-objtool/klp: Convert local label references
-objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label references
-objtool/klp: Add LoongArch jump opcode bytes support
-objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
-objtool/klp: Keep LoongArch tablejump annotation table entries
-objtool/klp: Rewrite PC-relative data references to GOT on LoongArch
-objtool/LoongArch: Add arch_adjusted_addend() for KLP support
-objtool/LoongArch: Enable inline alternative cloning for KLP
-klp-build: use -fPIC and drop direct-extern-access on LoongArch
-klp-build: Add LoongArch syscall patching macro
-LoongArch: Mark special sections for KLP support
-LoongArch: Fix EFI linking with -fdata-sections
-LoongArch: Add livepatch build (KLP) support
-LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
-Huacai
+Yup, that looks like an improvement. Thank you.
 
->
->  arch/loongarch/Kconfig                        |   2 +
->  arch/loongarch/include/asm/alternative-asm.h  |  10 +-
->  arch/loongarch/include/asm/alternative.h      |  11 +-
->  arch/loongarch/include/asm/asm-extable.h      |  10 +-
->  arch/loongarch/include/asm/bug.h              |   1 +
->  arch/loongarch/include/asm/jump_label.h       |   2 +
->  arch/loongarch/kernel/asm-offsets.c           |  18 ++
->  arch/loongarch/kernel/vmlinux.lds.S           |   2 +-
->  include/linux/livepatch_helpers.h             |  22 ++
->  scripts/livepatch/klp-build                   |  43 +++-
->  tools/arch/loongarch/include/asm/inst.h       |  11 +
->  tools/objtool/Makefile                        |   3 +-
->  tools/objtool/arch/loongarch/decode.c         | 212 ++++++++++++++++++
->  .../objtool/arch/loongarch/include/arch/elf.h |  35 +++
->  tools/objtool/klp-diff.c                      | 105 ++++++++-
->  15 files changed, 473 insertions(+), 14 deletions(-)
->
->
-> base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
-> --
-> 2.53.0
->
+Miroslav 
+
