@@ -1,120 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3D3360EF9
-	for <live-patching@vger.kernel.org>; Sat,  1 Aug 2026 00:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C1A31E855
+	for <live-patching@vger.kernel.org>; Mon,  3 Aug 2026 03:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785544274; cv=none; b=IDdodfnLCOSfk1P7jGRhWGB9DVutsWkEyxFs8t7L6wOgtuzLi4/DtsKlu8HDULG+xZai3Ljzq7f4p3syIs+aQHL476gqxqbsxX+rT0gVuLESmb3DWxZIRw5QS80iFq4TLwGYlpOfLedkPyf9NxAVE3/Te1I61yyoQSW4JfRMqd0=
+	t=1785726258; cv=none; b=ISk4MZWdvaqxMyeqQOJH2LZc5gSEgfzd3wz9U4JOd/atEEoD1OYEGDX3jCHBHpWZHFBtPpRHJq5uX+TaOPXApHfKTumf2oCS+9bywEq5KjOqu1NmxtoZsvhEnseVvFmHlwj9AbgCfjU0T/JFW4pQ49B9Ch6Ho6u71PY9On73JpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785544274; c=relaxed/simple;
-	bh=DTBwgs8S1sAi2koYnIwWweu8EC1Mh2QZ7r67IGibE4A=;
+	s=arc-20240116; t=1785726258; c=relaxed/simple;
+	bh=op1uvfkiitjlJcvl7/XSLBJUpq4e0ubErjdG7DxM7JU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pkl9z+wOHHJH/eHJmijTCebPE9YLaAtkF8NiIyYFMTCFgR3PT9D680JCGov0N46tMZXTjZZ3tjGhFCravdBj4iE9mfAppjaSrCiNgrdandBUnDFdKRY9z1XBXmT//3tdBIzrNlQ5CVFdq1rxqFqiPKQii2VR+6EKJ8W5AWreBJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nt5Md8af; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=X2lOD6ip1r+Lx532yRSqdirF0xISPM9rniK9GOrhR/qCJKDJMrzAM/v2P8ptqbFBbhIVJifDlkTKNMzGioMaBzTEmW9r2OOYNVgSh1wRGE8vOMVTOYuwmyeZ6YXEeK9S4wZTQWyTUlXxacCMy2N35o2g//coF9qR+HqZM1ncTaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fheQ70iZ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=RWf0xL80; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nt5Md8af"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fheQ70iZ";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="RWf0xL80"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785544272;
+	s=mimecast20190719; t=1785726255;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zqTqj3+/j/AbFq2RoVrHCV42PTj4hoEfVpDtllzCIrc=;
-	b=Nt5Md8af/bEpi3L58jkwzIWPN0HdrA0MUFbwPVQFb1zkimpGNksqs0Df5jR3b4tXYQ2wVV
-	w12CNb64wAKGt7oClvaO2te2JLEo0Bu/6HggBT2X/WOM95LQyBsiL3wEbfowpn4Q31sLd0
-	lNSHmA2O1NpdlslfjQR/XvFCImku2BQ=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-IM_ZwtJiOAmahgM67owaQg-1; Fri,
- 31 Jul 2026 20:31:06 -0400
-X-MC-Unique: IM_ZwtJiOAmahgM67owaQg-1
-X-Mimecast-MFC-AGG-ID: IM_ZwtJiOAmahgM67owaQg_1785544264
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0504A1800348;
-	Sat,  1 Aug 2026 00:31:04 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.88.33])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2236330002E9;
-	Sat,  1 Aug 2026 00:31:01 +0000 (UTC)
-Date: Fri, 31 Jul 2026 20:30:58 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz,
-	corbet@lwn.net, jpoimboe@kernel.org, shuah@kernel.org,
-	jolsa@kernel.org, mhiramat@kernel.org, stable@vger.kernel.org,
-	linux-open-source@crowdstrike.com
-Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/livepatch: update
- test-ftrace.sh for deprecated ftrace_enabled
-Message-ID: <am0-QoUNQo4p2sBg@redhat.com>
-References: <20260731175358.3542156-1-andrey.grodzovsky@crowdstrike.com>
- <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com>
+	bh=KUtcRnSqNtRgjZiisBWB494atT1AA+2pGvQqVdG4DTE=;
+	b=fheQ70iZ8XEhRyXvP2b+ArD3O5ToYManmKWrUTO/Rv2GXAR0p7Wp0ZmuCk/WyyPdS+FoMF
+	O63yAp3bLJafnNd7jeVGNYUqHwPKfm77YeE2ng3K5Zhxisoi2b40JJyFCSuMGHjxKEUf4T
+	mAYKLbtYA2XUtaMKqzlfkBTnI1adnv0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-226-SyBzPXk2PWSxHWA5HLP0qg-1; Sun, 02 Aug 2026 23:04:04 -0400
+X-MC-Unique: SyBzPXk2PWSxHWA5HLP0qg-1
+X-Mimecast-MFC-AGG-ID: SyBzPXk2PWSxHWA5HLP0qg_1785726244
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-92e63df032bso307675485a.0
+        for <live-patching@vger.kernel.org>; Sun, 02 Aug 2026 20:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1785726244; x=1786331044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=KUtcRnSqNtRgjZiisBWB494atT1AA+2pGvQqVdG4DTE=;
+        b=RWf0xL80LqzPc+2FyCz4XQ6HMod+Q1R8Tou/syfDjcw/JSHUcnHeMd9WEFlpA2YxYb
+         i1eyyCfLS3lRRMODsIqoqUYHnNgeEjRGCzeU2RL87BEsosURl1nV1xk4tjP9hyl2tz6F
+         PUOG9naPVFcK9mFy2wAc//RcBGLRXjb5u3q6yUamYuUO1X2vkczIaudurHFNOzJhsxRf
+         8YEKZTp9MiMiLjz1dtny0cu7fYRd48dm8qtffNFkHdU0+YprvuU7M+W2WA5Hn9Gh/bho
+         Ee94g8upClJt3X6Ls+u4Z1H6yv51Dk4dwPViGybBBXWuwGtINJcUBjuxEmgLTaiYIr9Q
+         Jptw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785726244; x=1786331044;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KUtcRnSqNtRgjZiisBWB494atT1AA+2pGvQqVdG4DTE=;
+        b=D7HqSML9hxerHsnkoGyq1p8UgqSs+w85Q3rcBwz6SJvhy3RUeNUjGUtpIhI5AngRdl
+         UvGfYmW9AF3+QlyyOcWycOQ3RDvPu7Q25VV1qMRVEIRmEVbeGQhvatBl7nyXZMyGbHUJ
+         yHcDG/HD9op2/k6i8kovm+eLyBBTjUtyoebTL4YUDtnS/tSLQ4L0PPwkDIpOAS3pj/u7
+         NIyOst2t5J8oN5jFHN7ONX9ke0EKJ/6Ggx/3N+wgdEBMv2JTq++z74UhyyLD/BJViCKY
+         5FNgE3x+wBZzZ4+ekOU2tJ1sS3e9aY8ec0xBa4ZVLhXC4DpXkCDo5UO/gqVc4K4mwtTc
+         asBg==
+X-Gm-Message-State: AOJu0YwXzW34vVIZhskAOwrna8fNRmICV+e+YfIBP9sDRXOr5mS9G/fm
+	97+3fzWfDNPanb5hTQj21dgZ2ujTNycBVROgoD5XjZC+GvxvbvxT4fHLPkQK2ioJuD1vORxFgHL
+	qPqlICVUaYsPwujfyl9vgyT69lX7LencBj/sodlFZ9Z9OK4dW+iASr4reclmWJV/Y5l4=
+X-Gm-Gg: AR+sD10g4cb1PRZmBN6eKCewnzYBBX7fAwTor5DW2D/1q/U9nVEw92RCUdFXbkjZJhz
+	Q3/OHICJI4wjhiPoWziQyaHLChskxZCFs5tsifwOYTM4Z6KDy2aUvkY5QXzv1qpIm4Gusw2ib+V
+	xcfgcLcZcPat9fGApdXkXKb7WWydNi3r0nT/XXqzBaSTOqy924c2NU7ffXsxJfo7+w9TBaSorjv
+	+qKlpyrGwi9WCT1PjkFQnGIKFKWoCy4pee8Nbo9eU3wxCVUFU+w1APKG4Qb9qX+yPG3J/lzWMwE
+	z3rrpnxi8JUpeupYspvK0iq2WgB8wJzUdg3lMSL8BG9r9wmVJvjJWkCi+aOsfPPGuAGJ5OY=
+X-Received: by 2002:a05:620a:2b42:b0:933:ade:2daf with SMTP id af79cd13be357-93499b2e3f1mr1787486285a.18.1785726244119;
+        Sun, 02 Aug 2026 20:04:04 -0700 (PDT)
+X-Received: by 2002:a05:620a:2b42:b0:933:ade:2daf with SMTP id af79cd13be357-93499b2e3f1mr1787481885a.18.1785726243578;
+        Sun, 02 Aug 2026 20:04:03 -0700 (PDT)
+Received: from jpoimboe ([68.74.140.199])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9349c207e64sm570618585a.47.2026.08.02.20.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 20:04:02 -0700 (PDT)
+Date: Sun, 2 Aug 2026 20:03:59 -0700
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: live-patching@vger.kernel.org, Jiri Kosina <jikos@kernel.org>, 
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+Subject: Re: [PATCH 1/4] objtool/klp: use patched module name for
+ klp-relocation section naming
+Message-ID: <gte6frofwqfzedcqq5juvuszopk4tobooz7iycqigqgjadwsmc@j6v57ud4aq7a>
+References: <20260720145658.1103243-1-joe.lawrence@redhat.com>
+ <20260720145658.1103243-2-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20260720145658.1103243-2-joe.lawrence@redhat.com>
 
-On Fri, Jul 31, 2026 at 01:53:58PM -0400, Andrey Grodzovsky wrote:
-> kernel.ftrace_enabled=0 is now refused on kernels that deprecate the
-> knob, so the old disable/reload flow no longer applies there. Probe
-> for this with ftrace_disable_supported() and keep the full original
-> scenario (disable, fail to load a livepatch, re-enable, load, confirm
-> disable is refused while loaded) on kernels where it still works;
-> otherwise just confirm the write is refused.
+On Mon, Jul 20, 2026 at 10:56:55AM -0400, Joe Lawrence wrote:
+> Documentation/livepatch/module-elf-format.rst states (and the kernel
+> currently implements) that the name of a livepatch relocation section
+> must conform to the following format:
 > 
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Suggested-by: Miroslav Benes <mbenes@suse.cz>
-> Assisted-by: Claude:claude-sonnet-5
-> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> ---
->  .../testing/selftests/livepatch/functions.sh  | 13 ++++++
->  .../selftests/livepatch/test-ftrace.sh        | 45 ++++++++++++-------
->  2 files changed, 41 insertions(+), 17 deletions(-)
+>     .klp.rela.objname.section_name
 > 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 30dc677b2f45..7fa4bda70221 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -126,6 +126,19 @@ function set_ftrace_enabled() {
->  	echo "livepatch: kernel.ftrace_enabled = $result" > /dev/kmsg
->  }
->  
-> +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=0
-> +#	can still disable ftrace on this kernel. Newer kernels deprecate
-> +#	the knob and always refuse the write with -EOPNOTSUPP.
-> +function ftrace_disable_supported() {
-> +	local result
-> +
-> +	sysctl -q kernel.ftrace_enabled=0 &> /dev/null
-> +	result=$(sysctl --values kernel.ftrace_enabled)
-> +	sysctl -q kernel.ftrace_enabled=1 &> /dev/null
-> +
-> +	[[ "$result" == "0" ]]
-> +}
+> where "objname" determines when the kernel applies the relocations in
+> this section (i.e., when the "objname" module loads).  This allows
+> relocations not only for currently loaded kernel objects (like vmlinux
+> and loaded device drivers), but also for lazy resolution to facilitate
+> late-module livepatching (for modules loaded after the livepatch).
+> 
+> Previously, objtool's KLP post-link step derived the "objname" from the
+> klp symbol name, which encoded where the symbol *lives* rather than
+> which module is being *patched*.  This broke cross-module references
+> (e.g., can_isotp.ko calling can_rx_unregister() from can.ko),
+> incorrectly placing them in the .klp.rela.can..text section instead of
+> .klp.rela.can_isotp..text.
+> 
+> Fix this by adding an 'obj_name' field to the intermediate 'klp_reloc'
+> struct.  klp-diff populates this field using find_modname(), and
+> klp-post-link reads it directly to generate the .klp.rela section name.
+> As a result, each relocation correctly carries its own target module,
+> regardless of where the referenced symbol originates.
+> 
+> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-Small nit: AFAICT, it doesn't really affect the test pattern, but it
-would be a bit cleaner if this function restored the original value
-instead of always turning it on, like (untested):
+I fixed this one a different way by putting the objname in the section
+name: __klp_relocs.<objname>.  Will post the patches soon.
 
-	orig=$(sysctl --values kernel.ftrace_enabled)
-	sysctl -q kernel.ftrace_enabled=0 &> /dev/null
-	result=$(sysctl --values kernel.ftrace_enabled)
-	sysctl -q "kernel.ftrace_enabled=$orig" &> /dev/null
-
-	[[ "$result" == "0" ]]
-
---
-Joe
+-- 
+Josh
 
