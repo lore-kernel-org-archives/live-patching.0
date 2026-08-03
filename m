@@ -1,101 +1,73 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8211220D4E9;
-	Mon,  3 Aug 2026 06:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 367822F49F6;
+	Mon,  3 Aug 2026 06:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785737536; cv=none; b=fbsje81W/AGTHSybdvRlm33WGR1iXFCawgqW3/dOOkaBESMdtdOTmiQ8LsT/IgVMmQSeUj7INLpvlP1ldo9ug4qKtlZ+2D9756I0hrY9da73WSdhIVi5eASVYaEuj2C22fxfcEOShhoDEjoKVsNcw7zsoCUgRPrzgnv9zA18AGk=
+	t=1785738275; cv=none; b=amRpu8efTGJpl/hQIY9X5fYoTPWAdj5e1/IwSudMYC0pgc+rj3Lglictc3l17vf2+yONDpz7PqBLzSmpScA4hB/49G1+Vro26i56UeetSUExf52eTdGyV7QF6M7sAsrTsEL/eBRKR7s7QdvS9iTp4oivxb2YLAlAkZZr0IC1UYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785737536; c=relaxed/simple;
-	bh=gCMlGDaM9vfs6uE3jvclbyogGXBIGhgOUok/wY4ejTI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nTpTIH9Qr6hgBpWAjQzHtwW1g6C8SN0FdnOkojYIGY3TzRy4d88eMfRsjy44yN/2IsSxJ1i5IsiwljjcGFKFb5pLJAIBj90NSK7p6FvPEcFcxkP7CrORGbSx40JE38DzlmXRQtlHABgD6jLOJ4hIXfm7mFSzKX0JHZGgIC+7V4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CA91U3k3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785738275; c=relaxed/simple;
+	bh=+qpl5A4qedpzD7nqclH13TiUNbNiV1T4qnKKpDgaLLw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XYMWUlAWwEii4IDnGfGyLER67P0r0mwFJranrIoqLGu+DgaW7IgtdtXOmOFIXDvQQs66PN2Ql+is/ad/3JInZzJf5ZrSMkitTAm65iDqhk3gNcD5d6kQw3DlkEqvPxWOsHjE3GgYBRcMIlO/0drSr34TcvFKz8l2I3EPjx4Rmco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wh7QtTJH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CA91U3k3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C206D1F000E9;
-	Mon,  3 Aug 2026 06:12:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wh7QtTJH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2021F000E9;
+	Mon,  3 Aug 2026 06:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785737535;
-	bh=krOdy05UyoHdCNYWNW0BgzTSpaA9o55a/ECp5bmP1X0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CA91U3k3MR7T35ckeL3cuUXZWRq3R+T+Yctlht8/n8JOXcBXHndw6pOkMGKo1AyBo
-	 nbSOXz9ZeUltDjYo6p/j4tPZDk/w3YAmrdhVb5Qn6u/DYZzemXONNW452x/HCUdUih
-	 3l5gEsTmuHKyDSYD5VPRI1FULy5w06ojkwwBWiCyI+nweFnpLBqOKrOCU+rBlyKQtd
-	 NEVvpwits7m6e3sFLAyxgQZH9SaQknFspnAW2anM7t4vH00FgC6HWWdXCRVxrIf7w8
-	 T1w5illbNQhg6Ufo8zYTVoDxqjOSa3sNNEgrDUTzXrUTtkfv62kwdEyxG/TkqWJF44
-	 afqsH/oOJe80w==
-From: sashiko-bot@kernel.org
-Subject: Re: [tip: objtool/core] objtool/klp: Add .klp.symid for sympos
- disambiguation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: linux-tip-commits@vger.kernel.org
-Cc: "Ingo Molnar" <mingo@kernel.org>, x86@kernel.org, live-patching@vger.kernel.org, "Josh
- Poimboeuf" <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <178573617913.1210945.4137827646322421739.tip-bot2@tip-bot2>
-References: <64d50f077b569f47883c015cdb7079edb068efe8.1785727106.git.jpoimboe@kernel.org>
- <178573617913.1210945.4137827646322421739.tip-bot2@tip-bot2>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 03 Aug 2026 06:12:14 +0000
-Message-Id: <20260803061214.C206D1F000E9@smtp.kernel.org>
+	s=k20260515; t=1785738273;
+	bh=0SUlHOvzvNtuHEL4jHvhZn+t3I9LqS3+mLNP8h+hNRo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Wh7QtTJHZQ7aG7QdujC1tYwNHtEnXVTncwlawayK+55bt7AaDJHR258hpzAMghaa9
+	 a7N5CF5BJLrN+vOOqnYRFQXvVWtybwrGnGexd2zKY/tJ194VlJU9kw8vDUlOkIxxld
+	 NsL6OW57h//6OwlI8W68Bsp2SA46kGklxZcTLOlxUnvFYQGa3Lj6tpabo1yIARUegq
+	 X3yYUnTuOJYXbBIiFZtRpvpL6R4pwBb+rN65FNo6s1pr/eOV6dXSB+PcUTASoIMJH9
+	 xxL2bRfEccXz4T66xj+QOnO3H6oUsQ7JXCO3MbylVrbSg/c5R7R3M4dxIFPq6xHwRg
+	 OQLW5b77VhdLQ==
+Date: Sun, 2 Aug 2026 23:24:31 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, live-patching@vger.kernel.org, 
+	Peter Zijlstra <peterz@infradead.org>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH 07/14] module: Add module_kallsyms_on_each_core_symbol()
+Message-ID: <uujknkk2vlo5fwud2piiyt7iqjic74rx23hcqulsv2eksbse2o@4ukhz52awr2z>
+References: <cover.1785727106.git.jpoimboe@kernel.org>
+ <9ff8d9f0ad20a9a5cdbab3fe650d3532688065d4.1785727106.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9ff8d9f0ad20a9a5cdbab3fe650d3532688065d4.1785727106.git.jpoimboe@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The `.exitcall.exit` section is discarded during the final vmlinux =
-link, but `klp_create_symid_sections` incorrectly generates `.klp.symid` re=
-locations to duplicate static symbols within it.
---
+On Sun, Aug 02, 2026 at 08:24:29PM -0700, Josh Poimboeuf wrote:
+> module_kallsyms_on_each_symbol() iterates mod->kallsyms, which points at
+> the full init symbol table until do_init_module() swaps it out.  The set
+> of symbols it reports thus differs based on whether init memory has been
+> freed yet.
+> 
+> Add module_kallsyms_on_each_core_symbol() for callers which need a
+> symbol's position to be the same before and after that swap.
+> core_kallsyms is fully populated by add_kallsyms() before the module
+> leaves MODULE_STATE_UNFORMED, so it's readable on both paths.
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
---- Patch [1]: [tip: objtool/core] objtool/klp: Add .klp.symid for sympos d=
-isambiguation ---
-commit 95a71e72a77916e00e9b21eb4e2fc9a9e4c3258d
-Author: Josh Poimboeuf <jpoimboe@kernel.org>
-Date:   Mon Aug 3 05:49:39 2026 +0000
+NAK
 
-objtool/klp: Add .klp.symid for sympos disambiguation
+The Sashiko comment made me realize this is not worth adding kernel code
+for.  A duplicate symbol name between init and non-init module code is
+somewhere between exceedingly rare and non-existent.  I'll submit
+another patch separately which will make it a build error for now.
 
-Livepatch identifies a duplicate-named symbol by its position (sympos)
-among same-named kallsyms entries, which for vmlinux are counted in
-ascending address order in the final linked kernel. This commit adds a
-new .klp.symid section to bridge the gap and correlate symbols between
-vmlinux.o and vmlinux.
-
-Link: https://patch.msgid.link/64d50f077b569f47883c015cdb7079edb068efe8.178=
-5727106.git.jpoimboe@kernel.org
-
-> diff --git a/tools/objtool/klp-symid.c b/tools/objtool/klp-symid.c
-> new file mode 100644
-> index 0000000000000..cf188cdfa6079
-> --- /dev/null
-> +++ b/tools/objtool/klp-symid.c
-[ ... ]
-> +static const char * const discarded_secs[] =3D {
-> +	".discard",
-> +	".modinfo",
-> +	"__tracepoint_check",
-> +};
-
-[Severity: Low]
-Does this list need to include ".exitcall.exit"?
-
-When built-in components use module_exit() with identical function
-names (like sm4_exit in multiple x86 crypto modules), duplicate static
-variables are created in the .exitcall.exit section.
-
-Because this section is missing from discarded_secs[], symid_needed()
-generates R_ABS64 relocations in .klp.symid to these symbols.
-
-Since .exitcall.exit is unconditionally discarded by the linker during the
-final vmlinux link, this can cause a fatal linker error: ".klp.symid refers
-to discarded section .exitcall.exit".
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178573617913.121094=
-5.4137827646322421739.tip-bot2@tip-bot2?part=3D1
+-- 
+Josh
