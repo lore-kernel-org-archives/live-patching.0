@@ -1,194 +1,101 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD849362149;
-	Mon,  3 Aug 2026 05:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8211220D4E9;
+	Mon,  3 Aug 2026 06:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785736198; cv=none; b=YOdUcNvs2YA9GzGiAnLxR435b0Uy9bX4eJfo9m/cGfuaHMxiVdiH3aHih6is1HkrSxk3JnkBaDUCJLPCCtIDE3yq+a4YUkkXwezRK5LimnNwRK9xq7dMjuM1XBNVaLecRJLQLWmJS1y8aIN89hsgGNj4N/zbzFKGIQrxaSrDZsA=
+	t=1785737536; cv=none; b=fbsje81W/AGTHSybdvRlm33WGR1iXFCawgqW3/dOOkaBESMdtdOTmiQ8LsT/IgVMmQSeUj7INLpvlP1ldo9ug4qKtlZ+2D9756I0hrY9da73WSdhIVi5eASVYaEuj2C22fxfcEOShhoDEjoKVsNcw7zsoCUgRPrzgnv9zA18AGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785736198; c=relaxed/simple;
-	bh=slB9InxDI0/v0Vut52prpj4pCijHoTSF1EVG3RuHVmQ=;
-	h=Date:From:To:Subject:Cc:In-Reply-To:References:MIME-Version:
-	 Message-ID:Content-Type; b=DzRsXmQaNuXb/6MZcln0sBjRFFGHwk8byhwPVEizZHp6d+tK0AMi7fPQmTxAWu90IUHnh8BzwtcbwSBJptT86mfuLIOe7x8BNtNDFh4lvIGA7qAvXm7+lZFt5fLlqqQB8XWd7HkW98UkmECXmT92C1xprexN3VAK3oVpOmezukE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jDb3N6NU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zqB71XS9; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1785737536; c=relaxed/simple;
+	bh=gCMlGDaM9vfs6uE3jvclbyogGXBIGhgOUok/wY4ejTI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nTpTIH9Qr6hgBpWAjQzHtwW1g6C8SN0FdnOkojYIGY3TzRy4d88eMfRsjy44yN/2IsSxJ1i5IsiwljjcGFKFb5pLJAIBj90NSK7p6FvPEcFcxkP7CrORGbSx40JE38DzlmXRQtlHABgD6jLOJ4hIXfm7mFSzKX0JHZGgIC+7V4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CA91U3k3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jDb3N6NU";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zqB71XS9"
-Date: Mon, 03 Aug 2026 05:49:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1785736185;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UkZwqhzEDwfKZXo5szPc56FmHTHXk7dbSiom6kSVY4w=;
-	b=jDb3N6NUAc4AvFdiKBjznjgvrvJoGB0RHPXTltEfTKR1Ro3TdJGEkgKjbS47gdv1W9lLPJ
-	SA3qAGU72yT4N+YyJ4gortx/fB8tTpFoJIO64kLc9JYVRkve6swsx+mvVEtn6NGlZoXRTb
-	We6OIcOlmUMiU8ezVPaLv82XFSUc/mDyBi31R5vzZGecO4n1g3Q5gDLtaRs/kaENgvZWzN
-	ongAJX5JUnr6z00vJAyLgZDZYMtLWofLiwaUH0Kslt+sSm350KR4dnPIMPWhnUPV9T74d7
-	qvCZJAHwOs1vaIy5eATh3jbPXC/ertcqNa35qHHw2+MuThobSOOOQ50+zMibKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1785736185;
-	h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UkZwqhzEDwfKZXo5szPc56FmHTHXk7dbSiom6kSVY4w=;
-	b=zqB71XS9n2K09gSDFHy60H1Fm+NEtpFvcPOyBtD1TbmqQOod+B/Eu/i6Dm+2aHatDzl9cQ
-	JMJ3/3PXSuNul7DQ==
-From: "tip-bot2 for Joe Lawrence" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CA91U3k3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C206D1F000E9;
+	Mon,  3 Aug 2026 06:12:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785737535;
+	bh=krOdy05UyoHdCNYWNW0BgzTSpaA9o55a/ECp5bmP1X0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=CA91U3k3MR7T35ckeL3cuUXZWRq3R+T+Yctlht8/n8JOXcBXHndw6pOkMGKo1AyBo
+	 nbSOXz9ZeUltDjYo6p/j4tPZDk/w3YAmrdhVb5Qn6u/DYZzemXONNW452x/HCUdUih
+	 3l5gEsTmuHKyDSYD5VPRI1FULy5w06ojkwwBWiCyI+nweFnpLBqOKrOCU+rBlyKQtd
+	 NEVvpwits7m6e3sFLAyxgQZH9SaQknFspnAW2anM7t4vH00FgC6HWWdXCRVxrIf7w8
+	 T1w5illbNQhg6Ufo8zYTVoDxqjOSa3sNNEgrDUTzXrUTtkfv62kwdEyxG/TkqWJF44
+	 afqsH/oOJe80w==
+From: sashiko-bot@kernel.org
+Subject: Re: [tip: objtool/core] objtool/klp: Add .klp.symid for sympos
+ disambiguation
+Reply-To: sashiko-reviews@lists.linux.dev
 To: linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool/klp: Normalize Module.symvers paths to
- module names
-Cc: Ben Procknow <bprockno@redhat.com>, Joe Lawrence <joe.lawrence@redhat.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, live-patching@vger.kernel.org,
- x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To:
- <dbe1b72931bd3c31b751fd0729613d9f2226fff6.1785727106.git.jpoimboe@kernel.org>
-References:
- <dbe1b72931bd3c31b751fd0729613d9f2226fff6.1785727106.git.jpoimboe@kernel.org>
+Cc: "Ingo Molnar" <mingo@kernel.org>, x86@kernel.org, live-patching@vger.kernel.org, "Josh
+ Poimboeuf" <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <178573617913.1210945.4137827646322421739.tip-bot2@tip-bot2>
+References: <64d50f077b569f47883c015cdb7079edb068efe8.1785727106.git.jpoimboe@kernel.org>
+ <178573617913.1210945.4137827646322421739.tip-bot2@tip-bot2>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 03 Aug 2026 06:12:14 +0000
+Message-Id: <20260803061214.C206D1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-ID: <178573618371.1210945.1444857092839684415.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe:
- Contact <mailto:tglx@kernel.org> to get blacklisted from these emails
-Precedence: bulk
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-The following commit has been merged into the objtool/core branch of tip:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The `.exitcall.exit` section is discarded during the final vmlinux =
+link, but `klp_create_symid_sections` incorrectly generates `.klp.symid` re=
+locations to duplicate static symbols within it.
+--
 
-Commit-ID:     8668bf91e0508abeb8e98b4edd89032be02228a1
-Gitweb:        https://git.kernel.org/tip/8668bf91e0508abeb8e98b4edd89032be02=
-228a1
-Author:        Joe Lawrence <joe.lawrence@redhat.com>
-AuthorDate:    Sun, 02 Aug 2026 20:24:24 -07:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Mon, 03 Aug 2026 07:12:38 +02:00
+--- Patch [1]: [tip: objtool/core] objtool/klp: Add .klp.symid for sympos d=
+isambiguation ---
+commit 95a71e72a77916e00e9b21eb4e2fc9a9e4c3258d
+Author: Josh Poimboeuf <jpoimboe@kernel.org>
+Date:   Mon Aug 3 05:49:39 2026 +0000
 
-objtool/klp: Normalize Module.symvers paths to module names
+objtool/klp: Add .klp.symid for sympos disambiguation
 
-Module.symvers contains build-tree object paths as module identifiers
-(e.g., "arch/x86/kvm/kvm") rather than runtime module names ("kvm").
-Objtool's clone_reloc_klp() uses this field directly for exported
-symbols, while unexported symbols correctly go through __find_modname().
+Livepatch identifies a duplicate-named symbol by its position (sympos)
+among same-named kallsyms entries, which for vmlinux are counted in
+ascending address order in the final linked kernel. This commit adds a
+new .klp.symid section to bridge the gap and correlate symbols between
+vmlinux.o and vmlinux.
 
-This means that exported symbol relocations may land in a .klp.rela
-section named with the build path rather than the module name.  That is
-a crash waiting to happen: the kernel's livepatch loader silently skips
-this relocation because it doesn't match the expected klp_object name.
-The unresolved relocation sits in the newly activated code, crashing
-when executed.
+Link: https://patch.msgid.link/64d50f077b569f47883c015cdb7079edb068efe8.178=
+5727106.git.jpoimboe@kernel.org
 
-Normalize export->mod at Module.symvers read time using the same logic
-as __find_modname() (refactored into a shared normalize_modname()
-helper).
+> diff --git a/tools/objtool/klp-symid.c b/tools/objtool/klp-symid.c
+> new file mode 100644
+> index 0000000000000..cf188cdfa6079
+> --- /dev/null
+> +++ b/tools/objtool/klp-symid.c
+[ ... ]
+> +static const char * const discarded_secs[] =3D {
+> +	".discard",
+> +	".modinfo",
+> +	"__tracepoint_check",
+> +};
 
-Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing =
-object files")
-Reported-by: Ben Procknow <bprockno@redhat.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Cc: live-patching@vger.kernel.org
-Link: https://patch.msgid.link/dbe1b72931bd3c31b751fd0729613d9f2226fff6.17857=
-27106.git.jpoimboe@kernel.org
----
- tools/objtool/klp-diff.c | 49 +++++++++++++++++++++++++++------------
- 1 file changed, 34 insertions(+), 15 deletions(-)
+[Severity: Low]
+Does this list need to include ".exitcall.exit"?
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index aeb99d5..15d37d9 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -83,6 +83,35 @@ static char *escape_str(const char *orig)
- 	return new;
- }
-=20
-+/*
-+ * Convert a build-tree object path to a runtime module name: strip
-+ * directory components, replace '-' with '_', and remove file
-+ * extensions.  Examples:
-+ *
-+ *   "arch/x86/kvm/kvm" -> "kvm"
-+ *   "arch/x86/kvm/kvm-intel" -> "kvm_intel".
-+ *
-+ * Used by read_exports() to normalize Module.symvers entries and by
-+ * __find_modname() as a fallback when .modinfo lacks a "name=3D" tag.
-+ */
-+static char *normalize_modname(char *name)
-+{
-+	char *slash =3D strrchr(name, '/');
-+
-+	if (slash)
-+		name =3D slash + 1;
-+
-+	for (char *c =3D name; *c; c++) {
-+		if (*c =3D=3D '-')
-+			*c =3D '_';
-+		else if (*c =3D=3D '.') {
-+			*c =3D '\0';
-+			break;
-+		}
-+	}
-+	return name;
-+}
-+
- static int read_exports(void)
- {
- 	const char *symvers =3D "Module.symvers";
-@@ -150,6 +179,9 @@ static int read_exports(void)
- 			return -1;
- 		}
-=20
-+		if (strcmp(export->mod, "vmlinux"))
-+			export->mod =3D normalize_modname(export->mod);
-+
- 		export->sym =3D strdup(sym);
- 		if (!export->sym) {
- 			ERROR_GLIBC("strdup");
-@@ -1140,7 +1172,7 @@ static struct export *find_export(struct symbol *sym)
- static const char *__find_modname(struct elfs *e)
- {
- 	struct section *sec;
--	char *name, *slash;
-+	char *name;
-=20
- 	sec =3D find_section_by_name(e->orig, ".modinfo");
- 	if (!sec) {
-@@ -1158,20 +1190,7 @@ static const char *__find_modname(struct elfs *e)
- 		return NULL;
- 	}
-=20
--	slash =3D strrchr(name, '/');
--	if (slash)
--		name =3D slash + 1;
--
--	for (char *c =3D name; *c; c++) {
--		if (*c =3D=3D '-')
--			*c =3D '_';
--		else if (*c =3D=3D '.') {
--			*c =3D '\0';
--			break;
--		}
--	}
--
--	return name;
-+	return normalize_modname(name);
- }
-=20
- /* Get the object's module name as defined by the kernel (and klp_object) */
+When built-in components use module_exit() with identical function
+names (like sm4_exit in multiple x86 crypto modules), duplicate static
+variables are created in the .exitcall.exit section.
+
+Because this section is missing from discarded_secs[], symid_needed()
+generates R_ABS64 relocations in .klp.symid to these symbols.
+
+Since .exitcall.exit is unconditionally discarded by the linker during the
+final vmlinux link, this can cause a fatal linker error: ".klp.symid refers
+to discarded section .exitcall.exit".
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178573617913.121094=
+5.4137827646322421739.tip-bot2@tip-bot2?part=3D1
