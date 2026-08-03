@@ -1,91 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C166A329E5D
-	for <live-patching@vger.kernel.org>; Mon,  3 Aug 2026 03:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9410332628
+	for <live-patching@vger.kernel.org>; Mon,  3 Aug 2026 03:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785726325; cv=none; b=Xlw4vqVdfrK5Tnuo4SGybQ0bC9wRTnx5WODOsbJru6e72OZN+RPLUAtBwbyx62eDbIKBH1q1g52y6pxoANrMz/+/mSc4LEm5qLnn0duwon8AE+czkP5uemciF17ft9XI5rV29Dq+xcczleLyW59uJ+7RvXHpHQO0NzxrIpAdMWA=
+	t=1785726381; cv=none; b=TmvGa756nCJNcrN4jvMa7INSBy6EXutgC6sK5tI1vzfj8J6t63VdyfSA6NH85X6cleI8/6lzfkIkJ5iVGUS36zqw1q6ZgwZYD5N8Q/6CbFb0ZjQFtz9KkXHfCO+LsBOTpMGH/It90JhG5scudEjOWsEj05yUHwkRtPW0f5QYJe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785726325; c=relaxed/simple;
-	bh=CvqhaJOMzp7noYaEgzEmw/TC3TEhWPgVF/4BmeuCk/Y=;
+	s=arc-20240116; t=1785726381; c=relaxed/simple;
+	bh=ZtwZq/kCAeMwn5NwURMZPhuNB48Wis7NnEYjFVkLA1c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OyogBxLN40nOulgSLlGfbOdiGDqXKDUq3EO7TbN17IBUvgz7CxDRoHYMKpmCXd/cFxgsrykd+m8qZ+YHiHgVIja/OjC5LXhtl0RHOEMUQfipbPOaKDriEeJIARPZOWgzF4Uwi/AtEfwyKg/pTIk6fHJQ4pLfOHLe5rEgq7Dsm/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CY0on4H0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nfaCKKcP; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bg2cnUX0iskQogrJbzkkT/MX9r84SNwDp+I+gXIzqnRX/s5hX+RkNSDSzX80B+zHL9NehK5+UVmU19yG4m0yLq2TYw2FmIJ2yYQ7pk+UpPLbAAUCfQVxw3zPlUEPexx/Hdmip73YXgyBEONCvQN9SVMIeT5WSBT0scSDNX9oIEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JL6t0zaN; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ao5FoOeN; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CY0on4H0";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nfaCKKcP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JL6t0zaN";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ao5FoOeN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785726322;
+	s=mimecast20190719; t=1785726378;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=P3jjpiniO3TLp8NKn3IV3oXA3rMsPuR4g8mzmo0i6UQ=;
-	b=CY0on4H0yYpMO4+ohqexxmzptuE2rmgABOjaUCkoJeyCmi8zIQ2iNbmJhIc6U19MiV2FnX
-	oIrg6TziubLmE8Ra1lxwIzaltgSZMErEKmAs1OYDRykIdNM1d88i1u3mCpxBximsu8EP3K
-	0qhVbXt9dy6blKfmZbxKOq/fVBh4p9g=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=K2psCU+3zZ668SmM2CDNU/cclrNBYedaBPTmJ5ydt5A=;
+	b=JL6t0zaNA+Cbic6yh+qz6fvTRrYOiBB4aNSafo4OTyFzouFOC7iToA5h+SeroCICjjRBT2
+	w5bONV1dHbK0oD3akW5oyQChEeO1iiAvdICbXoQPlwFjFfLNEQ1xy/I1s50IZT/ixV7WST
+	45uV6kSRvU6tklNcYynPpEnE3tBqwc4=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-644-926J6hOYNTqeK8j3S_5Gqg-1; Sun, 02 Aug 2026 23:05:21 -0400
-X-MC-Unique: 926J6hOYNTqeK8j3S_5Gqg-1
-X-Mimecast-MFC-AGG-ID: 926J6hOYNTqeK8j3S_5Gqg_1785726321
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8eec6acbe21so62969216d6.3
-        for <live-patching@vger.kernel.org>; Sun, 02 Aug 2026 20:05:21 -0700 (PDT)
+ us-mta-573-O7fFkctbNB-z1fTZtBQ-hA-1; Sun, 02 Aug 2026 23:06:17 -0400
+X-MC-Unique: O7fFkctbNB-z1fTZtBQ-hA-1
+X-Mimecast-MFC-AGG-ID: O7fFkctbNB-z1fTZtBQ-hA_1785726377
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8f0f45415cfso33157466d6.2
+        for <live-patching@vger.kernel.org>; Sun, 02 Aug 2026 20:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1785726321; x=1786331121; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1785726377; x=1786331177; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=P3jjpiniO3TLp8NKn3IV3oXA3rMsPuR4g8mzmo0i6UQ=;
-        b=nfaCKKcPaVJQ3nxdu3hQ5teWDr1hzawTAHXOPmoxIZn/szxz1VltKdtYLR8ZQKYy+K
-         +4n3sklQ2+xfofGKcPYdo2xWsX+K7D2RoGuXF0r23UU8oG+cdoXwj7XM9ndC03LlUP/7
-         h2cBfu6rQ7yvhYPYE7jk8MopiPSFyP1cJUeZnnZ6jSOyni9+ELQvfqofUiAsvZG6ditd
-         GjJdpxJ05Gk0/hZxsTv0wA5hL1B025FjSEXlpdB6lRDC/L3j5oM1EFRjkU+rYYJz99fZ
-         iqovWMQsfTHXH1bim/QqeRI/TkDLOZ4qNharzizrIImnoxw3FXE0UlXIRiLejugvi5il
-         UcHw==
+        bh=K2psCU+3zZ668SmM2CDNU/cclrNBYedaBPTmJ5ydt5A=;
+        b=ao5FoOeNHYsVeGZGjTUd0uWdRYiAKKLagavpmCuZS5rpzdHBuvkzT1pT+SNXgbYlI7
+         +eTvr0eS0K/1Nauk82cBcSJzEyTu/bCN8JuQyYfl6b0K8mVxV+f3Z2ujRARE1xi5zdtK
+         f4iRraNk+4FqpjrxU9bZHz6uC3Wfa4YedZtOLGpdPlJv8sY1DTnHjoQ6X6ajAsdmpWfy
+         ZHK0vd3knxcoD+O8/FRiLNN2BfDG4VXqfrOVZ6n6jsszOnPONecucWvupZQMPbNpdMIc
+         fdEQopapul0wFndFkHQ/wFCADDDR9GeKS3EdJudwm1i++/1F1LGYGdXI/ki8IXZ7hUXj
+         YC4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785726321; x=1786331121;
+        d=1e100.net; s=20251104; t=1785726377; x=1786331177;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=P3jjpiniO3TLp8NKn3IV3oXA3rMsPuR4g8mzmo0i6UQ=;
-        b=p0R78pxoeEKO2ZGj2qdx+o5WxxP/rQ3WrmSIkif8syojmw1YupjLmKsFxdaNy/lNW3
-         cC76eBpXaob4b4ix+r44fDnJnn1G/b4rUCBWbJENJ/CFw+rs2GO3SGndpXfqer+iW7cR
-         mXRl11fsKsaBqxOKwj+htJyNNAuvKzbM/dPIaJtUR66ZmmQ0nDTiW0CoBPVELQBvwTNS
-         r3d6xoH549xrWUo6UkPQkxzbkvNqRBThehm421f5KYa7Bm9uvqiYhxMb+lTO4oUTODgL
-         UMTlICPy+nMmvJQ7Q+1Bz7zOBDih4qjDFHjl2J/+Mw59c1PuiiXGI77A64j/qmeVZUtD
-         v2NQ==
-X-Gm-Message-State: AOJu0Yx6fmYbZctolGgjQ3Fj6EjWshK+tdgkmpz/szWY8JaOIfN3u9sS
-	otD4/ii00/IeZWJJ3i6gPgH5dAEVQi+sChZbJOv3mwu7bpNq67u0Sy69BpoPHSK8wwhIB6JjrAj
-	mXNseMxx+ig2HBFCSBLKi/MrpNlVjJ25Y8+y+RdjbtYSDTZG5BLX65J4YdsR1MAP3x2CcOMBn0u
-	c=
-X-Gm-Gg: AR+sD11WHqepKOieYAbSpbMoqWe94s6cZNcO6B0sv+/7NhYoj/W/GncCN6zFPhUOspT
-	aSN/9BCJs4Mmt5MaSUJSqFx2uMo9HY/f1peYKCkatQNcG3kPq3rx8zeiZK90Q6/A7uW4xSBtRen
-	vPDBEAXXgDcIQjlWLI5Ob5T4kksEyyFC0uo38RqueOoZdnHaYr3bE7Bugiv83/79la0hfWlOGIs
-	cIl0dgCUnEiaD9SBzUb7Gn/BciKulpRIAIFeM5H5Od8yjqhqb+mDXMfn6V4nZ1GtlNRNa8eRwty
-	BmhJCC6x2z+t4RjpLHOmAoi6w6X87biXT7KljDTA3q7foIKICSXCWu0+hdgjBqj3KAyyfVM=
-X-Received: by 2002:a05:6214:84d4:b0:908:4a89:587 with SMTP id 6a1803df08f44-9084a8905acmr167260786d6.25.1785726320690;
-        Sun, 02 Aug 2026 20:05:20 -0700 (PDT)
-X-Received: by 2002:a05:6214:84d4:b0:908:4a89:587 with SMTP id 6a1803df08f44-9084a8905acmr167260486d6.25.1785726320234;
-        Sun, 02 Aug 2026 20:05:20 -0700 (PDT)
+        bh=K2psCU+3zZ668SmM2CDNU/cclrNBYedaBPTmJ5ydt5A=;
+        b=jmPDkk+VvgTDx0d2x5FX2+4VHJbRc2WfdZ3Ma+LgIyRtj+ZXY2GVUS8nX+1WeCYIBj
+         qhyNhaWocH2u03nqVSbn3GcmsSn8avTKvcMPe4H3qzZK3Pigj0EHf18J+oLHK+WORbtY
+         yGuwbdO1zPceSXTWei34jsUV2m6CnqalIEMN+2IORdMxKOlfsirHlrGFOitftGRe8i7o
+         FxLFv2NU+TLusl8ayJBvlJjTCPOxm6NhyecFjTGhhcGCIDE/mlgEfHmC/RLhP2GjyTGG
+         RPbLnGURnnbmbY+6F8vIsQM+guPVm+F0k88uR63G1tOexRGyOdZhzC7AvDP+kDQXjW1l
+         MGlQ==
+X-Gm-Message-State: AOJu0Ywd7vSTU7vOAwTbz9oO4PGJppVp4raFqJR+uTzhsDW8oIJwdlxW
+	8i2YtT5RQtFK6SgcKVzZMSqNI2w2G0nvL5BFZlf3Kde/sTI2WKw7XH51gCc0fqF2PnUCuf2m2lV
+	DRKYEQcZRlWKKTyz8azEesDpaec8WX/dbN76utu8OQKl6hVWbd0v9Jx4cM9joVjKaLTw=
+X-Gm-Gg: AR+sD11WRZ8nQx2iqD4E1cBwTiEsBJd6HBnyx5+SlkpBR6WVp/TJxvv8FGDZrzIjkAJ
+	ay2LQJzIzQXe64xziUznQDXs4RQpsV2w0TTlPnjQIMD7pn0V+1ES67utgr6I/hy90BVmW5A6IeB
+	0Z9nutsBxojGmx+Y83FqC3u3XNl/VybklAQXO/WT2QTj3SojlZYTSbBaeea2eJqJSOmb4JFqwMs
+	3fRRpL/bA2gkJcba8kvw27oVs/0q4ODGizAduRYTqnstJIoV8c/24Xx5uQ0ZZlhMdH07dDPLq5l
+	YefJZGKe3Umi7vuEeqdYblXTI3juO4zhIjDwyrYYOUJgBjlD60fEVIK5OyAv+liDrc6mHeE=
+X-Received: by 2002:a05:6214:54c7:b0:8de:ca40:c3b5 with SMTP id 6a1803df08f44-908496be40bmr189875726d6.31.1785726376886;
+        Sun, 02 Aug 2026 20:06:16 -0700 (PDT)
+X-Received: by 2002:a05:6214:54c7:b0:8de:ca40:c3b5 with SMTP id 6a1803df08f44-908496be40bmr189875316d6.31.1785726376346;
+        Sun, 02 Aug 2026 20:06:16 -0700 (PDT)
 Received: from jpoimboe ([68.74.140.199])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908436072edsm65322056d6.46.2026.08.02.20.05.18
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-908432a1e44sm65308406d6.2.2026.08.02.20.06.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 20:05:19 -0700 (PDT)
-Date: Sun, 2 Aug 2026 20:05:16 -0700
+        Sun, 02 Aug 2026 20:06:15 -0700 (PDT)
+Date: Sun, 2 Aug 2026 20:06:12 -0700
 From: Josh Poimboeuf <jpoimboe@redhat.com>
 To: Joe Lawrence <joe.lawrence@redhat.com>
 Cc: live-patching@vger.kernel.org, Jiri Kosina <jikos@kernel.org>, 
 	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
-Subject: Re: [PATCH 3/4] objtool/klp: reject new cross-module references
- without existing dependency
-Message-ID: <vmtvk7v2nehsiudwkvsjf3fqa6l2ejmkmx3jftmmuosif23qdm@4ivl2segtrgw>
+Subject: Re: [PATCH 4/4] objtool/klp: strip klp-induced module dependencies
+ from livepatch modules
+Message-ID: <7r7l7impvs5y2lgx3mjfo2wmgmtsbjla3qiu3dtpor3xrlvf4g@lmci63zeujzb>
 References: <20260720145658.1103243-1-joe.lawrence@redhat.com>
- <20260720145658.1103243-4-joe.lawrence@redhat.com>
+ <20260720145658.1103243-5-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -94,36 +93,33 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260720145658.1103243-4-joe.lawrence@redhat.com>
+In-Reply-To: <20260720145658.1103243-5-joe.lawrence@redhat.com>
 
-On Mon, Jul 20, 2026 at 10:56:57AM -0400, Joe Lawrence wrote:
-> When a livepatch introduces a new reference to a module-exported symbol,
-> the resulting klp-relocation will only be resolved at patch-enable time
-> if the exporting module is loaded.
+On Mon, Jul 20, 2026 at 10:56:58AM -0400, Joe Lawrence wrote:
+> The klp-diff pipeline creates weak UNDEF placeholder symbols for
+> cross-module references that will become klp-relocations.  When modpost
+> runs on the linked livepatch .ko, it sees these UNDEF symbols, resolves
+> them via Module.symvers, and adds the providing modules to the depends=
+> field in .modinfo.
 > 
-> A future commit will remove livepatch module dependency references to
-> facilitate late-module patching, that is, the pre-loading of the
-> livepatch before target modules are loaded.
+> These dependencies are unnecessary: klp-relocations are resolved by the
+> livepatch infrastructure at patch-enable time, not by the module loader.
+> Adding hard module dependencies defeats late-module patching, since the
+> kernel will refuse to load the livepatch module unless all depended
+> modules are already present.
 > 
-> If the original (unpatched) module already depends on the exporting
-> module, the dependency is safe: the module loader ensures the dependency
-> is satisfied before the patched module can be loaded, so the
-> klp-relocation target will exist.
+> Fix this by having klp-post-link strip any depends= entry that is only
+> the result of klp-symbol (.klp.sym.<mod>.*).  The check is conservative:
+> if any remaining SHN_UNDEF symbol matches a known export name from that
+> module, the dependency is kept (indicating a legitimate non-KLP
+> reference).
 > 
-> However, if the patch introduces a reference to a module that the
-> original doesn't depend on, there is no such guarantee.  The exporting
-> module could be absent or could be unloaded at any time, leading to a
-> relocation failure or use-after-free.
-> 
-> Add a build-time check: when a new symbol reference (no twin) targets a
-> module export, verify that the original module already has at least one
-> UNDEF symbol resolving to that same exporting module.  If not, error out
-> with a diagnostic message.
-> 
+> Assisted-by: Claude:claude-opus-4-6
 > Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-I think the previous patch exposed this bug, so I combined them into a
-single patch and massaged the code a bit.
+This patch is no longer needed in light of my tombstone patch which
+should prevent modpost from adding those module dependencies in the
+first place.
 
 -- 
 Josh
