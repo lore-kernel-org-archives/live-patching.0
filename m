@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D787839023A;
-	Mon,  3 Aug 2026 03:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC80373C1D;
+	Mon,  3 Aug 2026 03:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785727494; cv=none; b=G5nUcZf2yZUh3iRJCsFS/aIc3/cLM2K2kezVBcn1layz3RpOKaELzGS18bGcFKnR9ucAbDCU5mHulUACrGC+8UXuLjPMvILb3eU0nmL5xPHWRD2uqD8vnzvR0wamGWVZ0G9l/OjgVVH4Cqsohk+xL+RWyGbqo94Eb12GrNddgFI=
+	t=1785727494; cv=none; b=M1yddcLSzLdF1/HCIQGrIrq0SRLKsnSMpZQkhAQnsnKsNdnvHjnkZntMNoBCXMmIrnw6MZkZL/HnOjDxJSzLh3/kHR9luDG6oSQonjUq1Aok43pD5e24OwRw4XLrdmf7zUgcWln8eBsQ58lSsru4iIOlXb1DLMHhA8WoK5n5wgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785727494; c=relaxed/simple;
-	bh=oA9f7bxwNxOoy6P80UEF0cXiqYrypwijWnbw8RZI4qQ=;
+	bh=bUEz3yqIl8iuF01MWVluUFvE0Y6OJbyCUpjOZrRlAgs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RdDs7aGdDx57xwpFOGrKJl/3zAgA06EZ84rvOCKpY8oYmdAPcsXcBgAWDNz6gknE1O9RAPp7H+exB13I9iqEj/aitl+5AM4MxP0BqZGlJvZvKDn8HRRCtMErbPyNYhw8ElXbOJgD2r+GY/i7x2yVDkKZXjXXgMsWObVcwSKpvdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fwmNdnxT; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=WZRuQhjmoh4+A2zN9iINugL1o6dUIZi0haPsp9s0vvLM9ng0QrAvI/ACzVFKrjsGvOafUdJBgNs8Vp3zfRUScE1Q2UoMTawsdqkTLsGRCTXRRRoLcoR3PG41Q9Hr5GOTUneOYv59EVWc9CkrROWHmwrprygyI4JfHqogs2JIY+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nxouAoRE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fwmNdnxT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9DD1F00A3E;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nxouAoRE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8C751F00A3D;
 	Mon,  3 Aug 2026 03:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785727492;
-	bh=a8sLyW2mz/hNWPDiEAkdg/YAmqss08QGzlB7RXCIJqc=;
+	s=k20260515; t=1785727493;
+	bh=bXyObPR/zEH+klDXuuVkfmL3pol8wEVXP2QY5Sl8GMw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fwmNdnxTVFfgtTXmJLdqgFghTC37vRzkHuecVgPeqbclBkKnd2F+pf9kFRf9csv5a
-	 ekDLkYQDIitt2v1a1A9McZaAG/1/BjFOFFKI3N+Z3X615xgcnm2nh/vyNddu4EgAX4
-	 xvegfHx+t9iit3qy6JABOi2lQ30O8AKQjO+4JtkUstLZJ+DWAN4z2BvQdI9I4KXkMq
-	 QaUym+/fkpIBWpV4KdLcAHZQtCEvJBzT5pFHXsxuvb5cOnNYLiMT6d7I/VEGWyBBki
-	 mU0DEDZIiijPu1MPvrActOv0JK8iIzUCKwtPSwenrGQCh2I+9Np6bgRyVPS7RD8t6e
-	 ZnRWFKV6ztNfA==
+	b=nxouAoREg35Py8dGTbDj8nMQEKyVej5fchUKvtO9+pRF/XCuSARVlotnpzr/Ky4EY
+	 nQ2sA0h9pxn2c9YVFzeJn3B5jtg0pIs8JoTbN6MzVhgnDZ9rgw2opatJITyFmAf6L6
+	 9w6u7YRsPOx9qgW3oKhQVA6nzmFZUlcUsxy+/QEJXEk9kFxEQoIzC3d4t9Uyj14I3Q
+	 9P9lRv2owUtrdNxTvFzM0oseYrYotslpD2jNyKdOcq64rACA7D96BHsmsj6/yp1IMl
+	 2Bcw++mSfukemqwlxpaF+jvAev0PVztkQfSK5rfFG4J/wCRlZnA7crvCn/BFG8iXbm
+	 Edwk84gQcy/5Q==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,11 +39,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org,
-	Ben Procknow <bprockno@redhat.com>
-Subject: [PATCH 06/14] objtool/klp: Fix symbol resolution for duplicate data symbols
-Date: Sun,  2 Aug 2026 20:24:28 -0700
-Message-ID: <919785e3bf2245db02ff6391e735d9cb139170b1.1785727106.git.jpoimboe@kernel.org>
+	linux-modules@vger.kernel.org
+Subject: [PATCH 07/14] module: Add module_kallsyms_on_each_core_symbol()
+Date: Sun,  2 Aug 2026 20:24:29 -0700
+Message-ID: <9ff8d9f0ad20a9a5cdbab3fe650d3532688065d4.1785727106.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1785727106.git.jpoimboe@kernel.org>
 References: <cover.1785727106.git.jpoimboe@kernel.org>
@@ -55,610 +54,104 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-find_sympos() calculates a sympos used by livepatch to disambiguate
-duplicately-named symbols.  For function symbols, there's a hack which
-counts .text.unlikely symbols before other .text symbols, matching the
-linker script's section ordering.
+module_kallsyms_on_each_symbol() iterates mod->kallsyms, which points at
+the full init symbol table until do_init_module() swaps it out.  The set
+of symbols it reports thus differs based on whether init memory has been
+freed yet.
 
-Not only is the hack fragile, data symbols can have the same problem.
-So for example, adding a reference to pwq_cache in
-ep_unregister_pollwait() can trigger a corrupt sympos and a relocation
-to the wrong pwq_cache symbol in the livepatch module, resulting in a
-crash or undefined behavior.
+Add module_kallsyms_on_each_core_symbol() for callers which need a
+symbol's position to be the same before and after that swap.
+core_kallsyms is fully populated by add_kallsyms() before the module
+leaves MODULE_STATE_UNFORMED, so it's readable on both paths.
 
-Remove the existing hack in favor of a fully deterministic solution,
-using the new .klp.symid table to derive the symbol-to-id mapping from
-the original vmlinux.o and the id-to-address mapping from the
-corresponding vmlinux, which can then be used to determine the exact
-sympos associated with the original vmlinux.
-
-Modules don't need any special treatment: the .ko has the same
-section/symbol ordering as the original whole-archive symbol table.
-
-Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-Reported-by: Ben Procknow <bprockno@redhat.com>
-Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
-Link: https://lore.kernel.org/20260710153042.3156788-1-joe.lawrence@redhat.com
-Link: https://lore.kernel.org/20260724221730.3126529-1-joe.lawrence@redhat.com
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- scripts/livepatch/klp-build         |   4 +
- tools/objtool/Build                 |   3 +-
- tools/objtool/include/objtool/klp.h |   5 +
- tools/objtool/klp-diff.c            |  66 +----
- tools/objtool/klp-sympos.c          | 411 ++++++++++++++++++++++++++++
- 5 files changed, 427 insertions(+), 62 deletions(-)
- create mode 100644 tools/objtool/klp-sympos.c
+ include/linux/module.h   | 11 ++++++++++
+ kernel/module/kallsyms.c | 46 ++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 57 insertions(+)
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index f94e324ff53c..b52a8489d9f6 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -611,6 +611,8 @@ copy_orig_objects() {
- 	done
- 	xtrace_restore
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 7566815fabbe..4ea4522a5fc5 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -947,6 +947,9 @@ static inline bool module_sig_ok(struct module *module)
+ int module_kallsyms_on_each_symbol(const char *modname,
+ 				   int (*fn)(void *, const char *, unsigned long),
+ 				   void *data);
++int module_kallsyms_on_each_core_symbol(const char *modname,
++					int (*fn)(void *, const char *, unsigned long),
++					void *data);
  
-+	cp -f "$PWD/vmlinux" "$ORIG_DIR" || die "missing vmlinux"
-+
- 	mv -f "$TMP_DIR/build.log" "$ORIG_DIR"
- 	touch "$TIMESTAMP"
- 	touch "$ORIG_DIR/.complete"
-@@ -681,6 +683,8 @@ generate_checksums() {
- 		"$OBJTOOL" klp checksum "$dest"
- 	done
- 
-+	[[ -f "$src_dir/vmlinux" ]] && cp -f "$src_dir/vmlinux" "$dest_dir"
-+
- 	touch "$dest_dir/.complete"
+ /* For kallsyms to ask for address resolution.  namebuf should be at
+  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
+@@ -984,6 +987,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ 	return -EOPNOTSUPP;
  }
  
-diff --git a/tools/objtool/Build b/tools/objtool/Build
-index 506f89bed808..59f948628098 100644
---- a/tools/objtool/Build
-+++ b/tools/objtool/Build
-@@ -13,7 +13,8 @@ objtool-$(BUILD_DISAS) += disas.o
- objtool-$(BUILD_DISAS) += trace.o
- 
- objtool-$(BUILD_ORC) += orc_gen.o orc_dump.o
--objtool-$(BUILD_KLP) += builtin-klp.o klp-checksum.o klp-diff.o klp-post-link.o
-+objtool-$(BUILD_KLP) += builtin-klp.o klp-checksum.o klp-diff.o \
-+			klp-post-link.o klp-sympos.o
- 
- objtool-y += libstring.o
- objtool-y += libctype.o
-diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
-index 4d3c3bd462aa..0118c2c170c3 100644
---- a/tools/objtool/include/objtool/klp.h
-+++ b/tools/objtool/include/objtool/klp.h
-@@ -43,9 +43,14 @@ struct klp_symid {
- };
- 
- struct objtool_file;
-+struct elf;
-+struct symbol;
- 
- int klp_create_symid_sections(struct objtool_file *file);
- 
-+int klp_sympos_init(struct elf *orig);
-+unsigned long klp_find_sympos(struct elf *elf, struct symbol *sym);
++static inline int
++module_kallsyms_on_each_core_symbol(const char *modname,
++				    int (*fn)(void *, const char *, unsigned long),
++				    void *data)
++{
++	return -EOPNOTSUPP;
++}
 +
- int cmd_klp_checksum(int argc, const char **argv);
- int cmd_klp_diff(int argc, const char **argv);
- int cmd_klp_post_link(int argc, const char **argv);
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 75ba0e060a34..c5284d275207 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -898,65 +898,6 @@ static int correlate_symbols(struct elfs *e)
- 	return 0;
+ /* For kallsyms to ask for address resolution.  NULL means not found. */
+ static inline int module_address_lookup(unsigned long addr,
+ 						unsigned long *symbolsize,
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index 0fc11e45df9b..3a959c3c9f9b 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -494,3 +494,49 @@ int module_kallsyms_on_each_symbol(const char *modname,
+ 	mutex_unlock(&module_mutex);
+ 	return ret;
  }
- 
--/* "sympos" is used by livepatch to disambiguate duplicate symbol names */
--static unsigned long find_sympos(struct elf *elf, struct symbol *sym)
--{
--	bool vmlinux = str_ends_with(objname, "vmlinux.o");
--	unsigned long sympos = 0, nr_matches = 0;
--	bool has_dup = false;
--	struct symbol *s;
--
--	if (sym->bind != STB_LOCAL)
--		return 0;
--
--	if (vmlinux && is_func_sym(sym)) {
--		/*
--		 * HACK: Unfortunately, symbol ordering can differ between
--		 * vmlinux.o and vmlinux due to the linker script emitting
--		 * .text.unlikely* before .text*.  Count .text.unlikely* first.
--		 *
--		 * TODO: Disambiguate symbols more reliably (checksums?)
--		 */
--		for_each_sym(elf, s) {
--			if (strstarts(s->sec->name, ".text.unlikely") &&
--			    !strcmp(s->name, sym->name)) {
--				nr_matches++;
--				if (s == sym)
--					sympos = nr_matches;
--				else
--					has_dup = true;
--			}
--		}
--		for_each_sym(elf, s) {
--			if (!strstarts(s->sec->name, ".text.unlikely") &&
--			    !strcmp(s->name, sym->name)) {
--				nr_matches++;
--				if (s == sym)
--					sympos = nr_matches;
--				else
--					has_dup = true;
--			}
--		}
--	} else {
--		for_each_sym(elf, s) {
--			if (!strcmp(s->name, sym->name)) {
--				nr_matches++;
--				if (s == sym)
--					sympos = nr_matches;
--				else
--					has_dup = true;
--			}
--		}
--	}
--
--	if (!sympos) {
--		ERROR("can't find sympos for %s", sym->name);
--		return ULONG_MAX;
--	}
--
--	return has_dup ? sympos : 0;
--}
--
- static int clone_sym_relocs(struct elfs *e, struct symbol *patched_sym);
- 
- static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym,
-@@ -1418,7 +1359,7 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 			return -1;
- 
- 		sym_orig_name = patched_sym->twin->name;
--		sympos = find_sympos(e->orig, patched_sym->twin);
-+		sympos = klp_find_sympos(e->orig, patched_sym->twin);
- 		if (sympos == ULONG_MAX)
- 			return -1;
- 	}
-@@ -2036,7 +1977,7 @@ static int create_klp_sections(struct elfs *e)
- 
- 		/* klp_func_ext.sympos */
- 		BUILD_BUG_ON(sizeof(sympos) != sizeof_field(struct klp_func_ext, sympos));
--		sympos = find_sympos(e->orig, sym->clone->twin);
-+		sympos = klp_find_sympos(e->orig, sym->clone->twin);
- 		if (sympos == ULONG_MAX)
- 			return -1;
- 		memcpy(func_data + offsetof(struct klp_func_ext, sympos), &sympos,
-@@ -2190,6 +2131,9 @@ int cmd_klp_diff(int argc, const char **argv)
- 	if (!e.orig || !e.patched)
- 		return -1;
- 
-+	if (klp_sympos_init(e.orig))
-+		return -1;
-+
- 	if (read_exports())
- 		return -1;
- 
-diff --git a/tools/objtool/klp-sympos.c b/tools/objtool/klp-sympos.c
-new file mode 100644
-index 000000000000..bbfae516d339
---- /dev/null
-+++ b/tools/objtool/klp-sympos.c
-@@ -0,0 +1,411 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Compute "sympos", the position used by livepatch to disambiguate
-+ * duplicate symbol names in the patched object.
-+ */
-+#include <stdlib.h>
-+#include <string.h>
-+#include <fcntl.h>
-+
-+#include <objtool/objtool.h>
-+#include <objtool/warn.h>
-+#include <objtool/endianness.h>
-+#include <objtool/klp.h>
-+
-+#include <linux/string.h>
-+
-+struct vmlinux_sym {
-+	struct hlist_node hash;
-+	const char *name;
-+	u64 addr;
-+};
-+
-+struct vmlinux_symid {
-+	struct hlist_node hash;
-+	u64 id;
-+	u64 addr;
-+};
-+
-+struct vmlinux_o_symid {
-+	struct hlist_node hash;
-+	u64 id;
-+	unsigned int sym_idx;
-+};
-+
-+static DEFINE_HASHTABLE(vmlinux_o_symids, 16);
 +
 +/*
-+ * The original linked kernel, found next to the orig vmlinux.o.  Read with raw
-+ * libelf rather than elf_open_read(): only the symbol table and the resolved
-+ * .klp.symid table are needed, not the (huge) instruction/reloc machinery.
++ * Iterate @modname's cut-down core symbol table, rather than mod->kallsyms
++ * which points at the full init symbol table until do_init_module() swaps it
++ * out.  For callers which need a symbol's position to be the same before and
++ * after that swap.
 + *
-+ * Both tables are built once by read_orig_vmlinux().  The Elf handle stays
-+ * open because the hashed names point into its mmapped string table.
++ * core_kallsyms is populated by add_kallsyms(), which runs before the module
++ * leaves MODULE_STATE_UNFORMED.
++ *
++ * Unlike module_kallsyms_on_each_symbol(), @modname is required.
 + */
-+static struct {
-+	Elf *elf;
-+	DECLARE_HASHTABLE(syms, 16);	/* name -> address */
-+	DECLARE_HASHTABLE(symids, 16);	/* .klp.symid id -> address */
-+} vmlinux;
-+
-+/*
-+ * Would the symbol be visible to the runtime's kallsyms-based symbol lookup?
-+ */
-+static bool vmlinux_sym_in_kallsyms(Elf *elf, GElf_Sym *sym)
++int module_kallsyms_on_each_core_symbol(const char *modname,
++					int (*fn)(void *, const char *, unsigned long),
++					void *data)
 +{
-+	unsigned int type = GELF_ST_TYPE(sym->st_info);
-+	GElf_Shdr shdr;
-+	Elf_Scn *scn;
++	struct mod_kallsyms *kallsyms;
++	struct module *mod;
++	unsigned int i;
++	int ret = 0;
 +
-+	if (sym->st_shndx == SHN_UNDEF || sym->st_shndx >= SHN_LORESERVE)
-+		return false;
++	if (!modname)
++		return -EINVAL;
 +
-+	if (type == STT_SECTION || type == STT_FILE)
-+		return false;
++	guard(mutex)(&module_mutex);
 +
-+	scn = elf_getscn(elf, sym->st_shndx);
-+	if (!scn || !gelf_getshdr(scn, &shdr))
-+		return false;
++	mod = find_module_all(modname, strlen(modname), false);
++	if (!mod)
++		return -ENOENT;
 +
-+	return shdr.sh_flags & SHF_ALLOC;
-+}
++	kallsyms = &mod->core_kallsyms;
 +
-+static int read_orig_vmlinux(const char *filename)
-+{
-+	size_t shstrndx, nr_syms = 0, nr_symids = 0, strtab_idx = 0;
-+	Elf_Data *symtab_data = NULL, *symid_data = NULL;
-+	struct klp_symid *symids;
-+	Elf_Scn *scn = NULL;
-+	GElf_Ehdr ehdr;
-+	int fd;
++	for (i = 0; i < kallsyms->num_symtab; i++) {
++		const Elf_Sym *sym = &kallsyms->symtab[i];
 +
-+	fd = open(filename, O_RDONLY);
-+	if (fd == -1) {
-+		ERROR_GLIBC("can't open '%s'", filename);
-+		return -1;
-+	}
-+
-+	if (elf_version(EV_CURRENT) == EV_NONE) {
-+		ERROR_ELF("elf_version");
-+		return -1;
-+	}
-+
-+	vmlinux.elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
-+	if (!vmlinux.elf) {
-+		ERROR_ELF("elf_begin");
-+		return -1;
-+	}
-+
-+	if (!gelf_getehdr(vmlinux.elf, &ehdr)) {
-+		ERROR_ELF("gelf_getehdr");
-+		return -1;
-+	}
-+
-+	if (elf_getshdrstrndx(vmlinux.elf, &shstrndx)) {
-+		ERROR_ELF("elf_getshdrstrndx");
-+		return -1;
-+	}
-+
-+	while ((scn = elf_nextscn(vmlinux.elf, scn))) {
-+		const char *name;
-+		GElf_Shdr shdr;
-+
-+		if (!gelf_getshdr(scn, &shdr)) {
-+			ERROR_ELF("gelf_getshdr");
-+			return -1;
-+		}
-+
-+		if (shdr.sh_type == SHT_SYMTAB) {
-+			symtab_data = elf_getdata(scn, NULL);
-+			if (!symtab_data) {
-+				ERROR_ELF("elf_getdata");
-+				return -1;
-+			}
-+			nr_syms = shdr.sh_size / shdr.sh_entsize;
-+			strtab_idx = shdr.sh_link;
-+			continue;
-+		}
-+
-+		name = elf_strptr(vmlinux.elf, shstrndx, shdr.sh_name);
-+		if (name && !strcmp(name, KLP_SYMID_SEC)) {
-+			if (shdr.sh_size % sizeof(struct klp_symid)) {
-+				ERROR("%s: %s: struct klp_symid size mismatch",
-+				      filename, KLP_SYMID_SEC);
-+				return -1;
-+			}
-+			symid_data = elf_getdata(scn, NULL);
-+			if (!symid_data) {
-+				ERROR_ELF("elf_getdata");
-+				return -1;
-+			}
-+			nr_symids = shdr.sh_size / sizeof(struct klp_symid);
-+		}
-+	}
-+
-+	if (!symtab_data) {
-+		ERROR("%s: missing symbol table", filename);
-+		return -1;
-+	}
-+
-+	if (!symid_data) {
-+		ERROR("%s: missing %s section, kernel not built with CONFIG_KLP_BUILD?",
-+		      filename, KLP_SYMID_SEC);
-+		return -1;
-+	}
-+
-+	for (size_t i = 0; i < nr_syms; i++) {
-+		struct vmlinux_sym *vsym;
-+		const char *name;
-+		GElf_Sym s;
-+
-+		if (!gelf_getsym(symtab_data, i, &s)) {
-+			ERROR_ELF("gelf_getsym");
-+			return -1;
-+		}
-+
-+		if (!vmlinux_sym_in_kallsyms(vmlinux.elf, &s))
++		if (sym->st_shndx == SHN_UNDEF)
 +			continue;
 +
-+		name = elf_strptr(vmlinux.elf, strtab_idx, s.st_name);
-+		if (!name)
-+			continue;
-+
-+		vsym = calloc(1, sizeof(*vsym));
-+		if (!vsym) {
-+			ERROR_GLIBC("calloc");
-+			return -1;
-+		}
-+
-+		vsym->name = name;
-+		vsym->addr = s.st_value;
-+		hash_add(vmlinux.syms, &vsym->hash, str_hash(name));
++		ret = fn(data, kallsyms_symbol_name(kallsyms, i),
++			 kallsyms_symbol_value(sym));
++		if (ret)
++			break;
 +	}
-+
-+	symids = symid_data->d_buf;
-+
-+	for (size_t i = 0; i < nr_symids; i++) {
-+		struct vmlinux_symid *vsymid;
-+
-+		vsymid = calloc(1, sizeof(*vsymid));
-+		if (!vsymid) {
-+			ERROR_GLIBC("calloc");
-+			return -1;
-+		}
-+
-+		vsymid->id = __bswap_if_needed(&ehdr, symids[i].id);
-+		vsymid->addr = __bswap_if_needed(&ehdr, symids[i].addr);
-+		hash_add(vmlinux.symids, &vsymid->hash, vsymid->id);
-+	}
-+
-+	/* the fd and Elf handle stay open, the hashed names live in the mmap */
-+	return 0;
-+}
-+
-+/*
-+ * Read the orig vmlinux.o's .klp.symid table, an array of entries whose 'addr'
-+ * fields have relocs to the symbols they describe.
-+ */
-+static int read_vmlinux_o_symids(struct elf *vmlinux_o)
-+{
-+	struct section *sec;
-+
-+	for_each_sec(vmlinux_o, sec) {
-+		unsigned long nr;
-+
-+		if (strcmp(sec->name, KLP_SYMID_SEC))
-+			continue;
-+
-+		if (sec_size(sec) % sizeof(struct klp_symid)) {
-+			ERROR("%s: %s: struct klp_symid size mismatch",
-+			      vmlinux_o->name, KLP_SYMID_SEC);
-+			return -1;
-+		}
-+
-+		nr = sec_size(sec) / sizeof(struct klp_symid);
-+
-+		for (unsigned long i = 0; i < nr; i++) {
-+			unsigned long offset = i * sizeof(struct klp_symid);
-+			struct vmlinux_o_symid *entry;
-+			struct klp_symid *symid;
-+			struct reloc *reloc;
-+
-+			entry = calloc(1, sizeof(*entry));
-+			if (!entry) {
-+				ERROR_GLIBC("calloc");
-+				return -1;
-+			}
-+
-+			symid = sec->data->d_buf + offset;
-+			entry->id = bswap_if_needed(vmlinux_o, symid->id);
-+
-+			reloc = find_reloc_by_dest(vmlinux_o, sec,
-+						   offset + offsetof(struct klp_symid, addr));
-+			if (!reloc) {
-+				ERROR("%s: missing reloc for %s entry",
-+				      vmlinux_o->name, KLP_SYMID_SEC);
-+				return -1;
-+			}
-+			entry->sym_idx = reloc->sym->idx;
-+
-+			hash_add(vmlinux_o_symids, &entry->hash, entry->sym_idx);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+int klp_sympos_init(struct elf *orig)
-+{
-+	char *filename;
-+	int ret;
-+
-+	if (!str_ends_with(objname, "vmlinux.o"))
-+		return 0;
-+
-+	if (read_vmlinux_o_symids(orig))
-+		return -1;
-+
-+	filename = strndup(objname, strlen(objname) - 2);
-+	if (!filename) {
-+		ERROR_GLIBC("strndup");
-+		return -1;
-+	}
-+
-+	ret = read_orig_vmlinux(filename);
-+	free(filename);
 +
 +	return ret;
-+}
-+
-+/* Find the symbol's id in the orig vmlinux.o's .klp.symid table */
-+static int find_vmlinux_o_symid(struct symbol *sym, u64 *id)
-+{
-+	struct vmlinux_o_symid *entry;
-+
-+	hash_for_each_possible(vmlinux_o_symids, entry, hash, sym->idx) {
-+		if (entry->sym_idx == sym->idx) {
-+			*id = entry->id;
-+			return 0;
-+		}
-+	}
-+
-+	ERROR("no %s entry for symbol %s in orig vmlinux.o", KLP_SYMID_SEC,
-+	      sym->name);
-+	return -1;
-+}
-+
-+/* Find the symbol's final address in the orig vmlinux's .klp.symid table */
-+static int find_vmlinux_symid_addr(u64 id, u64 *addr)
-+{
-+	struct vmlinux_symid *symid;
-+
-+	hash_for_each_possible(vmlinux.symids, symid, hash, id) {
-+		if (symid->id == id) {
-+			*addr = symid->addr;
-+			return 0;
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+/*
-+ * Find the sympos of a vmlinux-local symbol by ranking its final address
-+ * among the duplicately named symbols in the linked orig vmlinux, replicating
-+ * the order in which kallsyms_on_each_match_symbol() counts them.
-+ */
-+static unsigned long find_vmlinux_sympos(struct symbol *sym)
-+{
-+	unsigned long nr_matches = 0, sympos = 1;
-+	u32 key = str_hash(sym->name);
-+	struct vmlinux_sym *vsym;
-+	bool found = false;
-+	u64 id, addr;
-+
-+	hash_for_each_possible(vmlinux.syms, vsym, hash, key)
-+		if (!strcmp(vsym->name, sym->name))
-+			nr_matches++;
-+
-+	if (!nr_matches) {
-+		ERROR("can't find symbol %s in orig vmlinux", sym->name);
-+		return ULONG_MAX;
-+	}
-+
-+	/*
-+	 * Unique symbols don't need disambiguating.  They also have no
-+	 * .klp.symid entry, which is only emitted for names duplicated in
-+	 * vmlinux.o, so the lookups below would fail.
-+	 */
-+	if (nr_matches == 1)
-+		return 0;
-+
-+	if (find_vmlinux_o_symid(sym, &id))
-+		return ULONG_MAX;
-+
-+	if (find_vmlinux_symid_addr(id, &addr)) {
-+		ERROR("no %s entry for symbol %s in orig vmlinux", KLP_SYMID_SEC,
-+		      sym->name);
-+		return ULONG_MAX;
-+	}
-+
-+	hash_for_each_possible(vmlinux.syms, vsym, hash, key) {
-+		if (strcmp(vsym->name, sym->name))
-+			continue;
-+
-+		if (vsym->addr < addr)
-+			sympos++;
-+		else if (vsym->addr == addr)
-+			found = true;
-+	}
-+
-+	if (!found) {
-+		ERROR("%s address mismatch for symbol %s, stale orig vmlinux?",
-+		      KLP_SYMID_SEC, sym->name);
-+		return ULONG_MAX;
-+	}
-+
-+	return sympos;
-+}
-+
-+/*
-+ * "sympos" is used by livepatch to disambiguate duplicate symbol names.
-+ */
-+unsigned long klp_find_sympos(struct elf *elf, struct symbol *sym)
-+{
-+	unsigned long sympos = 0, nr_matches = 0;
-+	bool has_dup = false;
-+	struct symbol *s;
-+
-+	if (sym->bind != STB_LOCAL)
-+		return 0;
-+
-+	/*
-+	 * vmlinux: the final link reorders symbols relative to vmlinux.o,
-+	 * so the position needs to be derived from the linked orig vmlinux via
-+	 * the .klp.symid table.
-+	 */
-+	if (vmlinux.elf)
-+		return find_vmlinux_sympos(sym);
-+
-+	/*
-+	 * modules: the final .ko preserves symbol table order, so a
-+	 * symtab-order count here matches the runtime count done by
-+	 * module_kallsyms_on_each_symbol().
-+	 */
-+	for_each_sym(elf, s) {
-+		if (!strcmp(s->name, sym->name)) {
-+			nr_matches++;
-+			if (s == sym)
-+				sympos = nr_matches;
-+			else
-+				has_dup = true;
-+		}
-+	}
-+
-+	if (!sympos) {
-+		ERROR("can't find sympos for %s", sym->name);
-+		return ULONG_MAX;
-+	}
-+
-+	return has_dup ? sympos : 0;
 +}
 -- 
 2.54.0
