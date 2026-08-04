@@ -1,30 +1,30 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3111448BB0;
-	Tue,  4 Aug 2026 10:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA0F448D06;
+	Tue,  4 Aug 2026 10:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785839829; cv=none; b=efCH0VWAbMg8PUW6ZMSPoPRjdl2/G6n5RthpSswDi1c3PJ9Lm91PjZr/YbBbz/cS+6XuHTcMYVj62MVWdFKbFnCzQda0BMdIvRAZUpC1mc69YYXMFUexWACPlRcFHdhp8B4xKEUgDetXsXgU1n3WBgJFCgojUNA+bG2siHgaIjk=
+	t=1785839830; cv=none; b=HK64Z2XZx7J+ZKkmW8QBuklvpWh+rwVWGLqZPQwp9AmuN6o65uLo44znauhLBO+fL7+55xHId4kjEI6y5zqCeW4usDAq4J+BlfBc4qNJqX68sNLlBrB1CblWkCMelyd/JE3aT2xqV/EbgNRV3wTZkZIssgEG75xpuaZmpPr4Ftg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785839829; c=relaxed/simple;
-	bh=frv7TVUQxrzZXf94KmbtysyYUaRLeK9SbLYWWX5/SDg=;
+	s=arc-20240116; t=1785839830; c=relaxed/simple;
+	bh=V+TiK7MuCofMdG9dgvWdWCKyJPDTBZL1tm27s0teJgY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cfBgOJH4VVpEipoo56990tt3y3tF4NYc0WW30pah9+m8j5uFrGup3xwiz39+Jrf7dQ6xWYkiXujVQzcMN2j1yDY28hWYAOLeAHTWicdkcoZ+nNwrd1ydoHj8ZKomWrxPRXdI1pIyCqYlStKYDWmOrTWQpZDkzpKO+AcvxdUkATc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=gFkrD48O; arc=none smtp.client-ip=115.124.30.110
+	 MIME-Version; b=k+lZJ/KxU8M9tfLQ6uwQeNJNaGL3lQMgPEJdqTme11K9VCJ8J5iVwh1CFXaObPs/RWj8nIONIRCuqpxr1O85scFfa/s9xrKP68+4lhtfi4uWQpzUt05gtpc83HR3oDXJGnGLrWBxwIzKjTUCkNsyhpgFSgLgtV5MvItwYM03/nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bhwn4Hxq; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="gFkrD48O"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bhwn4Hxq"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1785839819; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=7hpONqRjO5c0M/yKXJ6veooXI3+oa4S7WBEo4b9UHV4=;
-	b=gFkrD48O/eYFjHkUyWZtdkmNF40d727CcGsKkdmp19VzahTwV1JAk3VmXJnNB84bc52U7ZmUbg/R65IZijTRCTzcKLnB61G4mWWGYiq58fnztYhSOfzThcr+RhTUoXe9sAJOEgyNoCkxwbZB14M0UFEFnOPzZohvS5siIZmohlk=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R971e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X8Nlqct_1785839815;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X8Nlqct_1785839815 cluster:ay36)
+	t=1785839824; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=osYv4PyMOH+hGuFQLUeP+UmPCqW/DzeJKVWPMYqOR5E=;
+	b=bhwn4Hxqf2PXWP0BZTehIUi7eMtBkTqzkeUWvqErsp+ltB7WUBs3ENqGhhlqDn+MoGW2mHUUUCn1x7i3yR1hkXh/vDAlDv9eWX2jFw3+UXkuFfPTuk+x3IxDD9BbC6F3I+qvsM31rqyAw+8GQ3pg6JDU2sEfEUkgPOm/06aqn/s=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X8Nlqdc_1785839818;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X8Nlqdc_1785839818 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 04 Aug 2026 18:36:57 +0800
+          Tue, 04 Aug 2026 18:37:01 +0800
 From: Wang Han <wanghan@linux.alibaba.com>
 To: Paul Walmsley <pjw@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
@@ -60,9 +60,9 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>,
 	linux-perf-users@vger.kernel.org,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 6/7] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
-Date: Tue,  4 Aug 2026 18:36:25 +0800
-Message-ID: <20260804103626.2803112-7-wanghan@linux.alibaba.com>
+Subject: [PATCH v5 7/7] selftests/livepatch: Add RISC-V syscall wrapper prefix
+Date: Tue,  4 Aug 2026 18:36:26 +0800
+Message-ID: <20260804103626.2803112-8-wanghan@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260804103626.2803112-1-wanghan@linux.alibaba.com>
 References: <20260804103626.2803112-1-wanghan@linux.alibaba.com>
@@ -74,60 +74,34 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that the metadata frame records, the kunwind state machine and
-arch_stack_walk_reliable() are all in place, advertise the capability
-to the rest of the kernel:
+The syscall livepatch selftest resolves and patches a syscall wrapper
+symbol. To use that test for RISC-V livepatch validation, add the
+RISC-V FN_PREFIX definition for ARCH_HAS_SYSCALL_WRAPPER.
 
-  * select HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT, so
-    only the configurations with the tested metadata records and
-    FP-based reliable walker enable it.
-  * select HAVE_LIVEPATCH under the same condition and source
-    kernel/livepatch/Kconfig so the livepatch menu is reachable from
-    the RISC-V configuration.
+Without this macro, the syscall livepatch selftest cannot resolve the
+RISC-V target symbol, and the syscall-related livepatch test fails on
+RISC-V.
 
-The 64BIT dependency is conservative scoping rather than a hard
-technical requirement: the metadata frame record, kunwind state machine
-and arch_stack_walk_reliable() also build on RV32, and the IRQ-stack
-frame-record adjustment fixes a latent RV32 issue. However, the syscall
-livepatch selftest and module relocation path have only been exercised
-on RV64 QEMU virt so far. The 64BIT gate can be relaxed in a follow-up
-once RV32 has equivalent coverage.
-
-This is split out from the unwinder change so the policy decision and
-the implementation can be reviewed and reverted independently.
-
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 ---
- arch/riscv/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/livepatch/test_modules/test_klp_syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c2c2f5f3ed5e..b36f711ecf45 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -186,6 +186,7 @@ config RISCV
- 	select HAVE_KRETPROBES
- 	# https://github.com/ClangBuiltLinux/linux/issues/1881
- 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
-+	select HAVE_LIVEPATCH if FRAME_POINTER && 64BIT
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PAGE_SIZE_4KB
-@@ -196,6 +197,7 @@ config RISCV
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_PREEMPT_DYNAMIC_KEY
- 	select HAVE_REGS_AND_STACK_ACCESS_API
-+	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && 64BIT
- 	select HAVE_RETHOOK
- 	select HAVE_RSEQ
- 	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
-@@ -1392,3 +1394,5 @@ endmenu # "CPU Power Management"
- source "arch/riscv/kvm/Kconfig"
- 
- source "drivers/acpi/Kconfig"
-+
-+source "kernel/livepatch/Kconfig"
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+index 08aacc0e14de..9baa2a5f84c9 100644
+--- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+@@ -24,6 +24,8 @@
+     #define FN_PREFIX __s390x_
+   #elif defined(__aarch64__)
+     #define FN_PREFIX __arm64_
++  #elif defined(__riscv)
++    #define FN_PREFIX __riscv_
+   #elif defined(__powerpc__)
+     #define FN_PREFIX
+   #else
 -- 
 2.43.0
 
