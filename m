@@ -1,172 +1,293 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAE93EB0E8
-	for <live-patching@vger.kernel.org>; Tue,  4 Aug 2026 08:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785830706; cv=pass; b=Af85ddUBhanlALqQP7mV7Z/ex+LdOrvwnbhewMuE51Wt8jXwZJNFH1bWQIfQapVWhuUpmexTp575woM/QyiBMHExkfu5n7ejCkhXLewsXC3A9A7wXXKAdGvlfBkjpOD/BFCmCQgnhqO2H278q9lpNGknpcXhCbNsfOqnlsnFmCA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785830706; c=relaxed/simple;
-	bh=+Hb1SpzFF3V8KPLkO13v6cUxu1h5CbiM4NFRrHqr13w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M1v9iwtOgcZZaGOwQst9thr6HQvJzMNXd/IO6ALZTkwnDX/J0WUZdYEqUB2HPm3CUhlYpxc9prGusKBG4WUWsnxIgS5yePPjz3gHE2PSWf6z54XRlPTbzyed3hGo0hmpRkjndZbihNC/QyzqotKwAollW9YPDSGWADYs2HqY7vg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKgKC0rE; arc=pass smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21FD4457B2;
+	Tue,  4 Aug 2026 10:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785839806; cv=none; b=MbKmPr4iZ3Z2qHcGP3nAgsVS1i4ia7JbIvtJdC85Cyh+oih+TZ/Ps0suUkCKBWnDU45SuGz1EoFhR2uHDaU/wYUWbKjXX2y/8Qh6dvm8xSXlLxyiIqUKjLPjNf0N81BhFS9oiKGHngruGQczErfWBzdGOIkC2reXiy8p8Yy1uPk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785839806; c=relaxed/simple;
+	bh=aoFnItxafuGwRzyxr0iB9CMcmYlbAkZEp2m0mZecDZ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xn2zpSAPJyXK14qYhBgcoHPl2zZsbElZqlKt2UWl491q7jzIc9q6HBKWdpFNGjcTaxJt94ev78q4stFD1Z3c5m2tAlJePHYrwa3rsWLibKLBYJ0yI00TIP12MsTBcxfEx5NELnH95R8z/rWbJpK4rZ8aXENhyZ6FKaFBLeuBbl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VjXmdHnk; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKgKC0rE"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8143daf89c7so41826887b3.1
-        for <live-patching@vger.kernel.org>; Tue, 04 Aug 2026 01:05:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785830702; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UR6Wguk2OSTyS8VckVzK4NrLeZNueOG5wD/koIdAMgi7TfvhV0acqn+Y8h55SeV3yk
-         RIJmI3vVP9ltR+o+3VgGeR2H1NloW1ik8IhwV6pl8sdTQ0pUSAfrr5B7uD48+D9awuP+
-         FShs9XTOxFX6IDsBcKN8JT1VeN5KVazMlgQWEcB3gR/+cqjvJX2XNGZxjmsdY936Ki20
-         kovQR0voxBQdjF+s6qFmfVzBjr/tFvD/apKr9heKn9miJRarYJzZdlhsZVSMaYI3Sa4k
-         bIlXHwqanMpAqxM8WNutGwrgJBtX4L2GDtaQKptQvsYIaFa4S4gFsOfTbrSs6vLR2Psq
-         ZP8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=DxODsGuSrXyYDuLdsSOihL33BxJS8kfi8qZptAhXGXo=;
-        fh=jK92vzhjnq08YH51E2cRjTzfyAYV/0WBY5Zb//b1aX0=;
-        b=UbrXjhQyoR3A9lfkD+Kco2BX9IPX4Doqf1mFdm1gghX8AF+CFfZTP5fZ1JUbJME2tB
-         3XGKy1DGkMfLSv6fxsLscZZNvCUaYWuSRuJpM2I+IYdDPlaeIlOwf3MmnQn9LxAyI0h1
-         vXDU7/oHzPOQ4l6Qs8CGcUUHRps/Y3fwVZ/IkxGK4OwNmcflMO8YlYK/2Y+XYhg15iCo
-         /fkqtrMdHqOTWktJPDNocMz2CugAH8timwZatOZxHWhWzZN/DOn8kgjwtOafx+ac5v+B
-         Im6kd3h3Mzx3Yis+N7bdwdg04g41x7ppAu9hz9vb6mEciGqz0YTcJw/kGS6gaOWUkSyM
-         wZjQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785830702; x=1786435502; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DxODsGuSrXyYDuLdsSOihL33BxJS8kfi8qZptAhXGXo=;
-        b=fKgKC0rE22sIZOWHb09XSm+Af+bBZCN8sU1jde2zvsCQjXPwvNJZLeq+GFNswOtzEW
-         PK7pqaFDvpGE9aKXihgPxs1dYrg+8kDHNzmoWzo08EXnyR8M0V7Lx66+d7ROxZhGsr09
-         2wV3pkje7bVlPUAeyuj/2Q3dcZk5uzvFlgIcOUT4sTMkJEyHPDSIeYyLYhUCA3JODeZJ
-         rqPvq8/DsB4gVpyT25UsNXk+iI3s7l+JvffTOLGgI71lbeToa0bHMi0W/Hpoixq4NehT
-         W4GCYhH2Jr3lnpbp5LjPdUHPiUwkN1L9RFXyhOOXIM6q+UccJmlSeYXrULXjN/Re9Qmh
-         WY8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785830702; x=1786435502;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DxODsGuSrXyYDuLdsSOihL33BxJS8kfi8qZptAhXGXo=;
-        b=SqbFPf7utpsXNu3blo7UAKzSOS8YwG4O07QyYFGbgFA0ccqoKDyjsdVYLX7I6PfPTe
-         D4DTZ2G7r70o0Hs1yQfNcPbr7j23c9VQKUN8A+ccPa/4G5w1JrmFr9M4ycDXmLICKdbi
-         8zmQ+jlmZ1PjFEUr07/0Ry/1WKpXNrP1iredBbUEROJ8NHX9X6ufEj6qgMbNYkqkXMGm
-         NTSddD30s3ipVoNfjCdFX4t3r+5MDq9JDioad1D8FdZFRpx/JzVx+GsvDvGfoa2TRZRe
-         RN5yR+BMU43ocpJbDW5gPWuRUrmPwtOW3pnPN04ahCbMvu1ZQC4mauGGnMiPzA1C9L+f
-         lBJw==
-X-Forwarded-Encrypted: i=1; AHgh+RoctWyG2BprloN3/d0gupTKu/gGJklPaeXBrG4BLEhWu/VAYMZ9ijXj2yylnT1v/h88sJd/n99xt+/rngEI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0q4LWIqlJ4eIexpp3j8nLa/hp8F7O15rDQ2AcazsJO3bth5gT
-	AUg6y884+Sj/r9CGGqY3sRmUyprdklx94GJ3mbUxynk3GQql0XdeNapEDprK7oBi5/6cvGQC5qt
-	yAsXkcZIeuQWisxsWZlHV09DIKhV2QtQ=
-X-Gm-Gg: AR+sD11yhjyo64QwCWc3Eta2ByryewaeLQEtdHS3lOcsFV8QhFoZaGtGX9xQtXpZVze
-	Ji5e+pYUKoP2MzBkiFGk7VeqXwYVqI9+Y4S2XVAkKFAIgRQzKY9qen5Zh6+1CJpAjSNZzCMLfRV
-	m0IRktq3w8KPoa5uh0ivQrOPUDxUNUsbNdRPlDQYJSeOaCpsfty56XP3q9yyOuaPRGC18Di9fhD
-	AsTJUz3Qaa8qAR55lmrwEqU2gLJcRij2smi8fCcLoPHzt7BoxMNfKYnRQpmuU85BauHcBEdrHU5
-	V7B6o/QO8CPJ8t8PhZw9ede6Am+LwlbpaheqCN06BSaSIChjxFQhFghJ6gEzlA1+QIz8R9vEib9
-	QLA==
-X-Received: by 2002:a05:690c:6b11:b0:80c:3848:bde5 with SMTP id
- 00721157ae682-81fd4a22e3emr170966087b3.13.1785830702256; Tue, 04 Aug 2026
- 01:05:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VjXmdHnk"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1785839796; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=9qthyqQX/Ih/uUwRYMYrPDP5NZjEf9dKmI4Qn+fFJ20=;
+	b=VjXmdHnkYMYoQwRN1jPIg2hRaZiAxxAknAyMK5g7D697Omeutczn1ZeZDR9auxHF0dJTIqvPq7sfDILvudQTh7rzs9fhhs+8kT7XhJ2sPTBtS1t/Qf1z7TZmgOQrqgQbGB08iv3KfkseCfgIYs4QUTETZkjkj0Bp1HqQlJ4JwgA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X8NlqWZ_1785839792;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X8NlqWZ_1785839792 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 04 Aug 2026 18:36:34 +0800
+From: Wang Han <wanghan@linux.alibaba.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	linux-riscv@lists.infradead.org,
+	Oleg Nesterov <oleg@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	oliver.yang@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com,
+	jkchen@linux.alibaba.com,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v5 0/7] riscv: Add reliable stack unwinding for livepatch
+Date: Tue,  4 Aug 2026 18:36:19 +0800
+Message-ID: <20260804103626.2803112-1-wanghan@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260804065010.44922-1-laoar.shao@gmail.com> <20260804065010.44922-2-laoar.shao@gmail.com>
- <20260804065633.0D6A31F00A3E@smtp.kernel.org>
-In-Reply-To: <20260804065633.0D6A31F00A3E@smtp.kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 4 Aug 2026 16:04:25 +0800
-X-Gm-Features: AUfX_mzjzWFOup3b8CRhesfJVIRE_EvKUp-y3mYxG0ZbV58cKl29zxrmTeo9fLY
-Message-ID: <CALOAHbA-5v9p4U6=RnNap1iFRNUpooABqfv1MLAuG7qQYRu5MA@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 1/4] livepatch: Make klp_find_func() non static
-To: sashiko-reviews@lists.linux.dev
-Cc: jpoimboe@kernel.org, joe.lawrence@redhat.com, song@kernel.org, 
-	mbenes@suse.cz, jikos@kernel.org, pmladek@suse.com, 
-	live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 4, 2026 at 2:56=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] klp_find_func() incorrectly returns the search parameter inste=
-ad of the matched object from the list.
-> --
->
-> --- Patch [1]: [RFC PATCH v4 1/4] livepatch: Make klp_find_func() non sta=
-tic ---
-> commit 59916304ff12f7685cb556f7a7c1f4a1c5a25b00
-> Author: Yafang Shao <laoar.shao@gmail.com>
->
-> livepatch: Make klp_find_func() non static
->
-> This commit makes klp_find_func() non static so it can be used in other
-> source files by an upcoming patch. It also renames the old_func parameter
-> to func to better reflect its generic purpose.
->
-> > diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> > index 28d15ba58a26d..e07c41a0f3ac8 100644
-> > --- a/kernel/livepatch/core.c
-> > +++ b/kernel/livepatch/core.c
-> [ ... ]
-> > -static struct klp_func *klp_find_func(struct klp_object *obj,
-> > -                                   struct klp_func *old_func)
-> > +/* Check if @func is present in @obj. */
-> > +struct klp_func *klp_find_func(struct klp_object *obj, struct klp_func=
- *func)
-> >  {
-> > -     struct klp_func *func;
-> > +     struct klp_func *obj_func;
-> >
-> > -     klp_for_each_func(obj, func) {
-> > +     klp_for_each_func(obj, obj_func) {
-> >               /*
-> >                * Besides identical old_sympos, also consider old_sympos
-> >                * of 0 and 1 are identical.
-> >                */
-> > -             if ((strcmp(old_func->old_name, func->old_name) =3D=3D 0)=
- &&
-> > -                 ((old_func->old_sympos =3D=3D func->old_sympos) ||
-> > -                  (old_func->old_sympos =3D=3D 0 && func->old_sympos =
-=3D=3D 1) ||
-> > -                  (old_func->old_sympos =3D=3D 1 && func->old_sympos =
-=3D=3D 0))) {
-> > +             if ((strcmp(obj_func->old_name, func->old_name) =3D=3D 0)=
- &&
-> > +                 ((obj_func->old_sympos =3D=3D func->old_sympos) ||
-> > +                  (obj_func->old_sympos =3D=3D 0 && func->old_sympos =
-=3D=3D 1) ||
-> > +                  (obj_func->old_sympos =3D=3D 1 && func->old_sympos =
-=3D=3D 0))) {
-> >                       return func;
->
-> [Severity: Medium]
-> Will this return the correct object? It looks like this now returns the
-> search parameter (func) instead of the newly introduced list iterator
-> variable (obj_func).
->
-> If a caller relies on the returned pointer to access the matched object
-> from the list, they will receive the search parameter instead. This could
-> lead to incorrect state manipulation or memory corruption for new users
-> of this exported function.
->
-> Should this return obj_func instead?
+Hi,
 
-Good catch. It should return obj_func instead.
+This is v5 of the RISC-V reliable stack unwinding series for livepatch.
 
---=20
-Regards
-Yafang
+The series adds explicit frame-record metadata, preserves the frame
+pointer through dynamic ftrace, and replaces the open-coded stack walker
+with a conservative frame-pointer based unwinder. It then enables the
+RISC-V livepatch capability and adds the syscall-wrapper selftest prefix.
+
+Changes since v4:
+  * Use sizeof(struct frame_record) for STACKFRAME_RECORD_SIZE, as
+    requested by Shuai Xue.
+  * Guard IRQ stack accessors and IRQ stack entries with
+    CONFIG_IRQ_STACKS, addressing the link-time issue reported by Shuai
+    Xue and Sashiko.
+  * Add the corresponding Reviewed-by tag from Shuai Xue to 1/7.
+  * Rebase onto the latest riscv/for-next; no other functional changes.
+
+The review replies have been sent in the v4 RESEND thread.
+
+Base:
+  riscv/for-next ff492e321c47 ("Revert \"riscv: hwprobe: Fix stale vDSO data for late-initialized keys at boot\"")
+
+Previous versions:
+  v4 RESEND: https://lore.kernel.org/r/20260629072713.3273743-1-wanghan@linux.alibaba.com
+  v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+  v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+  v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
+
+Validation:
+  * Built Linux 7.2.0-rc6 with riscv64-unknown-linux-gnu-gcc 15.2.0
+    and binutils 2.46.
+  * Standard livepatch configuration built successfully, including
+    Image, vmlinux, modules, compile_commands.json and GDB scripts.
+  * CONFIG_IRQ_STACKS=n variant linked successfully with GCC.
+  * QEMU 8.2.2, 1 CPU: livepatch selftests PASS: 7, SKIP: 1,
+    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+  * QEMU 8.2.2, 4 CPUs: livepatch selftests PASS: 7, SKIP: 1,
+    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+  * No BUG, WARNING, Oops, panic, unreliable stack or Call Trace found
+    by the validation log scans. Expected negative livepatch errors are
+    part of the selftests.
+
+Wang Han (7):
+  riscv: stacktrace: Add frame record metadata
+  riscv: stacktrace: disable KASAN and KCOV instrumentation for
+    stacktrace.o
+  riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+  riscv: stacktrace: introduce stack-bound tracking helpers
+  riscv: stacktrace: switch to frame-pointer based unwinder
+  riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+  selftests/livepatch: Add RISC-V syscall wrapper prefix
+
+ arch/riscv/Kconfig                            |   4 +
+ arch/riscv/include/asm/ptrace.h               |   9 +
+ arch/riscv/include/asm/stacktrace.h           |  67 ++-
+ arch/riscv/include/asm/stacktrace/common.h    | 159 +++++
+ arch/riscv/include/asm/stacktrace/frame.h     |  53 ++
+ arch/riscv/kernel/Makefile                    |   6 +
+ arch/riscv/kernel/asm-offsets.c               |   6 +
+ arch/riscv/kernel/entry.S                     |  39 +-
+ arch/riscv/kernel/ftrace.c                    |   6 +-
+ arch/riscv/kernel/head.S                      |  23 +
+ arch/riscv/kernel/mcount-dyn.S                |   4 -
+ arch/riscv/kernel/perf_callchain.c            |   2 +-
+ arch/riscv/kernel/process.c                   |  33 +-
+ arch/riscv/kernel/stacktrace.c                | 561 +++++++++++++++---
+ .../livepatch/test_modules/test_klp_syscall.c |   2 +
+ 15 files changed, 868 insertions(+), 106 deletions(-)
+ create mode 100644 arch/riscv/include/asm/stacktrace/common.h
+ create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+
+Range-diff against v4:
+1:  8cef363cfed7 ! 1:  cbb1dc004d0f riscv: stacktrace: Add frame record metadata
+    @@ Commit message
+             the secondary CPU path sets up s0 before smp_callin() so idle-task
+             unwinding does not inherit an undefined caller frame;
+           * copy_thread creates matching final metadata records for new kernel
+    -        and user tasks, and keeps s0 available for the frame-pointer chain;
+    -      * call_on_irq_stack still reserves an aligned stack slot, but links the
+    -        saved {fp, ra} with the raw frame-record size so s0 points at the
+    -        RISC-V frame record rather than past the alignment padding.
+    +        and user tasks, and keeps s0 available for the frame-pointer chain.
+     
+    -    The call_on_irq_stack adjustment fixes a latent RV32 issue. On RV64,
+    -    sizeof(struct stackframe) is equal to the stack alignment, so the old
+    -    s0 value happened to point just above the saved {fp, ra}. On RV32, the
+    -    raw frame record is 8 bytes while the reserved stack slot is 16-byte
+    -    aligned, so the old s0 value pointed into the padding. Using the raw
+    -    record size makes s0 point above the saved frame record on both RV32
+    -    and RV64 while still reserving the aligned slot.
+    +    Keep the embedded metadata-record field offsets distinct from the
+    +    s0-relative STACKFRAME_* offsets used by call_on_irq_stack(), because
+    +    the latter describe a frame record relative to s0 rather than to the
+    +    record base.
+     
+         These changes keep s0 reserved for the frame-pointer chain at task and
+    -    stack-switch boundaries.
+    +    exception boundaries.
+     
+    +    Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+         Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+     
+      ## arch/riscv/include/asm/ptrace.h ##
+    @@ arch/riscv/kernel/asm-offsets.c: void asm_offsets(void)
+      
+      	OFFSET(HIBERN_PBE_ADDR, pbe, address);
+     @@ arch/riscv/kernel/asm-offsets.c: void asm_offsets(void)
+    - 	OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_ptr);
+    - 
+      	DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
+    -+	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct stackframe));
+    - 	OFFSET(STACKFRAME_FP, stackframe, fp);
+    - 	OFFSET(STACKFRAME_RA, stackframe, ra);
+    + 	DEFINE(STACKFRAME_FP, offsetof(struct stackframe, fp) - sizeof(struct stackframe));
+    + 	DEFINE(STACKFRAME_RA, offsetof(struct stackframe, ra) - sizeof(struct stackframe));
+    ++	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct frame_record));
+    ++	OFFSET(FRAME_RECORD_FP, frame_record, fp);
+    ++	OFFSET(FRAME_RECORD_RA, frame_record, ra);
+      #ifdef CONFIG_FUNCTION_TRACER
+    + 	DEFINE(FTRACE_OPS_FUNC,		offsetof(struct ftrace_ops, func));
+    + #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+     
+      ## arch/riscv/kernel/entry.S ##
+     @@
+    @@ arch/riscv/kernel/entry.S: SYM_CODE_START(handle_exception)
+     +	 * Create a metadata frame record. The unwinder will use this to
+     +	 * identify and unwind exception boundaries.
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp) /* stackframe.record.fp = 0 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp) /* stackframe.record.ra = 0 */
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp) /* stackframe.record.fp = 0 */
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp) /* stackframe.record.ra = 0 */
+     +#ifdef CONFIG_RISCV_M_MODE
+     +	li t0, SR_MPP
+     +	and t0, s1, t0
+    @@ arch/riscv/kernel/entry.S: SYM_CODE_START_LOCAL(handle_kernel_stack_overflow)
+     +	 * pt_regs boundary and the unwinder can resume from the pre-overflow
+     +	 * frame pointer saved in PT_S0.
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
+     +	li t0, FRAME_META_TYPE_PT_REGS
+     +	REG_S t0, S_STACKFRAME_TYPE(sp)
+     +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+    @@ arch/riscv/kernel/entry.S: ASM_NOKPROBE(handle_kernel_stack_overflow)
+      	move a2, sp /* pt_regs */
+      	call ret_from_fork_kernel
+      	j ret_from_exception
+    -@@ arch/riscv/kernel/entry.S: SYM_FUNC_START(call_on_irq_stack)
+    - 	addi	sp, sp, -STACKFRAME_SIZE_ON_STACK
+    - 	REG_S	ra, STACKFRAME_RA(sp)
+    - 	REG_S	s0, STACKFRAME_FP(sp)
+    --	addi	s0, sp, STACKFRAME_SIZE_ON_STACK
+    -+	addi	s0, sp, STACKFRAME_RECORD_SIZE
+    - 
+    - 	/* Switch to the per-CPU shadow call stack */
+    - 	scs_save_current
+    -@@ arch/riscv/kernel/entry.S: SYM_FUNC_START(call_on_irq_stack)
+    - 	scs_load_current
+    - 
+    - 	/* Switch back to the thread stack and restore ra and s0 */
+    --	addi	sp, s0, -STACKFRAME_SIZE_ON_STACK
+    -+	addi	sp, s0, -STACKFRAME_RECORD_SIZE
+    - 	REG_L	ra, STACKFRAME_RA(sp)
+    - 	REG_L	s0, STACKFRAME_FP(sp)
+    - 	addi	sp, sp, STACKFRAME_SIZE_ON_STACK
+     
+      ## arch/riscv/kernel/head.S ##
+     @@
+    @@ arch/riscv/kernel/head.S: SYM_CODE_START(_start_kernel)
+     +	 * fp/s0 points above the metadata record (RISC-V
+     +	 * convention).
+     +	 */
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
+    -+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_FP)(sp)
+    ++	REG_S zero, (S_STACKFRAME + FRAME_RECORD_RA)(sp)
+     +	li t0, FRAME_META_TYPE_FINAL
+     +	REG_S t0, S_STACKFRAME_TYPE(sp)
+     +	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
+2:  237864b66d78 = 2:  c63daa8759a6 riscv: stacktrace: disable KASAN and KCOV instrumentation for stacktrace.o
+3:  e6035966a35a = 3:  352269306907 riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+4:  d132087ea01e ! 4:  2cc86f5728c1 riscv: stacktrace: introduce stack-bound tracking helpers
+    @@ arch/riscv/include/asm/stacktrace.h: extern void notrace walk_stackframe(struct
+     +/*
+     + * IRQ stack accessors
+     + */
+    ++#ifdef CONFIG_IRQ_STACKS
+     +static inline struct stack_info stackinfo_get_irq(void)
+     +{
+     +	unsigned long low = (unsigned long)raw_cpu_read(irq_stack_ptr);
+    @@ arch/riscv/include/asm/stacktrace.h: extern void notrace walk_stackframe(struct
+     +
+     +	return stackinfo_on_stack(&info, sp, size);
+     +}
+    ++#endif /* CONFIG_IRQ_STACKS */
+     +
+     +/*
+     + * Task stack accessors
+5:  02adea3ece82 ! 5:  57c5e7d08cf8 riscv: stacktrace: switch to frame-pointer based unwinder
+    @@ arch/riscv/kernel/stacktrace.c: unsigned long __get_wchan(struct task_struct *ta
+     +	struct task_struct *tsk = task ?: current;
+     +	struct stack_info stacks[] = {
+     +		stackinfo_get_task(tsk),
+    ++#ifdef CONFIG_IRQ_STACKS
+     +		STACKINFO_CPU(tsk, irq),
+    ++#endif
+     +#ifdef CONFIG_VMAP_STACK
+     +		STACKINFO_CPU(tsk, overflow),
+     +#endif
+6:  c7d7dbe7a8a1 = 6:  9b3379fe9320 riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+7:  ae94a234b34a < -:  ------------ selftests/livepatch: Add RISC-V syscall wrapper prefix
+-:  ------------ > 7:  07dddd25aae1 selftests/livepatch: Add RISC-V syscall wrapper prefix
+
+base-commit: ff492e321c477f0c8899ac2b875635a84e928d78
+-- 
+2.43.0
