@@ -1,140 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F363D47BF
-	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 20:51:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B980C41D637
+	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 21:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786049496; cv=none; b=r4W5QUXRkEDKLC1aKOcBm9paz54nYh+hKJ4bSAAhSqn8RwyXf92PEcox39yZVxyieQvxUtRQYw0/bcVDpczrIfnGs9ujIRlFVIWGOh9/3nzhVYgieq4dCQZjyi378FRYP5uPXtMwhZIP6Z8esb8qLSknSy/yo8vlrc1e/tB/hKU=
+	t=1786051119; cv=none; b=sMRr9RkDqJ8zY8gKK4317OCKbhGU1ZvZP0bITchrmEVwqpfExsBrd0jI5UcMXugePM5/lVW5NnapoYJFN/n/pyPBFlNydK6Kt+7sWDjD1OqAru74eldkVgMDOtTfcp8SWTwPnqohKt8jBrdvkiLc/yVfFCobXXdN2Dl8TGCjRSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786049496; c=relaxed/simple;
-	bh=XSr4jiIN+IbLU5OWkGzLTRf7CRvEGItFML2nDQdSJkU=;
+	s=arc-20240116; t=1786051119; c=relaxed/simple;
+	bh=omYC/0CsEWbjCXrhWXnCRdSCMvvNYHrVSNaA5Kh2WME=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N+jaeOO57y700GVJWFti8e9z3o4FBFhQka3qGVxjPjtTdePMvIkIvX3YzS4HEpkyzQE8AI+NQjPofqaUF45zAPm9wQBd1VruO3d+I+fc3k7MNWbgmpgj5kTP/4Yll0qImXIRYUQ3Ea5Frx9vDd3sA5Ya2qechzf5ACsu2m3dagw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDZFqDQk; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=SzNYYHYNZQ2HlBc4UGZka19iEDw3wjFVJ6mSf5qMor+I3ArYwDIJonDMw53OIa0D6iRGPGzbjw2gp+xB6kUqvntmPxksg+mz+zY0lK6oW0rUY7rmnBYZl9tpPx2+ly9ixDWh1L9g0UrjlCsL6SZQGzhhAgESZp36ncdOOG4EXGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdY4ykLf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDZFqDQk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8A71F00A3F
-	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 20:51:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdY4ykLf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B341F00A3E
+	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 21:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786049494;
-	bh=UyFkqO8eyZy1bfK31eDmPTdvIXytfNIs/515ao8PabA=;
+	s=k20260515; t=1786051117;
+	bh=7iK461ESpNVqLm9X3mINmjVFtgPa61Ne86Hxh9FvtdE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=BDZFqDQkryr90ckCWRTN7SpL3/yHL0GFgCxN6uJUiWHmT3/ajtplNU/W77X19x49J
-	 ArsJtgseukKeTxFKKrZI4j+SB632kyCwaSNvC4ikha2OqEXjC1177AyCWNIx3rpBCA
-	 oRXz7x3e8OnLRQzIxiqSJM5Drqenn5KFDgkBg3kPeWjNKeeVArF1OEQUFQQ6eeipc6
-	 LEc/X9OcHAjT2dquHILRCwGP4cUfXtg697mfyw/pbpxI8KOwjsJx5tWRqSvWorRbco
-	 VQqPK0+Qz6MRxPWb9HSzjxTH+6y/KwiGpIhFiEwjDbGiNxoiS/nUWk5xONfFjBd2Aa
-	 eVhxzogujnXwg==
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-930f618435cso180273585a.3
-        for <live-patching@vger.kernel.org>; Thu, 06 Aug 2026 13:51:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rq3zkSeJUJnqvT5lFkGM/xXB0azh8tvqRfLULQuQPs7nNy6gkD5asdy+skCWedde2XLXAe+DYkYv+YVpmgm@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpaO9I9S7Db1+sbXux1q+/uFuRfBkq5FF80B1DT2NoTIt47/t9
-	OGWt12GxmnYnmzPwYiW7t16qeUZotNPMDrKmdyVJPcTRK/9sr/4snonjFOT6cmTQZlVepqD3nZl
-	kIbMb3R4eycrQXwm6eswG+4gc7jM/EMM=
-X-Received: by 2002:a05:620a:a809:b0:934:ab73:ac53 with SMTP id
- af79cd13be357-93648e27310mr1711283985a.0.1786049493909; Thu, 06 Aug 2026
- 13:51:33 -0700 (PDT)
+	b=MdY4ykLfCOE5L1anriEHxDSQWaxYawwnXuTy6R9nqDGCksSj13W14Q3Blv0o2Yqbc
+	 /kLP75p0VjAXXJelRJuXaxhAfJwiV7mLTk9pJOMkxIez+0UXQb/4daKjd2hYQthjXc
+	 S/3ubeTLb1LiymIdN7FU5HLsSJL/IeyUduKRksbgvo20QtdAk5ECW7H514hnpJoy+8
+	 p0iGPcGCJ6FmEroi6+Ku4MhIR0QdFJDb133TKcxW5wQPp5nJN9bB+ClZZ0RDgrDU3L
+	 zTF/HNjTth5vrWLYFSNbAe9vApJWfgvC/yP0oT6dG0V7DJKkHajhgp0BCno+GWPs5l
+	 eluT0mPRgedoQ==
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-936623c6dd3so54398885a.0
+        for <live-patching@vger.kernel.org>; Thu, 06 Aug 2026 14:18:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rq8lirBY/9gZ4I9Pv2mAsRAE5JebMDNht+zVCgT/sBmlzRkZUBoqnPF6PISHohjWecJw9yiALdbLauQ097W@vger.kernel.org
+X-Gm-Message-State: AOJu0YztTn71nrhgwXCpyL18gaEtTgsuQb1Z5YGwhGpzl11VnQ8jZp+6
+	/ifEhknA9qtVIjh7UFxIwzi9FxCq6fxxvRBbdnYuhjqsA+eO+jQKortqUS4OYgF5atS9Qj8WhxH
+	miJMXlesI7mhuVntiHOMfmUp9Y7WuXXI=
+X-Received: by 2002:a05:620a:3d89:b0:915:92f3:54e3 with SMTP id
+ af79cd13be357-9365945e9demr809487785a.4.1786051116804; Thu, 06 Aug 2026
+ 14:18:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1785939903.git.jpoimboe@kernel.org> <d9debc941bd06c1a606ed7a366bff73d1680f0f8.1785939903.git.jpoimboe@kernel.org>
- <CAPhsuW69pBfEzN=apAzQkSgY+FJvxeukgydNZwYSrpA6+kQ42Q@mail.gmail.com> <a7ljeflolo25c22ay4uawzwmqueimkio452fgyf47turjmbvsh@qzc3coik37yq>
-In-Reply-To: <a7ljeflolo25c22ay4uawzwmqueimkio452fgyf47turjmbvsh@qzc3coik37yq>
+References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com> <20260806153000.4184871-3-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260806153000.4184871-3-andrey.grodzovsky@crowdstrike.com>
 From: Song Liu <song@kernel.org>
-Date: Thu, 6 Aug 2026 13:51:22 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5eDasiSJSiHaMFKy+eK6dF_0nBzFD=7HyhXzGBoUPfOw@mail.gmail.com>
-X-Gm-Features: AUfX_mxWb8AaeyYW_nq6rFuNJpcY23mPwsK2M5o8OFHJ9Otb7pt5F7khdWissaw
-Message-ID: <CAPhsuW5eDasiSJSiHaMFKy+eK6dF_0nBzFD=7HyhXzGBoUPfOw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] objtool/klp: Fix size of empty special section entries
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Date: Thu, 6 Aug 2026 14:18:24 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com>
+X-Gm-Features: AUfX_myLm4rrhFHB6ribxegz34WsGyCezFjywzASsvUedhjj05jmJkbjlTkIwlw
+Message-ID: <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/livepatch: update
+ test-ftrace.sh for deprecated ftrace_enabled
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz, 
+	jolsa@kernel.org, mhiramat@kernel.org, jpoimboe@kernel.org, 
+	joe.lawrence@redhat.com, mark.rutland@arm.com, corbet@lwn.net, 
+	stable@vger.kernel.org, linux-open-source@crowdstrike.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 5, 2026 at 10:11=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
+On Thu, Aug 6, 2026 at 8:30=E2=80=AFAM Andrey Grodzovsky
+<andrey.grodzovsky@crowdstrike.com> wrote:
 >
-> On Wed, Aug 05, 2026 at 01:36:26PM -0700, Song Liu wrote:
-> > On Wed, Aug 5, 2026 at 7:30=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.=
-org> wrote:
-> > >
-> > [...]
-> > >
-> > > diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-> > > index 492d7a012cffe..11e8f3ddbb0e6 100644
-> > > --- a/tools/objtool/klp-diff.c
-> > > +++ b/tools/objtool/klp-diff.c
-> > > @@ -1627,6 +1627,7 @@ static int create_fake_symbols(struct elf *elf)
-> > >         for_each_reloc(sec->rsec, reloc) {
-> > >                 unsigned long offset, size;
-> > >                 struct reloc *next_reloc;
-> > > +               bool last =3D true;
-> > >
-> > >                 if (annotype(elf, sec, reloc) !=3D ANNOTYPE_DATA_SPEC=
-IAL)
-> > >                         continue;
-> > > @@ -1641,10 +1642,11 @@ static int create_fake_symbols(struct elf *el=
-f)
-> > >                                 continue;
-> > >
-> > >                         size =3D reloc_addend(next_reloc) - offset;
-> > > +                       last =3D false;
-> > >                         break;
-> > >                 }
-> > >
-> > > -               if (!size)
-> > > +               if (last)
-> > >                         size =3D sec_size(reloc->sym->sec) - offset;
-> >
-> > Some comments about "last" logic here can be very helpful.
-> >
-> > Also, with the last flag, "size =3D 0;" before the for_each_reloc_conti=
-nue()
-> > loop can be removed.
-> >
-> > Other than these nitpicks:
-> >
-> > Acked-by: Song Liu <song@kernel.org>
+> kernel.ftrace_enabled=3D0 is now refused on kernels that deprecate the
+> knob, so the old disable/reload flow no longer applies there. Probe
+> for this with ftrace_disable_supported() and keep the full original
+> scenario (disable, fail to load a livepatch, re-enable, load, confirm
+> disable is refused while loaded) on kernels where it still works;
+> otherwise just confirm the write is refused.
 >
-> How about this on top?
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Suggested-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+>  .../testing/selftests/livepatch/functions.sh  | 14 ++++++
+>  .../selftests/livepatch/test-ftrace.sh        | 45 ++++++++++++-------
+>  2 files changed, 42 insertions(+), 17 deletions(-)
+>
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testi=
+ng/selftests/livepatch/functions.sh
+> index 30dc677b2f45..a65b7b1ac8ad 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -126,6 +126,20 @@ function set_ftrace_enabled() {
+>         echo "livepatch: kernel.ftrace_enabled =3D $result" > /dev/kmsg
+>  }
+>
+> +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=3D0
+> +#      can still disable ftrace on this kernel. Newer kernels deprecate
+> +#      the knob and always refuse the write with -EOPNOTSUPP.
+> +function ftrace_disable_supported() {
+> +       local orig result
+> +
+> +       orig=3D$(sysctl --values kernel.ftrace_enabled)
+> +       sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
+> +       result=3D$(sysctl --values kernel.ftrace_enabled)
+> +       sysctl -q "kernel.ftrace_enabled=3D$orig" &> /dev/null
+> +
+> +       [[ "$result" =3D=3D "0" ]]
+> +}
 
-Looks great! Thanks!
+Since the selftests are shipped with the kernel code, I think
+we don't need to handle backward compatibility here. Instead,
+we can just assume disabling ftrace is no longer supported.
 
+Thanks,
 Song
 
-> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-> index 11e8f3ddbb0e6..38fae861d12c7 100644
-> --- a/tools/objtool/klp-diff.c
-> +++ b/tools/objtool/klp-diff.c
-> @@ -1634,7 +1634,10 @@ static int create_fake_symbols(struct elf *elf)
->
->                 offset =3D reloc_addend(reloc);
->
-> -               size =3D 0;
-> +               /*
-> +                * Find the start of the next entry so the fake symbol si=
-ze can
-> +                * be calculated.
-> +                */
->                 next_reloc =3D reloc;
->                 for_each_reloc_continue(sec->rsec, next_reloc) {
->                         if (annotype(elf, sec, next_reloc) !=3D ANNOTYPE_=
-DATA_SPECIAL ||
-> @@ -1646,6 +1649,10 @@ static int create_fake_symbols(struct elf *elf)
->                         break;
->                 }
->
-> +               /*
-> +                * If no next entry found, this is the last entry, so its=
- size
-> +                * is from the current offset to the end of the section.
-> +                */
->                 if (last)
->                         size =3D sec_size(reloc->sym->sec) - offset;
->
+[...]
