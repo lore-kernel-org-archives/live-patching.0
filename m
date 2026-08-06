@@ -1,222 +1,201 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E77144C50D
-	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 15:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786030324; cv=pass; b=CEm7p6Oa+m7glGoJL+Eq8N/0Q8YQ8HXZIsTcik7H3yhEuTLp88SMqX1JMwkZFtkDF8PFW1mFgWd8a/Gf040d/FJw1zkufEOQz3sipjVpSEC+EE25cvL1aJYkIHrpgY057REUs6UqMsNmNsWzc2uZbbuzSZaeIuIx7uek1HTBhzw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786030324; c=relaxed/simple;
-	bh=q1yKAchAKLYq079ovpGA477d3rJNusw7Xe8p+FR68lg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nALN0/IDocXjL0YIdWY0KAx64Fgdb1ex6XE2D/Bc69iDsM158BnkQCTScw9cx5jJBWYvq3SgMLTqBQPtEfjn5mzxZ37gzjmwqQrGHBn33cZcxhSZNMw+5FJlzKxc4JfT/2cew1Seh4ZaHnYyZ3Nb2FuhZSLlT54iVAmRwqpgt8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=cD4zTm5M; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jUwr7YyE; arc=pass smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62FA847F2EB
+	for <live-patching@vger.kernel.org>; Thu,  6 Aug 2026 15:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786031896; cv=none; b=XNP9ZbytdMe0e992gVtzwXIc+eoDh6XYHrCvMVLplebrfBQIT1rzQlh5dCeFPjHPTWfZJvBrhbMkRfs/RLOM9W13Rp7Ymgnysp+Jo33ZUZTYn1QUQCn0h9LE3CG+H7EoscjfGBCAEKHddNngLmv3Xw6dPtEq9AY6LMk0NcxvDno=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786031896; c=relaxed/simple;
+	bh=YjAJYGsMEG8J0bvWFQuJc8/rvIWCLn/bHxRIHUpvxdE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n+j9A8xSojB0d02nLF06HHKFGhRyFtNiKZCgFxuVkFsjCgBQZTE8YYc+1+SnZ/3UyHMSJSXVHCYqiPKqFJ9ErjWOzBmb3R+zh4cBQJoYLbnmsp91qUbdaVuThj/ARbTw2uWzDU/T1ze1kDi/Mtkq+7tL8Yt81gGdTUojFFYBEBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AW6IN9hm; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=WjjsFlAn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="cD4zTm5M";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jUwr7YyE"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 676F5Gvv778089
-	for <live-patching@vger.kernel.org>; Thu, 6 Aug 2026 15:32:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=; b=cD4z
-	Tm5M17fPCDrNyQnDpnqttK1cC6kuMPVg4/jD/NafaBCKl0S12uY23MLt8b4AzTR1
-	tNtAlGU6iP65NOCAbZGM/AFS1P8A8jFJtgC+Gka/cS6al6ZUwTehMeQPyb49rJQ/
-	ju69mZ7d/ia/w2ssTJghneL2trmQpwiu1JI2o4ewFKbpqsE6YwXRn0dDomX5s3g/
-	TzyMqV1CTrn8xM9VTU4dBjoou0s9LDokE/Lr5b8h6sM33N7AXcM7VGNgAH/pGgMd
-	cZseJx5SSRaCvi1pYSw14VZx4tyjkzymIS24edQKmC4N7Wsh7W7pzQS0ATIUeCok
-	yJesokBCRMEHIY5+8g==
-Received: from mail-yx1-f70.google.com (mail-yx1-f70.google.com [74.125.224.70])
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4fvktmjekh-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <live-patching@vger.kernel.org>; Thu, 06 Aug 2026 15:32:01 +0000 (GMT)
-Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-664e15b53d3so5822027d50.3
-        for <live-patching@vger.kernel.org>; Thu, 06 Aug 2026 08:32:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786030320; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QLZ9WoUnuyaaCvl8QufPCjJUeBJL7NUfxVBu/up55Rmahp9tNiE3RbCRSKYcJOfOch
-         VjA4k9nr3d/cq2rPK6RnO9BlFcPhE+08Mr26ctdrYek/etS367u/D5/wrYT/2KfT1aB3
-         Hl6a60RSSuDT1KmEuQQbDVnQ9OTJTneKjYiTsH1u38eGPqcGL67TWMAm6kDgFMA4In49
-         PZn92AcWhlr+VQdbj9flSMhrzAer6f8RymKZd0NEl1o+l2F67ItBrYfqOt3SQZ12+ph6
-         EaQPAt2s1nWe5JSz1A8wV9vvVjS0nBeq8ctNHTQwkNGfrivYwNgLsyiQs21MZu2hsR2q
-         iJKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
-        fh=cwAK0W04yIQ8S8/HgvjmAipqa+yFzLg6kRIpT5QoxYs=;
-        b=kHmQ2TnPwu7nc8E5A5Q/OnRy7RKHdzO3fdzn79Qagm7GdmqdvGQ47WKJZe2PaC9in9
-         Y1Q1TD1xdF5VBXDS3LNjrRIDKDqmDlIg1QFe3r1Tw8NF85yzZjD5mw3ieBs2E5jTGA8w
-         6ugFL9f9zL5uPudNqShtmad6QBIJZSuULNg0RMIhUsVKNcVWuV1jbKXeYehACPDI+o8M
-         chKJotsbjnkBKJxwQm9skdDh4TXBUt9HX2D0JhIr8gtK2ahuFtD1Sku1x6nSf1th1FWr
-         OElNBLZjySpZCfWCgsBIkfrh2hEdnWJX5emCAQLCwo9hTz6pMt9qqOzc26exwlry079Y
-         89vg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AW6IN9hm";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="WjjsFlAn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786031888;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=TpgrFCVNVdoS5oc3yO5w/szZoVoVW3+bvH29IbpSiQ4=;
+	b=AW6IN9hmf3+Sm3t+IyspnF4lYYM61U8+tXciXDMePcAFx0aNg6zCeEf0iBgEq3eWsy3LRY
+	TXwrcKNZm6jSlHCU5gC0dUxr+EDRfRoNNuGW38g0TFASRYURuLfKOnfjdwhB3bRCUxxzlO
+	kOtkB9f0Vafy/gvaYdhXdvtwdkniNgg=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-517-6wOR9cbHN5e8rew5Nlcpqg-1; Thu, 06 Aug 2026 11:58:02 -0400
+X-MC-Unique: 6wOR9cbHN5e8rew5Nlcpqg-1
+X-Mimecast-MFC-AGG-ID: 6wOR9cbHN5e8rew5Nlcpqg_1786031880
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-5b29e7e8ab6so528901e87.0
+        for <live-patching@vger.kernel.org>; Thu, 06 Aug 2026 08:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1786030320; x=1786635120; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
-        b=jUwr7YyEutR2ntg8mjiTkWr8G03wYaEMxMSDpwpeIO060yep4vdjVdLNRvdpnYyHTh
-         Q2ja/+7W1N89qUtLLHRF2mQFXrKXQw1q7TKbCzzFGzCy8phwlVgFemybh4MsP+CUcdjM
-         lH3nwDnpqcmGChjsCbjpWZo8NYW4J3mXH8mmmFURQgcdbKZ6uwkM5LI8SnhJQM7acml/
-         nJF1EDne5owqizd5ct1e56AakdqqUXBYpxOm46SB/gVYfEap/FbxbnM7SCuYg+6J+inK
-         m/vmdXVQn4/+CKbdIOqRKB//rjFCjK81hRMhXyWjyAMGfCvtjZljQDehl4TxvX+xCLXI
-         vkGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786030320; x=1786635120;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1786031880; x=1786636680; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
-        b=CRpIWzpRIOTa00NpHTNY5RSDOEpsaZqIYFU/56d1lbWXWMf4UEkkzwl65g/qE4ENae
-         +7OVGrPP3ftqoZaZf3Gsf+P/BDAIV6C1X+tJtSyfd5scQ3/fbGZGRsFUhbzaobySHGJt
-         yDzRt/zJUxndfOjGh3GEg1I9+tAyrVwza8gHlSKFzB9CimRSjNxkUdLlbBssATKk4ctu
-         rObxCRgGUSGVr+mMNyDqwrW08RP54LAn7kuGAtx58vl23O9So3VOoiEaQT0u/8zEHpbd
-         y0Ym4yHG4IlfSH2ciXcwtxZfeHcw4VR4w+AqJrOO/Xoj3qvPTczyD2aO/g2kmKJytylk
-         drjQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqwQUCApYk6MNX+dmJd8unEt3uI8oqlVHDFqbzHCJy0Nmn0JVZqy9EztfxqZh1YAWXVoMKoWdIvZ48+sBJ1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+dOEvi7SL0nGCcbmk+oSI+pnNQXowDg8KPNpRYPcCoPmfbygb
-	uuBSSRA/d9Xzto6tkJ15B3LIGLAmkBmSR1TmJpqbfTfoRL/NsoRXij+pk9cJ6VkcxE7ngcGG6Ad
-	1SaEg+acRRwWYP3ZrpdjZgeuAuYZ3Sq+IJuOzHAqvVX3Pr/6pl0+id1ckn9LMpD8luJOlhWt1nf
-	npvys9BBMCYJjh4FTg4UM05kJ2yJ6W8TaW+evrt/kypw==
-X-Gm-Gg: AR+sD11zgXCzXyl1jhfo5nYZLDWEiMl+Hw/LODoaq87v0a2lGmmBmIHyIKpHmK+LPrp
-	OI1Opm9ig7h8Afgc386V78s05/gATUYY6BxqhB1z3wOL9J2ADUIb86d2ho4IDU4wreqX32Vewfq
-	cuORhpsW6NBhmnsM+7lKkqbi31jHFuU4ufybmqvw0TZUhkdjXirCQGulFOwQ==
-X-Received: by 2002:a05:690e:488a:b0:664:bd5c:6e72 with SMTP id 956f58d0204a3-6699aa7511dmr7229020d50.34.1786030320299;
-        Thu, 06 Aug 2026 08:32:00 -0700 (PDT)
-X-Received: by 2002:a05:690e:488a:b0:664:bd5c:6e72 with SMTP id
- 956f58d0204a3-6699aa7511dmr7228964d50.34.1786030319671; Thu, 06 Aug 2026
- 08:31:59 -0700 (PDT)
+        bh=TpgrFCVNVdoS5oc3yO5w/szZoVoVW3+bvH29IbpSiQ4=;
+        b=WjjsFlAnJ6dJ44fj41SuLSUtH9ilJZrbx2zSEcJHfMKXxuOXUHMjJVlRSObb/iGWeH
+         M8qsOzCgGaVLoGg5Q4YaOTcKspgv952rwEy2ohFPhPeMlRcSm8x6VIIG7bPfOavXprXM
+         k1/TCMQHwH74MH0RHXAPkNfKbWYqnXVg8QKxlpfWY5yxU+7ePs6kHESqR/ub4OY9I7yy
+         VNio+gnCIRPxSc9q4kH7yv1TPKMNUkvr6IFvlRw7StK1MjrIeNxuS5iCbRa4VmDH1gZx
+         LAqB2eZojlFLXYuUWigN0cmso8G3qJYHr4r0+H7nOwSm2wrvozSPDcuLiDDnlFQLTozd
+         NeMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786031880; x=1786636680;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TpgrFCVNVdoS5oc3yO5w/szZoVoVW3+bvH29IbpSiQ4=;
+        b=PwrLpNQvEwfujH/z00I43kNhnMWi47v5azVxwrIMBP8//c8SHF48EXCkJLgo73h1r+
+         sZxhBn02P/VZgDEm4/Ovb772WO71ou/HyprdgTgXXBKnBtIbYMD7rGH0e0QRwgY2WPs+
+         T21MTceqHor7AO3csk7EUxzetUig8V6L23pfjq8CMmwah7JkI0/wDiSMnwY64GgPVhiP
+         2t0pJM2o2EMDCN5JTbp24xvPqc5vc5VJAIqHTRLyWgqB+M5UO9kJhUvrnuFW+wfvzCxq
+         dQm5+KkwwUEj5wpAAyiCZlqA3bWj+7pETKydVRM5CYVV9wu0Ogy1QR0LkepmpspubT+N
+         reiQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqahpyEtvfiwDLUfdaFsrn6T2TSKUdG2nUa0K2yAj43LrVXye0120nYuf4XTPlc7swiutGu6ilYy40T/I/A@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjw6eUfBFOPow/6AiJb0MFFLcsyFRWQNH+t8pZPIVfSkOoa81S
+	Umggn/JI/ENbN45mXSDQyIFuPQLZzWFjG2y/Q01vNAUgKdYS7cd8iYhQbRWTiRL4zRDvADl6Mcx
+	e1+5psdfPz/kX6VSK5E9EbKvg8lkYU3xYHXSyckyAntNaOQXN0JHI9eH/aSM4itKciWs=
+X-Gm-Gg: AR+sD13zno7H62WdQkgAe7ZXubR7LJLO9/cN3MbxmWgT0aj3NFKoa5nnIWAQCT5B+M1
+	VW0yzzlbx2RfsGpzRSI/BGDHikeGU/dJfYDaGT09aZB1mMHgdKDp+pIAGYNpcpVz2Tk5jub9Bzs
+	R1D+8maiFOqaC62ToYmS4nAGkPofLsx1WtXHyGFKgQg6f4TaRXAGK5s6cw1LJ6QVIPUlMUj2evt
+	xceodmfb/GkQsAAkxTyVBmCkM6bYlOt2qQILcrBvBCQsmn/hPhYRWXd3Y5zVSa3F9lP09d4PdFp
+	kaiUBDK5mSpvFBcRJhwGq0eC/hI+ttdGRtJsOKcUqt9Ga4DAPfvNkV8tL9g7VABzu6mGLiZhPNh
+	5OZUFNFHkgotzvQGLUZ4nie0Kuql1PEgTht2G3yaUGqwy0sI33tkXMJe4
+X-Received: by 2002:a05:6512:1083:b0:5b2:a3a2:1395 with SMTP id 2adb3069b0e04-5b2fe39ca69mr1532517e87.3.1786031880367;
+        Thu, 06 Aug 2026 08:58:00 -0700 (PDT)
+X-Received: by 2002:a05:6512:1083:b0:5b2:a3a2:1395 with SMTP id 2adb3069b0e04-5b2fe39ca69mr1532500e87.3.1786031879886;
+        Thu, 06 Aug 2026 08:57:59 -0700 (PDT)
+Received: from [192.168.1.26] (pool-68-160-160-85.bstnma.fios.verizon.net. [68.160.160.85])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b2f62363fasm830971e87.10.2026.08.06.08.57.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2026 08:57:59 -0700 (PDT)
+Message-ID: <6a6608f4-0a05-4d75-8b7f-edddfac9c5d4@redhat.com>
+Date: Thu, 6 Aug 2026 11:57:55 -0400
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260731175358.3542156-1-andrey.grodzovsky@crowdstrike.com>
- <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com> <am0-QoUNQo4p2sBg@redhat.com>
-In-Reply-To: <am0-QoUNQo4p2sBg@redhat.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Thu, 6 Aug 2026 11:31:47 -0400
-X-Gm-Features: AUfX_mw1nwxsETix0HLa6WjJrBSSAU1_0A9CQBJUP5Fq4BDIA8mjk_ZZNVuhTmY
-Message-ID: <CAOu3gNhFL+1JmWRVwJVq4xUn-8mENkNwYexCwpFZ8FaZY82SRw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/livepatch: update
- test-ftrace.sh for deprecated ftrace_enabled
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz,
-        corbet@lwn.net, jpoimboe@kernel.org, shuah@kernel.org,
-        jolsa@kernel.org, mhiramat@kernel.org, stable@vger.kernel.org,
-        linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-ORIG-GUID: ea9L5PZL4gDmoW2KpRbh0XcLIKMTRUsk
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDEyMCBTYWx0ZWRfX3oGaY1PsCBzV
- n316WDZSFXyGXTDcniJtxAXdplVbx+jqxd3xK90DoCDWEnOa3EQkrMHjm2XdlPPxe6jRuWlhzdM
- TW6JZxFKB+Umf/X0qy3v55JZp9mSrVSVgtNJV23oST4LbB0o4sem
-X-Proofpoint-GUID: ea9L5PZL4gDmoW2KpRbh0XcLIKMTRUsk
-X-Authority-Analysis: v=2.4 cv=B7iJFutM c=1 sm=1 tr=0 ts=6a74a8f1 cx=c_pps
- a=S/uc88zpIJVNbziUnJ6G4Q==:117 a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=t04HzT_fAfAF5W-3wVZy:22 a=ngmC-yC5AAAA:8 a=e25ExAebAAAA:8 a=20KFwNOVAAAA:8
- a=meVymXHHAAAA:8 a=pl6vuDidAAAA:8 a=dDW-ktzWsA5qhXuJ1JwA:9 a=QEXdDO2ut3YA:10
- a=nd2WpGr1bMy9NW-iytEl:22 a=P5XVh-r7Nk77isVNjX_M:22 a=Fx-rEtueDibNKiZPBj-h:22
- a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDEyMCBTYWx0ZWRfX0JdK558y/s1K
- kEsvYNhWywlNfpwgACWswItayU3WOWnLhvgx2VzXVhEW07kMrs9lLwoUw2v8U/2vKBn4YlYo8nb
- tGKXBvxVEZVGGzO8ZvId1TN9yR4wZNHjO+V61XPBqUm85ngLVdSR5Qw2HpWVPo0c6P/pm6jrbVH
- BRTySBUziJ7K5QXdnz5X1oiFdCsmYs9L25aXFRebLS/uDtewBTRg6Cdk2IxVMJXKfUG7YunLL5g
- uzOJ2Q+7QgnjA44j3f41Q53klTaPXGqplniMh4YlRedP4zHLGr0nBmNgELuqPE6kEb181/XbW3D
- 7/ZlMOPFlDMaeXsknpHVaBxZMpcuFQ9ZoS5XhjBVvuvZ3LrczJlCRA+lReK2wsPRZEnZZoNDf0z
- eeIq1ofTzWCvUao/FArUm1ZNiLE3SSD6xBYnkdJVW1fkGdadeglo4ZOBRmCLzNqKxIJrtk2bRq4
- rpnZDGbIta5qea2ZzjA==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11867
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0
- spamscore=0 malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060120
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/7] objtool/klp: sympos/module/alternative/etc fixes
+To: Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+References: <cover.1785939903.git.jpoimboe@kernel.org>
+Content-Language: en-US
+From: Joe Lawrence <joe.lawrence@redhat.com>
+Autocrypt: addr=joe.lawrence@redhat.com; keydata=
+ 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
+ pNzsRQ==
+In-Reply-To: <cover.1785939903.git.jpoimboe@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you Joe and Steven for your comments; I sent V3.
+On 8/5/26 10:29 AM, Josh Poimboeuf wrote:
+> v2: 
+> - rebased on tip/master (first 6 patches were merged)
+> - dropped original patches 7-8 (will post followup)
+> - added .klp.symid fix
+> 
+> v1: https://lore.kernel.org/cover.1785727106.git.jpoimboe@kernel.org
+> 
+> This consolidates fixes for the klp-build issues reported by Joe over
+> the last several weeks, plus some more things I found while
+> testing/reviewing.
+> 
+> Fun stuff like symbol resolution, module dependencies, alternatives.
+> 
+> Joe Lawrence (1):
+>   objtool/klp: Allow new references to module exports
+> 
+> Josh Poimboeuf (6):
+>   objtool/klp: Fix vmlinux .klp.symid link error for .no_trim_symbol
+>     symbols
+>   objtool/klp: Fix size of empty special section entries
+>   objtool/klp: Ignore replacement offset of empty x86 alternatives
+>   objtool/klp: Explicitly disallow patching or referencing init
+>     code/data
+>   objtool/klp: Fix cross-module klp relocation section naming
+>   objtool/klp: Don't match local symbols against exports
+> 
+>  tools/objtool/arch/x86/special.c        | 27 ++++++++++
+>  tools/objtool/include/objtool/klp.h     | 10 ++--
+>  tools/objtool/include/objtool/special.h |  7 +++
+>  tools/objtool/klp-diff.c                | 65 ++++++++++++++++++++++---
+>  tools/objtool/klp-post-link.c           | 53 +++++++++++---------
+>  tools/objtool/klp-symid.c               |  1 +
+>  tools/objtool/klp-sympos.c              | 10 ++++
+>  7 files changed, 141 insertions(+), 32 deletions(-)
+> 
 
-Andrey
+These changes (and follow-up comments) look pretty good (lightly
+tested).  Could "objtool/klp: Fix vmlinux .klp.symid link error for
+.no_trim_symbol symbols" peel off and merge sooner since it fixes a
+commit just recently merged?
 
-On Fri, Jul 31, 2026 at 8:31=E2=80=AFPM Joe Lawrence <joe.lawrence@redhat.c=
-om> wrote:
->
-> On Fri, Jul 31, 2026 at 01:53:58PM -0400, Andrey Grodzovsky wrote:
-> > kernel.ftrace_enabled=3D0 is now refused on kernels that deprecate the
-> > knob, so the old disable/reload flow no longer applies there. Probe
-> > for this with ftrace_disable_supported() and keep the full original
-> > scenario (disable, fail to load a livepatch, re-enable, load, confirm
-> > disable is refused while loaded) on kernels where it still works;
-> > otherwise just confirm the write is refused.
-> >
-> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > Suggested-by: Miroslav Benes <mbenes@suse.cz>
-> > Assisted-by: Claude:claude-sonnet-5
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > ---
-> >  .../testing/selftests/livepatch/https://urldefense.com/v3/__http://fun=
-ctions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87Va=
-VkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$   | 13 ++++++
-> >  .../selftests/livepatch/https://urldefense.com/v3/__http://test-ftrace=
-.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87VaVkoNZc=
-qFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAJf9tNxM$         | 45 ++++++++++++=
--------
-> >  2 files changed, 41 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/livepatch/https://urldefense.com/v=
-3/__http://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotP=
-ltPcR5ezYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$  b/to=
-ols/testing/selftests/livepatch/https://urldefense.com/v3/__http://function=
-s.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87VaVkoNZ=
-cqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
-> > index 30dc677b2f45..7fa4bda70221 100644
-> > --- a/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
-p://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5e=
-zYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
-> > +++ b/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
-p://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5e=
-zYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
-> > @@ -126,6 +126,19 @@ function set_ftrace_enabled() {
-> >       echo "livepatch: kernel.ftrace_enabled =3D $result" > /dev/kmsg
-> >  }
-> >
-> > +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=3D0
-> > +#    can still disable ftrace on this kernel. Newer kernels deprecate
-> > +#    the knob and always refuse the write with -EOPNOTSUPP.
-> > +function ftrace_disable_supported() {
-> > +     local result
-> > +
-> > +     sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
-> > +     result=3D$(sysctl --values kernel.ftrace_enabled)
-> > +     sysctl -q kernel.ftrace_enabled=3D1 &> /dev/null
-> > +
-> > +     [[ "$result" =3D=3D "0" ]]
-> > +}
->
-> Small nit: AFAICT, it doesn't really affect the test pattern, but it
-> would be a bit cleaner if this function restored the original value
-> instead of always turning it on, like (untested):
->
->         orig=3D$(sysctl --values kernel.ftrace_enabled)
->         sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
->         result=3D$(sysctl --values kernel.ftrace_enabled)
->         sysctl -q "kernel.ftrace_enabled=3D$orig" &> /dev/null
->
->         [[ "$result" =3D=3D "0" ]]
->
-> --
-> Joe
->
+Though I think there is a still gap for EXPORT_SYMBOL_FOR_MODULES
+symbols: those exported that way from vmlinux would presumably need a
+klp-relocation, but klp_reloc_needed() always returns false for all
+vmlinux exports.  Maybe we need to parse the namespace column from
+Module.symvers to special case those?  (At least, that is how I read the
+code, I don't have full repro test cases handy.)
+
+This wouldn't block any of these patches, but if you are spinning a v3,
+we could consider tacking that on while we're here.
+
+-- 
+Joe
+
