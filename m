@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01986388397;
-	Thu,  6 Aug 2026 05:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AE0346E6D;
+	Thu,  6 Aug 2026 05:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785993119; cv=none; b=qbdNopoWZTxCqsWKhJkOL4lSSPa5brCBq6jl88ibs3iWIhmmgNERmolZh1UMD9+Yi9xFU7Sj0M+L5Q6cKGC0CD66dv3hcfAygDsx5pbfnDCUlHRnc3ZRdZzpAig4wVPwUZ9IR0TxsNRFoPHuAfc0r/bNoUDqJqhoBe5pjnbmovM=
+	t=1785993284; cv=none; b=BVe0++LAmXBOp817o4I5s2UU3v7eQutGn+pQ9R0se60uclgkD+Vw3uCbmHVIgrCxZGFEakYCJ3KblDVWWyR1RZkHIcLmf1usjqtV+esWbdFxI6C5iVtPgMBWzqKSseK+nZEg00OpsVdHhCxc746UFFdf/DN227zRTDpmlzhr+x0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785993119; c=relaxed/simple;
-	bh=WA7dCon8CQpEqGcsTutXNKml9HEovh4hp3JvRbzTDwI=;
+	s=arc-20240116; t=1785993284; c=relaxed/simple;
+	bh=IpD0S00n1aaySDqvumbNJ05Aoy8b2FDDKpepMt7QTJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ipKFPT3X+o2pOT5/u6c1OR1EMTCgG0R+HLb5Bpic/0WwqTzNSbLZaFLAoxk7TMI4kazI93Ssj8WSuxVSFuQSBBJtJRVM/ylkTFi3FnWsp6ei7SgrgGzG4G3cUCgd4jFHylkOGSiUi4AWMsIyoaei4hY2kOkcCMwLmyRr0NroNEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aweGhOmQ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=HEnqzbCmppk3yNMNQ9iZZ/h30cNuHyk0Kq1G1bI933WGxydbHp5uPvSUejRH6J8xeV1d1ZykD8hHxjdNTdS2Qso4v7wN2O3AtHuBUhacFFFgxjJO3hp43rSOYsFnLNUn65VtE36sPgYTJFK7SQ0QwPLx1pjSKiCbqtVLvqA0fzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y474cnY1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aweGhOmQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CF21F000E9;
-	Thu,  6 Aug 2026 05:11:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y474cnY1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F611F000E9;
+	Thu,  6 Aug 2026 05:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785993117;
-	bh=wx7sxRy043u28HXEw62TTCtYApnWdd/OunIHDVJdeAY=;
+	s=k20260515; t=1785993283;
+	bh=1h/40MnagXrvHFxVAE6cgFk1yZrIzXLLuxRy2OqsWPk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=aweGhOmQoGK//hRIba0yRj7uroPKdAX8+L++eQg8joMEQUShDyeP9OQ1hUo1ELzyN
-	 LIUBP+87UYEterg9iR+wcXSvjQJmG77QAmeWc7XpwSU4teAaHGImOxuDj2fwrfVj7d
-	 W+nqvF51CVQ+AWMVVoqufQl5umFD420lXHMrtqi91uhSOwns95Lp6NMMgfMMRB3pdF
-	 rxKwR7F+4lg+c5+b08BBojouY0I2JjhV4tmNzM8da+ssU7H0RO3wF6hvVdlyCwKGwN
-	 ZLLW5oXVL4k02D718KlJfRbMnsyKk1s5KbpuqrAGj/2S/83NvCi6rPeU8bO2JwiuNg
-	 U1uEU+rZGv88w==
-Date: Wed, 5 Aug 2026 22:11:55 -0700
+	b=Y474cnY1SJR8UtYO+Ipn0i+BoMPlOJ6aLNgO0caaKofAQ/PyeXu2Qd7O+xU0ASd7P
+	 im7lhFPPxEoIqirDJpegIzrALId7tO2oEPKwJCAcBnY28tVz2bDb1WFvz0PEZXLYd8
+	 l0O/b3k7mIzgnOWGIQwWhL6TS9H7VmetuARN4dh92xJOlF2FZDeZjbL8E/oagQ7smN
+	 mHjRkHRuJUqgqhA6aoE5tOSyEspIU2BTxjYqgOJ054wGZAnTPIoKqT84mH9ts56RfR
+	 TbIgBWJAnOsCezqpMvR0cmoDVQ4kM3wa/IrFqhBRYx5JHLTOvIeZw0zi7IoiV3ckDp
+	 wHgD+aJMdc/Eg==
+Date: Wed, 5 Aug 2026 22:14:40 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Song Liu <song@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
 	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 2/7] objtool/klp: Fix size of empty special section
- entries
-Message-ID: <a7ljeflolo25c22ay4uawzwmqueimkio452fgyf47turjmbvsh@qzc3coik37yq>
+Subject: Re: [PATCH v2 3/7] objtool/klp: Ignore replacement offset of empty
+ x86 alternatives
+Message-ID: <n7vcinh4b6fxiialkkak6zyljtoereczrghqe44rv76uazurct@l2ljwl7rj4pr>
 References: <cover.1785939903.git.jpoimboe@kernel.org>
- <d9debc941bd06c1a606ed7a366bff73d1680f0f8.1785939903.git.jpoimboe@kernel.org>
- <CAPhsuW69pBfEzN=apAzQkSgY+FJvxeukgydNZwYSrpA6+kQ42Q@mail.gmail.com>
+ <9f9c0c444e078869f2bceac7ecc72fe7310e188f.1785939903.git.jpoimboe@kernel.org>
+ <CAPhsuW5i95esQj9yT8M5Rv=KyqQDU+NBp=R9t+T=Ngd0JXA3Yg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,72 +47,51 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW69pBfEzN=apAzQkSgY+FJvxeukgydNZwYSrpA6+kQ42Q@mail.gmail.com>
+In-Reply-To: <CAPhsuW5i95esQj9yT8M5Rv=KyqQDU+NBp=R9t+T=Ngd0JXA3Yg@mail.gmail.com>
 
-On Wed, Aug 05, 2026 at 01:36:26PM -0700, Song Liu wrote:
+On Wed, Aug 05, 2026 at 01:51:44PM -0700, Song Liu wrote:
 > On Wed, Aug 5, 2026 at 7:30 AM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
 > >
-> [...]
+> > An x86 alternative with an empty replacement, e.g. the second entry of
 > >
-> > diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-> > index 492d7a012cffe..11e8f3ddbb0e6 100644
-> > --- a/tools/objtool/klp-diff.c
-> > +++ b/tools/objtool/klp-diff.c
-> > @@ -1627,6 +1627,7 @@ static int create_fake_symbols(struct elf *elf)
-> >         for_each_reloc(sec->rsec, reloc) {
-> >                 unsigned long offset, size;
-> >                 struct reloc *next_reloc;
-> > +               bool last = true;
+> >   ALTERNATIVE_2("orig", "repl", ft1, "", ft2)
 > >
-> >                 if (annotype(elf, sec, reloc) != ANNOTYPE_DATA_SPECIAL)
-> >                         continue;
-> > @@ -1641,10 +1642,11 @@ static int create_fake_symbols(struct elf *elf)
-> >                                 continue;
+> > has a replacementlen of zero.  Its replacement offset still gets a
+> > relocation, but the label it points at is the end of the previous
+> > replacement, which is also the beginning of the *next* alternative's
+> > replacement.  The value is meaningless; get_alt_entry() already ignores
+> > it for that reason.
 > >
-> >                         size = reloc_addend(next_reloc) - offset;
-> > +                       last = false;
-> >                         break;
-> >                 }
+> > klp diff doesn't ignore it.  When such an alternative belongs to a
+> > changed function, cloning its relocations drags in the unrelated
+> > neighboring replacement, along with everything that replacement
+> > references.  On an x86 clang/lto build an empty alternative in
+> > meminfo_proc_show() pulled in the replacement of an alternative in
+> > proc_kcore_init(), silently emitting a klp relocation against init text
+> > which has long since been freed by the time the patch is applied.
 > >
-> > -               if (!size)
-> > +               if (last)
-> >                         size = sec_size(reloc->sym->sec) - offset;
+> > Add arch_alt_ignore_new_reloc() and skip such relocations when cloning.
+> > This has to be arch specific: on arm64 a zero-length replacement instead
+> > identifies an alternative callback, whose replacement offset points at
+> > the callback function and must be preserved.
+> >
+> > Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> Some comments about "last" logic here can be very helpful.
-> 
-> Also, with the last flag, "size = 0;" before the for_each_reloc_continue()
-> loop can be removed.
-> 
-> Other than these nitpicks:
+> The patch looks good to me.
 > 
 > Acked-by: Song Liu <song@kernel.org>
+> 
+> Maybe we should add a __weak version of arch_alt_ignore_new_reloc(),
+> but that can wait until we add arm64 support.
+> 
+> However, this reminds me the cross compile use case. With current
+> arch_* functions, we cannot run klp-build on x86_64 build server for
+> an arm64 kernel (right?). What's our plan with the cross-compile use
+> cases?
 
-How about this on top?
+I suspect it will be easy, objtool already works fine being
+cross-compiled today.  Feel free to try it ;-)
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 11e8f3ddbb0e6..38fae861d12c7 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1634,7 +1634,10 @@ static int create_fake_symbols(struct elf *elf)
- 
- 		offset = reloc_addend(reloc);
- 
--		size = 0;
-+		/*
-+		 * Find the start of the next entry so the fake symbol size can
-+		 * be calculated.
-+		 */
- 		next_reloc = reloc;
- 		for_each_reloc_continue(sec->rsec, next_reloc) {
- 			if (annotype(elf, sec, next_reloc) != ANNOTYPE_DATA_SPECIAL ||
-@@ -1646,6 +1649,10 @@ static int create_fake_symbols(struct elf *elf)
- 			break;
- 		}
- 
-+		/*
-+		 * If no next entry found, this is the last entry, so its size
-+		 * is from the current offset to the end of the section.
-+		 */
- 		if (last)
- 			size = sec_size(reloc->sym->sec) - offset;
- 
+-- 
+Josh
