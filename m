@@ -1,96 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47E273EC6AE
-	for <live-patching@vger.kernel.org>; Wed,  5 Aug 2026 22:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788DF346E44;
+	Thu,  6 Aug 2026 01:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785968667; cv=none; b=ahA4V/RGbgiUWVUv1y5I66eqqNIYSXSk1nBW0sinpuK6sHi44KIY1B+M5SB7sjuBquSAOEkhYW1pGIpdLzJP6C8I3Qn594VGHYOjWqzdSyDpP+sWzyCO9tGxCF59UJXTytFk+oCcbO2reLeHqJztaVdVHBHxxZo1lbUYT56jjVw=
+	t=1785981290; cv=none; b=LMm5Vp5wqiTOwCDlg5EevKQ1gc2nU7Gfdlt/eRCnQi9Pz++C2GiMBmYTtfi+9/e1IK8S+TO+vn6C4U6GcL5J/gibQ90fWOP+6ywwNKoHyHM31Bb7lHztQhMoEQu8NXTDgZk7Gb6CUW1VJlUhf96gXyeCBzcWoeEobursiZ7V7Gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785968667; c=relaxed/simple;
-	bh=gTn8j2HBN0y2mi9HvgQ3sO2kXam/V46XgFTdCHWGqLI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BhsAseCRvsIV3tW+QLYjiOaXlwuLxEH26iuSBgd+meIJJ00zDsF0Z1CaSysOopQH2MRlpmJ72KuG4+wWkaPo3rJD3+iEqtcjBW5U1cv+qdl07tMQSJ2yiMVSL6Def9EkAPZOgjEykY9Oj3R2UEeUQDMMgDvKC+ujHQ2sK2a4D8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3jEh0BC; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3jEh0BC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7B41F00A3F
-	for <live-patching@vger.kernel.org>; Wed,  5 Aug 2026 22:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785968664;
-	bh=ENRcmGxzjyY3XpPs6PARuF3JYs2UjxLqfuPHHDcJ0lU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=M3jEh0BCmkEijQ9S6Ukz0S2VnAe7auPOsKuwPoyaV4XX22WvuJXlYoNsRbDmXiUZB
-	 vXvuKvRrbiRFnVpJVB5lHOziH9WAGc2LUyUZcd1akNBteWMZwI4xWl5NYKxFuhVoPO
-	 dehrQOd+bn5Dl7tEKvMT6rFJddp/eQe9K5epSf/l0x1XYoLsDPpb6nEIeA6oRlUo2B
-	 Lbmqa6fDVz906Dt2kBTns9mOxCA581zYfjAxbsloyuCvomFdHRhf03OXMosi1zup/4
-	 vucQsFur6hr0MNu0CZVsaiyfo8fFVViNMN6c+4tdeSf5j1Rjc7LxOvRROw0y1btv3J
-	 CVMFRDKVnY8vw==
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-92e5c92c389so87871185a.3
-        for <live-patching@vger.kernel.org>; Wed, 05 Aug 2026 15:24:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpQ7Q/JPvYGKazQhaTP5ehq2aT36A/YWYXfMGdmD66uxWIkdbU83/bgoprLBid04nmILzRQ63PL/4Am/FoD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya/YyRHKr7olqP/cYBH8VjT6whrRjpNgPqBagqYVORNwGuOBRF
-	BI9Lc2Uv70TLRvBUNyra6LRefzldawumtpOMobKmi5sIfeFBr48dVRZebcXFwBZMPc11MXiTRO0
-	0xm0HZ+lH7XtfVZKqZ4k7VvpvW/d+zWY=
-X-Received: by 2002:a05:620a:c53:b0:930:fad2:fd with SMTP id
- af79cd13be357-93649161658mr846282585a.17.1785968663907; Wed, 05 Aug 2026
- 15:24:23 -0700 (PDT)
+	s=arc-20240116; t=1785981290; c=relaxed/simple;
+	bh=o6YgzGCGVSFhKhuacX2i2QbH4BP7nIA205Zs9JwET1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e8rYnLjxMAF7vot0IrD4kP5ICz8P6oQkku+nGleKM+x0GBeVfn6m4P2/FPvbd7KtrbZIIDG4EiVqfVu/Hy6QDuw45L7t4mvsC5Zg4TYSrGknyzi8f6kOPGlmnS8oLg1EH9REIV72jOOnX3ltZVWTnqyUrhJDqMrW1T9orpYRuYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf12.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 8E375A2154;
+	Thu,  6 Aug 2026 01:54:40 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf12.hostedemail.com (Postfix) with ESMTPA id A7B8C17;
+	Thu,  6 Aug 2026 01:54:37 +0000 (UTC)
+Date: Wed, 5 Aug 2026 21:54:36 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <live-patching@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <mbenes@suse.cz>, <corbet@lwn.net>,
+ <jpoimboe@kernel.org>, <shuah@kernel.org>, <jolsa@kernel.org>,
+ <mhiramat@kernel.org>, <stable@vger.kernel.org>,
+ <linux-open-source@crowdstrike.com>
+Subject: Re: [RFC PATCH bpf-next v2 1/2] ftrace: deprecate disabling via
+ ftrace_enabled sysctl
+Message-ID: <20260805215436.2a526204@robin>
+In-Reply-To: <20260731175358.3542156-2-andrey.grodzovsky@crowdstrike.com>
+References: <20260731175358.3542156-1-andrey.grodzovsky@crowdstrike.com>
+	<20260731175358.3542156-2-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1785939903.git.jpoimboe@kernel.org> <f7aa7f27c504588b2588f5f9870c21f45adfdcfd.1785939903.git.jpoimboe@kernel.org>
-In-Reply-To: <f7aa7f27c504588b2588f5f9870c21f45adfdcfd.1785939903.git.jpoimboe@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Wed, 5 Aug 2026 15:24:12 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4rcUV564iOU3adNpq5PwG3hM1gZcXmy4xbycp49AX4nw@mail.gmail.com>
-X-Gm-Features: AUfX_myrH8440vsiRni7vmGbEVku-ymsq0spKBzE3s0lx1iKGyIFYBpEKpw-3J0
-Message-ID: <CAPhsuW4rcUV564iOU3adNpq5PwG3hM1gZcXmy4xbycp49AX4nw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] objtool/klp: Allow new references to module exports
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: k45dmnrakf9jctfeqokdbanqdofzwaju
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: A7B8C17
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18tow9zoAh1q8dj0YrZv4cTa47h6Y5EUC4=
+X-HE-Tag: 1785981277-275787
+X-HE-Meta: U2FsdGVkX1+yOSemSSbCiSPVOeY5rPw/VDg4KgmkOq5PLv5lYKB1NG02wXDKjLB4lSErp47AJzbnNS1/dTnAQVNSysfZ/aK77U4z6LNFI4o5399sgw6r5ejlN8K+0z1VRXVAaT2qUxlF1xZg/jES3tjuXn8GohMjBcdEu2A/SS/+KYMBQyaoErUM9TYMWNXLjMWJK2wZee6PHuub5duQAVF2bjSdUUIsacM6zg+27C6gn9sOKIj+KVxOBktKxFrq0aPvANHFRKex4bAyyQCmQX3c2e1GVYpdTTDUiXvpN0uFdPIiY+RGjm7kDl+xYb1XrX7sRQSpi5BmphltHsF6qOWKKaoUEZQ494/sdRmIvv3pkV7G9Eez0dCbfstwjTk8tzxtrMMpjHMq0LA8pM25+A==
 
-On Wed, Aug 5, 2026 at 7:30=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org>=
- wrote:
->
-> From: Joe Lawrence <joe.lawrence@redhat.com>
->
-> klp_reloc_needed() returns true for module exports to support
-> late-module patching.  However, clone_reloc_klp() unconditionally
-> rejects symbols without a twin (i.e., new references added by the
-> patch), even when the symbol is a known export from Module.symvers.
->
-> Relax the check: allow new references to exported symbols by only
-> erroring on !twin when there is no export.  The export metadata from
-> Module.symvers provides sufficient context to emit the klp-relocation
-> without a twin.
->
-> For a module export that isn't sufficient on its own though, as the
-> resulting klp relocation will only be resolved at patch-enable time if
-> the exporting module is loaded.
->
-> If the original (unpatched) module already depends on the exporting
-> module, the dependency is safe: the module loader ensures the dependency
-> is satisfied before the patched module can be loaded, so the
-> klp relocation target will exist.
->
-> However, if the patch introduces a reference to a module that the
-> original doesn't depend on, there is no such guarantee.  The exporting
-> module could be absent or could be unloaded at any time, leading to a
-> relocation failure or use-after-free.
->
-> So also add a build-time check: when a new symbol reference (no twin)
-> targets a module export, verify that the original module already has at
-> least one UNDEF symbol resolving to that same exporting module.  If not,
-> error out with a diagnostic message.
->
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Fri, 31 Jul 2026 13:53:57 -0400
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-Acked-by: Song Liu <song@kernel.org>
+>  
+> -static void ftrace_shutdown_sysctl(void)
+> +static void __maybe_unused ftrace_shutdown_sysctl(void)
+>  {
+>  	int command;
+>  
+> @@ -9377,7 +9377,7 @@ static void ftrace_shutdown_sysctl(void)
+>  # define ftrace_shutdown_sysctl()      do { } while (0)
+>  #endif /* CONFIG_DYNAMIC_FTRACE */
+>  
+> -static bool is_permanent_ops_registered(void)
+> +static bool __maybe_unused is_permanent_ops_registered(void)
+>  {
+>  	struct ftrace_ops *op;
+
+I agree with Sashiko: https://sashiko.dev/#/patchset/20260731175358.3542156-3-andrey.grodzovsky%40crowdstrike.com
+
+Instead of marking with "__maybe_unused", just delete them. If we need
+to revent, the revert will add them back.
+
+-- Steve
