@@ -1,45 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783882F30;
-	Fri,  7 Aug 2026 22:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3A02D2397;
+	Fri,  7 Aug 2026 22:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786142890; cv=none; b=I1X986BaRN4kGtcIoOi8r+RGo5azsa/+XXVaTky+wca8CDuC0ygAS764sOw8iu36rlRD1dFm6uL+Cj8PMktS1bSQpI1FKlKlhR0ytFYNf9+c+XzkZv2+3jfDCnTMmTY/T30flumgHD5nmBxYmiRsRX09pBTOGbZ/UkN/xfXe9jI=
+	t=1786143374; cv=none; b=Fr4hM1D1aVd9RbbRsmCfPafIvPyeTxzL5J9/JuEjqsuy5lreYoOlAjz/AVUyMIhsLFXyfLGDSIZ85erhCqpsYokA1C0jgm1n+oTfunBLN6RFsFXjIu+IKtEXvWEZIhqeegyvIUKGCAS2huR0R9fBw4pyvsIrQI+qIK3V63nHKnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786142890; c=relaxed/simple;
-	bh=fDSdP1bnuiEgKwIZaVjbWsAhuvM2e5tmpZ7YzQzrfyM=;
+	s=arc-20240116; t=1786143374; c=relaxed/simple;
+	bh=KqeVNAeOYU6y4m1KTluK5kcP/EBETUP/b9tnPni4qZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KIkX68t11tnHISqMtdrcD52yZtmGSPlLRALCHn6hTK6kyOTmDSXg2hb9XAv5YmS4H+r80P6eH2OoDBhxCdzRrIaBsy0Pq65jSEWPpnqLTHo1b4JsGlQh198Hy2p1J7Lgpw+U6Ojq8Bl7rcVGXZqFWHFDBy2xLX4v/3kaxVf28Kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWTRQCy6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=J8LXRFMlflbJ/Omy3hFhP2EFGIA4ph4psNzcQ9reSoIwlQ2oqfAVQd2QHwkZGk9VUX1wTi4kObEacKBCBkkJwJIDLK64YLxOWt5iCmAzCKJLxGTl6CwjQOPNZKlQQZfMrnRDpPIvxLKFIuAjJHiGfOSSgptB08f30/KXj0Txibo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzkQm4sI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWTRQCy6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 661941F000E9;
-	Fri,  7 Aug 2026 22:48:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzkQm4sI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80101F00A3A;
+	Fri,  7 Aug 2026 22:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786142889;
-	bh=e5d/ApPq9zKbEYsjvmT4dzXT3sPT/1q+7IIhU9CC4Ho=;
+	s=k20260515; t=1786143373;
+	bh=k2h7TFpNtHGZoQbDMXlxnaziePvR8kZuJ/KZ00xUctY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hWTRQCy6854hksUwK/VkgIwM3NsNKUB/Y+ZrRFbRlL+nZAWlFl17tJfYFsNP649jO
-	 KY5n1rO7h1Sjc/7LFbBXUo+NPh2IdoTkUg44lV39YEr0RDr2NY1T+TKCVlcb4n9BwR
-	 zzbMNr3uc/VhgGQNiTDz4sU61TpCXcnUShnzTvtI2yxx9OhHiKhe8SVPiKbxWKOto6
-	 HbK83zumiS5UlywAgLiVmAylllQU7gbZNFNeuvBzwEdwEU4iGQ0neNVhmbUZl1eOoA
-	 RqG8MOUEdCRHM0lOvDrQ8oUQfwgnCoayylFD08fCs/anXPWypZKnE1ZxM++VZX1ugH
-	 UdvUchmmtB3Aw==
-Date: Fri, 7 Aug 2026 15:48:06 -0700
+	b=OzkQm4sIh98Wqq9Rgzi8nNRRs5cOR5UONHibRZ6i/HgWrIQkMs3L4ma4sRMTQsRkr
+	 rYUC3o4jxH+IhxRUpzUXY42thV+sWlmDR95ynufsP+qFFiMVS/N2tRawqnt1eyIKiq
+	 GPlLxNB+iVZHZygXL1bmxO+YJfPjbdsGidN8+TtsErKTB+wQ3ENy/niqQGt8oucBx4
+	 dAy5uN8aJTjrvyyVuNxFg+OS4rMUMzJKbPKaDiWiTz9/HHZM8w8KAzeZ9LkUMHplnP
+	 XEx7ZiRcNYKUkPBDiiPaXAPOFu226wm7iBdPcjMbdso4KnvRnMYJh9VKsMgJx3rESQ
+	 IcZ7lULkttxZw==
+Date: Fri, 7 Aug 2026 15:56:11 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: sashiko-bot@kernel.org
-Cc: x86@kernel.org, Mark Rutland <mark.rutland@arm.com>, 
-	live-patching@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Will Deacon <will@kernel.org>, Song Liu <song@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Song Liu <song@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Mark Rutland <mark.rutland@arm.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
 Subject: Re: [PATCH v3 10/21] objtool: Ignore jumps to the end of the
  function for checksum runs
-Message-ID: <2jmchblm2lryol7crl2n7rv6f5h4ej7hl3cmnixpv7amkuztsn@t4qigaqzvqg6>
-References: <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
- <20260514223021.1326AC2BCB3@smtp.kernel.org>
+Message-ID: <rcfhf5sutcqvl4bwhn7neuwv7di7opbkwy754sfgtwmce7mpte@vbtw77bs3khg>
+References: <cover.1778642120.git.jpoimboe@kernel.org>
+ <b3b58101e15e1bb5266e57134f0b65f7d8efdd4b.1778642120.git.jpoimboe@kernel.org>
+ <20260513073617.GH1889694@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -48,66 +48,30 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260514223021.1326AC2BCB3@smtp.kernel.org>
+In-Reply-To: <20260513073617.GH1889694@noisy.programming.kicks-ass.net>
 
-On Thu, May 14, 2026 at 10:30:20PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Missing parentheses in the jump destination check causes objtool to silently ignore all missing jump targets when branch validation is disabled, instead of only jumps to the end of the function.
-> --
+On Wed, May 13, 2026 at 09:36:17AM +0200, Peter Zijlstra wrote:
+> On Tue, May 12, 2026 at 08:33:44PM -0700, Josh Poimboeuf wrote:
+> > Sometimes Clang arm64 code jumps to the end of the function for UB.
+> > No need to make that an error for checksum runs.
 > 
-> commit aa068d4053e8b92ff17082c7a023821e72f5d625
-> Author: Josh Poimboeuf <jpoimboe@kernel.org>
+> I'm not sure I understand the rationale. If the compiler trips UB, we
+> want to be complaining about that no?
 > 
-> objtool: Ignore jumps to the end of the function for checksum runs
-> 
-> Sometimes Clang arm64 code jumps to the end of the function for UB.
-> This commit ignores these jumps to the end of the function for
-> checksum runs to avoid errors.
-> 
-> > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> > index 10b18cf9c3608..73451aef68029 100644
-> > --- a/tools/objtool/check.c
-> > +++ b/tools/objtool/check.c
-> 
-> [ ... ]
-> 
-> > @@ -1593,10 +1609,14 @@ static int add_jump_destinations(struct objtool_file *file)
-> >  			/*
-> >  			 * GCOV/KCOV dead code can jump to the end of
-> >  			 * the function/section.
-> > +			 *
-> > +			 * Clang on arm64 also does this sometimes for
-> > +			 * undefined behavior.
-> >  			 */
-> > -			if (file->ignore_unreachables && func &&
-> > -			    dest_sec == insn->sec &&
-> > -			    dest_off == func->offset + func->len)
-> > +			if (!validate_branch_enabled() ||
-> > +			    (file->ignore_unreachables && func &&
-> > +			     dest_sec == insn->sec &&
-> > +			     dest_off == func->offset + func->len))
-> >  				continue;
-> 
-> Does this condition silently ignore all missing jump targets when branch
-> validation is disabled?
-> 
-> Because of the || without proper parenthetical grouping around the first
-> two terms, if !validate_branch_enabled() is true (which it is for
-> --checksum or --noinstr runs), the rest of the condition short-circuits.
-> 
-> This appears to cause objtool to skip the error reporting and silently
-> leave the jump destination as NULL for any unresolvable jump in the binary,
-> instead of only those jumping to the end of the function.
-> 
-> Should the logic be grouped to restrict the exception to the end of the
-> function?
-> 
-> 			if ((!validate_branch_enabled() || file->ignore_unreachables) &&
-> 			    func &&
-> 			    dest_sec == insn->sec &&
-> 			    dest_off == func->offset + func->len)
+> Same as when clang just stops code-gen, also something we commonly see
+> when it hits UB.
 
-Yes, we should tighten that up.
+Right, but I guess the question is, should we always warn about that, or
+should we only warn about it when doing stack validation or ORC or some
+other CFG-traversing thing?
+
+The checksum thing is only used when manually enabled by klp-build
+(never for normal kernel builds), so it would be a weird spot to report
+the Clang "jumping to the end of the function" UB.
+
+If we care about that for arm64 then the UB check probably belongs in a
+new standalone objtool command that would get used during a regular
+kernel build.
 
 -- 
 Josh
