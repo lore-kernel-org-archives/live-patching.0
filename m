@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F66363C5A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85821415F03;
 	Fri,  7 Aug 2026 21:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786138720; cv=none; b=SGa+1BfR33SkItXYdfFTWWxL0drbrPvF4AE0BeptMbe3fZPRTEn4tXhctkMLOJSyTcyq3OLVgGbgAwie33efgwhUtCuDUGlu5cDv1kkahnL76Oj//7e1RhPGyovHjsvI8Tbhey4E9agrHKufVfE9zz96KIktv5wEVYMzVPfb+eE=
+	t=1786138720; cv=none; b=qEVGfnMCIpmnGhuDnOBgymqmorGclJahoW819cttyi19vWA4ovBfTyuS4tnng5x0hRlAp89dlT7Hj9+JVGA2iVgEsX67ESPmSpzZnQk5RULYmxSOp9/LI8HfXcUB8pJSe4q8UtkfUY687DXBwZCu3AQfLlSAjozaawqylIhQZ/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786138720; c=relaxed/simple;
-	bh=OTODUrJ3NLYt7bAWdPXWumkvEeUzVzuWVzB41fdG9Mo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mHkCXg/JRvHVvD+AajftlMVH9PKXwykv/sxqtZukShtKsvD+kl8WOE9eJ/lxTdY0mypKCXGUGiAZxaZM8KhPCXFf6UtXnnEo1MI15gYbdjL5drZVzlNp8epyMe9PSf4sumowpMOLZBVj8O04npXwoI7slXvBjG3yw4sqC8vOhCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=If79QAAp; arc=none smtp.client-ip=100.103.45.18
+	bh=VXmRrWZVTHFaT7hofHWs3uSAAGiWMDQtf3H3uLLqqQg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pcxG9hgO7nwSvFyEAxStGPzBYKlz9zn90SNTDjjHOyR43SQ5Rcakfum8AMTAg0FU49+1TZFLY0sasEFjkmM6diL1KBTOsRqGjCNKbgsrMaF8NVCqktbJb45HMspcOPvBzEiJ5vCWKNs9cRQcAxNQLAwRhbPB4y4b++c1uKTGiX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/LAlQUB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="If79QAAp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B261F000E9;
-	Fri,  7 Aug 2026 21:38:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/LAlQUB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269361F00A3A;
+	Fri,  7 Aug 2026 21:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1786138719;
-	bh=DsSwPjia3rP+xdgoQwgg31YAYEuvAKj6RCmKlRGUZ+A=;
-	h=From:To:Cc:Subject:Date;
-	b=If79QAApnUI3/rOluLy9ZxjNLLPuRMThCjJ5DF5vr0SaAwKB8mFyExIHPEIxFACxv
-	 yhEgFR+nW7sWX8dFPcKIoKXA6R+OlOMkHivB4Tb9PlweBKtX4LB/o5hbomjiDsY4lC
-	 fYVAwpk3P+NB3bEj97G2NArC0rgrMEYLu92avPq0VRPmuDiZTlrLw11bWSdCy/7SV2
-	 yV9z3Faxn5SJj4wzSUG9xAH62++iUEi3iKwfNdYUAeL62Sw/jSlMxmWG2G3faoDkhJ
-	 V5GQCbqcSG0t2aksmlSpo+j/Eq3Svkazd0ssV1MGYNZ3feuY59NufmvVdspqa4FGoD
-	 KGUSufWJKpiwA==
+	bh=rUt6locn3ii5lFfPGy35WculRb7UPWo5ZkS+XRT+YPI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=M/LAlQUBSGNbkBk8kNegLoB9psbIVq2hZ/NbKTfn0olLYFc5cff8MbMhT6zhxlmaM
+	 NYhZAvgzQhCVR5pfQbssRwF9KsTvngqTuduleVQ6fCFSvAfB8lnAKOorVePywTgQAv
+	 LN7cVz9CSi7RQbleoEUaS3ZoiAC1YpkB4grAIYJ5MuKqHpzdPF3oDQ063pMR0J1v7j
+	 qb0kPXFizm3WFzBHOePW/Wnf6VMV0gCQKO1J9XLFPSbOBM6RfyIfKxKMNVauxWMOIr
+	 iUfXJ7rSjFZ/uX9TdnJJH7N3eqxYKyC+Ay2sxjMa7A+eLkg7lsJDfn9ZlSOiKy8Hfk
+	 pevifzF7hK+OQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -34,10 +35,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 0/9] objtool/klp: sympos/module/alternative/etc fixes
-Date: Fri,  7 Aug 2026 14:37:45 -0700
-Message-ID: <cover.1786138493.git.jpoimboe@kernel.org>
+Subject: [PATCH v3 1/9] objtool/klp: Fix vmlinux .klp.symid link error for .no_trim_symbol symbols
+Date: Fri,  7 Aug 2026 14:37:46 -0700
+Message-ID: <5a3cc4cded743167dd0878220201d80f7e48e5d7.1786138493.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <cover.1786138493.git.jpoimboe@kernel.org>
+References: <cover.1786138493.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -46,45 +49,42 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v3:
-- remove "size = 0" and add comments to create_fake_symbols()
-- add patches 8 & 9
+Testing klp-build with arm64 produced the following linker error during
+the original kernel build:
 
-v2: https://lore.kernel.org/cover.1785939903.git.jpoimboe@kernel.org
-- rebased on tip/master (first 6 patches were merged)
-- dropped original patches 7-8 (will post followup)
-- added .klp.symid fix
+  `__notrim.1' referenced in section `.klp.symid' of vmlinux.o: defined in discarded section `.no_trim_symbol' of vmlinux.o
 
-v1: https://lore.kernel.org/cover.1785727106.git.jpoimboe@kernel.org
+symbol_get() puts a static __notrim[] in .no_trim_symbol, which GCC
+names __notrim.1, __notrim.2, etc.  Two or more built-in translation
+units calling symbol_get() thus produce duplicate names, resulting in
+corresponding .klp.symid references which trigger the above error.
 
-This consolidates fixes for the klp-build issues reported by Joe over
-the last several weeks, plus some more things I found while
-testing/reviewing.
+Add .no_trim_symbol to the discarded section list so its symbols don't
+get symids.
 
-Joe Lawrence (1):
-  objtool/klp: Allow new references to module exports
+Note this issue is not specific to arm64: it just needs two built-in
+symbol_get() callers.  arm64 trips over it easily because it has KVM
+always compiled in vmlinux, whereas on x86 it's typically a module.
 
-Josh Poimboeuf (8):
-  objtool/klp: Fix vmlinux .klp.symid link error for .no_trim_symbol
-    symbols
-  objtool/klp: Fix size of empty special section entries
-  objtool/klp: Ignore replacement offset of empty x86 alternatives
-  objtool/klp: Explicitly disallow patching or referencing init
-    code/data
-  objtool/klp: Fix cross-module klp relocation section naming
-  objtool/klp: Don't match local symbols against exports
-  objtool/klp: Fix relocations for EXPORT_SYMBOL_FOR_MODULES() symbols
-  objtool/klp: Fix line numbers in Module.symvers parse errors
+Fixes: 029223d30162 ("objtool/klp: Add .klp.symid for sympos disambiguation")
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ tools/objtool/klp-symid.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- tools/objtool/arch/x86/special.c        |  27 ++++++
- tools/objtool/include/objtool/klp.h     |  10 ++-
- tools/objtool/include/objtool/special.h |   7 ++
- tools/objtool/klp-diff.c                | 106 ++++++++++++++++++++----
- tools/objtool/klp-post-link.c           |  53 +++++++-----
- tools/objtool/klp-symid.c               |   1 +
- tools/objtool/klp-sympos.c              |  10 +++
- 7 files changed, 175 insertions(+), 39 deletions(-)
-
+diff --git a/tools/objtool/klp-symid.c b/tools/objtool/klp-symid.c
+index cf188cdfa6079..21d8708013aba 100644
+--- a/tools/objtool/klp-symid.c
++++ b/tools/objtool/klp-symid.c
+@@ -31,6 +31,7 @@
+ static const char * const discarded_secs[] = {
+ 	".discard",
+ 	".modinfo",
++	".no_trim_symbol",
+ 	"__tracepoint_check",
+ };
+ 
 -- 
 2.54.0
 
