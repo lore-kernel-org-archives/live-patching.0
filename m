@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC21637BE7A;
-	Sat,  8 Aug 2026 23:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCCF381AE0;
+	Sat,  8 Aug 2026 23:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786231114; cv=none; b=B/pk4pTBA78DkmR5CDjwxGEB5bwfhXBko5PFhomeDk9pEkzzZTMSbBCpGDd+iHeX1qUha/o4apLMs3UvWHgZJZd3OHDcPTy8LnBdKOM4atIH7nUnjtZNAQRu+HtWudIUWCmyhIC6YniTyluQzRcRDueYVliZFqgNLUyaCTdbF5s=
+	t=1786231116; cv=none; b=Vg42zYdsHd0v2EujUG6zMqm3X1MxO8ljw5PP4KeBa2+brvMihMrol79yjAy3+dRC/TqWRuCGhXnrZ+aLAbCpXRPOIeW5+7IqAByB+Gn1EMunnX5fADaLxsaCjx3Ly1xqHJNZpus5uRf2mLGASEn+NVQrtManZrAjhaf5kfzrt0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786231114; c=relaxed/simple;
-	bh=em/W6RX1LDB/B/iXSMlDcExQArcuro/ypwsLBvemSE4=;
+	s=arc-20240116; t=1786231116; c=relaxed/simple;
+	bh=W3SyGCo462WJlJKCsRBruxE7yb6MA8zDTXvX8bGc+vM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZdmN9sNoMBc0RRzjRrKtD2I2vJfsITvtZrcSBbKFEnq2005t177cYBKhWYJPJFGEtjAJotb6W2VsGR0fEUTu/9zwwUvy+ZHlqxSumx+LFZMxir4RhbFaqGCOUG4oAlRfkx+CWJAncRATALNCRqMK1unnUQYtdk8Ca+umvD0r278=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T8T+/OKR; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Qhegk3OfICmvY55qTvaqUUVBw+3Cip6y5ZOosTA3JQ9v6sYmCDR82R+NmS+aw1uICpO63zfgDU2K8NwL6nSwqO1KX/JSqtVf/FMPBSYpbzLlbhbNRe8AZRQLLJkyrwP+GKr1K+Dvi7HSkBNn8dbBHukhYzmdRXahw8XkuRC+OOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAc5hpwN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T8T+/OKR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BFC71F00ADE;
-	Sat,  8 Aug 2026 23:18:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAc5hpwN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9873C1F000E9;
+	Sat,  8 Aug 2026 23:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786231112;
-	bh=ca1nwuh/ovV7iRlJ1HipcMmil7CeSekJrBHAP1jRLkM=;
+	s=k20260515; t=1786231114;
+	bh=gV4QRBMjF8SWDxF8bR0dzMkZJ2kMlPEch7VZ8Sz4gRc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=T8T+/OKR1u9TE8zMCEbQ4TXv1lVbonhiRfkPhEbj9aBh3hZ41aNT296DcWSDQxxxK
-	 99oIJh/K451j+TTrApJzmlCGBBkddDrxpw9L/zoLPMkRZ6cuuDLYcKMTMP2T//ZXfx
-	 rDoXERtMRV9KJuVPqPju07SwjrfbcQnYcfZ8+JFA7CWCAl3cVrhj/Ggp+neiu9mFYe
-	 VfkYbrlLLj7jwmJ+mf6yWW6FpiIbHCZMmfVfmdmtyJTJZLfwngEYTxFrKQDih+6VgT
-	 f6ffS9xmOq/1QoRICXUxnnBTRXyNE6ujppyVlcbU72ztkjGYC0DaajkkICYuuWtQjj
-	 AkjbnfGEnqanw==
+	b=nAc5hpwNrSZ1ouVZFjbyGeSZn5j2elY1TzRKCTN/lK5f96kuAgdka1mLYO7o0P2dr
+	 F2Tyh6yMp3RpW5Rve6BNBxG+inmwfLWnd9pJ82afHZiyQj7H/i1vAfI6/XXy1gSQsm
+	 11vErT/6U4BaAJa7kLsX/AvEOY5RtoRBS0le4NTHkeTORomKVhXwQXAiEqfO071GB0
+	 SFoKcl1t/uhfJ43gvH6E1LsVI62QgvE+fTYnGE3gOOqcB4zR+SMCHuzjl6IJxENSSI
+	 lBWghi+LzluP3rd2ay8Gea88ktGKTA9Qql9s7i3VJ+JT+EMCnUThtD08J7qqF2w9+m
+	 owasDHEpY+vrQ==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v4 08/22] arm64: Remove unnecessary empty alternatives
-Date: Sat,  8 Aug 2026 16:17:12 -0700
-Message-ID: <a22bffd0fa5b02511fb6e4c1b68af871f260e691.1786230311.git.jpoimboe@kernel.org>
+Subject: [PATCH v4 10/22] objtool: Allow setting --mnop without --mcount
+Date: Sat,  8 Aug 2026 16:17:14 -0700
+Message-ID: <339aa792e9eec6de991f72bb3afc6016ddeb3d79.1786230311.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1786230311.git.jpoimboe@kernel.org>
 References: <cover.1786230311.git.jpoimboe@kernel.org>
@@ -56,41 +56,31 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The code in arch/arm64/mm/cache.S creates three empty alternatives, all
-from calling the dcache_by_myline_op_nosync asm macro.  If \op == cvau,
-it creates an empty alternative for ARM64_WORKAROUND_4311569.
+Instead of returning an error for --mnop without --mcount, just silently
+ignore it.  This will help simplify kbuild's handling of objtool args.
 
-Since orig_len == 0, the alternative patching code mostly ignores it,
-though it does do an unnecessary clean_dcache_range_nopatch().  It also
-triggers an objtool error ("empty alternative entry").
-
-Clean it up by moving the .ifnc check outside the alternative emit.
-
+Acked-by: Song Liu <song@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/include/asm/assembler.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/objtool/builtin-check.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-index effae53e9739d..6e059efced5bb 100644
---- a/arch/arm64/include/asm/assembler.h
-+++ b/arch/arm64/include/asm/assembler.h
-@@ -404,13 +404,13 @@ alternative_else_nop_endif
- 	add	\start, \start, \linesz
- 	cmp	\start, \end
- 	b.lo	.Ldcache_op\@
--alternative_if ARM64_WORKAROUND_4311569
- 	.ifnc	\op, cvau
-+alternative_if ARM64_WORKAROUND_4311569
- 	mov	\start, \tmp
- 	mov	\tmp, xzr
- 	cbnz	\start, .Ldcache_op\@
--	.endif
- alternative_else_nop_endif
-+	.endif
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 75b11dc85010e..b89c7dc7983f3 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -145,11 +145,6 @@ int cmd_parse_options(int argc, const char **argv, const char * const usage[])
  
- 	_cond_uaccess_extable .Ldcache_op\@, \fixup
- 	.endm
+ static bool opts_valid(void)
+ {
+-	if (opts.mnop && !opts.mcount) {
+-		ERROR("--mnop requires --mcount");
+-		return false;
+-	}
+-
+ 	if (opts.noinstr && !opts.link) {
+ 		ERROR("--noinstr requires --link");
+ 		return false;
 -- 
 2.54.0
 
