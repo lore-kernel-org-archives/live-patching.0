@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A88F272816;
-	Sat,  8 Aug 2026 00:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D1876026;
+	Sat,  8 Aug 2026 00:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786149411; cv=none; b=uRY/NJu6zxBzds5j69VM6/2cfjImY84Slm4qTJflNJKlHbHj58lsOhHGaLWPFr5qBPtrNa5lQTk0R8+UykYKjE7hF5hqh26pGlVU3SHCquSAw9ApdSqBituck2z+2WwQ6NqmsSJV8YlVuyTXWu6gETMyo2bF6Hs7Dr8ipeKVGTM=
+	t=1786149674; cv=none; b=pF9owNbZ3Jj1WbbcDDRbmJikbSch/A/9u32SP7Mc4SSouzSwuCC2mPcSprd+QQQDRC8oypYFx+y37lV6OXyRe/YphvUzflwnH1w1gTRJWtWTnZZIUJfaK8K00fYgxjqHH2/RmC7pH9Tv9CCcxnwD7y9x7jWhI7wFbXp+RvbT0g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786149411; c=relaxed/simple;
-	bh=PTBjlINsVWCRK1QARX5P9BV1eAoP4rlLHLn7yRx99Ig=;
+	s=arc-20240116; t=1786149674; c=relaxed/simple;
+	bh=/j5ZbbpMUe4bhlK2uDq4zM5EsfSsND+SmBt3r6C5qyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lxIuFVKlmZu++bq3ob26/JaWvuiKnn3YX0hrXCydm0weMdWb6Sr9lK9mxYG0ZN+qSrqWqu+/R7dsw3cOfYl+KKTE8ooqtuBfYU9qLXL3AWC/3D9wQPtIHqO6Vzx2CQonkZwYg+luXGrbfhvPp8ZWeSEbQ3GSrs1sxXEZHESBuxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpCQZEpR; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=bM5lU7IYYf5F2vXDH1vBzZ3ZlNJpEuyq1bisfzCXLMUsBmoWljEIoj7QZaJ2zZwJ388fu9cP5tRGnz8hy6PJ+Wn2OgrZYC7B1wULrQLVeuO2gqBAEqpRXXKpgQKa/3bQhZE22QNmZWGSBhMZLFtUGULXAPWnnTgkSWYSf4QTCyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGHeSRHP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpCQZEpR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A707C1F000E9;
-	Sat,  8 Aug 2026 00:36:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGHeSRHP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53AA1F000E9;
+	Sat,  8 Aug 2026 00:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786149409;
-	bh=MOSnxQzcmiqyC1BWTtii7cFL3Os2J8CSE8dSpLGK4HU=;
+	s=k20260515; t=1786149672;
+	bh=98aVebFo2ZoGfQEah6KnP9OcE5j2THfDpj4TyKk+wKM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gpCQZEpREw06/WxueV2zhL/u7J32gYgkc+39TRkUlvH+P0ab9OCtRI/0q5qmf0PIZ
-	 GhWZ/lhLlFTwHY9z5UinDTvXIopBOl2/hCBEvK84oHWiL6LMH1X0GAKePnSFjmlztQ
-	 J29p+FouG9L1pw1ZsHqrKYOIkhM/dCDfLK/8bNfxgWPyQY769sdLNsHZ9dp+dSlSY0
-	 2WdRiaY11al9hUElv4VAdoZI+OjdpZdUXrLMH0sY1iVyr+YoAKy7bAXsqOOng/r+nu
-	 RXTBNLFMZMGtwyLwjSGrfTJqSvSssylJJTX9ml8LmgTBldLKP3rshVfdgKH82xCVf8
-	 8LPBuF6ekniMA==
-Date: Fri, 7 Aug 2026 17:36:47 -0700
+	b=mGHeSRHPCALXQ2CKGzJk0XT8cIV1NasjJulNs0XvN+XouLKRIAibTVD3t4a2NJDkV
+	 HuRkgSc6LIT/xxrdkhmSLmES1SO2x9w0UkdURNjHVTCbtkwvijiqT3HzCfpOO2DdTw
+	 f+iQl6vtkmKmJMxypHbois9i54yMmN8Y/p28QWJdhruxvFcp5iPgNZQens00qek6Tj
+	 mlgqaEY2QPR5MkilBGgPPbIQ8rKwjrCkOPnXdJcdN9DSCulD342EtyQGLuZj0WhwP9
+	 q8DARi8OzrMXmHfeDLetWjdqV2KADRrubBjZupItcbQEB9yorbT05LU/WjAtft0eKr
+	 ZFU2DKQzbzrvA==
+Date: Fri, 7 Aug 2026 17:41:10 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: sashiko-bot@kernel.org
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>, live-patching@vger.kernel.org, 
-	Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
-	linux-arm-kernel@lists.infradead.org, Will Deacon <will@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v3 17/21] objtool/klp: Don't correlate arm64 mapping
- symbols
-Message-ID: <usz3qfvjypkbrnynylipd5mxtupbvglld4ioetzuzim27tei4y@lhwiwgt3onnt>
-References: <48efc64058f667159d3dedf367c1d4cdedf84f1c.1778642120.git.jpoimboe@kernel.org>
- <20260515011947.F225CC2BCC7@smtp.kernel.org>
+Cc: x86@kernel.org, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Song Liu <song@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v3 19/21] objtool/klp: Introduce objtool for arm64
+Message-ID: <7owxhuwmxb2kbaioac5cm3qgqgqezcn6vgz34md47zuvm3ajjj@sgxpuzvuulmm>
+References: <5b66146373b1ff1aba1318fd51867dea2eb882f6.1778642121.git.jpoimboe@kernel.org>
+ <20260515020845.CE5B2C2BCB3@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,50 +47,68 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260515011947.F225CC2BCC7@smtp.kernel.org>
+In-Reply-To: <20260515020845.CE5B2C2BCB3@smtp.kernel.org>
 
-On Fri, May 15, 2026 at 01:19:47AM +0000, sashiko-bot@kernel.org wrote:
+On Fri, May 15, 2026 at 02:08:45AM +0000, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The `is_mapping_sym()` function relies on an overly broad substring match (`strchr(sym->name, '$')`), which risks falsely classifying any unannotated (`STT_NOTYPE`) symbol containing a `$` as an ARM64 mapping symbol.
+> - [Medium] The arm64 instruction decoder misclassifies trap instructions (e.g., `brk #0x800` used for `BUG()`) as `INSN_OTHER` instead of `INSN_BUG`.
 > --
 > 
-> commit fb925cb10f7a9c6ab8ecefca87d3cd3b4e4da879
+> commit dd63f0c03bab6a47f34cfcb310454460653638ed
 > Author: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> objtool/klp: Don't correlate arm64 mapping symbols
+> objtool/klp: Introduce objtool for arm64
 > 
-> This commit updates the livepatch diff tool to skip the correlation of arm64
-> mapping symbols. These symbols mark transitions between code and data but are
-> not standard symbols that require correlation.
+> This commit adds basic support for arm64 in objtool, initially enabling 
+> only the "objtool klp" subcommands.
 > 
-> > diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-> > index eb21f3bf3120b..e1d4d94c9d77c 100644
-> > --- a/tools/objtool/klp-diff.c
-> > +++ b/tools/objtool/klp-diff.c
-> > @@ -501,6 +501,7 @@ static bool dont_correlate(struct symbol *sym)
-> >  	       is_prefix_func(sym) ||
-> >  	       is_uncorrelated_static_local(sym) ||
-> >  	       is_local_label(sym) ||
-> > +	       is_mapping_sym(sym) ||
+> > diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
+> > new file mode 100644
+> > index 0000000000000..47658c76e1af0
+> > --- /dev/null
+> > +++ b/tools/objtool/arch/arm64/decode.c
 > 
-> Does this code risk falsely classifying user-defined or macro-generated
-> assembly labels as mapping symbols?
+> [ ... ]
 > 
-> Looking at the definition:
+> > +int arch_decode_instruction(struct objtool_file *file, const struct section *sec,
+> > +			    unsigned long offset, unsigned int maxlen,
+> > +			    struct instruction *insn)
+> > +{
 > 
-> tools/objtool/include/objtool/elf.h:is_mapping_sym() {
->         return is_notype_sym(sym) && strchr(sym->name, '$');
-> }
+> [ ... ]
 > 
-> Because it relies on a broad substring match, could this exclude valid
-> unannotated STT_NOTYPE symbols containing a $ from correlation across all
-> architectures?
+> > +	if (ins == 0xd503201f) {
+> > +		/* NOP: static branch */
+> > +		insn->type = INSN_NOP;
+> > +	} else if ((ins & 0xfc000000) == 0x14000000) {
 > 
-> Triggering a livepatching failure would require an unusual edge case, but
-> would it be safer to use a stricter match for standard arm64 mapping symbol
-> formats like $x or $d?
+> [ ... ]
+> 
+> > +	} else if ((ins & 0x7e000000) == 0x36000000) {
+> > +		/* TBZ/TBNZ: intra-TU sibling call */
+> > +		insn->type = INSN_JUMP_CONDITIONAL;
+> > +		insn->immediate = sign_extend64((ins >> 5) & 0x3fff, 13);
+> > +	} else {
+> > +		insn->type = INSN_OTHER;
+> > +	}
+> 
+> Does this code misclassify trap instructions?
+> 
+> On arm64, BUG() is implemented using the brk instruction (such as brk #0x800).
+> Since the decoder doesn't appear to check for brk, it will fall through to the
+> else block and classify it as INSN_OTHER.
+> 
+> If INSN_BUG is misclassified as a normal instruction, won't this lose dead-end
+> propagation and corrupt objtool's control-flow analysis?
 
-Not realistic.
+Nope, as the comment above this says:
+
+	/*
+	 * These are the bare minimum needed for static branch detection and
+	 * checksum calculations.
+	 */
+
+For arm64 we don't have any reason to care about INSN_BUG.
 
 -- 
 Josh
