@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD25386C17;
-	Sat,  8 Aug 2026 23:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE9D37D124;
+	Sat,  8 Aug 2026 23:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786231121; cv=none; b=Wi8bl7OX5FvufUB9y+rJ0ZDpNixI5EM2Qza68R8hM7xL98JQQkqBrGk5gOn/h1QIqVU0UFtQgITirQoad6CvJiepTZHymAgsXK5x5qX9lkKt7bq/FyuNqgLIbdDoAuhXZcMgRaccHBMU9UsZ1cCIm1lQv91gInSVeEKm/mtb+mk=
+	t=1786231122; cv=none; b=YUXfbkxc9op80Ibr7OH7LAY0C5WV5fcf42VVNdFKN1Yd1V7oIcw4Ccba/91XDLutxwShm9edaznnIa7O8ZgAUxEqfIgQVPyZ9FXleDgFjUUstZ5YfQ+M/l31+lVnKf4q3wrFblL5OKCdA8p4m+KxXRmeC4MJw8vgdKYquOeXYbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786231121; c=relaxed/simple;
-	bh=Q7ro/BEYFXEr9xutkbU3nIQzhwq/EUsKRCygDwNJr7o=;
+	s=arc-20240116; t=1786231122; c=relaxed/simple;
+	bh=pmf79rrtsNXmpoe9hehE/nAg66JKSIJyNndJWZCs0uw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gIE7/f6og5sz32LW0xuVo65iYdkHwk5nm+cBpoHicbRWgNXNoHmT9H/58CywkuYtCf7LKgIZ4dtvjhEKO6gFiAQfWJ8Ospy3QYrMRc5pvL72ZVtqW/g8OuSG5kVfW40zNNAErTDD5p06l0B3DxBHEI7pYVF8oRE+6FnI3dC7/q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGnyOlq8; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=bma9z9XA5QrcCD9edh/Ibp0e2brhZdrcIOzm3QL/7qBJitAiw+ywpyS9jdG5ouALNJVAfLrC4Q/GttJHO7/JeL/Hl4ifazSEdhO9RmilQ0iVGc0jxcXVBwVS7kF95ogpGhzTl1i3b6u7A14lFljdMEiWKd1laVpOK7dKMmWNpUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OTjOZiEJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGnyOlq8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43FE91F00ACF;
-	Sat,  8 Aug 2026 23:18:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OTjOZiEJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC281F00A3E;
+	Sat,  8 Aug 2026 23:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786231117;
-	bh=s3L2odPB0Cqn2yHa+6ffnlbmn8mWjN2zdGF3gz1mUp8=;
+	s=k20260515; t=1786231113;
+	bh=6ADoXXo4TVe2TzxKvpv7LpzKJ+UodT4wZ8UmCONxN/c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=oGnyOlq8rd6+X7RV6gIx8WqoV2drtTWpbXix0ITH2u30QDMfHwJZaVyaaebxaF4gc
-	 VyuExwvK8547OKW+Luw0nZYG1FucqQ02IbCizs4oknJJ81p13LQ/1ouS54J+6iVtTY
-	 q13BrccZEQg/cwpMKOz3OLxWoeKqzEw0J89p1NE4p9I6AE9Ct4u9rZqYIPLXCWDIYg
-	 IxB13xYOI9H8gtOEOQ7B9jxQ9WNjOczZ859m8DE3FaitlXrUGszoVHcx+4i2Z5Nmjv
-	 /r4L0v39ZKP/miBxqUu7J1Q4bdjmJkIIMITmo2jXuW1m6BZSrCQcB9AB56DL3k1Hed
-	 ddzkcCg1ObSpQ==
+	b=OTjOZiEJ/oVFbHxdRHa9OdqUfCW0ZkH/Pa0qeea/645oCYuH6IWs86G5L5eMfRnbn
+	 f4dd3lsEnmGxZ4vkZcaEJY1/0ca1uA1DMBLLxkaeevsR50rJe+gm8QxcbxTSJKxb+a
+	 C0mPDNYJ1O4i9QfNXp8FgGkCOl7khYqMVF+jGXg8hWXyiCFchPoSG0gXCcJP294tbV
+	 tFqlB3iFLcN0wfsQT32TFenXZUqQtkVTBuSzgtB/ZtIIuASipdos4hIZz/Pv3BecG6
+	 gK4dkCaSoi3M1bjLItXD10lpp46yD3CorxgvvUyEigTKQ26Jgzf+T0fW/TBG36+1ZF
+	 PQqf8qQ8IsZBw==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v4 15/22] objtool: Prevent kCFI hashes from being decoded as instructions
-Date: Sat,  8 Aug 2026 16:17:19 -0700
-Message-ID: <11e49187e13d36d4257bc60cd2606e0ff5481dfc.1786230311.git.jpoimboe@kernel.org>
+Subject: [PATCH v4 09/22] crypto: arm64: Move data to .rodata
+Date: Sat,  8 Aug 2026 16:17:13 -0700
+Message-ID: <bf52b36c34e987a3a75c2c1c2d4c8d0f91b75f6c.1786230311.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1786230311.git.jpoimboe@kernel.org>
 References: <cover.1786230311.git.jpoimboe@kernel.org>
@@ -56,101 +56,81 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On arm64 with CONFIG_CFI=y, Clang places a 4-byte kCFI type hash
-immediately before each address-taken function entry.  Since these
-hashes are in the text section, objtool tries to decode them, leading to
-unpredictable results (e.g., ""unannotated intra-function call").
-
-arm64 toolchains use mapping symbols to annotate boundaries between code
-and data.  Use those to just mark such "instructions" as NOP so objtool
-ignores them.
+Data embedded in .text pollutes i-cache and confuses objtool and other
+tools that try to disassemble it.  Move it to .rodata.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c               | 14 ++++++++++++++
- tools/objtool/include/objtool/elf.h | 23 +++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ lib/crypto/arm64/sha2-armv8.pl | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index c034676e1b8c7..79b9e2b5d96de 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -430,6 +430,8 @@ static int decode_instructions(struct objtool_file *file)
+diff --git a/lib/crypto/arm64/sha2-armv8.pl b/lib/crypto/arm64/sha2-armv8.pl
+index 35ec9ae99fe16..e0ee2d5367e72 100644
+--- a/lib/crypto/arm64/sha2-armv8.pl
++++ b/lib/crypto/arm64/sha2-armv8.pl
+@@ -207,12 +207,13 @@ $func:
+ ___
+ $code.=<<___	if ($SZ==4);
+ #ifndef	__KERNEL__
++	adrp	x17,.LOPENSSL_armcap_P
++	add	x17,x17,:lo12:.LOPENSSL_armcap_P
+ # ifdef	__ILP32__
+-	ldrsw	x16,.LOPENSSL_armcap_P
++	ldrsw	x16,[x17]
+ # else
+-	ldr	x16,.LOPENSSL_armcap_P
++	ldr	x16,[x17]
+ # endif
+-	adr	x17,.LOPENSSL_armcap_P
+ 	add	x16,x16,x17
+ 	ldr	w16,[x16]
+ 	tst	w16,#ARMV8_SHA256
+@@ -237,7 +238,8 @@ $code.=<<___;
+ 	ldp	$E,$F,[$ctx,#4*$SZ]
+ 	add	$num,$inp,$num,lsl#`log(16*$SZ)/log(2)`	// end of input
+ 	ldp	$G,$H,[$ctx,#6*$SZ]
+-	adr	$Ktbl,.LK$BITS
++	adrp	$Ktbl,.LK$BITS
++	add	$Ktbl,$Ktbl,:lo12:.LK$BITS
+ 	stp	$ctx,$num,[x29,#96]
  
- 	for_each_sec(file->elf, sec) {
- 		struct instruction *insns = NULL;
-+		struct symbol *map_sym;
-+		bool is_data = false;
- 		u8 prev_len = 0;
- 		u8 idx = 0;
+ .Loop:
+@@ -286,6 +288,7 @@ $code.=<<___;
+ 	ret
+ .size	$func,.-$func
  
-@@ -456,6 +458,8 @@ static int decode_instructions(struct objtool_file *file)
- 		if (!strcmp(sec->name, ".init.text") && !opts.module)
- 			sec->init = true;
++.pushsection .rodata
+ .align	6
+ .type	.LK$BITS,%object
+ .LK$BITS:
+@@ -365,6 +368,7 @@ $code.=<<___;
+ #endif
+ .asciz	"SHA$BITS block transform for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
+ .align	2
++.popsection
+ ___
  
-+		map_sym = list_first_entry(&sec->symbol_list, struct symbol, list);
-+
- 		for (offset = 0; offset < sec_size(sec); offset += insn->len) {
- 			if (!insns || idx == INSN_CHUNK_MAX) {
- 				insns = calloc(INSN_CHUNK_SIZE, sizeof(*insn));
-@@ -480,6 +484,16 @@ static int decode_instructions(struct objtool_file *file)
+ if ($SZ==4) {
+@@ -385,7 +389,8 @@ sha256_block_armv8:
+ 	add		x29,sp,#0
  
- 			prev_len = insn->len;
+ 	ld1.32		{$ABCD,$EFGH},[$ctx]
+-	adr		$Ktbl,.LK256
++	adrp		$Ktbl,.LK256
++	add		$Ktbl,$Ktbl,:lo12:.LK256
  
-+			/* Use mapping symbols to skip data in text sections */
-+			sec_for_each_sym_from(sec, map_sym) {
-+				if (map_sym->offset > offset)
-+					break;
-+				if (is_mapping_sym(map_sym))
-+					is_data = is_data_mapping_sym(map_sym);
-+			}
-+			if (is_data)
-+				insn->type = INSN_NOP;
-+
- 			/*
- 			 * By default, "ud2" is a dead end unless otherwise
- 			 * annotated, because GCC 7 inserts it for certain
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index 5cba96c6392cb..796d154d447b6 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -296,6 +296,26 @@ static inline bool is_notype_sym(struct symbol *sym)
- 	return sym->type == STT_NOTYPE;
- }
+ .Loop_hw:
+ 	ld1		{@MSG[0]-@MSG[3]},[$inp],#64
+@@ -648,7 +653,8 @@ sha256_block_neon:
+ 	mov	x29, sp
+ 	sub	sp,sp,#16*4
  
-+/*
-+ * ARM64 mapping symbols ($d, $x, $a, __pi_$d, etc) which mark transitions
-+ * between code and data.
-+ */
-+static inline bool is_mapping_sym(struct symbol *sym)
-+{
-+	return is_notype_sym(sym) && strchr(sym->name, '$');
-+}
-+
-+static inline bool is_data_mapping_sym(struct symbol *sym)
-+{
-+	const char *dollar;
-+
-+	if (!is_mapping_sym(sym))
-+		return false;
-+
-+	dollar = strchr(sym->name, '$');
-+	return dollar && dollar[1] == 'd';
-+}
-+
- static inline bool is_global_sym(struct symbol *sym)
- {
- 	return sym->bind == STB_GLOBAL;
-@@ -508,6 +528,9 @@ static inline void set_sym_next_reloc(struct reloc *reloc, struct reloc *next)
- #define sec_for_each_sym(sec, sym)					\
- 	list_for_each_entry(sym, &sec->symbol_list, list)
+-	adr	$Ktbl,.LK256
++	adrp	$Ktbl,.LK256
++	add	$Ktbl,$Ktbl,:lo12:.LK256
+ 	add	$num,$inp,$num,lsl#6	// len to point at the end of inp
  
-+#define sec_for_each_sym_from(sec, sym)					\
-+	list_for_each_entry_from(sym, &sec->symbol_list, list)
-+
- #define sec_prev_sym(sym)						\
- 	sym->sec && sym->list.prev != &sym->sec->symbol_list ?		\
- 	list_prev_entry(sym, list) : NULL
+ 	ld1.8	{@X[0]},[$inp], #16
 -- 
 2.54.0
 
