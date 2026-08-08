@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9550676026;
-	Sat,  8 Aug 2026 00:41:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E795629B78B;
+	Sat,  8 Aug 2026 21:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786149693; cv=none; b=P2YVCOYdXRkH9Ha4AnK6u563lQGf7xI2335W5yBfipFYmx0+CDcHSdJ02HOVjIgM5LBLcmUEHzpLZemnmc3fvwSiUazzZ+u8nslwFTCnxMJf2q/dRY8e2Rmi2yEBgMcYImZIbMXH7P9IdoHpcD1N+M/X/c8HDiIRcC4jJfa86jQ=
+	t=1786226386; cv=none; b=sfwtdifKGRmVhl3XNP10GqG7TMBgKr1h1M7RUhRSmIc2eoxfhR3GwXrEutlwBjyfR4imR2Zbq9qPlDIwke1k5y2FeCkkex7lSF3oPAID05g1zvNdr6PK9eeK8L1G0HgLmFbqgIjD6kkGSGHQ2h3bORYfGmJeXLmMcfQQ/qhbi+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786149693; c=relaxed/simple;
-	bh=xSTT2Y8Nt9jx8WBkqZ80pRQURZ5LGdw/S2Af9cuUghQ=;
+	s=arc-20240116; t=1786226386; c=relaxed/simple;
+	bh=wRnyEN52eYUHGp90kotjD/tXVW5UARtGV9G1muIPv60=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZRK6HgwrrX9mUMAkTgE1yOcGGwFRmzmbyxuprnSN3d7PTRRI/oNZZhM0dQi5j9bEMGzEf16PbD3IRghYQRl0nXMljRNfnOaMDRPHxSmUpnPkwV0E3xHXd5m2i9jUfqKXCjYBXFUMpIB8J9pFPVJ25qqbC1txxw0/gEz7RSs+mEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K53J4Ewg; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eFP0wAGAAj9nAy4JeP9HKNo7yunNEqxMLmU0kEqcMivrXuyf/0F3BNOJcwGli4ji5qQpPi+uHr4crzbUsSQfplNSOJUhMg/lPBgK5FVivEcjJ7PfaTwSo8kzT8kHWFgfEPclTYBAe543B76PxFxn4MmBisBuPAZrcoRPURR3MtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWV56ivw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K53J4Ewg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAE91F000E9;
-	Sat,  8 Aug 2026 00:41:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWV56ivw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13B11F000E9;
+	Sat,  8 Aug 2026 21:59:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786149692;
-	bh=6YL3HWaNN5b5xlcbD6Iu0baOSlDyk7lrzsw42UJpYVQ=;
+	s=k20260515; t=1786226384;
+	bh=kfgpSe5xinaL9ifATlL93o/2t8Nm4a+z+ScqI0DWC/w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=K53J4EwgWESmb4+iPlvtXScn1NwwXR6CY25zq1b7E5QgLdz/dD0opuhjJH39GouHr
-	 XVNhK1u3QBJK9ibmFxUFN2rabfvb4xxojyfbsq41XdaDKgVoB+Nesx1h3zyZUVLgaB
-	 1n3CeyuyjHRZ7YsukULcTlLCvRXP/HMA5FDxnhNN+ZyBBaXzMrU1l25o5AI3p5Ty9n
-	 a9vZUGce40/6/tVwfjQN7HlqOdbO8lAZOBb3nnzSWsdjrk/GeECo2qeHeHw+t60gZR
-	 wcR0POjMlY0zTnqFXXBva+wwEKCnUOSekdeWFDCF2ZEc+5bjc/hlyfeebh1lZ9ykIH
-	 xmIJokT0MVUQA==
-Date: Fri, 7 Aug 2026 17:41:30 -0700
+	b=UWV56ivwCqk4ftHy4r6UIgshsW0TohA3CSZacQEFDg8LLwHbtX08Ey9g0bh4EGCHT
+	 d3fER0gKson63vkEYWLKK4mwfBoM1CoASF7UZu9vlh0kOub9ViIdZT3UvfVdQbiQwz
+	 kXonsZKcpBu+3qGwN6GrKi0wxCatUY3CqWwQpsl1G4g7yvrTC5HOZWuPyRKl4j+Uj/
+	 b0BEB1GHXcmZZ4jk3k7NH0WsU8/cXQEUxU2+b3QTO5o8YtdimEhjA0zNEyESBbyOt3
+	 q/cHmltOOQAg7eA8UqgekF84i1/k7kJpCBUR4gxCg0EGqYHQfB0Nd3jrC75YwhsDiQ
+	 7qthu1qs6dSAg==
+Date: Sat, 8 Aug 2026 14:59:42 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: sashiko-bot@kernel.org
-Cc: x86@kernel.org, Miroslav Benes <mbenes@suse.cz>, 
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Will Deacon <will@kernel.org>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, linux-arm-kernel@lists.infradead.org, 
-	Mark Rutland <mark.rutland@arm.com>, Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org, 
-	Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v3 21/21] klp-build: Add arm64 syscall patching macro
-Message-ID: <rumkp7mj6x4jo3r4x3erzkcwqkssbf5n46fxvrgcan7u4n2fuk@pkleqal5rqgr>
-References: <3bf3cee43039fc4da84e83d0891a92e25f40f00f.1778642121.git.jpoimboe@kernel.org>
- <20260515024439.AF2B7C2BCB3@smtp.kernel.org>
+	Song Liu <song@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	Mark Rutland <mark.rutland@arm.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v3 14/21] objtool: Prevent kCFI hashes from being decoded
+ as instructions
+Message-ID: <s275kky5bqb5w5agrseielj66zvm53hr3yv7n33tenz4swnvpb@c63r6czxpeil>
+References: <cover.1778642120.git.jpoimboe@kernel.org>
+ <b1d50c9fc9e6b9bca43833cc4ccbd88a31fed84b.1778642120.git.jpoimboe@kernel.org>
+ <akQNqlfFC0T5pcMa@redhat.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,53 +48,66 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260515024439.AF2B7C2BCB3@smtp.kernel.org>
+In-Reply-To: <akQNqlfFC0T5pcMa@redhat.com>
 
-On Fri, May 15, 2026 at 02:44:39AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The arm64 __KLP_SYSCALL_DEFINEx macro omits the ALLOW_ERROR_INJECTION declaration, silently breaking BPF error injection for livepatched syscalls.
-> --
+On Tue, Jun 30, 2026 at 02:40:42PM -0400, Joe Lawrence wrote:
+> The root cause is that create_fake_symbols() skips the entire special
+> section if any symbol exists at offset 0.  But Clang places a .Ltmp*
+> label at the start of .kcfi_traps, so no per-entry fake symbols are
+> created and clone_special_sections() extracts nothing.
 > 
-> commit b4d1a9ea352f196a7fd3e7198fdade51440d08e5
-> Author: Josh Poimboeuf <jpoimboe@kernel.org>
+>   static int create_fake_symbols(struct elf *elf)
+>   {
+>   ...
+>   	/*
+>   	 * 2) Make symbols for sh_entsize, and simple arrays of pointers:
+>   	 */
+>   entsize:
+>   	for_each_sec(elf, sec) {
+>   		unsigned int entry_size;
+>   		unsigned long offset;
 > 
-> klp-build: Add arm64 syscall patching macro
+>   		if (!is_special_section(sec) || find_symbol_by_offset(sec, 0))
+>   			continue;
 > 
-> This commit adds arm64 support for KLP_SYSCALL_DEFINEx(). The commit
-> message states it is mirroring the arm64 __SYSCALL_DEFINEx() pattern from
-> arch/arm64/include/asm/syscall_wrapper.h.
+>   $ llvm-readelf --wide --symbols klp-tmp/3-checksum-patched/vmlinux.o | \
+>           awk '$7 == 74993'
+>    93266: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT   74993 .Ltmp78
+>    93544: 0000000000000000     0 SECTION LOCAL  DEFAULT   74993 .kcfi_traps
 > 
-> > diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
-> > index 99d68d0773fa8..4b647b83865f9 100644
-> > --- a/include/linux/livepatch_helpers.h
-> > +++ b/include/linux/livepatch_helpers.h
-> > @@ -72,6 +72,25 @@
-> >  	}								\
-> >  	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-> >  
-> > +#elif defined(CONFIG_ARM64)
-> > +
-> > +#define __KLP_SYSCALL_DEFINEx(x, name, ...)				\
-> > +	static long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
-> > +	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
-> > +	asmlinkage long __arm64_sys##name(const struct pt_regs *regs);	\
-> > +	asmlinkage long __arm64_sys##name(const struct pt_regs *regs)	\
-> > +	{								\
-> > +		return __se_sys##name(SC_ARM64_REGS_TO_ARGS(x,__VA_ARGS__));\
-> > +	}								\
 > 
-> Does this macro definition omit the ALLOW_ERROR_INJECTION declaration?
+> Possible fix: ignore .L* assembler-local labels at section offset 0
+> using the existing is_local_label() helper.
 > 
-> The standard arm64 __SYSCALL_DEFINEx() macro explicitly registers the top-level
-> syscall handler with ALLOW_ERROR_INJECTION() to enable BPF error injection
-> workflows like bpf_override_return(). The x86 implementation correctly
-> preserves this functionality.
+> -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8-- -->8--
 > 
-> Because this macro is missing that declaration, it looks like it might
-> introduce a regression where BPF cannot inject errors into the replacement
-> syscalls in a livepatch module on arm64.
+> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+> index b9624bd9439b..4ba400926647 100644
+> --- a/tools/objtool/klp-diff.c
+> +++ b/tools/objtool/klp-diff.c
+> @@ -1860,8 +1860,17 @@ static int create_fake_symbols(struct elf *elf)
+>  	for_each_sec(elf, sec) {
+>  		unsigned int entry_size;
+>  		unsigned long offset;
+> +		struct symbol *sym_at_0;
+> 
+> -		if (!is_special_section(sec) || find_symbol_by_offset(sec, 0))
+> +		if (!is_special_section(sec))
+> +			continue;
+> +
+> +		/*
+> +		 * Clang may place assembler-local .L* labels at offset 0;
+> +		 * they must not prevent per-entry fake symbol creation.
+> +		 */
+> +		sym_at_0 = find_symbol_by_offset(sec, 0);
+> +		if (sym_at_0 && !is_local_label(sym_at_0))
+>  			continue;
 
-Fixed.
+Thanks, I'll fix this with my other series of fixes in the next version.
+
+find_symbol_by_offset() might not work because there can be multiple
+symbols at offset 0.  Instead we can just traverse the symbols in the
+section, looking for sym->fake.
 
 -- 
 Josh
