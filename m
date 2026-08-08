@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1168A384228;
-	Sat,  8 Aug 2026 23:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D30381EB4;
+	Sat,  8 Aug 2026 23:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786231116; cv=none; b=JHWvkMsu4pyGpLGSZkhldaNwgvp+zTIH3TqoWRAcD+Hk6xOvcARoJ1dnmRjt2t+Qv5/bTua6I56ZDONfPH1VGZWlakC2DRdMPJCAT4Mc+wlcSbuXCBO6TUaLLU+DAgUIK2JtXIpBp9g3DlohJw4p/6XGB46KCtw8O6IPlaB8z50=
+	t=1786231120; cv=none; b=pZEPRLBkphcwLDmIrYI4ZzESr7GVdaHujuMV0A+b3VdHnKEcYOKS6U06bo2Z+Jkg++fKNlqa1lsXEjC7hdweQmeC2XZe/LK51pJ8jVCbPZaQEVkoIKdTPMR2Z+JDXob+Gb7kySnSAui0knig736ORayc8wwqmY5PgTYHD+nLRxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786231116; c=relaxed/simple;
-	bh=/Wo5DedwZCEkHcc8ZLnJOXxc4qvg1OkUzCivi6XSoxE=;
+	s=arc-20240116; t=1786231120; c=relaxed/simple;
+	bh=pg+tc++Rl7SF1/WkWtk/Sq+xGlpSzahN09+kSeyTKC4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hqwk+t5pXYT1jqWlAAIxyEIW52Ds1vEQGL5Slk9Hgj3zpYgmbQK481odxMuDGwdyBZYWco7fYccl5Za2qfAWkE+aT4CZi80qmIQocdfB7wmI2HkKovJX1FG1ppA1XACdSrMr4Dn7mYUgV/Dx71H2OdDAbY/3pywLjyaFJR3IMoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fWjAA/gY; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=oDNMSUADX8ZzN3lJY+rp4zaQqfimTtnAJVTMrkYLzZb1s84fmqSbM6k0C5E/M1qiW6qEJ94jjwI/HTFsENpWfvnrRK51V1FTtGa+H1pFrYH0jxM1NdMX5mo98weVki+sbRXIrQOkqF0rNiSKZxwNQR9IxY0IwpPyr0WD8Er+bMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iv0xdtvB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWjAA/gY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5454F1F00A3D;
-	Sat,  8 Aug 2026 23:18:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iv0xdtvB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B861F00ADB;
+	Sat,  8 Aug 2026 23:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786231114;
-	bh=uE2HB1BAtSsaPradROS+PC6Riaax1AHZ+bCP9cmRupg=;
+	s=k20260515; t=1786231116;
+	bh=q/7ZXZiGZL3y71MydQCQYr/Z0bjpjJ17DIbARhGctuY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fWjAA/gYAv55v5+/w7cCkSj0UNu6I3gMB/FfGSUyCCAClzFcAAd8pmOOY1/AkTaR4
-	 HlXW8qgoNHHEuBv406o2OyvpF9lWG0+6PdWckAUBqh7dyet9nGwQ9r6wSRtb1svmNe
-	 oCLSLo/c48r/KCxitmnFnfAH0RlBD45voktenPK3I8BSXTEGjn0yJuZmsJfypgNuu4
-	 FCnkX4K2qfUvtcMG1zULnQFMr0QjwxPhRGNCgMNB6NhthuDvY9jKt7beZ/alXFCjrC
-	 OLJeL6+8oEk4kWzYmiAhoyMbCjL3xV6qn8rltPyTIcZuHFBP05ecjG70wYYbsgpCSm
-	 cX4a3nSLuQvPA==
+	b=Iv0xdtvBkQcf23BLNLWiWwmP13Vp89P8TfitdbZSgxGXAulLeguZOHk3YEwIn0Rcs
+	 xKI/ejyJLwvwwb/Nx5m4NJdGiQQqYIbuZyF4MYkqaNk1JXiMCd1unSz1880JiWbOUW
+	 S9nbJHbzcob2LcllovdJLuICjkAokI+J1RKY+glWMvCaY+diW1NYn9rfXyvVNVBIfa
+	 MDouCeAkOeVpjVegX56j7YUBYCZRUPsAvv+D607QhKBihPmVNWqx7TphFBwryBwrOg
+	 ZTv/tsF17GuaLLWOU1wgHkeTA5/X2EspajLm9y1Jv71M3ecboFIBjXDQ3KyC627cq9
+	 hgKm47DvF+3TA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v4 11/22] kbuild: Only run objtool if there is at least one command
-Date: Sat,  8 Aug 2026 16:17:15 -0700
-Message-ID: <8adf966b340ea38ef1df845c7af0c794df3a7bce.1786230311.git.jpoimboe@kernel.org>
+Subject: [PATCH v4 13/22] objtool: Refactor elf_add_data() to use a growable data buffer
+Date: Sat,  8 Aug 2026 16:17:17 -0700
+Message-ID: <3c65abcb71c23d04470f45862523b0363ee4d709.1786230311.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1786230311.git.jpoimboe@kernel.org>
 References: <cover.1786230311.git.jpoimboe@kernel.org>
@@ -56,161 +56,237 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Split the objtool args into commands and options, such that if no
-commands have been enabled, objtool doesn't run.
+Instead of calling elf_newdata() for each new piece of data with its own
+separate buffer, keep it all in the same growable buffer so the
+section's entire data can be accessed if needed.
 
-This is in preparation for enabling objtool and klp-build for arm64.
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/x86/boot/startup/Makefile |  2 +-
- scripts/Makefile.build         |  4 +--
- scripts/Makefile.lib           | 52 ++++++++++++++++++----------------
- scripts/Makefile.vmlinux_o     | 18 +++++-------
- 4 files changed, 38 insertions(+), 38 deletions(-)
+ tools/objtool/elf.c                 | 123 ++++++++++++++--------------
+ tools/objtool/include/objtool/elf.h |  13 ++-
+ 2 files changed, 71 insertions(+), 65 deletions(-)
 
-diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
-index 5e499cfb29b5c..a08297829fc63 100644
---- a/arch/x86/boot/startup/Makefile
-+++ b/arch/x86/boot/startup/Makefile
-@@ -36,7 +36,7 @@ $(patsubst %.o,$(obj)/%.o,$(lib-y)): OBJECT_FILES_NON_STANDARD := y
- # relocations, even if other objtool actions are being deferred.
- #
- $(pi-objs): objtool-enabled	= 1
--$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-args-y)) --noabs
-+$(pi-objs): objtool-args	= $(if $(delay-objtool),--dry-run,$(objtool-cmds-y) $(objtool-opts-y)) --noabs
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index a791f4ea6ec19..8bf225d70d918 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1147,9 +1147,6 @@ static int read_relocs(struct elf *elf)
  
- #
- # Confine the startup code by prefixing all symbols with __pi_ (for position
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 9117457432463..d0865528edad5 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -277,7 +277,7 @@ endif # CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT
- is-standard-object = $(if $(filter-out y%, $(OBJECT_FILES_NON_STANDARD_$(target-stem).o)$(OBJECT_FILES_NON_STANDARD)n),$(is-kernel-object))
+ 		rsec->base->rsec = rsec;
  
- ifdef CONFIG_OBJTOOL
--$(obj)/%.o: private objtool-enabled = $(if $(is-standard-object),$(if $(delay-objtool),$(is-single-obj-m),y))
-+$(obj)/%.o: private objtool-enabled = $(and $(is-standard-object),$(objtool-cmds-y),$(if $(delay-objtool),$(is-single-obj-m),y))
- endif
+-		/* nr_alloc_relocs=0: libelf owns d_buf */
+-		rsec->nr_alloc_relocs = 0;
+-
+ 		rsec->relocs = calloc(sec_num_entries(rsec), sizeof(*reloc));
+ 		if (!rsec->relocs) {
+ 			ERROR_GLIBC("calloc");
+@@ -1408,7 +1405,7 @@ unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char
  
- ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-@@ -502,7 +502,7 @@ define rule_ld_multi_m
- 	$(call cmd,gen_objtooldep)
- endef
+ void *elf_add_data(struct elf *elf, struct section *sec, const void *data, size_t size)
+ {
+-	unsigned long offset;
++	unsigned long offset, size_old, size_new, alloc_size_old, alloc_size_new;
+ 	Elf_Scn *s;
  
--$(multi-obj-m): private objtool-enabled := $(delay-objtool)
-+$(multi-obj-m): private objtool-enabled := $(if $(objtool-cmds-y),$(delay-objtool))
- $(multi-obj-m): private part-of-module := y
- $(multi-obj-m): %.o: %.mod FORCE
- 	$(call if_changed_rule,ld_multi_m)
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 0a4fdd8bd975d..272652875238c 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -186,30 +186,34 @@ ifdef CONFIG_OBJTOOL
+ 	if (!sec->sh.sh_addralign) {
+@@ -1422,30 +1419,55 @@ void *elf_add_data(struct elf *elf, struct section *sec, const void *data, size_
+ 		return NULL;
+ 	}
  
- objtool := $(objtree)/tools/objtool/objtool
- 
--objtool-args-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
--objtool-args-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
--objtool-args-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
--objtool-args-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
--objtool-args-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
--ifdef CONFIG_CALL_PADDING
--objtool-args-$(CONFIG_CFI)				+= --cfi
--objtool-args-$(CONFIG_FINEIBT)				+= --fineibt
--endif
--objtool-args-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
--ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
--objtool-args-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
--endif
--objtool-args-$(CONFIG_UNWINDER_ORC)			+= --orc
--objtool-args-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
--objtool-args-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
--objtool-args-$(CONFIG_MITIGATION_SLS)			+= --sls
--objtool-args-$(CONFIG_STACK_VALIDATION)			+= --stackval
--objtool-args-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
--objtool-args-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
--objtool-args-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
--objtool-args-$(CONFIG_OBJTOOL_WERROR)			+= --werror
-+# objtool commands
-+objtool-cmds-$(CONFIG_HAVE_JUMP_LABEL_HACK)		+= --hacks=jump_label
-+objtool-cmds-$(CONFIG_HAVE_NOINSTR_HACK)		+= --hacks=noinstr
-+objtool-cmds-$(CONFIG_MITIGATION_CALL_DEPTH_TRACKING)	+= --hacks=skylake
-+objtool-cmds-$(CONFIG_X86_KERNEL_IBT)			+= --ibt
-+objtool-cmds-$(CONFIG_CALL_PADDING)			+= --prefix=$(CONFIG_FUNCTION_PADDING_BYTES)
-+objtool-cmds-$(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL)	+= --mcount
-+objtool-cmds-$(CONFIG_UNWINDER_ORC)			+= --orc
-+objtool-cmds-$(CONFIG_MITIGATION_RETPOLINE)		+= --retpoline
-+objtool-cmds-$(CONFIG_MITIGATION_RETHUNK)		+= --rethunk
-+objtool-cmds-$(CONFIG_MITIGATION_SLS)			+= --sls
-+objtool-cmds-$(CONFIG_STACK_VALIDATION)			+= --stackval
-+objtool-cmds-$(CONFIG_HAVE_STATIC_CALL_INLINE)		+= --static-call
-+objtool-cmds-$(CONFIG_HAVE_UACCESS_VALIDATION)		+= --uaccess
-+objtool-cmds-y						+= $(OBJTOOL_ARGS)
- 
--objtool-args = $(objtool-args-y)					\
-+# objtool options
-+ifdef CONFIG_CALL_PADDING
-+objtool-opts-$(CONFIG_CFI)				+= --cfi
-+objtool-opts-$(CONFIG_FINEIBT)				+= --fineibt
-+endif
-+ifdef CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
-+objtool-opts-$(CONFIG_HAVE_OBJTOOL_NOP_MCOUNT)		+= --mnop
-+endif
-+objtool-opts-$(or $(CONFIG_GCOV_KERNEL),$(CONFIG_KCOV))	+= --no-unreachable
-+objtool-opts-$(CONFIG_OBJTOOL_WERROR)			+= --werror
+-	sec->data = elf_newdata(s);
+ 	if (!sec->data) {
+-		ERROR_ELF("elf_newdata");
+-		return NULL;
++		sec->data = elf_newdata(s);
++		if (!sec->data) {
++			ERROR_ELF("elf_newdata");
++			return NULL;
++		}
 +
-+objtool-args = $(objtool-cmds-y) $(objtool-opts-y)			\
- 	$(if $(delay-objtool), --link)					\
- 	$(if $(part-of-module), --module)
++		sec->data->d_align = sec->sh.sh_addralign;
+ 	}
  
-@@ -218,7 +222,7 @@ delay-objtool := $(or $(CONFIG_LTO_CLANG),$(CONFIG_X86_KERNEL_IBT),$(CONFIG_KLP_
- cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool-args) $@)
- cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+-	sec->data->d_buf = calloc(1, size);
+-	if (!sec->data->d_buf) {
+-		ERROR_GLIBC("calloc");
+-		return NULL;
++	size_old = sec->data->d_size;
++	offset = ALIGN(size_old, sec->sh.sh_addralign);
++	size_new = offset + size;
++
++	if (!sec->data_overallocated)
++		alloc_size_old = size_old;
++	else
++		alloc_size_old = max(64UL, roundup_pow_of_two(size_old ? : 1));
++
++	alloc_size_new = max(64UL, roundup_pow_of_two(size_new ? : 1));
++
++	if (alloc_size_new > alloc_size_old) {
++		void *orig_buf = sec->data->d_buf;
++
++		sec->data->d_buf = calloc(1, alloc_size_new);
++		if (!sec->data->d_buf) {
++			ERROR_GLIBC("calloc");
++			return NULL;
++		}
++
++		if (size_old)
++			memcpy(sec->data->d_buf, orig_buf, size_old);
++
++		if (orig_buf && sec->data_owned)
++			free(orig_buf);
++
++		sec->data_owned = 1;
++		sec->data_overallocated = 1;
+ 	}
  
--objtool-enabled := y
-+objtool-enabled = $(if $(objtool-cmds-y),y)
- 
- endif # CONFIG_OBJTOOL
- 
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 24a3a4fd271c2..729f82eb85b35 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -36,21 +36,17 @@ endif
- # For !delay-objtool + CONFIG_NOINSTR_VALIDATION, it runs on both translation
- # units and vmlinux.o, with the latter only used for noinstr/unret validation.
- 
--objtool-enabled := $(or $(delay-objtool),$(CONFIG_NOINSTR_VALIDATION))
+ 	if (data)
+-		memcpy(sec->data->d_buf, data, size);
 -
--ifeq ($(delay-objtool),y)
--vmlinux-objtool-args-y					+= $(objtool-args-y)
--else
--vmlinux-objtool-args-$(CONFIG_OBJTOOL_WERROR)		+= --werror
-+ifneq ($(delay-objtool),y)
-+objtool-cmds-y					 =
-+objtool-opts-y					 = --link
-+objtool-opts-$(CONFIG_OBJTOOL_WERROR)		+= --werror
- endif
- 
--vmlinux-objtool-args-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
--							   $(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
-+objtool-cmds-$(CONFIG_NOINSTR_VALIDATION)	+= --noinstr \
-+						$(if $(or $(CONFIG_MITIGATION_UNRET_ENTRY),$(CONFIG_MITIGATION_SRSO)), --unret)
- 
- # Only used for builds initiated by klp-build
--vmlinux-objtool-args-$(if $(KLP_SYMIDS),y)		+= --klp-symids
+-	sec->data->d_size = size;
+-	sec->data->d_align = sec->sh.sh_addralign;
 -
--objtool-args = $(vmlinux-objtool-args-y) --link
-+objtool-cmds-$(if $(KLP_SYMIDS),y)		+= --klp-symids
+-	offset = ALIGN(sec_size(sec), sec->sh.sh_addralign);
+-	sec->sh.sh_size = offset + size;
++		memcpy(sec->data->d_buf + offset, data, size);
++	else
++		memset(sec->data->d_buf + offset, 0, size);
  
- # Link of vmlinux.o used for section mismatch analysis
- # ---------------------------------------------------------------------------
++	sec->data->d_size = size_new;
++	sec->sh.sh_size = size_new;
+ 	mark_sec_changed(elf, sec, true);
+-
+-	return sec->data->d_buf;
++	return sec->data->d_buf + offset;
+ }
+ 
+ struct section *elf_create_section(struct elf *elf, const char *name,
+@@ -1496,6 +1518,8 @@ struct section *elf_create_section(struct elf *elf, const char *name,
+ 			ERROR_GLIBC("calloc");
+ 			return NULL;
+ 		}
++
++		sec->data_owned = 1;
+ 	}
+ 
+ 	if (!gelf_getshdr(s, &sec->sh)) {
+@@ -1546,60 +1570,33 @@ static int elf_alloc_reloc(struct elf *elf, struct section *rsec)
+ 	struct reloc *old_relocs, *old_relocs_end, *new_relocs;
+ 	unsigned int nr_relocs_old = sec_num_entries(rsec);
+ 	unsigned int nr_relocs_new = nr_relocs_old + 1;
+-	unsigned long nr_alloc;
++	unsigned long nr_alloc_old = 0, nr_alloc_new;
+ 	struct symbol *sym;
+ 
+-	if (!rsec->data) {
+-		rsec->data = elf_newdata(elf_getscn(elf->elf, rsec->idx));
+-		if (!rsec->data) {
+-			ERROR_ELF("elf_newdata");
+-			return -1;
+-		}
++	if (!elf_add_data(elf, rsec, NULL, elf_rela_size(elf)))
++		return -1;
+ 
+-		rsec->data->d_align = 1;
+-		rsec->data->d_type = ELF_T_RELA;
+-		rsec->data->d_buf = NULL;
+-	}
++	rsec->data->d_type = ELF_T_RELA;
+ 
+-	rsec->data->d_size = nr_relocs_new * elf_rela_size(elf);
+-	rsec->sh.sh_size   = rsec->data->d_size;
++	if (rsec->relocs_overallocated)
++		nr_alloc_old = max(64UL, roundup_pow_of_two(nr_relocs_old ? : 1));
++	else
++		nr_alloc_old = nr_relocs_old;
+ 
+-	nr_alloc = max(64UL, roundup_pow_of_two(nr_relocs_new));
+-	if (nr_alloc <= rsec->nr_alloc_relocs)
++	nr_alloc_new = max(64UL, roundup_pow_of_two(nr_relocs_new ? : 1));
++
++	if (nr_alloc_old == nr_alloc_new)
+ 		return 0;
+ 
+-	if (rsec->data->d_buf && !rsec->nr_alloc_relocs) {
+-		void *orig_buf = rsec->data->d_buf;
+-
+-		/*
+-		 * The original d_buf is owned by libelf so it can't be
+-		 * realloced.
+-		 */
+-		rsec->data->d_buf = malloc(nr_alloc * elf_rela_size(elf));
+-		if (!rsec->data->d_buf) {
+-			ERROR_GLIBC("malloc");
+-			return -1;
+-		}
+-		memcpy(rsec->data->d_buf, orig_buf,
+-		       nr_relocs_old * elf_rela_size(elf));
+-	} else {
+-		rsec->data->d_buf = realloc(rsec->data->d_buf,
+-					    nr_alloc * elf_rela_size(elf));
+-		if (!rsec->data->d_buf) {
+-			ERROR_GLIBC("realloc");
+-			return -1;
+-		}
+-	}
+-
+-	rsec->nr_alloc_relocs = nr_alloc;
+-
+-	old_relocs = rsec->relocs;
+-	new_relocs = calloc(nr_alloc, sizeof(struct reloc));
++	new_relocs = calloc(nr_alloc_new, sizeof(struct reloc));
+ 	if (!new_relocs) {
+ 		ERROR_GLIBC("calloc");
+ 		return -1;
+ 	}
+ 
++	rsec->relocs_overallocated = 1;
++
++	old_relocs = rsec->relocs;
+ 	if (!old_relocs)
+ 		goto done;
+ 
+@@ -1644,6 +1641,7 @@ static int elf_alloc_reloc(struct elf *elf, struct section *rsec)
+ 	}
+ 
+ 	free(old_relocs);
++
+ done:
+ 	rsec->relocs = new_relocs;
+ 	return 0;
+@@ -1673,7 +1671,6 @@ struct section *elf_create_rela_section(struct elf *elf, struct section *sec,
+ 	if (nr_relocs) {
+ 		rsec->data->d_type = ELF_T_RELA;
+ 
+-		rsec->nr_alloc_relocs = nr_relocs;
+ 		rsec->relocs = calloc(nr_relocs, sizeof(struct reloc));
+ 		if (!rsec->relocs) {
+ 			ERROR_GLIBC("calloc");
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index a82517a76a0f6..527dd10859de4 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -58,9 +58,18 @@ struct section {
+ 	Elf_Data *data;
+ 	const char *name;
+ 	int idx;
+-	bool _changed, text, rodata, noinstr, init, truncate;
++	u32 _changed			: 1,
++	    text			: 1,
++	    rodata			: 1,
++	    noinstr			: 1,
++	    init			: 1,
++	    truncate			: 1,
++	    data_owned			: 1,
++	    data_overallocated		: 1,
++	    relocs_overallocated	: 1;
++	    /* 23 bit hole */
++
+ 	struct reloc *relocs;
+-	unsigned long nr_alloc_relocs;
+ 	struct section *twin;
+ };
+ 
 -- 
 2.54.0
 
