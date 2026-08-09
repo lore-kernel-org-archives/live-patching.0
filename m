@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C901A6838
-	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F681A6838
+	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786267997; cv=none; b=YKIeMcAoD6+mcK2/58//DI47b/Le9VgH+z4j8KY0j2mIRqyopzf9gUzLlTH3I/xB7GhbQxiXdJC63S83blr0OqCdjeCYTIMpBQFfyQ8XUSFhGX0DnVYySVqMMfgmHIjNmAn1zFgFEE1Fy9EXejAQCDxqJAgD/iifKMu0bXeFSFs=
+	t=1786268003; cv=none; b=nVKBOuvlcIdt9LdT59SAqhRxkJrVkdK5Hr5k3XBWs0yoRlpv0rb4evu29rrmu5qRERSroyl0KOwkqUc7J/oiskHDHi4cAwSCfaW8LsISOO9u7l6Ranp1q5v/NTHz7YoL2khS7i0tynHYgnz/t6/LLg8D9ZOec2efJSMBmfkEjBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786267997; c=relaxed/simple;
-	bh=FNVbDHgZbbvD77n/YTsIKfGmk8YA3sU8XyRHuYq27RY=;
+	s=arc-20240116; t=1786268003; c=relaxed/simple;
+	bh=81Lg+/MtdhG7eOmqEuTaQEipMByAlH2xo3VM2FHbejc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aiBUNmuMgBD4U3kEkDB0l/7ZmgzM5JXNXiHOfoaiSdrIYyLwzLxc6m3tubt7TsORAX7jI8b4sWrs03WWcN5sX83Z7igoee5WdPyyfqXZLh+Mb+8L0syk4Ct+Pq+IOcksjGRGvpRw6R1GSdDpYjLfLj8qJRNb7xPZ87KfgruKD2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fp/DEoZy; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=u3JJ9GLkG5y9o0+ZiJGaE8CBxnyLCYPIim7CyVlVIO7nKKy78uNHNUn/Q6XBZjQBgDWe4RiirXvOdp6dYeBiAME9HvvcXyMBigoRm03TY5LMgPrKLNZVtyne7UQwUTY1RL4phHnOPRzuE7UxMZNYmUDAaIl40vN27vdiG6Lgeyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEuYXt36; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fp/DEoZy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 930A41F000E9;
-	Sun,  9 Aug 2026 09:33:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEuYXt36"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25BB1F000E9;
+	Sun,  9 Aug 2026 09:33:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786267996;
-	bh=x/xgD9D//52o9x2SOt7Vo75s7deivAWsywvMHqd/1PU=;
+	s=k20260515; t=1786268002;
+	bh=JZUgjSEugUHMqIpnYJnXU9R2Fk8EEUT7+hOh0Uv6cTk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fp/DEoZy85SxaM7O2w8v8GKn9V5a/AlT5EyHjuG970/Y7xgooHfUONtzRignQUWeT
-	 iApF8SSeQeUSSaujnHmazYhCtmAuxfRRGNVZic6t4a6h9hq1GnyC1YftRo2pKxD1XM
-	 +CsA8p6QgF5m1bQQZ1NftEIljp1EI+yA71m5YeliEDVPWNuhe2cCppecAYP8xZh2vs
-	 ZtEthOZ9ZDJjb+l0X4wH/W9mUarka77LKyutBlwE/Z3uOSZBwoTWzhg1svzyQyQAlE
-	 zTryFVlK8REUrkF99Ftw2gwTgAqT4blCjtXhXgY8rPe/+wEFsOPTbz8uEYgXJFQZuO
-	 vU/7iETo2tYsA==
+	b=iEuYXt369PtHbtG27zuS8KEm2aWQqwvEsr5VjimC4W9e/8s4PdUhCOQGrONOw5GgO
+	 DulZGq1tA7n7BDMUGvqD4C58qKmzSu9VMQ/KlGtWXcx14qBukbo02tqk/gtlaHxEdZ
+	 dhF4pfCUI67XUeQ+360YpLBjvX4weGcbvJ3F6k0Anf54LUnVc8zqWON6squnL/75Yu
+	 Vt0na2v49oe8glwrInMFrsx6tFF7VbBrOTn5Vnd2WTOUSqgHlcAD+ajcCDf/1GloYv
+	 IOyAk5FDnRJp8kGJ+kHcvkayPTDx3PiHOnXeNbkJFGpRj95sWITb2DxhsB3hOF6DoQ
+	 pDiDX7XIqouEw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 4/9] livepatch: Implement replace set for scoped
- atomic replace
+Subject: Re: [PATCH v5 6/9] selftests: livepatch: Adapt atomic replace tests
+ to provides/obsoletes
 Reply-To: sashiko-reviews@lists.linux.dev
-To: jpoimboe@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com, song@kernel.org, mbenes@suse.cz, jikos@kernel.org
-Cc: "Yafang Shao" <laoar.shao@gmail.com>, live-patching@vger.kernel.org
-In-Reply-To: <20260809091954.22930-5-laoar.shao@gmail.com>
+To: jpoimboe@kernel.org, pmladek@suse.com, mbenes@suse.cz, song@kernel.org, jikos@kernel.org, joe.lawrence@redhat.com
+Cc: live-patching@vger.kernel.org, "Yafang Shao" <laoar.shao@gmail.com>
+In-Reply-To: <20260809091954.22930-7-laoar.shao@gmail.com>
 References: <20260809091954.22930-1-laoar.shao@gmail.com>
- <20260809091954.22930-5-laoar.shao@gmail.com>
+ <20260809091954.22930-7-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 09 Aug 2026 09:33:14 +0000
-Message-Id: <20260809093315.930A41F000E9@smtp.kernel.org>
+Date: Sun, 09 Aug 2026 09:33:21 +0000
+Message-Id: <20260809093321.D25BB1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,72 +47,54 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `--provides` argument in `klp-build` lacks input validation,=
- allowing shell command injection during the kernel module build process.
+- [Medium] The 'replace' feature detection in test_modules/Makefile fails f=
+or out-of-tree (O=3D) kernel builds, breaking tests on older kernels.
 --
 
---- Patch [4]: [PATCH v5 4/9] livepatch: Implement replace set for scoped a=
-tomic replace ---
-commit 1fb78be5e32d18ecfd4bbeb7fa484d70bf6b9401
+--- Patch [6]: [PATCH v5 6/9] selftests: livepatch: Adapt atomic replace te=
+sts to provides/obsoletes ---
+commit e4d15e9f2792340ea543b405f9d074e729665c9b
 Author: Yafang Shao <laoar.shao@gmail.com>
 
-livepatch: Implement replace set for scoped atomic replace
+selftests: livepatch: Adapt atomic replace tests to provides/obsoletes
 
-This commit introduces a more flexible model for livepatch replacement by
-adding provides and obsoletes fields, allowing multiple independent=20
-livepatch sets to coexist on the same system.
+The legacy "replace" field in struct klp_patch was replaced by the
+provides/obsoletes mechanism. This commit adapts selftests to build and
+run on both old and new kernels by detecting the presence of the
+"replace" field.
 
-> diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-> index c4a7acf8edc3f..3600f93d9c1c3 100755
-> --- a/scripts/livepatch/klp-build
-> +++ b/scripts/livepatch/klp-build
-
-[ ... ]
-
-> @@ -189,9 +190,26 @@ process_args() {
->  				NAME=3D"$(module_name_string "$NAME")"
->  				shift 2
->  				;;
-> -			--no-replace)
-> -				REPLACE=3D0
-> -				shift
-> +			-p | --provides)
-> +				PROVIDES=3D"$2"
-
-[Severity: Medium]
-Is there a missing validation check for the provides argument here?
-
-The obsoletes argument below checks for valid integers, but it appears this
-assignment accepts any unvalidated string.
-
-> +				shift 2
-> +				;;
-> +			-r | --obsoletes)
-> +				OBSOLETES=3D"$2"
-> +				local obs_val=3D"$2"
-> +				[[ "$obs_val" !=3D \[*\] ]] && die "obsoletes must be enclosed in br=
-ackets, e.g., '[0,1,2]'"
-
-[ ... ]
-
-> @@ -847,7 +896,17 @@ build_patch_module() {
+> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/to=
+ols/testing/selftests/livepatch/test_modules/Makefile
+> index a13d398585dcb..29c55df360467 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
+> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+> @@ -16,6 +16,16 @@ obj-m +=3D test_klp_atomic_replace.o \
+>  	test_klp_state3.o \
+>  	test_klp_syscall.o
 > =20
->  	cflags=3D("-ffunction-sections")
->  	cflags+=3D("-fdata-sections")
-> -	[[ $REPLACE -eq 0 ]] && cflags+=3D("-DKLP_NO_REPLACE")
-> +	cflags+=3D("-DKLP_PROVIDES=3D$PROVIDES")
+> +# The legacy "replace" field was replaced by provides/obsoletes. When the
+> +# kernel (KDIR) still supports "replace", pass KLP_HAS_REPLACE to the
+> +# modules so that they can #ifdef the legacy "replace" code. Otherwise
+> +# the modules are built with the provides/obsoletes based code (to be
+> +# added later).
+> +KLP_HAS_REPLACE :=3D $(shell grep -q 'bool replace' $(KDIR)/include/linu=
+x/livepatch.h 2>/dev/null && echo y)
 
 [Severity: Medium]
-Because the provides argument lacks validation in process_args(), could
-this assignment allow shell command injection during the build process if=20
-un-escaped metacharacters are passed to the script?
+Will this grep fail for out-of-tree (O=3D...) kernel builds?
 
-> +
-> +	# Process OBSOLETES: remove brackets and spaces, convert to comma-separ=
-ated string
-> +	# Input: "[0, 1, 2]" or "[]" or "" -> Output: "0,1,2" or empty
-> +	if [[ -n "$OBSOLETES" && "$OBSOLETES" !=3D "[]" ]]; then
+If $(KDIR) points to the build directory rather than the source directory,
+$(KDIR)/include/linux/livepatch.h might not exist.
+
+When tests are run, detect_replace_attr() will still correctly identify the
+replace sysfs attribute on the running kernel and set HAS_REPLACE_ATTR=3D1.
+
+However, since the module would be compiled without KLP_HAS_REPLACE, it lac=
+ks
+the replace module parameter. When the test scripts attempt to load the mod=
+ule
+with replace=3D1, insmod will fail, causing the test suite to abort.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260809091954.2293=
-0-1-laoar.shao@gmail.com?part=3D4
+0-1-laoar.shao@gmail.com?part=3D6
