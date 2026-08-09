@@ -1,152 +1,120 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867823644A6
-	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836533C1D7F
+	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786268219; cv=pass; b=LjmSK44MUvwWjGEf7JuyV2YjIs2SQRqVy/DSzL/yp7serEcOTVOf0Z9x7oTuqm8sZiSuDfPNOPJvN0mraXxxH/EXKosW18l8icUKUKWeMWdNYta6gUs4CHJKGU2481dq5GuJOb7VgkR7hIf8Ky4YlzGA0giXQjglTOS5ZJgfbnI=
+	t=1786268429; cv=pass; b=pWub2uBsY3XER4NOzp4E9y5aeGyj61hFW5epH1JDcBQG7nfzdaYx6gest8KwSgwr7apy+PhijH4uAEA0OV6Vm2taAUJA0LCdIzzz4JOkg8CtsOXKcuVuUT4vLVlNrq8KQS7ghUyE8RlL9aDf1/6KU4Hd8TSSNLgya7A+qb0ynlY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786268219; c=relaxed/simple;
-	bh=ndT2fmu22V7/A5Rw92m9ugx35X0wxzO6htHWnyL2S4c=;
+	s=arc-20240116; t=1786268429; c=relaxed/simple;
+	bh=IjAXkoa2oScEt51YbbIBHg8pXYHsVgq8o76+T3S43fE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M6gh6qomHT4fszMN/gpVYLo1M6fVmaK1UhvymIY93VtW/2BuNxnckbdf0bUubAzmDEsrFDNWXukCshIhvJCUnmrUPRIbP+AINj0LOqwJmcpv3EkwhqiVyChQQmbkECaSYlF+aAwQrAf+2gPYhJnDWmEO/I2G46SUXCs0UKZTL84=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfG/5F7o; arc=pass smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=CepL+skae9GnPBNGdzxhB+dLgs+TewTPZpye6ctwNADOVNhYoI28OqlvaYTGCHRPCxhrRfNPDPwqGTodgZCElfUsDrSa9JfOecWTvd5VYNGWF89RHzQNZfpsHFUlsvwgdYuxoueR0wSLna1D4EnfVN4f1V1NWoi/dQMTD2MfO3A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fA/F0g8q; arc=pass smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfG/5F7o"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-81ff017d420so46919117b3.0
-        for <live-patching@vger.kernel.org>; Sun, 09 Aug 2026 02:36:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786268217; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fA/F0g8q"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-81ed073fed0so12578907b3.0
+        for <live-patching@vger.kernel.org>; Sun, 09 Aug 2026 02:40:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786268417; cv=none;
         d=google.com; s=arc-20260327;
-        b=M62Ypcj0v1ULlYxbI+0tuVI+mzjcxq4EoDlT5EfUq/nZV3e01FrkgCfCYByugPPIYR
-         DJgvgY8yxbRiU3QiAD5VdkxeDqD6Hj4yNBt/CduKWMnZab89aW9YbeH5LBpLZE/JSCX+
-         qfLFovmYvXjRZ1dZh2d0cgOzNrB3UhnMIOWbJsm+hHTQuHTItvRnAWwrqJTqUvflcK31
-         VW13mTeXDtBlxVyo6HDjqwROkd8OXMbd5mRBESXjnBhTecdv+/SPZVdU3tFvuShhN5pA
-         2Oxz71xdHRnUD6P3WfyHp6PwoBp1Xq86tokz8o2KJrSE/aMmLBjDXtffcD/lHMDYMsWV
-         d2dw==
+        b=bL+G73ldcJlHkpbnuiaOIlDvLbqalg+vH4P/wnw+dr6wvgAbuehX0FnXshmvQ6cRvY
+         JXJnhe3d9MXzB38htNH9NbiABxBUCEfQNajrUdpHIEagM6yrA4KlSG8yEpopvFajIv0V
+         hx/sQP1LUuJzAfsrOaTudF87gPzkan2XxQs1S/C8GZRtYZ//IfUh98S7qwSe12U1l3Cm
+         4e/aNumXCRekzeaLYbfA8R5pcu+RvvGYe3pT3LrH3SGtlAb9d/KnuABmgsiSEulb+CID
+         7f/uR1aT692Myt+f8OitJ/ZqM6j2GNDGeOY2tS8PjmmBmIGNaaLNUjmtBSWIz49oXY8y
+         zHxA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=nilV0Pn73Zsexcu5tZDlRh2Fi/j891cZt5rBBZe+zkM=;
-        fh=VS6fnLDrrrlB+i28NVWooOokwQgQxWRJ8+PD8g2EMrY=;
-        b=KmDQviJeDIzSTNw2+U/qhg8e6JsiyQX/rvzanrXgvoG4Cow9/Yj6QA6XDSE9s1Pfow
-         9pRc78jsXnjPFtz5EpoQHPG4wjrqVIuRrP28OORYBxF6SLyGtmr7h7TwAr+7A3sH8HGT
-         Ebnf7ywhWWH+H6WecVXwSkPv5BnRfI0mqv/p3aq32SXZI5iWllinmDdkDmi8AwYs8jyZ
-         Xk/BP9+7TrmRmQZ0nfFGMTN2QQM3/B+0zq5cXWUm/sscD3NKLfWqdbaiRrSt3RrjQ8eC
-         FXfSOHnSe0r+6SE+ozJrM5JM95xI7gRdc4avMrDmn1V6QfTHDHYUVVMMtbW/XyZomsX1
-         M+Fw==;
+        bh=9KkcD4cNkJ7R3VcW+5XtLvUJk0Z7zp7MozqiVoOmiAA=;
+        fh=10Ke2xGZe+25F6+lVsMRWGoyPhNRD5PjDOc9XXTatKI=;
+        b=bUH5N8d3Q8JwI2CKgaYd4yPHPvDc28G1Dt/GE+vBQQCmkMz0GEkbHdjjyPmwP/51qH
+         nJ33/+okeDpZavD7XzUVBZZIsD4qjzaoOPIzvIOyWYcrEI7p70Zw6e3R+dUYd7N/5yIR
+         eNpq4rQrgofI6cIYOlmKHYDJ8kXv7lCkPKkrPArhVV0zQv/F5mqQAO+HxTouGKIZQVww
+         TWk07qCe59BC9ylH6E+ynOYdYnHBuzSvYCA15XrhB63nxt+X25zu8jhaQ+1g5SwfWkIA
+         mVl3ttVLkbmHraiXoADz3IV1di/sCF5ert7O2NzHXl9DzhVtGLuKEPp7XBcj7iZmYORp
+         Usuw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786268217; x=1786873017; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786268417; x=1786873217; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=nilV0Pn73Zsexcu5tZDlRh2Fi/j891cZt5rBBZe+zkM=;
-        b=NfG/5F7oLlT1lBQyIEAam6SvEk+j+pkmD7E4OegpFrFn4AawuQmVk/6TDABcDa2+vW
-         CtW1zepRplhNcriwGpakPFkzhTkBdKJOUTaKWHRoYRUWgo/yrF4q+zK5eBhwr4jnYuIA
-         qk81Uszl/2ZwGvIf4SXT5U4DXSd/oFcHw+P1FeQTSGoL1ppZdhljibOs8SARNq2+yGCa
-         ARcL/NN6nz4wfsRgQfkvle62pirgl+JMov44cVwZw3bUkzywv0PFZRU/uayfMl5KXFB8
-         R8h+0hbjEtRQiyXhNVHyzQ4upTNWdRKoD08wihcI0ci9mJeLvcz8PYF6/ykSyxcVUAY0
-         zFbQ==
+        bh=9KkcD4cNkJ7R3VcW+5XtLvUJk0Z7zp7MozqiVoOmiAA=;
+        b=fA/F0g8qur/Ixtef7Qp+gKAzJQL/yCue0CQF3DWjiBZc3u6R+MfNhPB6YqiSFjHQyo
+         kBsMiBqW3z5HhirVRD/y8h/j0zlUK50kgQ2fJ71zt5yTbkvY/bPpc9wgu8ye6r8GTkEo
+         Z2oxRtbbRJmvSlboeQ32bpjM+LApWhYLfjfkLeYJ0c7dM7zBLt//uVIeI2232bEX8rDz
+         6d/HdHdnV2x5FlK7rR1ERUCn9pdPqcJhUtWFmdDzQVnTyBKmkwZ6aLHKsm07QovSDeD/
+         M6TYxpjflNCRYRgUpbltMD5Mm/fhgUFZCZXXLtk/8YAaMpeprQG7+HBfwmqXJTMyim9p
+         +D+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786268217; x=1786873017;
+        d=1e100.net; s=20251104; t=1786268417; x=1786873217;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nilV0Pn73Zsexcu5tZDlRh2Fi/j891cZt5rBBZe+zkM=;
-        b=n+FwLNSN9ekB0x4TlmoC08oDLQRFE4A3JhKywVE9mT/J9ROW8owzztMoTdTowxlPLJ
-         VOAbCFyelY6AsJU/JIBOvAmTAfez4x995uGuOwaMx2EiuxDcDbj7IWKy0UTXZjh98KRN
-         x14Y/BaAoOfslrL/oHDgwE9INmZul283D+KqwX3VySB66e3veLrqFLNnR1o1WioyrA4M
-         zpCc/h77MmPMEMCyShpLC8J8Xt8stK0p5EVYzQD8D6TO6/gMAi7c+Y/fNRVIW0+ESuHU
-         VqJukZpLUy6POn+pRMRnwFaz7DN6j2l4jmZYYVnxmbuyGi/hadVES9hz1sPFWrsONKh8
-         l6Kg==
-X-Forwarded-Encrypted: i=1; AHgh+RqB0ebTqZ6dU+1FqU3X1heJ74rPVpMyvj0g4MTQ0kEyZDlkPl0dwNrlK6AVJuZL3FxziIiM1LIv6ZyBZSyj@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrQvNyCPwUOSTywEFiOsnOJWJzI4yD+LITDpLj8OQ86jCFLv1/
-	y18RMZO/WC8Zrbzbh79g8So4X8qSkQLYqM52VCJMxja0nI/p25ncSL5yX2JSRneVf6ggGvwr3Ay
-	c/qs4z9xonl7QWtWiHOy3Pktfv0zon2U=
-X-Gm-Gg: AR+sD12LC2dZZEgsAWNbEAp+66paQyll15dwv5my6xAm0uio0qdyAeDsiCzv6KjsbDn
-	HQNoxtebxlrujIa9U2eZdpLEDiYg5grmgrp2OS08terYzORVtIZxSa0mR+mtPZM8WettMOnmA8J
-	aN5hOFzC9TaVKMpJ9fdInfmjgrzYFHkRo+fSGX+8wG+et7B9RNDrQn+royTvacdKV90+OmSBx0m
-	UwqEexxjTSCLVQs9V/Y9+ZAXv0V9bC7dYnphvVKg+0P8laZ3L0Zp9tznHzx+5AWCrjoJx/OdvfS
-	HGobFTBeXd5+cCKunkkRHvQx34Z98mg9hMHfzHFHkDN5cEiqDUW5AEDXmBXEA7x7lGPGR2afEzX
-	k5Q==
-X-Received: by 2002:a05:690c:c149:b0:81e:a373:47ad with SMTP id
- 00721157ae682-825eab48d46mr58166357b3.2.1786268217502; Sun, 09 Aug 2026
- 02:36:57 -0700 (PDT)
+        bh=9KkcD4cNkJ7R3VcW+5XtLvUJk0Z7zp7MozqiVoOmiAA=;
+        b=H9U7fZEFkKgrEIa/dVPqDhVrukpGUMGfgm7oixb/orJM67vXmmLqbdzjl5EoHDICLh
+         aQYkiU0TmOyvU6UvLJ1bCS42vaKcN0HZBEyk2eMbelrdg9Ux43XFWreh55MTH0rmmEs7
+         698YkYWUcKteP+ai1MbApudbI14eRsB3mDplSjIyg/x04J8l6RoC0V4dpqT9MWvsiqPW
+         rdl/tlpA3g0PCdalkDadvbHDvcc7nfPMpuggtzahL+HYjgX+s0n0/ebzrNPs9VQxyHq+
+         M60iJ36BIKAETbgLzuTGmZrOD0ruJkl7HtXIc0Imuto/5J/j8ibDAT9S/8CbNdNfg2TA
+         CfKw==
+X-Forwarded-Encrypted: i=1; AHgh+RorpaUghyoprChHRdPsAk+yPtTmTY95ySYD5a/eg+wSeuYqd96wO3VJKyi/yDR0v96bqMsUnbe+lsezEr0x@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhJFU6JdYDvi0Kmh0f35MA2PSbvbCk1ND3FpO5yYLFpHnaXc8J
+	8CsnXBHO3j2wbrZurhClJJXT2A/15GFoRtXlvtroDANfNgk9uOjR3awvyBvyZWJBiQMm0xXBmOP
+	0FpMiyJWuIC3ZmCUt6TMbOBkzvjCi+Ts=
+X-Gm-Gg: AR+sD10Symoqv7/QAgJpeuuh/6HykXHlYNpLQIyyuiLba3iGL+MLdsyKKydVia87dXL
+	O3Wn5VLRTtwcW5y4F5Brl6omv8UIu5yOuX2CowRzgPzpp5J2zHEvVUrbQhIPn9TvccAdL9qi7Xi
+	zj2trQqszl3j6kStGXAPnuz/wIV7KBkBLV38r+XjCXxrJa8q3KuDDjmtr9MBb2AOwCrUS7twXKB
+	sDx2vUvINdB9oX+gueWnwFpe5QWAGSuJg2+G73bRXmzjv9qJZHdgZjywoYHyNrr7N0JVXHli70Y
+	FpQ7/tn3AW31zb2T7KzZF9AcF4bydDRqPyZKiZckEi2RLOhRLnH15907joXOJsJoZMFtdEflKcz
+	o+Q==
+X-Received: by 2002:a05:690c:650c:b0:80c:8d09:3880 with SMTP id
+ 00721157ae682-8201f4a69bbmr219060497b3.15.1786268417150; Sun, 09 Aug 2026
+ 02:40:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260809091954.22930-1-laoar.shao@gmail.com> <20260809091954.22930-2-laoar.shao@gmail.com>
- <20260809092850.28E6B1F000E9@smtp.kernel.org>
-In-Reply-To: <20260809092850.28E6B1F000E9@smtp.kernel.org>
+References: <20260809091954.22930-1-laoar.shao@gmail.com> <20260809091954.22930-3-laoar.shao@gmail.com>
+ <20260809093214.169491F000E9@smtp.kernel.org>
+In-Reply-To: <20260809093214.169491F000E9@smtp.kernel.org>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 9 Aug 2026 17:36:21 +0800
-X-Gm-Features: AUfX_mzIf3R94gtGbxg0spoCg4Bd58KzxwELBsN6ZKEoNRF178Rwy36LlmKMp5g
-Message-ID: <CALOAHbD48m1VTLirFrKXgsDs+SAaaU3_PG21NQWbkt5SfH3E+Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/9] livepatch: Fix wrong index in funcs cleanup error path
+Date: Sun, 9 Aug 2026 17:39:41 +0800
+X-Gm-Features: AUfX_mwUPu4woBnmXuZZQ4trLTtU2ir7H6J_5FcX9RQDxlEWhKZkLdiT5BpUUpE
+Message-ID: <CALOAHbB0nfrtSvV5m8DY3OBYu_6ugrJ=thtGyO+0KtVQtsTwUg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/9] livepatch: Make klp_find_func() non static
 To: sashiko-reviews@lists.linux.dev
-Cc: mbenes@suse.cz, jikos@kernel.org, song@kernel.org, joe.lawrence@redhat.com, 
-	pmladek@suse.com, jpoimboe@kernel.org, live-patching@vger.kernel.org
+Cc: jpoimboe@kernel.org, mbenes@suse.cz, song@kernel.org, 
+	joe.lawrence@redhat.com, pmladek@suse.com, jikos@kernel.org, 
+	live-patching@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 9, 2026 at 5:28=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Sun, Aug 9, 2026 at 5:32=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [High] The patch introduces a double free vulnerability on the `funcs` =
-allocation error path.
-> --
 >
-> --- Patch [1]: [PATCH v5 1/9] livepatch: Fix wrong index in funcs cleanup=
- error path ---
-> commit c03811c85b7c79e0d681d9978c346e4424c48a99
-> Author: Yafang Shao <laoar.shao@gmail.com>
->
-> livepatch: Fix wrong index in funcs cleanup error path
->
-> This commit modifies the cleanup loop in livepatch_mod_init() to use the
-> index j instead of i when kzalloc() fails for a function array. This
-> attempts to prevent leaking previously allocated function arrays.
->
-> > diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-> > index f14d8c8fb35fa..16aff8f736eb6 100644
-> > --- a/scripts/livepatch/init.c
-> > +++ b/scripts/livepatch/init.c
-> > @@ -51,7 +51,7 @@ static int __init livepatch_mod_init(void)
-> >               if (!funcs) {
-> >                       ret =3D -ENOMEM;
-> >                       for (int j =3D 0; j < i; j++)
-> > -                             kfree(objs[i].funcs);
-> > +                             kfree(objs[j].funcs);
->
-> [Severity: High]
-> Does this introduce a double free in livepatch_mod_init()?
->
-> When the inner loop here frees objs[j].funcs, it leaves the dangling poin=
-ter
-> in the objs array. The code then jumps to err_free_objs, which iterates o=
-ver
-> all objects and frees the arrays again:
->
-> err_free_objs:
->         for (int i =3D 0; i < nr_objs; i++)
->                 kfree(objs[i].funcs);
->
-> Since the pointers weren't set to NULL in the inner loop, won't the
-> err_free_objs cleanup loop free the identical memory allocations a
-> second time?
+> Pre-existing issues:
+> - [High] A malformed livepatch module with a missing `old_name` triggers =
+a NULL pointer dereference in `klp_find_func()`.
 
-This is an invalid review issue. Since kfree(objs[i].funcs) is not
-added to err_free_objs in the current state, and it is moved from its
-current place to err_free_objs in patch #4.
+Invalid review issue.
+This issue was already resolved by commit:
+
+  livepatch: Fix NULL pointer dereference in klp_find_func()
+
+https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.g=
+it/commit/?h=3Dfor-7.3/trivial&id=3D1a38fd13c31ed8e7c7b598cc975ecc0f41fca46=
+8
 
 --=20
 Regards
