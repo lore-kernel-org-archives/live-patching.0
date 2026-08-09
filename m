@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187032D8376
-	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72AE11A6838
+	for <live-patching@vger.kernel.org>; Sun,  9 Aug 2026 09:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786267732; cv=none; b=t54wiTfW89jr3KoLkzNb6uLUSvXc4aE5sWiI/b9cbgI9mDseSuZuP9LKglUt+R55wa6ZZsfQ1Jz6Xzk4gybgZU2puqzD16BHP5hzPqlXi9MdK4OyFJwHQKLjcxlCjJCyZL5HKNWK+Fpg+hn1VP2jCv82XFeH8E+lVldY7Tf73B0=
+	t=1786267909; cv=none; b=BHHESvRhkrMZtbVHylAsdzhT2I7+uj42yV+coURpk0CDvVlX13W74ygxq2ZY7WcmMyFBbIyGcxPeceBt6NhsLKFYPI4XSQfWZydYBk/7vBz9Q6Bbc/o+Su5PXnrgnOXmFTiw8eSYfzoLT8ekPqU1r8mYQLVqOW0plMqELWeiWK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786267732; c=relaxed/simple;
-	bh=s6ObsVyk8x4L+I/R1hzkLHJzEeX9W0bdLxQeoxK8vBM=;
+	s=arc-20240116; t=1786267909; c=relaxed/simple;
+	bh=41XFBGmOqhZYNd2NhWLfJK/hLDiPV13hZ8V+NCV2YsI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=T4jIDZMrXl8PVc0XebNyFsb6fG4J4VW2MDEDgQoRTileoPx6dYZlryxI4/NxX/tSeunShLLxEl29ZK8ctBG4Ah1SFBf4e4DrR5aceIxoPMknXqH8IXJgy6ldxMWZYjZahLpLBsfAqit0A1aEcakvcWJFHdW/q+7FG3Q0A7FR2Tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EE1BrUtT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ZqP9ofRYTLkz7PzhZKFkZjCefVoutq7h3casIkK33kGqYBhD0ad1XNKsyetlwX/JFEeRJ07JUxm18m6mJ/A/AmKWoz6VdHnDv0qPt/kLeGq80ITwmVRHDoXZ2qXBWiAykVgwDSXMbqZHjKwKENH3XncmFtfIGL9ajfJR66Zz1aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fa4iPITP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EE1BrUtT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E6B1F000E9;
-	Sun,  9 Aug 2026 09:28:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fa4iPITP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9081F000E9;
+	Sun,  9 Aug 2026 09:31:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786267730;
-	bh=5Qsx4J0CHzxeAKnouGagEP0JBCbuM7Snr3jRLMdCY/Q=;
+	s=k20260515; t=1786267908;
+	bh=JgCCjsDiDbFkmuq4WVjGkHe5HSub7r0Ty7KKuwZtrUc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EE1BrUtTNsCPi/YIiJu9yoSaqvNbDCVBfQJSIBgEqDJxCCaGkKk3rl298VVZOLP/l
-	 HddZhszMb36dsmqWpDdW3F7zHTaKkaf6l4hKzm9EG5O3LON5PfCIqSZVYXzA6QMvtZ
-	 IENnghIVtxu4kdCfwzj7+3v3zxo4O07RKPxVYG/3alJg+LZywT8TQxhx2keCFOzOZP
-	 5F47GuWF6lerNs4vXWvpI9/MYuX2oMKDS4wBCee6ibWtVMGQ+lWXE2zV1OSwo6WGlZ
-	 gAho0vzcvgqu6pvHi/Cwnve6LnkjNb5ePPA4tC7eN7wbie9K3dZXra2Opu8a/G/DTz
-	 1YhKAwuWY49RQ==
+	b=fa4iPITPYF1Znnr+U9ShjZ1t7IzxY1NHUOaHnWfLQ0ofqYBV3ixMQtLboV2BJ40tt
+	 ifQegACNPWNRbWHi2yfYt9AGA+YyTvoH0iin5AKXwN8MWD6ukiBw+WoclzwiKGr09n
+	 VL4aG6ZQW3v85/t6LfcSQLA0//ANjeW+FgpLQV+9kqt2R2HSd1WXwKLqdLhv5eZhCP
+	 05ia6Ui2rp54DXLFVNEk0UoPZ5jKGbVuVKI0bttBw8+DIEMUev2OgK/L30wCT3tJEB
+	 zO061Vi2zDjhm6mc5RYmgSg3tzNzr+FhmbLKh1/B7ADTxSE6J3WeaFAOPnOLLUTvAX
+	 8YZBT9zxLfQlA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v5 1/9] livepatch: Fix wrong index in funcs cleanup
- error path
+Subject: Re: [PATCH v5 7/9] selftests: livepatch: Add provides/obsoletes
+ test scenarios
 Reply-To: sashiko-reviews@lists.linux.dev
-To: mbenes@suse.cz, jikos@kernel.org, song@kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, jpoimboe@kernel.org
+To: mbenes@suse.cz, joe.lawrence@redhat.com, jpoimboe@kernel.org, pmladek@suse.com, song@kernel.org, jikos@kernel.org
 Cc: "Yafang Shao" <laoar.shao@gmail.com>, live-patching@vger.kernel.org
-In-Reply-To: <20260809091954.22930-2-laoar.shao@gmail.com>
+In-Reply-To: <20260809091954.22930-8-laoar.shao@gmail.com>
 References: <20260809091954.22930-1-laoar.shao@gmail.com>
- <20260809091954.22930-2-laoar.shao@gmail.com>
+ <20260809091954.22930-8-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 09 Aug 2026 09:28:49 +0000
-Message-Id: <20260809092850.28E6B1F000E9@smtp.kernel.org>
+Date: Sun, 09 Aug 2026 09:31:47 +0000
+Message-Id: <20260809093147.9D9081F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,51 +47,57 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] The patch introduces a double free vulnerability on the `funcs` al=
-location error path.
+- [Medium] Race condition in test-provides-obsoletes.sh leading to flaky te=
+st failures.
 --
 
---- Patch [1]: [PATCH v5 1/9] livepatch: Fix wrong index in funcs cleanup e=
-rror path ---
-commit c03811c85b7c79e0d681d9978c346e4424c48a99
+--- Patch [7]: [PATCH v5 7/9] selftests: livepatch: Add provides/obsoletes =
+test scenarios ---
+commit b45263c641deb4b2b48bbe22a1f0bf862b20a22f
 Author: Yafang Shao <laoar.shao@gmail.com>
 
-livepatch: Fix wrong index in funcs cleanup error path
+selftests: livepatch: Add provides/obsoletes test scenarios
 
-This commit modifies the cleanup loop in livepatch_mod_init() to use the
-index j instead of i when kzalloc() fails for a function array. This
-attempts to prevent leaking previously allocated function arrays.
+This commit adds test scenarios for the new provides/obsoletes mechanism in
+livepatching. It introduces test-provides-obsoletes.sh to verify replacemen=
+t,
+coexistence, and obsolete features.
 
-> diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-> index f14d8c8fb35fa..16aff8f736eb6 100644
-> --- a/scripts/livepatch/init.c
-> +++ b/scripts/livepatch/init.c
-> @@ -51,7 +51,7 @@ static int __init livepatch_mod_init(void)
->  		if (!funcs) {
->  			ret =3D -ENOMEM;
->  			for (int j =3D 0; j < i; j++)
-> -				kfree(objs[i].funcs);
-> +				kfree(objs[j].funcs);
+> diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh=
+ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> new file mode 100755
+> index 0000000000000..c740d463f556d
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+[ ... ]
+> +start_test "provides 0 replaces provides 0"
+> +
+> +load_lp $MOD_LIVEPATCH provides=3D0
+> +load_lp $MOD_ATOMIC provides=3D0
+> +
+> +mods=3D($SYSFS_KLP_DIR/*)
+> +nmods=3D${#mods[@]}
+> +if [[ "$nmods" -ne 1 ]]; then
+> +	die "Expecting one module listed, found $nmods"
+> +fi
 
-[Severity: High]
-Does this introduce a double free in livepatch_mod_init()?
+[Severity: Medium]
+Could this directory check race with the asynchronous sysfs cleanup of the
+replaced patch?
 
-When the inner loop here frees objs[j].funcs, it leaves the dangling pointer
-in the objs array. The code then jumps to err_free_objs, which iterates over
-all objects and frees the arrays again:
+When load_lp returns, it polls until the new patch's sysfs transition file
+reads '0'. However, in the kernel, klp_try_complete_transition() clears
+klp_transition_patch before scheduling the asynchronous work to free replac=
+ed
+patches (klp_free_replaced_patches_async).
 
-err_free_objs:
-	for (int i =3D 0; i < nr_objs; i++)
-		kfree(objs[i].funcs);
+If the test checks the directory count immediately, couldn't it sporadically
+see the old patch before the async cleanup completes, causing the test to
+flake with "Expecting one module listed, found 2"?
 
-Since the pointers weren't set to NULL in the inner loop, won't the
-err_free_objs cleanup loop free the identical memory allocations a
-second time?
-
->  			goto err_free_objs;
->  		}
->
+This same pattern appears in the "same provides replaces" and "obsoletes
+replaces" test cases later in this script.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260809091954.2293=
-0-1-laoar.shao@gmail.com?part=3D1
+0-1-laoar.shao@gmail.com?part=3D7
