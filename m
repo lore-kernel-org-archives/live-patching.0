@@ -1,115 +1,89 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D601256C8B
-	for <live-patching@vger.kernel.org>; Mon, 10 Aug 2026 03:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786334034; cv=pass; b=OGvzYUBeK94F+Z4JPNUAhf5wRGTL18cLbJd4UJTio48T25Rl+nJqSEp1/BmDHa372bFqgnX6Lsu/SzwCRT4XR9oK4YIIEYmdwJP4IsaObvp1hhz1fQYcN+8tw4OoD4GvNtVmjCppO3LoqJeT/baHl5JVgEjmJQkZOAgSLvpO2RY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786334034; c=relaxed/simple;
-	bh=EU2KI1CRt6zOh0x+9oq4Ezjjo2sFpM135RQqO45Ttw8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k9LQrG0Uuiwf0wI+f7LQDdkDO8aM6Nf1lK91CmGb2xEBAYZBc48BMVZhdDnX1MC70QH0jPf6pqlAlpbsrVXFJkc9xBXXTYHx0HFSWl35KeOtyDX44IzprX9N0Qxpi+WLlXhLXmxZwij7w/HkUZN5jMbkp9o8m1XTRh6rsfLGngI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LHRmEMxU; arc=pass smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB1D3BADA9;
+	Mon, 10 Aug 2026 10:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786357877; cv=none; b=l63Abm6WUIuv89srZd9PRm+iZ65mBs9HEq3L0Q29bgS7uqGJRh/NUYBf5Z87p01c6dMnBP9v2O8CuxTRHSjExNylPLHSWKW02Y06O4cudVnXSawq7z/qlxp8t8HsDRTlt8BpzqpFDAY6sfc1fZTwteHgoWt89jwLWk0ASunrJQI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786357877; c=relaxed/simple;
+	bh=D7O1chavq7mnVPlCIi+Q1UQnC6ZftpNXMABBkouh1ME=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lr1apluwbu3OtqBcSETy8gc4ddSGavEevS5iEfqV8lFtbZinf7uQd1bK8lcoZgGusEJQTaMpscleJiNqO4LkaJYg2T2zlhqCtboNKulzL6feOuwAR28gSnPSinOPaKFuZAO4FjJ+MRr9ohtSHxeKmZ3htCYU1Ro1DjwnpppcaD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A6utgY3L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LHRmEMxU"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-82011c59e66so20832697b3.0
-        for <live-patching@vger.kernel.org>; Sun, 09 Aug 2026 20:53:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786334032; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ep2XtUBn4LG9lqSEEYdq1BqBebSBvfhdb7YG+vJ41nMEL0YPnfYkT/ypwv4yxU3SmR
-         jV4c9lkoD6VFpm/pe4dBIYkQj3yOxC4F4NXkAVCgggYOUeuFhedF5i+LBzBvAF1qN+MH
-         Jc8UF882kkaDhe9HbItSs2z2xxGUDs4v4bD5ih8WCyRxl38mElqysFBiRMFbSp4plkCV
-         tD9KNk+wENos/nI8ifs9QJyP7GIRKe5Noj/+BNeTs/Fk6hSzCWDwcKs1Kk3oungieF8j
-         UC0srslBpooeOyR5pCLMUyHui+cupsUtRl/+bivvcCjWn476IkAOgXT0ixeymxk6IHd2
-         knig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EU2KI1CRt6zOh0x+9oq4Ezjjo2sFpM135RQqO45Ttw8=;
-        fh=iBeLoFKxFuf2oXOFVD6Oqiup3F3gAzSLGqKKLwmLRRs=;
-        b=MdnJPzP+8eJfJ8GaTWX3MEiKwbBu9RArA5VSzjO/5g6vRqYlDgw7if1rJsGpIwoPkG
-         aPAsVKMpGvwwLNUpSRK5AR4F+9zv0pWx1UcPZpTdZAXqKeI+VDGg3c30V1b0c2D+J8Hk
-         hpf0pBGKbII4bIX2UsM0CZj9ecGNSDb+jMomiteIpk0GAt6/6QiUZ4TBISE0H4Y2oBR9
-         TOpSbcCOzFVa8kdkYPAyRdFB+5hSO9NulrejgMoOOO1Qw17v5CNQwMR28ZBuYQsMdaSV
-         Lz6+8nl3O1bBPa79NEi8NDaCmLQ04vurBHlKG8sMqCH9LdNTWxtIVE26yWQEstaitVTU
-         blIQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786334032; x=1786938832; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EU2KI1CRt6zOh0x+9oq4Ezjjo2sFpM135RQqO45Ttw8=;
-        b=LHRmEMxUbAGMCIMHzSgEQ5zwahA7W8shsrDkmVRFDb0gk35rOMFIPwtAN3eMwIc041
-         thQg6Uri6yT1JzATziVgTWvky9u/yBQEjGkn9kTZxTv4Syzvko7Ub9NirLt7dXDRu8ch
-         Jv62Ru1tFooiKuTUfkF8IHRoyNVKWHDoR1HJnLdnTLIHraV/wLSixp7kiedRigWcghDN
-         1lOs6BDwGGCOZmEZcRyhRGGcUS6J7YSq6wyDJSf/gBUJfQ+b4uoiFEb6eg7Gxp+IwxGV
-         I7+WvUo+f2eZYuw2Ht2t4UdHW5PfSAmHUR90ptCkvpoNXBBq9/5ydXNQEy4SFY4eNI91
-         2T6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786334032; x=1786938832;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EU2KI1CRt6zOh0x+9oq4Ezjjo2sFpM135RQqO45Ttw8=;
-        b=c7WBtqxR7cReK6pTqRzO+xHAwXSQMt0k320aqC9wpaSjr+gXvMDNfljCxjgGJKo7x8
-         C7vRIMZHMGroKckfltrsEtZmc1Q40CWPN8OyrjlzxQA6xBvDX3XAtZfLXuwOPMH7Nfq0
-         NA0t21uColbJavqS5wuBndZKZkSeemrNnKFU8W7s6nlspHNLw5muoyV/FJzin5oqB0h7
-         adYhGgwTbybpAEsjrbvxEMnb6gcPIWnvoYasFUg7K+7haB2jPNqTsARc8uembywfW4DC
-         UNHVDt0AZPdBqzWmePdjmq+vis7q4xTg/mM8/RF7Ww/weZLpuN32JybEWxrN6kFC187K
-         CfLw==
-X-Forwarded-Encrypted: i=1; AHgh+Rrg057AqRmIh5dqe4YB7O+DMtxALFe6CH3v2iE1GGG5grX0JdZAjwa2zgEfVu/ZU65XmVdXRk01kw/Dc5KL@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5PYiLfbrZgpdgz3jzgphf9f9fAA7GICgaB5Xm1mViBxEz7WyP
-	eUXiKpu5iH9SFzskwqFj2wllTvXFE8UdMgWKXmDh0jEWzO7zIR8ftOh88GGsJzzdpR5GKHLKsM7
-	VS52Mt9qEwXOetSpClV3nOoXmn3GDdYw=
-X-Gm-Gg: AR+sD11O3NWx0PrVXtf1WoEh79BeEZ1E/P8s0g5NiBK0PrOQdHX+3sgNunHau8uzAGv
-	10Wnk4/Dj1ewEppMA6eTvX1RKzLoW4Bb19vptID+r8+jfIindLAxY6aknDgNprTtp/KAMqUWCh8
-	YKleAogo0pEcuZ4cH1RIb8Jw2GAGMEnKVUkSegpA2y/9VagZMzVjSA2XubiTjqhX7y+HNyk4SC3
-	irfToYzyK9ZfsPSYYigzKjZXZeXt0DlQE20hz0n9QMNJclFPZTYmkcy1WGDGFe0qq/CJ0G6gDRx
-	vbtqvU8oVAql78GeolJB5ZaOUujlpGhcW/0yuSB3doQ4V4QtGpE33oShOz8DhmC/19C68ohAthP
-	/
-X-Received: by 2002:a05:690c:260e:b0:81e:695b:585c with SMTP id
- 00721157ae682-8201bcaf7a0mr264944807b3.4.1786334032195; Sun, 09 Aug 2026
- 20:53:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A6utgY3L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696901F000E9;
+	Mon, 10 Aug 2026 10:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786357876;
+	bh=T2rdagmXWfGPAIzO27YZsC0M9W0VZdij5BhCuKZjYSw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=A6utgY3LlJYWRMPuC8wdlIE0qKmJ4qA+6NPGz7UORV9rorxpaxw5NZAHYWukKfQ8U
+	 glXgp06JMMtMIuNpYLyBiQLRu4an7OgUgZV9S0jtIWEdu67gs4wjZAaaAMuG6vyIyh
+	 t02gjfWlF/peX2XVlpNoqOgcdfr00m+r03D1t76AcGeJ3uR94RYAPK78cz3WB/asrB
+	 kWhxEZHKNGVeTnjTRRHs3eKDO0nIg5WDcgEYNimF6ATH2/+lwdjVEuXAyq/wMC6Qds
+	 gOqKod//7rfFRkA+1+/BD0T14oFQEJUIlZcFmD2fwJw3C9A/SP1LaAHsONs47nEchy
+	 x8fyX9kdGHfEA==
+Date: Mon, 10 Aug 2026 11:31:10 +0100
+From: Will Deacon <will@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org,
+	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH] arm64/module: Fix livepatch BTI exceptions with Clang 21+
+Message-ID: <anmobvJXiBQqWn6S@willie-the-truck>
+References: <ed4fe1f95071897859ec7fbe9176246cbd4962bf.1786138806.git.jpoimboe@kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260809091954.22930-1-laoar.shao@gmail.com> <20260809091954.22930-4-laoar.shao@gmail.com>
- <20260809094046.50ED31F000E9@smtp.kernel.org>
-In-Reply-To: <20260809094046.50ED31F000E9@smtp.kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Mon, 10 Aug 2026 11:53:13 +0800
-X-Gm-Features: AUfX_mxElC9ze2AWpHHfl_SsxT2A2aEpQ3-OGyPTjU89ordFkAdgLF6AN-Fm3UI
-Message-ID: <CALOAHbAuSypXjKoPiGuSDMNe5WJ5DNKy0kkv-1QjFZc0wRZi2g@mail.gmail.com>
-Subject: Re: [PATCH v5 3/9] livepatch: Call klp_init_patch_early() earlier
-To: sashiko-reviews@lists.linux.dev
-Cc: song@kernel.org, jikos@kernel.org, mbenes@suse.cz, jpoimboe@kernel.org, 
-	joe.lawrence@redhat.com, pmladek@suse.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed4fe1f95071897859ec7fbe9176246cbd4962bf.1786138806.git.jpoimboe@kernel.org>
 
-On Sun, Aug 9, 2026 at 5:40=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] When CONFIG_DEBUG_KOBJECT_RELEASE is enabled, an error during pa=
-tch initialization causes a Use-After-Free during module unload due to dela=
-yed kobject release.
+On Fri, Aug 07, 2026 at 02:46:11PM -0700, Josh Poimboeuf wrote:
+> The following BTI exception was seen when loading a livepatch module:
+> 
+>   Internal error: Oops - BTI: 0000000036000001 [#1]  SMP
+>   pstate: 634004c9 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=jc)
+>   pc : kill_orphaned_pgrp+0x0/0x150
+>   lr : do_exit+0x498/0xaf0 [livepatch_combined]
+> 
+> The problem is that the patch module's do_exit() is branching to a
+> static function in vmlinux using a module PLT veneer (indirect branch),
+> but the target function doesn't have a BTI landing pad.
+> 
+> Clang 21+ omits the landing pad for static functions which can only be
+> reached by a direct branch.  That's fine for ordinary modules which only
+> branch to global exported functions.  But livepatch modules use klp
+> relocations to reference arbitrary kernel symbols, and with
+> CONFIG_RANDOMIZE_MODULE_REGION_FULL the module is far enough from the
+> kernel that every R_AARCH64_CALL26 needs a PLT.
+> 
+> RET is exempt from BTI checking, so use it instead of BR when the target
+> has no landing pad, similar to what ftrace and BPF do.
 
-Makes sense.
-I will fix this pre-existing issue in the next version.
+Hmm, doesn't that somewhat undermine the purpose of using BTI in the
+kernel? Now we're going to create PLTs that can branch to arbitrary
+addresses.
 
---=20
-Regards
-Yafang
+> This was found by testing with klp-build and Clang 21, but the issue is
+> not specific to klp-build.  It's inherent to any livepatch module use of
+> klp relocations.
+> 
+> Previous tests with Clang 20 did not show this problem, as older Clang
+> unconditionally emits "bti c" for every C function.
+
+Is there an option to restore that behaviour if CONFIG_LIVEPATCH=y?
+Otherwise, I think I'd be more inclined to add yet-another dependency
+to CONFIG_ARM64_BTI_KERNEL so it's disabled if LIVEPATCH is selected.
+
+Will
