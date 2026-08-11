@@ -1,55 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92C42E285C
-	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 22:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98F2397E73
+	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 22:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786487781; cv=none; b=q2+W8EoF0Jgg2fblWmTyOIJyq4A2L0ATX+AQvnT3OX36Ji0dxKhI9q5ePNpwZYcTteCSWf0mo+p6b75TV8ZrkeXCGltb3lvWzpqD1WGc7KRq005ldv4+r7EimCU3o+4h6C56f9rtOTQyiFMTqNONmOlBQwQx1z0CoAzbSvgYcmE=
+	t=1786487821; cv=none; b=ng76TXU0RMjq1yU40if0p7EZ6kVzurViUMcy/3q8ksrKNkZck8KfbltG+hsIZWK0DMxI36c3CHai4KGHhS5krNAV48K4biZrUCnAZqqSfjNVLx0ep9fsbNYKWW/AzNzE9enZf5++yAsuTccxH8hgxMNaRtnSLRTWQ9U9OMqsrXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786487781; c=relaxed/simple;
-	bh=AfldEmuhATcFxMIBdZpYfqXyTqeNtBoD5/COHSk4wWY=;
+	s=arc-20240116; t=1786487821; c=relaxed/simple;
+	bh=rzMhM3FcIrKHTU357iiMZeXP2RmA9FNJoPPqk3KH8bA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DJlXK+EqJM7X3ANzbWOgKEKbmc6oa+/dIybDQdi6GY+rLilCq4z9bRpV5buNQJQISBl1eLXmMfQ+lmnX18oVOVnuUnCvpq3Kablmervy3z4fTcFaEI8K6sdhQUjNhXSxdlELEol5bbBJwvQXsHwnqrdRnDn6iaO1KVIzyn9iu0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMvzFNcE; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=e56A1bLtFHPWQuE61PvtnUCBlDj8ZIbZU16gsHBcdnLSU9CJ7QqNPDhE3EJmsLoJbm5y3SdluNFxuBUOaSuCG70S/6pw9itHnKU5fUo/t74w3VZNkjVF2ty9ZscFxXfVmBZid/RRDgxZXCTJjxEfjoRW+YifQ9ADR1kostj7kik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7hI352E; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMvzFNcE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B0E31F00AC4
-	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 22:36:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7hI352E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99761F00ACF
+	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 22:36:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786487780;
-	bh=zLlNtAVo/6r202zcjzEkJ+yD0bMpIwaZgzntaBzQmH8=;
+	s=k20260515; t=1786487819;
+	bh=9UHtxr6BoTphw9k5sX3XVfj3ISvPw+UbHGwczai7TkM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=hMvzFNcEC9PbL7hVuTsYJ0MS4Zwx+EKRV1y7H2FTQ1OZFwa7rbcCXQptKFwIP8ZqV
-	 5MhxkEJJ9iQlYROmxYq6SiNEDmw78OQ/qzIfj9J8Am2oTLkD/dCOxx+xmfM3dgKFFD
-	 8/xdzWJlFB3VK69wpf1ElAhafs0d62Z6gXL1wgtkA5tU3SFMDpc1xe2+0x3frsclRa
-	 o2nxEMkyg01j1gACNwUzkYicHgOHD8C/wb74ZSPu9rFv+ssIDbWDULbLe1eulbnURH
-	 Wr/jVMbbUKfQkXQDBmmhMll1cbwHZvZAnxVWkVs8yUDMWjapTzKiog8Ziv/+L3VIWP
-	 03mjtaqWKkE9A==
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-92ed3993c1eso28770785a.1
-        for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 15:36:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rq2p52ZzUatAmdFJ/Fh8SG5FCXOWpsLTqYXoPCaWx73CVqsNR7MLV/DksTCUEztm2YC04Leamgx+pE9DRkc@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfzgtujEDQDg3CQJhiUy3q/zWTSBI7KFAvZSSVmqf8JM2Z4q98
-	jPLCqBmfgh35X5MabEASgTEMtz4BwtlwMKh9tptigLeZS1gQCYA1mAWalUzUstXIc9OLDyYwPtE
-	a+KkSdZER/DmmTb9WLYbdzOKzOQM1MxI=
-X-Received: by 2002:a05:620a:27c6:b0:932:dbf6:6f9 with SMTP id
- af79cd13be357-936b39f5c1dmr87037085a.9.1786487779500; Tue, 11 Aug 2026
- 15:36:19 -0700 (PDT)
+	b=I7hI352Eukth5ajE1H7cAyMzHJ6s/pQ2CJEztWyKNkLaAtk9qiwneZrzlauwOIVEv
+	 SnUUhetMpNG5jiIsn3CRHfzI4pksiIphb5ixlLy7FxKgI+g+RkNCrqDPMXtbnxrfEi
+	 l0NVJ2CGgQIUp8VEZ3EY8QEddP06wKO/r+3EroabK5xSZBxVFUHPZwIvIknSS2WClH
+	 mc8McUsvQQZtCmx7vwo+PxSLXgjMI8kybvui/+YFdNsPNEF0LL6JvEJIT27gMH/v3i
+	 VvivzdckJQM128oWmq5iGWSNTYxYCNwOepQ4zhyraYrOFGriP7CnaxGZ08e9MEDLZv
+	 epo0s95OgCU/g==
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-92e6391b114so36305885a.3
+        for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 15:36:59 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpqhbX6axmWVecbRM6O4EWPKenCOhiynhHUZmsPnJdXy3v1zTRsAQ+orQJYesw7wVs5Di1ulj32cVUsVOBB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzcd6AQCmD94VpHApUrAJaPxWeSo2vGo2NriBJ3y3Nsxx4Zc+ew
+	lYUWhpZXx+Xl+8qYndHG9aaVRSwGJFhZc98BSiOz6C8NBjOlohhMgEFTMiooc1z93QqWF5mbnGA
+	cszrV6rpL3awcJZ6TTo6xo+3k92pTzS4=
+X-Received: by 2002:a05:620a:3911:b0:92e:e7e0:ea45 with SMTP id
+ af79cd13be357-936b3e36a02mr72308285a.47.1786487818942; Tue, 11 Aug 2026
+ 15:36:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1786138493.git.jpoimboe@kernel.org> <fe5a00818e06ec613344d41d5944de054fcd8832.1786138493.git.jpoimboe@kernel.org>
-In-Reply-To: <fe5a00818e06ec613344d41d5944de054fcd8832.1786138493.git.jpoimboe@kernel.org>
+References: <cover.1786138493.git.jpoimboe@kernel.org> <133e16bb0c7cb916f10bbfb017eba525449ad1d6.1786138493.git.jpoimboe@kernel.org>
+In-Reply-To: <133e16bb0c7cb916f10bbfb017eba525449ad1d6.1786138493.git.jpoimboe@kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Tue, 11 Aug 2026 15:36:07 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4_ci8RiX_2z6GEb9VE4=2quxEpSA1yUoc8wJBzrtS+2Q@mail.gmail.com>
-X-Gm-Features: AUfX_mxT1A_SdKNAllzAAJCUU6uHIcqhgrRSKg1oqIhubyzO3OBKw--q3adSNgc
-Message-ID: <CAPhsuW4_ci8RiX_2z6GEb9VE4=2quxEpSA1yUoc8wJBzrtS+2Q@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] objtool/klp: Fix relocations for
- EXPORT_SYMBOL_FOR_MODULES() symbols
+Date: Tue, 11 Aug 2026 15:36:47 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4=kHYNU=hy2wbhNAhP1m+-5YoHDi6t+NdHvdH6yis4FA@mail.gmail.com>
+X-Gm-Features: AUfX_mwmX7riQmQVeoqYOiFspLFwZGi95ugHIur2R3T0K_7q3UEZxTJK4aEvEZU
+Message-ID: <CAPhsuW4=kHYNU=hy2wbhNAhP1m+-5YoHDi6t+NdHvdH6yis4FA@mail.gmail.com>
+Subject: Re: [PATCH v3 9/9] objtool/klp: Fix line numbers in Module.symvers
+ parse errors
 To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
@@ -60,37 +60,10 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Aug 7, 2026 at 2:38=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org>=
  wrote:
 >
-> EXPORT_SYMBOL_FOR_MODULES() puts a symbol in a "module:<names>"
-> namespace, which the module loader grants access to by matching the
-> importing module's name against that list.
+> read_exports() reports the offending line number when it fails to parse
+> Module.symvers.  The counter is initialized to 1 but never incremented,
+> so every error blames line 1 regardless of where the bad line is.
 >
-> klp_reloc_needed() only creates a klp reloc for module-owned exports; a
-> vmlinux export gets a normal reloc.  For a vmlinux symbol exported with
-> EXPORT_SYMBOL_FOR_MODULES(), using a normal reloc results in a modpost
-> failure in klp-build:
->
->   ERROR: modpost: module livepatch-foo uses symbol mpol_shared_policy_loo=
-kup from namespace module:kvm, but does not import it.
->
-> And the modpost error is correct: even with that error removed, the
-> patch module would fail to load:
->
->   livepatch_foo: module uses symbol (mpol_shared_policy_lookup) from name=
-space module:kvm, but does not import it.
->   livepatch_foo: Unknown symbol mpol_shared_policy_lookup (err -22)
->
-> Treat it like an unexported symbol by using a klp reloc.
->
-> Note this only affects "module:" namespaces.  Ordinary namespaced
-> exports continue to work with normal relocs thanks to copy_import_ns(),
-> which propagates the patched object's import_ns tags to the patch
-> module.
->
-> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diff=
-ing object files")
-> Reported-by: Joe Lawrence <joe.lawrence@redhat.com>
-> Link: https://lore.kernel.org/6a6608f4-0a05-4d75-8b7f-edddfac9c5d4@redhat=
-.com
 > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
 Acked-by: Song Liu <song@kernel.org>
