@@ -1,186 +1,184 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AE8453A58
-	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 17:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786467935; cv=pass; b=oF4Ys4PMkYqcV5xVDbacYfowNky4eC8Dvf/b/1ppb98obmP+H4GA/YZqgjaOozuhBdjZ7+fYAnohZ2DBqR0G2qjsATV/8aI7VzrVFTanuBTXDWWIga5gG2Ez50XHX8Pg2fdyIynYMZW9uWuQDuqpKJHqk/1wvMzGBDVnsy6CL9I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786467935; c=relaxed/simple;
-	bh=+Ypz7U6buxgORh1OWluKZomr0xkAeqqYj2KfousPsr0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C2r5meshH5FHuzMTd/rKw+FMoiSf/7cME3ULhMudb1WWgKiDG2v8bzY7rXUwUZStQAA3P2lpf5j0n6C4hx4COi3NbJXoXtk0gCZ/SC6t1TuFEc4d4hkEw3qe/d21Wt1BNMLHbM6SoEyETXkqjpT5QnRuMRPqD/rveoawbNYkvQs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hjOCivRG; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790F64519AF
+	for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 17:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786468165; cv=none; b=Pq3pOTNwfTuL0Hd5M1MxvP/r2Kl9dDvlTEGTg+52o2X5R7FDRpW+kBJsW5QpCKyJqOQB9cGuLSJzo3FJPa3DDfvfqXDGQjqrJlOSPMtf2O5RRtR3gVa928JeTn0FOFxAD5OQHzUKWFA9vWV0ggJpGnQlhdKKi6PJZAS6tlndAIc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786468165; c=relaxed/simple;
+	bh=cmNCcTF7j1tMhek1b5ToY5nZ1YUJjYQ1ZB1/GYRD7xs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=q963uRKDaGVYRw5mp2AWqfis53dNTvutGV0PAdWoNlkN3P4Qh/QjJoLamKpheP2f0CI/EcEgDtP7ew0sLBCe2jzcms38zBDMPFxlZYkXKyi0+l3TJL5BWsUa/CduPpOLkZ+lMKdnF9V+Squg/vfUtA+Kn7aLSmIw5ZpB1H1Xv+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tu1rqMC0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hjOCivRG"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c15d47266baso4011266b.3
-        for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 10:05:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786467932; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mhm01agNQd/HMWNwVFGPW7c6ISngISkFHgDZVn+PlK7lxZ3aUyWFf1sEcuXjtsa32K
-         Z9C3pKrGvu/snjSmg5O6o7TnvAPpKUZwLTVR7PzvP6KrFIMeHPNEaBUmYD1ukYMzIwFW
-         UcxO6wnMrVjXMa/cKQ1ymRvL+5uXnfnUVu+VM7Q7ov7AJhkuoHPBSiWkjeVcynKx5KhP
-         yqvOZ5voFQBQm6tGY+e62lheYMely8Iuggf7xBN4z+G/ocYGEyIlw/iTataNGKYa7DPK
-         FerkhyrWkcuiccZXsztsv+1Nc/a+Sazg2PSQ5LhrxqZxKZ1G4cIV1PfqtcvHWzIWztDs
-         d/iA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=pGAMSHHCOy6Ofyjr6GQGUC1+QOQEyOWjz2kH/2YxslA=;
-        fh=Yz0yHt05jm6or9U8AM6ntbDfXA0ZxHuBv4UnPDeTMKo=;
-        b=mg3jgq2+ZXT9VJ3WJaBWtXXHZPcajaYsYCGd6qF61/NWflUCHizxyFx5lMObFcxalv
-         H8vCuhW45szglARN588yIZ9cWsBqyfUVTty9M9lN/WPAXalCEFAGhuNmKzFd1sUb6LM0
-         khUyw4fJxiQ+x74VtfGHAbcA+UX7T3tgo3cjo/7g2b4onQxDZZgUQanC4rmCICGPvBNA
-         GarSYQUeGKiqP664E9Lb0JV0wEcHXwvtqFGUYIX2F7HQFjqOphwShe0YUOKskS3/8sUa
-         UzpUYtCIkTFiRFOQ5a8S00DdqssbeI+U8GQ99HdnYYBvmsmugQO4IwKVoscfZiTMq/du
-         u1oQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786467932; x=1787072732; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pGAMSHHCOy6Ofyjr6GQGUC1+QOQEyOWjz2kH/2YxslA=;
-        b=hjOCivRGQrTZoETld+lKPxLmVwTLXz7SpAvmmgB02vM+0A96ijc29tSxp3VBArBZo/
-         74iYx7fcCEN0wGOusYWA8ZFUTWNpdKMAVatWdJScPQ1NWXSRTD0pHyIgnlnAiLOIetbP
-         TQ1VeDWbvTlFDaVvh8HuUXwRAAUVeWD6HFwp84JUauW3cxwCWgZrWD5MtIGUF0ZFezSD
-         ubpZmoqK9kvWmKwcS3BeUORayIn1BNj4JxP2JVzFeVAYuYWVrso7i2A+YLqSfQ4iSrnx
-         X3gM7sIQwy6MT39yggmYmfVJ7yRULKxi9UR9y/Lf7TlHGPXpZ/5F1LYW71ODlN311Zp4
-         qR+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786467932; x=1787072732;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pGAMSHHCOy6Ofyjr6GQGUC1+QOQEyOWjz2kH/2YxslA=;
-        b=SGqYzSRBNk57+4qRWweYtTrsYv6ovZbXkuJ/SD3dbA9q3LN0EnDB1LSt+97pzEVoG+
-         h1BMMc/3wVzzqts9R9JMcwoYxPuIZ4nIy8crKPWTRmydCSDSqvrr4/uN8nWDtbfuiBn+
-         GUrY0ne07R32Qpev6SBLvJ2VKQEeoS1+jFLPXGuMhspX1ziVA5nYrz9X+wD120rCb2hH
-         4EVOA4APRwaOHr6WY1+ojsmn0rG46I7f1J/NQE/r1Vs7O345vCWYrdu45opyCbDjTh0o
-         H/TzaeOk2t/yWKDPQlaQ/MXJNhTzQAr+XBwy21yuH/n5pQIMkJ6rS3ZMpa+QMwlGH+H3
-         3eOg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3Ffi/2yvHLVeUwyTyU5AAU4PeVx0x3tB7ojoE++oL6iUTH7NkeIQ1TtcpaYW+F6sY8eFmn1477Lyd6RIO@vger.kernel.org
-X-Gm-Message-State: AOJu0YztJaOei2Tyt9Vlp1nTuVFs+1XMF8S4I59wEOpTHpZg/rUTlaMk
-	HcV6dZtn2Apw43qj6KtTMmSB6GNn0nmyzukDj4mdrcK+7T5P5lA/14eW8zhEhA0YWN3Z/20NJGX
-	P318jZQZKtQ0DuZWpGEaZXG4P0hU6C0wkROYg2zF5
-X-Gm-Gg: AR+sD12bA64Sl8V6/BSOVI0ltej1DlYffgH/RjuE4yFco9OkDy1xFKf/y+5c73Al+KF
-	4hwSlL4yDxIT8f+AY498rjXwHsf+aHET18gf/9OJlUE5ws+ftZZeRYckmlpBRQtJxIxl546aeOz
-	YedXpw3a9ZrQlLEOzcjvJ/lNwJbrOYMX5pNvAGBh5pIfEoh46ZANeNemCRvY5+GB0olwcdgxTPO
-	iOmK+PnROa8TmIGsxQsqMAz3kQI02LrqwK9IPkeFhxNpQmkAvi6L32/x2n1+gPcuuLYdp24a3Xp
-	wOf3ZHEEOOcwghdKhhUCkm418ba2b5o5UXH9jdpoRH8s+YfG+7RyOHyd4OTVbH235DqDrj0mxEE
-	gEE/2BXASDa2A3UoyxoOH3KXDrTh2baD4ZkOKHlLB9ItPJypV/Bf/Xhis
-X-Received: by 2002:a17:907:3e12:b0:c12:74af:51f3 with SMTP id
- a640c23a62f3a-c20e6001576mr216510566b.6.1786467931201; Tue, 11 Aug 2026
- 10:05:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tu1rqMC0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588361F00A3D;
+	Tue, 11 Aug 2026 17:09:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786468164;
+	bh=vuLc+eBTQsRcHHndOJtc/5UNxFkquB47Vebh+uHg3po=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=Tu1rqMC0YY3TBle4xI4qDvvm97eT9c7rCqaamZWMNMo0iqCUcCsWFC49SfTx1SHoM
+	 Bsv/WGkoTgGTZEeWXzhplmTRq+THfEH/iOBDN1WNb3jQtd/GPVnLXOQAEwu3zpWx2h
+	 5p2XtoVdCQpqRk6m88Vl7Ns0VJHx/wtLNhL/0ZYObWEdE8H4HbexF9em7TEjY+b07L
+	 qSQRRzaGbY70K8DP2+Rtp0J/wA9/SdLDCrITfQSZePK73EWgkog2jzUis29QRZAsG/
+	 tHkbC4W6OObl/7ENcbd/ZsR0u5AaJq+beHSf0Sp6tNfFrTvVm4JNhc0SowPesNaouO
+	 gtzdYvnL4fV3g==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id E68BB1980070;
+	Tue, 11 Aug 2026 13:09:21 -0400 (EDT)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Tue, 11 Aug 2026 13:09:21 -0400
+X-ME-Sender: <xms:P1d7aluzHBpOKT4g1lkWLPwsA-9zC4J1_LKphGI9fsToGEum9VB_fQ>
+    <xme:P1d7apTzzgT7xMXErdswtOtew6DB99dW1ZOF9bENt0MCAbS-_geOjnZvltg-eq9DH
+    rXXjmF9Oy-7ZkRgO95HTVvo7FWo08pnYT2977EF5OkHbNj8az9r1g>
+X-ME-Proxy-Cause: dmFkZTFofdFgFJq0nU6Moe8TviOaDqvGA8zMt6timdp8+AgUPcYdPRc42onFU7azTHwDiP
+    9LuwvxeI17UeVWze+z0jCic3+3Lafd6oh7mNIfJ2UmbZhnqcLwQR001qZ1r4TtSvxgCR9H
+    FTEbzbDzEUS6B8BkT/nxHlt4+HseYTUAGg1wssOiJUKjjNJNvu87QM62SGN0ayNxoaQb0p
+    J/qdoi3M4vgUk2XSNf44f4FB3an1kqdXoylI4HW7mGco9e+Uy+ypK63bWkbdJsp8RPgaOW
+    GiQkxEJmVFpC2jo6H1d8s/Wee94SFIJ7WNztrk5RYAw8aSTbJVPXUGxPFpaLiQtKX/cEIy
+    YzIBgCHFHTeEZvRZRMqIsQtvvDo9cDdgN+LaU4jHTP7EgAT+Lnd0/ip91k/2geQfmA8Y12
+    +T0p8Lx937DoHYJE6SoPxK5DmxsPx4V1v8SIeVwKKRb0ZvpDLmYAKFC/tfb3UQiaSYC6Rn
+    cdP5jCG+rOZ5SAcvNnvjrA9TxyMcNWp8LSjVsCZ4DZByTuq8fALLlFEE+pvuo1jTOXNyxU
+    Jwb73iYqabgcjO4M9XRpycJ69TbpzdMuHYxJTsHTjd6w2ZyM2Em5qz27+s3aK0zAQ062qE
+    LBQ79zVLuo3QZCz+dpRvMcBh6ZSd61oXPbOsOSq7btBw2bvrQwXO50uFdx6Q
+X-ME-Proxy: <xmx:QVd7ao_3kU1MNY6wnATbHYSpXZHoTUDsBkLAEizvf8L_hIdhJoH8aA>
+    <xmx:QVd7atFhRabESAxN-Sud0Yapvtk27ZIwf5RDPE7QKpxlWM_t9Bo2nw>
+    <xmx:QVd7aif9085EiJ7Bif8J_k-MlReewHUmWhvMGekIBCp0GJSnJmTp3w>
+    <xmx:QVd7amno3D4vRstjuzpIl-CFPTv5UJyE-qiDo_A4j9j7FZPx3g9zHw>
+    <xmx:QVd7aprqbzii9Mf2qVLhK11Wd_Cd4gwgjmJRfUQ-V82sSJ4kdQ_RtTGt>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id EC402F8006A; Tue, 11 Aug 2026 13:09:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <anmobvJXiBQqWn6S@willie-the-truck> <e5q2mvqtf6iw4lco55uny5ffhppw6vlflxguhc4gg5nm3zdvmo@zs6rw7iov5qc>
- <08d6c5cd-9924-4359-9181-a03718161528@app.fastmail.com> <kp4rvh4vxo65gipgqz4i4dnw2ueylmus4yys6xfrbngp5nefzn@4a4ekjlzqlph>
+Date: Tue, 11 Aug 2026 19:08:58 +0200
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nick Desaulniers" <ndesaulniers@google.com>
+Cc: "Josh Poimboeuf" <jpoimboe@kernel.org>, "Will Deacon" <will@kernel.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org,
+ "Song Liu" <song@kernel.org>, "Miroslav Benes" <mbenes@suse.cz>,
+ "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Mark Brown" <broonie@kernel.org>,
+ "Kees Cook" <kees@kernel.org>
+Message-Id: <e48e0097-34f1-4ef8-a3b5-a6893507cfdf@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOdkn1WycY5d1EaOTdWWL-wH1wSeWxDGJJgmt2QW7PoQp4w@mail.gmail.com>
+References: <anmobvJXiBQqWn6S@willie-the-truck>
+ <e5q2mvqtf6iw4lco55uny5ffhppw6vlflxguhc4gg5nm3zdvmo@zs6rw7iov5qc>
+ <08d6c5cd-9924-4359-9181-a03718161528@app.fastmail.com>
+ <kp4rvh4vxo65gipgqz4i4dnw2ueylmus4yys6xfrbngp5nefzn@4a4ekjlzqlph>
  <CAKwvOdmSVjY0TmOTc6WMmDHcLbn=tOV3R3zH_TO4zXZiYEsaBw@mail.gmail.com>
- <anrvDIWMNGIa4WPK@willie-the-truck> <4986ac98-d6da-474a-b218-b6468b68cb9f@app.fastmail.com>
- <16e3ed42-1b1f-4ddc-9d8c-5e12ee7dbe3c@app.fastmail.com> <answWdRpVQLtIzIj@willie-the-truck>
+ <anrvDIWMNGIa4WPK@willie-the-truck>
+ <4986ac98-d6da-474a-b218-b6468b68cb9f@app.fastmail.com>
+ <16e3ed42-1b1f-4ddc-9d8c-5e12ee7dbe3c@app.fastmail.com>
+ <answWdRpVQLtIzIj@willie-the-truck>
  <CAKwvOdkrxJ_9qjaBNQS+o=+_m_f3e9k6jMEmXB-S3+nXGoLV7w@mail.gmail.com>
  <buq25tpmdjlvskzfvlit6swc6tsjuzbdnjfix4w6af6247zads@ka44wuolomci>
- <CAKwvOdkS5ZaBGaoiLwcXqCBjcOXLXE88VD3bj5ES1sssKFf4HA@mail.gmail.com> <b4bdf563-274f-4ab9-804f-35c47ab2f353@app.fastmail.com>
-In-Reply-To: <b4bdf563-274f-4ab9-804f-35c47ab2f353@app.fastmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 11 Aug 2026 10:05:19 -0700
-X-Gm-Features: AUfX_mzxcGN4sb7ijjP5MydmAq4VJWRREtt4XkYwb-Zv99DfIfR8xj3RcsJ8Zs8
-Message-ID: <CAKwvOdkn1WycY5d1EaOTdWWL-wH1wSeWxDGJJgmt2QW7PoQp4w@mail.gmail.com>
+ <CAKwvOdkS5ZaBGaoiLwcXqCBjcOXLXE88VD3bj5ES1sssKFf4HA@mail.gmail.com>
+ <b4bdf563-274f-4ab9-804f-35c47ab2f353@app.fastmail.com>
+ <CAKwvOdkn1WycY5d1EaOTdWWL-wH1wSeWxDGJJgmt2QW7PoQp4w@mail.gmail.com>
 Subject: Re: [PATCH] arm64/module: Fix livepatch BTI exceptions with Clang 21+
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Will Deacon <will@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org, 
-	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 11, 2026 at 9:55=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
->
->
-> On Tue, 11 Aug 2026, at 18:52, Nick Desaulniers wrote:
-> > On Tue, Aug 11, 2026 at 9:41=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel=
+
+
+On Tue, 11 Aug 2026, at 19:05, Nick Desaulniers wrote:
+> On Tue, Aug 11, 2026 at 9:55=E2=80=AFAM Ard Biesheuvel <ardb@kernel.or=
+g> wrote:
+>>
+>>
+>> On Tue, 11 Aug 2026, at 18:52, Nick Desaulniers wrote:
+>> > On Tue, Aug 11, 2026 at 9:41=E2=80=AFAM Josh Poimboeuf <jpoimboe@ke=
+rnel.org> wrote:
+>> >>
+>> >> On Tue, Aug 11, 2026 at 09:27:28AM -0700, Nick Desaulniers wrote:
+>> >> > On Tue, Aug 11, 2026 at 7:23=E2=80=AFAM Will Deacon <will@kernel=
 .org> wrote:
-> >>
-> >> On Tue, Aug 11, 2026 at 09:27:28AM -0700, Nick Desaulniers wrote:
-> >> > On Tue, Aug 11, 2026 at 7:23=E2=80=AFAM Will Deacon <will@kernel.org=
-> wrote:
-> >> > >
-> >> > > On Tue, Aug 11, 2026 at 03:18:17PM +0200, Ard Biesheuvel wrote:
-> >> > > >
-> >> > > > On Tue, 11 Aug 2026, at 14:02, Ard Biesheuvel wrote:
-> >> > > > > On Tue, 11 Aug 2026, at 11:44, Will Deacon wrote:
-> >> > > > >> On Mon, Aug 10, 2026 at 09:41:35AM -0700, Nick Desaulniers wr=
-ote:
-> >> > > > >
-> >> > > > >>> Sure, but let's replace this with a link to a bug report in =
-llvm's
-> >> > > > >>> issue tracker?
-> >> > > > >>
-> >> > > > >> Yes, please! I can apply the patch once we have the bug numbe=
-r.
-> >> > > > >>
-> >> > > > >
-> >> > > > > I can look into that.
-> >> > > >
-> >> > > > https://github.com/llvm/llvm-project/issues/215547
-> >> > >
-> >> > > Thanks, Ard. I've ended up with the patch below.
-> >> >
-> >> > What's the extent that HAVE_LIVEPATCH will be used?
-> >> >
-> >> > Does this penalize kernels built with BTI in favor of HAVE_LIVEPATCH=
-?
-> >> >
-> >> > For example, with my Android hat on, if we have a kernel that's buil=
-t
-> >> > with ARM64_BTI_KERNEL=3Dy, and _dont_ use HAVE_LIVEPATCH, we're goin=
-g to
-> >> > turn off BTI for a feature we're not using?  But maybe we _do_ inten=
-d
-> >> > to use HAVE_LIVEPATCH, and my assumption was wrong?
-> >>
-> >> The problem isn't specific to livepatch, livepatch just makes it easie=
-r
-> >> to hit.
-> >
-> > Rereading Ard's report, let me see if I can articulate _how_ and tell
-> > me if I'm still not getting it.
-> >
-> > Let's say we have code in .init.text that calls code in .text. If
-> > .text was placed large enough away from .init.text, we get a veneer
-> > inserted by _the kernel_ (not the linker).  This veneer has an
-> > indirect call to the destination. No landing pad. Boom.
-> >
-> > Is that precise?
-> >
+>> >> > >
+>> >> > > On Tue, Aug 11, 2026 at 03:18:17PM +0200, Ard Biesheuvel wrote:
+>> >> > > >
+>> >> > > > On Tue, 11 Aug 2026, at 14:02, Ard Biesheuvel wrote:
+>> >> > > > > On Tue, 11 Aug 2026, at 11:44, Will Deacon wrote:
+>> >> > > > >> On Mon, Aug 10, 2026 at 09:41:35AM -0700, Nick Desaulnier=
+s wrote:
+>> >> > > > >
+>> >> > > > >>> Sure, but let's replace this with a link to a bug report=
+ in llvm's
+>> >> > > > >>> issue tracker?
+>> >> > > > >>
+>> >> > > > >> Yes, please! I can apply the patch once we have the bug n=
+umber.
+>> >> > > > >>
+>> >> > > > >
+>> >> > > > > I can look into that.
+>> >> > > >
+>> >> > > > https://github.com/llvm/llvm-project/issues/215547
+>> >> > >
+>> >> > > Thanks, Ard. I've ended up with the patch below.
+>> >> >
+>> >> > What's the extent that HAVE_LIVEPATCH will be used?
+>> >> >
+>> >> > Does this penalize kernels built with BTI in favor of HAVE_LIVEP=
+ATCH?
+>> >> >
+>> >> > For example, with my Android hat on, if we have a kernel that's =
+built
+>> >> > with ARM64_BTI_KERNEL=3Dy, and _dont_ use HAVE_LIVEPATCH, we're =
+going to
+>> >> > turn off BTI for a feature we're not using?  But maybe we _do_ i=
+ntend
+>> >> > to use HAVE_LIVEPATCH, and my assumption was wrong?
+>> >>
+>> >> The problem isn't specific to livepatch, livepatch just makes it e=
+asier
+>> >> to hit.
+>> >
+>> > Rereading Ard's report, let me see if I can articulate _how_ and te=
+ll
+>> > me if I'm still not getting it.
+>> >
+>> > Let's say we have code in .init.text that calls code in .text. If
+>> > .text was placed large enough away from .init.text, we get a veneer
+>> > inserted by _the kernel_ (not the linker).  This veneer has an
+>> > indirect call to the destination. No landing pad. Boom.
+>> >
+>> > Is that precise?
+>> >
+>>
+>> Yes.
 >
-> Yes.
+> Naive question: Could the machinery that emits the veneer instead emit
+> N veneers, one for each cross section reference?  Rather than one
+> veneer that could branch indirectly to N destinations (that probably
+> don't have landing pads), could we instead have N veneers that branch
+> directly to 1 location each?  Are the veneers larger than just a
+> branch?  Is the destination unknown when the veneers are created? This
+> would retain the landing pad elision optimization for .text (which is
+> likely run more frequently than .init.text), and you could probably
+> put those veneers in .init.text and throw them away with the rest of
+> __init.
+>
 
-Naive question: Could the machinery that emits the veneer instead emit
-N veneers, one for each cross section reference?  Rather than one
-veneer that could branch indirectly to N destinations (that probably
-don't have landing pads), could we instead have N veneers that branch
-directly to 1 location each?  Are the veneers larger than just a
-branch?  Is the destination unknown when the veneers are created? This
-would retain the landing pad elision optimization for .text (which is
-likely run more frequently than .init.text), and you could probably
-put those veneers in .init.text and throw them away with the rest of
-__init.
+The current veneer code emits veneers close to the call site, so that the
+veneer is in range for the caller.
 
---=20
-Thanks,
-~Nick Desaulniers
+These BTI veneers need to be emitted at the target end, so that the real
+target is withing direct branching range of the veneer.
+
+The PLT veneers are 12 bytes (ADRP + ADD + BR). These BTI veneers will
+need to be BTI_C + B, so 8 bytes.
+
+I'm prototyping something atm that may be able to address the .init.text
+vs .text issue. Fixing livepatch is a taller order.
+
+
