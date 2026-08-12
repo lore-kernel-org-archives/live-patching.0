@@ -1,55 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6BE171CD
-	for <live-patching@vger.kernel.org>; Wed, 12 Aug 2026 00:03:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DF131619B;
+	Wed, 12 Aug 2026 00:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786492985; cv=none; b=ahdA1KG8cinwjhPSwQDNzeCB12uCkczJ5aWIhcgTs/WA8hMT+KJy8C7UCUX4fw0/nWE2USPwU1B48/FjOLJ7DY68E/LJEDd/C/BM8wT/eiM2Rhe+sLng432+UB1bIKMm7kk7/kTG2twiNmuPcPzlKDBlhR9xWUrxbSPgNJC05MI=
+	t=1786494198; cv=none; b=ek4/K0foZigCg4APjTvHickhQJN/l5hTwBV7MDsmNyrUnVIgkCDuHtOUitbFpyFjkObdbL7htAnc5iAFGUjxgLQrG30spx98sa/5ng6FKBOd6G6V2OXc2/vCYvdxaOYqSp4/asoMPYwtEJzQeNeL+gu85j36FIwy7v+Ocr3WVRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786492985; c=relaxed/simple;
-	bh=5Kih/5Gb3n2KEUdLXQmm7RKtUqyE/igDwwvcsn9JuyU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MxStm+qvPyrQ9Uyobk+N0YLR32ysJGOPECiXCI8jlGev7SOoZ/RWPfYM4xuPTp6sg53mE40IerpUxcyG/PVkYb4kKES75DoujmfWk6qqEga7/mjAvtcsiwSSfT822dO04K+fJhh4hkAuxG9TMfiulA+HF7Kpu50789GKodvYvVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrIORbIq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786494198; c=relaxed/simple;
+	bh=BfUVxfBq9AiNKdwz2/DArCcvNRDKsYKj3DVmErfmFzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RQnpFjBrFFh8UIfHXfsn6fMsaKyqcg840e9zye9USpZZz423it13nNsSafYX8H+gQ2GD87F0z1AEvWvc8ArBcrA6rNY9B70KNhrdorMfmjPTnofFhrX0uKYoVXN29nA1rHy/22KyGoFWIPhsZD4FH6UFbGMrkV2Rw3tNF7U97QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jv6ul+a4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrIORbIq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9BDE1F00A3E
-	for <live-patching@vger.kernel.org>; Wed, 12 Aug 2026 00:03:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jv6ul+a4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DEE61F00A3D;
+	Wed, 12 Aug 2026 00:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786492983;
-	bh=5Kih/5Gb3n2KEUdLXQmm7RKtUqyE/igDwwvcsn9JuyU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=hrIORbIq/rgGgPoVBZEkFCNjKZCBXeeWCVnQqG+xPs4CXt2w/Ck1EjSYrmESXEbaV
-	 C1CGl4XrK8IxZeP+6xRfJdg8PQaDCtQ1+I8eHyC7PsDU10dcueZv9e2LVH/Vh71Otw
-	 YW06oAKIWIYHw0CuYdzRNZ5qAVSJ0HimNOkn3ia6MBD0WylewrkSdrTULF5Fkpt5PK
-	 B61VI43+3EATMXnqdTb9JsXZdWNLPEyQXiLEoFMnNHbM9YDqWyQIdF8UR8TPxEs7b7
-	 KZBTK9JMRTBzloKxYFlAQrpNoJVA9jMpoAdbp1UXQ4L1BNuNarTR449317aBdUTIHZ
-	 RqBRD5br6tXuQ==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-92e7632b193so36718685a.2
-        for <live-patching@vger.kernel.org>; Tue, 11 Aug 2026 17:03:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RpCO4HTkjT8XYT92RiO6eUNONi21+sjtsKlhP2k1nH5JlOT/4/dPPYGkDcJ9rp1+KTZl5JsUt7E/U8yU8gQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6TplFfdjylPnVKAzdqv1oFcp7EEYdnJ1D/ItE28LGWFunsjee
-	730a3JBgUWLrGrljWMENEF0S+ItEf0jy58RTWAmES9Q3AYcc7Q/MLn6Ay39OKWknr2J0tCJIET8
-	2mdqz7s2zKXBJj6Skz1rqOof/1/nliLs=
-X-Received: by 2002:a05:620a:3728:b0:915:b852:4361 with SMTP id
- af79cd13be357-936b3a7e00cmr113938785a.20.1786492982920; Tue, 11 Aug 2026
- 17:03:02 -0700 (PDT)
-Precedence: bulk
-X-Mailing-List: live-patching@vger.kernel.org
-List-Id: <live-patching.vger.kernel.org>
-List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1786230311.git.jpoimboe@kernel.org> <56e974b384ffbb3f8b424e7c69da3f702f87f2f8.1786230311.git.jpoimboe@kernel.org>
-In-Reply-To: <56e974b384ffbb3f8b424e7c69da3f702f87f2f8.1786230311.git.jpoimboe@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Tue, 11 Aug 2026 17:02:51 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6EHzoqmHExDiUXSm0MmFH-PLdV8GNYCUNJA9xfj=hkkA@mail.gmail.com>
-X-Gm-Features: AUfX_myU79kwtA8KLOeDN0dTNn1aonfc4LkMsrlHzwmFWelV0XLc1lXPl_idklo
-Message-ID: <CAPhsuW6EHzoqmHExDiUXSm0MmFH-PLdV8GNYCUNJA9xfj=hkkA@mail.gmail.com>
-Subject: Re: [PATCH v4 22/22] klp-build: Add arm64 syscall patching macro
-To: Josh Poimboeuf <jpoimboe@kernel.org>
+	s=k20260515; t=1786494189;
+	bh=HVqfjQiQHCa9APiBAYTwHxe0w4t0H0mT5QhnLN7jra4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Jv6ul+a4EGrYnKqOsRMwHpw8/KSOgGmlSlk/Rke8ZBPg6CCZco8iVgFsPMlka6+3d
+	 pM99tZFn06OVlT5TqpgWl7HuhhTBrim8JyhhlGZ8Ktmo3gsnVbpbXyh7OtctQDftTk
+	 9JJ5/ezVGMponksoHDYaKv2Jhva4ibS7IoADLik4MSi4LyfzvbaF/MW/PnMj60fu1Q
+	 R5hOJAg59PWZJdBM8IU2bcG/Cp2c2bN2AUKutcG/9NXClIJqwUVOqx0RKl8bxaT3wy
+	 XAnYoBmUyE5JSG3kBQK5D8xnYoTrM62lDC2bhWJbeNywWTQF0IzGeVCoKdmKdxvY/n
+	 LAToTCpxMlvtw==
+Date: Tue, 11 Aug 2026 17:23:06 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Song Liu <song@kernel.org>
 Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
 	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
 	Joe Lawrence <joe.lawrence@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
@@ -57,16 +36,44 @@ Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
 	Mark Rutland <mark.rutland@arm.com>, Nathan Chancellor <nathan@kernel.org>, 
 	Nicolas Schier <nsc@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
 	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 14/22] objtool: Reuse string references
+Message-ID: <anu8su4kuf3eUF3c@jpoimboe>
+References: <cover.1786230311.git.jpoimboe@kernel.org>
+ <e0856be4208a6bed2b22dffe2bf8e010470f49cf.1786230311.git.jpoimboe@kernel.org>
+ <CAPhsuW6JgV1a7jMxQ0bknOpQ7WQNSqYbAHWss18GCrzGZ79OcQ@mail.gmail.com>
+Precedence: bulk
+X-Mailing-List: live-patching@vger.kernel.org
+List-Id: <live-patching.vger.kernel.org>
+List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6JgV1a7jMxQ0bknOpQ7WQNSqYbAHWss18GCrzGZ79OcQ@mail.gmail.com>
 
-On Sat, Aug 8, 2026 at 4:18=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org>=
- wrote:
->
-> Add arm64 support for KLP_SYSCALL_DEFINEx(), mirroring the arm64
-> __SYSCALL_DEFINEx() pattern from arch/arm64/include/asm/syscall_wrapper.h=
-.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Tue, Aug 11, 2026 at 04:52:51PM -0700, Song Liu wrote:
+> > -unsigned int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
+> > +int elf_find_string(struct elf *elf, struct section *strtab, const char *str)
+> >  {
+> 
+> elf_find_string() returns -1 for error and positive number for addend.
+> It is a good idea to add some comments for this behavior.
 
-Acked-by: Song Liu <song@kernel.org>
+Ok, will add a small comment above the function:
+
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index f6219f495efdc..f9a4226f115ef 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -1410,6 +1410,11 @@ int elf_find_string(struct elf *elf, struct section *strtab, const char *str)
+ 	return -1;
+ }
+ 
++/*
++ * Add a static string to the strtab section.
++ *
++ * Returns positive string offset on success, -1 on error.
++ */
+ int elf_add_string(struct elf *elf, struct section *strtab, const char *str)
+ {
+ 	void *data;
