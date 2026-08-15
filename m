@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0408330676;
-	Sat, 15 Aug 2026 04:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF522ED843;
+	Sat, 15 Aug 2026 04:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786769159; cv=none; b=ILhI5vRrhtdMlfoQ57W9O0uN6crropUisQnJnpl5wExOcj/gmg1Lf/28V+aOp2no54Txas4OlWMAoziSDzLpSWjXjGfJ1xmepfvlNEj6GfKt4UVf+hg8l7Yd5lK3JEaIdydgndDzPX+rOlLc4lJ/CSNWcww4lrH/5y60yXATsr8=
+	t=1786769162; cv=none; b=ipL8FImTPOY8LhHMxZNCfUlHp1ZBB5eFcVjY8NQ1aBoElxrvNhlEVf3OdqV6TAGHwRnE4QAqV7oHK3puS/wvUvpnKPOkZ1ewkgWKCcvFoW/VDmYGppjA2Tl8qcDiblCyq/6RVFN5xA6mUkIh8635y/EXm2OPkfvq2lxbJy8UGqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786769159; c=relaxed/simple;
-	bh=e0rQStexMZ2GxY4wY8mMJZQNTPMCP8H7AcdPcXyqahs=;
+	s=arc-20240116; t=1786769162; c=relaxed/simple;
+	bh=lKwrcvDZGGHaPIdjQ94SaFakMaUXJBQwBrEFizBKbjc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j16v9VmxRHdYBIYRDdRfN/rVVECapflEoHsn7Az83E8Z6smBdScrLvzms5HVKWLnKLeG0qOMrpdVzeJtOkW7ds7S40Mh0Cgz699Wz9XbFoo7bvMkg3zj4COTbgEpuAmhYatNI6MCPX6BqAwIhPbmvQeoXms/S6WF9eDqZNW5SM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uds8CyUo; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=aMeMtxwaw62TTtOaoktUQO0pN2zySyejZoT6+EGyGSFhnVDhZVGfL6ZftBl/HGRl2b8euHSkIPhgl68H669JGQfABvsWT+p8uRqDoH5g2U4nbaoZ2KuwFAIo9S+S0kAQ8tGbjXTtp1N1WiaAd6VB5PjTlJdw/Acfksv22PdK0jQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWSVAKHk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uds8CyUo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23EE81F00A3D;
-	Sat, 15 Aug 2026 04:45:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWSVAKHk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE7001F00A3F;
+	Sat, 15 Aug 2026 04:45:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786769151;
-	bh=pEo+RWxb9Cy4x3mJlC/JTMk3aY2wjCClrY8gzFpWMUM=;
+	s=k20260515; t=1786769150;
+	bh=MPvOEc+5lf8H/6sumQoxrEWGP3CaWe5SGGeAIoQ2JNA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Uds8CyUoF1Yopnalrb3vrGSp1Q4mPilcRNod/8Z5E79NsAJUV7kN6E8KsQiRZiThv
-	 txwf0uf0ZhoRGhI+VbfmdzCqZ2te2ok20qQCpr//+LgJRGrSxmYigTtUp4NUlo9+cK
-	 0b21ZzCEfVeRIqBfhkGXXsM6tsR0kUSCfnvC32Kbk6XZmKm5rwjqXUvBe39Gn31Mlm
-	 /jN/eykVUsiIJl+rUOCu26NFUJKI8d/OWsZjGbs0LXHuj+YEt4kZTY4gMNgpEjjW9k
-	 v4O0wdtksJhj4d4YMMwnXZmM/Io4n48I79x/7xM9kMV8ecYQGd79l+UWbEFRfy55GZ
-	 IbSApACY/8QWQ==
+	b=EWSVAKHkynKQFLG14e1B38tQtZLc06S4HFXzg5dSPwZvmr7ljXSJsg++F9olxojRK
+	 jNv/cLfF72Mi2740XqAg82Yk4PFoiZx2n6avnLb8vTsAhoorDpgyABHPztmOco/mG4
+	 FBntnAwwbAZkf7O1ngyOM4m+OPqaHSt2LRHzkIHC8YYMIfzPboYMIUySCHMASxrpVV
+	 aP7UXvZO4OGscRC3xcjpaOlLsi7TfaQfqwZlJa4SRP7GZ8q/5VJQzL9Hu+OIS/FcF5
+	 aE8UnGVd3ZVd2vhetg5nNEvv1AU3qJY9O1frMp44QsAgVLfeRpTgWbwFL6iFIGQauu
+	 kNjRnpjiedOMg==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>
@@ -43,9 +43,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Kees Cook <kees@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	linux-toolchains@vger.kernel.org
-Subject: [PATCH 12/12] arm64/bti: Enable kernel BTI for GCC
-Date: Fri, 14 Aug 2026 21:45:29 -0700
-Message-ID: <c08ef46772d364db9b904fac0861adbb3a3bd4e2.1786768375.git.jpoimboe@kernel.org>
+Subject: [PATCH 10/12] efi/libstub: Remove obsolete .note.gnu.property workaround
+Date: Fri, 14 Aug 2026 21:45:27 -0700
+Message-ID: <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <cover.1786768375.git.jpoimboe@kernel.org>
 References: <cover.1786768375.git.jpoimboe@kernel.org>
@@ -57,37 +57,46 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit c0a454b9044f ("arm64/bti: Disable in kernel BTI when cross
-section thunks are broken") disabled in-kernel BTI for GCC because it
-omits a function's BTI landing pad when it determines that a function
-can only ever reached by a direct branch.  The observed failure was a
-module whose init text landed far enough from its core text to need a
-PLT, whose "br x16" then hit a function with no "bti c".
+Commit e2179a09ab08 ("efi/libstub: Disable -mbranch-protection") added
+--remove-section=.note.gnu.property to the stub objcopy invocation to
+work around a Clang bug where the note was emitted for code-less object
+files even with -mbranch-protection=none.
 
-Note that behavior isn't GCC-specific: Clang 21 has started ommitting
-landing pads as well.
+That was fixed by LLVM commit a48f6079f288 ("[AArch64] Generate
+.note.gnu.property based on module flags") which was released with
+Clang 12.  The minimum Clang version is now Clang 17, so this workaround
+is no longer needed.
 
-Now that all the known BTI bugs have been sorted out, re-enable it for
-GCC.
+On arm64, the stub also no longer builds with -mbranch-protection=none,
+as it has inherited the kernel's flags since commit 8358098b9787
+("arm64: efi: Enable BTI codegen and add PE/COFF annotation").
+
+Remove the workaround.  This fixes BTI on arm64, and is a no-op on
+RISC-V and LoongArch where the vmlinux generic NOTES macro discards it,
+and the x86 and ARM decompressors discard .note.* explicitly.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/arm64/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/firmware/efi/libstub/Makefile | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 2687b71438661..e150807b03016 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2114,8 +2114,6 @@ config ARM64_BTI_KERNEL
- 	depends on CC_HAS_BRANCH_PROT_PAC_RET_BTI
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94697
- 	depends on !CC_IS_GCC || GCC_VERSION >= 100100
--	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106671
--	depends on !CC_IS_GCC
- 	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
- 	help
- 	  Build the kernel with Branch Target Identification annotations
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index b1c95f69e807d..e18e124a89acf 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -106,12 +106,6 @@ lib-$(CONFIG_UNACCEPTED_MEMORY) += unaccepted_memory.o bitmap.o find.o
+ targets				:= $(lib-y)
+ lib-y				:= $(patsubst %.o,%.stub.o,$(lib-y))
+ 
+-# Even when -mbranch-protection=none is set, Clang will generate a
+-# .note.gnu.property for code-less object files (like lib/ctype.c),
+-# so work around this by explicitly removing the unwanted section.
+-# https://llvm.org/pr46480
+-STUBCOPY_FLAGS-y		+= --remove-section=.note.gnu.property
+-
+ STUBCOPY_RELOC-$(CONFIG_X86_32)	:= R_386_32
+ STUBCOPY_RELOC-$(CONFIG_X86_64)	:= R_X86_64_64
+ 
 -- 
 2.55.0
 
