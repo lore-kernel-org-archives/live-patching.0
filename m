@@ -1,89 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D9C17C211;
-	Sat, 15 Aug 2026 01:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62209126BE1;
+	Sat, 15 Aug 2026 02:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786757137; cv=none; b=nW6YGTc/62DekKm5gxhjmsd0TnxdKwXYr2dX9Lun6v+NGn7AI17byOng0PoycwNLaqss6NMugr2I4I/sE6kf0osWL1Q2hoMqZMLPI1T/nfHICQxElykDU4nBltKt9TIwbSrDBgWh4s9nyiZq/013i/lcXkjsKS50lgqlPVJNvvs=
+	t=1786761410; cv=none; b=V3iShhwjmbiFAwUv+TBgPqjhaS+KpCQlCF4WGTQ51xA82Hl6oZ79qPT2sian0ftqrjqL4230vs+xKRHAgM3SOTvnpn0k9JWJUC/1Nrix4g7XAcOvhoABhGVnLDAigvwPEIsWl5zgKhSRIZU7p4wnvSsP8uDq9vtPH9jr68v9flQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786757137; c=relaxed/simple;
-	bh=uuj3sIb8/16NjhY9ADaWM7jVagxVPUgGDJ7qO35+k0Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4PcgCeWFy2Z+aneML1Ge+kEp5IeXvXlEQjWMtR/JEnN+Yvcz+R1GcBeB8h9d/jShkcdJZcUGdKiV28riTRDNoLUZiJn35NCOXo0MZk//8awe9/IDV7fYIhx8++SiKaZQaHfaqtPigVT1AQEto7D8J6/1rJk8xqZ09KaFj0s4Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SD2HZodM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786761410; c=relaxed/simple;
+	bh=V4DuRohvVpu4ak3SrmioRuWcRpMHdH2Y+Agg9sFi5B8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uLTIzF5x8P3FBEs5CvfNDQfjPMTVc8o4i0DzAFNj6teAULLwiF+3GX/nR3hhZwSMmz7NARpXvK/znXy3D8rEyVNA5CXFmn4s2MrN1pQ21JCGLdnLMDmX3Zs6/AL/D4qYsWQMjzgSfVhEaLCKrTDY7+RnFMuP/gdiX7oPH/VrlK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqr6eTwG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SD2HZodM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE67C1F000E9;
-	Sat, 15 Aug 2026 01:25:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqr6eTwG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3CA1F000E9;
+	Sat, 15 Aug 2026 02:36:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786757135;
-	bh=QFZefKgyN0xN26UtFhsfl0y50ng/cw1paUVEUam+St0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SD2HZodM7bUNv5NFgpsIlsLRmq3Y25xw9ZXlDbS7r7X/iK76LqFkxMGxVoWk1/Q+f
-	 9h8e6qaXg31lnRT6fMwxPBtsFYk74GR1Y7u+xnYpAYWfXVxaIk/fRRRyH+r88svdtu
-	 lttE48eijunMXrxNKvwqv57UMBZ+wi1tEul8wrdvl6+T8Zy2vJyqClUoMHCg98hJGX
-	 n/RTsb2V4U2fpYIqG1HdkMZlcXBjImfzB1Wtp4wBVdMjpmpL04trEVz/UrBoNm1VZx
-	 tR91T9mGC6mP0SwrCvzQ6LdAeZMc6wSIMSwDikHGDfyZ7QzIy+aTauS6YXoMw4JOl/
-	 9FV2GfO4eHvXA==
-Date: Fri, 14 Aug 2026 18:25:33 -0700
+	s=k20260515; t=1786761408;
+	bh=1FwLSkMQZTpYypZi0pct+h/7VlhZ6I+lTAJPP9Ipzco=;
+	h=From:To:Cc:Subject:Date;
+	b=nqr6eTwG52sxByLZD1avQuwrFdEiUTver9fJkoxBguLIB6HaNqt/F9hqS8r5oFpdI
+	 37k8dvAba52xJvu/uoU9S6AbOkWO9xRUJOc/Grd93XWxDR8VKDDoIQXIs5IaOjJNdb
+	 5/yqHxF+pJYVzERET02HRzOcTBvDOGNrO86W9YpsuHLE3zfOm4SRimT+MM0vT/PCgj
+	 61ZAMf4iCS+5u74X8PoxCwbhEZ2XW+FbtTa2oZmilV7PGSj9EmApQupbrcZJYTOBz3
+	 S9VHD3u+EBRUbt+C2noIRyECnd5QyP55arNvxSGEX/OC4Mp34VY1nmxUFQD+LGk37Q
+	 ybr7Qt/gTdFoA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org, 
-	live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Song Liu <song@kernel.org>
-Subject: Re: [PATCH v3 8/9] objtool/klp: Fix relocations for
- EXPORT_SYMBOL_FOR_MODULES() symbols
-Message-ID: <an-_y1AuR2DUkcSu@jpoimboe>
-References: <cover.1786138493.git.jpoimboe@kernel.org>
- <fe5a00818e06ec613344d41d5944de054fcd8832.1786138493.git.jpoimboe@kernel.org>
- <CADBMgpz7iWC0=t=_gE-tfvv0mTPq4kg0qQ2zgPH8DVPE6eQ9Kw@mail.gmail.com>
- <an-wHwTNX1xDxlRC@jpoimboe>
+To: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Song Liu <song@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Dylan Hatch <dylanbhatch@google.com>
+Subject: [PATCH] objtool/klp: Fix vmlinux klp relocations for EXPORT_SYMBOL_FOR_MODULES()
+Date: Fri, 14 Aug 2026 19:36:34 -0700
+Message-ID: <f8e3b9fae109903a6aafb2a33310e4afdcebf58e.1786761327.git.jpoimboe@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <an-wHwTNX1xDxlRC@jpoimboe>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 14, 2026 at 05:18:19PM -0700, Josh Poimboeuf wrote:
-> On Fri, Aug 14, 2026 at 02:05:48PM -0700, Dylan Hatch wrote:
-> > Following up on the other thread [1], I noticed that when a patch is
-> > touching a module function with a reference to one of these
-> > module-exported symbols, the patch/module is rejected because KLP
-> > relocs referencing vmlinux symbols are not allowed from
-> > module-specific livepatch relocation sections. I was able to reproduce
-> > this with a simple module/livepatch combo that depends on one of these
-> > symbols [2] (see samples/livepatch/testmod.c and test.patch):
-> > 
-> > root@debian-vm:~$ insmod livepatch-test.ko
-> > root@debian-vm:~$ insmod testmod.ko
-> > insmod: ERROR: could not insert module testmod.ko: Invalid parameters
-> > 
-> > With dmesg:
-> > [  655.596876] livepatch_test: loading out-of-tree module taints kernel.
-> > [  655.600961] livepatch_test: tainting kernel with TAINT_LIVEPATCH
-> > [  655.605436] livepatch: enabling patch 'livepatch_test'
-> > [  655.609119] livepatch: 'livepatch_test': starting patching transition
-> > [  656.653454] livepatch: 'livepatch_test': patching complete
-> > [  738.777872] livepatch: invalid access to vmlinux symbol
-> > 'get_task_policy' from module-specific livepatch relocation section
-> > [  738.784899] livepatch: failed to initialize patch 'livepatch_test'
-> > for module 'testmod' (-22)
-> > [  738.790371] livepatch: patch 'livepatch_test' failed for module
-> > 'testmod', refusing to load module 'testmod'
-> > 
-> > Do you recommend a strategy for working around this, or is this
-> > something that would have to be fixed in the kernel?
-> 
-> Ah, this is another tooling issue, let me work up a patch.
+When a module function references a vmlinux symbol which is exported
+with EXPORT_SYMBOL_FOR_MODULES(), a patch to that function needs to use
+a klp reloc.
 
-Here is an untested diff, I'll post a proper patch once I get a chance
-to test it.
+Currently, livepatch fails to load such a module:
+
+  livepatch: invalid access to vmlinux symbol 'get_task_policy' from module-specific livepatch relocation section
+  livepatch: failed to initialize patch 'livepatch_test' for module 'testmod' (-22)
+  livepatch: patch 'livepatch_test' failed for module 'testmod', refusing to load module 'testmod'
+
+klp diff puts all klp relocs in __klp_relocs.<patched object>, so
+post-link names the section .klp.rela.<patched object>.<secname>, which the
+kernel rejects for vmlinux symbols.
+
+Commit 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation
+section naming") changed the meaning of objname in the klp rela section
+name to be where the referenced symbol is referenced rather than where
+it lives.  That premise only holds for symbols in a module: the relocs
+get applied when the patched module gets patched, and the module
+dependency guarantees the referenced module is loaded by then.
+
+A vmlinux symbol needs the opposite.  It's always resolvable, and it has
+to be applied when the patch module loads, before the module loader
+initializes the patch module's special sections, which may reference it.
+That's why livepatch rejects vmlinux symbols in module-specific
+sections.
+
+Use "vmlinux" as the section objname when the referenced symbol lives in
+vmlinux.  This moves such klp relocs from .klp.rela.kvm..text to
+.klp.rela.vmlinux..text.
+
+Fixes: 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation section naming")
+Reported-by: Dylan Hatch <dylanbhatch@google.com>
+Closes: https://lore.kernel.org/CADBMgpz7iWC0=t=_gE-tfvv0mTPq4kg0qQ2zgPH8DVPE6eQ9Kw@mail.gmail.com
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+---
+ tools/objtool/include/objtool/klp.h |  5 +++--
+ tools/objtool/klp-diff.c            | 35 ++++++++++++++++++-----------
+ 2 files changed, 25 insertions(+), 15 deletions(-)
 
 diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
 index 646d8e1f12eff..c57775d78c71e 100644
@@ -162,3 +164,6 @@ index a66049e0726a6..16681a76f13d0 100644
  		klp_relocs = elf_create_section(e->out, sec_name, 0,
  						0, SHT_PROGBITS, 8, SHF_ALLOC);
  		if (!klp_relocs)
+-- 
+2.55.0
+
