@@ -1,110 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E9E156F45;
-	Sat, 15 Aug 2026 05:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6321D798E;
+	Sat, 15 Aug 2026 05:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786770060; cv=none; b=DxUvBvhPA6ur4pk/84cJHdc2QlcEbljv7Ua/vdvagM9J+rukIIhlMP75W8SU3VPJVEK+GpnRm+7hAEYrK/9ngGkjbXHg1tSyrEvSUstD6zn0VFxaTLzRuTp0Cti+i03Tn/k6OGYjs8XHTwyp96x4wgpYrZnbHBA/TY8LwnCTzsw=
+	t=1786770108; cv=none; b=Y/qARNB6+MFFT1ya3bC3AdMFmYQ81SlBSV3qWH7gCeTN+spAuUTEJTfe0GeOVyhffA3hAt9DDnn6q1zKwsse1i81eH/1dxOgP11ZG1B/BFjqcdEx3zhyhFVIpOKAStNapD7COZZvE6eJsKqxDT/r+bkgsmTVCaLnKtyPSovQRUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786770060; c=relaxed/simple;
-	bh=AP+qWrHtSEIYZghT9Y0S8lDw/neHcN3BVQVYJuD1yRI=;
+	s=arc-20240116; t=1786770108; c=relaxed/simple;
+	bh=jdR6XWSZWwMj+2k6gHo4hmyu4BxRBOcLhXSzK+X17Mk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dmU3KAKoEjmFO+OPqMxJ1TI2t3iTTj9OYKroj4Pq7fswUMUzaCfDrahufvEBMIud1+voYdDBYLOxE+Gw/UyntPZNRo0+Eja4GlqI1f+RdUL4QeInFvBoSmZscB5krs3UdPTLM4c3b/26NoK1f572cVWQFxsUu2CQJLVhB0JXU3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bcspw1rc; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Myx3+1BQNbMgc2gQbDfKP0bRebrkJ78eZapsm0xOieqxcdnY416aCg3TsmbBaILzOtlIg1yoTCZyPEtCAw0NpIu3I07PQ63aTtftvproTOsJQQY3cOVkbAbAbD2H4O4aYspcG1CPP2LzYNfZlyVVcgtO607kfAZ1GK8QuqQbiEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YE9Vgfa2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bcspw1rc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCE51F00A3D;
-	Sat, 15 Aug 2026 05:00:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YE9Vgfa2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6D91F000E9;
+	Sat, 15 Aug 2026 05:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786770059;
-	bh=7eS07SXGwx21modMUDcvK0pVgzUSuDjnYthy1a/bug4=;
+	s=k20260515; t=1786770106;
+	bh=t8CZswJ9iXnJNKqTxpESc4GcbNZlXi0PD5X1QkefvI0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Bcspw1rcBO+0xUhrc2Mh/ffAdtwMmJcp2rEpgBMdUZRmNf6verFXl6gM3uTEOdIqx
-	 25jyvCRBaCuZlTQ5/Eoajypagq4fk1yOtTqMW+0Z1MWnCPH/VVL8YjcaedntxjE1Rf
-	 ccjnY2Ty5EWsj4LyXf/4TlOAxCOpOj833/0vBPuSmN6EaVn4xRCawW5RXn8K+6uLMp
-	 NJG9Y8WaTh0utSCQFLEusI3m/I9pxn3AnqmhsY27sNlHQZlsxz80RD6yyjNNUBDXZf
-	 YpZJpsS89ffSRMglEMYwo6ZgulXofYUv29ce/MTW9gQXOXUooR+if1JJVSpbbNjgsw
-	 ZzzXy054KXRCw==
+	b=YE9Vgfa2etwtRSJMpYpYiD2R/pRcpU1ZS1nDzlXKiXlynT2WWkD+3UL539xqw21tX
+	 m4a23ilRPdNXAulU5YUlnWUzksFHwqBxwsmtdkOURjAjoqtoaJms/a88YTrWyoEWB7
+	 r+zfiHqfo4ggVNRLFfXmBhm+pVxMDE0fN+NeIMRkErjJ2eFYABDboZYCN8TY6rIoSh
+	 wXEDlNfsCAssYiIDKFCEQZ9x4PrLzn+YJMazoN8VfT84GyhONIgmG1ArvUeDt3PmC3
+	 GgHI3oLIi2+/npRMDnRItP9D3iTvNu4lAc/z2SgGVKgVq+BdoCY02hYMsgUSwZeuFM
+	 6guaZ5eWZN+qQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 11/12] arm64/bti: Force-enable BTI linker veneers
+Subject: Re: [PATCH 01/12] arm64/bti: Add BTI landing pad to
+ __sdei_asm_handler()
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Catalin Marinas" <catalin.marinas@arm.com>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Will
+To: "Josh Poimboeuf" <jpoimboe@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
  Deacon" <will@kernel.org>
-Cc: "Mark Brown" <broonie@kernel.org>, "Joe Lawrence" <joe.lawrence@redhat.com>, "Song
- Liu" <song@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>, "Petr Mladek" <pmladek@suse.com>, linux-kernel@vger.kernel.org, "Mark
- Rutland" <mark.rutland@arm.com>, linux-toolchains@vger.kernel.org, linux-arm-kernel@lists.infradead.org, "Nick
- Desaulniers" <ndesaulniers@google.com>, live-patching@vger.kernel.org, "Miroslav
- Benes" <mbenes@suse.cz>, "Kees Cook" <kees@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>
-In-Reply-To: <edae8b52c1cba6eecd0bc75f709f6009816b80b8.1786768375.git.jpoimboe@kernel.org>
+Cc: "Mark Brown" <broonie@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, linux-toolchains@vger.kernel.org, "Song
+ Liu" <song@kernel.org>, "Petr Mladek" <pmladek@suse.com>, "Ard Biesheuvel" <ardb@kernel.org>, live-patching@vger.kernel.org, "Joe
+ Lawrence" <joe.lawrence@redhat.com>, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, "Mark
+ Rutland" <mark.rutland@arm.com>, "Kees Cook" <kees@kernel.org>, "Miroslav
+ Benes" <mbenes@suse.cz>, "Nick Desaulniers" <ndesaulniers@google.com>
+In-Reply-To: <99226432cc316215829655c787f71a70f06d1600.1786768375.git.jpoimboe@kernel.org>
 References: <cover.1786768375.git.jpoimboe@kernel.org>
- <edae8b52c1cba6eecd0bc75f709f6009816b80b8.1786768375.git.jpoimboe@kernel.org>
+ <99226432cc316215829655c787f71a70f06d1600.1786768375.git.jpoimboe@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 15 Aug 2026 05:00:58 +0000
-Message-Id: <20260815050058.ACCE51F00A3D@smtp.kernel.org>
+Date: Sat, 15 Aug 2026 05:01:45 +0000
+Message-Id: <20260815050146.1C6D91F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] ld-option incorrectly evaluates to true for -z force-bti on olde=
-r GNU ld versions, causing build failures.
+
+Pre-existing issues:
+- [High] Missing BTI landing pads (`bti j`) on indirect branch targets in t=
+he KPTI trampoline (`__sdei_asm_exit_trampoline` and `tramp_exit`).
+- [High] The KPTI entry trampoline mapping at `TRAMP_VALIAS` lacks the BTI =
+Guarded Page (`PTE_GP`) attribute, disabling hardware CFI checks.
 --
 
---- Patch [11]: [PATCH 11/12] arm64/bti: Force-enable BTI linker veneers ---
-commit dc92fd3fe21010a76154b8b30a8e4ff7c0d55416
+--- Patch [1]: [PATCH 01/12] arm64/bti: Add BTI landing pad to __sdei_asm_h=
+andler() ---
+commit 59fadd16326c687a5994c4bec81d9484edcc08f9
 Author: Josh Poimboeuf <jpoimboe@kernel.org>
 
-arm64/bti: Force-enable BTI linker veneers
+arm64/bti: Add BTI landing pad to __sdei_asm_handler()
 
-This commit force-enables BTI veneers using the "-z force-bti" linker
-option to ensure they are created even if some input objects are missing
-the BTI feature bit. This aims to prevent silent runtime BTI exceptions
-on larger kernels.
+With CONFIG_UNMAP_KERNEL_AT_EL0, __sdei_asm_entry_trampoline() indirect
+jumps to __sdei_asm_handler(). Add "bti j" to prevent a Branch Target
+exception.
 
-> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-> index 4eee721c0b278..d0db9a6766a2f 100644
-> --- a/arch/arm64/Makefile
-> +++ b/arch/arm64/Makefile
-> @@ -25,6 +25,7 @@ endif
-> =20
->  ifeq ($(CONFIG_ARM64_BTI_KERNEL),y)
->  KBUILD_AFLAGS	+=3D -include $(srctree)/arch/arm64/include/asm/bti-note.h
-> +LDFLAGS_vmlinux	+=3D $(call ld-option,-z force-bti)
+> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> index e0db14e9c843a..16c21fcb41976 100644
+> --- a/arch/arm64/kernel/entry.S
+> +++ b/arch/arm64/kernel/entry.S
+> @@ -976,6 +976,7 @@ NOKPROBE(__sdei_asm_exit_trampoline)
 
-[Severity: Medium]
-Does this ld-option check reliably detect if the linker supports "-z force-=
-bti"?
+[Severity: High]
+This is a pre-existing issue, but do we also need bti j landing pads on the
+indirect branch targets for the exit paths?
 
-When Kbuild's ld-option tests linker support, it executes the linker with "=
--v".
-However, when GNU ld is invoked with "-v" and no input files, it prints its
-version information and immediately exits with a 0 status code, completely
-bypassing any validation of keyword arguments like "-z".
+For example, __sdei_asm_exit_trampoline() is called via an indirect branch
+(br x5):
 
-Because of this, ld-option will falsely report that "-z force-bti" is suppo=
-rted
-on all versions of GNU ld, even older versions (prior to 2.34) where the op=
-tion
-was not yet introduced.=20
+arch/arm64/kernel/entry.S:__sdei_asm_exit_trampoline() {
+    SYM_CODE_START(__sdei_asm_exit_trampoline)
+        ldr x4, [x4, #(SDEI_EVENT_INTREGS + S_SDEI_TTBR1)]
+        ...
+}
 
-During the actual kernel link, ld parses the "-z" list, fails to recognize
-"force-bti", and emits an ignored warning. If CONFIG_WERROR=3Dy is set, the=
- linker
-escalates this warning to a fatal error and breaks the build. On builds wit=
-hout
-CONFIG_WERROR, the warning is ignored and the patch silently fails to enfor=
-ce
-the intended BTI veneers.
+Similarly, tramp_exit() in the same file lacks a landing pad despite being
+called via an indirect branch (br x29) on the EL0 exit path:
 
->  endif
-> =20
->  cc_has_k_constraint :=3D $(call try-run,echo				\
+arch/arm64/kernel/entry.S:tramp_exit() {
+    SYM_CODE_START_LOCAL(tramp_exit)
+        tramp_unmap_kernel x29
+        ...
+}
+
+Would it be better to add bti j annotations to these functions as well to
+prevent Branch Target exceptions?
+
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does the KPTI trampoline map=
+ping
+need the BTI Guarded Page (PTE_GP) attribute?
+
+Looking at map_entry_trampoline() in arch/arm64/mm/mmu.c, it uses
+kernel_exec_prot() to map the trampoline text:
+
+arch/arm64/mm/mmu.c:map_entry_trampoline() {
+    pgprot_t prot =3D kernel_exec_prot();
+    ...
+    early_create_pgd_mapping(tramp_pg_dir, pa_start, TRAMP_VALIAS,
+                             entry_tramp_text_size(), prot,
+                             pgd_pgtable_alloc_init_mm, NO_BLOCK_MAPPINGS);
+}
+
+The prot variable is derived from PAGE_KERNEL_ROX, which does not appear to
+contain the PTE_GP bit. Does this inadvertently disable hardware BTI enforc=
+ement
+for the trampoline pages? If so, could this architectural gap be masking the
+missing bti j annotations on the trampoline exit paths mentioned above?
+
+>   * want them.
+>   */
+>  SYM_CODE_START(__sdei_asm_handler)
+> +	bti	j
+>  	stp     x2, x3, [x1, #SDEI_EVENT_INTREGS + S_PC]
+>  	stp     x4, x5, [x1, #SDEI_EVENT_INTREGS + 16 * 2]
+>  	stp     x6, x7, [x1, #SDEI_EVENT_INTREGS + 16 * 3]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786768375.gi=
-t.jpoimboe@kernel.org?part=3D11
+t.jpoimboe@kernel.org?part=3D1
