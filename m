@@ -1,43 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62209126BE1;
-	Sat, 15 Aug 2026 02:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E15E45000;
+	Sat, 15 Aug 2026 04:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786761410; cv=none; b=V3iShhwjmbiFAwUv+TBgPqjhaS+KpCQlCF4WGTQ51xA82Hl6oZ79qPT2sian0ftqrjqL4230vs+xKRHAgM3SOTvnpn0k9JWJUC/1Nrix4g7XAcOvhoABhGVnLDAigvwPEIsWl5zgKhSRIZU7p4wnvSsP8uDq9vtPH9jr68v9flQ=
+	t=1786769144; cv=none; b=T/eVTjq6aQVl8UH1Sgoq4FnYKh299jAgADjEpJ0Gek22UulWEESUulC184JBDGWCI/zFVZH+CrUFgayAO9Ej5T9je3g5qK8oir1tu63eBsIkytKSrPDtB7Xc3igSTWGIuxPmCsGRjsj6gLus/ROFahDGus+O46xYn35G99VXJVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786761410; c=relaxed/simple;
-	bh=V4DuRohvVpu4ak3SrmioRuWcRpMHdH2Y+Agg9sFi5B8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uLTIzF5x8P3FBEs5CvfNDQfjPMTVc8o4i0DzAFNj6teAULLwiF+3GX/nR3hhZwSMmz7NARpXvK/znXy3D8rEyVNA5CXFmn4s2MrN1pQ21JCGLdnLMDmX3Zs6/AL/D4qYsWQMjzgSfVhEaLCKrTDY7+RnFMuP/gdiX7oPH/VrlK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqr6eTwG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786769144; c=relaxed/simple;
+	bh=uAT0cw010laXi0EU2fspdkcWWdHxCP5sg83zuH9l0Yc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FLfVGqjmJoL4LnJBd/MxNMGC1lvozYCNLudNDpsCyEhoHMaPGNsPRvs31ELa7W/VmhF4/IfB6jmD5nU1ff6+NCYN0vLT8oYxP8QjezNT1R+S/mFjOwD6ixtqidzirZk6EDws/1Uk7VyIE14P/yHoaEJI4qBk6AmSW/P6g3UpsA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwo5uajh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqr6eTwG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A3CA1F000E9;
-	Sat, 15 Aug 2026 02:36:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwo5uajh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2785B1F000E9;
+	Sat, 15 Aug 2026 04:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786761408;
-	bh=1FwLSkMQZTpYypZi0pct+h/7VlhZ6I+lTAJPP9Ipzco=;
+	s=k20260515; t=1786769142;
+	bh=WjLM+bqBQnxWBLyFD+G6Wb/9zI+E+wNq4T1i/w+3/XI=;
 	h=From:To:Cc:Subject:Date;
-	b=nqr6eTwG52sxByLZD1avQuwrFdEiUTver9fJkoxBguLIB6HaNqt/F9hqS8r5oFpdI
-	 37k8dvAba52xJvu/uoU9S6AbOkWO9xRUJOc/Grd93XWxDR8VKDDoIQXIs5IaOjJNdb
-	 5/yqHxF+pJYVzERET02HRzOcTBvDOGNrO86W9YpsuHLE3zfOm4SRimT+MM0vT/PCgj
-	 61ZAMf4iCS+5u74X8PoxCwbhEZ2XW+FbtTa2oZmilV7PGSj9EmApQupbrcZJYTOBz3
-	 S9VHD3u+EBRUbt+C2noIRyECnd5QyP55arNvxSGEX/OC4Mp34VY1nmxUFQD+LGk37Q
-	 ybr7Qt/gTdFoA==
+	b=gwo5uajh9Ku11rgr69W3oWzKqADkXpQw2vTRX6xQ2NxPdST2vVgf9rpAf858Lycbt
+	 8zb3t0GfJ6gam9vEy07gold0MjaH5LxGuIubCtzN9ZqYYAE+g4kcD5Wcom8irly069
+	 zkbrSnWo02ssjwp3Phn9EjWat+A/R0yCk1EjQUiPMgKUYGlPzXKy/UlLisHM2Ra1Os
+	 KxK2ClTVM0n6qxqVyALVKW4uUZhnMS8nXuOe9JdEdMWVny9Lerq98mmk1FnEGK54Yy
+	 cmchz3cbDQFmw1FwOoRep3M1UBZXALAL8vQGRDohsmnKbvSTVRmkgbyPenCLBmZwRx
+	 pRZ1DjU4ytbeA==
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: x86@kernel.org
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
 	live-patching@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
-	Dylan Hatch <dylanbhatch@google.com>
-Subject: [PATCH] objtool/klp: Fix vmlinux klp relocations for EXPORT_SYMBOL_FOR_MODULES()
-Date: Fri, 14 Aug 2026 19:36:34 -0700
-Message-ID: <f8e3b9fae109903a6aafb2a33310e4afdcebf58e.1786761327.git.jpoimboe@kernel.org>
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-toolchains@vger.kernel.org
+Subject: [PATCH 00/12] arm64/bti: Fix kernel BTI issues with livepatch, large kernels, toolchains
+Date: Fri, 14 Aug 2026 21:45:17 -0700
+Message-ID: <cover.1786768375.git.jpoimboe@kernel.org>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
@@ -47,123 +54,68 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a module function references a vmlinux symbol which is exported
-with EXPORT_SYMBOL_FOR_MODULES(), a patch to that function needs to use
-a klp reloc.
+These patches are a continuation of the following discussions about some
+bugs related to kernel BTI:
 
-Currently, livepatch fails to load such a module:
+  https://lore.kernel.org/ed4fe1f95071897859ec7fbe9176246cbd4962bf.1786138806.git.jpoimboe@kernel.org
+  https://lore.kernel.org/20260812162058.612202-4-ardb@kernel.org
 
-  livepatch: invalid access to vmlinux symbol 'get_task_policy' from module-specific livepatch relocation section
-  livepatch: failed to initialize patch 'livepatch_test' for module 'testmod' (-22)
-  livepatch: patch 'livepatch_test' failed for module 'testmod', refusing to load module 'testmod'
+This started as a livepatch crash investigation but quickly ballooned
+into a rabbit hole of latent bugs and toolchain quirks/crashes.
 
-klp diff puts all klp relocs in __klp_relocs.<patched object>, so
-post-link names the section .klp.rela.<patched object>.<secname>, which the
-kernel rejects for vmlinux symbols.
+The most notable patch is probably the last one, which enables BTI on GCC.
 
-Commit 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation
-section naming") changed the meaning of objname in the klp rela section
-name to be where the referenced symbol is referenced rather than where
-it lives.  That premise only holds for symbols in a module: the relocs
-get applied when the patched module gets patched, and the module
-dependency guarantees the referenced module is loaded by then.
+I also hit a SIGSEGV in the GNU linker, for which this series has a
+workaround.  The binutils bug is here:
 
-A vmlinux symbol needs the opposite.  It's always resolvable, and it has
-to be applied when the patch module loads, before the module loader
-initializes the patch module's special sections, which may reference it.
-That's why livepatch rejects vmlinux symbols in module-specific
-sections.
+  https://sourceware.org/bugzilla/show_bug.cgi?id=34525
 
-Use "vmlinux" as the section objname when the referenced symbol lives in
-vmlinux.  This moves such klp relocs from .klp.rela.kvm..text to
-.klp.rela.vmlinux..text.
+Several of these patches probably wouldn't be needed if we had a flag
+like -fno-omit-bti-pads or so for both compilers, but that currently
+doesn't exist, and this at least fixes things for the existing
+toolchains out there.
 
-Fixes: 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation section naming")
-Reported-by: Dylan Hatch <dylanbhatch@google.com>
-Closes: https://lore.kernel.org/CADBMgpz7iWC0=t=_gE-tfvv0mTPq4kg0qQ2zgPH8DVPE6eQ9Kw@mail.gmail.com
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/include/objtool/klp.h |  5 +++--
- tools/objtool/klp-diff.c            | 35 ++++++++++++++++++-----------
- 2 files changed, 25 insertions(+), 15 deletions(-)
+There is some toolchain discussion about that here:
 
-diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
-index 646d8e1f12eff..c57775d78c71e 100644
---- a/tools/objtool/include/objtool/klp.h
-+++ b/tools/objtool/include/objtool/klp.h
-@@ -20,8 +20,9 @@
-  * SHF_RELA_LIVEPATCH, nor does it support having two RELA sections for a
-  * single PROGBITS section.
-  *
-- * "objname" is the name of the object being patched ("vmlinux" or a module
-- * name).  post-link uses it to name the resulting
-+ * "objname" is the object whose loading gates the relocation: "vmlinux" for
-+ * references to vmlinux symbols, otherwise the name of the module being
-+ * patched.  post-link uses it to name the resulting
-  * .klp.rela.objname.section_name sections.
-  */
- #define KLP_RELOCS_SEC	"__klp_relocs"
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index a66049e0726a6..16681a76f13d0 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1344,13 +1344,14 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 			   struct section *sec, unsigned long offset,
- 			   struct export *export)
- {
-+	const char *sym_modname, *sym_orig_name, *sec_objname;
- 	struct symbol *patched_sym = patched_reloc->sym;
- 	s64 addend = reloc_addend(patched_reloc);
--	const char *sym_modname, *sym_orig_name;
--	static struct section *klp_relocs;
- 	char tombstone_name[SYM_NAME_LEN];
- 	struct symbol *sym, *klp_sym;
- 	unsigned long klp_reloc_off;
-+	struct section *klp_relocs;
-+	char sec_name[SEC_NAME_LEN];
- 	char sym_name[SYM_NAME_LEN];
- 	struct klp_reloc klp_reloc;
- 	unsigned long sympos;
-@@ -1441,20 +1442,28 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 	 * This intermediate step is necessary to prevent corruption by the
- 	 * linker, which doesn't know how to properly handle two rela sections
- 	 * applying to the same base section.
-+	 *
-+	 * The objname decides when the reloc gets applied.  A reference to a
-+	 * vmlinux symbol goes in the vmlinux section so it gets applied when
-+	 * the patch module loads.  Everything else goes in the patched
-+	 * object's section, applied when the patched module is loaded.
- 	 */
- 
-+	if (!strcmp(sym_modname, "vmlinux")) {
-+		sec_objname = "vmlinux";
-+	} else {
-+		sec_objname = find_modname(e);
-+		if (!sec_objname)
-+			return -1;
-+	}
-+
-+	/* section format: __klp_relocs.objname */
-+	if (snprintf_check(sec_name, SEC_NAME_LEN,
-+			   KLP_RELOCS_SEC ".%s", sec_objname))
-+		return -1;
-+
-+	klp_relocs = find_section_by_name(e->out, sec_name);
- 	if (!klp_relocs) {
--		const char *objname = find_modname(e);
--		char sec_name[SEC_NAME_LEN];
--
--		if (!objname)
--			return -1;
--
--		/* section format: __klp_relocs.objname */
--		if (snprintf_check(sec_name, SEC_NAME_LEN,
--				   KLP_RELOCS_SEC ".%s", objname))
--			return -1;
--
- 		klp_relocs = elf_create_section(e->out, sec_name, 0,
- 						0, SHT_PROGBITS, 8, SHF_ALLOC);
- 		if (!klp_relocs)
+ https://github.com/llvm/llvm-project/issues/215547
+
+Josh Poimboeuf (12):
+  arm64/bti: Add BTI landing pad to __sdei_asm_handler()
+  arm64/module: Fix BTI exceptions caused by omitted landing pads in
+    Clang 21
+  arm64/bti: Fix BTI linker failures with long branches into .idmap.text
+  arm64/bti: Work around ld crash caused by linker script aliases
+  arm64/bti: Add link error for large kernels with BTI and unsupported
+    toolchains
+  arm64/bti: Add link error for large kernels with BTI and livepatch
+  arm64/bti: Advertise BTI in assembly objects
+  arm64/bti: Enable BTI in the pi/ startup code
+  efi/libstub: Preserve the GNU property note
+  efi/libstub: Remove obsolete .note.gnu.property workaround
+  arm64/bti: Force-enable BTI linker veneers
+  arm64/bti: Enable kernel BTI for GCC
+
+ arch/arm64/Kconfig                    |   9 +-
+ arch/arm64/Makefile                   |   5 +
+ arch/arm64/include/asm/bti-note.h     |  32 +++++
+ arch/arm64/include/asm/module.h       |   5 +
+ arch/arm64/kernel/cpu-reset.S         |   2 +-
+ arch/arm64/kernel/entry.S             |   1 +
+ arch/arm64/kernel/head.S              |   8 +-
+ arch/arm64/kernel/hyp-stub.S          |   1 +
+ arch/arm64/kernel/image-vars.h        |  13 +-
+ arch/arm64/kernel/module-plts.c       | 186 ++++++++++++++++++++++++++
+ arch/arm64/kernel/pi/Makefile         |  11 +-
+ arch/arm64/kernel/sleep.S             |   2 +-
+ arch/arm64/kernel/vmlinux.lds.S       |  12 ++
+ arch/arm64/lib/memcpy.S               |   3 +
+ arch/arm64/lib/memset.S               |   2 +
+ arch/arm64/mm/cache.S                 |   1 +
+ arch/arm64/mm/proc.S                  |   8 +-
+ drivers/firmware/efi/libstub/Makefile |  15 ++-
+ 18 files changed, 282 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm64/include/asm/bti-note.h
+
 -- 
 2.55.0
 
