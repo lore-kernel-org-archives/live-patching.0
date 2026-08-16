@@ -1,92 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6BF21A457;
-	Sat, 15 Aug 2026 21:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786830828; cv=none; b=SepZjrS/8CkjSp9j6fIoSNAkXURj35HZbkGoyD2qGGwZejgZfr0zelQAxYXZwkhkEMgRBAreqcy2VkzMc5DCir5caJs5avWrvOkTEIE4Ng3Ej4Fdhp25LYVq7onyVAM8Twi581EoH/XwE38trLR3/J2Id6eoDPL+4KYK6euaxp4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786830828; c=relaxed/simple;
-	bh=TfaS4xsVEUti/Ld/sCXEUNN1G4AWkSUlF4uQG7INm0I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSsrbT3RyQe3Qn+ygCI6Bei4PwN4DvudPjEais8oc2NNQd/e9VGAcOBXmmDn9xGezdQknc9quoazah5UJPyA/Q8zlLmp8SzBoKUeqgoNNBzrk8k8wszr0Z7T33AU6PpLT3YZVr8LWBDG/k3sTokkkjx6gRG8gw85HPzuCnF5X4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYQysflY; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3F629B799
+	for <live-patching@vger.kernel.org>; Sun, 16 Aug 2026 02:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786848378; cv=pass; b=PM/deD56Y+jdtji4ueoKdC95LAlRShcNJLYiV1JR7pwTztGLrRvzjck2aVlMpFEasyMgBCbp1cC9sF/DmRzXiy2b24RZSG7V8oEREmXrBr1cEKaoDjB9elvw+SdBW4QoDe/TTs2rHU6nIXvy4GNkp3vwV8Ibg8oTFBs9npfEPfM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786848378; c=relaxed/simple;
+	bh=qRzl7e7/Kscd9msmiif2Sjjs6Y4/s3shUmUxevBbxd4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dEdAkbz+iVdL8LO7lR/W7KVgTlOC3cboHjiQ90EO5+JxYU7M6DlYeTUNsjvDMIgYb476nw+WvNlxT8ru2CTkEgV2fQwhggytle7U8aqVhCcVJNHL6puymXnFhpt+/SNcJurCw0415FrSxw0K6St+VVkJiHMFhwzsiU8OqeinKkk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9v9mceM; arc=pass smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYQysflY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 899231F000E9;
-	Sat, 15 Aug 2026 21:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786830826;
-	bh=L1xQp6TnnctvVRvsmBO7lNUazoq7APGQJNQv5Cgr9VY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iYQysflY5z6LJOT1PECEy9L7Pyjgx1OkM93zbDsKBNftTWEYrJM1TejoFe1QcGD1j
-	 vWUFEV3hP9K2B14HKBsAvHwR4JSu2Y/WoXijAtHIurutCR+a1kKKqOmPx9mfqgB943
-	 UNSv9khD0ANzi2gjhOLAT/2GlKhoHuDyZbHoQKasx46rMvaHfp2dLKr+dP4vOm6tvK
-	 TyjVuSfM9PkRvDs1pDyiTNi24oR7kmZsPCx4kAAxiQauaLeWIxTA64PUj+rx43NIm3
-	 NzK9CfqJnDii5NhMtSwvxLywVHYJMGUDfUE5KvY+51aHKRdnk/P7cR0mZLUg86BRut
-	 Mk8k4bt1Vgj5A==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 6EE2E1AC527F; Sat, 15 Aug 2026 22:53:43 +0100 (BST)
-Date: Sat, 15 Aug 2026 22:53:43 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org,
-	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH 07/12] arm64/bti: Advertise BTI in assembly objects
-Message-ID: <aoDf5x4iicivXsMc@sirena.co.uk>
-References: <cover.1786768375.git.jpoimboe@kernel.org>
- <5340f3df281bebc81aad3cd9a7471d95061b4b9d.1786768375.git.jpoimboe@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9v9mceM"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-836eac5682bso35724187b3.0
+        for <live-patching@vger.kernel.org>; Sat, 15 Aug 2026 19:46:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786848376; cv=none;
+        d=google.com; s=arc-20260327;
+        b=HPT5YXtQePVfnfc+jgHuEZDvSaKiAJOkbjp8bQ3DpUeO2r82SbU09uRvjaoLxslfU7
+         OtGXOSuCHhvpovlHs5ENRyI3cY5UwXSiXTMPMPDj+XDdhUUOZhTisifBVOmlJ2rdoP3j
+         Zjrc9jigkUAvtF3essEanDoTzmqH88zziWYTJmeNIRkClkleFuCcpcDVwTMMg0IpNKJd
+         J6eFxBEsupLiKEGPa+14afXx4YlkhzOlrVgOhe61Q6Zt992GyMonVEPkPitp0O8YGfvX
+         99dLJM+WX5JGkLTcNmAUNeAe8NSCYPCYye+pJX2cuamoHHge1ez/40hzKzxZIcQw7nwd
+         Avwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZGRs1d627zC31/3t3AcK+srZLfs7p1AirlV0chn57GE=;
+        fh=vBOYFZXY60OWSClxHhk/pS6LiEncAHiJPct2sWacmFU=;
+        b=eZg1Bm3p3sAdwR2RJnZCfRZaLEuGkK/A1/u8KRe5UHI3lKYfRVWPv676ep+6G8i8g6
+         0GbA9soRyvWioyqXhBLvY4DjSI0HiZ7GrM9uHH6Bj0M7oTzrL9NELnNOwnu3lXSgroTF
+         +ahaNdvMfUpDMV2YGVaNG5kGiP6A3XqGwvNIauj57bQgRmfpFQ8qJbgs6/qxrRDA+kYJ
+         Abb7nb/uab20GVTpzjSpcVB+vPjrPfZMQL6GqJd39CdIFfqHndpM+VOB6NKx8XkIEKr9
+         np10Y7jIKB7XQckpQI/qv4QfGe5NbvW4VZwBjx8/fl2FTCcdPdQA6Xh74rAw1DoeWJNC
+         mYEw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786848376; x=1787453176; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ZGRs1d627zC31/3t3AcK+srZLfs7p1AirlV0chn57GE=;
+        b=L9v9mceM0ATJRr1Ky7Tk9u834KxmjElb499AeQF2KKXHbNuigbKavvhJvj+ONYkF6e
+         Upfgj2yfDEcKngrVmwQ7xtVIVHa+lDO9j4k83PEqwIFED6EmrJgd+lmuCg9vwoo7MxUT
+         vziTIgdXT00AzDPAV/cs+U/bfiJahvx6TbKEwJMt22fQO0Gp1xHRGP0NN4fIhZlZPswT
+         yi3v4FDFYpjtAfBt+V1WjKmQC1ySKjlXU6BQ/N5GmXHs2OLYGXly/wa6K5/gCniUy9Bm
+         Z6kHmkhdVzGaYEvwzWKemYXj3kCD4JsFx0x0ypyXqMNh4CpigClHMupA2WPX6YRks89g
+         fe2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786848376; x=1787453176;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZGRs1d627zC31/3t3AcK+srZLfs7p1AirlV0chn57GE=;
+        b=niheSHXS965SH0ERafpdLdoJDs9WBv6VNIdQih2w20mnfAHoVH4CzBjyc04P94xkrJ
+         EQaGmLKb26vVQfFdX9eNTinEqUnKsBYRFuv7x4zuiTTeQy0rChiJlh5xG8OI8p8eU4x+
+         pJoPBt3yvV/EwvlG0EIA6F1SssrMnUetzgVbL80RNhugmHFTCViQwu8fGAqVX9yhx//i
+         34E4l+aa1nud8DSAvxLwrp4vpdAR0sl8VI+7QlGv18mO1DkP9QhbcSHhbYesGqRh5UGj
+         qC+/glPiMrFMKgbBXYNorZJeCHfo3Lj04lMHU+MM+5VCMmHzAweCdAJIFvpcv6Z1vqcg
+         VgCg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro+fMS6lvh5pDuVFXtGN7bIdH61me2sRLMG14xejVaK6VWEN2lUUszGLzZCYhXY0KGIlKpEdfXsRVXHkpJU@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwEghbbUor62lnjLGryAxim9SqOSyf7naGWq7OfpYwEIYZFY6/
+	WdB8jrksYGY4PeWvSVEnJKmslH/qsZ4R3a6y2Jybuw0lGrI3M1ggBTZXyybMzFEQFylB96+YA/Q
+	FtLcVoCZEHyZwnnDt/VJ2i4vaBDfYW6Fz8SFq
+X-Gm-Gg: AR+sD103SkZ5D1I2+mP5tj4QvygjROXYxR2OB9aDsgWVJ91fJFX9qmcMcxvjlpbi99j
+	0zcJ0VB5QAUWeNm1SWOFfbEpaBfQBSyLtwFgesJNq6mkuqpO+GSrsoGGeJiWRP+5XqdH/YIXZxX
+	7r17yu49Q2nPW/xANO8CIx208ezo4U2PmieDl4OINgTn7weolXUz+HyxYLUbadEdKevnQZeDhrQ
+	+fqTfRAN7JKvYc7vn2Ctu3la7XnhED4W8ibWyXuP8jw9795eCuJxqrq8Xq7Jo+fLmX51hndVlnL
+	tifWAugoH6F8xloPcZ1W3EyIuSHSG8pkSYzt1HMHtfvhj23ZXwEAhwBhrJhDPozXfikW01vJa77
+	Ccw==
+X-Received: by 2002:a05:690c:23c3:b0:81f:2abd:4c0 with SMTP id
+ 00721157ae682-8370d7e5fa5mr70930207b3.4.1786848376095; Sat, 15 Aug 2026
+ 19:46:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hHV2ZweC5h7oUr++"
-Content-Disposition: inline
-In-Reply-To: <5340f3df281bebc81aad3cd9a7471d95061b4b9d.1786768375.git.jpoimboe@kernel.org>
-X-Cookie: My vaseline is RUNNING...
+References: <20260813030408.9761-1-laoar.shao@gmail.com> <20260813030408.9761-2-laoar.shao@gmail.com>
+ <CAPhsuW6G+8TAb72vT3yubH2Rk4DdUbPpnL1jmvCnbYNx4UVfjQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW6G+8TAb72vT3yubH2Rk4DdUbPpnL1jmvCnbYNx4UVfjQ@mail.gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 16 Aug 2026 10:45:39 +0800
+X-Gm-Features: AcwNN1UaDA4Bt_XqmIXg5q8PzdXbteMybNsLxTFIyX7TnJvIbQOrXrmmKhyhCPQ
+Message-ID: <CALOAHbBcQpEcy364KBjZ-MUr_Ry8y=Nn8_jnPYxgGXFmcADAdg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] livepatch: Fix wrong index in funcs cleanup error path
+To: Song Liu <song@kernel.org>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Sat, Aug 15, 2026 at 4:36=E2=80=AFAM Song Liu <song@kernel.org> wrote:
+>
+> On Wed, Aug 12, 2026 at 8:04=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com=
+> wrote:
+> >
+> > In the object allocation loop, when kzalloc() for funcs fails, the
+> > cleanup loop uses `objs[i].funcs` instead of `objs[j].funcs`. Since
+> > `objs[i].funcs` is still NULL at that point, it repeatedly calls
+> > kfree(NULL) and leaks all previously allocated funcs arrays.
+> >
+> > Fixes: 59adee07b568 ("livepatch/klp-build: Add stub init code for livep=
+atch modules")
+> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+>
+> Acked-by: Song Liu <song@kernel.org>
+>
+> With a nitpick/comment below:
+>
+> > ---
+> >  scripts/livepatch/init.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
+> > index f14d8c8fb35f..77746984aa57 100644
+> > --- a/scripts/livepatch/init.c
+> > +++ b/scripts/livepatch/init.c
+> > @@ -50,8 +50,6 @@ static int __init livepatch_mod_init(void)
+> >                 funcs =3D kzalloc(sizeof(struct klp_func) * (nr_funcs +=
+ 1), GFP_KERNEL);
+> >                 if (!funcs) {
+> >                         ret =3D -ENOMEM;
+> > -                       for (int j =3D 0; j < i; j++)
+> > -                               kfree(objs[i].funcs);
+>
+> We really just need to replace objs[i] with obj[j] here, right?
 
---hHV2ZweC5h7oUr++
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+right
 
-On Fri, Aug 14, 2026 at 09:45:24PM -0700, Josh Poimboeuf wrote:
-> On a kernel whose text exceeds the +/-128MB direct branch range, the
-> linker inserts veneers.  With BTI enabled, the veneers' indirect branch
-> targets need a BTI landing pad, which not all functions have starting
-> with Clang 21 (and for all versions of GCC).
+> I personally feel it is actually cleaner to keep the kfree() loop here.
 
-We already have explicit note generation support in asm/assembler.h
-which is used in the vDSO code, it probably makes sense to replace that
-too.  I didn't check if there's potential for the two to collide with
-this as is.
+Sure, I will keep the loop here in the next version.
 
---hHV2ZweC5h7oUr++
-Content-Type: application/pgp-signature; name="signature.asc"
+> Current patch is correct as-is though, so this is really a nitpick.
+>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqA3+YACgkQJNaLcl1U
-h9A/DQf/WTnuS2TWA3jYmXlJx0LmO3Ydemf68Q8UJia96H0cXBoAVbvlCLGelBJ+
-xwrW2pLUAszFkVhshCZn9wIsBxiaJHvjNEJBiV11UN27ogqwqkF8P5omVVAoUx9n
-Jd8YZb4KIDcof9ZXXeug2J5QFkXaZQ+TjCCAKunMT94QPA4Ku2PLSs41CVdm1aBB
-Hda9JTCPsvER87662JHG7mICgPmUmlDQKwHpxS9V9YE+/fx+kgARnoEGc1O32DOb
-JKhYD8v22nrMHu0sdcpQMwjc/6GDvB6nGzFsxtwqi9sOQ6RNDffXKaHWWnxY1+74
-ZNAOYbZgbFNcnQb5BDrpiUMHGbWfjA==
-=y+lK
------END PGP SIGNATURE-----
-
---hHV2ZweC5h7oUr++--
+--=20
+Regards
+Yafang
