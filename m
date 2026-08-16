@@ -1,320 +1,133 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBF02FB084
-	for <live-patching@vger.kernel.org>; Sun, 16 Aug 2026 09:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4611F3C5522;
+	Sun, 16 Aug 2026 09:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786871103; cv=none; b=dE8qqIXYs7kIotjMDMLjgo9BynUb+U3P5aOL1toHb53dn97uJX9kjpIDbRQCNcXC6ofH9iN56xY7UVgr7jQGEAacUKtOZ3QxW6XjoQCgjjJpfwp0nLAcvD0UlQUv6/AAx7ZQ4TpFbx+EDJY3+d62YwNXLgB64fTXtgTMNE0BUYk=
+	t=1786873295; cv=none; b=p5BXJNgFvygXamWreg77/aHGTCuPS7yRvVNvO7lZcNXECcIUUg/3pR2Tv8YtGTxbBY/NjhIXL+vCc/HI+KhNl61G5wAegRFwH1M6OM4uPX+hnibR8IQwN+8v5hMJ1bfxXUa0VFmKZcvh7cfTObesHF2SDH7UZaF79+DYZbXv/UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786871103; c=relaxed/simple;
-	bh=+K4DcmYyr2oB/qyZ0zkTmb3PYpUq1wxdFdE5dh2SwiM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Euof8P4JsGlOY2j7nfHfDE5z85d4vOo2wtedtxEZEMP4SRuSucB6JYKB6yV5J7Bnwdp25y3jfZ9hK1jYhS0xbVPYAA71Js1q2sUFkk5OjEKW2T+mQeq2g87c8W5HMRS+tCykF1NIZ1kVc8+9P6vxuNIFHp+z529iL3RviYAKPF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SKKPkqES; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786873295; c=relaxed/simple;
+	bh=f4QgNZ1U1Ud7kiufpBMuaJ/ofofTBWIYdhm/RINrpvs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RSaHlcT6fmaeQvmGjq1QAAmSLQdUf4/ZPST2J8Xo3euoP/KRraf4QoqdL+O+IGPUY3hLy078JeHxcWTUy0HagVLXECeMIHHKP6gKaTrADGryBraY8csTKVyYiMU/wLkPgm2ZDdWBKj9syBceW0BbQG9Md2May94U1wUHExMt5Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E37Rk6Q0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SKKPkqES"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2d049069377so24881655ad.0
-        for <live-patching@vger.kernel.org>; Sun, 16 Aug 2026 02:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786871102; x=1787475902; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=feSpm1eQkq5bNCxDvtp4/FpvezlbdmTK2Pd0m5OeCLg=;
-        b=SKKPkqES7GRuzDSPXWw8lFTtzAKriTczSPdFB6eOLs03YZzHFxtsdS36tSKV6bcszY
-         ASxlNPYtjly+BWWu4o923CuPvhPxt/YC2g3vLaOoTyZYuPS32tp7u1cB8PRCs5PHBJwn
-         1bybshkl7Y7+7CutGxIK5XE8iQJGRID0OFvk288VltmJr61mg6A8JnW2MAfm/goyba0v
-         UpNJljo1xeTsekGaSfGVXSSxywNh473TBrcjxSnSMmqNlH7HqAIrjzF2CJbrZ3jjURh/
-         w9n9CqAaxsD15g3279RidzJ/HSP71pI1by8BcpPfaBPFSF0ZJorqmxfDAoyyQt5pdzj9
-         Ll7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786871102; x=1787475902;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=feSpm1eQkq5bNCxDvtp4/FpvezlbdmTK2Pd0m5OeCLg=;
-        b=R43KpglXw0yA7xwX/PVletG8jfR7JIGYY/Wwk0USSXoRwfWZzQ/SZfy62D00IX0C5F
-         GIyHrJS0wE/w7pFU/VQcvvijmi7KyHbQPpXAXzwCDuF1jI056SsW/+GOs+tFl7/LJJAk
-         Cv1XMfaIE8/4w+qArgpb9MY7kjF5J1Si8DGLDypqgl+c/jNXYvAKKjxHUgNbXdCDTq9c
-         c7tIkrz/xPS0xsPOsa5vCQpZGZAyX4BerHoIf9yg1kLDZbr7CfnjZ4zmHDj3tZUtQxwM
-         k+Nr8QvnwskXy37BUevWrb4wFox71dRKp5yvpsrDMPMVuCI12wO2XhJhi6xX4/YqTxYW
-         HXvw==
-X-Gm-Message-State: AOJu0YwPgs/PUjlyHIRUv6q07xChTBu6Nm/ZrMR5ZZnCaVLpIN7XRlDD
-	z7c/sSpa3SnR3YouPiwcnDvZqjRVu3IUzgNQHr9JjU4mFF+wpgHLJWeH
-X-Gm-Gg: AR+sD10NqBRzDWx5D+9I3yRzwijjzixhFZkLirIldJSUSmaTL9UKJegQc8ijgUHwKeN
-	vDCQshYBB8XJixQqP8MhQukp2Xd3rgvO1U5WmM5buU53uu2FEASxHnWtwBrRCDCal+3O95OZz67
-	18oQkK6IsQfpbGKw/YX3hYUe+hWDu1R9qwNr6cfjOXslM6gpVPeQtW08j174Wf8CniIMa15nwsN
-	4BGsAGqSKK5aXmbLx39Nwe/uW3ef5c5MoGG5qyqsnAomlmv1pnPDuVSsnQnm1ElvWTKrDQzJLxp
-	Y/Rc73+je+esOBmKlh9clixsPQYUqyLfHOzFo5Lku+/bqTTmTD9OnvGr4xm0E4z2YSTeVjaQnyt
-	OoDG8t/7DO7mCb59QSld8mplqRTKaxFHePkLX9EWcUjUln4+QTIVBtlmtezXvQ1G07UeGOq2irH
-	hpNeWjwJAJE6yrkl419qyBa3rKf7WJgd97CO5YQSzACErA+8ruhOhk/GpfpUWem6DzHhKt8ivCh
-	BEMzg8aM/e5+0oJPqCUS92SUFNxE0galKBIPHVWX/rLjuf0tfKiRY0D
-X-Received: by 2002:a17:902:f603:b0:2d3:78c2:1f19 with SMTP id d9443c01a7336-2d3b0c5798cmr202523645ad.9.1786871101610;
-        Sun, 16 Aug 2026 02:05:01 -0700 (PDT)
-Received: from yafangs-Air ([240e:46d:2100:4077:60c3:e9ee:3774:36cb])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d3aeb8869asm24466485ad.60.2026.08.16.02.04.57
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 16 Aug 2026 02:05:00 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	song@kernel.org
-Cc: live-patching@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>,
-	sashiko-bot <sashiko-bot@kernel.org>
-Subject: [PATCH v2 2/2] livepatch: Fix UAF of unregistered patch kobjects
-Date: Sun, 16 Aug 2026 17:04:42 +0800
-Message-ID: <20260816090442.18128-3-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260816090442.18128-1-laoar.shao@gmail.com>
-References: <20260816090442.18128-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E37Rk6Q0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF751F000E9;
+	Sun, 16 Aug 2026 09:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786873294;
+	bh=sMC7Xv3ObNnQLqHKFbABJEE/ltn5mUM5anIYIaQaIlw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E37Rk6Q0IFrIINsZVlHK4ylTf50BhpYIf8vgyOELq6XFUZ1ODv+oWePHPwIf1hIS4
+	 cRkG6PmsMPWHHesGQUJVZmFlUddPHQy9MeN4oBScJDn5jJ7JwXqvuirPoinIzAT5yj
+	 6uOEGTYWk4pnFF5nN9sz/NrigFFmyoOW73ib01kZAQXwKNe0YX+pjQEl8zOgqLRJ26
+	 j22OdcDLG9GYe9DdiOvItRHJwnW1GZrgWrZPS/eT9jNn0r3y6jrXPg1LFB1Zj436XB
+	 ae1sPOCeT8ENRA0akt3CbcEZxNjje7p9/6jV2OZupuZ+79tcFaTG2eV4+0L2AMYFdA
+	 0AS5KgXEabd0g==
+Date: Sun, 16 Aug 2026 10:41:27 +0100
+From: Will Deacon <will@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	live-patching@vger.kernel.org, Song Liu <song@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH 02/12] arm64/module: Fix BTI exceptions caused by omitted
+ landing pads in Clang 21
+Message-ID: <aoGFxycNrA0p-H4T@willie-the-truck>
+References: <cover.1786768375.git.jpoimboe@kernel.org>
+ <2ff1b2482406c61ca5979d6284ba5f948a3fbc20.1786768375.git.jpoimboe@kernel.org>
+ <6bc20c00-21a9-4315-8ec3-33c7ad6ae95f@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6bc20c00-21a9-4315-8ec3-33c7ad6ae95f@app.fastmail.com>
 
-When klp_enable_patch() fails after klp_init_patch_early() has run,
-the error path calls klp_free_patch_start() and klp_free_patch_finish().
-The former drops the references of all object and function kobjects via
-klp_free_objects(), the latter drops the patch kobject reference and
-waits for the patch kobject release only:
+Hi Josh, Ard,
 
-    klp_free_patch_finish():
-        kobject_put(&patch->kobj);
-        wait_for_completion(&patch->finish);
+On Sat, Aug 15, 2026 at 12:56:11PM +0300, Ard Biesheuvel wrote:
+> On Sat, 15 Aug 2026, at 07:45, Josh Poimboeuf wrote:
+> > The following BTI exception was seen when loading a livepatch module:
+> >
+> >   Internal error: Oops - BTI: 0000000036000001 [#1]  SMP
+> >   pstate: 634004c9 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=jc)
+> >   pc : kill_orphaned_pgrp+0x0/0x150
+> >   lr : do_exit+0x498/0xaf0 [livepatch_combined]
+> >
+> > The problem is that the patch module's do_exit() is branching to a
+> > static function in vmlinux using a module PLT veneer (indirect branch),
+> > but the target function doesn't have a BTI landing pad.
+> >
+> > Clang 21+ omits the landing pad for static functions which can only be
+> > reached by a direct branch.  But livepatch modules use klp relocations
+> > to reference arbitrary kernel symbols, and with
+> > CONFIG_RANDOMIZE_MODULE_REGION_FULL the module is far enough away that
+> > every call to vmlinux needs a PLT.
+> >
+> > Note this problem is actually not specific to livepatch.  It's possible
+> > for any module's .init section to be allocated > 128MB away from its
+> > .text section.  So calls from .init to .text via a PLT can trigger a BTI
+> > exception when the target function doesn't have a landing pad.
+> >
+> > GCC has always omitted the landing pad when possible, so kernel BTI is
+> > already considered incompatible with GCC since commit c0a454b9044f
+> > ("arm64/bti: Disable in kernel BTI when cross section thunks are
+> > broken").
+> >
+> > When missing landing pads are detected, allocate a page close to the
+> > target which can be used to hold BTI veneers which receive PLT veneer
+> > indirect branches and direct branch to the final target:
+> >
+> 
+> This does not work for cross-section calls from .init.text to .text.
+> 
+> If .init.text is far away from .text, it is likely because .text
+> ended up in the 128M 'near' module region, and .init.text did not.
+> (They tend to end up in direct branching range of each otherwise.)
+> 
+> Given that the module init code is typically small, I don't think
+> it is safe to assume that allocating a single page close enough to
+> .text is going to be possible if allocating the space for .init.*
+> was not.
+> 
+> IOW, the fix I proposed for cross-section calls is still needed
+> with this approach.
 
-With CONFIG_DEBUG_KOBJECT_RELEASE enabled, kobject_put() does not
-release the kobject synchronously but schedules a delayed release with
-a random delay of up to 4 seconds (see kobject_release() in
-lib/kobject.c). Because klp_free_patch_finish() only waits for the
-patch kobject release, it may return while object and function kobject
-releases are still pending. The caller can then unload the livepatch
-module, which frees the klp_object and klp_func structures. The delayed
-kobject release callbacks later access this freed memory in
-kobject_cleanup(), resulting in a use-after-free.
+Sorry to jump in here, but I couldn't figure out a better place to get
+involved as we have a few threads on this now.
 
-This issue can occur in two scenarios:
+Overall, it seems to me like there are three cases we need to consider
+for re-enabling BTI in the kernel:
 
-1. The patch kobject was never added to sysfs (e.g., klp_init_patch()
-   failed at kobject_add()). All child kobjects were only initialized
-   via kobject_init() but never added to sysfs. They do not hold
-   references to the patch kobject, so the patch kobject can be
-   released independently, unblocking patch->finish before the child
-   releases complete.
+1. A cross-section call that spans beyond the 128M range and therefore
+   needs a veneer. I think the static linker should resolve this, probably
+   by emitting a second veneer with the landing pad. Do we know if LLD
+   gets this right?
 
-2. The patch kobject was added to sysfs, but a subsequent operation
-   such as klp_add_nops() or klp_init_object() failed. Some child
-   kobjects were initialized but not yet added to sysfs. These
-   un-added children do not hold references to the patch kobject
-   either, so the same race can occur.
+2. Calls from modules to exported symbols that end up going via a PLT
+   due to module placement. Exported symbols shouldn't be static, so we
+   should have the correct BTI landing pad in this case (and if we don't,
+   we should fix EXPORT_SYMBOL() to add it).
 
-Fix this by tracking all static kobject releases with a per-patch
-atomic counter (kobj_pending). klp_free_patch_start() counts the
-patch kobject plus all static object and function kobjects.
-klp_free_patch_finish() waits until kobj_pending reaches zero,
-ensuring all kobject releases have completed before the module is
-unloaded.
+3. The livepatch case where a module appears to branch directly to
+   static functions in the kernel. For this, I frankly think we should
+   either make in-kernel BTI depend on !LIVEPATCH _or_ pass some compiler
+   option (tbd) when livepatch is enabled so that we get landing pads
+   for static functions (which is what I believe Clang/GCC used to do?).
 
-Dynamic objects and nop functions are excluded from the count because
-they are freed by their release callbacks (which call kfree) and only
-exist when the patch kobject was successfully added to sysfs. For
-patches fully added to sysfs, the kobject parent-child reference chain
-ensures the patch kobject is released last, so kobj_pending naturally
-reaches zero when the patch kobject is released. For patches with
-partial initialization failures, kobj_pending ensures all un-added
-kobject releases are tracked regardless of release order.
+What am I missing?
 
-The release callbacks use early return after kfree() for dynamic/nop
-kobjects to avoid dereferencing freed memory. Static kobjects are not
-freed by their release callbacks, so accessing obj->patch or
-func->obj->patch is safe. Furthermore, static functions always belong
-to static objects, so func->obj is never freed by a release callback.
-
-Reported-by: sashiko-bot <sashiko-bot@kernel.org>
-Closes: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.shao@gmail.com/
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- include/linux/livepatch.h |  6 +++++
- kernel/livepatch/core.c   | 50 ++++++++++++++++++++++++++++++++++++---
- 2 files changed, 53 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index ba9e3988c07c..6375150c2369 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -33,6 +33,7 @@
-  * @kobj:	kobject for sysfs resources
-  * @node:	list node for klp_object func_list
-  * @stack_node:	list node for klp_ops func_stack list
-+ * @obj:	back pointer to the owning object
-  * @old_size:	size of the old function
-  * @new_size:	size of the new function
-  * @nop:        temporary patch to use the original code again; dyn. allocated
-@@ -72,6 +73,7 @@ struct klp_func {
- 	struct kobject kobj;
- 	struct list_head node;
- 	struct list_head stack_node;
-+	struct klp_object *obj;
- 	unsigned long old_size, new_size;
- 	bool nop;
- 	bool patched;
-@@ -86,6 +88,7 @@ struct klp_func {
-  * @kobj:	kobject for sysfs resources
-  * @func_list:	dynamic list of the function entries
-  * @node:	list node for klp_patch obj_list
-+ * @patch:	back pointer to the owning patch
-  * @mod:	kernel module associated with the patched object
-  *		(NULL for vmlinux)
-  * @dynamic:    temporary object for nop functions; dynamically allocated
-@@ -101,6 +104,7 @@ struct klp_object {
- 	struct kobject kobj;
- 	struct list_head func_list;
- 	struct list_head node;
-+	struct klp_patch *patch;
- 	struct module *mod;
- 	bool dynamic;
- 	bool patched;
-@@ -127,6 +131,7 @@ struct klp_state {
-  * @list:	list node for global list of actively used patches
-  * @kobj:	kobject for sysfs resources
-  * @obj_list:	dynamic list of the object entries
-+ * @kobj_pending: number of kobjects awaiting release
-  * @enabled:	the patch is enabled (but operation may be incomplete)
-  * @forced:	was involved in a forced transition
-  * @free_work:	patch cleanup from workqueue-context
-@@ -140,6 +145,7 @@ struct klp_patch {
- 	bool replace;
- 
- 	/* internal */
-+	atomic_t kobj_pending;
- 	struct list_head list;
- 	struct kobject kobj;
- 	struct list_head obj_list;
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index a240d1144e89..b5e8242b0877 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -635,7 +635,8 @@ static void klp_kobj_release_patch(struct kobject *kobj)
- 	struct klp_patch *patch;
- 
- 	patch = container_of(kobj, struct klp_patch, kobj);
--	complete(&patch->finish);
-+	if (atomic_dec_and_test(&patch->kobj_pending))
-+		complete(&patch->finish);
- }
- 
- static const struct kobj_type klp_ktype_patch = {
-@@ -646,12 +647,19 @@ static const struct kobj_type klp_ktype_patch = {
- 
- static void klp_kobj_release_object(struct kobject *kobj)
- {
-+	struct klp_patch *patch;
- 	struct klp_object *obj;
- 
- 	obj = container_of(kobj, struct klp_object, kobj);
- 
--	if (obj->dynamic)
-+	if (obj->dynamic) {
- 		klp_free_object_dynamic(obj);
-+		return;
-+	}
-+
-+	patch = obj->patch;
-+	if (atomic_dec_and_test(&patch->kobj_pending))
-+		complete(&patch->finish);
- }
- 
- static const struct kobj_type klp_ktype_object = {
-@@ -662,12 +670,19 @@ static const struct kobj_type klp_ktype_object = {
- 
- static void klp_kobj_release_func(struct kobject *kobj)
- {
-+	struct klp_patch *patch;
- 	struct klp_func *func;
- 
- 	func = container_of(kobj, struct klp_func, kobj);
- 
--	if (func->nop)
-+	if (func->nop) {
- 		klp_free_func_nop(func);
-+		return;
-+	}
-+
-+	patch = func->obj->patch;
-+	if (atomic_dec_and_test(&patch->kobj_pending))
-+		complete(&patch->finish);
- }
- 
- static const struct kobj_type klp_ktype_func = {
-@@ -737,9 +752,35 @@ static void klp_free_objects_dynamic(struct klp_patch *patch)
-  */
- static void klp_free_patch_start(struct klp_patch *patch)
- {
-+	struct klp_object *obj;
-+	struct klp_func *func;
-+
- 	if (!list_empty(&patch->list))
- 		list_del(&patch->list);
- 
-+	/*
-+	 * Count all static kobjects (patch + objects + funcs) so that
-+	 * klp_free_patch_finish() can wait for all their releases.
-+	 *
-+	 * Dynamic objects and nop funcs are excluded because they are
-+	 * freed by their release callbacks and only exist when the patch
-+	 * kobject was successfully added to sysfs.  Static kobjects may
-+	 * or may not have been added to sysfs (e.g. if klp_init_object()
-+	 * failed after kobject_add() for the patch succeeded).  Counting
-+	 * all of them ensures delayed releases are tracked regardless.
-+	 */
-+	atomic_set(&patch->kobj_pending, 1);
-+	klp_for_each_object(patch, obj) {
-+		if (obj->dynamic)
-+			continue;
-+		atomic_inc(&patch->kobj_pending);
-+		klp_for_each_func(obj, func) {
-+			if (func->nop)
-+				continue;
-+			atomic_inc(&patch->kobj_pending);
-+		}
-+	}
-+
- 	klp_free_objects(patch);
- }
- 
-@@ -944,6 +985,7 @@ static void klp_init_func_early(struct klp_object *obj,
- {
- 	kobject_init(&func->kobj, &klp_ktype_func);
- 	list_add_tail(&func->node, &obj->func_list);
-+	func->obj = obj;
- }
- 
- static void klp_init_object_early(struct klp_patch *patch,
-@@ -952,6 +994,7 @@ static void klp_init_object_early(struct klp_patch *patch,
- 	INIT_LIST_HEAD(&obj->func_list);
- 	kobject_init(&obj->kobj, &klp_ktype_object);
- 	list_add_tail(&obj->node, &patch->obj_list);
-+	obj->patch = patch;
- }
- 
- static void klp_init_patch_early(struct klp_patch *patch)
-@@ -962,6 +1005,7 @@ static void klp_init_patch_early(struct klp_patch *patch)
- 	INIT_LIST_HEAD(&patch->list);
- 	INIT_LIST_HEAD(&patch->obj_list);
- 	kobject_init(&patch->kobj, &klp_ktype_patch);
-+	atomic_set(&patch->kobj_pending, 0);
- 	patch->enabled = false;
- 	patch->forced = false;
- 	INIT_WORK(&patch->free_work, klp_free_patch_work_fn);
--- 
-2.52.0
-
+Will
