@@ -1,295 +1,161 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32559282F29
-	for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 16:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786985617; cv=none; b=blLDYntS15IFfBZXu/aJg3wjOSsUPNySeBrkLeN5ljyO0xKn+cqb68iJbQ3spAXQe1/ocYNLuY/1N0TwdOyhPhZYX/80n3XLRY3cHFoiuAfLp9kPSfDIu7xKe8vBs4WJUnWVEi5CE22KDZ6peeNohUT5iaLrAGEFAvOeVN3P3BQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786985617; c=relaxed/simple;
-	bh=asRMw8WjcsCwAeJV4SmVF5zMdThAXCu7hy3C3bu35RA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hu6oV58Tgq6r6+FO8y4EdBUhI0LV5k+yBFrGsl/M8jf4fTOWhs83bku7/qS9l9nwtkPQpqO3dADwi1C16Izku602rB8/56G+XT4Xu1jN7z2hR2aX9bGd4PXTev2V7u+yfX6+OrGypt3aYR8V30xfRdfnXrFlpiWXDf11y3TyF6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZRid71nH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tmEiI8Tf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F91377558
+	for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 19:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786996502; cv=pass; b=S33XDE1JlgtZ0bTf4bdAQvkgE0ImkfWFComf96hqnAwVHyJ15yQk/5RuJFkwC511JlbQpdWhcMqX+7l7tmSMPbWOLFkTVrItVemlscP1rzZtzgx7GrjRDWFD/jux7gEHjcoRj0MIeDW3rLGIVOPMF4nMAeqUWDpT85ZVkR0MSPc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786996502; c=relaxed/simple;
+	bh=yvICGRDviZ9Mxl2myEhHYYGBApOjkwX/h1S7R98bUPI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LSQd7++aWxbfvhngEyJCUFLhO5TceSqNX2TlHJJ2eVMmIKOWT7lcKA081mSWFrj3Xmtj1dCQlCJN/Im8VT6cvZDIWO4l/RvduvUrCDzlCzB+3av6OGdV0iQSX0kL9c9MSmaUNF0gSGjIiY4/Yh4ucWZR3rDKv7hZUqZwZ3LX2bk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c3yG6BnW; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZRid71nH";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tmEiI8Tf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786985608;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=3WX6LysBd+7CWucEaqFfHvbjj7UPWp+DHEZXI34FT2M=;
-	b=ZRid71nHSJdyWlrZ/ToNYsbYbjLipAM2BZGwH7w5A+oQdfrHOJ9XY3i+N2mLeSQJt1/PqF
-	JgP+p0pRryyYU7naxw9USsPu+AbKsMbJBj17A0J4bWGf6wUc2cP0er8aqtdyiVQLAr9dTL
-	anQ5Egr+0A1C3XQjhFj7zInVGkbu8dA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-99-fcKAyiNVMjikm7HO3z8m6w-1; Mon, 17 Aug 2026 12:53:19 -0400
-X-MC-Unique: fcKAyiNVMjikm7HO3z8m6w-1
-X-Mimecast-MFC-AGG-ID: fcKAyiNVMjikm7HO3z8m6w_1786985599
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8efad04d884so67084826d6.0
-        for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 09:53:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c3yG6BnW"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c20e70a0962so504709966b.2
+        for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 12:55:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786996499; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZWY4s1trwSZlVP7IptoXW0Dr8OV22qx3gDryfXIh4PC3RbLGp4ECBmRGu2I8SNwCTg
+         5Q4egGMyEWQg5tHOUQvC6WfbbFNVMFkPtow7AxUgDUxwq79Gg+ipCgmsS+CNiVt64n/f
+         ZNuFJAWfJm1b6YAH3SBL95fkMvhySJySHSm/SGggf1MVgystCkswU88D0azAo7iztSmO
+         97G1NytK5j4YOJuIsN4al6mO9lqtwOOpK1NzGcwMJEhahXO/Qg7M8wcxHMCHzyD+wNTR
+         3OwlPaqRi2Kcowxdc2hn4FTApnw1D77kP57rjr3M/EBqWl8EqlMQJP5qZQrkoC8cXmh+
+         xYcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
+        fh=TsCK5CP0yxIRjWQFV9N3oSZJYYgRzlWajR5l383tDyc=;
+        b=GJci3XWK+DJWkE6fRhv1sSLk1+hoYmF2grS+oW7giENUXwd5QfNpRNCgCDmKlJ8bPR
+         63mK76Tt+ctZy/Qn1iGe0RicsD3r8yA90q64Po2wzu0XXUCHUMOKTOVBZanm4QjiPMl/
+         waXDeE3Ooo9aCLC+KJhHB+y98OWjLIhekOjDi22wIoDMkA3jkNzWwNQdi/kbB4Ld3+u9
+         ju5xMF8PXtMf3ueBQNLFKGAQwmKsvW2GDxPUZ9jiFF2zNAg+P1nisOP4KD+b3JJhWPIo
+         Cu/uFhJTAxP2d0WLWrWLzhTDLLxvzlBgxgRh8wrMRKKiJvQFKpEcQKHonLV32srJJmV+
+         RIGQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1786985599; x=1787590399; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3WX6LysBd+7CWucEaqFfHvbjj7UPWp+DHEZXI34FT2M=;
-        b=tmEiI8TflWgPLjcb2k1BUVmKMM3lTu8wGiGRV3zBp65yYQnPIh46vycF5EbesLGPG6
-         Rpd6eXB4clOxsWwRD+DrDpbXMn4Y7H7fFNINbj9q2qwPj6ESiITeCEoxos/++2KJgSHP
-         Nund6PoBjfpuAmefKH+n5+Q6uDTbgq0mX5o3fSqPiB+abH+BiztQphTUw9CM74hWJTny
-         6EXOYEcKTCqvXJ6Tbq5nfoeI/UH2TH+Hes7M9KYfltaJ0B6d4th6sa12lwW2FiV9D5Gh
-         WtLruqpYgIjZS02LGJyUlZhXvLwzpvW5MIaGG5Bv18LWTsjMd7EVhvzTlcK0TcSMbhs+
-         u8yw==
+        d=google.com; s=20251104; t=1786996499; x=1787601299; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
+        b=c3yG6BnW8Ng/4aF73RgyvEdOt+kptrEGMBWykeT8cTOGHQunu8Ij7NyMdPNOdehuwp
+         ipR9uQxP9tMExU1+T/urPQbN1I1vTVPN6xm3k/lTK5HCL6nUcOu0ZrFNI6RzVHK15B3n
+         ybh+jcP9ArJeSZNIY0P2IhcK6c5phZluSxNnbK0/80kdkyJq0oMpi4cD0MR5gUZ8qrNg
+         Xv+usTWzWI3emesGkuOR4uVTWOBTVz5A+ohcG+rppA/RIBvzn/vpb+M70bJn31ld5luT
+         Z+/SZPcl3dDmVBsuNGh2Pjc2jmpclehlfD2GcO5y9kPPCQQAZkeHYW1k3mb9gh4JsPq1
+         WYrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786985599; x=1787590399;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3WX6LysBd+7CWucEaqFfHvbjj7UPWp+DHEZXI34FT2M=;
-        b=DkKzP/Y0HOk/emmMDzVx77VvXUGdEqM+M56xAe1uCzA8rKs7VQ1UcB9x4bDRNHLKkD
-         D7IoIA7Ir5rIL69F4OZVRqLMy3M5UGHxMYGvSRRX54xx5uYfvpBlFUdYoHaGt8SvqDeL
-         7EG2Y6zIZYBVT/8hAI/c98/l3yCphy5pnNbdycySF7Y8hw4+WHHPOi5B1SOzu348LWKA
-         oH8dKlN67e/5miYeyT4kntRJWwgt5YAkT6xF1+OlJgC4h9boHb7Z8o1VKkEVL1StfnBZ
-         s2JJfaOA3FMgjL+YUGxWWPcGYo4efVD3oLdms1bv6R0XYy0TIVmEls5k/iDVHinBwygj
-         mMPA==
-X-Forwarded-Encrypted: i=1; AHgh+RoKvLUCfs4bEzzlQAYw28BfTf9ZZp7om0AfE4L8coUPc/+nl8Mfh2I5913/zEgPrrVGsOiUx7VBOivCsHTe@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0lABnAUCYB8VZ9LwuHjp48hV7qLyZmR8ev8eAe6NJ/mJE3CKU
-	Eig4a471CTB59KAY3UAcVCXZIP/a7pT/1mKoQLpCG/BkTNm09RDrA+WybhD2Jj4gup4OHxewfw1
-	0hg/kdZ2NXz3vQn+zcAQThKdNG9RE4ytVa7FWh8A7wXn/VG2hmrHeTIAowMEgqqA+rxk=
-X-Gm-Gg: AR+sD102v0fPKYtPy0fhhIoKKmmRgrtrESnZzUOqdZqxzU2MStL8yYN1g9DyKsKAAtI
-	zBK0Pdkc8Iv0AE0xGg5WCWem0uJVEZh380stvOYL2UKVKp8LygrP76ZddGG5khRaPwuE1cruClh
-	u1zCRnbiKtC6gRKq0AwTeLEMycNa/DkrqbC1PrTEUa3/7lg66DnhnUKOUFBTy2nblWwUFJZ95YA
-	EJ8ZEI5/fQXJXQtbcjDcPi2GlkqCd+xwXCC0cPEIHAMiMBFo1uPNrrZ7z/giG99iANbZAahJmEp
-	UyIEDbSNx62daidNxu+v2ikPDKdmvU1J4r6XZU1AaNOkxk37kNoMynN/gZ4d6xk6aoHQV1dMGHn
-	Acnl0KM6IyYSdnA/WR0zyEdv9o1+04RTUL0W9/QabnNbb5PvN288DpZui
-X-Received: by 2002:a05:6214:458f:b0:905:6e01:b9a3 with SMTP id 6a1803df08f44-90a91e0b9cbmr325694336d6.31.1786985598861;
-        Mon, 17 Aug 2026 09:53:18 -0700 (PDT)
-X-Received: by 2002:a05:6214:458f:b0:905:6e01:b9a3 with SMTP id 6a1803df08f44-90a91e0b9cbmr325693576d6.31.1786985598345;
-        Mon, 17 Aug 2026 09:53:18 -0700 (PDT)
-Received: from [192.168.1.26] (pool-68-160-160-85.bstnma.fios.verizon.net. [68.160.160.85])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c45936724sm13335226d6.27.2026.08.17.09.53.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2026 09:53:17 -0700 (PDT)
-Message-ID: <83199677-691a-4060-bc8b-79ae0d8c7bed@redhat.com>
-Date: Mon, 17 Aug 2026 12:53:16 -0400
+        d=1e100.net; s=20251104; t=1786996499; x=1787601299;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
+        b=l+3bYyr6dHVTyOUCF6fFBlkLvcHl5gdgKJX/y+V9JBpgzg/HN35j5ndP2FgCJ3ZuAG
+         5+CRJq4AYWKpxbVnsJjLP2rBdU9Ytap5hR5lts6XtU6Wt3nGe94tzGXtz1ZXUiHn4zo9
+         FKZaf6Mk7RJ2RCL+dUeOxlZ5wAfC9T25NIQy4tK7DoMeGov4eyp/QTcsVmEhA+vNT/4y
+         Dx3ltUHyV+bS3raw8NkNioR8W9PWTUqs97SdAXRMprrDO0tPPFJEW883EcFdk6MJsStr
+         4y9i4ZmTuJB+j+yc92W/9aePZdyss5uj1ZuqZKfV6pheccDopEwc3FWu+ZarD9QJ8PDo
+         sEUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoostojjhXX4LHg+g0ctHpTMha95j+wK0W+whvsCWwpZxVmA1NRFXK7zNCQO9rhHhf3OHZOrLHs+5H6wpbB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX/Smde7BS6XKSG8GozG+lVe3Ps4Rmm2V5oBJNx+eVeZaOEpIj
+	LWIO8+WZLy8ep6U1bxSH/RgRWuVAjgbQIUMMrECE7rempcRpzwowkDMI6JUAcKDYaWm/OXRrn7M
+	vvArd4U6BF8AG5L2DAy841lNKpvMftGRwTBx5bMB+
+X-Gm-Gg: AR+sD13/tdWeMMWfqo3Q7o587SSyg4rOiBVewVpLIsyY7268c11+WtrA5jqkU/6d+dt
+	WeDYZpVyHZ7m0FpQvtHNw3PuxBypJsqsrV61eUdzDCIsXUMO2yPIaWl/SaXHKsRgoudDDM9neM7
+	HaZHMmz8zCCH8crHzYhJyUAX3zZkYFRqlP9dU/ff3CtctyP9CjU57zoprjqooKkFZ5bEybp8rPM
+	7V/wzAtAwGzSQfmUuOOjUKU/7aPRM/Pw1SCPD7pmhl45eQsORAM+H9TymyWED0OppIyWckW/hwH
+	fWh0e39wO8lKN6a6QuZCP52ZxXq8P1dDpdmTqWFU0tXOnuBxK4aQ3BMk8JImPANlAOf08bjILy5
+	ljydYG8TcZohIjLklVJE/pJIU6x+f3868ucaTj0mOxEMopP+A+Y2kOgyB
+X-Received: by 2002:a05:6938:a081:20b0:c16:12ff:dc93 with SMTP id
+ a640c23a62f3a-c21885d0e18mr100346666b.18.1786996498684; Mon, 17 Aug 2026
+ 12:54:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] objtool/klp: Fix vmlinux klp relocations for
- EXPORT_SYMBOL_FOR_MODULES()
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: x86@kernel.org, linux-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
- Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- Petr Mladek <pmladek@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>
-References: <f8e3b9fae109903a6aafb2a33310e4afdcebf58e.1786761327.git.jpoimboe@kernel.org>
- <CADBMgpxZYtSGi=SPRCJ_zOG10arL3uax+fyouctxi5tLLWPE+Q@mail.gmail.com>
-Content-Language: en-US
-From: Joe Lawrence <joe.lawrence@redhat.com>
-Autocrypt: addr=joe.lawrence@redhat.com; keydata=
- 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
- pNzsRQ==
-In-Reply-To: <CADBMgpxZYtSGi=SPRCJ_zOG10arL3uax+fyouctxi5tLLWPE+Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1786768375.git.jpoimboe@kernel.org> <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
+In-Reply-To: <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 17 Aug 2026 12:54:47 -0700
+X-Gm-Features: AcwNN1X5GYhNIXFwByZPWbcQ7Kc1jXcOVcJq-v_hRwbMgl2NTJnecge5Wd_AP5Q
+Message-ID: <CAKwvOd=Vn4L1sJ=8zVk9qcDLtaDYxfxn+0aG4tMrbETsqY5_PQ@mail.gmail.com>
+Subject: Re: [PATCH 10/12] efi/libstub: Remove obsolete .note.gnu.property workaround
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org, 
+	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/17/26 12:21 PM, Dylan Hatch wrote:
-> On Fri, Aug 14, 2026 at 7:36 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->>
->> When a module function references a vmlinux symbol which is exported
->> with EXPORT_SYMBOL_FOR_MODULES(), a patch to that function needs to use
->> a klp reloc.
->>
->> Currently, livepatch fails to load such a module:
->>
->>   livepatch: invalid access to vmlinux symbol 'get_task_policy' from module-specific livepatch relocation section
->>   livepatch: failed to initialize patch 'livepatch_test' for module 'testmod' (-22)
->>   livepatch: patch 'livepatch_test' failed for module 'testmod', refusing to load module 'testmod'
->>
->> klp diff puts all klp relocs in __klp_relocs.<patched object>, so
->> post-link names the section .klp.rela.<patched object>.<secname>, which the
->> kernel rejects for vmlinux symbols.
->>
->> Commit 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation
->> section naming") changed the meaning of objname in the klp rela section
->> name to be where the referenced symbol is referenced rather than where
->> it lives.  That premise only holds for symbols in a module: the relocs
->> get applied when the patched module gets patched, and the module
->> dependency guarantees the referenced module is loaded by then.
->>
->> A vmlinux symbol needs the opposite.  It's always resolvable, and it has
->> to be applied when the patch module loads, before the module loader
->> initializes the patch module's special sections, which may reference it.
->> That's why livepatch rejects vmlinux symbols in module-specific
->> sections.
->>
->> Use "vmlinux" as the section objname when the referenced symbol lives in
->> vmlinux.  This moves such klp relocs from .klp.rela.kvm..text to
->> .klp.rela.vmlinux..text.
->>
->> Fixes: 07f14d6af9d77 ("objtool/klp: Fix cross-module klp relocation section naming")
->> Reported-by: Dylan Hatch <dylanbhatch@google.com>
->> Closes: https://lore.kernel.org/CADBMgpz7iWC0=t=_gE-tfvv0mTPq4kg0qQ2zgPH8DVPE6eQ9Kw@mail.gmail.com
->> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
->> ---
->>  tools/objtool/include/objtool/klp.h |  5 +++--
->>  tools/objtool/klp-diff.c            | 35 ++++++++++++++++++-----------
->>  2 files changed, 25 insertions(+), 15 deletions(-)
->>
->> diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
->> index 646d8e1f12eff..c57775d78c71e 100644
->> --- a/tools/objtool/include/objtool/klp.h
->> +++ b/tools/objtool/include/objtool/klp.h
->> @@ -20,8 +20,9 @@
->>   * SHF_RELA_LIVEPATCH, nor does it support having two RELA sections for a
->>   * single PROGBITS section.
->>   *
->> - * "objname" is the name of the object being patched ("vmlinux" or a module
->> - * name).  post-link uses it to name the resulting
->> + * "objname" is the object whose loading gates the relocation: "vmlinux" for
->> + * references to vmlinux symbols, otherwise the name of the module being
->> + * patched.  post-link uses it to name the resulting
->>   * .klp.rela.objname.section_name sections.
->>   */
->>  #define KLP_RELOCS_SEC "__klp_relocs"
->> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
->> index a66049e0726a6..16681a76f13d0 100644
->> --- a/tools/objtool/klp-diff.c
->> +++ b/tools/objtool/klp-diff.c
->> @@ -1344,13 +1344,14 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
->>                            struct section *sec, unsigned long offset,
->>                            struct export *export)
->>  {
->> +       const char *sym_modname, *sym_orig_name, *sec_objname;
->>         struct symbol *patched_sym = patched_reloc->sym;
->>         s64 addend = reloc_addend(patched_reloc);
->> -       const char *sym_modname, *sym_orig_name;
->> -       static struct section *klp_relocs;
->>         char tombstone_name[SYM_NAME_LEN];
->>         struct symbol *sym, *klp_sym;
->>         unsigned long klp_reloc_off;
->> +       struct section *klp_relocs;
->> +       char sec_name[SEC_NAME_LEN];
->>         char sym_name[SYM_NAME_LEN];
->>         struct klp_reloc klp_reloc;
->>         unsigned long sympos;
->> @@ -1441,20 +1442,28 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
->>          * This intermediate step is necessary to prevent corruption by the
->>          * linker, which doesn't know how to properly handle two rela sections
->>          * applying to the same base section.
->> +        *
->> +        * The objname decides when the reloc gets applied.  A reference to a
->> +        * vmlinux symbol goes in the vmlinux section so it gets applied when
->> +        * the patch module loads.  Everything else goes in the patched
->> +        * object's section, applied when the patched module is loaded.
->>          */
->>
->> +       if (!strcmp(sym_modname, "vmlinux")) {
->> +               sec_objname = "vmlinux";
->> +       } else {
->> +               sec_objname = find_modname(e);
->> +               if (!sec_objname)
->> +                       return -1;
->> +       }
->> +
->> +       /* section format: __klp_relocs.objname */
->> +       if (snprintf_check(sec_name, SEC_NAME_LEN,
->> +                          KLP_RELOCS_SEC ".%s", sec_objname))
->> +               return -1;
->> +
->> +       klp_relocs = find_section_by_name(e->out, sec_name);
->>         if (!klp_relocs) {
->> -               const char *objname = find_modname(e);
->> -               char sec_name[SEC_NAME_LEN];
->> -
->> -               if (!objname)
->> -                       return -1;
->> -
->> -               /* section format: __klp_relocs.objname */
->> -               if (snprintf_check(sec_name, SEC_NAME_LEN,
->> -                                  KLP_RELOCS_SEC ".%s", objname))
->> -                       return -1;
->> -
->>                 klp_relocs = elf_create_section(e->out, sec_name, 0,
->>                                                 0, SHT_PROGBITS, 8, SHF_ALLOC);
->>                 if (!klp_relocs)
->> --
->> 2.55.0
->>
-> Tested-by: Dylan Hatch <dylanbhatch@google.com>
-> 
-> Tested with the reproducer patch I mentioned earlier:
-> 
-> https://github.com/dylanbhatch/linux/tree/mod-ns-lp
-> 
-> Also, are there integration test cases kept anywhere for klp-build?
-> And would this reproducer be helpful as a test case?
-> 
+On Fri, Aug 14, 2026 at 9:45=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
+>
+> Commit e2179a09ab08 ("efi/libstub: Disable -mbranch-protection") added
+> --remove-section=3D.note.gnu.property to the stub objcopy invocation to
+> work around a Clang bug where the note was emitted for code-less object
+> files even with -mbranch-protection=3Dnone.
+>
+> That was fixed by LLVM commit a48f6079f288 ("[AArch64] Generate
+> .note.gnu.property based on module flags") which was released with
+> Clang 12.  The minimum Clang version is now Clang 17, so this workaround
+> is no longer needed.
+>
+> On arm64, the stub also no longer builds with -mbranch-protection=3Dnone,
+> as it has inherited the kernel's flags since commit 8358098b9787
+> ("arm64: efi: Enable BTI codegen and add PE/COFF annotation").
 
-Hi Dylan, timely question: Song and I are planning to talk about
-klp-build unit/integration testing at upcoming LPC.
+I verified the above all looks correct.  Thanks for the cleanup.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-FWIW, I have some local test cases for exported symbols, including
-EXPORT_SYMBOL_FOR_MODULES, but not the specific case that you ran into.
-I'll be sure to add it to the suite.
+>
+> Remove the workaround.  This fixes BTI on arm64, and is a no-op on
+> RISC-V and LoongArch where the vmlinux generic NOTES macro discards it,
+> and the x86 and ARM decompressors discard .note.* explicitly.
+>
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  drivers/firmware/efi/libstub/Makefile | 6 ------
+>  1 file changed, 6 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi=
+/libstub/Makefile
+> index b1c95f69e807d..e18e124a89acf 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -106,12 +106,6 @@ lib-$(CONFIG_UNACCEPTED_MEMORY) +=3D unaccepted_memo=
+ry.o bitmap.o find.o
+>  targets                                :=3D $(lib-y)
+>  lib-y                          :=3D $(patsubst %.o,%.stub.o,$(lib-y))
+>
+> -# Even when -mbranch-protection=3Dnone is set, Clang will generate a
+> -# .note.gnu.property for code-less object files (like lib/ctype.c),
+> -# so work around this by explicitly removing the unwanted section.
+> -# https://llvm.org/pr46480
+> -STUBCOPY_FLAGS-y               +=3D --remove-section=3D.note.gnu.propert=
+y
+> -
+>  STUBCOPY_RELOC-$(CONFIG_X86_32)        :=3D R_386_32
+>  STUBCOPY_RELOC-$(CONFIG_X86_64)        :=3D R_X86_64_64
+>
+> --
+> 2.55.0
+>
 
-LMK if you're interested in more details or have any suggestions on testing.
 
-Regards,
--- 
-Joe
-
+--=20
+Thanks,
+~Nick Desaulniers
