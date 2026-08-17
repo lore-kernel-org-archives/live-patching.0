@@ -1,161 +1,174 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F91377558
-	for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 19:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786996502; cv=pass; b=S33XDE1JlgtZ0bTf4bdAQvkgE0ImkfWFComf96hqnAwVHyJ15yQk/5RuJFkwC511JlbQpdWhcMqX+7l7tmSMPbWOLFkTVrItVemlscP1rzZtzgx7GrjRDWFD/jux7gEHjcoRj0MIeDW3rLGIVOPMF4nMAeqUWDpT85ZVkR0MSPc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786996502; c=relaxed/simple;
-	bh=yvICGRDviZ9Mxl2myEhHYYGBApOjkwX/h1S7R98bUPI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LSQd7++aWxbfvhngEyJCUFLhO5TceSqNX2TlHJJ2eVMmIKOWT7lcKA081mSWFrj3Xmtj1dCQlCJN/Im8VT6cvZDIWO4l/RvduvUrCDzlCzB+3av6OGdV0iQSX0kL9c9MSmaUNF0gSGjIiY4/Yh4ucWZR3rDKv7hZUqZwZ3LX2bk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c3yG6BnW; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34B3472550;
+	Mon, 17 Aug 2026 21:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787003067; cv=none; b=OavgemY4iTK3jWximibCMG6d/846kqbYNYpJqHSRCsyA6MFaZEtSeVsV08ri4ckNEHWZ+u3XWb2WEYHJ5Bmowf7b4wNLdaeCpXhMRm6j0noFB3FzE8rZnyQeXtpVGTNDnfE4Hnf7kpMYDSRDISUUzBfNbxUrs3pXGqP5OV0tJ0Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787003067; c=relaxed/simple;
+	bh=sPh3RYSZ0KEulCIKzWcp+JkwIWt0DmsZu8/wY6lGJjc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t905wZ9WipcACncyhSEhg+AVKyp/WjsV+yjglEoCxBVbV8jZE1H0umV0pG0jE7lVABncqyMsnRl00eXVQUwS3ooe/fHXNNt5ddbdpGnMz84pLo4RsmE2RcIDG9qU73kxBueMxvaP1o8k6HQupnZqX+KQPXXBW4WeIkZnoa/Nxo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YvyXr0mF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c3yG6BnW"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c20e70a0962so504709966b.2
-        for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 12:55:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786996499; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZWY4s1trwSZlVP7IptoXW0Dr8OV22qx3gDryfXIh4PC3RbLGp4ECBmRGu2I8SNwCTg
-         5Q4egGMyEWQg5tHOUQvC6WfbbFNVMFkPtow7AxUgDUxwq79Gg+ipCgmsS+CNiVt64n/f
-         ZNuFJAWfJm1b6YAH3SBL95fkMvhySJySHSm/SGggf1MVgystCkswU88D0azAo7iztSmO
-         97G1NytK5j4YOJuIsN4al6mO9lqtwOOpK1NzGcwMJEhahXO/Qg7M8wcxHMCHzyD+wNTR
-         3OwlPaqRi2Kcowxdc2hn4FTApnw1D77kP57rjr3M/EBqWl8EqlMQJP5qZQrkoC8cXmh+
-         xYcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
-        fh=TsCK5CP0yxIRjWQFV9N3oSZJYYgRzlWajR5l383tDyc=;
-        b=GJci3XWK+DJWkE6fRhv1sSLk1+hoYmF2grS+oW7giENUXwd5QfNpRNCgCDmKlJ8bPR
-         63mK76Tt+ctZy/Qn1iGe0RicsD3r8yA90q64Po2wzu0XXUCHUMOKTOVBZanm4QjiPMl/
-         waXDeE3Ooo9aCLC+KJhHB+y98OWjLIhekOjDi22wIoDMkA3jkNzWwNQdi/kbB4Ld3+u9
-         ju5xMF8PXtMf3ueBQNLFKGAQwmKsvW2GDxPUZ9jiFF2zNAg+P1nisOP4KD+b3JJhWPIo
-         Cu/uFhJTAxP2d0WLWrWLzhTDLLxvzlBgxgRh8wrMRKKiJvQFKpEcQKHonLV32srJJmV+
-         RIGQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786996499; x=1787601299; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
-        b=c3yG6BnW8Ng/4aF73RgyvEdOt+kptrEGMBWykeT8cTOGHQunu8Ij7NyMdPNOdehuwp
-         ipR9uQxP9tMExU1+T/urPQbN1I1vTVPN6xm3k/lTK5HCL6nUcOu0ZrFNI6RzVHK15B3n
-         ybh+jcP9ArJeSZNIY0P2IhcK6c5phZluSxNnbK0/80kdkyJq0oMpi4cD0MR5gUZ8qrNg
-         Xv+usTWzWI3emesGkuOR4uVTWOBTVz5A+ohcG+rppA/RIBvzn/vpb+M70bJn31ld5luT
-         Z+/SZPcl3dDmVBsuNGh2Pjc2jmpclehlfD2GcO5y9kPPCQQAZkeHYW1k3mb9gh4JsPq1
-         WYrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786996499; x=1787601299;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fSMWOgsnzrhn6WjSaQuzJQj5JGPMtb+BQqa114k3Tnc=;
-        b=l+3bYyr6dHVTyOUCF6fFBlkLvcHl5gdgKJX/y+V9JBpgzg/HN35j5ndP2FgCJ3ZuAG
-         5+CRJq4AYWKpxbVnsJjLP2rBdU9Ytap5hR5lts6XtU6Wt3nGe94tzGXtz1ZXUiHn4zo9
-         FKZaf6Mk7RJ2RCL+dUeOxlZ5wAfC9T25NIQy4tK7DoMeGov4eyp/QTcsVmEhA+vNT/4y
-         Dx3ltUHyV+bS3raw8NkNioR8W9PWTUqs97SdAXRMprrDO0tPPFJEW883EcFdk6MJsStr
-         4y9i4ZmTuJB+j+yc92W/9aePZdyss5uj1ZuqZKfV6pheccDopEwc3FWu+ZarD9QJ8PDo
-         sEUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoostojjhXX4LHg+g0ctHpTMha95j+wK0W+whvsCWwpZxVmA1NRFXK7zNCQO9rhHhf3OHZOrLHs+5H6wpbB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwX/Smde7BS6XKSG8GozG+lVe3Ps4Rmm2V5oBJNx+eVeZaOEpIj
-	LWIO8+WZLy8ep6U1bxSH/RgRWuVAjgbQIUMMrECE7rempcRpzwowkDMI6JUAcKDYaWm/OXRrn7M
-	vvArd4U6BF8AG5L2DAy841lNKpvMftGRwTBx5bMB+
-X-Gm-Gg: AR+sD13/tdWeMMWfqo3Q7o587SSyg4rOiBVewVpLIsyY7268c11+WtrA5jqkU/6d+dt
-	WeDYZpVyHZ7m0FpQvtHNw3PuxBypJsqsrV61eUdzDCIsXUMO2yPIaWl/SaXHKsRgoudDDM9neM7
-	HaZHMmz8zCCH8crHzYhJyUAX3zZkYFRqlP9dU/ff3CtctyP9CjU57zoprjqooKkFZ5bEybp8rPM
-	7V/wzAtAwGzSQfmUuOOjUKU/7aPRM/Pw1SCPD7pmhl45eQsORAM+H9TymyWED0OppIyWckW/hwH
-	fWh0e39wO8lKN6a6QuZCP52ZxXq8P1dDpdmTqWFU0tXOnuBxK4aQ3BMk8JImPANlAOf08bjILy5
-	ljydYG8TcZohIjLklVJE/pJIU6x+f3868ucaTj0mOxEMopP+A+Y2kOgyB
-X-Received: by 2002:a05:6938:a081:20b0:c16:12ff:dc93 with SMTP id
- a640c23a62f3a-c21885d0e18mr100346666b.18.1786996498684; Mon, 17 Aug 2026
- 12:54:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YvyXr0mF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F00E1F000E9;
+	Mon, 17 Aug 2026 21:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787003066;
+	bh=SYYWAFb6MNGQGSRSXAIPAH4FqybYazhn6qOSEXQ0npo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=YvyXr0mF8oM0Qpvu8B995T9Niu1lMEuyvznn463YUnzlINCBL6c7oP3w5/b1Ik0Oj
+	 EIgVVvFhn1CxAtUcjww9aYnQh5EWlUeW8LkFNcAXZDKUyYCmckuluC53a+H9EPbz/l
+	 cr+nkXZNg9seXdnPrCWVpG5LXr7Xw9OUKKDN3qkO6269j3SOgLEJ3493HDDO+5CU+a
+	 zuRougM303roU30KkODvILas9ddQoNAX+6/eavYzCM4zyPqjJAtYatilCtSP3i6MCH
+	 6X/lSvmEV5vQrxR3NkQCHkzkDC2XrpBAm2kzphwFWbhlMzqGOGrJcqZ1HMhpAPx/kU
+	 +oVuu0zDnLYbw==
+Date: Mon, 17 Aug 2026 14:44:23 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org, Song Liu <song@kernel.org>, 
+	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Mark Brown <broonie@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH 02/12] arm64/module: Fix BTI exceptions caused by omitted
+ landing pads in Clang 21
+Message-ID: <aoMnkvrrjljQ6uOJ@jpoimboe>
+References: <cover.1786768375.git.jpoimboe@kernel.org>
+ <2ff1b2482406c61ca5979d6284ba5f948a3fbc20.1786768375.git.jpoimboe@kernel.org>
+ <6bc20c00-21a9-4315-8ec3-33c7ad6ae95f@app.fastmail.com>
+ <aoCu66bx1Qg14-uD@jpoimboe>
+ <b32fc053-6f1f-481e-9872-ab3cf22534e6@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1786768375.git.jpoimboe@kernel.org> <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
-In-Reply-To: <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 17 Aug 2026 12:54:47 -0700
-X-Gm-Features: AcwNN1X5GYhNIXFwByZPWbcQ7Kc1jXcOVcJq-v_hRwbMgl2NTJnecge5Wd_AP5Q
-Message-ID: <CAKwvOd=Vn4L1sJ=8zVk9qcDLtaDYxfxn+0aG4tMrbETsqY5_PQ@mail.gmail.com>
-Subject: Re: [PATCH 10/12] efi/libstub: Remove obsolete .note.gnu.property workaround
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org, 
-	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Mark Brown <broonie@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b32fc053-6f1f-481e-9872-ab3cf22534e6@app.fastmail.com>
 
-On Fri, Aug 14, 2026 at 9:45=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> Commit e2179a09ab08 ("efi/libstub: Disable -mbranch-protection") added
-> --remove-section=3D.note.gnu.property to the stub objcopy invocation to
-> work around a Clang bug where the note was emitted for code-less object
-> files even with -mbranch-protection=3Dnone.
->
-> That was fixed by LLVM commit a48f6079f288 ("[AArch64] Generate
-> .note.gnu.property based on module flags") which was released with
-> Clang 12.  The minimum Clang version is now Clang 17, so this workaround
-> is no longer needed.
->
-> On arm64, the stub also no longer builds with -mbranch-protection=3Dnone,
-> as it has inherited the kernel's flags since commit 8358098b9787
-> ("arm64: efi: Enable BTI codegen and add PE/COFF annotation").
+On Mon, Aug 17, 2026 at 02:11:26PM +0300, Ard Biesheuvel wrote:
+> On Sat, 15 Aug 2026, at 21:57, Josh Poimboeuf wrote:
+> > On Sat, Aug 15, 2026 at 12:56:11PM +0300, Ard Biesheuvel wrote:
+> >> On Sat, 15 Aug 2026, at 07:45, Josh Poimboeuf wrote:
+> >> > The following BTI exception was seen when loading a livepatch module:
+> >> >
+> >> >   Internal error: Oops - BTI: 0000000036000001 [#1]  SMP
+> >> >   pstate: 634004c9 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=jc)
+> >> >   pc : kill_orphaned_pgrp+0x0/0x150
+> >> >   lr : do_exit+0x498/0xaf0 [livepatch_combined]
+> >> >
+> >> > The problem is that the patch module's do_exit() is branching to a
+> >> > static function in vmlinux using a module PLT veneer (indirect branch),
+> >> > but the target function doesn't have a BTI landing pad.
+> >> >
+> >> > Clang 21+ omits the landing pad for static functions which can only be
+> >> > reached by a direct branch.  But livepatch modules use klp relocations
+> >> > to reference arbitrary kernel symbols, and with
+> >> > CONFIG_RANDOMIZE_MODULE_REGION_FULL the module is far enough away that
+> >> > every call to vmlinux needs a PLT.
+> >> >
+> >> > Note this problem is actually not specific to livepatch.  It's possible
+> >> > for any module's .init section to be allocated > 128MB away from its
+> >> > .text section.  So calls from .init to .text via a PLT can trigger a BTI
+> >> > exception when the target function doesn't have a landing pad.
+> >> >
+> >> > GCC has always omitted the landing pad when possible, so kernel BTI is
+> >> > already considered incompatible with GCC since commit c0a454b9044f
+> >> > ("arm64/bti: Disable in kernel BTI when cross section thunks are
+> >> > broken").
+> >> >
+> >> > When missing landing pads are detected, allocate a page close to the
+> >> > target which can be used to hold BTI veneers which receive PLT veneer
+> >> > indirect branches and direct branch to the final target:
+> >> >
+> >> 
+> >> This does not work for cross-section calls from .init.text to .text.
+> >> 
+> >> If .init.text is far away from .text, it is likely because .text
+> >> ended up in the 128M 'near' module region, and .init.text did not.
+> >> (They tend to end up in direct branching range of each otherwise.)
+> >> 
+> >> Given that the module init code is typically small, I don't think
+> >> it is safe to assume that allocating a single page close enough to
+> >> .text is going to be possible if allocating the space for .init.*
+> >> was not.
+> >> 
+> >> IOW, the fix I proposed for cross-section calls is still needed
+> >> with this approach.
+> >
+> > But the BTI veneer page is allocated from a *256MB* window, of which the
+> > near region is only a 128MB subset.
+> >
+> 
+> OK, so this window would be [_etext - 128M, _text + 128M), right? Or
+> whichever the equivalent is for a kernel module?
+> 
+> I agree that this considerably reduces the likelihood of running out
+> of veneer space within direct branching range.
 
-I verified the above all looks correct.  Thanks for the cleanup.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+It's a *moving* 256M window centered around a given branch target:
+[target - 128M, target + 128M).  The window always fully contains the
+near region, *plus* another 128MB: 128M - (target - base) below the
+region and (target - base) above, which always adds up to an extra
+128MB.  So it has a much bigger pool to choose from than module text
+does.
 
->
-> Remove the workaround.  This fixes BTI on arm64, and is a no-op on
-> RISC-V and LoongArch where the vmlinux generic NOTES macro discards it,
-> and the x86 and ARM decompressors discard .note.* explicitly.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> ---
->  drivers/firmware/efi/libstub/Makefile | 6 ------
->  1 file changed, 6 deletions(-)
->
-> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi=
-/libstub/Makefile
-> index b1c95f69e807d..e18e124a89acf 100644
-> --- a/drivers/firmware/efi/libstub/Makefile
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -106,12 +106,6 @@ lib-$(CONFIG_UNACCEPTED_MEMORY) +=3D unaccepted_memo=
-ry.o bitmap.o find.o
->  targets                                :=3D $(lib-y)
->  lib-y                          :=3D $(patsubst %.o,%.stub.o,$(lib-y))
->
-> -# Even when -mbranch-protection=3Dnone is set, Clang will generate a
-> -# .note.gnu.property for code-less object files (like lib/ctype.c),
-> -# so work around this by explicitly removing the unwanted section.
-> -# https://llvm.org/pr46480
-> -STUBCOPY_FLAGS-y               +=3D --remove-section=3D.note.gnu.propert=
-y
-> -
->  STUBCOPY_RELOC-$(CONFIG_X86_32)        :=3D R_386_32
->  STUBCOPY_RELOC-$(CONFIG_X86_64)        :=3D R_X86_64_64
->
-> --
-> 2.55.0
->
+It does try to allocate inside the region, or right after it, so the
+page can be shared by other branches in the same module if possible.
+But it can allocate more above or below as needed.
 
+> > There is a theoretical case where the 256MB window around the target is
+> > completely full without any fragmentation, but I would think that there
+> > would almost always be some fragmentation.  If that window is modules
+> > stacked together, most modules have at least .init.plt and .init.text,
+> > and many have .init.data.
+> >
+> 
+> Are you saying these are freed again once the module is initialized, and
+> therefore there is fragmentation? Not sure if it works like that if modules
+> are loaded one after the other.
 
---=20
-Thanks,
-~Nick Desaulniers
+Not sure I understand your question, but yes, the module init mem is
+allocated from the same pool as other module memory, and freed once
+module init is done, able to be reused, causing fragmentation.
+
+If multiple modules get loaded all at the same time before any module
+init memory has a chance to get freed, presumably fragmentation wouldn't
+be much of an issue yet and the given module's .init.text would get
+allocated close to .text in the first place.
+
+> > Right now it needs two pages (because of the default guard page) but we
+> > could maybe fall back to VM_NO_GUARD in case of emergency.
+> >
+> 
+> I like the advantage of only allocating veneers if they are really needed,
+> as opposed to allocating the space unconditionally, which is what my
+> solution does. But I need more convincing that this will actually cover
+> all these cases, given that the cross-section call issue only occurs when
+> running out of direct branching space to begin with.
+
+Right, so if .text fits in the near region, and a one-page .init.text
+doesn't, meaning the 128MB near region is completely full, the BTI
+veneer allocation still likely succeeds because it still has another
+128MB pool to allocate from above/below the region.
+
+So for the allocation to fail, it would need to be a perfect storm:
+
+1) a *lot* of modules loaded and/or huge vmlinux
+2) the branch in init code is placed >128MB away from its .text
+3) the target is a static .text function with no landing pad
+4) there are 0 free pages in the 256MB region around the target
+
+Seems unrealistic to me, unless I'm missing something.
+
+-- 
+Josh
