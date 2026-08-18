@@ -1,174 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34B3472550;
-	Mon, 17 Aug 2026 21:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C71331EB1
+	for <live-patching@vger.kernel.org>; Tue, 18 Aug 2026 05:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787003067; cv=none; b=OavgemY4iTK3jWximibCMG6d/846kqbYNYpJqHSRCsyA6MFaZEtSeVsV08ri4ckNEHWZ+u3XWb2WEYHJ5Bmowf7b4wNLdaeCpXhMRm6j0noFB3FzE8rZnyQeXtpVGTNDnfE4Hnf7kpMYDSRDISUUzBfNbxUrs3pXGqP5OV0tJ0Q=
+	t=1787032014; cv=none; b=BYHBY9+3JrMskvCssdK+bElM/UrbYGPV9Qdivv3SEzPFktL0Z/guF+MMHPgMoJ3DH0kexzeJ9YKMr5LDrh21lN14Hn86ppyJEuS6J7jyQDHyHSl3v1u4bGzgHQbGG8bQjNxiKQ0NSi4ChByQPNHma4cktwg31OTLRPY9/18XRys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787003067; c=relaxed/simple;
-	bh=sPh3RYSZ0KEulCIKzWcp+JkwIWt0DmsZu8/wY6lGJjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t905wZ9WipcACncyhSEhg+AVKyp/WjsV+yjglEoCxBVbV8jZE1H0umV0pG0jE7lVABncqyMsnRl00eXVQUwS3ooe/fHXNNt5ddbdpGnMz84pLo4RsmE2RcIDG9qU73kxBueMxvaP1o8k6HQupnZqX+KQPXXBW4WeIkZnoa/Nxo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YvyXr0mF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787032014; c=relaxed/simple;
+	bh=Ic4vcavd991EWodWP6ilgQOeU2lnKez3NhJuurx6/xU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lY0b6o6Z4GRtwkOYm8oFwn7h3raTzPo5rI+hJ+1CrKLPKnX27Q06qg9PMlIkwn3dfafh5jOsPgeyifXB1ejJoOO6FvhVOtXC08hgM0tA9LEEzfcsu16m6EwijJo72l5Jp8/XcPno9j2GA6k4ewAyioWPUSBKLtNz7774DPDNjb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WvHEU8v0; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YvyXr0mF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F00E1F000E9;
-	Mon, 17 Aug 2026 21:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787003066;
-	bh=SYYWAFb6MNGQGSRSXAIPAH4FqybYazhn6qOSEXQ0npo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YvyXr0mF8oM0Qpvu8B995T9Niu1lMEuyvznn463YUnzlINCBL6c7oP3w5/b1Ik0Oj
-	 EIgVVvFhn1CxAtUcjww9aYnQh5EWlUeW8LkFNcAXZDKUyYCmckuluC53a+H9EPbz/l
-	 cr+nkXZNg9seXdnPrCWVpG5LXr7Xw9OUKKDN3qkO6269j3SOgLEJ3493HDDO+5CU+a
-	 zuRougM303roU30KkODvILas9ddQoNAX+6/eavYzCM4zyPqjJAtYatilCtSP3i6MCH
-	 6X/lSvmEV5vQrxR3NkQCHkzkDC2XrpBAm2kzphwFWbhlMzqGOGrJcqZ1HMhpAPx/kU
-	 +oVuu0zDnLYbw==
-Date: Mon, 17 Aug 2026 14:44:23 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org, Song Liu <song@kernel.org>, 
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Mark Brown <broonie@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH 02/12] arm64/module: Fix BTI exceptions caused by omitted
- landing pads in Clang 21
-Message-ID: <aoMnkvrrjljQ6uOJ@jpoimboe>
-References: <cover.1786768375.git.jpoimboe@kernel.org>
- <2ff1b2482406c61ca5979d6284ba5f948a3fbc20.1786768375.git.jpoimboe@kernel.org>
- <6bc20c00-21a9-4315-8ec3-33c7ad6ae95f@app.fastmail.com>
- <aoCu66bx1Qg14-uD@jpoimboe>
- <b32fc053-6f1f-481e-9872-ab3cf22534e6@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvHEU8v0"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cab973140bso64254205ad.3
+        for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 22:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787032013; x=1787636813; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=I8tDVQkXHDAWsSkxyjLOxGSjyYS6rhJWWmpCs5k6tw4=;
+        b=WvHEU8v0LD7wzBoOe6bYXd9sCZwaQpbRsuXJI3qeRaSEMR37BtNyTYQm81WKHWJFZR
+         kTfi9MhuYhUrh8PW7Ds1hs+YxITFsIhsMQS+B+CDsRC+t55DBDi5ofs9IrntstIOF/Rq
+         Rvt26UuXBWIDv9DqgA8eAPSm2BvlWoHtNGRZVG0XUP9qr6p+vibzMVHFAk9D4GyFKrUX
+         ikSJuBxbYkSTjcQ8rhjBVVNlvRTayL9CS6PEEpkbbFxuH6/12FMc+gKuKWwEWbz8ssUO
+         mJHYJ3Q9xr1H0s9k4bZeb4wH8ADm6zHYbrXwK9kauhVeB00mOuPkL5uJtUNk2q//mi41
+         fvng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787032013; x=1787636813;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=I8tDVQkXHDAWsSkxyjLOxGSjyYS6rhJWWmpCs5k6tw4=;
+        b=FrQI3NW8BwrTbZhe2HwCFy4zLNTh8mX/ZSaAROUmj6+wYxfWNmw3gudmAmfwnEUkcl
+         hnkGnFRU7h48h8YlkePZEJ234YBi/cKGHT9WGrFtNkmXaZaYJp5mQ1rNidXrnJYLEkXw
+         pBk8C+O2C1toi4DzTlFc6AIZdioX6AKK0pZcMaJEdmk02e4VfAXQNgQw0Kf4KjNpSvaD
+         710pMRGtaUmN8wsPlbKbLpD50F5+v1rHkW3LOjfJPMcfqTO7OJdIw2X+lpobzQ/qxmIv
+         Hjtc1EiIvNql+SB4MvMe9CiR9GhIeVsqfICIfFO8lpytUlCj/RbgcrhDozZ5Fn/QQe/z
+         vOEQ==
+X-Gm-Message-State: AOJu0YxKieBHYwx9JkjzUKaYETP1i8wCVtrZFYUY/ZXr/juRIeGvfexn
+	OgmNdSAaUrFIqxsvmiwusoeU7opa5HR+YhaA3VltGlvbk9zcc5/S0FOE
+X-Gm-Gg: AR+sD10xBu6JWwTJj4nmiOCMwjFVPFv4cdQs/AYBqHFxj4k5s5fvLMVKdSWMaOpF4cm
+	OiFsPCMIah743Z6v8rNNZjcgCEZQWuzPOPH0V6vRT0Q8HYui/H0sF3EckOf+5VGfRmlmGGyBwEo
+	tHsSLW1/cfuzfFY4I6+ajPzyX/BnUuDNTAsWh+2RculnaiyIeGuG/DIPz1Dl8x9bsu9J5VISNuV
+	pTTFKC+Wn2hXhSXvCeTovba3ji19mhSD9Ub/nX21vTvvb/nhNvd/4hmHGxpqJAvr1KxHC1fzAmQ
+	7XAwcTz0uKfBjP+2Ru8Im+theMpE8MfHiu9+DhE0QYPaLmioVNebCZP3+AvQJjR2kP6v11ze5sI
+	M9zKDNr8UkbD2coMg5qWxQh0Er5cIj55N6TsZNlVPV4BOHXxCzZFJoJ0ODK46Lj5hqi8du6KMeV
+	ZPem9kz1yZBIj2GY7GRFhL3Sfv1fq0MtVF1QqlHIX2dwzazi7t1wmdmg4eoQkiz5/A98hHh2tLc
+	VtumepZjjvUbD0a37Oe+USMCmK4uDuaeAtdS/tAlD8s+A==
+X-Received: by 2002:a17:902:fd8f:b0:2cc:d6de:d597 with SMTP id d9443c01a7336-2d3b086d3f8mr342483215ad.7.1787032012380;
+        Mon, 17 Aug 2026 22:46:52 -0700 (PDT)
+Received: from yafangs-Air ([240e:46c:1d00:3a03:190c:5e44:c783:ef9a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb51951bsm12906985ad.29.2026.08.17.22.46.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 17 Aug 2026 22:46:52 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	song@kernel.org
+Cc: live-patching@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH] selftests: livepatch: filter kobject debug messages in check_result()
+Date: Tue, 18 Aug 2026 13:46:29 +0800
+Message-ID: <20260818054629.69246-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b32fc053-6f1f-481e-9872-ab3cf22534e6@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 17, 2026 at 02:11:26PM +0300, Ard Biesheuvel wrote:
-> On Sat, 15 Aug 2026, at 21:57, Josh Poimboeuf wrote:
-> > On Sat, Aug 15, 2026 at 12:56:11PM +0300, Ard Biesheuvel wrote:
-> >> On Sat, 15 Aug 2026, at 07:45, Josh Poimboeuf wrote:
-> >> > The following BTI exception was seen when loading a livepatch module:
-> >> >
-> >> >   Internal error: Oops - BTI: 0000000036000001 [#1]  SMP
-> >> >   pstate: 634004c9 (nZCv daIF +PAN -UAO +TCO +DIT -SSBS BTYPE=jc)
-> >> >   pc : kill_orphaned_pgrp+0x0/0x150
-> >> >   lr : do_exit+0x498/0xaf0 [livepatch_combined]
-> >> >
-> >> > The problem is that the patch module's do_exit() is branching to a
-> >> > static function in vmlinux using a module PLT veneer (indirect branch),
-> >> > but the target function doesn't have a BTI landing pad.
-> >> >
-> >> > Clang 21+ omits the landing pad for static functions which can only be
-> >> > reached by a direct branch.  But livepatch modules use klp relocations
-> >> > to reference arbitrary kernel symbols, and with
-> >> > CONFIG_RANDOMIZE_MODULE_REGION_FULL the module is far enough away that
-> >> > every call to vmlinux needs a PLT.
-> >> >
-> >> > Note this problem is actually not specific to livepatch.  It's possible
-> >> > for any module's .init section to be allocated > 128MB away from its
-> >> > .text section.  So calls from .init to .text via a PLT can trigger a BTI
-> >> > exception when the target function doesn't have a landing pad.
-> >> >
-> >> > GCC has always omitted the landing pad when possible, so kernel BTI is
-> >> > already considered incompatible with GCC since commit c0a454b9044f
-> >> > ("arm64/bti: Disable in kernel BTI when cross section thunks are
-> >> > broken").
-> >> >
-> >> > When missing landing pads are detected, allocate a page close to the
-> >> > target which can be used to hold BTI veneers which receive PLT veneer
-> >> > indirect branches and direct branch to the final target:
-> >> >
-> >> 
-> >> This does not work for cross-section calls from .init.text to .text.
-> >> 
-> >> If .init.text is far away from .text, it is likely because .text
-> >> ended up in the 128M 'near' module region, and .init.text did not.
-> >> (They tend to end up in direct branching range of each otherwise.)
-> >> 
-> >> Given that the module init code is typically small, I don't think
-> >> it is safe to assume that allocating a single page close enough to
-> >> .text is going to be possible if allocating the space for .init.*
-> >> was not.
-> >> 
-> >> IOW, the fix I proposed for cross-section calls is still needed
-> >> with this approach.
-> >
-> > But the BTI veneer page is allocated from a *256MB* window, of which the
-> > near region is only a 128MB subset.
-> >
-> 
-> OK, so this window would be [_etext - 128M, _text + 128M), right? Or
-> whichever the equivalent is for a kernel module?
-> 
-> I agree that this considerably reduces the likelihood of running out
-> of veneer space within direct branching range.
+CONFIG_DEBUG_KOBJECT makes kobject_add_internal(), kobject_uevent_env(),
+fill_kobj_path() and friends emit pr_debug() messages, and
+CONFIG_DEBUG_KOBJECT_RELEASE makes kobject_release() emit a pr_info()
+for every delayed kobject free.  All of these carry the "kobject:"
+prefix via pr_fmt(), e.g.:
 
-It's a *moving* 256M window centered around a given branch target:
-[target - 128M, target + 128M).  The window always fully contains the
-near region, *plus* another 128MB: 128M - (target - base) below the
-region and (target - base) above, which always adds up to an extra
-128MB.  So it has a much bigger pool to choose from than module text
-does.
+  kobject: 'test_klp_livepatch' (ffff...): kobject_release, parent ... (delayed N)
+  kobject: 'test_klp_livepatch' (ffff...): kobject_add_internal: parent: 'module', set: 'module'
 
-It does try to allocate inside the region, or right after it, so the
-page can be shared by other branches in the same module if possible.
-But it can allocate more above or below as needed.
+The livepatch test modules' kobjects are named "test_klp_*", so these
+lines match the check_result() grep for "test_klp" and leak into the
+result.  The extra lines no longer match the expected output, so the
+selftests fail when either debug config is enabled.
 
-> > There is a theoretical case where the 256MB window around the target is
-> > completely full without any fragmentation, but I would think that there
-> > would almost always be some fragmentation.  If that window is modules
-> > stacked together, most modules have at least .init.plt and .init.text,
-> > and many have .init.data.
-> >
-> 
-> Are you saying these are freed again once the module is initialized, and
-> therefore there is fragmentation? Not sure if it works like that if modules
-> are loaded one after the other.
+Filter out the "kobject:" lines from the result and note in the README
+that both configs are safe to keep enabled.
 
-Not sure I understand your question, but yes, the module init mem is
-allocated from the same pool as other module memory, and freed once
-module init is done, able to be reused, causing fragmentation.
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ tools/testing/selftests/livepatch/README       | 3 +++
+ tools/testing/selftests/livepatch/functions.sh | 1 +
+ 2 files changed, 4 insertions(+)
 
-If multiple modules get loaded all at the same time before any module
-init memory has a chance to get freed, presumably fragmentation wouldn't
-be much of an issue yet and the given module's .init.text would get
-allocated close to .text in the first place.
-
-> > Right now it needs two pages (because of the default guard page) but we
-> > could maybe fall back to VM_NO_GUARD in case of emergency.
-> >
-> 
-> I like the advantage of only allocating veneers if they are really needed,
-> as opposed to allocating the space unconditionally, which is what my
-> solution does. But I need more convincing that this will actually cover
-> all these cases, given that the cross-section call issue only occurs when
-> running out of direct branching space to begin with.
-
-Right, so if .text fits in the near region, and a one-page .init.text
-doesn't, meaning the 128MB near region is completely full, the BTI
-veneer allocation still likely succeeds because it still has another
-128MB pool to allocate from above/below the region.
-
-So for the allocation to fail, it would need to be a perfect storm:
-
-1) a *lot* of modules loaded and/or huge vmlinux
-2) the branch in init code is placed >128MB away from its .text
-3) the target is a static .text function with no landing pad
-4) there are 0 free pages in the 256MB region around the target
-
-Seems unrealistic to me, unless I'm missing something.
-
+diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+index d2035dd64a2b..d03461bd45bb 100644
+--- a/tools/testing/selftests/livepatch/README
++++ b/tools/testing/selftests/livepatch/README
+@@ -15,6 +15,9 @@ Config
+ 
+ Set CONFIG_LIVEPATCH=y option and it's prerequisites.
+ 
++Note: CONFIG_DEBUG_KOBJECT and CONFIG_DEBUG_KOBJECT_RELEASE emit "kobject:"
++debug messages to the kernel log.  The tests filter these out, so they are safe
++to keep enabled.
+ 
+ Building the tests
+ ------------------
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 17810521d069..3dae2ad20f1e 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -327,6 +327,7 @@ function check_result {
+ 	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
+ 		 grep -e 'livepatch:' -e 'test_klp' | \
+ 		 grep -v '\(tainting\|taints\) kernel' | \
++		 grep -v 'kobject:' | \
+ 		 sed 's/^\[[ 0-9.]*\] //' | \
+ 		 sed 's/^\[[ ]*[CT][0-9]*\] //')
+ 
 -- 
-Josh
+2.52.0
+
