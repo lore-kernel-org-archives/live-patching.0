@@ -1,131 +1,124 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C71331EB1
-	for <live-patching@vger.kernel.org>; Tue, 18 Aug 2026 05:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90EF1A262A
+	for <live-patching@vger.kernel.org>; Tue, 18 Aug 2026 14:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787032014; cv=none; b=BYHBY9+3JrMskvCssdK+bElM/UrbYGPV9Qdivv3SEzPFktL0Z/guF+MMHPgMoJ3DH0kexzeJ9YKMr5LDrh21lN14Hn86ppyJEuS6J7jyQDHyHSl3v1u4bGzgHQbGG8bQjNxiKQ0NSi4ChByQPNHma4cktwg31OTLRPY9/18XRys=
+	t=1787062533; cv=none; b=qzMRHap/6+aL8h4rDeZ8iwfiXXbkgt2RGrczr9E+jxTE927pepmD3Mq1zHaigzk7R2MtK70QmA8zHUI5totLET4GDdfgD6hiqaA9eWAFkna2MDdkGi8ANNwD8jgmzMfFuWkO1pCCp8su38a9p6icfyrcn01W0Q4MJW5+RbkmJH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787032014; c=relaxed/simple;
-	bh=Ic4vcavd991EWodWP6ilgQOeU2lnKez3NhJuurx6/xU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lY0b6o6Z4GRtwkOYm8oFwn7h3raTzPo5rI+hJ+1CrKLPKnX27Q06qg9PMlIkwn3dfafh5jOsPgeyifXB1ejJoOO6FvhVOtXC08hgM0tA9LEEzfcsu16m6EwijJo72l5Jp8/XcPno9j2GA6k4ewAyioWPUSBKLtNz7774DPDNjb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WvHEU8v0; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787062533; c=relaxed/simple;
+	bh=hi+oUL6zlvqYdIP3TAz0c+KSrjbhmM33fjnAlT6IX1w=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=LH8wNvV99YLfS/Ml+4sA8+8a3XITpcyV315VvwBAJodNtJBHfPYI4NIu80WMnSgkFdlmEFj/Cm4bOFaMOcyvSMhlQWGg1rp1f6qg5m0zXOujLL3A9LBsuFvpNvIRVUOfdL1hxVmLCHfgKn4ZLuQfhUFNeqFRAW/RYt7mZk0YW5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNXifQ85; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WvHEU8v0"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cab973140bso64254205ad.3
-        for <live-patching@vger.kernel.org>; Mon, 17 Aug 2026 22:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787032013; x=1787636813; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I8tDVQkXHDAWsSkxyjLOxGSjyYS6rhJWWmpCs5k6tw4=;
-        b=WvHEU8v0LD7wzBoOe6bYXd9sCZwaQpbRsuXJI3qeRaSEMR37BtNyTYQm81WKHWJFZR
-         kTfi9MhuYhUrh8PW7Ds1hs+YxITFsIhsMQS+B+CDsRC+t55DBDi5ofs9IrntstIOF/Rq
-         Rvt26UuXBWIDv9DqgA8eAPSm2BvlWoHtNGRZVG0XUP9qr6p+vibzMVHFAk9D4GyFKrUX
-         ikSJuBxbYkSTjcQ8rhjBVVNlvRTayL9CS6PEEpkbbFxuH6/12FMc+gKuKWwEWbz8ssUO
-         mJHYJ3Q9xr1H0s9k4bZeb4wH8ADm6zHYbrXwK9kauhVeB00mOuPkL5uJtUNk2q//mi41
-         fvng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787032013; x=1787636813;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=I8tDVQkXHDAWsSkxyjLOxGSjyYS6rhJWWmpCs5k6tw4=;
-        b=FrQI3NW8BwrTbZhe2HwCFy4zLNTh8mX/ZSaAROUmj6+wYxfWNmw3gudmAmfwnEUkcl
-         hnkGnFRU7h48h8YlkePZEJ234YBi/cKGHT9WGrFtNkmXaZaYJp5mQ1rNidXrnJYLEkXw
-         pBk8C+O2C1toi4DzTlFc6AIZdioX6AKK0pZcMaJEdmk02e4VfAXQNgQw0Kf4KjNpSvaD
-         710pMRGtaUmN8wsPlbKbLpD50F5+v1rHkW3LOjfJPMcfqTO7OJdIw2X+lpobzQ/qxmIv
-         Hjtc1EiIvNql+SB4MvMe9CiR9GhIeVsqfICIfFO8lpytUlCj/RbgcrhDozZ5Fn/QQe/z
-         vOEQ==
-X-Gm-Message-State: AOJu0YxKieBHYwx9JkjzUKaYETP1i8wCVtrZFYUY/ZXr/juRIeGvfexn
-	OgmNdSAaUrFIqxsvmiwusoeU7opa5HR+YhaA3VltGlvbk9zcc5/S0FOE
-X-Gm-Gg: AR+sD10xBu6JWwTJj4nmiOCMwjFVPFv4cdQs/AYBqHFxj4k5s5fvLMVKdSWMaOpF4cm
-	OiFsPCMIah743Z6v8rNNZjcgCEZQWuzPOPH0V6vRT0Q8HYui/H0sF3EckOf+5VGfRmlmGGyBwEo
-	tHsSLW1/cfuzfFY4I6+ajPzyX/BnUuDNTAsWh+2RculnaiyIeGuG/DIPz1Dl8x9bsu9J5VISNuV
-	pTTFKC+Wn2hXhSXvCeTovba3ji19mhSD9Ub/nX21vTvvb/nhNvd/4hmHGxpqJAvr1KxHC1fzAmQ
-	7XAwcTz0uKfBjP+2Ru8Im+theMpE8MfHiu9+DhE0QYPaLmioVNebCZP3+AvQJjR2kP6v11ze5sI
-	M9zKDNr8UkbD2coMg5qWxQh0Er5cIj55N6TsZNlVPV4BOHXxCzZFJoJ0ODK46Lj5hqi8du6KMeV
-	ZPem9kz1yZBIj2GY7GRFhL3Sfv1fq0MtVF1QqlHIX2dwzazi7t1wmdmg4eoQkiz5/A98hHh2tLc
-	VtumepZjjvUbD0a37Oe+USMCmK4uDuaeAtdS/tAlD8s+A==
-X-Received: by 2002:a17:902:fd8f:b0:2cc:d6de:d597 with SMTP id d9443c01a7336-2d3b086d3f8mr342483215ad.7.1787032012380;
-        Mon, 17 Aug 2026 22:46:52 -0700 (PDT)
-Received: from yafangs-Air ([240e:46c:1d00:3a03:190c:5e44:c783:ef9a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb51951bsm12906985ad.29.2026.08.17.22.46.48
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 17 Aug 2026 22:46:52 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	song@kernel.org
-Cc: live-patching@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH] selftests: livepatch: filter kobject debug messages in check_result()
-Date: Tue, 18 Aug 2026 13:46:29 +0800
-Message-ID: <20260818054629.69246-1-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNXifQ85"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B4E1F00A3A;
+	Tue, 18 Aug 2026 14:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787062532;
+	bh=3GGCDtHoSJ0Nxzd5K3g4Rn7pndoxkDIAt/HAFcA8P/4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=oNXifQ850ArQgbK9rbE88NYiZtjbzE8DEXS5V/7njNhfsdgzr++/PJvBwR8mrv1cv
+	 aLyAVQF6AsiMXZ9VyVNNV0otOLi2it6272rz58KH0YlX8/tR3bMkGA+5pCDyKfjnMM
+	 0jH3beESPsSTZSTBbDSqBK7cNd48Qv130gNofeE53vQctgWkiAEykfWweN9m5G765L
+	 5nUcvQGwzFReDBb8Btpg3rBV0PApGCKPNQfm306f/ZvtqtYJYBDwrm5jHpcIat9q8A
+	 pnaLsVXIvAH/R5gZenYVJBYYZSObHTwfUrCHOoWExJ4bSVnszMWoC3eBRyquchxGRH
+	 OAxsUezlY7pNQ==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id D88FF1980083;
+	Tue, 18 Aug 2026 10:15:29 -0400 (EDT)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Tue, 18 Aug 2026 10:15:29 -0400
+X-ME-Sender: <xms:_2iEaj0o6mlBiAjvLk8xn0dOP9a5sTc5VUO7iKj54BqtU17AKBl8Hg>
+    <xme:_2iEas7DpFLD1KqCOSKVYa_nzljAo67zJCIOnXeo2koSVfPEoPVvoTDTUcqbiKNu-
+    fc3L5xo8bfk8-aDnFhVRyT2tKymbDBYk3cbn59-DNuAj1Ze_chEkVE>
+X-ME-Proxy-Cause: dmFkZTE5+Ljdf8AEVfTUNzLW1bowQTEYVKKlh2mBbWP+x+yNcPAoPfael8/iK7utKXPRjy
+    Eq2IR27RmW3cu0Zc9yh/F2marlrsiMXG+KRcczqZPtS4kysaID2bPckkrmQo5wNsQMrFtA
+    RjGFJIlHiHiNFSWAA056rvjLUdIU4h3xqdUCZ6fOUX86Y4ILsghXZRe9ZIxQDeWn/dalnH
+    GA6nhom5QLsw/DqtdF9LKn0aFwLGBoUoBP+2ce9dgC0h1x2iVTMKbv558EznxZ7LPzFxOa
+    HGdguMqXuJdCUkw/b5hwRpwizzBgFT/w5hWWJXoxOWnQajiI+XOEfcU+3N+oKNpwBjAiXr
+    BlMyCf+RzZEtZifz5rb7e9jGmEEnC+6EkV/d8iBqUTOkTTGolREX7G1kMBFb1cMgiMmpgn
+    HJwdffy28ZBaKIBstNCyrdNc7JsZEZruXZ2NVrY6T/p6Wx/TR6zKbrdjY1zejchvbq5QH8
+    2fwVGumWt201CyiEW6RXNPnpM9egiSufIbn/q2YQLt1/p+PvQ8VvKtdj+cmCAs0wi4BX+g
+    jIcZV5YzFVjFqnF0aKCaRDj4OOmv6frXJvLKKBP19IE0sytLN6MTM4LSYbI1n24vKoB1P+
+    fsBwSazdfQoR5eBB+TKKqI11JCWIvY9PlGpcT9I2bul2kgJHJRQxSsdkAhjA
+X-ME-Proxy: <xmx:AWmEap4BBIRi-rCyVjk5J33JNnDLYuCGpJhsRkhD_hlIfToSeX8Oyw>
+    <xmx:AWmEagTwNiJhaGS_XNvhhnMqYFJRAprUp1nfOi0PA5V5am0Hw2lDBg>
+    <xmx:AWmEao8Ht3ha4T3nlYR7phgdHq7N2DJxOY6W8_Ovck4-yr79EsJdAQ>
+    <xmx:AWmEahowxQwD0FuKdb7G2P2okHDL91aC9cw80fE3bqLuIFNvBWm60g>
+    <xmx:AWmEauXc0Vt9tffceu_kyzuJLUP1yBaolLYsfXP4MQ9ZoJz1WhOIIbxz>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id E0D83F80070; Tue, 18 Aug 2026 10:15:26 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Tue, 18 Aug 2026 17:15:06 +0300
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>
+Cc: "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, live-patching@vger.kernel.org,
+ "Song Liu" <song@kernel.org>, "Miroslav Benes" <mbenes@suse.cz>,
+ "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Mark Brown" <broonie@kernel.org>,
+ "Kees Cook" <kees@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ linux-toolchains@vger.kernel.org
+Message-Id: <efe4a3b6-6511-4c05-825d-d25de72839ed@app.fastmail.com>
+In-Reply-To: 
+ <CAKwvOd=Vn4L1sJ=8zVk9qcDLtaDYxfxn+0aG4tMrbETsqY5_PQ@mail.gmail.com>
+References: <cover.1786768375.git.jpoimboe@kernel.org>
+ <e5c957d816240e749a92588d4a9bb44da791f8e3.1786768375.git.jpoimboe@kernel.org>
+ <CAKwvOd=Vn4L1sJ=8zVk9qcDLtaDYxfxn+0aG4tMrbETsqY5_PQ@mail.gmail.com>
+Subject: Re: [PATCH 10/12] efi/libstub: Remove obsolete .note.gnu.property workaround
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-CONFIG_DEBUG_KOBJECT makes kobject_add_internal(), kobject_uevent_env(),
-fill_kobj_path() and friends emit pr_debug() messages, and
-CONFIG_DEBUG_KOBJECT_RELEASE makes kobject_release() emit a pr_info()
-for every delayed kobject free.  All of these carry the "kobject:"
-prefix via pr_fmt(), e.g.:
 
-  kobject: 'test_klp_livepatch' (ffff...): kobject_release, parent ... (delayed N)
-  kobject: 'test_klp_livepatch' (ffff...): kobject_add_internal: parent: 'module', set: 'module'
 
-The livepatch test modules' kobjects are named "test_klp_*", so these
-lines match the check_result() grep for "test_klp" and leak into the
-result.  The extra lines no longer match the expected output, so the
-selftests fail when either debug config is enabled.
+On Mon, 17 Aug 2026, at 22:54, Nick Desaulniers wrote:
+> On Fri, Aug 14, 2026 at 9:45=E2=80=AFPM Josh Poimboeuf <jpoimboe@kerne=
+l.org> wrote:
+>>
+>> Commit e2179a09ab08 ("efi/libstub: Disable -mbranch-protection") added
+>> --remove-section=3D.note.gnu.property to the stub objcopy invocation =
+to
+>> work around a Clang bug where the note was emitted for code-less obje=
+ct
+>> files even with -mbranch-protection=3Dnone.
+>>
+>> That was fixed by LLVM commit a48f6079f288 ("[AArch64] Generate
+>> .note.gnu.property based on module flags") which was released with
+>> Clang 12.  The minimum Clang version is now Clang 17, so this workaro=
+und
+>> is no longer needed.
+>>
+>> On arm64, the stub also no longer builds with -mbranch-protection=3Dn=
+one,
+>> as it has inherited the kernel's flags since commit 8358098b9787
+>> ("arm64: efi: Enable BTI codegen and add PE/COFF annotation").
+>>
+>> Remove the workaround.  This fixes BTI on arm64, and is a no-op on
+>> RISC-V and LoongArch where the vmlinux generic NOTES macro discards i=
+t,
+>> and the x86 and ARM decompressors discard .note.* explicitly.
+>>
+>> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+>> ---
+>>  drivers/firmware/efi/libstub/Makefile | 6 ------
+>>  1 file changed, 6 deletions(-)
+>>
+>
+> I verified the above all looks correct.  Thanks for the cleanup.
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
 
-Filter out the "kobject:" lines from the result and note in the README
-that both configs are safe to keep enabled.
-
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- tools/testing/selftests/livepatch/README       | 3 +++
- tools/testing/selftests/livepatch/functions.sh | 1 +
- 2 files changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
-index d2035dd64a2b..d03461bd45bb 100644
---- a/tools/testing/selftests/livepatch/README
-+++ b/tools/testing/selftests/livepatch/README
-@@ -15,6 +15,9 @@ Config
- 
- Set CONFIG_LIVEPATCH=y option and it's prerequisites.
- 
-+Note: CONFIG_DEBUG_KOBJECT and CONFIG_DEBUG_KOBJECT_RELEASE emit "kobject:"
-+debug messages to the kernel log.  The tests filter these out, so they are safe
-+to keep enabled.
- 
- Building the tests
- ------------------
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 17810521d069..3dae2ad20f1e 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -327,6 +327,7 @@ function check_result {
- 	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
- 		 grep -e 'livepatch:' -e 'test_klp' | \
- 		 grep -v '\(tainting\|taints\) kernel' | \
-+		 grep -v 'kobject:' | \
- 		 sed 's/^\[[ 0-9.]*\] //' | \
- 		 sed 's/^\[[ ]*[CT][0-9]*\] //')
- 
--- 
-2.52.0
+Thanks. I've cherry-picked just this patch for v7.3
 
