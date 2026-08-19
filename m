@@ -1,213 +1,123 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C8330274D
-	for <live-patching@vger.kernel.org>; Wed, 19 Aug 2026 12:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52633A9013
+	for <live-patching@vger.kernel.org>; Wed, 19 Aug 2026 13:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787144386; cv=none; b=VtjogcKFhBpFQGk3Sohx8rjH8YjHJdNE3BsOqyPvSMDVr+IeAdqa/MhZyrFzCHeJ+aDj0uiBHIKyfeZbrIFzmkVfXsqwJvkTP1OdNUjy1see8P4FqmQEf/tMUPJa5KeR8KKaNiZJEeUyxk9cDUmHWf4tx+tFbeaO665UlukPmxM=
+	t=1787146129; cv=none; b=P5HYBg1L7Zj2RKUQYzGjg+vezNYdUpo5gTs1oeKzwAvLP6MLMPdc42m6Y5VXI5wekRkUCvRTgAbINjKKi9XBA9P2IjjzJuBVQ9OHhZsQckbQKu4/IB6ZQfr5cTh/RITecIM9vsHWrDcuS7T62cyfkCDyjhHJlAAA8YCMSK63WC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787144386; c=relaxed/simple;
-	bh=wxWdDA/OQxdpGyjcEEMeoSm55oJgOwzx8cpmmdH3L2k=;
+	s=arc-20240116; t=1787146129; c=relaxed/simple;
+	bh=wlapjEqe8kyZhlEQN1QZwk9ra7ALD54v+oHhW67f6/Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YNk86yjtDnoQqgPASBdxwXb8aEBjXtiLUs6Ed7dfipQBnGhp5TO0leIGkYn0VHFEBpJH+nSsmlUCZNPW/o3rFVWZyw7xd7FOfRvsfIUJ1QDe0Fa34U0XD89UkF5mJf7WslWt1/DrgiHUtM+wYicTEXpTzm+tPppx2qvE2jCpQ6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LpWSstIE; arc=none smtp.client-ip=209.85.128.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=ek7bgBZNQ0M5P9dfzsVurJ40jyWxMUVyb0oq14iDEZuThk9Zm10uCCrTZQVc2Xw0zQOhV2W2SaKhLUaGHlVtDxjngzkUlKtisSv+zxWFdQhxNRaZRR1+g1291iLp+RG91rJDnTt+ZTINCLYOt997pOr4jV5NPdpc0lcPdnlfM68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RQ0jiBRU; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LpWSstIE"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495437bb891so7785625e9.1
-        for <live-patching@vger.kernel.org>; Wed, 19 Aug 2026 05:59:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RQ0jiBRU"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-499ae1c6471so3680065e9.3
+        for <live-patching@vger.kernel.org>; Wed, 19 Aug 2026 06:28:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787144383; x=1787749183; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KKUZ68+2oy4CCiqh/DqOSs4VstN5uj/eU8eWIQyQY2I=;
-        b=LpWSstIEuUFMjkbm+Cjycozi0EQ/cjDiqoE0G/Ew/HljXEqRn5qE2gTlDmkMebzLhL
-         y8EXptttwhKdrkOw2I/34660hjxv7RsUz+j4lxewSQBrxbDbnOk4oDsK7t46JE3zRYkV
-         GU6cBBZxLYZ/W2Ct/7uBC+bfiyFu/lHdGsgO97g9rhHgOeBRErphYQy8KmfVvTpvdSJJ
-         tMOk8R1ug4Tx4KFyOYL2DkYeExZLJNvoSdvzI4fWSrMOZbBxz9oGujS6XpWk6YvfQafY
-         hF3avCqC0Y2jvFFOLsLe2jncSsZg/GF18lh+2WDIe216fCyDi7RMBTPxDnTbCdRgHvGx
-         mwbg==
+        d=suse.com; s=google; t=1787146124; x=1787750924; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=w+5IpqhSGJufIhhJ2XDzDGZAZt6AECsqWAFSahA7Sz0=;
+        b=RQ0jiBRUqffm4476BSJas6pvGIGgKPwIVdTC6MfqMSab2n4v4B/RjomokI43bzU63Q
+         twXr8o2rzBLzbVu2Gny2lGfUFfe21gT1is39dqnLtzTdqfkXFNsDQmhb8n4g+e2fLiTP
+         qg/vPecZKDjCsCNbyOGnvof3hJDsvxcSk/B8nIDeP1h1T+reiRV0P+hCptLObUStnZTj
+         M2jYnHW12gLManWsVOHV0Ts1MotSaNzEBs0Qb/trYq8Bo/N8WEMKyiHsJHlW3QUU8Hy8
+         +fotjYVyuHTCLIgx/pPYxlO3YiZxuGevaB3pYDUM0JJwxkFqFjtyLIcK+lpY5y5f7dEH
+         USQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787144383; x=1787749183;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=KKUZ68+2oy4CCiqh/DqOSs4VstN5uj/eU8eWIQyQY2I=;
-        b=Hs7hLh7DZ8wSeJrwJ4PESSLV/8/QDAAEXsHSkCAmzjl5+ii8/hzeZuxBlRpBggS3rh
-         vjLjn5Tl8FPMtjxu1KX//T+rg/JR/+Gewa+2/aLYwvPgPZsWkn8UPMs+3f9Bszrc//4t
-         VQb2aRAWUUnwYTctuDI+R54qiU3nz9ymNcBBRuuOz/XuzszaPfBsNRvenBmr+05nhQAt
-         Dr+HzL1YPUNFnBTnkMIGWQzNjxxZKyBEeXS0j6JehgOfprTjoo08q/S6ZQ5+YCLrQb0/
-         OfWZm+Cg5zchC9cu5MtprO9XBmzV2qR7KL7AwJD2o/2q7E81wUOge18VqzBV5fNjxSkY
-         q9UQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpjTWzaO83aQTfgw6Ukql7qhK2UHzBIBvHtkP6nngHUcjKEyAD356X044ONk2qRpgvVK14NhCM+GhRuC1tT@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL5ygcHywE5iaFkv028bncLOiAotERtpAFkkSG2bnIywGjGgHc
-	Tqkfx7cZ5lqzgVP59P+M6HGHBeENSrLnIpnsrM79n4btairVY/QkBrnKJEB2/v3T+Ws=
-X-Gm-Gg: AR+sD12hgr1OFLbdMJkwvqq14Q4qTVpqWSp46riv1P/sOAfBVY5VAVjbhjh+8oiQTX4
-	8T2Cj2r1oQeR9Tfd3iLcKbkQ/CxvNbep6daft4VhBlm4qV61SddOqHLUmmrNfrKxrd4R5kvY9VP
-	8gQSLijbOVqD0uwbfZI4Ruue20/WyHJ2q6Lx9wxTP27fPzBH9tkUFzJfmZK9Ons2lydT0BYrpt+
-	w8/f5q6XDGduldtKMYihvXPNu7LYAZ1mlzhjZkswXakT4hfT1bnnvZFGEFdizb1pia4oB6FcASy
-	s2lN3CLqbjI5Hw2AePIk9HGkP67JXtR2R+Ejmi/1UypXeHtkXxAiuUX7BdKMYEFmpld9CiaPqtx
-	hyzQg/50aukp4S+YbZtTdOGqgcftO2GCpJrYbRqQEf7GkoG3PcUbFOTRimiTNrWI+UjZWawlm66
-	FoEi+hibZmqeEpqwmsqj00gMrdyiNwYGV6dShFRnQ2cQSnDWB5n0my9oYlYiHUxQ==
-X-Received: by 2002:a05:600c:8712:b0:499:a0a5:e13f with SMTP id 5b1f17b1804b1-499aa0aaf56mr77029315e9.2.1787144382901;
-        Wed, 19 Aug 2026 05:59:42 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787146124; x=1787750924;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=w+5IpqhSGJufIhhJ2XDzDGZAZt6AECsqWAFSahA7Sz0=;
+        b=iixau77LsAVKmNdjaovCXCgMjhLF8BfwsUfbvRt8FwIDYlp+lOdsZ4xSfSbNGgl9Vp
+         4aWeBE6VEcmGtHV39rOJM1Cxxhf9K9ccefmfnfm0x/JgUXLvwEOxwMNUlpRem+QESCi9
+         LNRcTas3BiFJe12ePeENSjJpOw0O/+mIVjzVHSfnEDidVUu5isMg/bqulvEXu4Qb++7R
+         aOyk3JYHMRWzP7CYGvypRMksDs5Az4CFqOKTRjY1hy53LHrGiX4Oj7hDmHvQdpdHjrDC
+         vI7AiC2uTKGGS43qswfGWpPMOJP5lMS8G8NfhCsaVF6oTY0Z7P+B+kc2+2S2mYUCh0K3
+         vLyQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rpvh4huVDbPIM2gu9EbRr7rKN6ZYnjgqpOIm/ARmoeFcJgCex1biSsrMubwPYmfbUDw00p79JncN8rcnUdX@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGh8fv+nByh2rvE55Nsh7ZUVViX+Z4JffjyBwpP6TG+SMW0OVP
+	aAN+SeeHRTVolkv+VYP3Koi35xPGJqOJJ5KzG+UdyIZhnoNtad3rRmJXw5THYa6wmUQ=
+X-Gm-Gg: AR+sD13udvTl/+D2l0NNg/Mv9n/K7Ns20HKBJ0pQ+5yLj6u3b+p0QAFpT4CmnK8P66j
+	mwqJ8eG64k0o+8c8G0aqZfzMlhAfkep85nKz8BEWNUIgdslfOa0324SyupV3n2ER8tNRjHhN7D8
+	a/KymSmc7mXSGHvdi0c+gukhOBqX0EUlViwpMfJM4VnqFsNwm3F+CpRMs2Z1VHXxaXKOHMlwG/B
+	6QSf6C/qkSPbCD7ImFuTLibsccX98Rb8M0+7Hbmia7j07LuqSB8rWrIAz9foSglcB86fobQ2aMN
+	CVhodHpNOxYiNGGRKi6NxivXHUfjFXg90PBMw1tXeK4hIPmATivLHbxKvi7qywEHc8oYVy0jass
+	SVD3HJFu+baKvlmcbza8MsoA2S0d7wTX1spaPtzrp73lDkANyGa5eFEjiqcRRGn6X9dcIBy8Eot
+	PAZK1a49s20AGPgoJECgqEkmmyMNqTurjxg+Zan6TGPn8zdC4iin6nTo39mMErug==
+X-Received: by 2002:a05:600c:468d:b0:493:e365:7630 with SMTP id 5b1f17b1804b1-499aa1bbe90mr71693335e9.14.1787146123688;
+        Wed, 19 Aug 2026 06:28:43 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499a9e00bddsm49415795e9.3.2026.08.19.05.59.42
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499a9aa1594sm56432525e9.0.2026.08.19.06.28.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 05:59:42 -0700 (PDT)
-Date: Wed, 19 Aug 2026 14:59:40 +0200
+        Wed, 19 Aug 2026 06:28:43 -0700 (PDT)
+Date: Wed, 19 Aug 2026 15:28:41 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
 	joe.lawrence@redhat.com, song@kernel.org,
-	live-patching@vger.kernel.org, sashiko-bot <sashiko-bot@kernel.org>
-Subject: Re: [PATCH v2 2/2] livepatch: Fix UAF of unregistered patch kobjects
-Message-ID: <aoWovB9T0ovJb7Yq@pathway.suse.cz>
-References: <20260816090442.18128-1-laoar.shao@gmail.com>
- <20260816090442.18128-3-laoar.shao@gmail.com>
- <aoWRDIjvE5jYNR9_@pathway.suse.cz>
- <CALOAHbAwO4VCWEhMxkywv9W4wf8CfHJfgtaithBBpoSp5LJDkw@mail.gmail.com>
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH] selftests: livepatch: filter kobject debug messages in
+ check_result()
+Message-ID: <aoWvidB12l4oPIdK@pathway.suse.cz>
+References: <20260818054629.69246-1-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbAwO4VCWEhMxkywv9W4wf8CfHJfgtaithBBpoSp5LJDkw@mail.gmail.com>
+In-Reply-To: <20260818054629.69246-1-laoar.shao@gmail.com>
 
-On Wed 2026-08-19 20:37:17, Yafang Shao wrote:
-> On Wed, Aug 19, 2026 at 7:18 PM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Sun 2026-08-16 17:04:42, Yafang Shao wrote:
-> > > When klp_enable_patch() fails after klp_init_patch_early() has run,
-> > > the error path calls klp_free_patch_start() and klp_free_patch_finish().
-> > > The former drops the references of all object and function kobjects via
-> > > klp_free_objects(), the latter drops the patch kobject reference and
-> > > waits for the patch kobject release only:
-> > >
-> > >     klp_free_patch_finish():
-> > >         kobject_put(&patch->kobj);
-> > >         wait_for_completion(&patch->finish);
-> > >
-> > > With CONFIG_DEBUG_KOBJECT_RELEASE enabled, kobject_put() does not
-> > > release the kobject synchronously but schedules a delayed release with
-> > > a random delay of up to 4 seconds (see kobject_release() in
-> > > lib/kobject.c).
-> >
-> > Yes.
-> >
-> > > Because klp_free_patch_finish() only waits for the
-> > > patch kobject release, it may return while object and function kobject
-> > > releases are still pending. The caller can then unload the livepatch
-> > > module, which frees the klp_object and klp_func structures. The delayed
-> > > kobject release callbacks later access this freed memory in
-> > > kobject_cleanup(), resulting in a use-after-free.
-> > >
-> > > This issue can occur in two scenarios:
-> > >
-> > > 1. The patch kobject was never added to sysfs (e.g., klp_init_patch()
-> > >    failed at kobject_add()). All child kobjects were only initialized
-> > >    via kobject_init() but never added to sysfs. They do not hold
-> > >    references to the patch kobject, so the patch kobject can be
-> > >    released independently, unblocking patch->finish before the child
-> > >    releases complete.
-> > >
-> > > 2. The patch kobject was added to sysfs, but a subsequent operation
-> > >    such as klp_add_nops() or klp_init_object() failed. Some child
-> > >    kobjects were initialized but not yet added to sysfs. These
-> > >    un-added children do not hold references to the patch kobject
-> > >    either, so the same race can occur.
-> >
-> > In short, this says that the races might happen when some kobjects
-> > were not added into sysfs. Am I right, please?
+On Tue 2026-08-18 13:46:29, Yafang Shao wrote:
+> CONFIG_DEBUG_KOBJECT makes kobject_add_internal(), kobject_uevent_env(),
+> fill_kobj_path() and friends emit pr_debug() messages, and
+> CONFIG_DEBUG_KOBJECT_RELEASE makes kobject_release() emit a pr_info()
+> for every delayed kobject free.  All of these carry the "kobject:"
+> prefix via pr_fmt(), e.g.:
 > 
-> right
-> 
-> >
-> > I agree. My undestading:
-> >
-> > The klp_kobj_release_*() callbacks are called by kobject_cleanup()
-> > which calls kobject_put(parent) as the last step. It should make sure
-> > that:
-> >
-> >   + klp_kobj_release_patch() is scheduled/called only when
-> >     klp_kobj_release_object() has been called for all patch->objs.
-> >
-> >   + klp_kobj_release_object() is scheduled/called only when
-> >     klp_kobj_release_func() has been called for all obj->funcs.
-> >
-> > But it works only when "kobj->parent" is set and
-> > "parent->kref" has been incremented for each child before.
-> >
-> > This is true only when kobject_add() is called for all all used
-> > kobjects. But it is not guaranteed when any klp_init_*() failed.
-> 
-> correct
-> 
-> >
-> > > Fix this by tracking all static kobject releases with a per-patch
-> > > atomic counter (kobj_pending). klp_free_patch_start() counts the
-> > > patch kobject plus all static object and function kobjects.
-> > > klp_free_patch_finish() waits until kobj_pending reaches zero,
-> > > ensuring all kobject releases have completed before the module is
-> > > unloaded.
-> >
-> > I think that we do not need an extra couter. We might use
-> > the existing kobj->kref. We just need to explicitely
-> > increment/decrement it.
-> 
-> good idea
-> 
-> >
-> > I mean something like:
-> >
-> > diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> > index 28d15ba58a26..023f666ddcc4 100644
-> > --- a/kernel/livepatch/core.c
-> > +++ b/kernel/livepatch/core.c
-> > @@ -652,6 +652,8 @@ static void klp_kobj_release_object(struct kobject *kobj)
-> >
-> >         if (obj->dynamic)
-> >                 klp_free_object_dynamic(obj);
-> > +       else
-> > +               kobject_put(&obj->patch.kobj);
-> >  }
-> 
-> It appears that klp_init_object_early() also initializes non-dynamic
-> objects, right?
+>   kobject: 'test_klp_livepatch' (ffff...): kobject_release, parent ... (delayed N)
 
-I was a bit confused by the sentence. The dynamic objects
-do not exist when klp_init_object_early() is called in
-klp_init_patch_early().
+Yeah, this is pr_info() printed only when CONFIG_DEBUG_KOBJECT_RELEASE enabled.
 
-But I see that it is called also in klp_alloc_object_dynamic().
+>   kobject: 'test_klp_livepatch' (ffff...): kobject_add_internal: parent: 'module', set: 'module'
 
-> Therefore, we should call kobject_put() unconditionally.
+This one seems to be printed by pr_debug(). It is printed
+with CONFIG_DEBUG_KOBJECT but only when CONFIG_DYNAMIC_DEBUG
+is not enabled.
 
-Great catch. Yes, we should call it unconditionally.
-
->  static void klp_kobj_release_object(struct kobject *kobj)
->  {
->         struct klp_object *obj;
-> +       struct klp_patch *patch;
+> The livepatch test modules' kobjects are named "test_klp_*", so these
+> lines match the check_result() grep for "test_klp" and leak into the
+> result.  The extra lines no longer match the expected output, so the
+> selftests fail when either debug config is enabled.
 > 
->         obj = container_of(kobj, struct klp_object, kobj);
-> +       patch = obj->patch;
-> 
->         if (obj->dynamic)
->                 klp_free_object_dynamic(obj);
-> +
-> +       kobject_put(&patch->kobj);
->  }
+> Filter out the "kobject:" lines from the result and note in the README
+> that both configs are safe to keep enabled.
 
-Looks good. Same with klp_kobj_release_func().
+Honestly, I do not feel comfortable with this ignore-all-kobject-messages
+approach. We might miss real problems reported by the kobject API.
+
+It seems acceptable to ignore the quite specific "kobject: .*parent.*
+(delayed" pattern.
+
+But I would prefer to ignore the other debug messages by detecting
+the KERN_DEBUG loglevel. It seems that dmesg even allows to filter
+the output on its own. It is a bit ugly because we want all
+other loglevels but:
+
+   dmesg --level=info,notice,warn,err,crit,alert,emerg
+
+might do the job.
 
 Best Regards,
 Petr
