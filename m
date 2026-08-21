@@ -1,160 +1,113 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8727B367F21
-	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 03:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787282129; cv=pass; b=fwk+xT0mtg4q3axRGQnT8JQ0SQk4pIgB2Pf88hPfzLvjmMZVXJ1RyH8UIUvYZ0A3MCBdy6YwdHJk87dnsdxmxBdAhQXwGQBbBli4dnPCvJleY3whb/zonom+QIJpIXiAZUeufUnrvegPcG0LGbsB0aj7LT3L3Nux+wpA9EjYlXg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787282129; c=relaxed/simple;
-	bh=/FPTVIppAfTPDE0h/OjnQk2c1BLBYv9APnV+Sj6s+d0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l07JITDc7pT5mYsfgyB8ObUGWZRiHiQYZa7b/BhQy+Um9nfSixEpaVyQdxeAUl88ZiqNwnVB5JXxzVqHXaGdXDKVNGrR/6Z6hJ5K/l/SwLKsT/Z+9iBgSxKIDg62rkyhKWmwTqns8P9kJdLX4BSYz72pbV5ID9UalbQkKfNkB/Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ADxi2J9B; arc=pass smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DC6276041
+	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 03:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787282231; cv=none; b=DLRs84C+cT2uDiw835wODfIToqVW1f9c90mEbtWMn5RA/PuM5xTHihG9Ssik1CSc2Hp8BfYfiTnzXitBxV6o6j3WJmAUl6edbDjJGEgCgIIwKo+r4Y0K1kRm+iQjigLqxYHqKWbZGSazpjr4GnICwyD0YeyaBLXfHQzawv0FVdY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787282231; c=relaxed/simple;
+	bh=FLESvOGmkpQtMDp6LiILAqqDlJbD6IWAlv/XLAgTCRI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sPrYhriCq74nacrgHHcWwTZZ8F5p++blP2n/UZ5KynhBdNKCAtnuyfxkiRt4zzKT8Dk4FXIFjGnI8BqPLpKi+EunjJvL+XdGQudoNnR2kK0RV8pokdInz/WTtnyHuCJjzheNFGdtnHrib/jbatzAfnQA1obsNnCMIvOQMMmnr5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfMvOoc6; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ADxi2J9B"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81f36179d72so9937477b3.2
-        for <live-patching@vger.kernel.org>; Thu, 20 Aug 2026 20:15:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787282125; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fiu9wCZ/F2h3TG26Hde6Hin8z+e6TnrdDSPInjdw5BzC8CUIpAOGefLIiV2bMF8xW5
-         WTVtb/xwBVD6lR1CA+Bm1di/hxWUwhNI0elmmC+y4MgytPeBgNT0splD8Mj+FukwH5Nm
-         jW1QLQTe5fvKeDJzlQm+uCnYcepH2XP5pmX1GShk88k6FdTscSsjQHWBAPsFyfBa40K3
-         +ZVK8gQP0ZhSgs3EX4taBfWjxUm/mjF8dYPkXxUwC/+sTnmoOV4dnE6A/qFM3e5FlfBn
-         0Soatn8dGYfaRCjz5WgG7XgQrp5qcEhe5kjWoY2+2U2c2cPM12nmnPpteck75blafB7y
-         69tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8Wqkj50xDCLBlQS2sVxD5JqRiNcQiD/QAzj9cqbP0K4=;
-        fh=HZSCo8fGGb5vJV9IWB0PmlK+WQqrA8/7ZGzwKHYrtVI=;
-        b=qv6N0lTr7TZzHBFq+FLTotroYGMkLPWL/vGUjo0ye77uqAHIFo8mL13gAEVzReY5/w
-         O/rBU3ZLXCcR19kiaLqSEIB2Pv2TXgv6o74EwIB3RGo6fB+WVlUa0pqJU+gQhl1eFuvd
-         9fd7noJotOkEzC8k9XtIawNviNFR4vn21HFl0v3iCZhlBwkk45zCQovhe4YrHw3Cn8bv
-         Z9AKJjInYy6Qf85Valrgqn0sfYhq0iG8bsQYFoeCrhO1O3Bl/lVF5KT/XgQw7RPMwaNt
-         T5He9TG76kiGNhIrwKm9h9NEaG2fbJ53Va/cv/ohCns9aq7Y6SYR2WQDSzIzQVi6wXIw
-         /cyg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfMvOoc6"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c9d1fff21edso455234a12.1
+        for <live-patching@vger.kernel.org>; Thu, 20 Aug 2026 20:17:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787282125; x=1787886925; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8Wqkj50xDCLBlQS2sVxD5JqRiNcQiD/QAzj9cqbP0K4=;
-        b=ADxi2J9BUQU2QhFI0hYkV8lEt/PSNj07c+wpNBaEp0om7W96mbQ55YuZG5jq0ohHoO
-         IHJVsdMCBmNTk49o8sMojm8cAA4+Napy4Tp/6QU4o78J8kai3CWLD9xzcu0KbjM8RVlb
-         VjuQ9cZWeNsebFbagJZPZOK1svPZ16utcVffgVZR91xXvnO8MDoqVEknJcludHxER1W7
-         mCOHeP4U3QTurUN01LIIxUG9UD4PowLcGCfOvsKlj5D//I/3dM3Ak9yTLbug0h03lto4
-         riQusZ4s+pK7m0XPgLnVqZaqvEKDRl4GyWuI1lP/Oo2z7KDAury9HoEoTdoTMLUTK8tJ
-         dhnQ==
+        d=gmail.com; s=20251104; t=1787282226; x=1787887026; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=w2KRkGzx+wUHA95SG64aSXZgUP19cNjyj2g5tU3/uNY=;
+        b=PfMvOoc6RlVbJErlqn97Z6lDlGyc1cO0SC61zqrSK/VYHP8YDEsK8rEqJbh7Npx4dH
+         XX1IXsdJGCSSz1q5jqDJli1nkx4UB4jjHML8mCL9CK0XBSv08dJzm2WOLystdCmdejRM
+         caFZQgnC+LtvMEKEpXioBRdotAxytLG7DtaFjKTm5d2AzZquhf0lEphDAWsgkFgn/lpJ
+         hF049UzQk4Mou43j7jbB8J2TNpzoUHJ7TF/CMSzJBv+3Xs8W6+5OJn3CEd99aAypn6lZ
+         Pbtys9+L3nv8PHmOY1pobG7WgRi408BHcGLF5Ykgh5WIg0exmtw6NqLGurXsPOQ7lDot
+         75hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787282125; x=1787886925;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8Wqkj50xDCLBlQS2sVxD5JqRiNcQiD/QAzj9cqbP0K4=;
-        b=i95zislERuHIgx+AcAifK+piK7NPy6Q6K5Dnp2XU4ebqg/GKpAWsPgxfBUuWnWWeTD
-         MxT2S0oPyLOlvdnS0BWPp9i3c6yaBRQSyfB5kh18Gr4AlCzpMdpwZEzeAcVlJd1qUZJK
-         j20OE1SNdcSxsPoVcDSebVeQsCWWWWAxVQK0KEaSBwVIjtD2n4ger9xlEGFya3h7aaiE
-         AheEwhDmazK93ig7jmsGApQaznzMROAKr3jOx+MBGYjkAgJL4UCa43wWk9HqFmKppljr
-         A640Eud8mSS9uJgdPAJvDpTW+wopPtji5QtazM1yBK/d6EHR9dEFF84I87y0fuHTFRd3
-         Ic3g==
-X-Forwarded-Encrypted: i=1; AHgh+RqdKQhn+JI+3RgwSCvefle5zKR6rgaqHHMNHFjX0eiBdnNXa1lpMoZAenJdTfWMk6ctkn2VTDzFfD6beUtA@vger.kernel.org
-X-Gm-Message-State: AFuF++m/yaF6clymGrWnDWXiIRwusYWO1KSG+THZU/ERoQCkFtW66RnU
-	24hKzIX5K4FVQn2+SAqnEsZ3cZgJA9vZKJqknGT0RZQdAwODgK5NzL9tKqi4PJxi4iEI9TzvsHz
-	JoJpr1yKF7z+4YCiF9r7Rf+08sdztROECxpRW
-X-Gm-Gg: AR+sD10lUNpKya0jR6OxPFKFLcYRh3lQmtQ5pCE+glyH2sJBaH2YfZ4X77ruFu8vq6q
-	/NfG44OmJ394DDBrfHx0Q08x+sKC/uUVsSUUd00DOXUdnvxxmcs48wIoUHWu80zINHCwbttJOao
-	X4g9P089OHFQL5asRdPlsxaGAD1XEeYNdxZrUylu+7d5O0okz8UQZ3rn/nB1cA+3DV2HLgCe8tu
-	9QRJVOus4gMH35WAN5vSbRWwhgs3oFxBhofOy7mIciJxFFwmpiCCeJdF3EuVRzyRGqM2sXVjvY8
-	lMl2pCERtimPjAKdrXy3MP7pQ3y/k/gDIknxJfh6q0rOOkQ4hbNe/HDFQicgGmc6y5lK2sNeXsZ
-	M/Q==
-X-Received: by 2002:a05:690c:e28a:20b0:81f:64e8:9362 with SMTP id
- 00721157ae682-849f2e1bf55mr10993187b3.16.1787282124704; Thu, 20 Aug 2026
- 20:15:24 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787282226; x=1787887026;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=w2KRkGzx+wUHA95SG64aSXZgUP19cNjyj2g5tU3/uNY=;
+        b=LKC7s4qxuUbPxd75Qwb1RqVW6Ud9uUvgII6jDJ0SWSVm/oSawwyU5S0RvKd739hTuM
+         K27JwCTI2fbGVpRpLf9eYl2Stro6eJKsvoN7l5ZngBWfBiN0umE4Oq7ToWur5xZdikZ2
+         MBMp4RXUYSUXybpra7vYqbibA9krULRNQ9INXo4HV/hIaHGck59vXkhDkTNc3cqdJj3r
+         1lAjBWIYHQlDagI+t8bEbWZN1o/HN2EWRI8yQyFB6mVmJGN0RK0GLCVVHixrFLiR4+Xh
+         3nxqOQbKElnGtDH+jlsG+BV34hMPiaB7IOcUrE1EKF27C1OBUZo6bz3ZJZIDgyt8+6tY
+         ko2Q==
+X-Gm-Message-State: AOJu0Ywg5PldBMaikLZWN1S+2vM+Sgf4RamG9upjhziNBfTd6lCjX0L4
+	QWo6v6CMhskk80l5ii1zEnjlV4RWQQef/OZkt1625kfHsf12LOsaGpp7koy1qcvE
+X-Gm-Gg: AR+sD10QOf/Uf9ZTpk4HTpXghvyU31RrYzM5yC4sSwd4KNMmhQRK4W4/A+jNvn7+EMd
+	0lRoq31YjLi8hk5tNtIJfXctW5ClHYolm4CGorlJLhaechqTHc0ncnoE/ovBnvdPQSVRTQJcKYY
+	kj5vCp+qrHCQLLqLrxxNX24UGmk5DpSVpZXIqjwcqerhYUowTVinJJNjlmex4yXtvg7NYe52Ynr
+	qndWTJWodmu03cAI32yjBTnZ9O0dUf6/h8cuROQqbYWMJoo1FJ6lJ8hOjfQxAtCv21ygNoSZjgv
+	CK9Jln/Rf12DC67q4ecagDqkcMr/b0uYWklYRjnAVPH0H6jJkGt3I0RjcE9CRdXHZBrwNPjI7mY
+	2kBIkp1bEfOvKRUy7HcIuEMwP0lJM5bwO4lcwJBOaPB3VyVpeR3zhtLInCbmmkFEHdz9K4cPLT7
+	set+02gICcdZanK8aV3toPKPMTYUF8ZBBUoU/Bou0r2tGvDKYBhLAL4mXVXVKkXQa+mTVCNoQ3I
+	Z5kNxVwvDWEXwH6WQnkPfOiZpFTF5kLxqJ71aUKZyaA0dPf0BmY0j6f
+X-Received: by 2002:a05:6a20:3d94:b0:3b3:26aa:5455 with SMTP id adf61e73a8af0-3cd300f9e23mr5950451637.13.1787282225636;
+        Thu, 20 Aug 2026 20:17:05 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46c:1d00:6f7:10c9:b208:aa96:517])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc15543ec0fsm2346460a12.9.2026.08.20.20.17.03
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 20 Aug 2026 20:17:05 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	song@kernel.org
+Cc: live-patching@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v3 0/2] livepatch: Fix issues around CONFIG_DEBUG_KOBJECT_RELEASE
+Date: Fri, 21 Aug 2026 11:16:46 +0800
+Message-ID: <20260821031648.48195-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260816090442.18128-1-laoar.shao@gmail.com> <aoWEX89bxOpo4873@pathway.suse.cz>
- <aocdq0hr_iQTimG0@jpoimboe>
-In-Reply-To: <aocdq0hr_iQTimG0@jpoimboe>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 21 Aug 2026 11:14:48 +0800
-X-Gm-Features: AcwNN1X-E5iTijJXN2v0ohJ4JaXWkd3Ru830Ba7RT9gywIA2D_fixn2kDasl1vc
-Message-ID: <CALOAHbDRckHX+Ha4=jOZKWkvQAyWdxDL2qAeD6-KDkJZMM2Jtg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] ivepatch: Fix several bugs found during replace
- set implementation
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 20, 2026 at 11:40=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.or=
-g> wrote:
->
-> On Wed, Aug 19, 2026 at 12:24:31PM +0200, Petr Mladek wrote:
-> > On Sun 2026-08-16 17:04:40, Yafang Shao wrote:
-> > > These fixes were found while implementing the replace set series [0].
-> > > They are independent of that series and can be applied separately.
-> > >
-> > > Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-la=
-oar.shao@gmail.com [0]
-> > >
-> > > Changes:
-> > > v1->v2:
-> > > - minor improvements and acked-by (Song)
-> > > - fix issues reported by sashiko
-> > >
-> > > v1: https://lore.kernel.org/live-patching/20260813030408.9761-1-laoar=
-.shao@gmail.com/
-> > >
-> > > Yafang Shao (2):
-> > >   livepatch: Fix wrong index in funcs cleanup error path
-> >
-> > This patch is against scripts/livepatch/init.c which is part of
-> > klp-build framework. The klp-build-related changes usually
-> > go via the "tip" tree by Josh.
-> >
-> > >   livepatch: Fix UAF of unregistered patch kobjects
-> >
-> > This patch is against the kernel/livepatch/* code. These changes
-> > usually go via the "livepatching" tree by me.
-> >
-> > Honestly, I am not sure how to handle this situation.
-> > Josh?
->
-> The scripts/livepatch changes have tended to be tied to objtool, which
-> is why they have gone through the tip tree.
->
-> I'm open to suggestions or ideas.  We could possibly rename or move that
-> scripts/livepatch directory (scripts/klp-build/?  tools/objtool/klp-build=
-/?)
-> if that makes the boundary less confusing.
->
-> Or might there be some other maintainership model or way of splitting up
-> the files?
+These fixes were found while implementing the replace set series [0].
+They are independent of that series and can be applied separately.
 
-My replace set series [0] touches both kernel/livepatch and
-scripts/livepatch; I'm not sure whether that would cause conflicts.
+Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.shao@gmail.com [0]
 
-Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.sh=
-ao@gmail.com/
-[0]
+Changes:
+v2->v3: 
+- rename the subject
+- include the selftests patch
+- exclude the klp-build patch
+- use kobj->kref instead of introducing extra counter (Petr)
 
->
-> In any case, I'll go ahead and queue up patch 1 for tip for now.
+v2:
+https://lore.kernel.org/live-patching/20260816090442.18128-1-laoar.shao@gmail.com/
+https://lore.kernel.org/live-patching/20260818054629.69246-1-laoar.shao@gmail.com/
 
-Thanks. I will send a new version excluding patch 1.
+v1->v2:
+- minor improvements and acked-by (Song)
+- fix issues reported by sashiko
 
---=20
-Regards
-Yafang
+v1: https://lore.kernel.org/live-patching/20260813030408.9761-1-laoar.shao@gmail.com/
+
+Yafang Shao (2):
+  livepatch: Fix UAF of unregistered patch kobjects
+  selftests/livepatch: filter debug messages in check_result()
+
+ include/linux/livepatch.h                      |  4 ++++
+ kernel/livepatch/core.c                        | 10 ++++++++++
+ tools/testing/selftests/livepatch/functions.sh | 12 +++++++++---
+ 3 files changed, 23 insertions(+), 3 deletions(-)
+
+-- 
+2.52.0
+
