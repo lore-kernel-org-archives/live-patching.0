@@ -1,143 +1,100 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF73C3BE155
-	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 08:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD25A486648
+	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 11:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787302310; cv=none; b=ht+hTQVyaPNsNKGrwa2I3E0V6aKZH/kqXR/ZETt7xslV2/j4yTEF7NXcb7IyFCmFbFD80eNX5Kdi48hz2zhfaOkQBPqY9LYht/go8TuFu5r0fQikYP7jakZTa5tiC6XFU800VJ0n3urglMUoZJehEhw8MR9oz2byKVAS0WM0Iyg=
+	t=1787312358; cv=none; b=KJIVEjONh8sTckB/vXBJQYaasNym8PPlA5n0kv9CnoNomVjfgJBT5ebV8py11TnlFArHtA/YyOtZ2uLwh6JoEx7EbGjtjlTWadfBmejcXZHj2tMzkJ49OjfQyrq41RsnggM384RIfldAGQXubbpHGnDlG1nmqKsRvdom1xsvu3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787302310; c=relaxed/simple;
-	bh=ONoLiILwAuo27RgtNNvwffOs2zb2RvAkJKkw0H1EQOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rrmp7+afExyMgDdNxfHepxHgYre8f5GufM9RKJ+rZd0Y04cBjrjzTKzBkBHdE1NOmdnh8tpDXCrpM5g4ExXTstYAoBG29TF5yJI4bEcHlzZWXP8LJcAiY8UisEkapJdkD6cpbkNx3peV2zYDWSM8lCuIdP5q6OPC8SCRc5w58Sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EOrvZhIe; arc=none smtp.client-ip=209.85.218.50
+	s=arc-20240116; t=1787312358; c=relaxed/simple;
+	bh=ZCqP4JILFbPDSjTbp4IgJyVQ4m0n4F3q5nmoYZy7eO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EFrS3/CZEHdbXd0WDMcp/yL18TCvSNN6LkBg1VTa63ZZKOFUODHQv7xbfRJyUx3BgMpG0g5o1c4YQsuI4ztcP80mgnwRkYysYUyCVg6NnnzyNyge4eLm5WZHBGlMlojrI51W5pT3E2eRAHV5t+5j4QnUjj0uAGxKIobtMP0Q/d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aKqnz9kV; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EOrvZhIe"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c197e7e4e94so147031266b.2
-        for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 01:51:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aKqnz9kV"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6a15d54ac95so1794881a12.0
+        for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 04:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787302307; x=1787907107; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=suse.com; s=google; t=1787312352; x=1787917152; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=fJfaCgdpJlwyfiEez2J3vKbm3cGSdPRw5h1jwiFB9Uc=;
-        b=EOrvZhIetvVti4CeK+VAQV9JdkwmdNHqFpq2xixvrjKzP+WZvRvk3YmcbVwjrBdEUG
-         2EV0bWY4pP3Rze/690q1B6Bm3bOgbH0EJjHkxIwtaKAhc2IVzRlHd2g+YqUXyGLw2ZJR
-         0CNXVVMDHgMWr+BHXMi0IsCC+CwCR+++NSTqBjIG6eG4VHzF4Vk5kCCn0z0HVp9tq7cS
-         Hrxv1qt4kfQ2Ij7hWyUOKg+/2cTbnSJX5cOzz1J+d2XCCBEFgjv0z6Z3N8UB3dvewSER
-         9zn7TWjma1krBCdEdxflmHMUySr5Zdi49X3IiJFql1GRlmoTLPgBo2850WuqUL1a1Vo0
-         Dtww==
+        bh=HCHBLwYOrzsMfLvGvn9+AELP12LoSDK9pA2FNZaHrcE=;
+        b=aKqnz9kVQTK4L5XwHhFX/HeLvqMNBMEFRgL6pKVct5hj2Sgb8dGfIDDO4lr9jSopkw
+         e155QRnAFrwnL57Gj8dsa1D9Xaw/ywpG5EIhSkhkAWYZM3Fu5TA6gDqs+hxIsrQHTOeA
+         YLugD4iTQR6Q24gAtHXnJpYD3WwOMkOz387EFBgLe6b/XUca7FTZPl81KNlZS359Vn4d
+         C3x+Cb2kQzQ7UiOfcF3oxxYJvLjOZ2Vko3z8hp5npjxJskip4eCJXYhuH/hNbOu2Qjmz
+         OAZ/zfKwuBd8c55/noatFhbJSIUh+nqFM1BPA0TSxffpgDsoXswRXakAJLXulbnUeA7J
+         4JYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787302307; x=1787907107;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787312352; x=1787917152;
+        h=content-transfer-encoding:content-disposition:content-type
+         :mime-version:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fJfaCgdpJlwyfiEez2J3vKbm3cGSdPRw5h1jwiFB9Uc=;
-        b=ndSViMsrBWNO+IDU83FqvUKy9VyVCkQc9tq/xqfSyihA1hrtyCCJ/9BTJp+eCRcS26
-         3hwqAYtZo224g/1BkvZMcZo4ztZvCkx8Ul/lgkO94zpnJc+zpxozLc9wo0h4YX+ibeJI
-         oPN79maQO/c/PxPBp1sFYYEvi0XtuCZvUl6nFGwz4y6YnoFfbPsuuGwgUC5WPn+gPMwG
-         WSeuyerfDJ61WKvxh6mgf+/KS1eomQiwwKgiG+tjy+yOadMXrkTBZZZs267CxGA9vZ4w
-         mJNQPJshnH1yuP7huYko81Qj4QjALGSL48GLOF3rvxMfTXEn83BDkioEyQS5a1g4vHmR
-         RITQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoYU3vxsCBcrgzVAYaTiykjSqqgtpnN6MGhwZPLHhl5Ti7/ZklQikGjm4ZucVmKIORsKlQ4RO9+Au/nXZrk@vger.kernel.org
-X-Gm-Message-State: AFuF++n43bK0yWR37VI2Ws4l6eeNbpJv7JSFrgdhnwazp9mssv3+G27s
-	Jn+hxFSkJ3bBEjJ5hPil9bt3OzFoIx7qpQYq/+sgbqTUQGSo5KwWoiwYc+P8NTl0bvo=
-X-Gm-Gg: AR+sD10YHdMK6KGhZohfJxbGMWZJh3N2kIk4N0jUiQTEYv+UrrVCXzl9R0dm8qMFT9C
-	BT4UZGnTXxo8h4dhNsOLVngRlprgJdJ/rKl2C4+Q/QggqEAXaDDWLIY2pTL3PboGpbBcknshTL7
-	tzhpOtBUtoh5htrhTcF6Hz6afhlqM5Z9AwyCzQYYdBDQZ44CaDhkz7Osym34su4LulYcghCuEUt
-	st/fypCdVCQKSU5xYq9RGlKC37pSogUxlJJsrXpMqhfTQXT3M7/6Gx3HdxDq/1+VaDDUYJgorsE
-	E6uRfNKCf0apNzMvcJhe+VRu9RppwWciFQozYP1aMkteT8j/oUud3GNxxvxWII8G85T6EA1Y6kz
-	N4YUqUE8Z8R1BkDTGlDxsfNJe4Q4vEY5ZjIFASA1aGu/lOmzOmDTssc5LBWfp6itKdcPHMlW1kQ
-	haxBK2p3lEW/LGwN+hOm8LpFjxojZpwAoQnQ5y9TzFSZKqRcFb4RUk12yucNHMQg==
-X-Received: by 2002:a17:906:fe4b:b0:c20:3402:bd35 with SMTP id a640c23a62f3a-c246a605e78mr512915166b.12.1787302307160;
-        Fri, 21 Aug 2026 01:51:47 -0700 (PDT)
+        bh=HCHBLwYOrzsMfLvGvn9+AELP12LoSDK9pA2FNZaHrcE=;
+        b=AP1mk81dJg1yUEJA5fz8AzAAt1bFu5L5VCtZwrmyV0p+VVd2F8LLtq89NZBIQCqk/t
+         H9UrlIIIzz/K9qiAEkbNDatAJBj8wz8P4kaz3xi0G6N9SrK7zJ8zqE7UwmvpCxEu8Ao0
+         1ygFeK1D0u48VLt5Svfc+GQc/XEBpTJVn1++ZkGIU/m/2yd5Xsn4KWNtOUMU6qJqt12a
+         SjN2ZwGykmHUGLQ5J36CKUR1deiz5OUjQTwHCR/Gdgh0x9bp7WDjurJnpf8gy8Ar7VD9
+         ig5LMTOHQcKwwrO93jIDQP97PKEwTXDCn4Jsj39jNqHHPoLHhGxTzOxfL4SoTI8FX53w
+         mq6w==
+X-Forwarded-Encrypted: i=1; AHgh+Rpuof2QQ3r8nOFbTqMt63sO5aKPXlwaP4hJlXa0GEGEzIs71pTe7DVowq0qCBdnZ6i6yDPWisNWPVmrpmax@vger.kernel.org
+X-Gm-Message-State: AFuF++m3wau2s6zvXJKFVSPo2M+XU/41Dus3YkMTqbu1BON+bcRdPNzj
+	9LzgUc+aEflSigd96aZFAFe1jthdCs7wbz8FyjrPwrXQd1tJRSph2Qpk2leQPN2mrZE=
+X-Gm-Gg: AR+sD12jcUL84dRN56OR0TgALjSehGvmwFLZWdZm6BIKnRxPcJMbzOdU6jjYKZPK0YO
+	JiKAySyI2vRJgy1ZXLIMtdtfLYRb1qP7BKTpEsp1e9fOsbhLBSsjGQV3OmzlRaDKuh8iAqjvpck
+	kuO5K4DrGjzXBjClnmtiaS0f+v+DtF+bdISRonuBbq2NSRFHqLsHKqJaUN3C8wC+5w98GoxtARX
+	+t4rU51aDFLgzJBwyliZdyKOgRpxOLONB5dUaqhKoLh0+uEKrCAMeA37KnTlhbx2k3WLQiQ9k9x
+	oOwz8FGBNrQbjbs4kbzQ7yfKoUrY3ObSzscXxdPFBNDlXlBPKlJpFbmVw/8+sZlIUhhNbB+F+Q2
+	h89gIji+8Rhqpjjuu7wd1rt0GgWWCsV9sgCaFGoBxWUW15naFa2Q0o3S8by8oMj1uO27aI+GpqG
+	uhi+yBBs+3OQUP2rgpUbDN0lSBX7H1mk26BMpHhWbW/H24vim747Eu2C/WNLakDw==
+X-Received: by 2002:a05:6402:eaa:b0:698:6620:d988 with SMTP id 4fb4d7f45d1cf-6a42f28e8e8mr6157293a12.15.1787312352266;
+        Fri, 21 Aug 2026 04:39:12 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c245921e461sm395845966b.54.2026.08.21.01.51.46
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a3feec9e2esm6041668a12.5.2026.08.21.04.39.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 01:51:46 -0700 (PDT)
-Date: Fri, 21 Aug 2026 10:51:44 +0200
+        Fri, 21 Aug 2026 04:39:11 -0700 (PDT)
+Date: Fri, 21 Aug 2026 13:39:09 +0200
 From: Petr Mladek <pmladek@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-	song@kernel.org, live-patching@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: Re: [PATCH v2 0/2] ivepatch: Fix several bugs found during replace
- set implementation
-Message-ID: <aogRoHC151zl8VxW@pathway.suse.cz>
-References: <20260816090442.18128-1-laoar.shao@gmail.com>
- <aoWEX89bxOpo4873@pathway.suse.cz>
- <aocdq0hr_iQTimG0@jpoimboe>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: [GIT PULL] livepatching for 7.3
+Message-ID: <aog43Saa86EsHfoX@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aocdq0hr_iQTimG0@jpoimboe>
+Content-Transfer-Encoding: 8bit
 
-On Thu 2026-08-20 08:40:40, Josh Poimboeuf wrote:
-> On Wed, Aug 19, 2026 at 12:24:31PM +0200, Petr Mladek wrote:
-> > On Sun 2026-08-16 17:04:40, Yafang Shao wrote:
-> > > These fixes were found while implementing the replace set series [0].
-> > > They are independent of that series and can be applied separately.
-> > > 
-> > > Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.shao@gmail.com [0]
-> > > 
-> > > Changes:
-> > > v1->v2:
-> > > - minor improvements and acked-by (Song)
-> > > - fix issues reported by sashiko
-> > > 
-> > > v1: https://lore.kernel.org/live-patching/20260813030408.9761-1-laoar.shao@gmail.com/
-> > > 
-> > > Yafang Shao (2):
-> > >   livepatch: Fix wrong index in funcs cleanup error path
-> > 
-> > This patch is against scripts/livepatch/init.c which is part of
-> > klp-build framework. The klp-build-related changes usually
-> > go via the "tip" tree by Josh.
-> > 
-> > >   livepatch: Fix UAF of unregistered patch kobjects
-> > 
-> > This patch is against the kernel/livepatch/* code. These changes
-> > usually go via the "livepatching" tree by me.
-> > 
-> > Honestly, I am not sure how to handle this situation.
-> > Josh?
-> 
-> The scripts/livepatch changes have tended to be tied to objtool, which
-> is why they have gone through the tip tree.
+Hi Linus,
 
-Yup.
+please pull the latest livepatching changes from
 
-> I'm open to suggestions or ideas.  We could possibly rename or move that
-> scripts/livepatch directory (scripts/klp-build/?  tools/objtool/klp-build/?)
-> if that makes the boundary less confusing.
+  git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git tags/livepatching-for-7.3
 
-I like the idea with klp-build name. It might help people to
-distinguish the two areas.
+===================================
 
-> Or might there be some other maintainership model or way of splitting up
-> the files?
+- Move consistency checks to catch missing func->old_name before
+  the first access
 
-I guess that we need to keep the core livepatching code and klp-build
-stuff separated because klp-build is very tight with objtool and
-objtool is tight with arch code, ...
+- Allow to run livepatching selftests from top-level directory
 
-It might help to crate KLP BUILD section in MAINTAINERS.
-It would point to the tip tree. You would be the maintainer.
-And other livepatch people, including live-patching mailing list,
-might stay as reviewers.
+----------------------------------------------------------------
+Thomas Weißschuh (1):
+      kbuild: unset sub_make_done before calling kselftest build system
 
-> In any case, I'll go ahead and queue up patch 1 for tip for now.
+Yafang Shao (1):
+      livepatch: Fix NULL pointer dereference in klp_find_func()
 
-Thanks a lot.
-
-Best Regards,
-Petr
+ Makefile                |  4 ++--
+ kernel/livepatch/core.c | 34 ++++++++++++++++++++++------------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
