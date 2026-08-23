@@ -1,74 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD752D781B
-	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 20:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935D615C14F
+	for <live-patching@vger.kernel.org>; Sun, 23 Aug 2026 05:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787345164; cv=none; b=YQMCurYALIKG32/QX8+EEvWniGSSASuOjvKesMzQlMbl3SFmG04bJH2xbnDkUHEar+AUTyEV6CnDkeHl6TMztZvlwchVf9YB5ZO1/gqJPCixQrKHecA/k1OYptaMXHLr9OIEEnu+5Baw1n7CNFghXOvhKRGOfGUO3wGN5fpt1TA=
+	t=1787461235; cv=none; b=h1ctkzWexIstu6O2VYz0WaMaATQr/tCFhKDxNBYgvXp1+Shz7yydShZFtXpLUREIUG29CSpmtZBu1V1XqDZhSj5/ZcZgX9Di2UoGsXXbrltaZmaGHL/oU1IK7u2AYkjEapzzBZ1oJKcSdN9fXmPHW9qmrezdbA2vD+k1vsq/s1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787345164; c=relaxed/simple;
-	bh=M0dFDQ/Xoo04rbHs/A55S0BI1NO1LbkXQVDpJYALPqU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pvLrEW5LKWryNhcgamS9api32WVcn8kwcmPB6b9irp0yacXh//tKqdLCbimrmYqUjI9QkgnbjkIVzjKhATmKAWavdWeEco0YayyfN8RChu0RPhN8KOzENG5oYv327zPWkXuzdiIevRqIgPQgG9xPD25MqKRSFO6p6BZXlU56N0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlALvVEN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787461235; c=relaxed/simple;
+	bh=KBVhPHwGh7gCHrsssphUSdeOdVh3Sr96NStd12N7L0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T1e/U5zXTy2PS6EheI0CKdtskmBjJTjEcp+ZJuC30Fpkir61S2URQ9RVVWQ1SfBn93WZZz9DszWlrJ6dGHJfw8RY5MMz27SmIg31e7pvQVxgAMYPPfxrM3/066oFZtETz6O9GP+1mAhRicY8/CF1E7KaeS32UPx+jgUOIUVJmAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KQ9sZZ98; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlALvVEN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEF51F00AC4
-	for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 20:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787345163;
-	bh=eo92fRkWKyfdcGR7p0mN6kh7aFKmIvHxaVkvmoCRYHg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=JlALvVENfsv3bmSgehRO8W4TgZwXbgKI2dfMBlCYZJbt3skzLm1nXZgEq4hdblQQP
-	 wawGX/0ZLNtAlMi04FCOppqY3KvJlfv+oS/pGeEY75JoSs3YUH/HbqXn4fZLeSB5sN
-	 tIDiH0HXhdBHqGKnuBhW7kZtlTYwCP0gQkFSUelZBzJQgh7mwbLUMFf3y04Cv2TwTq
-	 bqFp/SLFbED4+cyMJepZrCq2v0+nueXk1TpekRmxbSyOvsUvgg+2QTcuFjfewXWgDC
-	 ++WqOnQLCmK3rilxjRwWg8M1MDq5h1yIQPrLkBscRH8E3DhhgkmgjyNXmwt34OJenF
-	 RuRRpXSjQnH6g==
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-52d590ce5cdso10546801cf.1
-        for <live-patching@vger.kernel.org>; Fri, 21 Aug 2026 13:46:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqbkSQxhpue/nZTf2GSrwWdWdiF+d3t9zXhH8RNbI4U/7lVc/j7WSR8u1zp414zAN60Rr4JJCEuScV1z5OY@vger.kernel.org
-X-Gm-Message-State: AFuF++nTTGSO3efekILar7yrO18/nqjv7BySLdBrhbotueiwtEwDpHnF
-	2vVYSSRQl3Soz4zXTb04NKrp0232khy9e0TRzx/jchMPlyOwZpJzu94GF066UBbnhuCllSkipNg
-	8kz++va1Ja4Tir/0owAvFOFn4KHBgCjA=
-X-Received: by 2002:a05:622a:5593:b0:52d:742b:aa58 with SMTP id
- d75a77b69052e-52df56e1157mr86239261cf.6.1787345162398; Fri, 21 Aug 2026
- 13:46:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQ9sZZ98"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38759bcd877so2773494a91.2
+        for <live-patching@vger.kernel.org>; Sat, 22 Aug 2026 22:00:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787461234; x=1788066034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KBVhPHwGh7gCHrsssphUSdeOdVh3Sr96NStd12N7L0I=;
+        b=KQ9sZZ98eIm9D9hR1Gnm/gZW8oC3J9L8jwvKC05kUIPFhNpTRijN8CP6rGGnH27iDF
+         7gGep+0BwLhmq5bX+1O9HpWkvXjTcUQ1ixutZ7cp3cWlbvkakq5NCKOSnANGN0UgQ2Cp
+         XJD6mh4gj3GW7l+HJaeG+wPMioz9Ubb1y3hzpXsIGzgBLXjlSLcSZO8+kJj+7TaBmPt0
+         fY9CdhzcBxmJbwiygGq0SHjHeq+cU4Y7UTcjI01H+LL3qCbgNJzZ+GTLIRmx2xQZSoyu
+         tAbvUSJUfAe9JJ4YYMsNaeeT3r9n9XxTNFdHvcpeJpbQRs0iBhT/6V+wFWtIyfCDifhx
+         o9Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787461234; x=1788066034;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KBVhPHwGh7gCHrsssphUSdeOdVh3Sr96NStd12N7L0I=;
+        b=A43TSbqb6i71DP/AUR7EfEoIo8vv4G+tmV0L7Pz3Q38fLubmOg3coIRLxq0Iec7B5K
+         pBbK35BkAk57DgYOZ+zOLac2v2thupdVNwbHWQL+dWHQXuTwrIPX2dfqgHdB6mEpdyxf
+         fFEdnjtViZ256np7QJjm+HcdQ2RouHPtlyt9po6tTf2IKPpey5ly0VMZLo1K95wWVc2H
+         fqBxShNUArGMVmU6x9ChDRAYADOrWVrmztZQRYaAV5U35fdHL0/ftJxdjyFIAlv/dSL7
+         DiI46HOw+lr9sQ/KztBOOrQVoX2VPw9r1aS777IuHDSInZPwALehTILDDpzs+hedyusj
+         x7OQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqGdwqJXfh1H3XODcD7PRpZ8HsmsPi6D4xHIF8JLf5tYGHgdDgpBPmsqzwo6k6KDxxFmgQWMMklKAhghfi6@vger.kernel.org
+X-Gm-Message-State: AFuF++nTCdXmNju145RS513HXwVJiQrzth0g2ox7H9d9p+Rgx5ITLoNo
+	dsuJFxdn0J0+jW57D58Br93WA0z/KpKS+GhUBo5NfOf+hKrK2L/v3tzA
+X-Gm-Gg: AR+sD13zfcUvW3A6m75J9wdTuGkwpBSFsDJuen0SjdYf096vjxTY61EJGrQMg2d4xhG
+	J2OO0xktdBRFWPFpvN81Yw4InV3h31uRRJI8NSkoh02sAmooa9eqrXcH0ZyCYNdG59EGghdUjND
+	2dYZGgWUsTcm2W9AMNR7Hx0FeYzGHuJvkY9VxA+lrcGP2YhzaoHZOTRbu/lgstT50abH/NO+EWe
+	lGcf7CV4AIXOaaMAukbOf+H5dXg+LMtpzKC8Oz8rbxUxRS5TzmrYgpmxT56nBHsNHboCwSZOD1c
+	ZtXzbBMG3Ul49dnVDH29CttUrejN+JOY8oZ82IrsAffrg2TUpjmh2bJGGbBmE9fVqv7ZB+qZHxt
+	oHB3bfkBfZ/dSToSYWIFnLIFfBAozOzqNewB9Xv4xN/53Tja+SigDRgENYvyuiPknxFIuPbp1Bt
+	LKHe889yJy3VfjwyoIFgD3ZaE1uXxbp5xffE8zdtjmWbgL5iloL55LYzFb4BojF4Lyfx864h29W
+	1e3hDVdpIM8I8C7S/wmBBjqvK2fB9b8YA==
+X-Received: by 2002:a17:90b:1f8d:b0:38c:a59b:5189 with SMTP id 98e67ed59e1d1-395df67778fmr16884913a91.15.1787461233876;
+        Sat, 22 Aug 2026 22:00:33 -0700 (PDT)
+Received: from Harrys-Laptop.hitronhub.home ([2407:4d00:6c05:13e8:edcf:d188:51c8:54cc])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e42cc144sm4731547a91.0.2026.08.22.22.00.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 22 Aug 2026 22:00:33 -0700 (PDT)
+From: Harry Hsu <x90613@gmail.com>
+To: pmladek@suse.com
+Cc: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	joe.lawrence@redhat.com,
+	live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] livepatch: Fix stack check for aliased old_func
+Date: Sun, 23 Aug 2026 13:00:29 +0800
+Message-ID: <20260823050029.35979-1-x90613@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <aohuTo9QOhzvCkP2@pathway.suse.cz>
+References: <aohuTo9QOhzvCkP2@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260821031648.48195-1-laoar.shao@gmail.com> <20260821031648.48195-3-laoar.shao@gmail.com>
-In-Reply-To: <20260821031648.48195-3-laoar.shao@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Fri, 21 Aug 2026 13:45:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6tXmjqW17FquDeaCWwN_4D4ets1Y1xTk0yMfjdNczzxA@mail.gmail.com>
-X-Gm-Features: AcwNN1X0em2RT8lpPrRDli0FHZ6vk90WthiSV1Nv6dZ58IxJNs25REvbGsO04sw
-Message-ID: <CAPhsuW6tXmjqW17FquDeaCWwN_4D4ets1Y1xTk0yMfjdNczzxA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] selftests/livepatch: filter debug messages in check_result()
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 20, 2026 at 8:17=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
+On Fri 2026-08-21 17:27:10, Petr Mladek wrote:
+> This might fix klp_check_stack_func() for A. But not for B. B won't
+> be the last entry so that klp_check_stack_func() would use
+> the list_next_entry() and will check for A on stack instead of
+> the original function.
 >
-[...]
+> Another _big problem_ is in klp_ftrace_handler(). It would use A
+> in PATCHED state and B in UNPATCHED. But it is not clear whether
+> A or B should be used in the PATCHED state. And it should use
+> the original code in UNPATCHED state.
 >
-> Filtering out every "kobject:" line also hides real WARN()s, e.g. the
-> one kobject_get() emits for an object whose refcount was not
-> initialized.  Filtering with "dmesg --level=3D..." is not enough either,
-> since the tests enable livepatch pr_debug() through dynamic_debug/control
-> and expect its messages.  Read the log with "dmesg --raw" and drop only
-> the debug-level messages without the "livepatch:" prefix, plus the
-> specific delayed-release info message.
+> IMHO, we must catch this situation when preparing livepatches
+> and when enabling the livepatch. A single livepatch must never
+> create two entries on any ops->func_stack.
 >
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> IMHO, we should catch the duplicate (aliased) entries in
+> klp_init_object_loaded() and return -EINVAL when they are found.
+>
+> I do not see any other solution. We could not decide which
+> struct klp_func should be used for the redirection when
+> more of them point to the same original function.
 
-Acked-by: Song Liu <song@kernel.org>
+You're right, thanks for pointing this out. list_is_last() only
+patches over the stack-check symptom for A and still leaves B wrong,
+and it does nothing for the klp_ftrace_handler() ambiguity you
+describe - there's really no sound way to pick between A and B once
+they're both live entries backed by the same old_func.
+
+Rejecting the duplicate at load time is the right fix. I'll send a
+v2 that detects aliased old_func addresses within the same klp_object
+in klp_init_object_loaded() and returns -EINVAL when found, instead
+of touching klp_check_stack_func().
+
+Thanks,
+Harry
