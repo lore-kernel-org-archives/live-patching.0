@@ -1,44 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9CE7383C83
-	for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 11:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E52400DE1
+	for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 12:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787659191; cv=none; b=m2ASSmyRBD8+L67mipdl3HlPvO/qxTpptiSwiZ48qLEihH5zn5xVT9kMSKTyJdn17ypQTErf0p5LlE7iOL3krJ9G7f4ZHuQneW6uJjvto08s8/hBrQNiaUd2GIEyuCuVIcIyKLl6T2xtcfXNvUdphkvvenhrHNpWjzRVp1xC8YA=
+	t=1787659579; cv=none; b=W52L69G1dx2PVtzWuH3NM67EhAa8H0KDtw1vGTnaF7bdU3HcHRVUSGsw/cSBq9xsiALHN+tHAgevV70kMQxRJoaSrC6o02XmXKpzoYca+ku7AoIWznMK3NuAUistnMXcHHG5YAWU1BYST9SYisMTlxSw2jeaIx8TZrUyMqAeiW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787659191; c=relaxed/simple;
-	bh=0A9fuR12Bv+fLjdUguiRFnzROQzeZGTfCSngsjfnoSA=;
+	s=arc-20240116; t=1787659579; c=relaxed/simple;
+	bh=89htUvbTfg8M/14fsnfPLLIyxju4u5xnXteL18LiH08=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OG/qPmedw4ArFDmYT0921XXrAtGVDGBbbZdQe+AWW1j4ildfLzmP8uTT40kXLTJc1Enc4tdY2IcTUde6bgNiNYTWqN6JEsleiKUVa9dhw9OsR1k50U4+s3opbJkbWGPV7ERyINVDRbcuZ7XTIPuic1X2Wwyz7WjZ6DPOtkdL+LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H0jJnG+g; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Nihp7vK7kkihXhw9UT02SVfb9LXERQfEHIkvXV9m0+qW/Tgc8IOQgVGb/9HyNmALsN36oUSJgAOOXhQ1TA7zlFjzpxYXSKlFaMsDyzFibUPvkx67hZhRlR+nQPAtb7LJTUexgcSdmgVXsRdUQ1UDLSTwdOU4rvQOJ04oEOlq/5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PIZesTyz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H0jJnG+g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50A6E1F000E9;
-	Tue, 25 Aug 2026 11:59:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PIZesTyz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB401F00A3A;
+	Tue, 25 Aug 2026 12:06:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787659189;
-	bh=DN0hnNvSVEK/cEBQc/1V6WfF/VWi1S+SvzN20Pr69I0=;
+	s=k20260515; t=1787659569;
+	bh=//Ywcsm1XtrbnWUdEus2M6tiypi8Bf7AdHk0bFKNCQs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=H0jJnG+gznhTmy0xnOWQ8XH+tI70yniEvTZaxD0E2eVF9aK+J2HtJNBfk8D5Dkw22
-	 a5fwOhQP1ahsiPQSvuD6lM1zic8lgr3XjW0oJk7dE20NSJzBy1kDy92tbKTRP308eg
-	 fkzLZLCRDj94JCc/t4Piac92vboHnv9/jPi+VWwzQzDpkZJR8I7QihcWMjb1yYSaUp
-	 qRSmS3Y6u1we9oJzfFaDFNwmxsoDSVqKz359wtsb29zC0hz+HamclHKsPHDveqCkSs
-	 g1kbxHbBRTb2OUHMI6jrvXgJspAIpnwBP2NsLoRomSqz99s3tBJXQX9lD/4wIjUUfR
-	 K5ClTXWh1Ao5g==
+	b=PIZesTyz/5MT0SZe81WiQ1sSWE8o47EMisW5UvKD6Ti8lQl9A3P5r/CWrBHHswzvT
+	 UbKabsgiqijKPhrdAdyWhUwwrfXyumaX4vPjYI6cL29co+cAMN7NU6FFVRM0BX4+wX
+	 zmH3+espv/yCtETIFZXrv5k5oybkLCjHidnjJldfYi/Iams2IqrLtAYA3/+ahue2EO
+	 FwieMRjAUUBvy7bJLRDzty/kx1w8KS9l0Qi7iIFuUK4XaM4UOMlv7kZ5/Gxm+MrxPG
+	 T+D/ms5sbrcn7SQ+Us/FOvdpY11r2FZ/U1QbdixBwHBnGzSaE1irHHxeCkHOA4hXlR
+	 gcRHawGYrN4cw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 for-next 3/8] livepatch: Implement replace set for
- scoped atomic replace
+Subject: Re: [PATCH v7 for-next 2/8] livepatch: Call klp_init_patch_early()
+ earlier
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yafang Shao" <laoar.shao@gmail.com>, mbenes@suse.cz, jpoimboe@kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, song@kernel.org, jikos@kernel.org
+To: pmladek@suse.com, jpoimboe@kernel.org, song@kernel.org, jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com, "Yafang
+ Shao" <laoar.shao@gmail.com>
 Cc: live-patching@vger.kernel.org
-In-Reply-To: <20260825114641.80452-4-laoar.shao@gmail.com>
+In-Reply-To: <20260825114641.80452-3-laoar.shao@gmail.com>
 References: <20260825114641.80452-1-laoar.shao@gmail.com>
- <20260825114641.80452-4-laoar.shao@gmail.com>
+ <20260825114641.80452-3-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 25 Aug 2026 11:59:48 +0000
-Message-Id: <20260825115949.50A6E1F000E9@smtp.kernel.org>
+Date: Tue, 25 Aug 2026 12:06:08 +0000
+Message-Id: <20260825120608.BAB401F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,78 +48,78 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Contradiction between documentation/commit message and actual co=
-de regarding the 'obsoletes' list.
+
+Pre-existing issues:
+- [High] Potential use-after-free of kobject delayed work structs during er=
+ror cleanup if CONFIG_DEBUG_KOBJECT_RELEASE is enabled.
 --
 
---- Patch [3]: [PATCH v7 for-next 3/8] livepatch: Implement replace set for=
- scoped atomic replace ---
-commit 32e1bcc9ed17f1580951816746e0cfa7cadbca0b
+--- Patch [2]: [PATCH v7 for-next 2/8] livepatch: Call klp_init_patch_early=
+() earlier ---
+commit b5f9135d749ffc4d6ea6c6a68a0fc6489e7a1cbf
 Author: Yafang Shao <laoar.shao@gmail.com>
 
-livepatch: Implement replace set for scoped atomic replace
+livepatch: Call klp_init_patch_early() earlier
+   =20
+Invoke klp_init_patch_early() during early initialization to avoid mixing
+for_each_() and for_each_*_static() variants later in the code.
 
-This commit replaces the boolean replace flag with a more flexible model
-using provides and obsoletes fields to allow multiple independent livepatch
-sets to coexist on the same system.
-
-> The klp-build script is updated with -p/--provides and -r/--obsoletes
-> options. The obsoletes list automatically includes the provides id
-> and deduplicates entries. Input validation rejects malformed values
-> at build time.
-
-[Severity: Medium]
-Is this description accurate? The code and inline comments in the build
-script and init.c explicitly state that the provides ID is not included in
-the obsoletes list, and the kernel instead relies on explicitly checking the
-provides ID directly.
-
-> diff --git a/Documentation/livepatch/cumulative-patches.rst b/Documentati=
-on/livepatch/cumulative-patches.rst
-> index 1931f318976a5..04352ae3f0d06 100644
-> --- a/Documentation/livepatch/cumulative-patches.rst
-> +++ b/Documentation/livepatch/cumulative-patches.rst
-
+> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
 [ ... ]
-
-> +Provides and Obsoletes
-> +-----------------------
-> +
-> +The ``provides`` field in ``struct klp_patch`` is an unsigned integer th=
-at
-> +identifies the livepatch's replace set. By default, it is 0.
-> +
-> +The ``obsoletes`` field is an optional array of unsigned integers that
-> +specifies additional ``provides`` ids to be replaced when this patch is
-> +loaded. By default, it includes the patch's own ``provides`` id, ensuring
-> +that a new patch always replaces any existing patch with the same
-> +``provides`` id.
-
-[Severity: Medium]
-This isn't a code bug, but does this documentation match the implementation?
-The text here states that the obsoletes field automatically includes the
-patch's own provides id by default.=20
-
-> diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-> index b52a8489d9f67..64bf3fce7fbc1 100755
-> --- a/scripts/livepatch/klp-build
-> +++ b/scripts/livepatch/klp-build
-
-[ ... ]
-
-> @@ -235,6 +254,37 @@ process_args() {
->  		exit 1
->  	fi
+> @@ -1152,6 +1152,14 @@ int klp_enable_patch(struct klp_patch *patch)
 > =20
-> +	# Remove duplicates from obsoletes (if specified)
-> +	# Note: provides ID is not added here; the kernel will replace
-> +	# livepatch with the same provides ID.
+>  	klp_init_patch_early(patch);
+> =20
+> +	if (!klp_is_patch_compatible(patch)) {
+> +		pr_err("Livepatch patch (%s) is not compatible with the already instal=
+led livepatches.\n",
+> +			patch->mod->name);
+> +		ret =3D -EINVAL;
+> +		goto err;
+> +	}
 
-[Severity: Medium]
-Here the build script explicitly notes that the provides ID is not added to
-the obsoletes list. Could the commit message and the documentation in
-cumulative-patches.rst be updated to match this behavior to avoid confusion?
+[Severity: High]
+This is a pre-existing issue, but does this error path expose a use-after-f=
+ree
+of kobject delayed work structs when CONFIG_DEBUG_KOBJECT_RELEASE is enable=
+d?
+
+Because kobject_add() has not yet run (it runs later in klp_init_patch()), =
+the
+child kobjects (obj and func) do not have their parent pointers set to
+patch->kobj during this cleanup path.
+
+When the error path jumps to err and calls klp_free_patch_start(), it drops
+references to the child kobjects. Since their parent pointers aren't set,
+putting the child kobjects does not elevate or pin the parent patch->kobj.=
+=20
+
+Consequently, the wait_for_completion() in klp_free_patch_finish() only wai=
+ts
+for the patch kobject to finish releasing, but not the child kobjects:
+
+kernel/livepatch/core.c:klp_free_patch_finish() {
+	...
+	kobject_put(&patch->kobj);
+	wait_for_completion(&patch->finish);
+
+	/* Put the module after the last access to struct klp_patch. */
+	if (!patch->forced)
+		module_put(patch->mod);
+}
+
+This allows the module memory to be completely freed while the delayed work
+for the child obj and func kobjects (which reside in the now-freed module
+memory) might still be queued. When the workqueue executes them, it results=
+ in
+a use-after-free.
+
+While this issue already existed for klp_init_patch() failures, moving
+klp_is_patch_compatible() after klp_init_patch_early() makes it trivially
+reachable by simply providing an incompatible livepatch.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825114641.8045=
-2-1-laoar.shao@gmail.com?part=3D3
+2-1-laoar.shao@gmail.com?part=3D2
