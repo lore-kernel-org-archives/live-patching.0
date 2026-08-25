@@ -1,63 +1,63 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD27386424
-	for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 11:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0DB3955C9
+	for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 11:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787658447; cv=none; b=evE3W3QtfM0dzI1txP111JCFIUP5zTOX5CRA4YINIily/qIATb6c21K/pPf3eN0dSxM2mzmHo30M1ErIE6Ch+1os/7+iAYTzf0sm5iHK73hmc+kFpQIXRSvcsFfdfTNwKrBPp5Nqet8z71l1CcYe/Pe1eAGA759XQKc8tI2sBZI=
+	t=1787658453; cv=none; b=cQodW1vWiNL3mzBVkbPJI4i7DZ68GkebWf6AAyR78VPliqUYfQa47Q3Dd4TQ2AqH1GyiL5eKCykNGz66ftnG/V10/vdVDegMH5/NeEaVdZpgv3IxAdw+Aoy1BOFrT6B2A7XIDXUtDJj/sHm+WnTKVl2ASg9td1fTAo6JlU+saac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787658447; c=relaxed/simple;
-	bh=w7JSStcfgDqaV4Tr76myIpBcuBymwfSn8nopkxbCqtk=;
+	s=arc-20240116; t=1787658453; c=relaxed/simple;
+	bh=kl0zUecAr94bgCo37/G2QYusCpUPCUTbxN5a2j+t2qc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mro+oKNPv8zlfVBkgIYKD6Y5CVOp5lrHlJlssN8yFOHJ2DOIbQ23f1Ca2/dea31qnr0TZpZCEOOp3v1fC/vcn9mth1Wc/AXdy7rVc/7r/Q6vc/hS+Y58WL9k9EEVNmFodrAzy3B2LK0F8zKks0aeHlfIwmDouyRuSlUC9dYd1oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=egiT/H/q; arc=none smtp.client-ip=209.85.215.170
+	 MIME-Version; b=CyaweCb3Gyzgg3cYzL2IRC46iHHi6Iw4EQbT0XsAwGNrzgDZuHp7xp3Kjj/BCNE8d6gfls9n901WY2hzajLgzxO+gxM0qt7kWVnXBIhkcG7u7ijGLdhnsZoeOj1PjQ5C1wP5NhGRbl/0jXYc1WCjG9V5rv9Ozytd8HMZbXqaj/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bN9Dwnb/; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="egiT/H/q"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ca00f126b7eso3410452a12.2
-        for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 04:47:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bN9Dwnb/"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84830c774a0so5120306b3a.1
+        for <live-patching@vger.kernel.org>; Tue, 25 Aug 2026 04:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787658445; x=1788263245; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787658451; x=1788263251; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dBKqD2PckBNK1I4NC8foeC9557dpGRTQjx0VTVADAs4=;
-        b=egiT/H/qYZmrV7Nqk1RcsiJx7OaAxOx+5AxpMmzmzK0XRK2fkBpYGOQHDcK2a9NE/0
-         hIV3lBxF2EDu41Lf+vU5436kTGKPRRvhh2pT4TcrcPXILvXxrBdY2MXhpaIJHJDMFD27
-         b9ASgX+t/niqOya4SpGdj80N5ag6OD1LTB2eSUqgXltpC2vsTo8a89XqI9h68QhPuNtb
-         UIek55DvKBSdEhR1oW61w2akaSGxQD07TJf309QR7uPVAq95NEDn50NnChO5LbUbZIKI
-         69fuYPY14Cjbx3U5ttmwfXnzSP+/Okffb/2OU/6MDs+6f5MdcpJ0SrFhV3kG886o0WjQ
-         3axw==
+        bh=68t19fuRmALkACdOuuQ0dowbBW+GelOm4AkbOmUpWHo=;
+        b=bN9Dwnb/tIC/5AD+BB4+nyHPePLNfLU1QUtQA2VMDlCX45Wftho6BgzNtvd0sesW8L
+         sWPvj1MsBlExPdyE+7KK1QAVpj9GxYLCCj4N5ur3SKdXQ6YYMncclTMfNNtSTRzXYbgG
+         IJ+GEajPUR9v8otQrKCRYMHBN+aQUI9Re4OXyLekoxGjRq4BZE/01mK2vWJX9qvjkosb
+         zgvJU0kzQc+bdrrp11RzxP1LP1aYVAzGYmx62NSmzFSTl789vIEqgElwPD3KGmiOTuP5
+         4Y3efejwMcSKU1BPv5gT+VTfgfqVNEJ4wclD7Phl7ltxkCUIGxLnQlj/Hpn04P03p2jr
+         wjjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787658445; x=1788263245;
+        d=1e100.net; s=20251104; t=1787658451; x=1788263251;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dBKqD2PckBNK1I4NC8foeC9557dpGRTQjx0VTVADAs4=;
-        b=qASU013wbpNL6watEwHX0lVokYrPIpMfYWckNA3WZ3RRtVcSaJ0qETL5RlfOTKFu69
-         tZKcbJ3srOrVbOAoIuh3vvmOOFZrvMFk4pWBu1wi9LNOoqvpcsM+pXDYhKzfmxxn/WMR
-         sNGq0WQKdte0gwL9YGkyF0z+MjoLS1zaiDqZgA5P24d3TNEnq5rOgyw7tSVxPjTzK46R
-         CFO04g+ZI2tvLPsSDDM/mK/D/cdArAYnLHs4uX3miSLzeH/4NSxpBnsYhR5Er72zUrF5
-         Ua0BmDaIZgDaC+jGt4IxNDOsHDdAiQ14P9U0c/DYidwh+sEHPHZ2HCA0qwnexRb3UuyW
-         IQLw==
-X-Gm-Message-State: AFuF++kNZEw560M9llfzMfAJqV4ZCiT4hZj7fnsRum/6tWMK/GE3Q6ZT
-	S64khFWzzRgr7Y0LjHHGqhcJgPw4Yfo7b9nYJadnO6jmlN+QRRnHwMnJ
-X-Gm-Gg: AR+sD135QulvmF9MBThk7s8iVpZKkDD4QrkQqHO4tbDe4UoHkv/06Q7A/hYl/XTcRns
-	4gEGrrS2WVXUrT3Zkt7yyYn/17/VrsoSZoBbdoVBRgqCltSolZd9oECGdplmI4FTn8ARyMkS3Vl
-	MzcuvR3mVYa+blfvItFj0065a572b8AGDLwCdx8lVvhcHTCBixDKpRC/k7ldPWWZ8Zgz4Za7+fE
-	aWfBr9Z2HEEo+cX7UTP4IpwI+zLCnPBVsouztiHNqPrX+jMxT7Vg0W8d79ASJ24gSQzVzz3VYQU
-	gJPtSzIJu8Mk4leQ4tzySmn8EESann+eu8COQHw/US8tAbz29Z9UItkpL2rqbD976/QvNx4oyza
-	pqKAn1MhhEMgOsgCYXoPs40KTLqXWZUVtoZQtzw35wEw4vf9LR4XGZLD7eIFqPFdESaDSm2qnfA
-	jMQLojw8Cmmhp53EL2zRy1coCGvOTCDrdbeX/ypLurwt4SwO+PtOS42+1ymAT7hGFNgLVoObOn1
-	jh8FappSOo4m6taz9rim4Oj8ac9eASnufl6Syg=
-X-Received: by 2002:a05:6a00:acc:b0:846:bc81:3e29 with SMTP id d2e1a72fcca58-8520b946107mr39744983b3a.2.1787658445285;
-        Tue, 25 Aug 2026 04:47:25 -0700 (PDT)
+        bh=68t19fuRmALkACdOuuQ0dowbBW+GelOm4AkbOmUpWHo=;
+        b=mLSOlGs3bz4LamjB80uisU2vANlCQmzGsiQEIdcI4t7mzEJnIifLO9G6wwDR86c5dA
+         46VrQ2vKcFdN1xb5uH2ye2O8b9kgC+2CJde+UauNiGQ3RQSdhQ3pz9GBW0WIYasIpna9
+         IARUGzAKPI8XvAM0kQpznG+p34qtbConjNs59mOLke8lpqEK3l24iixYnW0Td1kgUjAx
+         zTuG+nacLWJ1j/REj3PagrGUyhgW8uwJlPaRn5qu0uGTj1yx1CyIckEiCTLPSdcwNj6r
+         Vsg+eQhyBRiz8CKiMnPL1A6AjdwHxVppV751HCA5hOuz4O6YH8v+FpRkbQMI2ZPs00cO
+         5qIw==
+X-Gm-Message-State: AFuF++mA4BQxeQmpCQGm9/4rnw71cr/y1Jxw93tD25FNppT2B/hNliBj
+	PXBTe7F/EWVVpW6lFBKeQp0e73MGiyIP44Cq0+UkXbZyIx5fTVHK/lFp
+X-Gm-Gg: AR+sD13KBTCqt8wnaI2D0V9GUplFTJ8Z4he5Ss96LmVKxJkkVQdGYPEycC7sLyLM97R
+	uPNJhTr+l00Ig9ssZCZNSbO0iPtDUkJt/XRU6yZcVZ+XKjly/62+RV4FRDxsBi+QNJpuOONFZiI
+	PQtOBeEjCYPTRaHt8dHnnfrKMXoFvU2y3058eXpNhdGm/MJzjar0XcVzOg2ejH8KWMRR3+kbdcP
+	mDf1WE8NAN1OXBn29ksv5uLrb5kfVGPGmsdgTJs7PDRCsIzjYajmAbxa39fLkb/Xwq6VpahBmeI
+	pz5Rk2V68LF4nZkItTx+6sOjDNk+UuU5Med6IrTcZEcXM9ZAVZNOyGxwlwh1Z7A82jOdnnvpqgP
+	lWcAmIwssc3ts3Ko+WBWQJcuUSk8MpqD/ZNcCVSsaGRe6WdlKgoYUSyyTobdJQRftVBzFZq/WHb
+	OHpSW19uKWWohscNr/KvkduhqOPcocWEreSAjatLwW91Tf9sT7CwSXHibu6D+ojnQyxF2G+yO3I
+	J+ooTH0OszI/zUA0IKlJu/YTN+RKm1VkymAUq8=
+X-Received: by 2002:a05:6a21:3381:b0:3cc:841d:bb26 with SMTP id adf61e73a8af0-3cd913240damr13552885637.15.1787658450780;
+        Tue, 25 Aug 2026 04:47:30 -0700 (PDT)
 Received: from yafangs-Air ([240e:46e:1b00:ae5:3473:12aa:8e70:f95d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc199e5fcaasm1864438a12.24.2026.08.25.04.47.20
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc199e5fcaasm1864438a12.24.2026.08.25.04.47.25
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 25 Aug 2026 04:47:23 -0700 (PDT)
+        Tue, 25 Aug 2026 04:47:30 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: jpoimboe@kernel.org,
 	jikos@kernel.org,
@@ -67,9 +67,9 @@ To: jpoimboe@kernel.org,
 	song@kernel.org
 Cc: live-patching@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v7 for-next 5/8] selftests/livepatch: Adapt atomic replace tests to provides/obsoletes
-Date: Tue, 25 Aug 2026 19:46:38 +0800
-Message-ID: <20260825114641.80452-6-laoar.shao@gmail.com>
+Subject: [PATCH v7 for-next 6/8] selftests/livepatch: Add provides/obsoletes test scenarios
+Date: Tue, 25 Aug 2026 19:46:39 +0800
+Message-ID: <20260825114641.80452-7-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260825114641.80452-1-laoar.shao@gmail.com>
 References: <20260825114641.80452-1-laoar.shao@gmail.com>
@@ -81,303 +81,381 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The legacy "replace" field in struct klp_patch was replaced by the
-provides/obsoletes mechanism. As a result, the atomic replace
-selftests fail to build against kernels that only support
-provides/obsoletes.
+Now that the legacy "replace" field has been replaced by the
+provides/obsoletes mechanism, add test scenarios to verify the new
+behavior.
 
-Adapt the selftests so that they build and run on both old and new
-kernels:
+Fill in the #else branches of the test modules that were left as
+TODO placeholders in the previous patch:
 
-- test_modules/Makefile detects whether the kernel header still
-  declares the "replace" field. If so, it passes KLP_HAS_REPLACE to
-  the modules via ccflags-y.
+- test_klp_atomic_replace.c gains provides and obsoletes module
+  parameters for the provides/obsoletes based tests.
 
-- test_klp_atomic_replace.c and other source files using .replace guard
-  their replace module parameter and .replace assignment with
-  #ifdef KLP_HAS_REPLACE. The #else branches are left as TODO
-  placeholders for the upcoming provides/obsoletes based tests.
+- test_klp_callbacks_demo2.c gains a provides module parameter.
 
-- functions.sh adds detect_replace_attr(), which loads a temporary
-  livepatch and checks for the /sys/kernel/livepatch/<patch>/replace
-  attribute, setting HAS_REPLACE_ATTR accordingly.
+- test_klp_livepatch.c gains a provides module parameter so that it
+  can be loaded with a specific provides id for coexistence tests.
 
-- test-livepatch.sh and test-callbacks.sh run the tests that depend
-  on multiple livepatches coexisting or on the atomic replace
-  behavior ("multiple livepatches" and "atomic replace") only when
-  HAS_REPLACE_ATTR is set. These scenarios do not apply to the new
-  kernel, where provides=0 replaces any other livepatch by default.
+- test_klp_state.c and test_klp_state2.c add a comment in the #else
+  branch noting that provides=0 (the default) is equivalent to the
+  previous .replace=true behavior.
 
-The provides/obsoletes based selftests will be added later.
+Add test-provides.sh with four test scenarios:
+
+1. provides=0 replaces provides=0: two livepatches with provides=0
+   that modify different functions; the second replaces the first.
+
+2. Same provides replaces: two livepatches with provides=1 that
+   modify different functions; the second replaces the first.
+
+3. Obsoletes replaces: a livepatch with provides=2 and obsoletes=[1]
+   replaces a livepatch with provides=1. The provides/obsoletes sysfs
+   values are verified.
+
+4. provides=0 coexists with provides=1: two livepatches with
+   different provides ids that modify different functions coexist,
+   verifying that provides=0 does not replace a patch with a
+   different provides id.
+
+The provides/obsoletes based tests only run on kernels that no longer
+support the legacy "replace" attribute.
 
 Assisted-by: Comagic:DeepSeek-V4-Flash
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/livepatch/functions.sh   | 15 +++++++++++++++
- .../selftests/livepatch/test-callbacks.sh        |  6 ++++++
- .../selftests/livepatch/test-livepatch.sh        |  6 ++++++
- .../selftests/livepatch/test_modules/Makefile    | 14 ++++++++++++++
- .../test_modules/test_klp_atomic_replace.c       | 16 ++++++++++++++++
- .../test_modules/test_klp_callbacks_demo2.c      | 16 ++++++++++++++++
- .../livepatch/test_modules/test_klp_state.c      |  7 +++++++
- .../livepatch/test_modules/test_klp_state2.c     |  7 +++++++
- 8 files changed, 87 insertions(+)
+ tools/testing/selftests/livepatch/Makefile    |   3 +-
+ .../livepatch/test-provides-obsoletes.sh      | 174 ++++++++++++++++++
+ .../test_modules/test_klp_atomic_replace.c    |  22 ++-
+ .../test_modules/test_klp_callbacks_demo2.c   |  12 +-
+ .../test_modules/test_klp_livepatch.c         |   9 +
+ .../livepatch/test_modules/test_klp_state.c   |   5 +-
+ .../livepatch/test_modules/test_klp_state2.c  |   5 +-
+ 7 files changed, 205 insertions(+), 25 deletions(-)
+ create mode 100755 tools/testing/selftests/livepatch/test-provides-obsoletes.sh
 
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 30dc677b2f45..17810521d069 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -351,6 +351,21 @@ function does_sysfs_exist() {
- 	[[ -f "$SYSFS_KLP_DIR/$mod/$attr" ]]
- }
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index a080eb54a215..38f98594d883 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -11,7 +11,8 @@ TEST_PROGS := \
+ 	test-ftrace.sh \
+ 	test-sysfs.sh \
+ 	test-syscall.sh \
+-	test-kprobe.sh
++	test-kprobe.sh \
++	test-provides-obsoletes.sh
  
-+# detect_replace_attr() - detect whether the running kernel still exposes
-+# the legacy "replace" sysfs attribute and set HAS_REPLACE_ATTR
-+# accordingly. The atomic replace tests are only run when the attribute
-+# is present. The provides/obsoletes based tests will be added later.
-+function detect_replace_attr() {
-+	HAS_REPLACE_ATTR=0
+ TEST_FILES := settings
+ 
+diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+new file mode 100755
+index 000000000000..2707457b9133
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+@@ -0,0 +1,174 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2026 Yafang Shao <laoar.shao@gmail.com>
 +
-+	load_lp test_klp_livepatch
-+	if does_sysfs_exist test_klp_livepatch "replace"; then
-+		HAS_REPLACE_ATTR=1
-+	fi
-+	disable_lp test_klp_livepatch
-+	unload_lp test_klp_livepatch
-+}
++. $(dirname $0)/functions.sh
 +
- # check_sysfs_rights(modname, rel_path, expected_rights) - check sysfs
- # path permissions
- #	modname - livepatch module creating the sysfs interface
-diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-index 2a03deb26a12..e9b2dc6ea099 100755
---- a/tools/testing/selftests/livepatch/test-callbacks.sh
-+++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-@@ -11,6 +11,8 @@ MOD_TARGET_BUSY=test_klp_callbacks_busy
- 
- setup_config
- 
++MOD_ATOMIC=test_klp_atomic_replace
++MOD_LIVEPATCH=test_klp_livepatch
++
++setup_config
++
 +detect_replace_attr
 +
- 
- # Test a combination of loading a kernel module and a livepatch that
- # patches a function in the first module.  Load the target module
-@@ -451,6 +453,7 @@ $MOD_TARGET_BUSY: busymod_work_func exit
- $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
- 
- 
++# The provides/obsoletes based tests only run on kernels that no longer
++# support the legacy "replace" attribute.
 +if [[ "$HAS_REPLACE_ATTR" == "1" ]]; then
- # Test loading multiple livepatches.  This test-case is mainly for comparing
- # with the next test-case.
- #
-@@ -499,8 +502,10 @@ $MOD_LIVEPATCH: post_unpatch_callback: vmlinux
- livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH2
- % rmmod $MOD_LIVEPATCH"
++	echo "SKIP: kernel still supports the legacy replace attribute"
++	exit $ksft_skip
 +fi
- 
- 
-+if [[ "$HAS_REPLACE_ATTR" == "1" ]]; then
- # Load multiple livepatches, but the second as an 'atomic-replace'
- # patch.  When the latter loads, the original livepatch should be
- # disabled and *none* of its pre/post-unpatch callbacks executed.  On
-@@ -548,6 +553,7 @@ $MOD_LIVEPATCH2: post_unpatch_callback: vmlinux
- livepatch: '$MOD_LIVEPATCH2': unpatching complete
- % rmmod $MOD_LIVEPATCH2
- % rmmod $MOD_LIVEPATCH"
-+fi
- 
- 
- exit 0
-diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-index c44c5341a2f1..b3b7cd81e3d0 100755
---- a/tools/testing/selftests/livepatch/test-livepatch.sh
-+++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-@@ -13,6 +13,8 @@ MOD_TARGET_PATCH=test_klp_mod_patch
- 
- setup_config
- 
-+detect_replace_attr
 +
- 
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
-@@ -49,6 +51,7 @@ livepatch: '$MOD_LIVEPATCH1': unpatching complete
- % rmmod $MOD_LIVEPATCH1"
- 
- 
-+if [[ "$HAS_REPLACE_ATTR" == "1" ]]; then
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
- # - load another livepatch and verify that both livepatches are active
-@@ -107,8 +110,10 @@ livepatch: '$MOD_LIVEPATCH1': starting unpatching transition
- livepatch: '$MOD_LIVEPATCH1': completing unpatching transition
- livepatch: '$MOD_LIVEPATCH1': unpatching complete
- % rmmod $MOD_LIVEPATCH1"
-+fi
- 
- 
-+if [[ "$HAS_REPLACE_ATTR" == "1" ]]; then
- # - load a livepatch that modifies the output from /proc/cmdline and
- #   verify correct behavior
- # - load two additional livepatches and check the number of livepatch modules
-@@ -196,6 +201,7 @@ livepatch: '$MOD_REPLACE': starting unpatching transition
- livepatch: '$MOD_REPLACE': completing unpatching transition
- livepatch: '$MOD_REPLACE': unpatching complete
- % rmmod $MOD_REPLACE"
-+fi
- 
- 
- # - load a target module that provides /proc/test_klp_mod_target with
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index a13d398585dc..a4fe469a6501 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -16,6 +16,20 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state3.o \
- 	test_klp_syscall.o
- 
-+# The legacy "replace" field was replaced by provides/obsoletes. When the
-+# kernel (KDIR) still supports "replace", pass KLP_HAS_REPLACE to the
-+# modules so that they can #ifdef the legacy "replace" code. Otherwise
-+# the modules are built with the provides/obsoletes based code (to be
-+# added later).
-+KLP_SRC := $(if $(wildcard $(srctree)/include/linux/livepatch.h), \
-+		 $(srctree), $(KDIR))
-+KLP_HAS_REPLACE := $(shell grep -q 'bool replace' \
-+		 $(KLP_SRC)/include/linux/livepatch.h 2>/dev/null \
-+		 && echo y)
-+ifeq ($(KLP_HAS_REPLACE),y)
-+ccflags-y += -DKLP_HAS_REPLACE
-+endif
 +
- # Ensure that KDIR exists, otherwise skip the compilation
- modules:
- ifneq ("$(wildcard $(KDIR))", "")
++# - load a livepatch with provides=0 (cmdline), then another with
++#   provides=0 (meminfo). The second replaces the first (same provides).
++# - unload the remaining livepatch
++
++start_test "provides 0 replaces provides 0"
++
++load_lp $MOD_LIVEPATCH provides=0
++load_lp $MOD_ATOMIC provides=0
++
++check_sysfs_value "$MOD_ATOMIC" "enabled" "1"
++
++disable_lp $MOD_ATOMIC
++unload_lp $MOD_ATOMIC
++unload_lp $MOD_LIVEPATCH
++
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko provides=0
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++livepatch: '$MOD_LIVEPATCH': patching complete
++% insmod test_modules/$MOD_ATOMIC.ko provides=0
++livepatch: enabling patch '$MOD_ATOMIC'
++livepatch: '$MOD_ATOMIC': initializing patching transition
++livepatch: '$MOD_ATOMIC': starting patching transition
++livepatch: '$MOD_ATOMIC': completing patching transition
++livepatch: '$MOD_ATOMIC': patching complete
++% echo 0 > /sys/kernel/livepatch/$MOD_ATOMIC/enabled
++livepatch: '$MOD_ATOMIC': initializing unpatching transition
++livepatch: '$MOD_ATOMIC': starting unpatching transition
++livepatch: '$MOD_ATOMIC': completing unpatching transition
++livepatch: '$MOD_ATOMIC': unpatching complete
++% rmmod $MOD_ATOMIC
++% rmmod $MOD_LIVEPATCH"
++
++
++# - load a livepatch with provides=1 (cmdline), then another with
++#   provides=1 (meminfo). The second replaces the first (same provides).
++# - unload the remaining livepatch
++
++start_test "same provides replaces"
++
++load_lp $MOD_LIVEPATCH provides=1
++load_lp $MOD_ATOMIC provides=1
++
++check_sysfs_value "$MOD_ATOMIC" "enabled" "1"
++
++disable_lp $MOD_ATOMIC
++unload_lp $MOD_ATOMIC
++unload_lp $MOD_LIVEPATCH
++
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko provides=1
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++livepatch: '$MOD_LIVEPATCH': patching complete
++% insmod test_modules/$MOD_ATOMIC.ko provides=1
++livepatch: enabling patch '$MOD_ATOMIC'
++livepatch: '$MOD_ATOMIC': initializing patching transition
++livepatch: '$MOD_ATOMIC': starting patching transition
++livepatch: '$MOD_ATOMIC': completing patching transition
++livepatch: '$MOD_ATOMIC': patching complete
++% echo 0 > /sys/kernel/livepatch/$MOD_ATOMIC/enabled
++livepatch: '$MOD_ATOMIC': initializing unpatching transition
++livepatch: '$MOD_ATOMIC': starting unpatching transition
++livepatch: '$MOD_ATOMIC': completing unpatching transition
++livepatch: '$MOD_ATOMIC': unpatching complete
++% rmmod $MOD_ATOMIC
++% rmmod $MOD_LIVEPATCH"
++
++
++# - load a livepatch with provides=1 (cmdline), then another with
++#   provides=2 and obsoletes=[1] (meminfo). The second replaces the
++#   first (obsoletes contains the first patch's provides id).
++# - verify the provides/obsoletes sysfs values
++# - unload the remaining livepatch
++
++start_test "obsoletes replaces"
++
++load_lp $MOD_LIVEPATCH provides=1
++load_lp $MOD_ATOMIC provides=2 obsoletes=1
++
++check_sysfs_value "$MOD_ATOMIC" "provides" "2"
++check_sysfs_value "$MOD_ATOMIC" "obsoletes" "1"
++
++disable_lp $MOD_ATOMIC
++unload_lp $MOD_ATOMIC
++unload_lp $MOD_LIVEPATCH
++
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko provides=1
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++livepatch: '$MOD_LIVEPATCH': patching complete
++% insmod test_modules/$MOD_ATOMIC.ko provides=2 obsoletes=1
++livepatch: enabling patch '$MOD_ATOMIC'
++livepatch: '$MOD_ATOMIC': initializing patching transition
++livepatch: '$MOD_ATOMIC': starting patching transition
++livepatch: '$MOD_ATOMIC': completing patching transition
++livepatch: '$MOD_ATOMIC': patching complete
++% echo 0 > /sys/kernel/livepatch/$MOD_ATOMIC/enabled
++livepatch: '$MOD_ATOMIC': initializing unpatching transition
++livepatch: '$MOD_ATOMIC': starting unpatching transition
++livepatch: '$MOD_ATOMIC': completing unpatching transition
++livepatch: '$MOD_ATOMIC': unpatching complete
++% rmmod $MOD_ATOMIC
++% rmmod $MOD_LIVEPATCH"
++
++
++# - load two livepatches with different provides ids that modify
++#   different functions and verify that they coexist
++# - in particular, verify that provides=0 does NOT replace a patch
++#   with a different provides id
++# - unload both livepatches
++
++start_test "provides 0 coexists with provides 1"
++
++load_lp $MOD_LIVEPATCH provides=0
++load_lp $MOD_ATOMIC provides=1
++
++disable_lp $MOD_LIVEPATCH
++unload_lp $MOD_LIVEPATCH
++disable_lp $MOD_ATOMIC
++unload_lp $MOD_ATOMIC
++
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko provides=0
++livepatch: enabling patch '$MOD_LIVEPATCH'
++livepatch: '$MOD_LIVEPATCH': initializing patching transition
++livepatch: '$MOD_LIVEPATCH': starting patching transition
++livepatch: '$MOD_LIVEPATCH': completing patching transition
++livepatch: '$MOD_LIVEPATCH': patching complete
++% insmod test_modules/$MOD_ATOMIC.ko provides=1
++livepatch: enabling patch '$MOD_ATOMIC'
++livepatch: '$MOD_ATOMIC': initializing patching transition
++livepatch: '$MOD_ATOMIC': starting patching transition
++livepatch: '$MOD_ATOMIC': completing patching transition
++livepatch: '$MOD_ATOMIC': patching complete
++% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
++livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
++livepatch: '$MOD_LIVEPATCH': starting unpatching transition
++livepatch: '$MOD_LIVEPATCH': completing unpatching transition
++livepatch: '$MOD_LIVEPATCH': unpatching complete
++% rmmod $MOD_LIVEPATCH
++% echo 0 > /sys/kernel/livepatch/$MOD_ATOMIC/enabled
++livepatch: '$MOD_ATOMIC': initializing unpatching transition
++livepatch: '$MOD_ATOMIC': starting unpatching transition
++livepatch: '$MOD_ATOMIC': completing unpatching transition
++livepatch: '$MOD_ATOMIC': unpatching complete
++% rmmod $MOD_ATOMIC"
++
++exit 0
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c b/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
-index 5af7093ca00c..4b3ed17886e7 100644
+index 4b3ed17886e7..b0ed924eeeed 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
-@@ -7,9 +7,16 @@
- #include <linux/kernel.h>
- #include <linux/livepatch.h>
- 
-+#ifdef KLP_HAS_REPLACE
- static int replace;
+@@ -12,10 +12,15 @@ static int replace;
  module_param(replace, int, 0644);
  MODULE_PARM_DESC(replace, "replace (default=0)");
-+#else
-+/*
-+ * TODO: Add provides/obsoletes module parameters for the
-+ * provides/obsoletes based tests (to be added later).
-+ */
-+#endif
+ #else
+-/*
+- * TODO: Add provides/obsoletes module parameters for the
+- * provides/obsoletes based tests (to be added later).
+- */
++static unsigned int provides;
++module_param(provides, uint, 0644);
++MODULE_PARM_DESC(provides, "provides id (default=0)");
++
++#define KLP_MAX_OBSOLETES 16
++static unsigned int obsoletes[KLP_MAX_OBSOLETES];
++static int nr_obsoletes;
++module_param_array(obsoletes, uint, &nr_obsoletes, 0644);
++MODULE_PARM_DESC(obsoletes, "obsoletes provides ids");
+ #endif
  
  #include <linux/seq_file.h>
- static int livepatch_meminfo_proc_show(struct seq_file *m, void *v)
-@@ -36,12 +43,21 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
-+#ifdef KLP_HAS_REPLACE
- 	/* set .replace in the init function below for demo purposes */
-+#endif
- };
- 
- static int test_klp_atomic_replace_init(void)
- {
-+#ifdef KLP_HAS_REPLACE
+@@ -53,10 +58,11 @@ static int test_klp_atomic_replace_init(void)
+ #ifdef KLP_HAS_REPLACE
  	patch.replace = replace;
-+#else
-+	/*
-+	 * TODO: Set provides/obsoletes from the module parameters
-+	 * for the provides/obsoletes based tests (to be added later).
-+	 */
-+#endif
+ #else
+-	/*
+-	 * TODO: Set provides/obsoletes from the module parameters
+-	 * for the provides/obsoletes based tests (to be added later).
+-	 */
++	patch.provides = provides;
++	if (nr_obsoletes > 0) {
++		patch.obsoletes = obsoletes;
++		patch.nr_obsoletes = nr_obsoletes;
++	}
+ #endif
  	return klp_enable_patch(&patch);
  }
- 
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-index 5417573e80af..135da6d4d882 100644
+index 135da6d4d882..a0e7b7d1e198 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
-@@ -7,9 +7,16 @@
+@@ -12,10 +12,9 @@ static int replace;
+ module_param(replace, int, 0644);
+ MODULE_PARM_DESC(replace, "replace (default=0)");
+ #else
+-/*
+- * TODO: Add provides/obsoletes module parameters for the
+- * provides/obsoletes based tests (to be added later).
+- */
++static unsigned int provides;
++module_param(provides, uint, 0644);
++MODULE_PARM_DESC(provides, "provides id (default=0)");
+ #endif
+ 
+ static const char *const module_state[] = {
+@@ -89,10 +88,7 @@ static int test_klp_callbacks_demo2_init(void)
+ #ifdef KLP_HAS_REPLACE
+ 	patch.replace = replace;
+ #else
+-	/*
+-	 * TODO: Set provides/obsoletes from the module parameters
+-	 * for the provides/obsoletes based tests (to be added later).
+-	 */
++	patch.provides = provides;
+ #endif
+ 	return klp_enable_patch(&patch);
+ }
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c b/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
+index aff08199de71..fa2bc6ec921d 100644
+--- a/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
+@@ -7,6 +7,12 @@
  #include <linux/kernel.h>
  #include <linux/livepatch.h>
  
-+#ifdef KLP_HAS_REPLACE
- static int replace;
- module_param(replace, int, 0644);
- MODULE_PARM_DESC(replace, "replace (default=0)");
-+#else
-+/*
-+ * TODO: Add provides/obsoletes module parameters for the
-+ * provides/obsoletes based tests (to be added later).
-+ */
++#ifndef KLP_HAS_REPLACE
++static unsigned int provides;
++module_param(provides, uint, 0644);
++MODULE_PARM_DESC(provides, "provides id (default=0)");
 +#endif
- 
- static const char *const module_state[] = {
- 	[MODULE_STATE_LIVE]	= "[MODULE_STATE_LIVE] Normal state",
-@@ -72,12 +79,21 @@ static struct klp_object objs[] = {
- static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
-+#ifdef KLP_HAS_REPLACE
- 	/* set .replace in the init function below for demo purposes */
-+#endif
- };
- 
- static int test_klp_callbacks_demo2_init(void)
++
+ #include <linux/seq_file.h>
+ static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
  {
-+#ifdef KLP_HAS_REPLACE
- 	patch.replace = replace;
-+#else
-+	/*
-+	 * TODO: Set provides/obsoletes from the module parameters
-+	 * for the provides/obsoletes based tests (to be added later).
-+	 */
+@@ -36,6 +42,9 @@ static struct klp_patch patch = {
+ 
+ static int test_klp_livepatch_init(void)
+ {
++#ifndef KLP_HAS_REPLACE
++	patch.provides = provides;
 +#endif
  	return klp_enable_patch(&patch);
  }
  
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-index 57a4253acb01..3492472e5d07 100644
+index 3492472e5d07..313401a5506e 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-@@ -142,7 +142,14 @@ static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
- 	.states = states,
-+#ifdef KLP_HAS_REPLACE
+@@ -145,10 +145,7 @@ static struct klp_patch patch = {
+ #ifdef KLP_HAS_REPLACE
  	.replace = true,
-+#else
-+/*
-+ * TODO: Add provides/obsoletes module parameters for the
-+ * provides/obsoletes based tests (to be added later).
-+ */
-+#endif
+ #else
+-/*
+- * TODO: Add provides/obsoletes module parameters for the
+- * provides/obsoletes based tests (to be added later).
+- */
++	/* provides=0 by default, replaces all provides=0 patches */
+ #endif
  };
  
- static int test_klp_callbacks_demo_init(void)
 diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-index c978ea4d5e67..8160b565a659 100644
+index 8160b565a659..1afc2cabc39d 100644
 --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
 +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-@@ -171,7 +171,14 @@ static struct klp_patch patch = {
- 	.mod = THIS_MODULE,
- 	.objs = objs,
- 	.states = states,
-+#ifdef KLP_HAS_REPLACE
+@@ -174,10 +174,7 @@ static struct klp_patch patch = {
+ #ifdef KLP_HAS_REPLACE
  	.replace = true,
-+#else
-+/*
-+ * TODO: Add provides/obsoletes module parameters for the
-+ * provides/obsoletes based tests (to be added later).
-+ */
-+#endif
+ #else
+-/*
+- * TODO: Add provides/obsoletes module parameters for the
+- * provides/obsoletes based tests (to be added later).
+- */
++	/* provides=0 by default, replaces all provides=0 patches */
+ #endif
  };
  
- static int test_klp_callbacks_demo_init(void)
 -- 
 2.52.0
 
