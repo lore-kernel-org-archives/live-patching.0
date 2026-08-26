@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3954E3B4EA4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3E23B5303
 	for <live-patching@vger.kernel.org>; Wed, 26 Aug 2026 19:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787773821; cv=none; b=RMqjdUrne1eVMVRtVon5iNQvKTVhPzNv5QLo96GV7eLkIMYdn+CHIeEBLHK02mb0IzORgI/wYZCGbKEsC6z34utMha6RR5rdfoqraQIVYFUgMoZRQuI7z9mm2ffDDA6D0ltTO+6v49sxYtm1ifbKIFeMPgF90+Ew6WH2R3LpByM=
+	t=1787773820; cv=none; b=uYXaWmJIe2Z8EHyq1o87TGFa6oDP1UYgdLuWPlgCSFGTQEItB1ZMUfL108mXosxjLR+Z99Dyh5D7fu8Q7QW4u3b3zO4vkRjQVthL6jqHRBfrUFPaIRNt3sA4qwYQck/JD2elHVH3qG+qRvHVw4ef9D4xjPp7xWuG+ZLbPnc1rxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787773821; c=relaxed/simple;
-	bh=J8B8bRZRyctvVnAuGlJ3w78i19weh055An38kJv9J08=;
+	s=arc-20240116; t=1787773820; c=relaxed/simple;
+	bh=rEuLUsLWOT6XG2H0ug7PCU+HTdJX3Spbx1VaEW7dXdM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=SXzwQkCeJXY74GwWcPVCp+52XJuk/Xj5qLKU0wZQVx4l7044NGHKGK8zg96aMU6v4aFq/cjSFNuDSqztts3JHL8YDnhv5gwnOrDGoU7z8sLoODzvLzF/Vm2zTNYmgwGJsnVYS6p+kjuLJ58e5dX21oLLcwphjg5B6y24RdyQrE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WI5rEBHY; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-type; b=LjMAbx0UeFMwpdDn9Z7ck5bzNxvoDp2sBL84XR1fAdhfPf6913rwDnCFSy5M8cUBxS3qy9+toIw/aIVKCLJ8cBe1UCktQJwb6XZGPuWwHFun+vNJW3pV6QjbDSCxcYLFoRjP5gwaCARRtDMOMPmhTmh4UjBWbPssES7BA3ReyK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KB/+OGIX; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WI5rEBHY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KB/+OGIX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1787773812;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QIzXD75edV/cIPqeb4p1kvOcxJSAFOx2/iqu04v/n+I=;
-	b=WI5rEBHYnqWP9qLdGfGwSKP8XMcUxi2wBqlbRx2+cThbUmyfTz39TrrsJWQX30DQskcqSi
-	uOIDVRJUMcUVQ8XvlebaPAQl2l8R3GN5xSZS4K6XWAVS5vCH+jf60GeBQl53Q5SZ6h91/J
-	vgYkHskbsizZOhjAsAObam454lgRC64=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=5SqGrkHQm8dJ5v8HQSwteRwkbtcEIrt/1QGX2z5fIVY=;
+	b=KB/+OGIX2lddSp2R1glcb8dFyiWXija/otxjYPq22Vc/6/XfOjIZvmTwx/rxqfTgvqZCLi
+	n6s2JGgSGV3URK8C2tKcDXtFO1E0EJerOXxw45M9TA7xxm8l0PPyAxuN9aQ5vdTS6LvkFL
+	CR7EvhcmSEBU2UGGniSLdrBNpY4j6dU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-193-bQ2G4Pi6O1-2VsRQIqL8lg-1; Wed,
- 26 Aug 2026 15:50:08 -0400
-X-MC-Unique: bQ2G4Pi6O1-2VsRQIqL8lg-1
-X-Mimecast-MFC-AGG-ID: bQ2G4Pi6O1-2VsRQIqL8lg_1787773807
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-101-UpAgDIDEPz-uOaXxF5mNUg-1; Wed,
+ 26 Aug 2026 15:50:07 -0400
+X-MC-Unique: UpAgDIDEPz-uOaXxF5mNUg-1
+X-Mimecast-MFC-AGG-ID: UpAgDIDEPz-uOaXxF5mNUg_1787773806
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 31B441801356;
-	Wed, 26 Aug 2026 19:50:07 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 255D230002ED;
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E237C19540EF;
 	Wed, 26 Aug 2026 19:50:05 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BD2F73000239;
+	Wed, 26 Aug 2026 19:50:04 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH v2 3/7] objtool/klp: allow special section entry size overrides
-Date: Wed, 26 Aug 2026 15:49:56 -0400
-Message-ID: <20260826195000.455905-4-joe.lawrence@redhat.com>
+Subject: [RFC PATCH v2 2/7] objtool/klp: add --symvers option to klp diff
+Date: Wed, 26 Aug 2026 15:49:55 -0400
+Message-ID: <20260826195000.455905-3-joe.lawrence@redhat.com>
 In-Reply-To: <20260826195000.455905-1-joe.lawrence@redhat.com>
 References: <20260826195000.455905-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -64,87 +64,71 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Special section entry sizes (ALT_ENTRY_SIZE, JUMP_ENTRY_SIZE,
-EX_ENTRY_SIZE) are built into objtool from arch-specific headers.  When
-processing cached unit test objects that were built from a different
-kernel version, these compiled-in sizes may not match the objects'
-actual entry sizes, causing create_fake_symbols() to incorrectly parse
-special sections.
+Add a --symvers (-s) option that accepts a path to Module.symvers.  When
+provided, it replaces the default "Module.symvers" filename used by the
+auto-detection logic.
 
-Allow the user to override the compiled-in defaults via environment
-variables of the same name.  When unset, behavior is unchanged.  This
-will enable a klp-diff unit test runner to pass the correct entry sizes
-from test metadata.
+This decoupling helps to enable scenarios like out-of-tree module
+patching and unit testing of klp-diff, where object files /
+Module.symvers live outside the kernel tree.
+
+The existing auto-detection behavior (try cwd, then top_level_dir()
+fallback) is preserved regardless of whether --symvers is specified.
 
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- tools/objtool/klp-diff.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ tools/objtool/klp-diff.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index f40c128fdd49..4195b3ccff15 100644
+index 1726d17f31e5..f40c128fdd49 100644
 --- a/tools/objtool/klp-diff.c
 +++ b/tools/objtool/klp-diff.c
-@@ -21,6 +21,8 @@
- #include <linux/string.h>
- #include <linux/jhash.h>
+@@ -35,6 +35,7 @@ struct export {
+ 	bool mod_ns;
+ };
  
-+#include <arch/special.h>
-+
- #define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
++static const char *symvers_path = "Module.symvers";
+ bool debug, debug_correlate, debug_clone;
+ int indent;
  
- struct elfs {
-@@ -1638,6 +1640,22 @@ static int clone_sym_relocs(struct elfs *e, struct symbol *patched_sym)
+@@ -48,6 +49,7 @@ static const struct option klp_diff_options[] = {
+ 	OPT_BOOLEAN('d', "debug", &debug, "enable all debug output"),
+ 	OPT_BOOLEAN(0, "debug-correlate", &debug_correlate, "enable correlation debug output"),
+ 	OPT_BOOLEAN(0, "debug-clone", &debug_clone, "enable cloning debug output"),
++	OPT_STRING('s', "symvers", &symvers_path, "path", "path to Module.symvers (default: Module.symvers)"),
+ 	OPT_END(),
+ };
  
- }
+@@ -116,19 +118,23 @@ static char *normalize_modname(char *name)
  
-+static unsigned int entry_size_from_env(const char *name, unsigned int def)
-+{
-+	const char *str = getenv(name);
-+	char *end;
-+	unsigned long val;
-+
-+	if (!str)
-+		return def;
-+
-+	val = strtoul(str, &end, 10);
-+	if (*end || !val)
-+		return def;
-+
-+	return val;
-+}
-+
- static int create_fake_symbol(struct elf *elf, struct section *sec,
- 			      unsigned long offset, size_t size)
+ static int read_exports(void)
  {
-@@ -1781,6 +1799,27 @@ static int create_fake_symbols(struct elf *elf)
- 		}
+-	const char *symvers = "Module.symvers";
+ 	char line[1024], *path = NULL;
+ 	unsigned int line_num = 0;
+ 	FILE *file;
  
- 		entry_size = sec->sh.sh_entsize;
+-	file = fopen(symvers, "r");
+-	if (!file) {
+-		path = top_level_dir(symvers);
++	if (!symvers_path) {
++		ERROR("missing symvers path");
++		return -1;
++	}
 +
-+		/*
-+		 * Some special sections have multiple relocs per entry,
-+		 * so the reloc-based heuristic below doesn't work.  Use
-+		 * the arch-defined entry sizes for known special sections.
-+		 */
-+		if (!entry_size) {
-+			if (!strcmp(sec->name, ".altinstructions"))
-+				entry_size = entry_size_from_env("ALT_ENTRY_SIZE", ALT_ENTRY_SIZE);
-+			else if (!strcmp(sec->name, "__jump_table"))
-+				entry_size = entry_size_from_env("JUMP_ENTRY_SIZE", JUMP_ENTRY_SIZE);
-+			else if (!strcmp(sec->name, "__ex_table"))
-+				entry_size = entry_size_from_env("EX_ENTRY_SIZE", EX_ENTRY_SIZE);
-+
-+			if (entry_size && sec_size(sec) % entry_size) {
-+				ERROR("%s: entry size %u doesn't divide section size %lu",
-+				      sec->name, entry_size, sec_size(sec));
-+				return -1;
-+			}
-+		}
-+
- 		if (!entry_size) {
- 			entry_size = arch_reloc_size(sec->rsec->relocs);
- 			if (sec_size(sec) != entry_size * sec_num_entries(sec->rsec)) {
++	file = fopen(symvers_path, "r");
++	if (!file && symvers_path[0] != '/') {
++		path = top_level_dir(symvers_path);
+ 		if (path)
+ 			file = fopen(path, "r");
+ 	}
+ 	if (!file) {
+-		ERROR("can't open '%s', \"objtool diff\" should be run from the kernel tree", symvers);
++		ERROR("can't open '%s', \"objtool diff\" should be run from the kernel tree", symvers_path);
+ 		free(path);
+ 		return -1;
+ 	}
 -- 
 2.55.0
 
