@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF8D3AA9D1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D017512D1F1
 	for <live-patching@vger.kernel.org>; Wed, 26 Aug 2026 19:50:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787773825; cv=none; b=SFPQYHlo7mgpfaLnw/YvjFHMBZbTG+H3Jbat+/XhQ0C28XXUlVIZNZWy9Ls29fvJpcmVmOBCvhWvyaPBjVV7fohC3Ms9f258+BqJ8Fe+WRduYtjk+5DFlr2ueB/cUimd0UbB8BCn1Qh8Hoeg8mreh11+KJtHgCOB4SV6BefM4J4=
+	t=1787773826; cv=none; b=fFHLLkdxD6HEptivTVHLmaR9/vLspfkfrFD5bAsp3qoumNnpRbmh7XlmnHzdRJiN0RK9e4JLfaXsZAxCqUJ0Fc5Nx8wfzo6HmRQk8X9qG6uEUmuXm5PF+mpxbnPuAgKc6yx4bI0d8A3FkuXBp8dVQo635Mw8KFiyl3DuPbbEI8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787773825; c=relaxed/simple;
-	bh=55fQY2rJMMZPq06fjwVNxkluNrQ8owT/nK4USVDFeRo=;
+	s=arc-20240116; t=1787773826; c=relaxed/simple;
+	bh=mQw88AaXmnhXzHokeWbOoXM8Fsooidi4oE7gFV6DNM4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-type; b=KXmuqQmPiCgM0TA1YdHlqeyKjXUG8Drp02FVqa9qimDApapE9SpBobcGV8ThdV5Zh/uuzkhVcABjS5MGkxJd2kay9b4ZOEi6rfvHB+GvQwzcBjOJGf1uR20VRf33oxpTqYZR7zalUBhQcMn/FKCAhC9Cy48xMox7OZb+uMYiyyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZAzy338Y; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-type; b=uu7tmavUtBrtgbHkWSXY5NZw6Q6Cp2l7mt+UbBQF/vJ+Lr/TlVPcbfNBsl/NKvFKUwWlqJWvoA8ob/KIB6mQQWgA7gR/P3Zbt27kYkzWo+UgYRLjKffQC1rOoeaRGSMraZ8jVLbq8V6y49Ezj9gXbtGPqD3YtnlPnxN07TuM8uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FBbDGvWr; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZAzy338Y"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FBbDGvWr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787773813;
+	s=mimecast20190719; t=1787773816;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vq+q+4VI16FbdxhtAm2z4pJmmTvdV3JyAVtTBEwFyJw=;
-	b=ZAzy338YrquVSB/avikTUVdOT/I9By7SCnATFeWvEzNVEO2BnjI2vRMJI3U3jq8GXasFKD
-	xnNmhhS15B3lHLacRQv7NkHEyopJtI5/+6LVUzTOeewBpjtgmLvlw6ViCookIjNykr/mZS
-	IeEiflgv5Dc2ZXqc/MA9X63MFu0UCLY=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=SQPnx5hQuK3mw5cxbMCsY1FeKaXsAsViCj56CZeirQ8=;
+	b=FBbDGvWra5pYR0yLfozktOOLlLk34V8hRB7OmkvKc5QFZES0IQODAHOTz0naqjOGzewN0f
+	M5KKBvHRay0fiTKPWrJ4OdaJH6Zl8u5diKFjRZ+7ZEwL99dJSh1IhXgIdy4OCW6HNiJJ0V
+	03TUOQW5amnGb3OITvmmMTYMC/nHBPU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-584-9eI0khK6Nu2IgJjRYkWe9A-1; Wed,
- 26 Aug 2026 15:50:12 -0400
-X-MC-Unique: 9eI0khK6Nu2IgJjRYkWe9A-1
-X-Mimecast-MFC-AGG-ID: 9eI0khK6Nu2IgJjRYkWe9A_1787773811
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-FAq8brFDPMOM_B2YiehVzA-1; Wed,
+ 26 Aug 2026 15:50:11 -0400
+X-MC-Unique: FAq8brFDPMOM_B2YiehVzA-1
+X-Mimecast-MFC-AGG-ID: FAq8brFDPMOM_B2YiehVzA_1787773809
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1EE411955E7E;
-	Wed, 26 Aug 2026 19:50:11 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F2BB630002E9;
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B86BA184BA9F;
 	Wed, 26 Aug 2026 19:50:09 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE2F13000239;
+	Wed, 26 Aug 2026 19:50:08 +0000 (UTC)
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: live-patching@vger.kernel.org
 Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -49,9 +49,9 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Petr Mladek <pmladek@suse.com>,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [RFC PATCH v2 6/7] livepatch/klp-build: add pre-built object support for advanced OOT workflows
-Date: Wed, 26 Aug 2026 15:49:59 -0400
-Message-ID: <20260826195000.455905-7-joe.lawrence@redhat.com>
+Subject: [RFC PATCH v2 5/7] livepatch/klp-build: add basic out-of-tree module support
+Date: Wed, 26 Aug 2026 15:49:58 -0400
+Message-ID: <20260826195000.455905-6-joe.lawrence@redhat.com>
 In-Reply-To: <20260826195000.455905-1-joe.lawrence@redhat.com>
 References: <20260826195000.455905-1-joe.lawrence@redhat.com>
 Precedence: bulk
@@ -64,252 +64,274 @@ Content-type: text/plain
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Most real-world out-of-tree drivers use complicated, non-standard build
-systems (DKMS, cmake, autoconf, proprietary toolchains) that cannot be
-driven by klp-build's internal build stages.  Rather than attempting to
-accommodate every third-party build system, let the user handle the
-build process and supply the object pairs directly.
+klp-build is currently limited to patching in-tree kernel modules.
+Introduce a --oot-dir option to enable livepatch generation for basic
+out-of-tree (OOT) modules.  This requires the associated kernel tree to
+be fully built (Module.symvers must exist).
 
-Enhance klp-build with --orig-dir and --patched-dir options that accept
-directories of pre-built .o files.  The user is responsible for building
-original and patched objects externally.  The only hard requirement is
-that both builds use -ffunction-sections and -fdata-sections so that
-objtool can identify changed functions at the object level.
+The OOT workflow is as follows:
 
-From there, klp-build performs its binary comparison, symbol extraction,
-and livepatch module assembly pipeline used for in-tree patches, only
-with the build steps factored out.  External symbol ownership is
-determined from the target kernel's Module.symvers (--symvers,
-defaulting to $PWD/Module.symvers).
+  cd /path/to/built-kernel
+  ./scripts/livepatch/klp-build --oot-dir /path/to/mymodule my-fix.patch
 
-The new options are mutually exclusive with --oot-dir (which drives the
-build itself) and --short-circuit (which is specific to the standard
-build pipeline).
+With this option, klp-build performs two builds (original and patched)
+of the OOT module via `make M=...` instead of a full kernel rebuild.
+The resulting objects are then processed and diffed to produce the final
+livepatch .ko.
 
-The workflow is as follows:
-
-  # 1. Build OOT objects with -ffunction-sections and -fdata-sections
-  mkdir -p /tmp/orig && cp $OOT/my_module.o /tmp/orig/
-
-  # 2. (Optional) leverage the kernel's fix-patch-lines script to "undo"
-  #    the effects of line number shift by the patch
-  $KDIR/scripts/livepatch/fix-patch-lines $OOT/fix-overflow.patch \
-      | recountdiff > /tmp/fixed.patch
-
-  # 3. Apply patch, rebuild
-  mkdir -p /tmp/patched && cp $OOT/my_module.o /tmp/patched/
-
-  # 4. Generate the livepatch
-  cd $KDIR
-  ./scripts/livepatch/klp-build \
-      --orig-dir /tmp/orig \
-      --patched-dir /tmp/patched \
-      --symvers $KDIR/Module.symvers \
-      -o livepatch-my_module.ko
-
-NOTE: klp-build does not verify that user-supplied objects were built
-against the correct kernel headers or with compatible compiler options.
-The resulting livepatch module is only as correct as the inputs
-provided.
+Note that --oot-dir drives the build via `make M=`, assuming a simple
+Kbuild/Makefile layout.  This is suited for small test modules and bug
+reproducers rather than full OOT drivers with complex build systems
+(which should use --orig-dir/--patched-dir instead).
 
 Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 ---
- scripts/livepatch/klp-build | 110 +++++++++++++++++++++++++++++++++---
- 1 file changed, 102 insertions(+), 8 deletions(-)
+ scripts/livepatch/klp-build | 84 ++++++++++++++++++++++++++++---------
+ 1 file changed, 64 insertions(+), 20 deletions(-)
 
 diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index b60f5a5da31e..e118f133e923 100755
+index b52a8489d9f6..b60f5a5da31e 100755
 --- a/scripts/livepatch/klp-build
 +++ b/scripts/livepatch/klp-build
-@@ -22,6 +22,9 @@ shopt -s lastpipe
+@@ -21,6 +21,7 @@ shopt -s lastpipe
+ 
  unset DEBUG_CLONE DIFF_CHECKSUM SKIP_CLEANUP VERBOSE XTRACE
  
- OOT_DIR=""
-+USER_ORIG_DIR=""
-+USER_PATCHED_DIR=""
-+SYMVERS_PATH=""
++OOT_DIR=""
  REPLACE=1
  SHORT_CIRCUIT=0
  JOBS="$(getconf _NPROCESSORS_ONLN)"
-@@ -127,6 +130,7 @@ trap trap_err ERR
- __usage() {
- 	cat <<EOF
- Usage: $SCRIPT [OPTIONS] PATCH_FILE(s)
-+       $SCRIPT --orig-dir=<DIR> --patched-dir=<DIR> [OPTIONS]
- Generate a livepatch module.
+@@ -137,6 +138,7 @@ Options:
  
- Options:
-@@ -139,6 +143,9 @@ Options:
  Advanced Options:
     -d, --debug			Show symbol/reloc cloning decisions
-        --oot-dir=<DIR>		Out-of-tree module source directory
-+       --orig-dir=<DIR>		Directory of pre-built original .o files
-+       --patched-dir=<DIR>	Directory of pre-built patched .o files
-+       --symvers=<FILE>		Path to Module.symvers [default: \$PWD/Module.symvers]
++       --oot-dir=<DIR>		Out-of-tree module source directory
     -S, --short-circuit=STEP	Start at build step (requires prior --keep-tmp)
  				   1|orig		Build original kernel (default)
  				   2|patched		Build patched kernel
-@@ -162,7 +169,7 @@ process_args() {
+@@ -160,7 +162,7 @@ process_args() {
  	local patch
  
  	short="hfj:o:vdS:T"
--	long="help,show-first-changed,jobs:,oot-dir:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
-+	long="help,show-first-changed,jobs:,oot-dir:,orig-dir:,patched-dir:,symvers:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
+-	long="help,show-first-changed,jobs:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
++	long="help,show-first-changed,jobs:,oot-dir:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
  
  	args=$(getopt --options "$short" --longoptions "$long" -- "$@") || {
  		echo; usage; exit
-@@ -208,6 +215,18 @@ process_args() {
- 				OOT_DIR="$2"
- 				shift 2
+@@ -202,6 +204,10 @@ process_args() {
+ 				keep_tmp=1
+ 				shift
  				;;
-+			--orig-dir)
-+				USER_ORIG_DIR="$2"
-+				shift 2
-+				;;
-+			--patched-dir)
-+				USER_PATCHED_DIR="$2"
-+				shift 2
-+				;;
-+			--symvers)
-+				SYMVERS_PATH="$2"
++			--oot-dir)
++				OOT_DIR="$2"
 +				shift 2
 +				;;
  			-S | --short-circuit)
  				[[ ! -d "$TMP_DIR" ]] && die "--short-circuit requires preserved klp-tmp dir"
  				keep_tmp=1
-@@ -236,7 +255,18 @@ process_args() {
- 		esac
+@@ -364,11 +370,21 @@ check_unsupported_patches() {
+ 		get_patch_files "$patch" | mapfile -t files
+ 
+ 		for file in "${files[@]}"; do
++			# In and out-of-tree paths to reject
+ 			case "$file" in
+-				lib/*|*/vdso/*|*/realmode/rm/*|*.S)
++				*.S)
+ 					die "${patch}: unsupported patch to $file"
+ 					;;
+ 			esac
++
++			# In-tree paths to reject
++			if [[ -z "$OOT_DIR" ]]; then
++				case "$file" in
++					lib/*|*/vdso/*|*/realmode/rm/*)
++						die "${patch}: unsupported patch to $file"
++						;;
++				esac
++			fi
+ 		done
  	done
+ }
+@@ -377,13 +393,14 @@ apply_patch() {
+ 	local patch="$1"
+ 	shift
+ 	local extra_args=("$@")
++	local patch_target="${OOT_DIR:-$PWD}"
+ 	local drift_regex="with fuzz|offset [0-9]+ line"
+ 	local output
+ 	local status
  
--	if [[ $# -eq 0 ]] && (( SHORT_CIRCUIT <= 2 )); then
-+	if [[ -n "$USER_ORIG_DIR" || -n "$USER_PATCHED_DIR" ]]; then
-+		[[ -n "$USER_ORIG_DIR" && -n "$USER_PATCHED_DIR" ]] ||
-+			die "--orig-dir and --patched-dir must both be specified"
-+		[[ -v NAME ]] ||
-+			die "--orig-dir/--patched-dir requires -o <output.ko>"
-+		[[ -n "$OOT_DIR" ]] &&
-+			die "--orig-dir/--patched-dir and --oot-dir are mutually exclusive"
-+		(( SHORT_CIRCUIT > 0 )) &&
-+			die "--short-circuit is not used with --orig-dir/--patched-dir"
-+		[[ $# -gt 0 ]] &&
-+			die "patch files are not used with --orig-dir/--patched-dir"
-+	elif [[ $# -eq 0 ]] && (( SHORT_CIRCUIT <= 2 )); then
- 		usage
- 		exit 1
- 	fi
-@@ -456,7 +486,19 @@ validate_patches() {
- do_init() {
- 	[[ ! "$PWD" -ef "$SCRIPT_DIR/../.." ]] && die "please run from the kernel root directory"
+ 	[[ ! -f "$patch" ]] && die "$patch doesn't exist"
+ 	status=0
+-	output=$(patch -p1 --dry-run --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" < "$patch" 2>&1) || status=$?
++	output=$(patch -d "$patch_target" -p1 --dry-run --no-backup-if-mismatch -r /dev/null "${extra_args[@]}" < "$patch" 2>&1) || status=$?
+ 	if [[ "$status" -ne 0 ]]; then
+ 		echo "$output" >&2
+ 		die "$patch did not apply"
+@@ -398,9 +415,10 @@ apply_patch() {
  
--	if [[ -n "$OOT_DIR" ]]; then
-+	if [[ -n "$USER_ORIG_DIR" ]]; then
-+		[[ -d "$USER_ORIG_DIR" ]] || die "directory not found: $USER_ORIG_DIR"
-+		[[ -d "$USER_PATCHED_DIR" ]] || die "directory not found: $USER_PATCHED_DIR"
-+		USER_ORIG_DIR="$(realpath "$USER_ORIG_DIR")"
-+		USER_PATCHED_DIR="$(realpath "$USER_PATCHED_DIR")"
-+		if [[ -n "$SYMVERS_PATH" ]]; then
-+			SYMVERS_PATH="$(realpath "$SYMVERS_PATH")"
-+			[[ -f "$SYMVERS_PATH" ]] || die "Module.symvers not found: $SYMVERS_PATH"
-+		else
-+			[[ -f "$PWD/Module.symvers" ]] ||
-+				die "no Module.symvers in $PWD; use --symvers to specify"
-+		fi
-+	elif [[ -n "$OOT_DIR" ]]; then
- 		[[ -d "$OOT_DIR" ]] || die "module directory not found: $OOT_DIR"
- 		OOT_DIR="$(realpath "$OOT_DIR")"
- 		[[ -f "$OOT_DIR/Kbuild" || -f "$OOT_DIR/Makefile" ]] ||
-@@ -482,14 +524,19 @@ do_init() {
- 	(( SHORT_CIRCUIT <= 1 )) && rm -rf "$TMP_DIR"
- 	mkdir -p "$TMP_DIR"
+ revert_patch() {
+ 	local patch="$1"
++	local patch_target="${OOT_DIR:-$PWD}"
+ 	local tmp=()
  
-+	validate_config
-+	set_module_name
-+	set_kernelversion
-+
-+	# Pre-built OOT init complete
-+	if [[ -n "$USER_ORIG_DIR" ]]; then
-+		return 0
-+	fi
-+
- 	APPLIED_PATCHES=()
+-	patch -p1 -R --force --no-backup-if-mismatch -r /dev/null &> /dev/null < "$patch" || true
++	patch -d "$patch_target" -p1 -R --force --no-backup-if-mismatch -r /dev/null &> /dev/null < "$patch" || true
  
- 	[[ -x "$FIX_PATCH_LINES" ]] || die "can't find fix-patch-lines"
- 	command -v recountdiff &>/dev/null || die "recountdiff not found (install patchutils)"
--
--	validate_config
--	set_module_name
--	set_kernelversion
+ 	for p in "${APPLIED_PATCHES[@]}"; do
+ 		[[ "$p" == "$patch" ]] && continue
+@@ -436,10 +454,17 @@ validate_patches() {
  }
  
- # Refresh the patch hunk headers, specifically the line numbers and counts.
-@@ -757,7 +804,11 @@ diff_objects() {
+ do_init() {
+-	# We're not yet smart enough to handle anything other than in-tree
+-	# builds in pwd.
+ 	[[ ! "$PWD" -ef "$SCRIPT_DIR/../.." ]] && die "please run from the kernel root directory"
+ 
++	if [[ -n "$OOT_DIR" ]]; then
++		[[ -d "$OOT_DIR" ]] || die "module directory not found: $OOT_DIR"
++		OOT_DIR="$(realpath "$OOT_DIR")"
++		[[ -f "$OOT_DIR/Kbuild" || -f "$OOT_DIR/Makefile" ]] ||
++			die "no Kbuild or Makefile in $OOT_DIR"
++		[[ -f "$PWD/Module.symvers" ]] ||
++			die "kernel must be built first (no Module.symvers in $PWD)"
++	fi
++
+ 	if (( SHORT_CIRCUIT >= 2 )); then
+ 		[[ -f "$ORIG_DIR/.complete" ]] || die "-S $SHORT_CIRCUIT requires completed $ORIG_DIR"
+ 	fi
+@@ -471,6 +496,7 @@ do_init() {
+ refresh_patch() {
+ 	local patch="$1"
+ 	local tmpdir="$PATCH_TMP_DIR"
++	local patch_target="${OOT_DIR:-$PWD}"
+ 	local input_files=()
+ 	local output_files=()
+ 
+@@ -483,11 +509,11 @@ refresh_patch() {
+ 	get_patch_output_files "$patch" | mapfile -t output_files
+ 
+ 	# Copy orig source files to 'a'
+-	echo "${input_files[@]}" | xargs cp --parents --target-directory="$tmpdir/a"
++	( cd "$patch_target" && echo "${input_files[@]}" | xargs cp --parents --target-directory="$tmpdir/a" )
+ 
+ 	# Copy patched source files to 'b'
+ 	apply_patch "$patch" "--silent"
+-	echo "${output_files[@]}" | xargs cp --parents --target-directory="$tmpdir/b"
++	( cd "$patch_target" && echo "${output_files[@]}" | xargs cp --parents --target-directory="$tmpdir/b" )
+ 	revert_patch "$patch"
+ 
+ 	# Diff 'a' and 'b' to make a clean patch
+@@ -529,6 +555,7 @@ clean_kernel() {
+ 	cmd=("make")
+ 	cmd+=("--silent")
+ 	cmd+=("-j$JOBS")
++	[[ -n "$OOT_DIR" ]] && cmd+=("M=$OOT_DIR")
+ 	cmd+=("clean")
+ 
+ 	"${cmd[@]}"
+@@ -567,7 +594,11 @@ build_kernel() {
+ 	fi
+ 	cmd+=("-j$JOBS")
+ 	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections")
+-	cmd+=("vmlinux")
++	if [[ -z "$OOT_DIR" ]]; then
++		cmd+=("vmlinux")
++	else
++		cmd+=("M=$OOT_DIR")
++	fi
+ 	cmd+=("modules")
+ 
+ 	"${cmd[@]}"							\
+@@ -579,13 +610,20 @@ build_kernel() {
+ find_objects() {
+ 	local opts=("$@")
+ 
+-	# Find root-level vmlinux.o and non-root-level .ko files,
+-	# excluding klp-tmp/ and hidden directories.
+-	find "$PWD" -mindepth 1 \
+-		    \( -path "$TMP_DIR" -o -name ".*" -o -regex "$PWD/[^/][^/]*\.ko" \) -prune -o \
+-		    -type f "${opts[@]}"				\
+-		    \( -name "*.ko" -o -path "$PWD/vmlinux.o" \)	\
+-		    -printf '%P\n'
++	if [[ -z "$OOT_DIR" ]]; then
++		# In-tree: find root-level vmlinux.o and non-root-level .ko files,
++		# excluding klp-tmp/ and hidden directories.
++		find "$PWD" -mindepth 1 \
++			    \( -path "$TMP_DIR" -o -name ".*" -o -regex "$PWD/[^/][^/]*\.ko" \) -prune -o \
++			    -type f "${opts[@]}"				\
++			    \( -name "*.ko" -o -path "$PWD/vmlinux.o" \)	\
++			    -printf '%P\n'
++	else
++		# OOT: find .ko at any depth under the module dir
++		find "$OOT_DIR" -path "$OOT_DIR/.git" -prune -o \
++			-type f "${opts[@]}" \
++			-name "*.ko" -printf '%P\n'
++	fi
+ }
+ 
+ # Copy all .o archives to $ORIG_DIR
+@@ -597,10 +635,11 @@ copy_orig_objects() {
+ 
+ 	find_objects | mapfile -t files
+ 
++	local obj_root="${OOT_DIR:-$PWD}"
+ 	xtrace_save "copying original objects"
+ 	for _file in "${files[@]}"; do
+ 		local rel_file="${_file/.ko/.o}"
+-		local file="$PWD/$rel_file"
++		local file="$obj_root/$rel_file"
+ 		local orig_file="$ORIG_DIR/$rel_file"
+ 		local orig_dir="$(dirname "$orig_file")"
+ 
+@@ -633,10 +672,11 @@ copy_patched_objects() {
+ 
+ 	find_objects "${opts[@]}" | mapfile -t files
+ 
++	local obj_root="${OOT_DIR:-$PWD}"
+ 	xtrace_save "copying changed objects"
+ 	for _file in "${files[@]}"; do
+ 		local rel_file="${_file/.ko/.o}"
+-		local file="$PWD/$rel_file"
++		local file="$obj_root/$rel_file"
+ 		local orig_file="$ORIG_DIR/$rel_file"
+ 		local patched_file="$PATCHED_DIR/$rel_file"
+ 		local patched_dir="$(dirname "$patched_file")"
+@@ -717,6 +757,7 @@ diff_objects() {
  		cmd+=("klp")
  		cmd+=("diff")
  		(( ${#opts[@]} > 0 )) && cmd+=("${opts[@]}")
--		[[ -n "$OOT_DIR" ]] && cmd+=("--symvers" "$PWD/Module.symvers")
-+		if [[ -n "$SYMVERS_PATH" ]]; then
-+			cmd+=("--symvers" "$SYMVERS_PATH")
-+		elif [[ -n "$OOT_DIR" || -n "$USER_ORIG_DIR" ]]; then
-+			cmd+=("--symvers" "$PWD/Module.symvers")
-+		fi
++		[[ -n "$OOT_DIR" ]] && cmd+=("--symvers" "$PWD/Module.symvers")
  		cmd+=("$orig_file")
  		cmd+=("$patched_file")
  		cmd+=("$out_file")
-@@ -931,11 +982,54 @@ build_patch_module() {
- }
- 
- 
-+setup_oot() {
-+	local files=()
-+	local rel
-+
-+	mkdir -p "$ORIG_DIR" "$PATCHED_DIR"
-+
-+	find "$USER_ORIG_DIR" -type f -name "*.o" -printf '%P\n' | mapfile -t files
-+	[[ ${#files[@]} -gt 0 ]] || die "no .o files found in $USER_ORIG_DIR"
-+	for rel in "${files[@]}"; do
-+		[[ -f "$USER_PATCHED_DIR/$rel" ]] ||
-+			die "$rel found in orig dir but missing from patched dir"
-+		mkdir -p "$ORIG_DIR/$(dirname "$rel")"
-+		mkdir -p "$PATCHED_DIR/$(dirname "$rel")"
-+		cp -f "$USER_ORIG_DIR/$rel" "$ORIG_DIR/$rel"
-+		cp -f "$USER_PATCHED_DIR/$rel" "$PATCHED_DIR/$rel"
-+	done
-+
-+	touch "$ORIG_DIR/.complete"
-+	touch "$PATCHED_DIR/.complete"
-+}
-+
-+
- ################################################################################
- 
+@@ -895,13 +936,16 @@ build_patch_module() {
  process_args "$@"
  do_init
  
-+# User provided OOT original and patched object files can jump straight
-+# to checksum + diff + build steps
-+if [[ -n "$USER_ORIG_DIR" ]]; then
-+	status "Setting up OOT objects"
-+	setup_oot
++BUILD_TARGET="kernel"
++[[ -n "$OOT_DIR" ]] && BUILD_TARGET="module ${OOT_DIR##*/}"
 +
-+	status "Generating original checksums"
-+	generate_checksums "$ORIG_DIR" "$ORIG_CSUM_DIR" "$PATCHED_DIR"
-+	status "Generating patched checksums"
-+	generate_checksums "$PATCHED_DIR" "$PATCHED_CSUM_DIR"
-+
-+	status "Diffing objects"
-+	diff_objects
-+
-+	status "Building patch module: $OUTFILE"
-+	build_patch_module
-+
-+	status "SUCCESS"
-+	exit 0
-+fi
-+
- BUILD_TARGET="kernel"
- [[ -n "$OOT_DIR" ]] && BUILD_TARGET="module ${OOT_DIR##*/}"
+ if (( SHORT_CIRCUIT <= 2 )); then
+ 	status "Validating patch(es)"
+ 	validate_patches
+ fi
  
+ if (( SHORT_CIRCUIT <= 1 )); then
+-	status "Building original kernel"
++	status "Building original $BUILD_TARGET"
+ 	clean_kernel
+ 	build_kernel "original"
+ 	status "Copying original object files"
+@@ -912,7 +956,7 @@ if (( SHORT_CIRCUIT <= 2 )); then
+ 	status "Fixing patch(es)"
+ 	fix_patches
+ 	apply_patches "--silent"
+-	status "Building patched kernel"
++	status "Building patched $BUILD_TARGET"
+ 	build_kernel "patched"
+ 	revert_patches
+ 	status "Copying patched object files"
 -- 
 2.55.0
 
