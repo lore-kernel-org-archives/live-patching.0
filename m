@@ -1,102 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFE63806B0;
-	Fri, 28 Aug 2026 18:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD5881AA8
+	for <live-patching@vger.kernel.org>; Sun, 30 Aug 2026 05:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787941270; cv=none; b=EEqWWPE2b3LwHz5Ybpwk7beLFvikg/YCd1hy5QVX4F+ZA57S+AvU35Trj6ykG71bmprF5C1m7DFH8BPSDzbme+0p8QdazZNXMemrrVjLAikszKqqYuuQc9ehrHDmYxxwvmcO62jvzmwg6eJ3fm13nplyqo644aYJ2T5jHIVuDDA=
+	t=1788068952; cv=none; b=PsH5u9z9tmnTGCHDaVPkNKnS3zG5UAXUdOxWO6GkW5vJzU9147DeJ8JKWKN6V+1ZjrKI6tW9smHb2+YTli0dZNGwaJEBS9BziO3CuxDnl0S42Su6s4RXAgxkJSb2BK0WUHGAzW6iGAqEomw/43pjcZYsUSEIl3waE6R+tA8YhK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787941270; c=relaxed/simple;
-	bh=MyE/EC0o9YWsIANSKx1Tx0JSNx+gMw7iBo5/okolDaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lzHItGLtZcc/K3mlKyNdNp5P6bvGKkCASXraxxZJb6muBB3k2FV9xCu9f95ojEf+tzfUe0ajujLLQ04phebLQxqcZQqJJ83ibV8pO7GDTeRvIBNEKCBGoYoXGAKza1Ud67v+yQ384XZANRQhfvOOUYPyb1Kh+8WSvj6OOqcYu58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBbCzLHn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788068952; c=relaxed/simple;
+	bh=FXBLSpksIirhSRXV903wcB0It4hQXCDFxk8fOpN+DlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B2qPQaPvQv0++oYkCfqCnpzK+0q7VnTxZMwg4q+LNbHiHvkYmkmAVu8jTLFWcdY6xo7ItOcJQqUt+kFSFG3S/iNoMguUCsGW9jScP7mQCLeH3sbINn56VWBNjXAc8nCsgJE0nxg0X4jX95e3pIIo7WohUj+T5GwHHFaonZpADXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEo7Dp+H; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBbCzLHn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4237C1F00A3E;
-	Fri, 28 Aug 2026 18:21:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787941269;
-	bh=A/k664QFyYRwzcNr4KYnjEmuHDQ6OKV/1WoYk0ZksFE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=CBbCzLHn4auYDKqANWY/yY/eApy4GRFPyx7gmTvLSI9eZlYQqaBFSWXA6UQY0SLt0
-	 IjrGEVpQH32SiH9L0gjdlhXZr6mRnYPwCX8vzIKHuCPq8uQXynUBsZCBwRGV7G8nsO
-	 2/HPhCRXBpLvrwQm7IBbuFo+6yDcnKdyD73+nGPP/0UFU/eQ/CaERT37l/uFfNamCM
-	 gKqqrBeBoAo76jkjL5+23386A9iWTH3h6kKE5NUoq5dqH6OQh1eT2zers+Zlm0kGEs
-	 oS3QatC3mfZyfKRykcfjYBgAHd6HZ1R566FMYPn66FBEbshJJ1GPEZiw8Klo28TSEu
-	 Fg+oR48D4Y8tg==
-Date: Fri, 28 Aug 2026 11:21:06 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: sashiko-bot@kernel.org
-Cc: x86@kernel.org, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, linux-kernel@vger.kernel.org, live-patching@vger.kernel.org, 
-	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] objtool/klp: Fix checksums for constant pool
- references
-Message-ID: <apHRd-me1otNaFir@jpoimboe>
-References: <f3a9e74ceebc6475ce94bcfe985401140857814a.1787939301.git.jpoimboe@kernel.org>
- <20260828175935.AA3E21F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEo7Dp+H"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-382ef647e20so2372140a91.1
+        for <live-patching@vger.kernel.org>; Sat, 29 Aug 2026 22:49:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788068951; x=1788673751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RVZWfP8Be5WH503CB2oNRLs56H17Q2WRpSeogD8c8MY=;
+        b=pEo7Dp+HD8Rzc/yW/0ja9xQthodZe4wK+LSmgnDi4Wo5aUiQTqAyZJxs0vcFQC1TLE
+         SEiXCV1PfgA3zriFsB1MFk0eR4mGs+T7THZclZ7IUeKVFZFVydCrjWBqfYcdmI8u5c7C
+         e7eFfWCM9t8+nmNhGGL2GmPDhENls6xP6qXN2aOw4OL0B78fy4cjcI4jLR9Rwy/lHm76
+         xakdtfY1OZn5Ol6Y/zhxtEN4b5udt942KTsF4jHjQ9FLdF+lr3IpLn74Y//ICK/+R5La
+         w+p6dqTmsSUGFk1zSCSnEKx+9RYYaGE5i6jukTbtqW0ngg0QvnJqffuUGow0OttHEwZ1
+         FEXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788068951; x=1788673751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RVZWfP8Be5WH503CB2oNRLs56H17Q2WRpSeogD8c8MY=;
+        b=EpNN6ciLCVIgO97QOdyR9f2bETGpUguoB0W8jAzlhf4Mx0Ve+OSU7fZljUslbyNM0R
+         Ht6OYXtt6GEFtLn9JDnO55HpqLsaYR2+JsJj2WbIEtfoMe2myDHg6RZlvFfqEi7scJLD
+         zVEVpKr/mPmuHaBYJ0ghzCepthWM+yE3wA1ZGKQBb73PsfaA4qojZZxBrisFGS3XZ0C/
+         P7OEj1onONdPIhuqgTW8mS5nIOq5whY8/ghWKzLuFX7na9kpz+zm4hudrGK+mY/R33w9
+         KnfEvJkGbuy4HgExc1+URqJOWfeLTtw4YXHYY75vj0zaZW5eDpJH/m7xSXJ/4rZawb0d
+         JcEg==
+X-Gm-Message-State: AFuF++mgHbbX+ymfeQbE4zgVeHZ4F0PpAidMEv4KBoDagW+0AA5r2z1K
+	G+CbMn/k5U85CIY2qUhKPT0yp1dG/HyQLL1fQhje+FsUzolO/WVaV22F
+X-Gm-Gg: AYBFou3DkrhTdopQS+wi1kxKFJume4QjajPtf/aCIyS08Ky+vRItaIsohTD4Jq9Rgzf
+	qeLm1gNidJHZWE2asaQbsgvvkX5j85Pycen0Qc73LCwfw9NiSRBa1+NgSSQ52VuJQy70L38iIeF
+	+5TT1kuYBRdVJVg6wahEeZiuPt5UVAoy7zbSlCoQhAlBvAMyz5gp3MzTo7MPvPAsAwd5XS0AZM6
+	q/PUOBoc0mSqjv5EMeuEwsWPm/jxjK88WAr5oP0w9OO52+TcPvvhCAE/V6SS/c6qBd4WqCIvixu
+	unrcCB3LxgpK6WZbMI9uC9fjEqK/GgCuMDkfYjXvIvZeDO8e3Wd3eXqslrABaTvhGFgsgQDMHiA
+	XVzKEGCP6GZW0bt1zAvMNE0Yc8aGMrMrufzJP6qaVgsEtQYDcKUGtOyp2JIwnENHbywzr+/ECEg
+	jZ7MkZM/jIR9TfIvKHB/wFhY4u3yuXipAsXcrZtO7EgymwLTW7ETmQomLNhvyla1/LGrHmLV+IN
+	4rkEjUF/vla9yAe1GwOuSFJFDep0XMQxs82Tp5DzyWy00qplbEoEHoqiZhS7MNJEOt2zw==
+X-Received: by 2002:a17:90b:5405:b0:38e:67e1:15b with SMTP id 98e67ed59e1d1-396d0de4c19mr28089442a91.6.1788068950535;
+        Sat, 29 Aug 2026 22:49:10 -0700 (PDT)
+Received: from localhost.localdomain ([240e:46d:2510:761:2de1:2bab:6d79:724b])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396ddc555b0sm9742569a91.13.2026.08.29.22.49.06
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 29 Aug 2026 22:49:09 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	song@kernel.org
+Cc: live-patching@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v4 0/2] livepatch: Fix issues around CONFIG_DEBUG_KOBJECT_RELEASE
+Date: Sun, 30 Aug 2026 13:48:55 +0800
+Message-ID: <20260830054857.64758-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260828175935.AA3E21F000E9@smtp.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 28, 2026 at 05:59:35PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The checksum calculation for anonymous constants does not align the relocation addend, potentially reading past the end of the constant and out-of-bounds of the section.
-> --
-> 
-> commit 40a0e3ccdee64d957ccae4cb27dbc7318ac09355
-> Author: Josh Poimboeuf <jpoimboe@kernel.org>
-> 
-> objtool/klp: Fix checksums for constant pool references
-> 
-> This commit addresses false positive changed functions in livepatches by
-> including the underlying data of anonymous constant pool references in the
-> objtool checksum calculation, rather than relying on arbitrary symbol names.
-> 
-> > diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
-> > index b8e47f28997e9..ebe25f9c5260a 100644
-> > --- a/tools/objtool/klp-checksum.c
-> > +++ b/tools/objtool/klp-checksum.c
-> 
-> [ ... ]
-> 
-> > @@ -129,6 +142,14 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
-> >  		goto alts;
-> >  	}
-> >  
-> > +	if (is_anonymous_const_data(sym)) {
-> > +		void *cst;
-> > +
-> > +		cst = sym->sec->data->d_buf + sym->offset + offset;
-> > +		__checksum_update_insn(func, insn, cst, sym->sec->sh.sh_entsize);
-> 
-> [Severity: Medium]
-> Could this result in an out-of-bounds read if the relocation addend is
-> unaligned?
-> 
-> In checksum_update_insn(), the code calculates the cst pointer by adding the
-> potentially unaligned offset to the symbol base, but then unconditionally
-> hashes a full sym->sec->sh.sh_entsize bytes.
-> 
-> If the compiler emits a relocation to a constant pool section with an
-> unaligned addend (for example, when an instruction accesses a sub-element of
-> a 16-byte constant), reading a full sh_entsize bytes from a mid-constant
-> offset could cross the section buffer boundary if this constant is at the
-> end of the section.
-> 
-> Can this lead to non-deterministic checksums by incorporating unrelated memory
-> into the hash, or potentially cause a segfault during the kernel build?
+These fixes were found while implementing the replace set series [0].
+They are independent of that series and can be applied separately.
 
-Doesn't happen.
+Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.shao@gmail.com [0]
+
+Changes:
+v3->v4:
+- use "dmesg -r" instead of "dmesg --raw" (Joe)
+
+v3: https://lore.kernel.org/live-patching/20260821031648.48195-1-laoar.shao@gmail.com/
+
+v2->v3:
+- rename the subject
+- include the selftests patch
+- exclude the klp-build patch
+- use kobj->kref instead of introducing extra counter (Petr)
+
+v2:
+https://lore.kernel.org/live-patching/20260816090442.18128-1-laoar.shao@gmail.com/
+https://lore.kernel.org/live-patching/20260818054629.69246-1-laoar.shao@gmail.com/
+
+v1->v2:
+- minor improvements and acked-by (Song)
+- fix issues reported by sashiko
+
+v1: https://lore.kernel.org/live-patching/20260813030408.9761-1-laoar.shao@gmail.com/
+
+Yafang Shao (2):
+  livepatch: Fix UAF of unregistered patch kobjects
+  selftests/livepatch: filter debug messages in check_result()
+
+ include/linux/livepatch.h                      |  4 ++++
+ kernel/livepatch/core.c                        | 10 ++++++++++
+ tools/testing/selftests/livepatch/functions.sh | 12 +++++++++---
+ 3 files changed, 23 insertions(+), 3 deletions(-)
 
 -- 
-Josh
+2.52.0
+
