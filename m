@@ -1,169 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0921DFFD;
-	Sun, 30 Aug 2026 17:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B083CC7EC
+	for <live-patching@vger.kernel.org>; Mon, 31 Aug 2026 08:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788112570; cv=none; b=ejMmM7lvzh3xbGykQ7gOLnLN6VyXRNgr5jNwqGWG2TOkGRAlCaq2USQO5sWa6CfoyyhZRPLl48EowQUofDyKY4pVj9vANB/Id61sQlR+YCAZMoqi8dxVUa3/JTPGdgmBQGUFW+x3CgL6kR82cOMzlp91gE5U6FnCIqxwTy1BYxQ=
+	t=1788165856; cv=none; b=LDsRPqHz7+IrJL451wSH8gMH97cAN587xYAH+LlDTT2HaR9hOpta6UrgpAIXqMIXeLBC7rD+FWQG/3tm6K1G8c0Wan8y3wm3cdHUmgEe3Ez5/pO76O5AaMN8ZlfrNdEgejVlsZQDQmCaKIRC2vvbLFpD4WzEpGPJ5ygzuGfuoHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788112570; c=relaxed/simple;
-	bh=Xp5wHcBcPiiQTcpwoSqZ469cyCkUGVeYi6l2ITj9b+w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P6RJEFJ0Xxl2vAi4oH5pgLnlUjhRQisblq8pEp8mE1DD36AlkgVxWLjKC9hqW06czr7VzSuLSpp+z2tg+GCIl+0+odRumUxKUWSeKlDUctemwVmtIjI6UsdSIV/ymw9HEW/gZqQdkddIBDmELoPYHoeBTmqBld00+WgiGZIepic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sg/Mf207; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788165856; c=relaxed/simple;
+	bh=EPXi/i8/cLIOytc/4g/nQ5+sJUy3gys8AWpUeJuA7tQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gZj46YA9LWrxj9owZUjzSwdIgS9N0fhSf0CReFPrfvSD86J/pMIANKdHA8RPH0hmo/PzbvMfQt6KGjWFyb5/OVo83ydqgFC1avkEAkATAVvxYGNS0SEDOVCtgx5uJV+amaMGKGFE9cPw9Sm5NI3ls5bfPNnOnklZGud3GidgW0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FgFH8d5U; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sg/Mf207"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BABB1F000E9;
-	Sun, 30 Aug 2026 17:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788112568;
-	bh=MP2cYbOMQ2yPxsWmqbaEgbim2t5PGL0Oh3kp+NhD3Ds=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Sg/Mf207ElMq9UPBD++UvJIjjunCI4kMpOUqONLj+LSierSJhZ6FE4HSE3hSILL4Z
-	 fk008p3jEfeG+4X88SKnkLh9XLoZAzebV66m/1Qch30vnDIbjGlP82Sm1qdmkevmLm
-	 V5Y31LMQPwsSm3BHGA/VDYDLAidhN1zTbVu/e4zWgV2qtFL2CMFFJkj7kaoHpYWWgB
-	 2Bu2kjJ+byG3uIF3Ldx1b8LyFQsOV8j3Z/hUZ2ta3Aeq0dcgk4Y5/gN5oVNYnmOCmz
-	 dZ4d0cuy8PVeL+I2S7v4Sy59vbs5DmEK9LLBujSisltlAtmK1izy4hZu+IdE37qRJf
-	 rHJ3c+bBtGWVQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/3] livepatch: Clean up klp_init_object_loaded() when
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FgFH8d5U"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48433f36a21so1065105f8f.1
+        for <live-patching@vger.kernel.org>; Mon, 31 Aug 2026 01:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1788165851; x=1788770651; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/IdgWJ9SyaxkF+z2j2vaf53j2K61APsWhXnC/i9sVbU=;
+        b=FgFH8d5UVfQoQeiuITU/VAtc7XVKlGdSbOhxhunVuyw6LlUog9ng7y5gXW+Uyt0SsK
+         u4/cAgIUZ+Rkpolz2kDKzxV5gG8FUgekS2ZU0PJ2HN+9ccX7y/Sy8uqIK5FInfadaqd4
+         RcVuhgZa48uokEtEcJIKyRLjnmMWE3znAI/u7d0bHR3pVAhzpS9l3KJPtZMfZu7EUocl
+         QBuopjEy2zOENnAjkNPZlgj1oib00RQzQMXNWu/ybIn8W/PQT5JnDSUVt+1dYJIJPgGS
+         y6llxvvOI2jgXoL2uKkQQpacnOG/NI+EV3wmt3GuwILKZPkcdyHrqSWk1s0K5Oz93POI
+         wn1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788165851; x=1788770651;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/IdgWJ9SyaxkF+z2j2vaf53j2K61APsWhXnC/i9sVbU=;
+        b=TOvoO0R8io6wiDD5HPeyI28xYhgiCz39zPgltimygfnk3RRqJqVYs8tyH3gQ5P0+R9
+         soOE6JZuaqv3wz5rWdC0lX4Ej6jvtRMlFS5cNq2pte3MmqNA3h+5PUEnO9QcWSlL7MtB
+         TL13zFcZjQCmVjMEJ3fUsGdMWC4fhE81aAWHs7QlAcQlGcZycRudiPeB0TSd+L1inB8o
+         ePCYCzT8pGZ3VPzLwi/nti+gzlb2udt8TS0OUkoeJow6cGWmoJSRk/vqQeTvGlUKIj8I
+         MCiK/oS7yR0I+osUMW/qclZAX7KGbgaIoHn/6M8i0dolrnjdS+VY/Qw4oaHRTDiGva4n
+         rwFA==
+X-Forwarded-Encrypted: i=1; AKwUvBzmxFxzGCvaqbf2tCuR5EeQqJU7xnPBRv6xBhXvtEpas73vDpa7ZHV7rAZOTOlp8/rJctruoR0r2W8tcvop@vger.kernel.org
+X-Gm-Message-State: AFuF++nIvD7srguzyAmG0mZ0e1VIxF1K+VBHa1FQyVRUUclan9g2KtQg
+	cmS0S0+yVPUPL4jVT8j7ESGnOyJQMq4M4klKmLQtOs6QftLSzUKu8pGbASSxoHqTbo3HzOlW0FT
+	oUToTLvM=
+X-Gm-Gg: AYBFou3iGIFfkYlY5xtcLiFzDVRI85LPdtyu4RBkwUpNWgs1Ht4QQRMVLL3rXRZONTR
+	WmkG8ZuotzvOLb2NtAwPHT7Phj+2UbgnN3z4nthgAhl9lzsX3L/2qpAwCFi9IhtLsPqv0mUXizK
+	Ci7iSHZ4dbcIX+ag4InPOBOkIfj9dTlDBEXaFcdAHFKXUDSXFN59rjG/E9NdfZEVjMT70Fc25wu
+	Y6emfW6/D1XjbOsaNhAI7DFvywusLGy1JrkMRQV3VbOMxZ8ZN4zfVPHDZkO5iWxnl5vEtrJ0di9
+	MVz4bln1J9OTN0wVRbQ8fGD7WvyDZrFNj/gG+M4SJ0NguNYZCSt+VN0nzkaEbCoenMNDjm/Gg8z
+	I3tMqJ8q52cbfvHaiKI2VRIozNmWGOlZrmM4yrlmrk9uuWANgWSzztnmH6ry1+MNJIAA9Y+tuGk
+	gDWZ4OLyFXbeyWNwD+W0Oww6RlSaTyq5f2doy9DIM7bFhSbRKpsj1Mvd0DffzXjw==
+X-Received: by 2002:a05:6000:481b:b0:484:3600:35a9 with SMTP id ffacd0b85a97d-4843978e680mr12471515f8f.3.1788165851386;
+        Mon, 31 Aug 2026 01:44:11 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48435b024fbsm12215795f8f.29.2026.08.31.01.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 01:44:10 -0700 (PDT)
+Date: Mon, 31 Aug 2026 10:44:09 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Song Liu <song@kernel.org>
+Cc: Harry Hsu <x90613@gmail.com>, jpoimboe@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, jikos@kernel.org,
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+	sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/2] livepatch: Clean up klp_init_object_loaded() when
  fails
-Reply-To: sashiko-reviews@lists.linux.dev
-To: pmladek@suse.com, "Harry Hsu" <x90613@gmail.com>
-Cc: jpoimboe@kernel.org, linux-kernel@vger.kernel.org, jikos@kernel.org, joe.lawrence@redhat.com, live-patching@vger.kernel.org, mbenes@suse.cz
-In-Reply-To: <20260830173343.52759-4-x90613@gmail.com>
-References: <20260830173343.52759-1-x90613@gmail.com>
- <20260830173343.52759-4-x90613@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 30 Aug 2026 17:56:07 +0000
-Message-Id: <20260830175608.4BABB1F000E9@smtp.kernel.org>
+Message-ID: <apU-2f7rffaTUKWC@pathway.suse.cz>
+References: <apBbjoEHJ98DWN_W@pathway.suse.cz>
+ <20260828125244.509977-1-pmladek@suse.com>
+ <20260828125244.509977-3-pmladek@suse.com>
+ <CAPhsuW7Jr16Wyd4oEXKEwJPwX=p7HWLZTA63uNeu=13GYf+=Uw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW7Jr16Wyd4oEXKEwJPwX=p7HWLZTA63uNeu=13GYf+=Uw@mail.gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On Fri 2026-08-28 10:44:38, Song Liu wrote:
+> On Fri, Aug 28, 2026 at 5:53 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > When a module is loaded, klp_module_coming() iterates over patches and
+> > calls klp_init_object_loaded(). If initialization fails, it delegates
+> > cleanup to klp_cleanup_module_patches_limited().
+> >
+> > However, the cleanup loop skips the failing patch. Each function called
+> > in klp_init_object_loaded() is supposed to clean its own changes. This
+> > works except for the changes done by klp_init_object_loaded().
+> >
+> > The current code is a bit messy. The changes done by
+> > klp_init_object_loaded() should get cleared by klp_free_object_loaded().
+> > But this function also clears obj->mod which is set by
+> > klp_module_coming(). And relocations are cleared separately.
+> >
+> > Fix the situations by updating klp_free_object_loaded(). It should
+> > revert all and only changes made by klp_init_object_loaded().
+> > This requires some shuffling:
+> >
+> >  + Clear obj->mod explicitly in klp_cleanup_module_patches_limited()
+> >    and do not rely on klp_free_object_loaded().
+> >
+> >  + Clear relocations in klp_free_object_loaded(). Remove the explicit
+> >    call from klp_cleanup_module_patches_limited(). This requires
+> >    adding the @patch parameter.
+> >
+> > Finally, call klp_free_object_loaded() in the error path in
+> > klp_init_object_loaded().
+> >
+> > Reported-by: sashiko-bot@kernel.org
+> > Closes: https://lore.kernel.org/r/20260823062313.1321B1F000E9@smtp.kernel.org
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> 
+> Acked-by: Song Liu <song@kernel.org>
+> 
+> With one nitpick
 
-New issues:
-- [Medium] Failing `klp_apply_object_relocs()` triggers spurious architectu=
-ral warnings due to unconditional clearing of unapplied relocations in the =
-newly added error path.
+> > --- a/kernel/livepatch/core.c
+> > +++ b/kernel/livepatch/core.c
+> > @@ -725,18 +725,20 @@ static void __klp_free_funcs(struct klp_object *obj, bool nops_only)
+> >  }
+> >
+> >  /* Clean up when a patched object is unloaded */
+> > -static void klp_free_object_loaded(struct klp_object *obj)
+> > +static void klp_free_object_loaded(struct klp_patch *patch, struct klp_object *obj)
+> 
+> nit: Do we still need to fit every line in 80 characters? checkpatch.pl
+> only enforce 100 characters these days.
 
-Pre-existing issues:
-- [High] If `klp_pre_patch_callback()` or `klp_patch_object()` fails during=
- `klp_module_coming()`, the successfully initialized state from `klp_init_o=
-bject_loaded()` is leaked. The cleanup function `klp_cleanup_module_patches=
-_limited()` intentionally skips the currently failing patch, leaving applie=
-d relocations in the livepatch module uncleared and causing subsequent load=
- attempts of the target module to persistently fail.
---
+I do not have strong opinion about it. My editor highlights characters
+which are over the 80 lines limit so I automatically fix it. I haven't
+found a courage to change it yet. And my eyes are getting worse over
+the years so I use big fonts. 80 characters per line look good
+on my monitor ;-)
 
-commit a90c142b7a6f2c5551f83382ec1fcf15614ffbac
-Author: Petr Mladek <pmladek@suse.com>
-
-livepatch: Clean up klp_init_object_loaded() when fails
-
-When a module is loaded, klp_module_coming() iterates over patches and
-calls klp_init_object_loaded(). If initialization fails, it delegates
-cleanup to klp_cleanup_module_patches_limited(). This commit updates
-klp_free_object_loaded() to revert all and only changes made by
-klp_init_object_loaded().
-
-Closes: https://lore.kernel.org/r/20260823062313.1321B1F000E9@smtp.kernel.o=
-rg
-
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index a6796cd6b65fd..706a4a7193514 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-
-[ ... ]
-
-> @@ -916,11 +920,17 @@ static int klp_init_object_loaded(struct klp_patch =
-*patch,
->  		if (!ret) {
->  			pr_err("kallsyms size lookup failed for '%s' replacement\n",
->  			       func->old_name);
-> -			return -ENOENT;
-> +			ret =3D -ENOENT;
-> +			goto err;
->  		}
->  	}
-> =20
->  	return 0;
-> +
-> +err:
-> +	klp_free_object_loaded(patch, obj);
-> +
-> +	return ret;
->  }
-
-[Severity: Medium]
-Does this unconditionally clear unapplied relocations?
-
-When klp_init_object_loaded() fails (for example, if a symbol lookup fails
-after klp_apply_object_relocs() succeeds, or if klp_apply_object_relocs()
-itself fails), this newly added error path calls klp_free_object_loaded().
-
-This unconditionally invokes klp_clear_object_relocs(), which iterates over
-all .klp.rela sections and attempts to un-apply them via
-clear_relocate_add().
-
-However, for sections that were never applied, the target memory remains
-unmodified (zeroed). On architectures like x86, clear_relocate_add() uses
-memcmp() to verify that the memory contains the expected relocated value.
-Since it does not, it prints an "Invalid relocation target" warning for
-every unapplied relocation entry, resulting in significant spurious warning
-spam in the kernel log.
-
-[ ... ]
-
-> @@ -1274,8 +1284,8 @@ static void klp_cleanup_module_patches_limited(stru=
-ct module *mod,
->  			klp_unpatch_object(obj);
-> =20
->  			klp_post_unpatch_callback(obj);
-> -			klp_clear_object_relocs(patch, obj);
-> -			klp_free_object_loaded(obj);
-> +			klp_free_object_loaded(patch, obj);
-> +			obj->mod =3D NULL;
->  			break;
->  		}
->  	}
-
-[Severity: High]
-This is a pre-existing issue, but does this cleanup logic leak relocations
-if klp_module_coming() fails after klp_init_object_loaded() succeeds?
-
-If klp_pre_patch_callback() or klp_patch_object() fails during
-klp_module_coming(), the successfully initialized state from
-klp_init_object_loaded() is leaked.
-
-The cleanup function intentionally skips the currently failing patch:
-
-kernel/livepatch/core.c:klp_cleanup_module_patches_limited() {
-	...
-	klp_for_each_patch(patch) {
-		if (patch =3D=3D limit)
-			break;
-	...
-}
-
-This prevents its newly applied relocations from being cleared. Since these
-relocations modify the livepatch module's memory, they persist even after
-the target module's load attempt is aborted.
-
-Upon a subsequent attempt to load the target module,
-klp_apply_object_relocs() will attempt to apply the relocations again. On
-architectures like x86, apply_relocate_add() verifies that the target
-memory is zero; finding it non-zero, it returns -ENOEXEC. This causes
-klp_module_coming() to fail, permanently preventing the target module
-from being loaded as long as the livepatch is loaded.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260830173343.5275=
-9-1-x90613@gmail.com?part=3D3
+Best Regards,
+Petr
