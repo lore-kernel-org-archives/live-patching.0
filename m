@@ -1,75 +1,75 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCA21FCFFC
-	for <live-patching@vger.kernel.org>; Wed,  2 Sep 2026 13:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167B64A8403
+	for <live-patching@vger.kernel.org>; Wed,  2 Sep 2026 15:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788356754; cv=none; b=qC0+n5DsjrF0hhoXFZAnR1/YjmSRlV7sEXLpkjyTJjZShg+t36KByKKfebTzBZV0kOsK8nIsJxqyLs0l87OdvQOsvtf0fSXkAGKU4S0kHHDYYqAl3ojKYPsoUO38eReeS5WcBkj7E4nohEpOpPsKQ+cawyLhbmjX9bPVWxr1t3w=
+	t=1788362160; cv=none; b=o4Y7intCN0sd7KDGabKl9CAtmCpbCVtOmCq0lm3dtIVi9iKI59D/VEVxaCFsKmS1v6ursXirJzbzdEImUBk/hzLjcL6NFrR3bsfvadAhPJPjYuzemRg0Or9BccXQ0U/cuQm2G8cW17ncpp/Gg1i0p0LtqprFMZ6NdevkDN74sw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788356754; c=relaxed/simple;
-	bh=Blk6bkiDNVlzCmR80Tl850pIOGn/qmdrjADbDP28C5Y=;
+	s=arc-20240116; t=1788362160; c=relaxed/simple;
+	bh=XUZDiaTcOA5+kAYSEqv60/44+6jL9IaX7+m/61ypG9Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZWETcnqcvxdcT0o++OhXI4Rd/N/BNJ2AhYsobdw3IbOvFNmIQtdIosp/Pj5H3njqoaASXfEyZIYr4QdVtJVWCITs0eqzn+foXINDe6Lyc8k0pXUuhrTiU+T8UraCGxOyS7q+tMau+TtXylI8ufUIvEMtPW/H2eKOzOO2PowCKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VAvRq5m9; arc=none smtp.client-ip=209.85.221.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=tk0wMZfFXvJqlsB1+KAK+k1BW1+rCwOLvXPX5SsAM6RVzxfnbhEBHM9mt4rBNyDHDy7OfE2rfypM6lsMRmxm8GO4307ciqUWkWCFBo+hLt++MFTk8Jkl1Ocj/QYG/Mmn7BanUEbFqPr05uJHret8DWRMW0TFkXg9Zc0Nn/QoYcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ciNBUdmw; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VAvRq5m9"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-48436216a98so707932f8f.0
-        for <live-patching@vger.kernel.org>; Wed, 02 Sep 2026 06:45:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ciNBUdmw"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-49ccfae359fso8196205e9.3
+        for <live-patching@vger.kernel.org>; Wed, 02 Sep 2026 08:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788356751; x=1788961551; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1788362155; x=1788966955; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9WlVJhR5jLZZd5/CTPgiaxmrkubOYMFFIEI4VEKaueA=;
-        b=VAvRq5m91whNX9KnJGImEi9mlZtfWY3UPCDgs21W31dterEBn6v0n6PU482DY+9Hyz
-         fXMZi3kG3Ss/CQdXnhrOzHiwO7OQGFpTANC1gfV5Y7ldGAg1wBp6MMcIzHPY/z/CDKr4
-         UVe7Orj8pNUBX8L+HBlf4ontHoBiuR4ecF+RqSszWwaSkH5Y81hT2tKSA+HpYBXZWMl4
-         uxv/y7Ra5uKCzdRKrL67J0IuPCAGh5otD40cMIl+z89HDIZix8MNB273LIC69qZoVV3R
-         gUF2On+h8uYHqjJAcObZ5HCr5fHJS16FzFXICja0SrCv8pkNWHbdObsgUsk0WsgYmQ0g
-         E4/Q==
+        bh=SKy/ceUWl3j64g/lhknRGefAudI+1+1MndJfHsJ8Tv8=;
+        b=ciNBUdmwSnoMPD93JV/uQKKmEaGGLFFeB2iF+s7dsvcMPEkVjwg1+/F05K8s3x6JZu
+         2+1m1IgC4DRuvRTlPmvTZZgg2MxidBE74Gsrit6xhwY7yHOJYXFZlhXUVsE+LICP/D1y
+         LOrrizoVcTR8DD6z+NO1dGi5kPEo8mvEr0fGOxGSkP/0mzFCSJ+pjU4X4KYzc5ni6Fck
+         g2tn2IVVM9joNoG7M7oXELulFOkoXYphYWCKNpC24erwULW8jrDaFx+YaH1JMhfxUpcR
+         8dK8yn/v36Wj/WBOPc8zxVPsPLYRQUGi5ESlVQyvUOWpQRpncAvfeMHuo7gkMEa2dctJ
+         4Eeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788356751; x=1788961551;
+        d=1e100.net; s=20251104; t=1788362155; x=1788966955;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9WlVJhR5jLZZd5/CTPgiaxmrkubOYMFFIEI4VEKaueA=;
-        b=cgrpJUoPHCmTIFUeQL7SKO5KL1+tTLktw9nCOf3hNZxE0NpWf7RWUI0ixty8WJBre0
-         LHx9aAiS0kRg86b1inA42G0inJyFJxz0Zi77pq1MdF3Z63Gh4T2si1pz4ZQ6NK96mb1g
-         jbwhsyFQl/XQEU0OBBRfir+8XkKH798FaXYTQDj9Z8Zr86rG06PRHUPfaZnKdW+MgvJh
-         6c6bt217SRIUYrLevjtiHgxlrDOL9fztHQPMR8lThJQxZ5KKtsNngbJH1f9VIgfiLN17
-         T9gO/6nglA/4GWIwXPCRwOVTb6B9w6HmH6rmHh4eh3GS5ZEJ6V9QwNNE9k9Zg7ptImL0
-         wbsw==
-X-Forwarded-Encrypted: i=1; AKwUvByZJDWR+a95ESz38mnkYEsVZJlJml119PiRDUSBvjWlz+aiq84DzarDOhVQ0BM2vCY7fs2mQN4PA9HEeOtA@vger.kernel.org
-X-Gm-Message-State: AFuF++nLIWuBAxWk8f0PHRYPZJR1Tp9iSM1RG6oZegjR7T/hO0RVRXuF
-	hE5xIWwgEUxAqtQvN8yJE4zd/40HTvE3Sri+pHosqwipNRja0Cdmt8R+UGqHze/Ee8Y=
-X-Gm-Gg: AYBFou1YoQ54w7UqxgXQR+6PuwMftFCd7a1f9Xu8nv39+9wdyuWyVCkM/s6wYgocLlE
-	c0Lk1xvTy7+eeYunpGv19kWgSovmoTQOzszpGZG6/cfE5Nz3Rd//23b3nzkuf7SaghtOmPP2u2A
-	+CTrqVxZB8c+Z8fxFG0AWYsxAOgxkzRTZXxW4z9TNASgug8is3gEnv+fD3TSOPJLDO3JgIQvqYQ
-	GPrOHibZRsSaYXL1ggx4DAf+2VPJXpd1q+0k2GjLXcPKZaiEGZnpHtB46VQ7bUc+2aukHUe38Pq
-	bSLFddjpSOTF2Hhgq/z1NAkrlC05PrqP/u1uEFIlX2Thyflz/E5LYBkZsEkrx2Ww8L1bNIEtnT+
-	g5DSe+/PNIB5zLDIC4H48N1oXVaKWBqFEsD7O6LcGTKxisEOJVXhzQaBvmDSW8/PnEjbp978nGA
-	H+AjOVRKfg/DTX5dZt08dleV+NXRmh4D6wySE4g8qcYUFGBTrarPZz+VCHUsdQhb/h+7lcPAtK
-X-Received: by 2002:a05:6000:4819:b0:484:4537:95ed with SMTP id ffacd0b85a97d-48488efe633mr9507562f8f.5.1788356750605;
-        Wed, 02 Sep 2026 06:45:50 -0700 (PDT)
+        bh=SKy/ceUWl3j64g/lhknRGefAudI+1+1MndJfHsJ8Tv8=;
+        b=iTEVEYocgcDMWqo255t31RMm7IkvwiCEj2p9rb3c8r2DarMM7QFGgtJy4un89m2tSV
+         XHGPauFEx1/kip75AhGetXiHkOGQ3n3lrRCAeXNI1ZRcVGgVjdRiDTY+mC3YfHNfUGM7
+         +IAAV5yd238WKMSCOKcr1MrTWgLnmEglgUtUNcGyxOkhXn0VrW0ENOSqUlWJUrRhU8r3
+         8qEs/Zor8SA1ORm2lZteqxECtl/FW5LxdimDDUNA3m3Tihx9p3jCLNyJul0nPpUs3hli
+         hnQPE9hLvazewsL9P52k76WD/bsx5Uvji20eFMwhj1MLqveVLN4eotohc52WSG4lmxT6
+         gMww==
+X-Forwarded-Encrypted: i=1; AHgh+RpTthOlFXcTWN8aQBdoD4R0iwnNX8JURqJk7PTWc2aeO2R5vdrjGSzYoauCEF6/P8C6rfzH5srVAQKp/Qzm@vger.kernel.org
+X-Gm-Message-State: AFuF++lNyJqixqR0Bf1Bo4t69ACiTrHWZTVfJQwmlFAfR8kSSkcdwKdB
+	fqSfSJPDgKJVSVMkqsLenF4CUvhN5n1IoxuMny6i8RBNvp7nTao+0ed9iMju7ssXwm8=
+X-Gm-Gg: AR+sD10xFIamxYoVDK2K2zUJPMUs+a3MSjakvsuAn7wO1VL5qsWZpUczmWlMEZGOYbz
+	4bHnfHroWSns1mgHPBltWF869jwUPkKZkJ4h5PN529+qmDqHCdu1dGtTamhnAGhn+831YvE4CtT
+	HsUkpujhYOQeRC9OjnILY1n/6VEGH8ugStWfCi6B0U86n+R4ueIKPC6Vvg6TY/CBH5TTnAzvFkX
+	sdyV55ypMMZRgl6D8PsP2c/qC3MSd4Kz7QwNRt8SkugOZAQuu0YyA2nqM3TKoSizFAnf+QYQsXw
+	zwqnE5c9LBIpZuHet70lOvBmED4ZFHFMha0IRvN2XYWWpyrEnt3bO4nlMbtJio727QwjaR8s7Zk
+	dRsKqUxteBipB65vaY7xCodj/I0BgBj3jm79BiqTPFtFn7W0zDGIf8zLc7Tx2wV/MASsNipA32s
+	qBB8xJ8egipk7c8t0OFhvVlBVsYQKgfzYkVLnNMbJBMLMXCecKIZfspAl5EfOTXw==
+X-Received: by 2002:a05:600c:45c4:b0:499:79b9:e220 with SMTP id 5b1f17b1804b1-49ce5816186mr102318575e9.10.1788362154811;
+        Wed, 02 Sep 2026 08:15:54 -0700 (PDT)
 Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448e736a6sm6339105f8f.5.2026.09.02.06.45.49
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce4a804sm180755475e9.15.2026.09.02.08.15.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 06:45:50 -0700 (PDT)
-Date: Wed, 2 Sep 2026 15:45:48 +0200
+        Wed, 02 Sep 2026 08:15:54 -0700 (PDT)
+Date: Wed, 2 Sep 2026 17:15:52 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
 	joe.lawrence@redhat.com, song@kernel.org,
 	live-patching@vger.kernel.org
-Subject: Re: [PATCH v7 for-next 5/8] selftests/livepatch: Adapt atomic
- replace tests to provides/obsoletes
-Message-ID: <apgojIqhOoxYOXuK@pathway.suse.cz>
+Subject: Re: [PATCH v7 for-next 6/8] selftests/livepatch: Add
+ provides/obsoletes test scenarios
+Message-ID: <apg9qFCgDaXbUT6J@pathway.suse.cz>
 References: <20260825114641.80452-1-laoar.shao@gmail.com>
- <20260825114641.80452-6-laoar.shao@gmail.com>
+ <20260825114641.80452-7-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -78,146 +78,105 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260825114641.80452-6-laoar.shao@gmail.com>
+In-Reply-To: <20260825114641.80452-7-laoar.shao@gmail.com>
 
-On Tue 2026-08-25 19:46:38, Yafang Shao wrote:
-> The legacy "replace" field in struct klp_patch was replaced by the
-> provides/obsoletes mechanism. As a result, the atomic replace
-> selftests fail to build against kernels that only support
-> provides/obsoletes.
+On Tue 2026-08-25 19:46:39, Yafang Shao wrote:
+> Now that the legacy "replace" field has been replaced by the
+> provides/obsoletes mechanism, add test scenarios to verify the new
+> behavior.
 > 
-> Adapt the selftests so that they build and run on both old and new
-> kernels:
+> Fill in the #else branches of the test modules that were left as
+> TODO placeholders in the previous patch:
 > 
-> - test_modules/Makefile detects whether the kernel header still
->   declares the "replace" field. If so, it passes KLP_HAS_REPLACE to
->   the modules via ccflags-y.
+> - test_klp_atomic_replace.c gains provides and obsoletes module
+>   parameters for the provides/obsoletes based tests.
 > 
-> - test_klp_atomic_replace.c and other source files using .replace guard
->   their replace module parameter and .replace assignment with
->   #ifdef KLP_HAS_REPLACE. The #else branches are left as TODO
->   placeholders for the upcoming provides/obsoletes based tests.
+> - test_klp_callbacks_demo2.c gains a provides module parameter.
 > 
-> - functions.sh adds detect_replace_attr(), which loads a temporary
->   livepatch and checks for the /sys/kernel/livepatch/<patch>/replace
->   attribute, setting HAS_REPLACE_ATTR accordingly.
+> - test_klp_livepatch.c gains a provides module parameter so that it
+>   can be loaded with a specific provides id for coexistence tests.
 > 
-> - test-livepatch.sh and test-callbacks.sh run the tests that depend
->   on multiple livepatches coexisting or on the atomic replace
->   behavior ("multiple livepatches" and "atomic replace") only when
->   HAS_REPLACE_ATTR is set. These scenarios do not apply to the new
->   kernel, where provides=0 replaces any other livepatch by default.
+> - test_klp_state.c and test_klp_state2.c add a comment in the #else
+>   branch noting that provides=0 (the default) is equivalent to the
+>   previous .replace=true behavior.
 > 
-> The provides/obsoletes based selftests will be added later.
+> Add test-provides.sh with four test scenarios:
+> 
+> 1. provides=0 replaces provides=0: two livepatches with provides=0
+>    that modify different functions; the second replaces the first.
+> 
+> 2. Same provides replaces: two livepatches with provides=1 that
+>    modify different functions; the second replaces the first.
+> 
+> 3. Obsoletes replaces: a livepatch with provides=2 and obsoletes=[1]
+>    replaces a livepatch with provides=1. The provides/obsoletes sysfs
+>    values are verified.
+> 
+> 4. provides=0 coexists with provides=1: two livepatches with
+>    different provides ids that modify different functions coexist,
+>    verifying that provides=0 does not replace a patch with a
+>    different provides id.
+> 
+> The provides/obsoletes based tests only run on kernels that no longer
+> support the legacy "replace" attribute.
 > 
 > Assisted-by: Comagic:DeepSeek-V4-Flash
 > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 > ---
->  tools/testing/selftests/livepatch/functions.sh   | 15 +++++++++++++++
->  .../selftests/livepatch/test-callbacks.sh        |  6 ++++++
->  .../selftests/livepatch/test-livepatch.sh        |  6 ++++++
->  .../selftests/livepatch/test_modules/Makefile    | 14 ++++++++++++++
->  .../test_modules/test_klp_atomic_replace.c       | 16 ++++++++++++++++
->  .../test_modules/test_klp_callbacks_demo2.c      | 16 ++++++++++++++++
->  .../livepatch/test_modules/test_klp_state.c      |  7 +++++++
->  .../livepatch/test_modules/test_klp_state2.c     |  7 +++++++
->  8 files changed, 87 insertions(+)
+>  tools/testing/selftests/livepatch/Makefile    |   3 +-
+>  .../livepatch/test-provides-obsoletes.sh      | 174 ++++++++++++++++++
+>  .../test_modules/test_klp_atomic_replace.c    |  22 ++-
+>  .../test_modules/test_klp_callbacks_demo2.c   |  12 +-
+>  .../test_modules/test_klp_livepatch.c         |   9 +
+>  .../livepatch/test_modules/test_klp_state.c   |   5 +-
+>  .../livepatch/test_modules/test_klp_state2.c  |   5 +-
+>  7 files changed, 205 insertions(+), 25 deletions(-)
+>  create mode 100755 tools/testing/selftests/livepatch/test-provides-obsoletes.sh
 > 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 30dc677b2f45..17810521d069 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -351,6 +351,21 @@ function does_sysfs_exist() {
->  	[[ -f "$SYSFS_KLP_DIR/$mod/$attr" ]]
->  }
+> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+> index a080eb54a215..38f98594d883 100644
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@ -11,7 +11,8 @@ TEST_PROGS := \
+>  	test-ftrace.sh \
+>  	test-sysfs.sh \
+>  	test-syscall.sh \
+> -	test-kprobe.sh
+> +	test-kprobe.sh \
+> +	test-provides-obsoletes.sh
 >  
-> +# detect_replace_attr() - detect whether the running kernel still exposes
-> +# the legacy "replace" sysfs attribute and set HAS_REPLACE_ATTR
-> +# accordingly. The atomic replace tests are only run when the attribute
-> +# is present. The provides/obsoletes based tests will be added later.
-> +function detect_replace_attr() {
-> +	HAS_REPLACE_ATTR=0
+>  TEST_FILES := settings
+>  
+> diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> new file mode 100755
+> index 000000000000..2707457b9133
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> @@ -0,0 +1,174 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (C) 2026 Yafang Shao <laoar.shao@gmail.com>
 > +
-> +	load_lp test_klp_livepatch
-> +	if does_sysfs_exist test_klp_livepatch "replace"; then
-> +		HAS_REPLACE_ATTR=1
-> +	fi
-> +	disable_lp test_klp_livepatch
-> +	unload_lp test_klp_livepatch
-> +}
+> +. $(dirname $0)/functions.sh
 > +
->  # check_sysfs_rights(modname, rel_path, expected_rights) - check sysfs
->  # path permissions
->  #	modname - livepatch module creating the sysfs interface
-> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> @@ -16,6 +16,20 @@ obj-m += test_klp_atomic_replace.o \
->  	test_klp_state3.o \
->  	test_klp_syscall.o
->  
-> +# The legacy "replace" field was replaced by provides/obsoletes. When the
-> +# kernel (KDIR) still supports "replace", pass KLP_HAS_REPLACE to the
-> +# modules so that they can #ifdef the legacy "replace" code. Otherwise
-> +# the modules are built with the provides/obsoletes based code (to be
-> +# added later).
-> +KLP_SRC := $(if $(wildcard $(srctree)/include/linux/livepatch.h), \
-> +		 $(srctree), $(KDIR))
-> +KLP_HAS_REPLACE := $(shell grep -q 'bool replace' \
-> +		 $(KLP_SRC)/include/linux/livepatch.h 2>/dev/null \
-> +		 && echo y)
-> +ifeq ($(KLP_HAS_REPLACE),y)
-> +ccflags-y += -DKLP_HAS_REPLACE
-> +endif
-> +
->  # Ensure that KDIR exists, otherwise skip the compilation
->  modules:
->  ifneq ("$(wildcard $(KDIR))", "")
+> +MOD_ATOMIC=test_klp_atomic_replace
+> +MOD_LIVEPATCH=test_klp_livepatch
 
-These two ways to detect the feature are dirty hacks. It might be
-acceptable in selftests. But I wonder if we could do better.
+I always get lost in the various test modules and have to look
+what is inside. It might help me if the name better describes
+the content, for example, rename:
 
-Alternative solution might be to define:
+ + test_klp_atomic_replace -> test_klp_proc_memset_livepatch
+ + test_klp_livepatch -> test_klp_proc_cmdline_livepatch
 
-	HAVE_KLP_PROVIDES as true in kernel/livepatch/Kconfig
+So, it is clear that they "livepatch" a given "proc" interface.
+And it is rather clear that they livepatch different functions.
 
-We could then use in the Makefile:
+The names are long. The following might still be better than
+the current state:
 
-	ifeq ($(HAVE_KLP_PROVIDES),y)
-	ccflags-y += -DHAVE_KLP_PROVIDES
-	endif
-
-And we could zgrep /proc/config.gz in the shell scripts.
-For example, see kconfig_has() in
-tools/testing/selftests/firmware/fw_lib.sh
-
-Note 1: It will work only when we change the state of HAVE_KLP_PROVIDES
-      in the patch when the provides/obsoletes are substituted.
-
-Note 2: We should update the selftests before we change the behavior.
-	Otherwise, we would break bisection.
-
-
-> diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-> index 2a03deb26a12..e9b2dc6ea099 100755
-> --- a/tools/testing/selftests/livepatch/test-callbacks.sh
-> +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-> @@ -451,6 +453,7 @@ $MOD_TARGET_BUSY: busymod_work_func exit
->  $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_exit"
->  
->  
-> +if [[ "$HAS_REPLACE_ATTR" == "1" ]]; then
->  # Test loading multiple livepatches.  This test-case is mainly for comparing
->  # with the next test-case.
->  #
-
-Nit: Marcos made several tests conditional and he updated indentation
-	after adding the if/fi.
-
-     I could live with both approaches. It just would be nice to be
-     consistent.
-
-And I like the idea to explicitly mention that a test has been
-skipped because a feature is not available.
+   + test_klp_memset_lp
+   + test_klp_cmdline_lp
 
 Best Regards,
 Petr
