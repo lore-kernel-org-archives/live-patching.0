@@ -1,204 +1,111 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852C337188A
-	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 05:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788414521; cv=pass; b=nHpjFIEDeFXqLqr17fAgPh2HF4LLjSpI2UcuzU9C1ReJvYe1p0wUnTFC3pM1VOQAiC23U0A1qBqUp9+4KL/wYLEjSVpi9JDb+ramk20pF6TNgAxzE0gMtHhUH9ripz23R6KZ53J+j16yuXqMSxfHklbTysN2CPad8VaT+emiFSk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788414521; c=relaxed/simple;
-	bh=BwN0v0ISME7+uRzXI+Ig1sKkAbLZ2YkXkhqGyc9gLd4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=snwnbU/sn3hPvp+KeZy5iQKztDfH+9a4GY9cAH/3Rubne5s9FECAZeA3iB78mJvSe4K62GsAONW9YZf5e0+ctfgUUPJzGi5FuV8V7wZ9A+kbA18czw+B8HGuqps/+wn3OMF8x2pqmZc6CWmABBLkXjWHn6QVQJbiepsGs9Sjsks=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PidN1zRf; arc=pass smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EEE423EB7
+	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 07:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788420625; cv=none; b=LTh01vrP7GA5zyNKI/1KBA6I978Pm1LXGBkjFxfH4IlJ1yrso3j5+CQ8nJ39/IipoKVx1WpEK7TTiN5evMzPEkHy4mIo5oer4ueDYHs+zgWYrW9uVV+RomcfAfeagzHYUdmFor86My2XIWBtxa95+GIoH8tNjGgLxZX4gud7D4g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788420625; c=relaxed/simple;
+	bh=2nrqvrQ/NYzEeIYa7fbWNoPrAdM3T5KYXbQtL3KEWkU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h4jebnKHt6YB0EVzqbSyMYy4AzT/6ynIfFXfnrnRZPIELZimKQ1K1XZK2ulA+kHtx7A6zWeB7SR9JFVloSGD3fxKliyOAfK0jir3OVfZ32ovMPzjG8phOXyoqRLpADF+neZlgDb1AgD5V1RZ1UjV9t5oN2CowbAdrxrfibtan4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ckLYXxNH; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PidN1zRf"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-8200b55dc47so24836207b3.3
-        for <live-patching@vger.kernel.org>; Wed, 02 Sep 2026 22:48:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788414519; cv=none;
-        d=google.com; s=arc-20260327;
-        b=X4k8dp41YEYjWlBaYd7+kvfxI4/UQ/t5acidCASZWyrCpMOyaHG4d5YL+plEWGZ0Iq
-         PCdpOp1lVPC0OXP2E5qFhuTMB15JWk8yyBV6ZYHoyIBiZ8C23HQJnp6FIb8RhVnUcp15
-         8ddCjWkackdgIcWkkUBisLSrDN0xxY/9CSIrJ8OaYnq2W7zbyEIYdvsGxrvlsZIQ+pDh
-         NOx1RcKHSqJx4WQ86XIZIIwE35mnDY99Uwaujl9p0brvdmsBMfyMYNtVwy/oLR4vABkz
-         mSrNLYNWvEqt7LkDOJUiZspwuQqf1ze+ig47fdXIst0YV0mV0zK8XiZnqgj/X69frfBn
-         GnUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
-        fh=pRgsO/uX+vFnq0AcgVN7JT7DnFvkOTQJ/sv+Z3JKrwA=;
-        b=HuCpt2pEeW+2xt/E1Rq+F+jEOxq2FNSjOplncskUm4j6ZiVNtMy3NhCYR75gKcKWrk
-         q3oHrUXpIfMkh8VzUQpT2Jy43hyppz4puWvcKX4ZCHOq4JG1eq/pRv/51WoFMgqGPHxl
-         zLCpJ0vZlcMe6apDtH6Nux8d5DVemElRP66btM9+6/v0Y3TdsBtrdKeOX/j5no77D2F4
-         0iJ8NSXs+fSqwojnhwAsrsjyGCa6LK7kphRUi/aMG2qBZeJ+Vm620qsRl6H9AhDaRdeB
-         dEGUD3rybXYRzo7fJq8KGRViPKJ1oRWwx/Go7VPy+6r8aUWC+utl9cMN3tvBiLRT0ZTQ
-         0Yrw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ckLYXxNH"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b96837ca3so14148045e9.3
+        for <live-patching@vger.kernel.org>; Thu, 03 Sep 2026 00:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788414519; x=1789019319; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
-        b=PidN1zRfnElfgEkciG8ZlK1f7ZtVaT8bwFkJPHtjGAtjuCRDl5nBkK2H/PRZqsxkla
-         5EFjae8bBzAiWUVySSOXJMdp7mQHlhAWHxMKoHtxSuhEv/ytCFBY0lEIPMpY0fa2GzCf
-         +/jiVw+7/E2u4Y2fGOcJ8DBtG7FY8BJlVs6fl+sydTxzeooyLHKKLglGaoCvXxWVZ8YV
-         9JAl9NlbUayUqsQi8RvLsDiZd7DvILvVn8E0Sh54BF7h81qD5GsrOzawrvXyhulwpCWH
-         jBra2Uplbg9lupuc9VqXNtHDioAdlF+xpiXaxOrn6dE32esHdUMGbkHoG6Wss1pPqCMO
-         XLKg==
+        d=suse.com; s=google; t=1788420608; x=1789025408; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tw/7Pm6zA0Mzoef4R2syw+evCZTvzXDxRbaoH9jxbo0=;
+        b=ckLYXxNHpwcThomu7jQKht0JLJT8GAaQMTmsgqjtS21X4CnPiLQ1KbeWJQpfiQpMiS
+         XvqWoHkaNCOLp4riIEqW7MOVBMj52Wichj+keQpFbcndm44bz7GArZjCwaqCsCLH5ARL
+         KQHgyPLiiNVkPGxz19KMt53LijYaqt2vJwm7PmkN+eS84Yy0lV5rbEUj8t9NZ4zFPo4W
+         Mxu70mTR82NYvkyj/cRUSa5XUIDg38luCNyjeNNjHy/IgTMTEktIOkeZa/Qv49FcdEFx
+         SSf6/nG0kiZdsUurtkgVnVl6CnKzAIaDEHrO4db5JGnPdZvHJApNSkiCaLYkQTKlOLP7
+         E2ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788414519; x=1789019319;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
-        b=DDv5u+jsid7NKzy5C/+cr5qOzeKFgECUjvjfoizd7rA0ySSR1aA5Jqa4wiuwuvi2m6
-         /V2lM5ZFhTcg2qBie5jWiqflRWuiVMpOlgvDJ9e336BdA9DW5pOAUVm7rP7CwsNVq/bQ
-         Azw+uBi7EiBIW7oQN5NQPPcJlVq3RGZd28JBxd9K7tsGm+4eEKAnXYndc0vEsJhmiPkJ
-         a7fF/yOtiHop+lRYJJm9M0yoe79hJm2GlSLYjCUf04ayK1RDk7Yj3bzvZUrXTV0vXm9Q
-         Oio4qM7o2BJljx66TSn9U2FH9W0jM7BL1YhvIw9PQyOnB67pcjtwtccgU02Hg+HIJCFG
-         gAvQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzr52cLLReHJcyL54eORQMTNh8B7dTV+3ndy4sjxadH326irD9gdwDt5MgJLhK5uqik2w/x81aRWKke2qwV@vger.kernel.org
-X-Gm-Message-State: AFuF++l8W89lj6Zh6BuShFVSx7JANfvt3Vh+lmEou4+DSr3V9VxWhFm0
-	M+088ltDvAdJ44P+iFQPXHlJC0PNBndm34C2f7WuYj+xuA11ZpO/Y0Ab1OajmJtHIFVbLF/MDRN
-	DkublK5Wb5RMiEMThMrbCJzQvA6Hqt7o=
-X-Gm-Gg: AYBFou3S/dXo7AKolZcrL5dh1C3NWmvRUdekw3e2KfFNctZdEiCreQdZWQ4vRERokG8
-	CCmroU88B9ZrceqyhRhFJ9gAFIVx4kcC/JpdaF+C0ziu0jJQSLLXH7hOZpeAPT/z8jx5Oig/E2i
-	O2W//Hj6gx7BdaInitlBDOn7e5WhBJbWHTTb+cgzSZxSIFeWGoRbQS0AslYbokbhSnHadrZ+h6q
-	CehlGlMGF4vQ84xeSiDEbKBaTvfqdc/5YApoJ2T5p7UEGWFQGafqJagmjysceeL0yiBpgWWVi//
-	1WBbgGVE2NCOWNZQQR34ydhHgPriKuwb5DVQ8+5PWoRFkEYTojEu2VcuoTjsxm6LBmhFvasPBRr
-	HEfvvrcj1D11l
-X-Received: by 2002:a05:690c:91:b0:81c:89a2:dbce with SMTP id
- 00721157ae682-86c4d652716mr50577147b3.3.1788414519278; Wed, 02 Sep 2026
- 22:48:39 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788420608; x=1789025408;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=tw/7Pm6zA0Mzoef4R2syw+evCZTvzXDxRbaoH9jxbo0=;
+        b=GJZPliJUUQq/PrOY73lBwwJKqW25Y3UexvaUXr5OBf45LDi3g/9ZVvr2wQigJt4jYY
+         Te9ZwxPoD/s1ONaWavUO0bJUjYDD6LnXTIr/aPhvFS9br28XKxijxvCECYm2TAz7SaSJ
+         9xon9lPtHmWCFVPXVqxsNTgPnvg+qeKZPAr/FASrwv0A+ThXkVAojS2DPnBCLGgN7ca+
+         2HbV/5J+bo7sfaffHarq1VnAp2B8euPS43epUFTtRThLziyGrltG8DsiJ08hK3Az60br
+         chSMTdplurh/w5mwX5oEbMl89q0Aag/mkUcX+Nf6IO2/0f/aom602EP+ICMC42SNoqgw
+         QdsQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxYU6BudadFe3TcmswqZzIfYGie8AfhxoAV4Y1LbCVZ5nuviPZBjigUJ0R+HBknChxhLhENb/4sF0BK8Uv5@vger.kernel.org
+X-Gm-Message-State: AFuF++lTbelveAYyRl9L/zU8UKDx7Ahkgjo5x4rQ0CjXLLdMw637yiVJ
+	AggRMFZnmjR15+6sXEM5GtfjjqWUba3CfSxyryPVnHx+j3tSeo6tYDL4jFFZH2DAWxw=
+X-Gm-Gg: AYBFou1Fo3j7irPY+ifIAXZV++IqeWKO4bWYPb5jl2o8snzBoC9BMz/g+jpR2HmY/jG
+	mLmJrd4m0hcOXed9RjDyo+ugbQTDQ+Y1VDgPPK1/aN3YP3ygKX9gOH3Ith/eIuyr4kKv4G8vo+j
+	lQ0otUqtp/DA6B8vM81uzd+pmy+hzU2pTBckaEOhhIQUrl4YNX+ma9WxZYGVYrYsyJYutC3jEOh
+	Y37n5uOKzBLAUCbwbIALqMFLn2fieLQVx+t+nDEZECFcUQTBPsX+nrB/zszhk33kbeuEfCa+e6Z
+	da75VMO7m/E7Pv+ygMCXFtkF5KTp75ryNo1N0JlQgc+VDvs/nZ+Ifu6P+pKFN7sUVGhTuUCtJ9P
+	GYe19gG1kvf07MO/Lq7gzNnKlbzLbG0JUm3zDR1jNheQfoKbnV5ePlRda+hNfUUqWWEVLhxGe4T
+	95D3+tv11LnOS65B+FT93ZnEkHOOchXs0dMdE7Bn7zqh9B4I73yYyvU0isoQIYvCufy8bbrh+cq
+	QBt2TAgcmIvS58=
+X-Received: by 2002:a05:600c:154c:b0:49b:5521:785d with SMTP id 5b1f17b1804b1-49ce57f4d96mr176231405e9.4.1788420607726;
+        Thu, 03 Sep 2026 00:30:07 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm56807065e9.1.2026.09.03.00.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 00:30:07 -0700 (PDT)
+Date: Thu, 3 Sep 2026 09:30:05 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, song@kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: documentation: was: Re: [PATCH v7 for-next 3/8] livepatch:
+ Implement replace set for scoped atomic replace
+Message-ID: <apkh_fVZ75pm1Jzs@pathway.suse.cz>
+References: <20260825114641.80452-1-laoar.shao@gmail.com>
+ <20260825114641.80452-4-laoar.shao@gmail.com>
+ <apfRgPN7FWsgYSOn@pathway.suse.cz>
+ <CALOAHbCh1R0_zxZztvhYgUhtQswi7dzR-jw6AeA0MqF=BThdAQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-9-laoar.shao@gmail.com>
- <aphGEn8RDWQx_yEA@pathway.suse.cz>
-In-Reply-To: <aphGEn8RDWQx_yEA@pathway.suse.cz>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 3 Sep 2026 13:48:02 +0800
-X-Gm-Features: AcwNN1WU29NyAtuYPP3_Bcr93Nc64I5daT3XcMSZUoHEiCoCnG2aNOtB9jRbk5U
-Message-ID: <CALOAHbAm20jD2odE9afK8wwpqTymwv+TeGM9cD4E4i=xYWTbGw@mail.gmail.com>
-Subject: Re: [PATCH v7 for-next 8/8] selftests/livepatch: Add test for
- function conflict across provides
-To: Petr Mladek <pmladek@suse.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbCh1R0_zxZztvhYgUhtQswi7dzR-jw6AeA0MqF=BThdAQ@mail.gmail.com>
 
-On Wed, Sep 2, 2026 at 11:51=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrot=
-e:
->
-> On Tue 2026-08-25 19:46:41, Yafang Shao wrote:
-> > Livepatches with different provides ids must not modify the same
-> > function. If a second livepatch attempts to modify a function that
-> > has already been modified by a loaded livepatch with a different
-> > provides id, the loading will fail. If the second livepatch shares
-> > the same provides id, or if its obsoletes list contains the first
-> > livepatch's provides id, it will load successfully and replace the
-> > first one.
+On Wed 2026-09-02 17:50:28, Yafang Shao wrote:
+> On Wed, Sep 2, 2026 at 3:34 PM Petr Mladek <pmladek@suse.com> wrote:
+> > On Tue 2026-08-25 19:46:36, Yafang Shao wrote:
+> > > - obsoletes: an optional array of unsigned int ids specifying
+> > >   additional provides ids to be replaced. This allows a new patch
+> > >   to explicitly obsolete patches from different replace sets.
 > >
-> > Add a new test module test_klp_provides.c that patches meminfo_proc_sho=
-w
-> > (the same function as test_klp_atomic_replace) so that the two modules
-> > can be loaded with different provides ids to test the function conflict
-> > detection.
+> > We should mention here the special meanting of the "0" id.
+> > It enforces the most secure mode when only one livepatch
+> > can be enabled at any time.
 > >
-> > Add three test scenarios to test-provides.sh:
-> >
-> > 1. Function conflict across provides: load test_klp_atomic_replace with
-> >    provides=3D1, then attempt to load test_klp_provides with provides=
-=3D2.
-> >    The second livepatch is rejected because livepatches with different
-> >    provides ids and no obsoletes must not modify the same function.
-> >
-> > 2. Function replace within same provides: load test_klp_atomic_replace
-> >    with provides=3D1, then load test_klp_provides with provides=3D1. Th=
-e
-> >    second livepatch loads successfully and replaces the first one
-> >    because they share the same provides id.
-> >
-> > 3. Function replace across provides with obsoletes: load
-> >    test_klp_atomic_replace with provides=3D1, then load test_klp_provid=
-es
-> >    with provides=3D2 and obsoletes=3D[1]. The second livepatch loads
-> >    successfully and replaces the first one because the obsoletes list
-> >    allows it to replace a livepatch with a different provides id.
-> >
-> > Assisted-by: Comagic:DeepSeek-V4-Flash
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > ---
-> >  .../livepatch/test-provides-obsoletes.sh      | 110 ++++++++++++++++++
-> >  .../selftests/livepatch/test_modules/Makefile |   1 +
-> >  .../test_modules/test_klp_provides.c          |  72 ++++++++++++
-> >  3 files changed, 183 insertions(+)
-> >  create mode 100644 tools/testing/selftests/livepatch/test_modules/test=
-_klp_provides.c
-> >
-> > diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.=
-sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > index f9a9f9b28490..be54e8d2c889 100755
-> > --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > @@ -8,6 +8,7 @@ MOD_ATOMIC=3Dtest_klp_atomic_replace
-> >  MOD_LIVEPATCH=3Dtest_klp_livepatch
-> >  MOD_STATE=3Dtest_klp_state
-> >  MOD_STATE2=3Dtest_klp_state2
-> > +MOD_PROVIDES=3Dtest_klp_provides
->
-> The new module duplicates test_klp_atomic_replace.c. We want to avoid
-> this. Please, create the copy module by using
->
->     #include <original_module.c>
->
-> Also it would really help to use a better naming. As I suggeted in
-> the review of the 6th patch:
->
->    + test_klp_proc_meminfo_livepatch
->    + test_klp_proc_meminfo_livepatch2
->
-> or
->
->    + test_klp_meminfo_lp
->    + test_klp_meminfo_lp2
->
-> Then it will be clear that these are liveapatches and they modify
-> the same function.
->
-> Then it would be more obvious when they should succeed and
-> when fails:
->
-> # same function, replaced by provides
-> load_lp $MOD_MEMINFO_LP provides=3D1
-> load_lp $MOD_MEMINFO_LP2 provides=3D1
->
-> # same function, can't be loaded  in parallel
-> load_lp $MOD_MEMINFO_LP provides=3D1
-> load_failing_mod $MOD_MEMINFO_LP2 provides=3D2
->
-> # different functions, atomic replace works (nops)
-> load_lp $MOD_MEMINFO_LP provides=3D1
-> load_lp $MOD_CMDLINE_LP provides=3D1
->
-> # different functions, install in parallel
-> load_lp $MOD_MEMINFO_LP provides=3D1
-> load_lp $MOD_CMDLINE_LP provides=3D2
+> > Also it is important to explain here also the compatibility
+> > rules. They are important part of the design.
+> 
+> Ah, if you prefer to make '0' a special case, I will implement it that way.
+> This brings up the question you mentioned in another email: should we
+> allow loading another ID when livepatch ID 0 is already enabled? It
+> seems the answer is to reject the other ID.
 
-Thanks for your suggestion.
-I will update it.
+We first need to decide about the compatibility rules. Let's continue
+the discussion in the other thread "Replace rules...", see
+https://lore.kernel.org/all/apfQ6c_3giN615Ll@pathway.suse.cz/
 
---=20
-Regards
-Yafang
+Best Regards,
+Petr
