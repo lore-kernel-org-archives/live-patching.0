@@ -1,206 +1,202 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A5392C39
-	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 05:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 852C337188A
+	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 05:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788414303; cv=pass; b=AL+WFljlEg88XzvZwzY7CgfystiRXtwSPk35kHU3Lkp/3XlkkKW3X32wBIheNvffYmkNovmv1dS3/OozFljaH0DYrbQXZRU6PF7nznyYYuM0FeLsgh9EEAxPr6+rHg99h3oM41+5LN2SCARQ3J99iAVNVMRQZ0aWwqhmtiXp34o=
+	t=1788414521; cv=pass; b=nHpjFIEDeFXqLqr17fAgPh2HF4LLjSpI2UcuzU9C1ReJvYe1p0wUnTFC3pM1VOQAiC23U0A1qBqUp9+4KL/wYLEjSVpi9JDb+ramk20pF6TNgAxzE0gMtHhUH9ripz23R6KZ53J+j16yuXqMSxfHklbTysN2CPad8VaT+emiFSk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788414303; c=relaxed/simple;
-	bh=JRv44yZS6TOdVsYL6aujlshIw0O5RRQ3A6sGzpvBLmM=;
+	s=arc-20240116; t=1788414521; c=relaxed/simple;
+	bh=BwN0v0ISME7+uRzXI+Ig1sKkAbLZ2YkXkhqGyc9gLd4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fCgAvnTqc1VAKJQ81XnbOvu+kF79hoaQZNX3UtcZq2Spliq92RpfWVVTzBwyTgRfGup1Q61C0tUSOl+YAHxdfTr1JcE+XoBYAsTX67yd7s5W6E+6c0AnPZctHGut1XMjLva1eciWJwyBVuFVoPKZW0CQjnxstvdhUn6S43as0EQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EOGu/uuf; arc=pass smtp.client-ip=209.85.128.172
+	 To:Cc:Content-Type; b=snwnbU/sn3hPvp+KeZy5iQKztDfH+9a4GY9cAH/3Rubne5s9FECAZeA3iB78mJvSe4K62GsAONW9YZf5e0+ctfgUUPJzGi5FuV8V7wZ9A+kbA18czw+B8HGuqps/+wn3OMF8x2pqmZc6CWmABBLkXjWHn6QVQJbiepsGs9Sjsks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PidN1zRf; arc=pass smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EOGu/uuf"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-86d43cdee51so17042307b3.2
-        for <live-patching@vger.kernel.org>; Wed, 02 Sep 2026 22:45:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788414300; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PidN1zRf"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-8200b55dc47so24836207b3.3
+        for <live-patching@vger.kernel.org>; Wed, 02 Sep 2026 22:48:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788414519; cv=none;
         d=google.com; s=arc-20260327;
-        b=ogn1uIHEqrmsK+6FCrQbAerAHwcdntNpcHIMCJXjynpgRblsvfe3hIs17LESUdRZTF
-         rJMoV48Ny3ny9rt3l/1fJxkn09vZQmLqZH7Ud41dm5trGt0zkHbbywkOL/1Wq4NFPAqR
-         H9IaT0NaCtDojaYUbGBsy0PINncxEdUFpfAl+uWViCHTNnnptWpY1hVsjejwC8qQlhA6
-         GXjCMd+GJIJyh4omyIsaO7uMX1mUnMtjSAkwqHq1bnBNdISGRPjCpqws0VP0wwu4fP2E
-         nyNd140bZ0a9Jk2He6YAz4N0CnY2vUYInS1Dqe+qweawHr51N2KbzJ9gkiIl2i93l4F0
-         849g==
+        b=X4k8dp41YEYjWlBaYd7+kvfxI4/UQ/t5acidCASZWyrCpMOyaHG4d5YL+plEWGZ0Iq
+         PCdpOp1lVPC0OXP2E5qFhuTMB15JWk8yyBV6ZYHoyIBiZ8C23HQJnp6FIb8RhVnUcp15
+         8ddCjWkackdgIcWkkUBisLSrDN0xxY/9CSIrJ8OaYnq2W7zbyEIYdvsGxrvlsZIQ+pDh
+         NOx1RcKHSqJx4WQ86XIZIIwE35mnDY99Uwaujl9p0brvdmsBMfyMYNtVwy/oLR4vABkz
+         mSrNLYNWvEqt7LkDOJUiZspwuQqf1ze+ig47fdXIst0YV0mV0zK8XiZnqgj/X69frfBn
+         GnUA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rs1GsUG2y0Py+N3to2ZLYFaN+nlXAvezgWONgJQViK0=;
-        fh=0lmjpVTI7srXw/lG6O079retmJai8JZfiniJqiiGQFQ=;
-        b=DZDWTUMbksnkUpe6KqJv5PQUaaaLWLx3XHY/Tyjb/WMIHWyz8fUHyyDh+00ocD+DB3
-         xUXkWdKpWl5NtndfZuCaoCah6BqOvBgvUAiAkYrk3Wo6Nz1YfC6P2q4BAYgjjHxgdr00
-         tpbq8Zy0gvQl6w00GEFTX/sjEt9JpDr7Q4928lzfxxL4JeEY6EX4O+QquEThiNHN+dBb
-         es4Wo5GKo+EcUWogHtV6ZpO1aKWD5ay92GDnyn9uCqNMTQlJfC2MGgtsCskhX2A751pu
-         YOYqZYOvhwGPP4KPb6aCS+lfk6lbvkqI/tUrzyQU7s8C2E95OppIaamwG2U8ZnlznMJq
-         IuOQ==;
+        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
+        fh=pRgsO/uX+vFnq0AcgVN7JT7DnFvkOTQJ/sv+Z3JKrwA=;
+        b=HuCpt2pEeW+2xt/E1Rq+F+jEOxq2FNSjOplncskUm4j6ZiVNtMy3NhCYR75gKcKWrk
+         q3oHrUXpIfMkh8VzUQpT2Jy43hyppz4puWvcKX4ZCHOq4JG1eq/pRv/51WoFMgqGPHxl
+         zLCpJ0vZlcMe6apDtH6Nux8d5DVemElRP66btM9+6/v0Y3TdsBtrdKeOX/j5no77D2F4
+         0iJ8NSXs+fSqwojnhwAsrsjyGCa6LK7kphRUi/aMG2qBZeJ+Vm620qsRl6H9AhDaRdeB
+         dEGUD3rybXYRzo7fJq8KGRViPKJ1oRWwx/Go7VPy+6r8aUWC+utl9cMN3tvBiLRT0ZTQ
+         0Yrw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788414300; x=1789019100; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788414519; x=1789019319; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=rs1GsUG2y0Py+N3to2ZLYFaN+nlXAvezgWONgJQViK0=;
-        b=EOGu/uuf1NBsiMhzkssuROsgXOU4yy49CaCjuS82vsYmgE8RtnMvudpsHulGL06h3C
-         2SAAJ2weUc891sw22BEF0lughtC9hMa+MJtKVGy6Qq07qZakkB7In4tRfylPjI/D/G25
-         OAgAnD3P48Wksqtw38MdwVLOgfPwp2CL/kOlJi4xsG6KbHooGxBKHWDeqR2x01J3kI1A
-         48wOv3xTyr6wDwRzlSneGFm71QTW3v72pgRmoONFn9DbEwN2jh8Ud3E09Esz5X/nwjXr
-         xAdgK3vBa57KHVUpxYVijloE0QfvSDraZnRBAfWv5Hak8ZfPs/LPnkY5hnCVCbtWiNjt
-         ZJAA==
+        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
+        b=PidN1zRfnElfgEkciG8ZlK1f7ZtVaT8bwFkJPHtjGAtjuCRDl5nBkK2H/PRZqsxkla
+         5EFjae8bBzAiWUVySSOXJMdp7mQHlhAWHxMKoHtxSuhEv/ytCFBY0lEIPMpY0fa2GzCf
+         +/jiVw+7/E2u4Y2fGOcJ8DBtG7FY8BJlVs6fl+sydTxzeooyLHKKLglGaoCvXxWVZ8YV
+         9JAl9NlbUayUqsQi8RvLsDiZd7DvILvVn8E0Sh54BF7h81qD5GsrOzawrvXyhulwpCWH
+         jBra2Uplbg9lupuc9VqXNtHDioAdlF+xpiXaxOrn6dE32esHdUMGbkHoG6Wss1pPqCMO
+         XLKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788414300; x=1789019100;
+        d=1e100.net; s=20251104; t=1788414519; x=1789019319;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rs1GsUG2y0Py+N3to2ZLYFaN+nlXAvezgWONgJQViK0=;
-        b=USdOBqF72HqWD+Le+sgN0mlDkUZ+4N+jervkhX9OPM95JrBEc+Bohw+BSbRgftLhEq
-         DTUYxlIR/dfPuEkVX8ncd3i5PtD5JRdm3oPu5eRXbyxQ6bDjh332sQB3V2T87eQUMM5e
-         KJPLvtnprti7KTgOmNT4TEg8E6QZQpOH+75vdCCWIQFIG+cYCbnlU1Jr3qyioF+rgrml
-         gsb/DPFstIB7PKERz4gVrXLpjqmoNVR7xhaOiGkK1Nv11zM7GfAvUj8zgklv9OuRnB65
-         RmgieKT/xEX8xPBfLtAyn8GjB+veYyerBaUacj79FzorIjPEw6I/cPZBzLhL7GQjKakO
-         LbUQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzim21fnZLEd4Xv9qML9MPvfDQuAZHa4pt7+HF+USr/ESBJOBGB3x5eZ0b1ej62RzsTaYIHdUng3WCoDUV9@vger.kernel.org
-X-Gm-Message-State: AFuF++mY3FjzzoR9uGTQJ062OYHV0IbADwSEcKPtGlKLQFqUzseATwn6
-	ZgatyJhMejNyAaxYbznqvcW/+NK4DOJcpGF7WtjbXO3YafnFF11qogtjEFq6VNAhwZ7WYTPnTlL
-	cQbqD70tx4zLEx+gF/zJesr8TPWGk0WM=
-X-Gm-Gg: AYBFou3MxmtizenQnjECdWtmNKtC83wXUcsPcPcyyEJl6IiBlkOROz61PhZN7cLy3uz
-	s6NYcXvkqot/I4q6//3nLywL1F4p3I2SjFDeerieZrFKpSLXRgjSnwCxHZuPiXheAYrHgY54ehe
-	2DYyP6qclPrxFZRW7B8r0upyhJLOYitoJXMgDvlXKEhi7Rs2GiHKqf3G3sUXVO2b75uFZBJ1sM1
-	If4YyXSLsmLSgm0M5eIvYv2QzdZ3r08aPrR4FSQf8T08FjKrVor4rTYk7NlIkGIFtEa+qheLY/n
-	pYJArnL3GJpwmRVjy11wjpCZBhaPeLmgjFmgx0pi0sjCiW1mqgsfM5De+uc8L/qiMrdFzM7Gr9b
-	k5w==
-X-Received: by 2002:a05:690c:580a:b0:864:7ad7:a2f9 with SMTP id
- 00721157ae682-86c5454e9a4mr41867897b3.28.1788414300478; Wed, 02 Sep 2026
- 22:45:00 -0700 (PDT)
+        bh=pVD3Ul7TDR56+hhWprTXacwmkXG8ltct5NfdLC6T+/M=;
+        b=DDv5u+jsid7NKzy5C/+cr5qOzeKFgECUjvjfoizd7rA0ySSR1aA5Jqa4wiuwuvi2m6
+         /V2lM5ZFhTcg2qBie5jWiqflRWuiVMpOlgvDJ9e336BdA9DW5pOAUVm7rP7CwsNVq/bQ
+         Azw+uBi7EiBIW7oQN5NQPPcJlVq3RGZd28JBxd9K7tsGm+4eEKAnXYndc0vEsJhmiPkJ
+         a7fF/yOtiHop+lRYJJm9M0yoe79hJm2GlSLYjCUf04ayK1RDk7Yj3bzvZUrXTV0vXm9Q
+         Oio4qM7o2BJljx66TSn9U2FH9W0jM7BL1YhvIw9PQyOnB67pcjtwtccgU02Hg+HIJCFG
+         gAvQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzr52cLLReHJcyL54eORQMTNh8B7dTV+3ndy4sjxadH326irD9gdwDt5MgJLhK5uqik2w/x81aRWKke2qwV@vger.kernel.org
+X-Gm-Message-State: AFuF++l8W89lj6Zh6BuShFVSx7JANfvt3Vh+lmEou4+DSr3V9VxWhFm0
+	M+088ltDvAdJ44P+iFQPXHlJC0PNBndm34C2f7WuYj+xuA11ZpO/Y0Ab1OajmJtHIFVbLF/MDRN
+	DkublK5Wb5RMiEMThMrbCJzQvA6Hqt7o=
+X-Gm-Gg: AYBFou3S/dXo7AKolZcrL5dh1C3NWmvRUdekw3e2KfFNctZdEiCreQdZWQ4vRERokG8
+	CCmroU88B9ZrceqyhRhFJ9gAFIVx4kcC/JpdaF+C0ziu0jJQSLLXH7hOZpeAPT/z8jx5Oig/E2i
+	O2W//Hj6gx7BdaInitlBDOn7e5WhBJbWHTTb+cgzSZxSIFeWGoRbQS0AslYbokbhSnHadrZ+h6q
+	CehlGlMGF4vQ84xeSiDEbKBaTvfqdc/5YApoJ2T5p7UEGWFQGafqJagmjysceeL0yiBpgWWVi//
+	1WBbgGVE2NCOWNZQQR34ydhHgPriKuwb5DVQ8+5PWoRFkEYTojEu2VcuoTjsxm6LBmhFvasPBRr
+	HEfvvrcj1D11l
+X-Received: by 2002:a05:690c:91:b0:81c:89a2:dbce with SMTP id
+ 00721157ae682-86c4d652716mr50577147b3.3.1788414519278; Wed, 02 Sep 2026
+ 22:48:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-8-laoar.shao@gmail.com>
- <apg_3dLUGBeCjKoM@pathway.suse.cz>
-In-Reply-To: <apg_3dLUGBeCjKoM@pathway.suse.cz>
+References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-9-laoar.shao@gmail.com>
+ <aphGEn8RDWQx_yEA@pathway.suse.cz>
+In-Reply-To: <aphGEn8RDWQx_yEA@pathway.suse.cz>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 3 Sep 2026 13:44:24 +0800
-X-Gm-Features: AcwNN1WWYu-kqnWMHTsDXpE09m3DOQ_ZmDncypAtHOMYtOJo35E1UEl2ApfJNyA
-Message-ID: <CALOAHbB84_EzuP4W=rOsd15WjAAj=jdk1prs=iuDunUkJdcZkw@mail.gmail.com>
-Subject: Re: [PATCH v7 for-next 7/8] selftests/livepatch: Add test for state
- ID conflict across provides
+Date: Thu, 3 Sep 2026 13:48:02 +0800
+X-Gm-Features: AcwNN1WU29NyAtuYPP3_Bcr93Nc64I5daT3XcMSZUoHEiCoCnG2aNOtB9jRbk5U
+Message-ID: <CALOAHbAm20jD2odE9afK8wwpqTymwv+TeGM9cD4E4i=xYWTbGw@mail.gmail.com>
+Subject: Re: [PATCH v7 for-next 8/8] selftests/livepatch: Add test for
+ function conflict across provides
 To: Petr Mladek <pmladek@suse.com>
 Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
 	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 2, 2026 at 11:25=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrot=
+On Wed, Sep 2, 2026 at 11:51=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrot=
 e:
 >
-> On Tue 2026-08-25 19:46:40, Yafang Shao wrote:
-> > Livepatches with different provides ids must not share the same state
-> > id. If a second livepatch attempts to reuse a state id already
-> > registered by a livepatch with a different provides id, the loading
-> > will fail. However, if the second livepatch's obsoletes list includes
-> > the first livepatch's provides id, the second livepatch replaces the
-> > first one and may reuse the same state id.
+> On Tue 2026-08-25 19:46:41, Yafang Shao wrote:
+> > Livepatches with different provides ids must not modify the same
+> > function. If a second livepatch attempts to modify a function that
+> > has already been modified by a loaded livepatch with a different
+> > provides id, the loading will fail. If the second livepatch shares
+> > the same provides id, or if its obsoletes list contains the first
+> > livepatch's provides id, it will load successfully and replace the
+> > first one.
 > >
-> > Add provides and obsoletes module parameters to test_klp_state.c and
-> > test_klp_state2.c (guarded by #ifndef KLP_HAS_REPLACE) so that they
-> > can be loaded with different provides ids and obsoletes ids.
+> > Add a new test module test_klp_provides.c that patches meminfo_proc_sho=
+w
+> > (the same function as test_klp_atomic_replace) so that the two modules
+> > can be loaded with different provides ids to test the function conflict
+> > detection.
 > >
-> > Add a "state id conflict across provides" test scenario to
-> > test-provides.sh:
+> > Add three test scenarios to test-provides.sh:
 > >
-> >   - Load test_klp_state with provides=3D1, which registers state ID 1.
-> >   - Attempt to load test_klp_state2 with provides=3D2, which reuses the
-> >     same state ID 1. The second livepatch is rejected because
-> >     livepatches with different provides ids must not share the same
-> >     state id.
-> >   - Disable and unload the remaining livepatch.
+> > 1. Function conflict across provides: load test_klp_atomic_replace with
+> >    provides=3D1, then attempt to load test_klp_provides with provides=
+=3D2.
+> >    The second livepatch is rejected because livepatches with different
+> >    provides ids and no obsoletes must not modify the same function.
 > >
-> > Add a "taking over system state via obsoletes" test scenario to
-> > test-state.sh:
+> > 2. Function replace within same provides: load test_klp_atomic_replace
+> >    with provides=3D1, then load test_klp_provides with provides=3D1. Th=
+e
+> >    second livepatch loads successfully and replaces the first one
+> >    because they share the same provides id.
 > >
-> >   - Load test_klp_state with provides=3D10, which registers state ID 1.
-> >   - Load test_klp_state2 with provides=3D20 obsoletes=3D10, which reuse=
-s the
-> >     same state ID 1. Although the provides ids differ, the second livep=
-atch
-> >     replaces the first one because its obsoletes list includes the firs=
-t
-> >     livepatch's provides id (10). The state is taken over successfully.
-> >   - Unload the replaced livepatch, then disable and unload the second
-> >     livepatch.
+> > 3. Function replace across provides with obsoletes: load
+> >    test_klp_atomic_replace with provides=3D1, then load test_klp_provid=
+es
+> >    with provides=3D2 and obsoletes=3D[1]. The second livepatch loads
+> >    successfully and replaces the first one because the obsoletes list
+> >    allows it to replace a livepatch with a different provides id.
 > >
 > > Assisted-by: Comagic:DeepSeek-V4-Flash
 > > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 > > ---
-> >  .../livepatch/test-provides-obsoletes.sh      | 86 +++++++++++++++++++
-> >  .../livepatch/test_modules/test_klp_state.c   |  9 ++
-> >  .../livepatch/test_modules/test_klp_state2.c  | 19 ++++
-> >  3 files changed, 114 insertions(+)
+> >  .../livepatch/test-provides-obsoletes.sh      | 110 ++++++++++++++++++
+> >  .../selftests/livepatch/test_modules/Makefile |   1 +
+> >  .../test_modules/test_klp_provides.c          |  72 ++++++++++++
+> >  3 files changed, 183 insertions(+)
+> >  create mode 100644 tools/testing/selftests/livepatch/test_modules/test=
+_klp_provides.c
 > >
 > > diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.=
 sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > index 2707457b9133..f9a9f9b28490 100755
+> > index f9a9f9b28490..be54e8d2c889 100755
 > > --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
 > > +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > @@ -6,6 +6,8 @@
-> >
-> >  MOD_ATOMIC=3Dtest_klp_atomic_replace
+> > @@ -8,6 +8,7 @@ MOD_ATOMIC=3Dtest_klp_atomic_replace
 > >  MOD_LIVEPATCH=3Dtest_klp_livepatch
-> > +MOD_STATE=3Dtest_klp_state
-> > +MOD_STATE2=3Dtest_klp_state2
-> >
-> >  setup_config
-> >
-> > @@ -171,4 +173,88 @@ livepatch: '$MOD_ATOMIC': completing unpatching tr=
-ansition
-> >  livepatch: '$MOD_ATOMIC': unpatching complete
-> >  % rmmod $MOD_ATOMIC"
-> >
-> > +# - load a livepatch with provides=3D1 that registers state ID 1
-> > +# - try to load another livepatch with provides=3D2 that reuses the sa=
-me
-> > +#   state ID. The second one must be rejected because livepatches with
-> > +#   different provides ids must not share the same state id.
-> > +# - disable and unload the remaining livepatch
-> > +
-> > +start_test "state id conflict across provides"
-> > +
-> > +load_lp $MOD_STATE provides=3D1
-> > +load_failing_mod $MOD_STATE2 provides=3D2
+> >  MOD_STATE=3Dtest_klp_state
+> >  MOD_STATE2=3Dtest_klp_state2
+> > +MOD_PROVIDES=3Dtest_klp_provides
 >
-> It is not obvious why it should fail because we do not know the used
-> state id. It might be better to define it via a parameter. It would
-> even allow to test more variants:
+> The new module duplicates test_klp_atomic_replace.c. We want to avoid
+> this. Please, create the copy module by using
 >
-> # same state, same provides
-> load_lp $MOD_STATE_LP1 state=3D1 provides=3D1
-> load_lp $MOD_STATE_LP2 state=3D1 provides=3D1
+>     #include <original_module.c>
 >
-> # same state, misc provides
-> load_lp $MOD_STATE_LP1 state=3D1 provides=3D1
-> load_failing_mod $MOD_STATE_LP2 state=3D1 provides=3D2
+> Also it would really help to use a better naming. As I suggeted in
+> the review of the 6th patch:
 >
-> # same states, replaced by obsoletes
-> load_lp $MOD_STATE_LP1 state=3D1 provides=3D1
-> load_lp $MOD_STATE_LP2 state=3D1 provides=3D2 obsoletes=3D1
+>    + test_klp_proc_meminfo_livepatch
+>    + test_klp_proc_meminfo_livepatch2
 >
-> # misc states, same provides
-> load_lp $MOD_STATE_LP1 state=3D1 provides=3D1
-> load_failing_mod $MOD_STATE_LP2 state=3D2 provides=3D1
+> or
 >
-> # misc states, misc provides
-> load_lp $MOD_STATE_LP1 state=3D1 provides=3D1
-> load_lp $MOD_STATE_LP2 state=3D2 provides=3D2
+>    + test_klp_meminfo_lp
+>    + test_klp_meminfo_lp2
+>
+> Then it will be clear that these are liveapatches and they modify
+> the same function.
+>
+> Then it would be more obvious when they should succeed and
+> when fails:
+>
+> # same function, replaced by provides
+> load_lp $MOD_MEMINFO_LP provides=3D1
+> load_lp $MOD_MEMINFO_LP2 provides=3D1
+>
+> # same function, can't be loaded  in parallel
+> load_lp $MOD_MEMINFO_LP provides=3D1
+> load_failing_mod $MOD_MEMINFO_LP2 provides=3D2
+>
+> # different functions, atomic replace works (nops)
+> load_lp $MOD_MEMINFO_LP provides=3D1
+> load_lp $MOD_CMDLINE_LP provides=3D1
+>
+> # different functions, install in parallel
+> load_lp $MOD_MEMINFO_LP provides=3D1
+> load_lp $MOD_CMDLINE_LP provides=3D2
 
-Makes sense.
+Thanks for your suggestion.
 I will update it.
 
 --=20
