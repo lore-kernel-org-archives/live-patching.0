@@ -1,78 +1,79 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EEE423EB7
-	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 07:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B28B36167E
+	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 09:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788420625; cv=none; b=LTh01vrP7GA5zyNKI/1KBA6I978Pm1LXGBkjFxfH4IlJ1yrso3j5+CQ8nJ39/IipoKVx1WpEK7TTiN5evMzPEkHy4mIo5oer4ueDYHs+zgWYrW9uVV+RomcfAfeagzHYUdmFor86My2XIWBtxa95+GIoH8tNjGgLxZX4gud7D4g=
+	t=1788427658; cv=none; b=UcmB5WrpjMfhLxJlp0OIaAIMKPF2J9rAmYnWamxsZFWwYMBUq6/1SOofcJNY+2/aqZ9L1tN/ayMooK48arF7Wg8i/vCTW6jCy+9Q5+1Yu93/S+Krly2gRQSIvNq+D5AWmDMqL7uxdm9g1smL7bNchysspixJbu9/tZHsms+cekk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788420625; c=relaxed/simple;
-	bh=2nrqvrQ/NYzEeIYa7fbWNoPrAdM3T5KYXbQtL3KEWkU=;
+	s=arc-20240116; t=1788427658; c=relaxed/simple;
+	bh=2CqoirDhSro/DIzmMuu5OHYE92zS0qQ9eAazAOgBd/U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h4jebnKHt6YB0EVzqbSyMYy4AzT/6ynIfFXfnrnRZPIELZimKQ1K1XZK2ulA+kHtx7A6zWeB7SR9JFVloSGD3fxKliyOAfK0jir3OVfZ32ovMPzjG8phOXyoqRLpADF+neZlgDb1AgD5V1RZ1UjV9t5oN2CowbAdrxrfibtan4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ckLYXxNH; arc=none smtp.client-ip=209.85.128.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=OPUkmkY3eqQFTccekMMAfNoh0umQTfIg//8ehy6vLu/LOmYmVmeAhQRT9kpDlqBaWdEKfYAhfwDd+ublTi2KPwhN1DaaWSSk43wO2MMVZWOwxQ+bZzKD8LSE4YIGjWq9wOlS37i8p9UilkRebgqRF+oqDMEgVAoRvQdEmGk6UCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BJQUIBKu; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ckLYXxNH"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b96837ca3so14148045e9.3
-        for <live-patching@vger.kernel.org>; Thu, 03 Sep 2026 00:30:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BJQUIBKu"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-485843aeab8so215712f8f.1
+        for <live-patching@vger.kernel.org>; Thu, 03 Sep 2026 02:27:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788420608; x=1789025408; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1788427650; x=1789032450; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tw/7Pm6zA0Mzoef4R2syw+evCZTvzXDxRbaoH9jxbo0=;
-        b=ckLYXxNHpwcThomu7jQKht0JLJT8GAaQMTmsgqjtS21X4CnPiLQ1KbeWJQpfiQpMiS
-         XvqWoHkaNCOLp4riIEqW7MOVBMj52Wichj+keQpFbcndm44bz7GArZjCwaqCsCLH5ARL
-         KQHgyPLiiNVkPGxz19KMt53LijYaqt2vJwm7PmkN+eS84Yy0lV5rbEUj8t9NZ4zFPo4W
-         Mxu70mTR82NYvkyj/cRUSa5XUIDg38luCNyjeNNjHy/IgTMTEktIOkeZa/Qv49FcdEFx
-         SSf6/nG0kiZdsUurtkgVnVl6CnKzAIaDEHrO4db5JGnPdZvHJApNSkiCaLYkQTKlOLP7
-         E2ZA==
+        bh=Jp3vYoWtYDkgfiHgrii6jKsTHN9fg0+wIpwgB3iVTJY=;
+        b=BJQUIBKusMLnYSQ5P3o/wmAiP+42EkpqpFGlo1LBYnt/hipLk/4JFUniS4D00G/UQn
+         IZzEmWXa7cGmNJwbcLP6gp5fobSqJhvPQKR1EvI+d1BD77d29PArW0PZSg8Q/YDw7JlE
+         kYAZMUrvNsv4aLJ0iqwuY9Gt0C16SpRoqbIhGF1ZedWCyYD+Qahse8g0mzpqE/+BVmYH
+         68yYkIK3peDz+7kzI6Dp5Hg83qNl9Lwa/eH1P75wd5+Nwn3biEabmbO6LvmdsNTilWnE
+         mRuo+9oI3eTwRKfCwebQ9WcGmjfJZZNfxXMU3FrxrK1spgerjPclG64yJYbdEAqd9Dgw
+         Gf3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788420608; x=1789025408;
+        d=1e100.net; s=20251104; t=1788427650; x=1789032450;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=tw/7Pm6zA0Mzoef4R2syw+evCZTvzXDxRbaoH9jxbo0=;
-        b=GJZPliJUUQq/PrOY73lBwwJKqW25Y3UexvaUXr5OBf45LDi3g/9ZVvr2wQigJt4jYY
-         Te9ZwxPoD/s1ONaWavUO0bJUjYDD6LnXTIr/aPhvFS9br28XKxijxvCECYm2TAz7SaSJ
-         9xon9lPtHmWCFVPXVqxsNTgPnvg+qeKZPAr/FASrwv0A+ThXkVAojS2DPnBCLGgN7ca+
-         2HbV/5J+bo7sfaffHarq1VnAp2B8euPS43epUFTtRThLziyGrltG8DsiJ08hK3Az60br
-         chSMTdplurh/w5mwX5oEbMl89q0Aag/mkUcX+Nf6IO2/0f/aom602EP+ICMC42SNoqgw
-         QdsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxYU6BudadFe3TcmswqZzIfYGie8AfhxoAV4Y1LbCVZ5nuviPZBjigUJ0R+HBknChxhLhENb/4sF0BK8Uv5@vger.kernel.org
-X-Gm-Message-State: AFuF++lTbelveAYyRl9L/zU8UKDx7Ahkgjo5x4rQ0CjXLLdMw637yiVJ
-	AggRMFZnmjR15+6sXEM5GtfjjqWUba3CfSxyryPVnHx+j3tSeo6tYDL4jFFZH2DAWxw=
-X-Gm-Gg: AYBFou1Fo3j7irPY+ifIAXZV++IqeWKO4bWYPb5jl2o8snzBoC9BMz/g+jpR2HmY/jG
-	mLmJrd4m0hcOXed9RjDyo+ugbQTDQ+Y1VDgPPK1/aN3YP3ygKX9gOH3Ith/eIuyr4kKv4G8vo+j
-	lQ0otUqtp/DA6B8vM81uzd+pmy+hzU2pTBckaEOhhIQUrl4YNX+ma9WxZYGVYrYsyJYutC3jEOh
-	Y37n5uOKzBLAUCbwbIALqMFLn2fieLQVx+t+nDEZECFcUQTBPsX+nrB/zszhk33kbeuEfCa+e6Z
-	da75VMO7m/E7Pv+ygMCXFtkF5KTp75ryNo1N0JlQgc+VDvs/nZ+Ifu6P+pKFN7sUVGhTuUCtJ9P
-	GYe19gG1kvf07MO/Lq7gzNnKlbzLbG0JUm3zDR1jNheQfoKbnV5ePlRda+hNfUUqWWEVLhxGe4T
-	95D3+tv11LnOS65B+FT93ZnEkHOOchXs0dMdE7Bn7zqh9B4I73yYyvU0isoQIYvCufy8bbrh+cq
-	QBt2TAgcmIvS58=
-X-Received: by 2002:a05:600c:154c:b0:49b:5521:785d with SMTP id 5b1f17b1804b1-49ce57f4d96mr176231405e9.4.1788420607726;
-        Thu, 03 Sep 2026 00:30:07 -0700 (PDT)
+        bh=Jp3vYoWtYDkgfiHgrii6jKsTHN9fg0+wIpwgB3iVTJY=;
+        b=Gxw1CMXj7RXuTNospWFCiyeNqFKySonk9VK70ZTPzuKShEIs3KoNsgy+DbyQnqXj+y
+         7d5fgiL6m9wT2Vw/VXHTftfxTIwWYeicK2CWGOvGMgM5py33HG1QeNkNJ64jLeGRsU6F
+         i++sCKesmB6QzYQuaRJ+ma4eVAMtPnHapTlGmu3MhNEmfI33UFrJtUkDFn9RVHMVTfGT
+         ekKchalk+UT1yXiF5JrQ7akmjO3/bSJoLLijAt1ld9qi5P0Q0B1co+JMmMbOj3SNSQUE
+         C5uLl7RQT+lOWso/09kaRapQz/trloIG5PV8osBjt7UJdKbd/6lU3nJm2bbkyUj7dZs2
+         e/dA==
+X-Forwarded-Encrypted: i=1; AKwUvBxRDdh/CaiCKtm/lHQgp+t8UnSvnJx/cF9WHGurMkq53bgfo/DX3eAfaMxOxKBbT6Ghb4+mDzML8M1UgX43@vger.kernel.org
+X-Gm-Message-State: AFuF++nQqQ+a2NAlTfRdQFeRGvzmpRA18j5OelKw2mC3Qxt0R89iLwsd
+	7ZNjWJ0pvY7RF3BkZpgQkd8pdQMD6DyRH8w/1Vm+mtcjSNMggjCFIE7PM8XnVTH6cZvDqvahDDD
+	O7h1CyGs=
+X-Gm-Gg: AYBFou1kh58kDYXzEMevkGcydmXcZV8eaY+UM8AkzaZHnLrHq28xRaQF56jKkbs8Ioe
+	lkwtjhs+/yniP8nzG+uz1plFb4t7tXXOzofP8HPxx3V+RKLGo0X62hS2u6QXdHBq5qJvKFlYbV9
+	1nWkJ1BKu82hemeNivyqHVFaYN9ZPEAVXlIj/DLfw/NM2lV60Qb4WlDrbJ3xbpbXprZAmH+2yWj
+	z3SKSAP7Evc3Hq7fbYORlpFSUMreuKBxhyMydaiY6OObB/B4DA+6+/6ZXiwXp7Go/kfa5QdWSFv
+	FkupjE+nKXeOboAhkRtjDVjrANgZtgQZgCQckks59AkM4Yc8nRqQ1zKz6v+hZE72Q+mvH4VR9bk
+	a6XEazdSezZ+SUiDyJJJTNx9vGFpFAfdVAAognvVEE4M1HRNcWkjCuLPgRrrkrd4+687kJvnCke
+	W/qS3GxqCCTBopmjsFRp3JSkcX4QBvyriP9lh6PjmQrNwIKixiZNE8YQpoHVeJUlgMtjsPwnXD1
+	PJezrJ8UZ4AlLI=
+X-Received: by 2002:a05:6000:1449:b0:482:ea9b:962c with SMTP id ffacd0b85a97d-48488f23cb6mr20489334f8f.22.1788427649730;
+        Thu, 03 Sep 2026 02:27:29 -0700 (PDT)
 Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm56807065e9.1.2026.09.03.00.30.06
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-484492ce5e5sm12209135f8f.36.2026.09.03.02.27.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 00:30:07 -0700 (PDT)
-Date: Thu, 3 Sep 2026 09:30:05 +0200
+        Thu, 03 Sep 2026 02:27:29 -0700 (PDT)
+Date: Thu, 3 Sep 2026 11:27:27 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: Yafang Shao <laoar.shao@gmail.com>
 Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
 	joe.lawrence@redhat.com, song@kernel.org,
 	live-patching@vger.kernel.org
-Subject: Re: documentation: was: Re: [PATCH v7 for-next 3/8] livepatch:
+Subject: Re: Replace rules: was: Re: [PATCH v7 for-next 3/8] livepatch:
  Implement replace set for scoped atomic replace
-Message-ID: <apkh_fVZ75pm1Jzs@pathway.suse.cz>
+Message-ID: <apk9f_LsGRYHzN0Z@pathway.suse.cz>
 References: <20260825114641.80452-1-laoar.shao@gmail.com>
  <20260825114641.80452-4-laoar.shao@gmail.com>
- <apfRgPN7FWsgYSOn@pathway.suse.cz>
- <CALOAHbCh1R0_zxZztvhYgUhtQswi7dzR-jw6AeA0MqF=BThdAQ@mail.gmail.com>
+ <apfQ6c_3giN615Ll@pathway.suse.cz>
+ <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -82,30 +83,173 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbCh1R0_zxZztvhYgUhtQswi7dzR-jw6AeA0MqF=BThdAQ@mail.gmail.com>
+In-Reply-To: <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com>
 
-On Wed 2026-09-02 17:50:28, Yafang Shao wrote:
-> On Wed, Sep 2, 2026 at 3:34 PM Petr Mladek <pmladek@suse.com> wrote:
+On Wed 2026-09-02 17:40:02, Yafang Shao wrote:
+> On Wed, Sep 2, 2026 at 3:31 PM Petr Mladek <pmladek@suse.com> wrote:
+> >
 > > On Tue 2026-08-25 19:46:36, Yafang Shao wrote:
+> > > The current bool replace flag is too coarse: it is either all or
+> > > nothing. A livepatch with .replace=true replaces ALL existing
+> > > livepatches, which is safe but inflexible. There is no way to have
+> > > multiple independent livepatch sets coexist on the same system.
+> > >
+> > > Replace it with a more flexible model using two new fields in
+> > > struct klp_patch:
+> > >
+> > > - provides: an unsigned int id identifying the patch replace set.
+> > >   By default (provides=0), any livepatch replaces any other livepatch.
+> > >
 > > > - obsoletes: an optional array of unsigned int ids specifying
 > > >   additional provides ids to be replaced. This allows a new patch
 > > >   to explicitly obsolete patches from different replace sets.
 > >
-> > We should mention here the special meanting of the "0" id.
-> > It enforces the most secure mode when only one livepatch
-> > can be enabled at any time.
+> > > --- a/include/linux/livepatch.h
+> > > +++ b/include/linux/livepatch.h
+> > > @@ -123,7 +123,8 @@ struct klp_state {
+> > >   * @mod:     reference to the live patch module
+> > >   * @objs:    object entries for kernel objects to be patched
+> > >   * @states:  system states that can get modified
+> > > - * @replace: replace all actively used patches
+> > > + * @provides:        only one active livepatch per id
+> > > + * @obsoletes:       replace given livepatch id(s)
+> > >   * @list:    list node for global list of actively used patches
+> > >   * @kobj:    kobject for sysfs resources
+> > >   * @obj_list:        dynamic list of the object entries
+> > > @@ -137,7 +138,9 @@ struct klp_patch {
+> > >       struct module *mod;
+> > >       struct klp_object *objs;
+> > >       struct klp_state *states;
+> > > -     bool replace;
+> > > +     unsigned int provides;
+> > > +     unsigned int *obsoletes;
+> > > +     unsigned int nr_obsoletes;
 > >
-> > Also it is important to explain here also the compatibility
-> > rules. They are important part of the design.
+> > This is a different sematic in compare with the other arrays.
+> > I guess that you wanted to allow obsoleting livepatch with '0' ID.
 > 
-> Ah, if you prefer to make '0' a special case, I will implement it that way.
-> This brings up the question you mentioned in another email: should we
-> allow loading another ID when livepatch ID 0 is already enabled? It
-> seems the answer is to reject the other ID.
+> right.
+> 
+> >
+> > But '0' is special. It obsoletes anything. Maybe, we could
+> > make it even more special and say that it can't obsoleted.
+> > Then we would be able to use it as the trailing element
+> > in the array...
+> >
+> > I do not have strong opinion about this. It is just an idea.
+> 
+> Making '0' special is good for backward compatibility, but it
+> complicates usage for users. Therefore, I prefer not to treat '0' as a
+> special case.
 
-We first need to decide about the compatibility rules. Let's continue
-the discussion in the other thread "Replace rules...", see
-https://lore.kernel.org/all/apfQ6c_3giN615Ll@pathway.suse.cz/
+Ah, I have missed that the current code does not treat '0' special.
+I was confused by the following sentence in the commit message:
+
+<paste>
+  By default (provides=0), any livepatch replaces any other livepatch.
+</paste>
+
+and this paragraph in the documentation:
+
+<paste>
+ It should be emphasized that the preferred and most secure way is to always use
+ the default ``provides = 0``. In this mode, any livepatch replaces any other
+ livepatch, preventing any unexpected interactions between incompatible
+ livepatches.
+</paste>
+
+I understood it the way that ``provides = 0`` was supposed to be
+special and always replace all other livepatches.
+
+I think that I was affected by Miroslav. I had an off-list discussion
+with him about this some time ago. My understanding is that Miroslav
+would prefer to somehow preserve the original ``replace = true``
+when the livepatch patch replaced anything.
+
+It might be useful for OS providers who want to make sure that their
+kernel critical fixes can be installed on the user system. Otherwise,
+customers might complain that some update failed, ...
+
+Of course, it has a drawback that any livepatch with ``prov ides= 0``
+would wipe any 3rd party livepatches, even when they are against 3rd
+party modules.
+
+I am not completely sure that this the special handling is a good
+idea. A better solution might be an option which might be used when
+loading the livepatch. e.g.
+
+    insmod livepatch.ko replace_all=y
+
+
+Any opinions?
+Miroslav?
+
+> > Another question:
+> >
+> > Should we allow to enable a livepatch when its provides id
+> > is obsoleted by a currently enabled livepatch?
+> 
+> Good question.
+> I believe it's best to refuse to load it, as doing otherwise might
+> introduce potential issues. I will update this rule in the next
+> version.
+> 
+> >
+> > For example, let's have:
+> >
+> >   + Livepatch A: provides:1
+> >   + Livepatch B: provides:2, obsoletes:1
+> >
+> > Now, two scenarios:
+> >
+> >   1. Livepatch A can be replaced by livepatch B. This is easy.
+> >   2. Can livepatch B get replaced by livepatch A?
+> 
+> No, I don't believe B should be replaced by A. In this case, if B is
+> already enabled, A should fail to load.
+
+This is my preference as well.
+
+
+> > The current code would allow to replace B with A when there is
+> > _no_ real conflict in the livaptched objects, functions, and states.
+> >
+> > But does it make sense?
+> >
+> > Reasoning: Livepatch B obsoleted the livepatch A for a reason.
+> >         It sounds like they should not be enabled at the same time.
+> >
+> >
+> > Special case:
+> >
+> > Should we allow to install a livepatch with non-zero provides
+> > when a livepatch with zero provides is installed.
+> >
+> > For example, let's have:
+> >
+> >   + Livepatch A: provides:1
+> >   + Livepatch B: provides:0
+> >
+> > Now, two scenarios:
+> >
+> >   1. Livepatch A can be replaced by livepatch B. This is easy.
+> >   2. Can livepatch A be installed in parallel with B?
+> >
+> > Reasoning: The livepatch B replaces everything because it wants
+> >         to be the only installed livepatch. It sounds weird
+> >         to "break" it by installing A in parallel later again.
+> 
+> So, let's just not treat '0' as a special case?
+
+I am not sure.
+
+I personally think that '0' should not be special. A better solution
+for a forced cleanup is the "replace_all" module option.
+
+The module option would need to be implemented in the livepatch code.
+But it will need some support in the livepatch core as well, either
+a flag in struct klp_patch or parameter in klp_enable_patch().
+IMHO, the flag in struct klp_patch might be more practical.
 
 Best Regards,
 Petr
