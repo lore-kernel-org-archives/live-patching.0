@@ -1,87 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-39.mta1.migadu.com [95.215.58.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B37647044E
-	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 21:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54946254AFF
+	for <live-patching@vger.kernel.org>; Fri,  4 Sep 2026 01:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788470314; cv=none; b=IKJLoN3eUI367JAEv8gJ0RtxyFkg+xN9SEcsYFYj1B3kb9XHg7WGVgXSPLj9ggvpA7s4sgrEYWXxMzyov6N42/UZSVEUXegJjk/ZXjGOvXJdXfQjWkVkDvmdIVqHDUtVOrlb2gAR8MDFMZZRrkQ/KwJmq97AYV2BTA9YWuAjvPA=
+	t=1788484733; cv=none; b=Gfnf2UqPq+U/VRpizXFkncBfV7wySN2cFcU0DqkmE5iMLoSihJCREEeyUXYYlEo4OdiGoOvPQULtEHQVec3RINKxNzBsZmr3gx/D0RXz3h+0dISyJgkyqKP3WEwop1yNPzwUjmmuPH/UPhq2cEgRPZjrW3cpB0/rDt7GbWtB+hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788470314; c=relaxed/simple;
-	bh=ZNhT5YbawNeK38uD8bMLp7GNfbfBJvvuPpzqb7Mj23s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L5yY1ShxNcnMFfwfpdAcaiQOU0ED4GncxG9jlo4yO/7yLqEV/wI0s4X1mNKQcn5j3jDKLGdtulkmTuAu9FdfRr4sJnGd0JYG+IRT/Z7cbU1GmFlj8rt0Jckx2cWACbS/44xtkMMHOsHkcjXg6Kd69NN6NadL9LovTMOJDURkuGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Opm1seZA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788484733; c=relaxed/simple;
+	bh=pX4mprltnCki1qpdruO6HrE63FIOiVDHWjIkL4K12d4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qLBpMAfxGK7wRkoDHD0+2Wf4e3f8D0kP80ZXzotZ1D5a1d+V3BxJS3x5eixbKq3HacV1whzcMIi6EP2wqn7bbk3sp8aZuGBCN2d3BAt02fdb4rZhKBp3tiXgVrfOymA2qYLtlGrDFt5c3R7C3YjW6q1Q+toQUcWYzTmmFTWvmKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Oj5hoRhu; arc=none smtp.client-ip=95.215.58.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Opm1seZA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43ACF1F000E9
-	for <live-patching@vger.kernel.org>; Thu,  3 Sep 2026 21:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788470311;
-	bh=yBT/w4H1nByHxcEeE8KfgBIAkWuXul7cj6fIHk2LA4U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Opm1seZAWbwLB3gOKwv4wiqRV8C+B6wphNNDt978lUbEWVSQgn5bcANQzuULfcylP
-	 SeuTeWDSvu3IGHhgkV6dvkgsnLGo2SZgDGX06Np1EOVyRhDCDOZ7T9U91b7PcOrQvb
-	 Rh71L2fjOUUzgvOBHA7CUIzY3k23tM5tmbCvdIeVPfa3je86UrPUKqBcHQeH/bLCPp
-	 k82Pe1cKH35DakXeWZmeEMbFZe06mD1+Sg0KsKxpH0eAhQcM63j5Fav2eRBh7gKXm/
-	 3N6Mwh28hxyBZMkHN2KRpdBXx1NcXOuU8Zxdln8lZx6rUX+Gv0u+DJsxkeQxdfeGrT
-	 BJaQVmzPYmKew==
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-92ea24a2dbfso38625785a.0
-        for <live-patching@vger.kernel.org>; Thu, 03 Sep 2026 14:18:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz6YXUXoRYBQ0KXecise20/Wv8gK3xfX5xPdSVDPkw/0DlDeK40Dr68BSbNE5qnSoqUN8cnAPkTcsf+3t13@vger.kernel.org
-X-Gm-Message-State: AFuF++nauVv/EogjNOLd3OmeovLPFGfrOa0r24torO1JWCheGtp/JHrA
-	pBvcxcEG8OWu3ujQulwiNdN91cj/RduCKPrdI1o9oW5y25kaDjIlMyDq8z8x6A0WT1V3KBlLRUX
-	pKffHH4RtUaQGu6AzkjtRztWVcoo7l68=
-X-Received: by 2002:a05:620a:4443:b0:92e:5d44:73fc with SMTP id
- af79cd13be357-939805cd179mr103565585a.12.1788470310565; Thu, 03 Sep 2026
- 14:18:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Oj5hoRhu"
+X-Envelope-To: live-patching@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pX4mprltnCki1qpdruO6HrE63FIOiVDHWjIkL4K12d4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788484728; v=1; x=1789089528;
+ b=Oj5hoRhudceXSudZeFbClMbScy6qy/7ECIkZqpb0BHyOJIdv/vcpuzS//quGGiGBpxubsdIm
+ h0T2E4otEyvdlC7VMqr9KbrQR6jsKrGAgbBtNFaMVDWrfDXENWVyc/4zscjpDR8opjl6vudnPXy
+ T+oFZg5+ON8054eZ0yimUG/U=
+X-Envelope-To: live-patching@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 36c46a2b2cd0163d;
+	Fri, 04 Sep 2026 01:18:48 +0000
+X-Mizu-Trace-ID: 36c46a2b2cd0163d
+X-Migadu-Flow: FLOW_OUT
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH RFC 0/8] arm64: ftrace: support CALL_OPS on kernels built
+ with kCFI
+Date: Fri, 04 Sep 2026 01:18:32 +0000
+Message-Id: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-4-laoar.shao@gmail.com>
- <apfQ6c_3giN615Ll@pathway.suse.cz> <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com>
- <apk9f_LsGRYHzN0Z@pathway.suse.cz>
-In-Reply-To: <apk9f_LsGRYHzN0Z@pathway.suse.cz>
-From: Song Liu <song@kernel.org>
-Date: Thu, 3 Sep 2026 14:18:18 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4sac0Xzumm0sRPXTy7Pe=OZucA4RDEBmmgF-e_fT_tqA@mail.gmail.com>
-X-Gm-Features: AcwNN1WvABViPozAs2xN3ws_olz2nLOEbUfEbUoU7nNy6ixTG4KcCLekIEzvoXE
-Message-ID: <CAPhsuW4sac0Xzumm0sRPXTy7Pe=OZucA4RDEBmmgF-e_fT_tqA@mail.gmail.com>
-Subject: Re: Replace rules: was: Re: [PATCH v7 for-next 3/8] livepatch:
- Implement replace set for scoped atomic replace
-To: Petr Mladek <pmladek@suse.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
-	mbenes@suse.cz, joe.lawrence@redhat.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGgcmmoC/2WNwQrCMBBEf6Xs2aVpCQG9Cn6A1+IhSTd2NaYhU
+ RFK/92kHj3OY+bNApkSU4ZDs0CiN2eeQwndrgE76XAl5LFk6EWvxF5INBJ1eiiJVns/x4x36xi
+ lEJ0iGqUzAso2JnL82bwDnE9HuPxgfpkb2Wc11prRmdAkHexUkY+tke0G/z9gXb90wKFvrgAAA
+ A==
+X-Change-ID: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
+To: Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, 
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>
+Cc: Leon Hwang <leon.hwang@linux.dev>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ Ben Cressey <ben@cressey.dev>, 
+ "Florent Revest (Anthropic)" <florent.revest@linux.dev>, 
+ "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+X-Mailer: b4 0.15.2
 
-On Thu, Sep 3, 2026 at 2:27=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
-:
-[...]
-> > > Reasoning: The livepatch B replaces everything because it wants
-> > >         to be the only installed livepatch. It sounds weird
-> > >         to "break" it by installing A in parallel later again.
-> >
-> > So, let's just not treat '0' as a special case?
->
-> I am not sure.
->
-> I personally think that '0' should not be special. A better solution
-> for a forced cleanup is the "replace_all" module option.
+CALL_OPS and kCFI have been mutually exclusive on arm64 since commit
+baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
+kCFI checks the type hash at a fixed offset before the entry point, so
+every function needs the same number of prefix NOPs. Before clang 21 the
+compiler could not emit prefix NOPs without also adding the function to
+ftrace's table. Since commit 9315e22b0c0a ("arm64: ftrace: allow
+DIRECT_CALLS without CALL_OPS") a kCFI kernel can attach BPF
+trampolines. A trampoline out of BL range is reached through
+ftrace_caller. That path costs ~10 ns more per call than on a CALL_OPS
+kernel, plus ~4 ns for every extra ftrace_ops registered. Clang 21 takes
+a section name as a third argument of -fpatchable-function-entry [1].
+This series uses it to give every function three prefix NOPs while
+keeping untraced functions out of ftrace's table, and enables CALL_OPS
+under kCFI. The per-call cost drops by ~10 ns and stops growing with the
+number of ftrace_ops registered.
 
-If we want '0' to be special, let's make it "not replace anything".
-Then folks who prefer to have all the live patch loaded at the
-same time have an easy solution.
+Patch 1 lets core ftrace skip a patch site the architecture rejects,
+which patch 4 relies on. Patch 2 takes the sorttable entry offset from
+Kconfig. Patch 3 lets notrace keep the prefix NOPs. Patch 4 makes the
+arm64 prefix layout configurable and refuses patch sites that do not
+fit. Patch 5 applies the prefix count where the type hash is emitted or
+read by hand. Patch 6 adds the compiler probe and enables CALL_OPS
+under CFI. Patch 7 uses five NOPs on ThinLTO kernels with BTI. Patch 8
+gives Rust functions the same prefix NOPs.
 
-> The module option would need to be implemented in the livepatch code.
-> But it will need some support in the livepatch core as well, either
-> a flag in struct klp_patch or parameter in klp_enable_patch().
-> IMHO, the flag in struct klp_patch might be more practical.
+The cost is text size, 4.8% of .text on a defconfig-based build with
+CFI and 7.4% with ThinLTO and BTI. CALL_OPS under CFI needs clang 21 or
+later, and Rust 1.98 or later with RUST=y. Commit d3359af21fc9e ("arm64:
+bti: Disable in-kernel BTI with recent versions of Clang") turns BTI
+off on clang 21 or later, so a mainline build has one or the other
+today. A module must be built with the same prefix count as its kernel,
+since vermagic does not carry the count.
 
-What is the use case of replace_all?
+Numbers below are from a KVM guest on a Graviton4 host, v7.3-rc1 with
+and without this series, clang 21.1.4. Cost of a fentry program on a
+syscall, per call, the call with the program attached minus the call
+without it:
 
-Thanks,
-Song
+  Kernel            | Trampoline   | Extra      || Per-call cost (ns)
+                    | vs. BL range | ftrace_ops || Median | Min  | Max
+  ==================+==============+============++========+======+======
+  kCFI, base        | out of range |          0 ||   32.9 | 32.6 | 33.4
+  kCFI, base        | out of range |         16 ||   92.6 | 92.4 | 96.3
+  kCFI, base        | in range     |          0 ||   21.3 | 21.0 | 21.8
+  ------------------+--------------+------------++--------+------+------
+  kCFI, this series | out of range |          0 ||   22.7 | 22.0 | 22.9
+  kCFI, this series | out of range |         16 ||   22.1 | 21.9 | 22.4
+  kCFI, this series | in range     |          0 ||   22.4 | 22.1 | 22.6
+  ------------------+--------------+------------++--------+------+------
+
+Mark Rutland discussed the uniform prefix with a section for untraced
+entries in 2022 [2]. His review of the DIRECT_CALLS series raised the
+cost of the ftrace_caller path [3]. Josh Poimboeuf's objtool support
+for arm64 livepatch [4] detects the prefix by the CALL_OPS layout and
+treats kCFI and CALL_OPS as never meeting, which this series changes.
+
+This is an RFC because it moves the kCFI type hash relative to the entry
+point on arm64 and every function carries the prefix NOPs. We would like
+the arm64 and CFI maintainers' view on that layout.
+
+[1] https://github.com/llvm/llvm-project/pull/131230
+[2] https://lore.kernel.org/all/Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N/
+[3] https://lore.kernel.org/all/amjnf5gz0xP5PTSB@J2N7QTR9R3/
+[4] https://lore.kernel.org/all/cover.1786230311.git.jpoimboe@kernel.org/
+
+---
+Jose Fernandez (Anthropic) (8):
+      ftrace: Let ftrace_call_adjust() reject a patch site
+      scripts/sorttable: Make the arm64 before_func offset configurable
+      compiler_types: Let notrace keep the function prefix NOPs
+      arm64: ftrace: Make the CALL_OPS prefix layout configurable
+      arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
+      arm64: ftrace: Support CALL_OPS on kernels built with kCFI
+      arm64: ftrace: Use five prefix NOPs on ThinLTO kernels with BTI
+      arm64: ftrace: Allow CALL_OPS on kCFI kernels built with Rust
+
+ arch/arm64/Kconfig                    |  27 +++++++-
+ arch/arm64/Makefile                   |  15 ++++-
+ arch/arm64/include/asm/cfi.h          |   8 +++
+ arch/arm64/include/asm/ftrace.h       |  16 +++++
+ arch/arm64/include/asm/linkage.h      |  11 ++++
+ arch/arm64/kernel/entry-ftrace.S      |  16 ++---
+ arch/arm64/kernel/ftrace.c            | 120 +++++++++++++++++++---------------
+ arch/arm64/kernel/pi/Makefile         |   2 +
+ arch/arm64/kernel/vdso/Makefile       |   2 +-
+ arch/arm64/net/bpf_jit_comp.c         |   8 ++-
+ drivers/firmware/efi/libstub/Makefile |   2 +-
+ include/linux/compiler_types.h        |   6 ++
+ kernel/trace/ftrace.c                 |   4 ++
+ rust/Makefile                         |   5 +-
+ scripts/Makefile                      |   3 +
+ scripts/sorttable.c                   |   7 +-
+ 16 files changed, 185 insertions(+), 67 deletions(-)
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
+
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+
