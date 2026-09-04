@@ -1,123 +1,141 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2E743E48D
-	for <live-patching@vger.kernel.org>; Fri,  4 Sep 2026 10:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788517607; cv=none; b=OUKQpLvDvbMe918rslez1Y8sVCXaEt2WzkmeBRNk5QnrQTh7WMqQOXyDOS+Z4joBVaz83J5iY3njpSIYoxpYF5uvtUFGlwvsnm0/Dei8n5qcoSDJZ0qAy+UinGHM28+e+s4nvtBPMyYo4Z4X/9pso+Fuc/ck41o6DmbQyt6katI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788517607; c=relaxed/simple;
-	bh=wzohwlBAoyl+rPZQ6GA5hqoQUxcvUXRIuzUKR+DKkpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y8FPIpPHy+W5gw67/r07aWv4nucfiaDOCq8J2vCrP4i7KXx6WlN995PvnZAlRUynJbQ8GV1jtn8m15dSj1A0I8mzQrih+qmPyJ0w9kiaMS0p7BxVFs/ft9NEG8pYZ5Of2lwzG+A9c6VvDG+ACvsjCIa9HdGRcn2JLeTkjHM/7js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XIhYQ9LZ; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947F9483BCD
+	for <live-patching@vger.kernel.org>; Fri,  4 Sep 2026 12:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788524315; cv=pass; b=SkoX7d5My6eHkbnif5GBIYi4yclo6th+WZMyc4VVYpKtvnCYjSZcElThA5c79xEW/9Alfcg+s918Ekcq19i3V5IbAJvaWEVRNWmVqsAYZCu3+Z8AGCiVZvTucltJ5koeQwEyc7LtMp4BQwhI0Fo9SmjEYTT6VOeMxMQZCRSUPf8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788524315; c=relaxed/simple;
+	bh=eO4W0pBpUA1VKwgA7pWUVcs1Sx0AhhcRANb40uA3yFU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B5YOkYBIuH79IJ80CrgrFuGrGG8TQFGTJXBdWKsOKbEvKMdps42DO+FyqiVP8sS3W11nAH4x+HwB5ssYgx2W5HilUdYI7FJ7K7QU5GanZ4tlaBo7pAz5rmN9ICh6EFlKGAn9etODHoLvHT0n1AEHZitVyIldjlxnDqas4MaMiSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WMNauiri; arc=pass smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XIhYQ9LZ"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so9023345e9.0
-        for <live-patching@vger.kernel.org>; Fri, 04 Sep 2026 03:26:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WMNauiri"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ccae46de39so1288105ad.3
+        for <live-patching@vger.kernel.org>; Fri, 04 Sep 2026 05:18:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788524313; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OWq3rXbCPKnsbRZTd1im2N9LpEEPoxeAmSWLUpqX5FrvFYA9oWFFQiYIfJM7gYmUef
+         btX/dq7qQ0p6KYWs3qHvKHxNHo8r3vzp5D5v63pJM34uyNuBF9X7x3zLqFQPQzGxyFoA
+         uGfD9EXa0/yZBOGo+0j8wAKnlglBAV8mvRQ43q4V0hwbkXy5CCh3G86sjxiFhZxD8Ia3
+         FK8PIwbQv/bYPkoP+csNICmVdmGkVmGbmPTnlzI1K8XEecmpykdNnWzI2V/18RZ8yrAY
+         cuNmdJbmE00+IkcTT8WKmaRDxL5FO8bG454zV4NDOUHx4sPgJ9qo9Sm5ekkdFXIJMMqk
+         hb5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eO4W0pBpUA1VKwgA7pWUVcs1Sx0AhhcRANb40uA3yFU=;
+        fh=DgwUlj4hR/CJtWpNhUBifuyA0QiZYm03tQDmWlZERzk=;
+        b=X+26Mgak4TlcCzmfsC1y/NgdySSOmvM6hu6JYXE3KuNkvhpebnt5w22GhuKb4ux7ZB
+         c5y2ubG/D3++U+KWH1vOhWRy80GE+vVmsh4tC0ljze4SlMLlxMm1rOHp3sqAjHek9ys4
+         yEFcRRWafHUlpZ0UY0nL8XUynjlis2Q2Ncnng6fh0PCoWil3T02hW1OJOGChwTOU5myE
+         Huy2UJCGY4M4QAvEaimH26KA+wJFnrNrjcrNbyrWqnhy/quQ5xJd1bF7Btbg9PF2Wp6T
+         nZ/L9HHQ8iWObpOmNfxgV8jfwATVrz/p23wJb0Q7uBVBMSRxqpEOsUlel+oFjykD85KU
+         P/Bg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788517603; x=1789122403; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1788524313; x=1789129113; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=jZEcZ868dSYcJDoVrt6bSieNB54bJy3X6WsPbW/gCJA=;
-        b=XIhYQ9LZdoJBTAXL8q+idyGoIRcisr5zhVdIophQYYJV443NvC9gVgESCesmZOsyNP
-         4wAcfpmdKtgJOtWsuXou6G+VdJ4NchUooki+0LP+PM3TeonTiy4AJEJ2NNkAj5L2U4FW
-         Nox5KGnj7qQiiIksjJO3qWaY22HHkv/UVwXk1s3QhONFIPFT0abvi3awlqPVvt5gzz0U
-         5n+r2PKT21GEx4EypKJrtyk+vph34AR8Q86V0QZ9rio/2zE7Kg1qDBnzsUSq+gKr6YsU
-         3JMXUq2uMuwe8u3HpKcR947j1eKSXsHz0HrhW2ypw0wR/eBqpa+NlmI2F3cJsuhvWO51
-         8NXw==
+        bh=eO4W0pBpUA1VKwgA7pWUVcs1Sx0AhhcRANb40uA3yFU=;
+        b=WMNauiripi6Md2Q3C3KkcuWrocOGGRafMxbYDlATW6HV68aOBusr3FL4eXVoF4vhsX
+         DO7Jgfmeno5zhnwRWIgfHvrvUM+3XTG/xFulQb6uxqGbEytQPlf+GGxxMKD983IfwasK
+         JZ8dP4XrZbEY8oiEzvYHXjbMf5wbZHBRAbESh+IxlSqcdT149S3ok0u273lxbuoHsZB5
+         x3PySqQZGNcJbPkCUFb2OKLEFffWYo+K3UUed1DYlevwTlbFIAr1+u029uYrVRygQ4ml
+         OkrtFQlxk0wYKPBPPf39rZeJx4CxE/88YUpd0GyCLyKaJbRs/qop3EUiAQiviishSpQw
+         WkHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788517603; x=1789122403;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1788524313; x=1789129113;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jZEcZ868dSYcJDoVrt6bSieNB54bJy3X6WsPbW/gCJA=;
-        b=mS8CbOQfGyXodp7Z4ZDoKqeLk+8uziJrK7HmcRyA4i76QQVy+jTRyPM4/MI/FiozU3
-         uIBAg+Z+8kgfEbmV+N0T2GINVtgfDz/Y8MGIJWT4f5ICES3sP9dlAZftNdbdKl4MGgwv
-         6dhr0T90D69wz6/tHkYiHt+hle97IYOILll9wWmWvZkVfQXpb3SS8r0Hfjthm3dzBS2/
-         cR/S2MJTi120fVjDyQcRpddN/+KTsbhgSMpSRRgS2zqLY01KecXUm+8z4k4a2lmPV7BP
-         MVgBsHa0mbyeo5ZoFylYN/dfbPHcEo1BDmO2YF+sY1Wwz9LlvgiqhStREfk4y1yckRWt
-         +DZw==
-X-Forwarded-Encrypted: i=1; AKwUvBxpQ9zqWtQDVOWqtsf4q9Idu+xGsMpn4CscinFkrBk7Q2rAYJoet9uBFRx0lv1femjnCvOTOTffzPZLQ7zX@vger.kernel.org
-X-Gm-Message-State: AFuF++k91gJByNBe9ojxG22g9uCElIVvHA2WNR87zuFrKtnjZ+yuiCQs
-	M64Vq7QyarSQzNEZLMKqG65z03qbrgS5K4yi+4unyyElkst28jKDK/vRgYkQA1ZyIFo=
-X-Gm-Gg: AYBFou0hy/YrSJYFVu2f1rZPeWkMZ0jbTFSRttKa07C/GRzJ+SYzA3Ox57jJFwoDQpu
-	Jw+elF9vJfcM6psl0sAe2d5aljxmlE41+h6uxTQWa89xG8xfiR70Am+MDQO3flHrW/STLi86vAW
-	NORoKk6nwyTYSu2abiAOzwAkcGOiPhtVo7DFDoUvruUoh//+/xYxnCtw3Fq0ZOK9Wiv71hbMNpF
-	hWFN46KQTqIEhH8HJ8W+dGvcUjuX34nOFGhJKI5xMa8Wls68wnxj1E9s+2037Tfmw8PXeYsYS4B
-	ThrbFsvb8MDfXQio51L2U4JPnyfFzHgrCmA3yf8pZkNARxLKeCR8WefiCK2ds8ijFyh1EefZ6eV
-	F2PH/VPH9hThg+H7qUvyV9ffGXx6A/eoc3yF0GKKo+rt58F9qIgtH66dxCY1iEjHfl+UzUjuekP
-	Cbel//baYSvT5thy/elj9IHEj7xIafDCWlzhmfTf2axoXvDKLWpeyodDrW0k4eLA==
-X-Received: by 2002:a05:600c:3e0a:b0:495:6e68:5df2 with SMTP id 5b1f17b1804b1-49cf8267a36mr54039005e9.12.1788517603067;
-        Fri, 04 Sep 2026 03:26:43 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f9114sm139607705e9.5.2026.09.04.03.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 03:26:42 -0700 (PDT)
-Date: Fri, 4 Sep 2026 12:26:40 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, song@kernel.org,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] livepatch: Fix issues around
- CONFIG_DEBUG_KOBJECT_RELEASE
-Message-ID: <apqc4J_Ti7iEgwhs@pathway.suse.cz>
-References: <20260830054857.64758-1-laoar.shao@gmail.com>
+        bh=eO4W0pBpUA1VKwgA7pWUVcs1Sx0AhhcRANb40uA3yFU=;
+        b=lLiFUbOu7i4qtb0q+0GSUsaR+YSJIVr7P3Ja1/HTZ3/U4xeGGksW8eIbrVXJWPBnrC
+         A2s8I1swPqfSaHmiMQ499YnbToKBZqXIaETGDOlu1AvPe0BoK6aTzGKormMZ8KiUk3oB
+         TyTbFOxOssCkG/C2u06Ha76Ww6FmuhCVLJb6ssqJjeK171ojUWc3VHPFcivOMjWAfejy
+         2Ftd1VTepjRdDCGo9Q+wmZoJUcdehJL1ZeqvBTLMCchaoS+w5ttN1SrzlQP2L/nvqLlx
+         kaGh7vqOslxcjnEEnPRhqH7GPFvrhoZ2uzrOuR2H+4RCLCOUTiwyrHjsLLIR2pHiBYKp
+         2VRg==
+X-Forwarded-Encrypted: i=1; AKwUvByJVNP46iat0xlQlN7lnObl/0Lm3VYottRP3phVY+IMwD0vYfgTTfrwfw1prJSWrvqAjL1LdXjDtWlW1H0c@vger.kernel.org
+X-Gm-Message-State: AFuF++nx3iSmYXBuqyXzIMjz//GnjYe6DMPVzt1Hp2Gy5TBY7qnXxPZ3
+	U7JAJHCoVZ3O8l1EVpLjz/98vJoFlmH1AGGfKx8XhKooiAwqK/TejCzKWTVm8ttKPletTXWmbs8
+	MXYw/YQVsiOVN5MX2Fy4OU9VxZL3S6GM=
+X-Gm-Gg: AYBFou1aVpeSk1+w0V3nuLyvJh72bflHdS1/BSXsc3hdbThLS0vYO2MmHGLl57nOBlN
+	LW4hR5YaOiCn4HIUFBCOLwrLXdE0ZxgS2R2h2ctRtJAQ1Y1bjb+DL5Z5cVAXlMdjD0rePUblltH
+	LTSPzAEBQekJWtTeq3iFxiun7k44jzRPs11yD7wrbRjfQX2/FBQsdOop5NxCy3G+qz8yKchsNi6
+	ioWBTyKN1pzPCyYq8/elggzkudD9fBqZ+2IoJQoqnnOzGyqVm9t4uvDxQjCA3IMqsRdcjO1GyCD
+	Z4hbtL0GnI/B01WyF6tBemwCfNc6dvA5kTigUvA0fMU5bzoDNgBf160gffc0AcIJQb6sH9IhOHl
+	r6+O22LjftkZNGLqyOQTmPAusmUo6qT0q64SZbdv9axA+PZ+K/Vsc+JPp1hYJ
+X-Received: by 2002:a17:90b:5404:b0:396:d28e:b52 with SMTP id
+ 98e67ed59e1d1-39b26229b5dmr5722108a91.3.1788524312944; Fri, 04 Sep 2026
+ 05:18:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260830054857.64758-1-laoar.shao@gmail.com>
+References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev> <20260904-b4-arm64-callops-kcfi-v1-6-ce6687739b0c@linux.dev>
+In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-6-ce6687739b0c@linux.dev>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 4 Sep 2026 14:18:19 +0200
+X-Gm-Features: AcwNN1W-BJa7t0_HMwRoOS4jQPgmmEa3lTrRn_StsdokzqumkRB4EleU3vHebmI
+Message-ID: <CANiq72kg3Z5rB28H4Ck+EzqQgiRSSowBMe3YW6p_iNwOG_dzWA@mail.gmail.com>
+Subject: Re: [PATCH RFC 6/8] arm64: ftrace: Support CALL_OPS on kernels built
+ with kCFI
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
+	Leon Hwang <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun 2026-08-30 13:48:55, Yafang Shao wrote:
-> These fixes were found while implementing the replace set series [0].
-> They are independent of that series and can be applied separately.
-> 
-> Link: https://lore.kernel.org/live-patching/20260809091954.22930-1-laoar.shao@gmail.com [0]
-> 
-> Changes:
-> v3->v4:
-> - use "dmesg -r" instead of "dmesg --raw" (Joe)
-> 
-> v3: https://lore.kernel.org/live-patching/20260821031648.48195-1-laoar.shao@gmail.com/
-> 
-> v2->v3:
-> - rename the subject
-> - include the selftests patch
-> - exclude the klp-build patch
-> - use kobj->kref instead of introducing extra counter (Petr)
-> 
-> v2:
-> https://lore.kernel.org/live-patching/20260816090442.18128-1-laoar.shao@gmail.com/
-> https://lore.kernel.org/live-patching/20260818054629.69246-1-laoar.shao@gmail.com/
-> 
-> v1->v2:
-> - minor improvements and acked-by (Song)
-> - fix issues reported by sashiko
-> 
-> v1: https://lore.kernel.org/live-patching/20260813030408.9761-1-laoar.shao@gmail.com/
-> 
-> Yafang Shao (2):
->   livepatch: Fix UAF of unregistered patch kobjects
->   selftests/livepatch: filter debug messages in check_result()
-> 
->  include/linux/livepatch.h                      |  4 ++++
->  kernel/livepatch/core.c                        | 10 ++++++++++
->  tools/testing/selftests/livepatch/functions.sh | 12 +++++++++---
->  3 files changed, 23 insertions(+), 3 deletions(-)
+On Fri, Sep 4, 2026 at 3:20=E2=80=AFAM Jose Fernandez (Anthropic)
+<jose.fernandez@linux.dev> wrote:
+>
+> Gate CALL_OPS under CFI on ARM64_CFI_PERMITS_CALL_OPS, which needs
+> clang 21 or newer and RUST off. rustc has its own flag for the prefix
+> NOPs and this patch does not pass it, so Rust functions would have no
+> prefix and a different hash offset.
 
-JFYI, the patchset has been committed into livepatching.git,
-branch for-7.4/kobject-release
+Why doesn't the patch pass the flag to `rustc`?
 
-Best Regards,
-Petr
+(Looking at later patches) Ah, is it because you defer it to the last patch=
+?
+
+Thanks!
+
+Cheers,
+Miguel
