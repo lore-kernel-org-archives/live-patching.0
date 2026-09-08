@@ -1,143 +1,117 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC50C3B8D40
-	for <live-patching@vger.kernel.org>; Mon,  7 Sep 2026 19:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788809599; cv=pass; b=hLr3dqDRjJjnk5S7+6YlqFXQcF3KMK6xDI1ubd+CcONEtralHGJjkjWxDwHu4GpC7hhANJ344A5wDvXO6cCi25yDtRlKa8bVdlMjvS+xa7geYEJ34mvEnJ9BzkFqCVsoVeNXbS9W3OpTLzTKezmI/xtPQKofIYBgNt+Jq3+uBvY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788809599; c=relaxed/simple;
-	bh=LbkJYZrKBAOtEAIquwnyRiPsYzlue46mhX6agZEqU8A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BRiRLAUFsrqXaVS61oe4V0G9YvMaKDKLV/IICH8gf9pUuNme4Pp1grE+WyLXsDnrY04VhFNX96ijdbotwytFlEcPgdIjBLMb6NXGV9YHzRFqz+mBGxuaJLBqHQkiBikbwaQZ1Lr9i8vbmTTlK6UdqPzNN++zw/98dQEUOn15Ck8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iK0qYj5j; arc=pass smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 513082C027C
+	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 07:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788851201; cv=none; b=cQ+oQxRyidAlgLDGbHdLDpDTo8vSzItkNi/Si8BO+QO0T4/JGB6PMpYBrWH1KHWnq8HTBKIuH0es94T5Ym5RxmKMswxJ5FYV9SF2Y0sxgxyetkp9sCbjJJMtwjWtDRvlEevKT8j5A+qxZ4aAFtW7Db+wEXXsb+2jiIHahYhgUlU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788851201; c=relaxed/simple;
+	bh=UF0fuhs2KUnT/AG6X6nloda47GwQtywQNTmgw9+Mp/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=keRXVEPec/oSQta+5X0dJQ+5sbilrl59T2ZyeuP6gXB5F5PX064G72HzJI6IeaLhbb70gO2GCVCtvSUTLrTthwCREe+mYjPs1o0kacHoldS9jtBY2lsa3BLDXyOIXhT6gnTOZEZFmZhnpOw56k9MQfapJNm3De3PfFFcX5HKlMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fY7ozbf7; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iK0qYj5j"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8523cc41f41so150924b3a.3
-        for <live-patching@vger.kernel.org>; Mon, 07 Sep 2026 12:33:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788809597; cv=none;
-        d=google.com; s=arc-20260327;
-        b=D6VZJPlvOIyTzmeTlXW6guGU98wBOCGzzvXWhKa0CHN8c0WuLfYdwHKGez+RVDFXD8
-         F9y7L4ERR3o15AjQTYW/khyLhnDTpJ4BS0FY/FfFN5WDrem9eSU1qskormYMbZqecPRP
-         9fCJRBqEsNpQKGoMplTv4WU9n6Ei5E7vdt489gJZDlI0FQ3601juE7dJCpsELEgkXZ3O
-         Gwg5VC/yO3TSaV00VDLTl60dY5NFK5Y7nd+hJtaJhtbtAycX1vJerj2lRWF5g2HlBEja
-         DIwyJ9heitibeJ/ZBcK1CGUEYuL0SIU42yL76Lu1GVgIiEyKdJWT7yOIHDA/XFS35NJ8
-         IEjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LbkJYZrKBAOtEAIquwnyRiPsYzlue46mhX6agZEqU8A=;
-        fh=9qx6OaR+mza4P5F2nHFDsKMr3RWEZWCMme4SWNox7qE=;
-        b=pZeemD2ERpBZsCK+dJ6hYVm9VWA/pt0zMUJT0cNhbTbEy2ls7HOP1PG47v76vws7Qv
-         p3UNI693mXMkEPwvwaCJuXxbsmpa/DjDdGaJAdrCuo3ptdG5nf4iKq4ScYvwZtD1Qk8s
-         REpqUPuF+K971v7HWbZ0/ADjKiycdabg335EClTfFow4QZA046YLrzPaf237uwWzBP0v
-         mXg1K8j6hTrn1iKpM7H82M/2yerCn+YoYA3lp0+gt74tI0gqG8qQE0bh2O5tU1Ht09Zq
-         JO6W5E/qHSDo+4UhLdTPQWjDR59D0Q01FgCuhMCzlpAuzU1teqzFFzyVhGSrCDHz2Wed
-         OYXA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fY7ozbf7"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49b0dd3c9a0so40954535e9.1
+        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 00:06:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788809597; x=1789414397; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=suse.com; s=google; t=1788851198; x=1789455998; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=LbkJYZrKBAOtEAIquwnyRiPsYzlue46mhX6agZEqU8A=;
-        b=iK0qYj5js7h9LqZ16ntFi4pR+coNw+J1DIsxddLy2bybdXua8s7AhsQh5PKG4aPy8k
-         cWfcsot8Jd3QOFo9QOMLhxclr26W+2bFQXUQb/5htv9RCQ75k/nTYOvsiDpAh9ZC1h0P
-         17HYrGhBkPAcaFKfVJDBRota6XZwJTFU94U1d0QKrv1bCLj5OM6vuETU3sDAU1WcF6/P
-         XwKGZTES39HLJn7EPOvbTJ556I3rp76dCWF5AVgyuUSKXaJklfe1ypw/YLdAV2Pt4o8p
-         oIt3UyGz4+F70fE+3rhKKK66OxHCacES0jUQHDbVEe3CfUFb1qgvkTLFywu8+KyEsrhR
-         Wz6A==
+        bh=f4OKhHlTxP+mf8Lckkb+JFWYpmo6Azxr4Ph5bz47dtc=;
+        b=fY7ozbf74zyHAFClTQM2FZ0U6WpitMrksDP4X4cd7A6X/Caju3GirbLfo+8x0rEFOl
+         juZq0OkV/EhpDRBAbV2A94Jt8Ww6Z2mCeIoacJyH3FYq6/3C2o/BF/BG0NbYft7Ibl6+
+         vhi0j3wBL2uVpSlI8t1+GKfLLSB6L+voRoOwWCZYaL+HXeh5RYEj2XQylXsHzVR1WyIv
+         duLIiRcFbEaIseOBeyjJwdSPJdoCxau92tQ2ux7VOPcEU7Qt4EMyfCVMCdmoWcfj0gvW
+         +HbNJ+zaRYHRxcLyLTQlwt6+g8jd7e5joqODXVFCOsOhoIc5Nq+WP9QJWTppDNNw62Gj
+         riHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788809597; x=1789414397;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1788851198; x=1789455998;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LbkJYZrKBAOtEAIquwnyRiPsYzlue46mhX6agZEqU8A=;
-        b=gRFgE+9KzKEM+aj2T1Opyj50n2LQseMTyNpjn14oY/UA61zISvyYh+Y6OJ5sFgPj1u
-         Jspyw5NLnj2/PdXFa3syAvAMz6xFvt+u+xx8u+ZE6KeLNTEZt5/dBIRIM0HCTz+kfMSM
-         gn6mq8G2DZCd4lJjTxR2fTtEU73V69kwQKbH6E1kN2b7B9MvhaZMwC+uw0etTIM6WI4j
-         EThUHbWungWFhLUO7YwSJxdyVPHZ/stdpfF3qh/58ci0SjLjP2/RbrCJhUTfxEOQofum
-         RReI0ksFuzZ4GomzzpWKIObSdtdDPpq2CRRdX9JTPg2k6aAjtsliBtiC6bI69BPEzLIj
-         vcNw==
-X-Forwarded-Encrypted: i=1; AKwUvBwVnvw1O3Wln7LpsqCOCEpE35wPY4YnH/SG4tbm9g7Eb7iD2raf+4lNX5w6LqC2HE4DRt+dozhUYR/3a1BE@vger.kernel.org
-X-Gm-Message-State: AFuF++m+mVNbdPU5AUnWzjJr8kQphQ0KdwxmwE3eP1cIyvLKGmsAI7z/
-	lMYJMjsXDQ4Fv1pljTCVK0ClhFZ5TZJFCtnCY4InV3OhZKljJfAMPUKWJ+gTKVlDHF1NvhtcVCC
-	WCixZjy+9HclQwcRmMQ4F8Bbb9obOQrQ=
-X-Gm-Gg: AYBFou2m0g44R/AFvugv+0YyacwdGXfF28pTnGOxN6GuT73ESo78EKrNJU15vcxpUA0
-	scC8YFUx0MUqMqnB4I5dV9miZfGXLFKUFwa+13Grv8bteQIczKYimpGYijl+MTVI3oAAV1I/J/3
-	HONZAdCipp6OA9kv32snvmY8i0MApMdbc1999ZgdYZaFcTJuW6+zpAQU659KjMH2lys1in0/8Mv
-	Sy2lCtm6NH7C/08/mHt8sysuzwOjEzhBy6PilfboRI6Cp298dci5f953G6xi54mjbaxw7ANJYMN
-	tRklhhEmQN1CbXj18iBQHf1yXJiLUTN/zc+7NXZJV3Jbg6eDNLthdRg4YBQ9Zuh/7Voq0WaF3/u
-	1NCmCadKqrWWdqmnSB1i78F7vE1UuePn0VbvVDKJ/a4chl41t8t0Nq4FYVvjBcg==
-X-Received: by 2002:a17:90b:1e04:b0:396:463e:2eeb with SMTP id
- 98e67ed59e1d1-39b264b24e2mr23088437a91.0.1788809597288; Mon, 07 Sep 2026
- 12:33:17 -0700 (PDT)
+        bh=f4OKhHlTxP+mf8Lckkb+JFWYpmo6Azxr4Ph5bz47dtc=;
+        b=A6rZZ9VFZcYCmApNI0Q+pBI2HHVaKNo6V+FZU2ZZbIFFviRxQxKvFlc5VcwHH6lWPo
+         UJUO/PEDmnvzKX2vl1Xwbfcll6R8mP/Wj7MyR4OFkPs40Yi9IsgFVl1Igu+zzcThWYtq
+         rNUEmOZ/WIsBv2uDglxXxZX3eq8qi7Qmel/DxNKSo4loTriGlF/53G+lNefbKU3edaqs
+         lAxi0R4FiCJwFvHV43WZgW8W3S4T9wv38b/w8BKhb7JvzorvhartMZRo5/XtLJOruyh5
+         UextKvSAChQJKcYVeEXLuR06f84wh/fXjVpIs0+O0CMdefdyoAyhLl4dBwD7kR2Kg0ug
+         rdwQ==
+X-Forwarded-Encrypted: i=1; AKwUvByyFgkBuuO3qz/4yYAdrlPSdhntx5HZtNU2PQNn3BW3QTTJ+fQaT0hkCY8d6r4P6a6LTqcLEFBi3oS62uOg@vger.kernel.org
+X-Gm-Message-State: AFuF++kHDhDYLm6BY0vyRV1tpzPMjmEpXTUMvWXaQB+CKBUrSVOtuW7C
+	uN8tYpXRI+il0sJ97jSjCeSzTI8N5uDzakryEkOlVtQNPFQLXzMDseTjPI1LCPJpfQ8=
+X-Gm-Gg: AYBFou01f71dr1/vZ6naZJCR5L7OZiAYZHijoqp0WzWYkCkNkE4XvVI0JO3aWqjO+mv
+	RsOh2Kf4ieTRWUlxEfyyVhwmhZvzObg2fSuFcQPVp6RTyN6rSGQM9QvhEpPOZf4SyLAuOsQDhVW
+	x27hH+Xk6Aap0P8ExJ4MZEn+VCX/9Gq52JB0gRKI7CIVJveS8jSqXr8e40WX72xB4cwrPNRguIC
+	e/mbRWEy7+cvxYmYlId4ZfhceNLyIZo7cZSFkP5/zmIEm2cSU5xjzTSo5qua0CsLz6AetQIM/QU
+	NrNOBiyo+SCwvsCnGdGzpHamkfAkVfQ8q2CUCjW8Drl2ZU8BfCdEiAMghvEduuR8VCJ7sWYESli
+	N927QyMfRG2oTAVeCoYmUWv7XV46PWsXITnMnq0Snsx3dKzakffkSWIjlHSzQunfEVJb0dufbf7
+	FTECpUuYzWipDwTjUChYzPZi/8HJfuCeK/qn6k9hDt11hxLynqLtNo
+X-Received: by 2002:a05:600c:4e51:b0:49c:ff8d:b548 with SMTP id 5b1f17b1804b1-49cff8db5demr463345525e9.11.1788851198438;
+        Tue, 08 Sep 2026 00:06:38 -0700 (PDT)
+Received: from pathway ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cfbdacc45sm340625455e9.11.2026.09.08.00.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 00:06:37 -0700 (PDT)
+Date: Tue, 8 Sep 2026 09:06:35 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Harry Hsu <x90613@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] livepatch: Fail object initialization on duplicate
+ patched function
+Message-ID: <ap-z-3n9BbtiV9lT@pathway>
+References: <20260830173343.52759-1-x90613@gmail.com>
+ <20260830173343.52759-2-x90613@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
- <20260904-b4-arm64-callops-kcfi-v1-8-ce6687739b0c@linux.dev>
- <CANiq72=xOrSXBBdmrKYfX1=qgF37LRAMzMJd4GJkXaYHMVe9yQ@mail.gmail.com> <ap3Z-YDtzmdtMiMk@linux.dev>
-In-Reply-To: <ap3Z-YDtzmdtMiMk@linux.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 7 Sep 2026 21:33:03 +0200
-X-Gm-Features: AcwNN1UJ5AD1nmjaRgagxZvj3fkfuD3Z7c-j0Zc231NENpcPq2HjO9j40kxIvNk
-Message-ID: <CANiq72mVXNmqh-RdOunFLBKRwMgYHFBqJOP7NbXrd8WHPb3sAw@mail.gmail.com>
-Subject: Re: [PATCH RFC 8/8] arm64: ftrace: Allow CALL_OPS on kCFI kernels
- built with Rust
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
-	Leon Hwang <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260830173343.52759-2-x90613@gmail.com>
 
-On Sun, Sep 6, 2026 at 11:24=E2=80=AFPM Jose Fernandez (Anthropic)
-<jose.fernandez@linux.dev> wrote:
->
-> # Do not pass -fpatchable-function-entry to bindgen: its libclang may not
-> # support the section argument (Clang >=3D 21), and parsing does not need=
- it.
+On Mon 2026-08-31 01:33:06, Harry Hsu wrote:
+> Several symbols can share one address:
+> 
+>   ffffffff8ed7fef0 t __do_sys_fork
+>   ffffffff8ed7fef0 T __ia32_sys_fork
+>   ffffffff8ed7fef0 T __x64_sys_fork
+> 
+> klp_find_ops() looks the ops up by func->old_func, i.e. by address, so
+> two klp_funcs of the same livepatch naming two of these symbols resolve
+> to the same klp_ops and are both pushed onto one ops->func_stack.
+> 
+> This breaks the assumption that a single livepatch contributes at most
+> one entry to any func_stack.  klp_ftrace_handler() picks the entry at
+> the top of the stack, but when both entries belong to the same livepatch
+> there is nothing that says which of them should be used in the PATCHED
+> state, and the UNPATCHED state has to end up at the original function
+> either way.  klp_check_stack_func() cannot tell them apart either: it
+> asks whether the preceding entry is the original function or another
+> livepatch's replacement, and an aliased sibling is neither.
+> 
+> Patching two aliases of one function from a single livepatch was never
+> meaningful, so fail object initialization in klp_init_object_loaded()
+> rather than leave the redirection undefined.
+> 
+> Fixes: 3c33f5b99d68 ("livepatch: support for repatching a function")
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Harry Hsu <x90613@gmail.com>
 
-Thanks! Hmm... Not sure if "parsing" is the right word, i.e. a flag
-change could still make `bindgen` parse and generate code fine but not
-match the ABI of the C compiler.
+Looks good to me and passes selftests:
 
-i.e. I guess I would have expected something like "...: its libclang
-may not support the section argument (Clang >=3D 21) and the removal of
-the flag does not change the ABI" or similar.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
 
-Cheers,
-Miguel
+Best Regards,
+Petr
