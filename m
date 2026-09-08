@@ -1,103 +1,150 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B396E545DBF;
-	Tue,  8 Sep 2026 13:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AC03F104C
+	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 14:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788875523; cv=none; b=bO0ttPLRuhfICot/WZSXqcnvcJSGpakXbgPayaQcPJxz4qhvoddyAmGbsEHrOQBFL+hPnHvBGSan67wYcfur7IdJs1KvV4r7pcde/jCZ7qs04JCDZWDsyunmdYm25M+cLlx13bss4PL/Yh6+Yjoj7U2Rq5g+rMnw5fhf/CE2IrE=
+	t=1788877515; cv=none; b=jps7vG2Tmav2JaU1shFDvJe/tlppYtykYUQdheI6d8p2/nx3zMRJd5kAmkHGmOZShE4aNWcgvc8JPiS/wMWei5JvZ7y7KMrgxeOJCo0AIeVm02afrKlvrEbASeaEgYG8lwfjqhOyh9ubVTbFK7BHaNzlyuTQd2WVFPDXJCe2F84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788875523; c=relaxed/simple;
-	bh=c8Gv/tOmnBsoRpMKP0BTnBqpL8Bhf2gTxJwPTe6abXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M010ui3vZO1AIXJxaMoctqtXdt6gttzS9BFb2Dnmr4zSfG/gtHstME26dtcpqoYLI4pTH0JqQE56btz2oa7NyT5ovcoLRr6XRHjVqivmu+vx02nsoUCkNNh6MO92hhcPJp2FwYCpFtmi3gbSmbwfct7jBWa7Jd1VhIeReK6xHBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=uTc1rGyi; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1788877515; c=relaxed/simple;
+	bh=vfUxM49D7eOOobIxOcOICptSQE1k1HaQpGdx3L2Cvg8=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=PSDwEtVOWMpRMUpfCwE+fcPhaW0xeTX/4QIXm6XRt20aUzHcv+lgKZ6i5yPqEU3DfSgI9Ky0KTOI/ugCyMoQLX+X+Mkx/7LrrVxHJbHDTZVRYCEKRrja84hdKJKv05cWSTIxuEFeVEd03IaKHg7emNbpXpMnLjcJs0qJkJFcxbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hxkF2PHv; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=pSR4LyMb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2ho28wH6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PpUpIV27; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="uTc1rGyi"
-Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 297A31C27D3;
-	Tue,  8 Sep 2026 13:51:55 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id BF43420012;
-	Tue,  8 Sep 2026 13:51:39 +0000 (UTC)
-Date: Tue, 8 Sep 2026 09:52:53 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai
- <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias
- Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
- <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
- Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen
- <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Leon Hwang
- <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, Josh
- Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, Ben Cressey
- <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH RFC 1/8] ftrace: Let ftrace_call_adjust() reject a patch
- site
-Message-ID: <20260908095253.520c278c@gandalf.local.home>
-In-Reply-To: <ap3PYIdhL3ETmN0Y@linux.dev>
-References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
-	<20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
-	<20260904084728.6d2ebcc8@gandalf.local.home>
-	<ap3PYIdhL3ETmN0Y@linux.dev>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hxkF2PHv";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="pSR4LyMb";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2ho28wH6";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PpUpIV27"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:2b::1244])
+	by smtp-out2.suse.de (Postfix) with ESMTP id BD7061F843;
+	Tue,  8 Sep 2026 14:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788877496; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ph0yr7vRO2TNMr38q6ZGMh5FyP314NuYsVOQxeqb3cc=;
+	b=hxkF2PHvitdSqz/SAYGj0S4j5MOh9q/PmwAi1OJ1JAIvWkoePOwZjvbKNKom7PSOTIVMMD
+	pcsjvYpSL6qI7lZNwQmBkdU36cj3C4oJmJQX/plZIRzZmNKTKw11hwzYRKYtK0BtD2IxuY
+	rnFdc8GBDAxl77XRNCtDu4uTU4v6gD0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788877496;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ph0yr7vRO2TNMr38q6ZGMh5FyP314NuYsVOQxeqb3cc=;
+	b=pSR4LyMbH2ib1Nktq/kurP35J6Ql3AFM6t+P04hJNZQ0uDIedPMj3H+WmKePmrw7bTeelA
+	eC09xMZTEORHULBg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=2ho28wH6;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=PpUpIV27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788877492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ph0yr7vRO2TNMr38q6ZGMh5FyP314NuYsVOQxeqb3cc=;
+	b=2ho28wH6r3LhA5OmcJIZI3mtZbPD2a99wltqNDqKZhPKiwuBbEe0wTnSB7WoQJWAoCqshX
+	1r6u/suunDvE5xxYNI+3JyyY1IJ/xBxYKGFO2lNtjyDgtw5L+lCdQb0baHpWVcBlL7/kqz
+	Qpw3cVUIOKNHXUvfDV4MOhFrRPWAXF8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788877492;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ph0yr7vRO2TNMr38q6ZGMh5FyP314NuYsVOQxeqb3cc=;
+	b=PpUpIV27K+hcNY/P90nj7HMBR6Xg3OZnRjEMb+NTZUEotbRby/sdRoFpjEDctHjctzhd3I
+	sf0yRkoOxnCBxFCg==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Stat-Signature: x457bex6yki4ewxmaioc5ood1sdccp73
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: BF43420012
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18nR2NzFrPVTBxdKw6aYNAKXDfxBb2FKIM=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=zmEISpUYs3PxDYsmwRf2tNZx1Ic66nQ4OS2YYg6VWuk=; b=uTc1rGyiax3d1heQBZvkqpESgAHTDt6puNzDb1kcaIw4IkVtTy8A1ipxHVxbFEoTotD5HI2HsR4MrblNpcB2tBhZCY5+By0G9i36l82d2hxFXEU+61IX5LsNnB8IYnbFlV+Hdk8lzxWxarrR31+5z6ELIXFNLi1siI+bPwO90hs=
-X-HE-Tag: 1788875499-703192
-X-HE-Meta: U2FsdGVkX19G2BzycxCMNywV55nFSuOsSuiCbrC27AdqLgblO/sjNWn8yFEVA1Pp4o54M56CAWLIIQPWiVbjNfHhKlkV7l9KH/m9cY30zHeFrqCV8VhxxkqgYRPQd0XdnDR29QpQjYtYZgEHDCk6F4UR4PhSZraMLTC0xijKFy1vc0KkipbPR7rWejQrGl0csG0VWcKwTFPmYo+8Mz/gKTw5i6SQwge1PHx9dHxhXncKI6vPabGOBRl5yQN6P/57/0gb/tGzPJdwg8IvwUXMxizGUE136mn9rXBG5BXLbaHmWF3w9OZI7xiwx2sAB2Pm
+Subject: Re: [PATCH v7 for-next 1/8] livepatch: Make klp_find_func() non
+ static
+From: Miroslav Benes <mbenes@suse.cz>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+ joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
+In-Reply-To: <20260825114641.80452-2-laoar.shao@gmail.com>
+References: <20260825114641.80452-1-laoar.shao@gmail.com>
+ <20260825114641.80452-2-laoar.shao@gmail.com>
+Date: Tue, 08 Sep 2026 16:24:50 +0200
+Message-Id: <178887749066.24106.16124933766549867985.b4-review@b4>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=359; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=vfUxM49D7eOOobIxOcOICptSQE1k1HaQpGdx3L2Cvg8=;
+ b=kA0DAAgBgX1r3ESrGywByyZiAGqgGrSiBBHqMbZBjFRgXH6UP69J3MP7kd7FREPYJcCQXmqM1
+ YkBTwQAAQgAORYhBOu9Qx4xlG0wKXvu3YF9a9xEqxssBQJqoBq0GxSAAAAAAAQADm1hbnUyLDIu
+ NSsxLjEyLDIsMgAKCRCBfWvcRKsbLCeKB/48ZgAoyMPM4vfEEx5wruwWfSDD+FK0JIKPQf+80J6
+ zUViZI7fHAq1JZIrsgQH7S2KQmvjThOvPsDYAZgiZ0vH8UNXTJ+0UyLVw2enAw5FVXVE/WdYdw0
+ wGpVBa3ZDZGkxNd+7+vc47KA1OJlvyN7mez0nKwSx221EJE17VwgDfSrmij6pBEtZHXY9b2AYtF
+ zsatZeRI/zI94zCflMaq2854qaC2yEb8tvsGAWp/4Wk72huWeOl+xbhC5cLJqZa8HcC4glZvTG3
+ tLYK2v08m7feRnY6OQbXXrgKApMO+xnJ9Cz6+QjcrFlNXYxDaBR8nUExdToClfDnImVGNp+5SA9 p
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spamd-Bar: ++++++++++++++++
+X-Rspamd-Queue-Id: BD7061F843
+X-Rspamd-Action: add header
+X-Spam-Flag: YES
+X-Spam-Score: 16.68
+X-Spam-Level: ****************
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [16.68 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-2.98)[99.92%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ONCE_RECEIVED(1.20)[];
+	NEURAL_SPAM_SHORT(0.77)[0.258];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DIRECT_TO_MX(0.00)[b4 0.17-dev];
+	TO_DN_SOME(0.00)[];
+	GREYLIST(0.00)[pass,body];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b2bf:2b::1244:from];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:2b::1244:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:helo,suse.cz:dkim,suse.cz:email]
+X-Spam: Yes
 
-On Sun, 6 Sep 2026 20:40:59 +0000
-"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev> wrote:
-
-> Will add one in v2, thanks.
+On Tue, 25 Aug 2026 19:46:34 +0800, Yafang Shao <laoar.shao@gmail.com> wrote:
+> Make klp_find_func() non static to allow its use in other source files
+> by an upcoming patch.
 > 
-> Today arm64 returns 0 only for a mis-aligned patch site. But patch 4 of
-> this series replaces that check with two: the two NOPs to patch must be
-> there, and the ops pointer must fit in the prefix NOPs (which also
-> catches a mis-aligned site). How about this to cover the series?
+> While at it, rename the parameter @old_func to @func to better reflect
+> its generic purpose.
 > 
-> 	/* The architecture may return 0 to reject a patch site */
-
-That comment is fine. I didn't really like the specifying of mis-alignment
-as it did appear to be too specific, and could change.
-
--- Steve
-
-
 > 
-> Happy to name the mis-aligned case in patch 1 and extend the comment
-> in patch 4 if you prefer that.
+> [...]
+
+Acked-by: Miroslav Benes <mbenes@suse.cz>
+
+-- 
+Miroslav
 
