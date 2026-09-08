@@ -1,116 +1,130 @@
 Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C459392C20
-	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 07:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AE5152BE32
+	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 12:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788851371; cv=none; b=jVC5k+764q/hfoI/qzqQM2kaHsT8COycRUr6eRm+rct8xioEmCAHcFjpTqiYKLfhlRzVSBEovJoDj+u61sMjuvQD1GLwVdgnXtmgbvqklLf9qVQfAfr6COEl3gnpYD78N8hSZWKVZ1mfWABqD6jDC1d5Y7MK5hSJ8JNy8awXVjI=
+	t=1788868932; cv=none; b=KkeuPMkz+B3L6HPMYIvf7HbE4b/yc1646LoqOjZtJ5qUcvUsCs7j4+xa21BtCYik8uC2ohTJRFlNBifmhEHLjZl52LZ/4rmc+IGYw/AJdobxcLJauT4wTCtmbXryiQ8xQ+bwMAdu9Nk2ljUf2kkZMXSfpu2SH9JfDvzKXmN9TkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788851371; c=relaxed/simple;
-	bh=u+ey/CJS2ARmIQu5wX+w7GU/MrgYt6L2EL87LvMkuBc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ST2JHYkdzywFk05DdazgjlzbVkpXhabVHHvWQ4xkXTBwxZeDhYheurvE+Qy/g+qPsp+QreHZxzVvlqSNtECCHqanFWT/E7jksFhFhp81xuEhWlCELkpK5bMajuf+2puuflbc7b0IbFn1Fq6rN3tnMXpLLnbphz+abDTLykSY1q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZYjWVFwi; arc=none smtp.client-ip=74.125.225.76
+	s=arc-20240116; t=1788868932; c=relaxed/simple;
+	bh=+ea3yYnkWvkYggstAtARXqN3w6KyrKQX3QazvOPZjRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WPgurLlCTYWRv6RcqGoc0VbEL+92ayGM6U35psp1cHoa1HPqRQQXpM8IvR2Il/FY2BpvTl8TLR9eUy3ajR8DpHTYdHgMvGrMsvhxw4SLv69HYp6edz1+1Jd3C4bf5/I9W9PRKZ7UpAiQoTEA9qFReYps2RgshwEQHQ9SV/zl5Lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E5awR27W; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZYjWVFwi"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6356257so340704f8f.0
-        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 00:09:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E5awR27W"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6356257so485389f8f.0
+        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 05:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788851363; x=1789456163; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KaN8ORG6D91TdeVvPbVzs5MI5F+Br3tg7mv89xYjlPA=;
-        b=ZYjWVFwi2Cc6OukpxbZKVvjmFZIpkWLZq8M84L4yQphYUd/wNr/quUFeO4G9nSVOjk
-         xx5X0AL9RPi02lwvFk00TZvav9Ta+Wv+I1Mul2zLxbUc8nXc+o7GjmMrhFFI0vFSCgbr
-         TFsFhkZYnxfgMMppaPt9FPVCOqDSpGXQT7pokxrE87gyPmiPSlS38/Tc3nOh7jpT/jKs
-         sBPdgzEkN2p7ic8wwYZxnwy+8MA6ITLR47a8yZtroJfYTzTAx1fAQ2IDA9LUneimxMat
-         /Ggfc71n1ILLQUhKOBFQG5KwMxFVvk91IOua8FOvJufVY57FcJy0K9NdMQ2dm+9TLsjk
-         naug==
+        d=suse.com; s=google; t=1788868928; x=1789473728; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=487eRbWP9lyEU/S8kmCpSA9mRITwOfBc17qyoaa0o10=;
+        b=E5awR27WEx8bPD1LeqecbkKIBOOPdU6nR3CA/iyv3T331T+nVkykyL3Hbd/wNbG64Z
+         2yJ/kZd1/My5pp//AogqJlXLpp63gPCoVywO0QszjXlRPT+eCLBUUUAsIVmcuWvq3Hip
+         1dVqlNY6YSc6frswjbtc5Xp+/lYS4TXcbAlbpL0cg48Xhxyva+4iE5VR24/q/rb2et0D
+         1/d5NmKaeURV+0IqSXX+yRwZV1zIuhaoCKDk3w/OChIRAxzkRwFu1Xvxl7H1SIx0Z8JJ
+         VqolXPmqqwssVsoZY2WGiFpcbYxgn/WyZH0BXQg/AukVeh9hspJKKbeJRf8oi+kSCt6n
+         GnSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788851363; x=1789456163;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KaN8ORG6D91TdeVvPbVzs5MI5F+Br3tg7mv89xYjlPA=;
-        b=ksv+1baucdtRBCykc/NNdKG0vPTRhC+nVM/wmYqrU3z3pQ/Zac4ddumHlEjWSNQZYK
-         QCZuFpyPTj78/GHBXtWzTUe76Dv1YJFu+U36bEwZjM6Uxv9ynaPR5faQQai1/cf/ejH3
-         nWgaGn3Ag3jAy+8WRPKLeAT/gFJ3R0jeBvUFyjueYmb/gTKvaYKga+rCpCcxXkcManw4
-         Q6R8lb5opTXxsCZItbV3yULqdOjq3s4pyLBj77+bM8aTaTfYSnputkIzXIP+3Lguhf+R
-         d8mtLkkKuQivNf5OkQxQY6UL5NKHImk3XuN1vR0gca+3Bv+9lTSUUEqAMJSDAPHRUOOZ
-         +pYw==
-X-Forwarded-Encrypted: i=1; AKwUvBxPJG2n9l3vt7mNEQI5aNXHD5rAOEELVqkOCVcA/veyCblvMhlwQQWmFdGCSM+9TVwNdd3cBjIcQ2zve4XK@vger.kernel.org
-X-Gm-Message-State: AFuF++nQ9edLq5ZQZ8pPzNbGWcOtyo1F8DcSa3st8AlD9HGk21VKzMgS
-	Fpwo40AiiUxpUYF2qYaeIJVhIc9SaOHqdMqSmEFW8CpjEay1fpSlOZ4SRcrlAJL0XFk=
-X-Gm-Gg: AYBFou2+9lqGGyzE0t0ZavSMMvnjg6xPPX863n5TP480ndk0P8V78Mh7KE6hre41VP+
-	vRFZR9yYSCsVCU5RR5A8wyVbRi2D6waOhBF8hJdbilii8EOqQnlOvy97bk7DE4ZIH5kyZGGhO3E
-	y7WuVmI5AiyDBxQX57mVhSnJaGnKNQ+ZkkpATTpjT9W04sxOZ3HVJYfoUcb2lBwMd3pH4reMpOT
-	yqJcCFw4OQmkWGumwUZYsMseqlus1tu+6bZLRgo8lK5xID5qbJEqZvvjG/DMz9RSQLtkuDBq0he
-	EfEakmY+olMWJ01HVmjimHXflhE9EMF6LNimYj86cDzVAKm19PRIJ6EP6lxLfse/fdkFYuq4oFc
-	Ata+FdJ/lChhxa5xDpRZYVYugmeFhh2H9yKIUe1jFk/U3v2NkPPXZqUOz8YRg4pQhDSG8VgONLV
-	8XIbLeNEy41bWrrwxJDgtWRYg/Cz2nIU5gY8v/DTQjSq3wBbUMCAE=
-X-Received: by 2002:a05:600c:1908:b0:49c:f13e:e4f with SMTP id 5b1f17b1804b1-49d1757b03dmr45007475e9.12.1788851363346;
-        Tue, 08 Sep 2026 00:09:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788868928; x=1789473728;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=487eRbWP9lyEU/S8kmCpSA9mRITwOfBc17qyoaa0o10=;
+        b=U62oXdgXreLp3lIzpLOt/737e3cj4B9S70wFOhVYpBbd+d8qnHFAGL1W72StlpEufH
+         sdDI+eyD6tPDoR5ORt1XxovYBLks5oIP/2xbGi2yMflAWtzNV4iJpyFDrq73rldAAgWH
+         ryRa4GLxzPsP2nLxAwwd/QtNUIVDkLoRZIsuoRY2YzTToe12Kps/LA5Uwizf4LUT4rae
+         RdvKWEM984dhLSk1Oz4YIYcWv9v0TKllmj76kTlyZ1syf6v9PseeLBuglcCjo7doKjQv
+         /UDLLKWTZubv3Qn4joNxsMAuAzffgpHOt0F+KsnuK8QbYFI6yADbIGMsbqs2U9ULKe9l
+         14uA==
+X-Forwarded-Encrypted: i=1; AKwUvByVXQt9ZjGCWytursdwoeQCFjmLvUENzbPq5FXdm05nK7Ogoa1bNTN3ZU8Q3gP8ByKIDmrJCgXVB5vmII9t@vger.kernel.org
+X-Gm-Message-State: AFuF++kUu5hZNh36NBuIODLAZPKIO5IHa+Z4HKGq3Dw55LjYDTsdkA17
+	naAH8Tlg5fdoN3RYB+14tD6OwLVXZhWPdHOWrBmqHaNKz1qTVhsiZQg+yTaBDaJqPzW+fTV7clm
+	s1ho5m0Y=
+X-Gm-Gg: AYBFou1EDM5H9qZ1KSj/GSX6TrffEaYAmQ8JxhGRNYxekWb3yLR89lWbVH7n4oXvCU8
+	iEQsgDzaRhc2hXyhER/aNWDqB180FOxmzU2OazbBT6QqgOuNvgqpPU2O5GoZS5kfDbVNADrGp1E
+	4W8vUY3Mpd3ait/jKYE8iStklD/VHcxBB7BUR21noJIBOUOr4n0vPxGZ7DcHrIlGzn/mtnXqfOR
+	wBKVLrNVohL+mG8+WPE4BkpRRPZE9GL6LPvN1A9QNh2z3qZr6IxSeugYIXf87la/YPRFaXaWfAb
+	yxYg+2tXyOl/LAiMBRsJDNSlLk/1Pw/+f/Z+1nmcpS9PREm2MyIRb3bV21v82zqYgymAtp2k8GO
+	WU0xQxckVivyXsTE9sacFqGp6ZuUT4//upsMH8495b+/wQ245U9cEFhyTOVPYXSUNQELoAaLGux
+	H60+6rVK+aCh7M7abgdhwemdUnwcqW/LVg85Ec2NrwYukAFUztB4w=
+X-Received: by 2002:adf:e944:0:b0:485:8ea0:da8c with SMTP id ffacd0b85a97d-485a242f46cmr5662930f8f.16.1788868928335;
+        Tue, 08 Sep 2026 05:02:08 -0700 (PDT)
 Received: from pathway ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d03543064sm279962065e9.13.2026.09.08.00.09.22
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885c5bbdsm33929719f8f.36.2026.09.08.05.02.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 00:09:22 -0700 (PDT)
-Date: Tue, 8 Sep 2026 09:09:21 +0200
+        Tue, 08 Sep 2026 05:02:07 -0700 (PDT)
 From: Petr Mladek <pmladek@suse.com>
-To: Harry Hsu <x90613@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org, song@kernel.org,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/livepatch: Test rejection of aliased symbols
- in one object
-Message-ID: <ap-0odfpLVv8k2er@pathway>
-References: <20260830173343.52759-1-x90613@gmail.com>
- <20260905155507.273262-1-x90613@gmail.com>
+To: Harry Hsu <x90613@gmail.com>,
+	jpoimboe@kernel.org,
+	mbenes@suse.cz,
+	joe.lawrence@redhat.com
+Cc: jikos@kernel.org,
+	live-patching@vger.kernel.org,
+	shuah@kernel.org,
+	song@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH 0/5] livepatch: Fail object initialization on duplicate patched function
+Date: Tue,  8 Sep 2026 14:01:44 +0200
+Message-ID: <20260908120149.299352-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260905155507.273262-1-x90613@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat 2026-09-05 23:55:07, Harry Hsu wrote:
-> klp_init_object_loaded() now rejects an object whose klp_funcs resolve to
-> the same address, because aliased symbols would push two klp_funcs of one
-> livepatch onto a single ops->func_stack and leave the redirection
-> ambiguous.
-> 
-> Add a target module providing test_klp_alias_show() together with its
-> __alias() sibling, and a livepatch naming both of them.  Two test cases
-> cover both callers of klp_init_object_loaded(): the klp_enable_patch()
-> path, where the target module is loaded before the livepatch, and the
-> klp_module_coming() path, where the livepatch is loaded first and the
-> module loader has to refuse the target module.
-> 
-> Suggested-by: Song Liu <song@kernel.org>
-> Signed-off-by: Harry Hsu <x90613@gmail.com>
+This is v4 of the patch failing object initialization when it patches
+the same underlying function twice through two aliased symbols
+(functions sharing one address) in the same object.
 
-Looks good to me and seems to work:
+Changes against [v3]:
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+  + Add selftest for livepatching aliased symbols [Song, Harry]
 
-> This is the selftest I promised in the v2 thread [1].
-> 
-> It applies on top of patch 1/3 of the series [2] and does not touch the
-> rest of it.  Petr, since you are going to post v4 of the whole patchset
-> anyway, please feel free to fold this in as the last patch.  Otherwise I
-> am happy to resend it as a separate follow-up once the series lands --
-> whichever is less work for you.
+  + Only partially revert relocations when failing inside
+    klp_apply_object_relocs() [Sashiko]
 
-Yup, I am working on v4 and included this patch.
+  + Cleanup changes made by klp_init_object_loaded() for failing
+    patch on another failures in klp_module_coming() [Sashiko]
 
-Best Regards,
-Petr
+Changes against [v2]:
+
+  + Clarify comments and the commit message [Miroslav]
+
+  + Cleanup when klp_init_object_loaded() fails [Sashiko]
+
+
+[v2] https://lore.kernel.org/r/20260823060734.58443-1-x90613@gmail.com
+[v3] https://lore.kernel.org/r/20260830173343.52759-1-x90613@gmail.com
+
+
+Harry Hsu (2):
+  livepatch: Fail object initialization on duplicate patched function
+  selftests/livepatch: Test rejection of aliased symbols in one object
+
+Petr Mladek (3):
+  livepatch: Move code for updating livepatch object relocations
+  livepatch: Clear relocations when klp_apply_object_relocs() fails
+  livepatch: Clean up klp_init_object_loaded() when fails
+
+ kernel/livepatch/core.c                       | 137 ++++++++++++------
+ tools/testing/selftests/livepatch/Makefile    |   3 +-
+ .../testing/selftests/livepatch/test-alias.sh |  81 +++++++++++
+ .../selftests/livepatch/test_modules/Makefile |   4 +-
+ .../test_modules/test_klp_alias_patch.c       |  62 ++++++++
+ .../test_modules/test_klp_alias_target.c      |  48 ++++++
+ 6 files changed, 285 insertions(+), 50 deletions(-)
+ create mode 100755 tools/testing/selftests/livepatch/test-alias.sh
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_alias_patch.c
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_alias_target.c
+
+-- 
+2.55.0
+
