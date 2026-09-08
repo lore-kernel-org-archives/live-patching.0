@@ -1,149 +1,103 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0497F559301
-	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 13:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B396E545DBF;
+	Tue,  8 Sep 2026 13:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788874352; cv=none; b=mRUvLTkewyUHqy8nkbcxddkSLer/QSLpBISihYbIiFvjwANIm8bvKRa0qVT147qfbCDrXavxYM+/n+rIWTlr7QkvaQ9G+ceqMmhLcMe18kASA0yNAwuvxrZPSXQYnb0pDpT4n1rfLUFeJO7ehW98RXl5kN1xht7qGaStKqo0SSA=
+	t=1788875523; cv=none; b=bO0ttPLRuhfICot/WZSXqcnvcJSGpakXbgPayaQcPJxz4qhvoddyAmGbsEHrOQBFL+hPnHvBGSan67wYcfur7IdJs1KvV4r7pcde/jCZ7qs04JCDZWDsyunmdYm25M+cLlx13bss4PL/Yh6+Yjoj7U2Rq5g+rMnw5fhf/CE2IrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788874352; c=relaxed/simple;
-	bh=WkJJWZ4SaxJF/zyHzYEhTuM+Mb9yokH8po4OGhCk8uQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VC7gOIcLl9tl24XN8xhzutdN9dF5D+DgtGcTS2ISXzxOs07Iqv7t5JX/ZebHb2xp6fPgwiugTWAy0loUn/HW493BAoifaxpJjrojQBYS3+NFgioNShG07czxXhe4p4tiqmDmEBN+D6fALloHCBUdT5UesPzQ04fSowjVuPFdnfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SSAFH46W; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1788875523; c=relaxed/simple;
+	bh=c8Gv/tOmnBsoRpMKP0BTnBqpL8Bhf2gTxJwPTe6abXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M010ui3vZO1AIXJxaMoctqtXdt6gttzS9BFb2Dnmr4zSfG/gtHstME26dtcpqoYLI4pTH0JqQE56btz2oa7NyT5ovcoLRr6XRHjVqivmu+vx02nsoUCkNNh6MO92hhcPJp2FwYCpFtmi3gbSmbwfct7jBWa7Jd1VhIeReK6xHBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=uTc1rGyi; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SSAFH46W"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-495590dde14so66061435e9.0
-        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 06:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788874334; x=1789479134; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mzA37jUw1zDr0CBMAEx16zABWeBDZswZOBHILRhm0ZI=;
-        b=SSAFH46Wc+tnRKi/RlRlGjt4dqFT80tRzWBvl4lbx9tVjvyjaUSpA95KM880CkktGT
-         hPz+5JVQVxsj4FzWzmNY0P/UDTzwgbPPqdoOmtkroc6bLBbWkxYRQ5oTf+MXMP8xkWyc
-         TNoQt5yVqu/YdBx69Z8bo3ZGCBjES7vO0Ayjl13TIGtKOJN3cyaGVmA9oA/fghGPq2p0
-         79H0MIXRptvXiP6P8WaHgKiIKj6lrVUc0lELsNsikc7CjVoKfhx1vIaw2kIdnaSY0/Z5
-         H2xYQJiGwJoDGQ2P5i32QUHs0YvNgQ+s8SnsTGejvsHpKawoQBFSrKXf3sA98rErs0Nt
-         cq3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788874334; x=1789479134;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mzA37jUw1zDr0CBMAEx16zABWeBDZswZOBHILRhm0ZI=;
-        b=bdWpUtqXb8gvDi/Qr4WK6CmA1X3d/VTjLdpbqaVmFzimUJImdGYv7x1DuSeiXrW5Zk
-         7U6xTgMTowX1Oq9lG+MieTXzbXomxSebRFoVtCdOjp6f7rhey0pFgPm6P715qFwe63dm
-         0GpMRFCAxlNiP+0JUxXLVG44Xuvm7Uft5yatarjnjYszn+/7HQIker156PjYl8pbJert
-         IAyh4dcGgdlXj2/m8s40as5cHN/mgc0SqLarmD5JlugpIjuVZyMLQqQC0CqqkFVLtGAN
-         FIxHpSOjTj0H72hDl7o2GzWcPhT0GEd3JCQN7e48FpawI/wD+QelP65FtRXOnJxrl+fd
-         bcEQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwcRSpqyj6x9yLB0M/ykcMZ1fYbMO8xK91A/7QKwp2MgWsBgsQXrHmoYEo6O5f6NSi88n4sQXC29fpgPtMr@vger.kernel.org
-X-Gm-Message-State: AFuF++ksIvuYd7zuSGOlNMGxqLPDrDFf8Lbuv6NrVvJfcSwpE1m99WiX
-	pHCaeZcTN13muFbxuJ/Zw6G2P+MRuqMX+JqeTP3ZrTFvXeAy0Q7A+xBRIj+nFc08P2A=
-X-Gm-Gg: AYBFou0Msgy0rNeKeD1rZBT8Tern0DiGG+Q7B5pPslmTKqbOKkW/Y3D0puIPaRZMXQ6
-	v7kPCvQUFw0oUi9SpJheppTL4uPMtkK8kfCMGU06cJCko/4z7HweSP1bP/TbMT+oGNIiyvhrMlh
-	EZiWjtCjalcY3mYSS2R4HUvbMY0v3N3BHWdAWDoheYKHdqDt0Cvl8N9qKYVRmV8gjcqk46dIt69
-	niJjIbPaOEmLtxx5HLjTEbmL7kVjnxActPXJBy/jsXbb7y/UayWCQGM/UzEVsF5UuxHTDij00Uy
-	kNf3ovEFkFdGeSEn4sbDRnc1V6KmZCK9v8TpT76XJ9dtYoSEGIP9nMizkYNWLPN9QZe4hoqMYSl
-	Vd7xUeEUaOsLKHNjwqk3Tf2qDfhVL6KI3rdTMZxoqnP7XTRvmsaHQ7CLH2nXTselG9Wj9M+Wr5m
-	WNDAEcoNCMjHG/jzeugd8YMYWgOHpND5XXGF1HNc7W5l5+cDWuTmQ=
-X-Received: by 2002:a05:600c:3d92:b0:49d:726:cc9f with SMTP id 5b1f17b1804b1-49d0726cd2emr409557115e9.5.1788874333600;
-        Tue, 08 Sep 2026 06:32:13 -0700 (PDT)
-Received: from pathway ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee7febb4sm518069085e9.14.2026.09.08.06.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 06:32:13 -0700 (PDT)
-Date: Tue, 8 Sep 2026 15:32:10 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: jpoimboe@kernel.org, joe.lawrence@redhat.com,
-	Harry Hsu <x90613@gmail.com>, mbenes@suse.cz,
-	linux-kernel@vger.kernel.org, shuah@kernel.org,
-	live-patching@vger.kernel.org, song@kernel.org, jikos@kernel.org
-Subject: Re: [PATCH v4 5/5] livepatch: Clean up klp_init_object_loaded() when
- fails
-Message-ID: <aqAOWrmq1YgTbgAi@pathway>
-References: <20260908120325.299649-1-pmladek@suse.com>
- <20260908120325.299649-6-pmladek@suse.com>
- <20260908122549.193F41F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="uTc1rGyi"
+Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id 297A31C27D3;
+	Tue,  8 Sep 2026 13:51:55 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id BF43420012;
+	Tue,  8 Sep 2026 13:51:39 +0000 (UTC)
+Date: Tue, 8 Sep 2026 09:52:53 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
+ <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
+ Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen
+ <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Leon Hwang
+ <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, Ben Cressey
+ <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+Subject: Re: [PATCH RFC 1/8] ftrace: Let ftrace_call_adjust() reject a patch
+ site
+Message-ID: <20260908095253.520c278c@gandalf.local.home>
+In-Reply-To: <ap3PYIdhL3ETmN0Y@linux.dev>
+References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
+	<20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+	<20260904084728.6d2ebcc8@gandalf.local.home>
+	<ap3PYIdhL3ETmN0Y@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260908122549.193F41F00A3A@smtp.kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: x457bex6yki4ewxmaioc5ood1sdccp73
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: BF43420012
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18nR2NzFrPVTBxdKw6aYNAKXDfxBb2FKIM=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=zmEISpUYs3PxDYsmwRf2tNZx1Ic66nQ4OS2YYg6VWuk=; b=uTc1rGyiax3d1heQBZvkqpESgAHTDt6puNzDb1kcaIw4IkVtTy8A1ipxHVxbFEoTotD5HI2HsR4MrblNpcB2tBhZCY5+By0G9i36l82d2hxFXEU+61IX5LsNnB8IYnbFlV+Hdk8lzxWxarrR31+5z6ELIXFNLi1siI+bPwO90hs=
+X-HE-Tag: 1788875499-703192
+X-HE-Meta: U2FsdGVkX19G2BzycxCMNywV55nFSuOsSuiCbrC27AdqLgblO/sjNWn8yFEVA1Pp4o54M56CAWLIIQPWiVbjNfHhKlkV7l9KH/m9cY30zHeFrqCV8VhxxkqgYRPQd0XdnDR29QpQjYtYZgEHDCk6F4UR4PhSZraMLTC0xijKFy1vc0KkipbPR7rWejQrGl0csG0VWcKwTFPmYo+8Mz/gKTw5i6SQwge1PHx9dHxhXncKI6vPabGOBRl5yQN6P/57/0gb/tGzPJdwg8IvwUXMxizGUE136mn9rXBG5BXLbaHmWF3w9OZI7xiwx2sAB2Pm
 
-On Tue 2026-09-08 12:25:48, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Partial relocations are not reverted when apply_relocate_add() fails midway, leading to permanent state corruption.
-> --
-> 
-> commit 3f6df1b4ed699e839abbdc8919a6c7de5d1850c8
-> Author: Petr Mladek <pmladek@suse.com>
-> 
-> livepatch: Clean up klp_init_object_loaded() when fails
-> 
-> When loading a module, klp_module_coming() updates all enabled patches.
-> If an error occurs, klp_cleanup_module_patches_limited() cleans up fully
-> processed patches, but skips the patch that failed midway. This commit
-> updates klp_free_object_loaded() to revert all and only changes made by
-> klp_init_object_loaded().
-> 
-> Closes: https://lore.kernel.org/r/20260823062313.1321B1F000E9@smtp.kernel.org
-> Closes: https://lore.kernel.org/r/20260830175608.4BABB1F000E9@smtp.kernel.org
-> 
-> > Next, klp_init_object_loaded() has to clear its own changes on
-> > failure. It just returns an error when relocations failed because
-> > they clear their own mess. It could call klp_free_object_loaded()
-> > in other situations because all relocations were done and other
-> > values are just cleared.
-> 
-> [Severity: High]
-> Does this actually clear its own mess completely? Looking at how relocations
-> are rolled back in klp_write_object_relocs_limited(), which was introduced
-> earlier in this series:
-> 
-> kernel/livepatch/core.c:klp_write_object_relocs_limited() {
->     ...
-> 		ret = klp_write_section_relocs(patch->mod, info->sechdrs,
-> 					       info->secstrings,
-> 					       patch->mod->core_kallsyms.strtab,
-> 					       info->symndx, i, obj->name, apply);
-> 		if (ret) {
-> 			if (apply)
-> 				klp_write_object_relocs_limited(patch, obj, false, i);
-> 			return ret;
-> 		}
->     ...
-> }
-> 
-> By passing i as the limit to the rollback function, the rollback loop:
-> 
-> 	for (i = 1; i < limit; i++) {
-> 
-> will terminate at i - 1. Doesn't this skip the rollback for the partially
-> applied section i?
-> 
-> If apply_relocate_add succeeds on relocations 0 to k-1 in section i, but
-> fails on relocation k, these partial relocations remain permanently applied
-> in the livepatch module's text. 
+On Sun, 6 Sep 2026 20:40:59 +0000
+"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev> wrote:
 
-This is the same problem which was reported for the 4th patch.
-It would need to handled in the arch-code, namely
-in __write_relocate_add() in arch/x86/kernel/module.c.
+> Will add one in v2, thanks.
+> 
+> Today arm64 returns 0 only for a mis-aligned patch site. But patch 4 of
+> this series replaces that check with two: the two NOPs to patch must be
+> there, and the ops pointer must fit in the prefix NOPs (which also
+> catches a mis-aligned site). How about this to cover the series?
+> 
+> 	/* The architecture may return 0 to reject a patch site */
 
-Best Regards,
-Petr
+That comment is fine. I didn't really like the specifying of mis-alignment
+as it did appear to be too specific, and could change.
 
-> Subsequent attempts to load the target module will fail immediately at
-> relocation 0 due to non-zero target memory, converting a potentially transient
-> address-space layout failure into a permanent -ENOEXEC on retry.
+-- Steve
+
+
+> 
+> Happy to name the mis-aligned case in patch 1 and extend the comment
+> in patch 4 if you prefer that.
+
