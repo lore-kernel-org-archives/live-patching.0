@@ -1,78 +1,77 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADF654B1B7
-	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 13:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECF2554086
+	for <live-patching@vger.kernel.org>; Tue,  8 Sep 2026 13:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872551; cv=none; b=fyFj1Aj5EIPoQeWlEs4Zo2agpG9PAUnl+p8G9dfIkTF29nV14AiGaffCLTBm/HQ/SM31PY8C4zlMMpmcIiVVbcZcEmdADXP8kBJuNGSELMo5RGpmDihyni5H66IWdP/WHSZDtcQb1LNlFRYz99AN7ZqM7AQjD86cB8Zt1LzkIhA=
+	t=1788874173; cv=none; b=SNCZXQFn8TSrvZ6nyW2fFXt8mhf1iH8b7k+2ANbh2l3MiFxGlNZpAwvLhLReMnJUYBVScH+zzYn8KABQ8qhRv2AitG2pFaJy/AHO5gsAB7+OoFT9K3hoCCrL33E3taAkKgddwqtaPbfKAZkdITUyclZo+1fiKUofk7qWdpkydqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872551; c=relaxed/simple;
-	bh=dn92Mo88uA51N0gSIQRdK0p8DpIE8ybkptRjiyJjPbo=;
+	s=arc-20240116; t=1788874173; c=relaxed/simple;
+	bh=ilMIv23jDI2om5QXhKraazCHucV6pJlWdlh4viYTMaQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OkrfIogzJ0d8TZ/ltKRGX80SGEsLRV4m/9yrJMgdqR6uk5L7yXr1ZYZeiT/dFWGa5kooCuEnrHEGAQFxJWtcGCVkg4WKN5NAEpzjk4/EQc8vnjyFJaU7xuJgxSliQgHZA4Qt9qBkOrp3g723yq3Oc3c7XMpugcJQDkWFE6XowSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OcT1Rhts; arc=none smtp.client-ip=209.85.221.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=ivtCs4vvGo4l4hSfjDH+r4VEL/UnHsiHDCcueQEOOKomfnr2cbsj7svL5DjskzpVWDuz5qto5ClIIH1I4xAexT59HjWYIi3B+B4qnoh+kvOAd9jpAqIyK0baGu6cgs/7etr5GiSyHioT/4n3sUgugV6lOGLt77AYsgWLTpUfJAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LKk5vrAM; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OcT1Rhts"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4859245e493so2328082f8f.1
-        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 06:02:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LKk5vrAM"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-47f96c5b722so3277123f8f.0
+        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 06:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1788872534; x=1789477334; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1788874164; x=1789478964; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BJ1elAf4v/bn33w8Prh48yV0z8gg3E6Slnlr125hPM0=;
-        b=OcT1Rhts7rFP8NMk25rtQ9PxYPR108uAYUV6LLKvC66H3tVSUXFIEiupv8uzZmJpH6
-         vLVM8ny1ZZKBr1CPCgminSExbwdmpLTplYJcQI/Z3pyguLVS91CqVQ96A19q7FuwAL3Y
-         86AdfC0ztXEd64LdlRuiso+T7I/ACBkwoluZ5lzmki67V+/LJRjIClNHy8hwLo4GQnaM
-         8ZlQQooohMoUXTi1w5lJv/IDtIlegl8BT6Jqe3yNft0fkLBFCN7wTxIzHcKaaQxFqZ8F
-         X4jxJabVXDtW/AU9/m0TN8inNOTZ0+0kVShPxwFIYY4rMLRAVn+OzFECcIFT5askoaIu
-         qMCw==
+        bh=YSgzUdR3sqoyk/gUrIXmjoEFUchlJ3rVBgk6ATmeKIw=;
+        b=LKk5vrAMirwsRBoQ1AIBrFsSQOsmLowcPgn1wJ7cIxVDp0zrDWADp03ZaT5Etmscoy
+         kby7oDNQuW5n6GyqNgklJLOtXjWCGxAXEwGHYz5QDST1PHf+SKdG/1HxWm8sFMzMS1GX
+         L2VlCweH4l7a7HaDcSFPJp49daOSCM1NbHI7FRMVrxo6j/UUwHuIPEpWWqmCeNwyDCoh
+         vTMWWs/k5NAhu3OpCcvrAHyA4inHyBUJBw0YDtZVGhZ8qccl3v6r7m4B1U7FV0Sx7qrX
+         EW0mzcVL1XLqpk9qhvWVXCceY6PDKqc8WcatLUojy3+/aADoUVd85hI0rtsTxpZ0AWAs
+         b9OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788872534; x=1789477334;
+        d=1e100.net; s=20251104; t=1788874164; x=1789478964;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=BJ1elAf4v/bn33w8Prh48yV0z8gg3E6Slnlr125hPM0=;
-        b=MjZhwBs/b2JGK1twS7YHC51TWgjg2/OVxukgn0qQdvLtoTlf/9RZ9yASnuiE+/eNpH
-         Loq4spNEDU3WBQetvhTjFg5smlGIEDFA3fN6XfshnZbtMsUtChBUh8qUiDtvKctwcPVB
-         Q30ffK0TWxF6LeYogmk9ytRoxFzjjQjerzdKfLw3hjDESR/Eja79j1OnqiaUqjOjzYJW
-         hBTrB4yItOoXgh+Gvjc9LMLgf/pqBdFOKjx5+8ueatcQ1zztaHQV2RpL4NwmFxavH2W+
-         iNF4RAE9PihmEvlYlcCDJ6YDKUOtmi/vcLY8TvM2ivaEJ/2et4RIJbYFMXaXOmdLSfTu
-         EoBw==
-X-Forwarded-Encrypted: i=1; AKwUvBxtT75lfOaUQALKNRglb7lY7y64xGvMIwlQ+AXPci+lreZnw4FAynxzBvppugLyKwacrvO/lzxvMNZCTr/o@vger.kernel.org
-X-Gm-Message-State: AFuF++m9qsU8aOwKeOptcInZfeGhPCUx/K+k0EJ6w5mbTj/LIK/7OpaG
-	wmiQ+8s6FtCXFj7xhmz2nUJMsqqAZhAuwsFLfUtvqO6tNIrr1aQkyig5MktC/RVBJMACLG/DCUJ
-	gWFsS7ww=
-X-Gm-Gg: AYBFou2+LIemBEM7Qo1DFuHDdjQw1NCBq2CSl+59OiNQ/EI8nlZQWNNNPCffst2xMK2
-	JYh+wSCJhQXanD5Bxflj25NsaSnKU+MbqWh4kuQrIl5ygIC8Qrdp+XZBGiz50QsXQhidvs8Ijm6
-	m5YfRM4zKHSDteII9w0FyjYqMfy8N0Zjkh+7+cVW7UgUY3BbhmoMHu/Y3dAiFKqyARePaVXIJK2
-	AF1FFMtBb6Exusq5sqKiQjGeQR+Vd4Km/PciOQRxpMv8ZxyiWR36+oVOkGI0a+MUKE4t5M4A9Uj
-	aO/TA35buFfBsyYhEwm25eMoBqxqLCbIunXlVoO3zRjEnj/LwpaNunMtTfVKK/H2V+Mj634sEwU
-	j32jTt//YGTS4BjqPaLMz7Suxnlkab8erwhQjDdiqBbe/0zDsDMxl/X/nlNB+meNTz4g4PaD78X
-	b63c2LLpZIg50/ijpAgFutJJCRZNE6jcGXx3+k06jKRmHA/pTIjsVLCgJKjWuqZA==
-X-Received: by 2002:a05:6000:2010:b0:485:8a47:5b92 with SMTP id ffacd0b85a97d-4858a475dadmr28510814f8f.47.1788872534455;
-        Tue, 08 Sep 2026 06:02:14 -0700 (PDT)
+        bh=YSgzUdR3sqoyk/gUrIXmjoEFUchlJ3rVBgk6ATmeKIw=;
+        b=Ivf8yFIIKsEryQHiHMKw/YSCaYWYw4fIYuo1SeUqH9Q034Lq2vaFszwYvTWqK7yk4I
+         sZkhPTjFbGdLMX2ys881oL6q8yDrRW2bCXwCLuX4ICZfQiLWBMLPCB8blsO9Z0l0CRMe
+         3UVva3fsZtwX/j3UGKoPB/6uINJ+8LbtbpUzh/zqEg0YgI3NYHNhMD99a0bVyWkno/yf
+         dC1v1iOayHTTqkulQklyzBT6KdPZA9ygu02EWWQ0fLjggSG+BC+z2W322nlHx3YDztNA
+         8qrS2X8+R/eu05dX6EAozsPKrFeLV3Kc1Q7eevhfPWGoEbEjrJoefUR4ICcTWUFTAK2l
+         Xtww==
+X-Forwarded-Encrypted: i=1; AKwUvBxdMc2migBzoHZgIIAAjully69sD77303MllR1OsSUusKCWplrFOhRqAJF4Em5FxH+P6LwEKtjdjn2oWFCY@vger.kernel.org
+X-Gm-Message-State: AFuF++kN06DPi8UB87jtpIBGYpWv55JesQdivIJj0NAB+G+W0fEUibfA
+	yxwcaR7bOVliR6dukPScnEwpYa4cpkeRIYR67fyPIplxtCpmt+thcvB3Dx+gni/cxBQ=
+X-Gm-Gg: AYBFou3BuB46TE2cTpx7nsCWkJGxNTu5LkF2hDDOwbFSa9fKYEBdITgEqzBqdzwe4Fb
+	eo3YtWnhxq/UNMFqmyw1YaHKvNrs8ouTj/7lVnEdTSWCwcaZqaawycI5L4U8TzKCDDnpi+yP1d4
+	7KJzMKuf4c6RMLLKrvOfg+RqAfuDyaEPDCtKi1uxb5RPpncPKnH8A4sTBdw8mjXxd25CC8Rz7QG
+	OD4tBhb9exhBLXZ7u/9nencw0rRW1/4zzf71uj5UJ/6k95UhXeDehwU77tqeOoDztpDiioNw1G1
+	/I8XNOIq3bBcy+dSyfUpIJChvX6d7x0ydIpLGaZH47ci7tHJfmtn+/Te7rGgdE1THvww2dgfuw2
+	AkLkY0u7H83MUU8LM3Bb555XbP+IMV+PiGLyS5Ryn3kSHs3nPPXaEutTbsRPNp81/YEHltdCTZT
+	Ol3RbOCQdW7z02TT5OtSW5/GBiEK+7OhLObCeeoIJWssmED1lvGFI=
+X-Received: by 2002:a05:6000:4710:b0:485:8a47:5b83 with SMTP id ffacd0b85a97d-4858a475c60mr26306825f8f.32.1788874163604;
+        Tue, 08 Sep 2026 06:29:23 -0700 (PDT)
 Received: from pathway ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885b7bfasm36713640f8f.29.2026.09.08.06.02.13
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885b7bfasm36856922f8f.29.2026.09.08.06.29.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 06:02:13 -0700 (PDT)
-Date: Tue, 8 Sep 2026 15:02:11 +0200
+        Tue, 08 Sep 2026 06:29:22 -0700 (PDT)
+Date: Tue, 8 Sep 2026 15:29:20 +0200
 From: Petr Mladek <pmladek@suse.com>
 To: sashiko-reviews@lists.linux.dev
-Cc: Harry Hsu <x90613@gmail.com>, joe.lawrence@redhat.com, mbenes@suse.cz,
-	jpoimboe@kernel.org, song@kernel.org, shuah@kernel.org,
-	live-patching@vger.kernel.org, jikos@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] livepatch: Fail object initialization on
- duplicate patched function
-Message-ID: <aqAHU9Qecqvl88VT@pathway>
+Cc: joe.lawrence@redhat.com, Harry Hsu <x90613@gmail.com>,
+	jpoimboe@kernel.org, mbenes@suse.cz, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	jikos@kernel.org, song@kernel.org
+Subject: Re: [PATCH v4 4/5] livepatch: Clear relocations when
+ klp_apply_object_relocs() fails
+Message-ID: <aqANsLgTIOy44sDg@pathway>
 References: <20260908120325.299649-1-pmladek@suse.com>
- <20260908120325.299649-2-pmladek@suse.com>
- <20260908121744.81D641F00A3A@smtp.kernel.org>
+ <20260908120325.299649-5-pmladek@suse.com>
+ <20260908121810.9577A1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -82,90 +81,118 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260908121744.81D641F00A3A@smtp.kernel.org>
+In-Reply-To: <20260908121810.9577A1F00A3A@smtp.kernel.org>
 
-On Tue 2026-09-08 12:17:44, sashiko-bot@kernel.org wrote:
+On Tue 2026-09-08 12:18:10, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Atomic replace patches will fail to load if previous patches targeted aliased functions.
+> - [Medium] Off-by-one error in the rollback loop leaves the failing section's partially applied relocations uncleared.
 > --
 > 
-> commit e5553650270f93e11fe885d264a3829802223d3a
-> Author: Harry Hsu <x90613@gmail.com>
+> commit d297505bb4b1d833ec93725770d65ac1044abcad
+> Author: Petr Mladek <pmladek@suse.com>
 > 
-> livepatch: Fail object initialization on duplicate patched function
+> livepatch: Clear relocations when klp_apply_object_relocs() fails
 > 
-> This commit introduces a check to prevent patching multiple aliases of a
-> function within a single livepatch. It fails object initialization if aliases
-> resolving to the same address are detected.
+> This commit introduces klp_write_object_relocs_limited() to unwind and
+> clear only the relocations that were successfully applied before
+> klp_write_object_relocs() encountered an error. This prevents partially
+> applied patches from leaving un-reverted changes that cause subsequent
+> patch operations to fail validation.
+> 
+> Link: https://lore.kernel.org/r/20260830175608.4BABB1F000E9@smtp.kernel.org
 > 
 > > diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> > index a240d1144e89c..a6762cbe74b70 100644
+> > index a6796cd6b65fd..714f97fdd271a 100644
 > > --- a/kernel/livepatch/core.c
 > > +++ b/kernel/livepatch/core.c
+> > @@ -342,14 +342,17 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
 > [ ... ]
-> > @@ -885,6 +885,21 @@ static int klp_init_object_loaded(struct klp_patch *patch,
-> >  		if (ret)
-> >  			return ret;
+> > +static int klp_write_object_relocs_limited(struct klp_patch *patch,
+> > +					   struct klp_object *obj,
+> > +					   bool apply, int limit)
+> >  {
+> >  	int i, ret;
+> >  	struct klp_modinfo *info = patch->mod->klp_info;
 > >  
-> > +		/*
-> > +		 * Aliased symbols share one address, so they would resolve to
-> > +		 * the same klp_ops and stack up on a single ops->func_stack,
-> > +		 * leaving the redirection ambiguous.
-> > +		 */
-> > +		klp_for_each_func(obj, prev_func) {
-> > +			if (prev_func == func)
-> > +				break;
-> > +			if (prev_func->old_func == func->old_func) {
-> > +				pr_err("'%s' and '%s' resolve to the same address, aliased symbols are not supported\n",
-> > +				       prev_func->old_name, func->old_name);
-> > +				return -EINVAL;
+> > -	for (i = 1; i < info->hdr.e_shnum; i++) {
+> > +	if (!limit || limit > info->hdr.e_shnum)
+> > +		limit = info->hdr.e_shnum;
+> > +
+> > +	for (i = 1; i < limit; i++) {
+> >  		Elf_Shdr *sec = info->sechdrs + i;
+> [ ... ]
+> > -		if (ret)
+> > +		if (ret) {
+> > +			if (apply)
+> > +				klp_write_object_relocs_limited(patch, obj, false, i);
 > 
-> [Severity: High]
-> Will this check inadvertently reject nop functions generated by an atomic
-> replace patch when previous patches targeted aliased functions?
+> [Severity: Medium]
+> When an error occurs in klp_write_section_relocs(), the rollback is triggered
+> with the failing section index passed as the limit. Since the rollback loop
+> iterates with a strict less-than bounds check against this limit, will this
+> skip the rollback for any relocations that were successfully applied within
+> the failing section itself before it encountered the error?
 > 
-> If previously loaded livepatches targeted aliased functions (for example, one
-> patch targets __do_sys_fork and another targets __x64_sys_fork), they were
-> permitted since they resided in different patches.
-> 
-> When an atomic replace patch is loaded, klp_add_nops() loops over all
-> previously patched functions and adds nops for them to the new patch. Since
-> nop deduplication is based on old_name, nops for both aliases are added.
-> 
-> Later, this check in klp_init_object_loaded() resolves their addresses and
-> finds duplicate old_func addresses. This causes the initialization to fail
-> with -EINVAL, which prevents the system from atomically replacing existing
-> livepatches and might force a reboot if the old patches cannot be safely
-> disabled manually.
+> It looks like this could leave partially applied relocations permanently
+> in memory within the failing section, causing future module loads to fail
+> validation.
 
-Wow, this is a nice catch. I would say that it is a corner case but
-the problem seems to exist. Now, the question is how to deal with it.
+Sigh, I did not go deep enough. And it goes down to the arch-specific
+implementations, in particular arch/x86/kernel/module.c:
 
-I see three possibilities:
+static int __write_relocate_add(Elf64_Shdr *sechdrs,
+		   const char *strtab,
+		   unsigned int symindex,
+		   unsigned int relsec,
+		   struct module *me,
+		   void *(*write)(void *dest, const void *src, size_t len),
+		   bool apply)
+{
+[...]
+	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
+[...]
+			if (memcmp(loc, &zero, size)) {
+				pr_err("x86/modules: Invalid relocation target, existing value is nonzero for sec %u, idx %u, type %d, loc %lx, val %llx\n",
+				       relsec, i, (int)ELF64_R_TYPE(rel[i].r_info),
+				       (unsigned long)loc, val);
+				return -ENOEXEC;
+			}
+			write(loc, &val, size);
+		} else {
+			if (memcmp(loc, &val, size)) {
+				pr_warn("x86/modules: Invalid relocation target, existing value does not match expected value for sec %u, idx %u, type %d, loc %lx, val %llx\n",
+					relsec, i, (int)ELF64_R_TYPE(rel[i].r_info),
+					(unsigned long)loc, val);
+				return -ENOEXEC;
+			}
+			write(loc, &zero, size);
+		}
+[...]
 
-1. We might detect the aliases in klp_find_func() and create only
-   one "nop" entry or do not create it all.
+We would need to implement the revert at this level.
+IMHO, it could be done separately.
 
-2. The problem might be easier to solve after adding
-   the provides/obsoletes, aka replace set, feature [1].
-   It should prevent loading the other livepatch for the aliased
-   symbol in the 1st place.
+I used Gemini LLM to check it and it seems that x86_64 is the only
+architecture with these permissive checks. It seems that all other
+architectures just write the new value without checking
+the existing one.
 
-3. Just document the problem as a limitation. It might be hit only
-   when installing more liveapatches in parallel that current
-   wild way.
-
-I personally prefer to wait for the provides/requires feature.
-
-[1] https://lore.kernel.org/all/20260607131659.29281-1-laoar.shao@gmail.com/
+Would you go this way and try to get patch into x86 code?
+Should I do it in v5 or separately?
 
 Best Regards,
 Petr
 
-> > +			}
+PS: I would prefer to go with unless it causes regression
+    and fix this "later". We could not endlessly delay
+    fixes because of Sashiko finding pre-existing problems.
+
+> >  			return ret;
 > > +		}
-> > +
-> >  		ret = kallsyms_lookup_size_offset((unsigned long)func->old_func,
+> >  	}
+> >  
+> >  	return 0;
+> >  }
 > 
 > -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260908120325.299649-1-pmladek@suse.com?part=1
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260908120325.299649-1-pmladek@suse.com?part=4
