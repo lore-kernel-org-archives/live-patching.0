@@ -1,227 +1,161 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A873AA9EF
-	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 07:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788939083; cv=pass; b=H4LS34Wc6H/6m9P3hPqeHNcP1/Wk5U184hxdWSpEtZa+ZHeam8iI2IwwoWXXSgGHSd8H+uhzvY1iARenY54kzOZIp0aa9dpYJ25WyAdoWsIx+DjJ4sQXAXQC+sob+9rrKt2dOSMSK/5K79MRjoTf/RrQ3KY6GgBQPnxcbVEA3kw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788939083; c=relaxed/simple;
-	bh=p5yzCPStQZlFYqWgsz/tWvBj/3blYllpwvjlsk3DA2Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fQMRGZ2TcuiTMxv3aGrzuS4jx8PL6Vyydd/nt8+/meFOo1e6doLtgstD2bOfffhUt5IhyTx4y6USGztbTzc1+qqkK1wUdki2Dc9P8RvWeMsMRU3Vtw9T2eyGKPoUKmCx0wFuoynL1PXiioFKuO+7UkpYeVPsaZCKO99odZEwiNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eml8NDlN; arc=pass smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC0755293B
+	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 12:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788957137; cv=none; b=ZW8Pr1sG40pc5EhKzKk9l7mHIy896fY3HlM0JnVQPdpheyGkcalYA955reoLkADd/GOplzpwL22qTdwc7G2l4fhdjLLVuJpbcSDp/VOB3lpQnexhi4Qigizs7i10QU53oKoqI5MWhU/qSZtkXVkhPJ808i+P4AwcsPlUtxZ6zjs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788957137; c=relaxed/simple;
+	bh=kEHLN3SxNVbJlYznjW2P5RT3Cdy6unfbFuvHn38Upds=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=i0/gB7ze33Ks7vtPeWpN0NukJODsqaiq7XqqsWpS3+gIh8qsCcYxF2DROUdQKlmHkCiki2XXxZZHIDex+xyLesgU6DW/aio2nG0g4Cb/X3EkyQOGNrdqbrzhG8hROExQXc4G1owIQvNzADsAFgmPys68znP5nCitjZnayLFY7NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=YO/JgPR1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5HQsvzGq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ns0hAuFj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=TikDKPai; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eml8NDlN"
-Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d46e4cdcbso6734117b3.0
-        for <live-patching@vger.kernel.org>; Wed, 09 Sep 2026 00:31:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788939081; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lhyp290qpowD34Niusb6G74jveprR6u9DWXAlmmi2dlpw+DYOM/keShEUjiHR6IxQw
-         3LZkL5yWkvGrZI9jp8D27zSQQFDC5QwnxDfA0PUVBtW1EY9j7SMnHLeu9HQWOzHeQZd6
-         QYSTEkF7Ctk7YQZL7vUAlHb7d7EM7P7FDwJn+xWKjEdjd3mgWeemx0RIgDoD2ax0bzvZ
-         T8hh+hXGFl3VnGARXEsx32VNIrNhMJTyv3mpDffY37Gnt/npl2SUsX6y2xJiQTDTuZFv
-         NZA5titpXgkbkrwDSRs2u+OSfSCm0u7s7J0UlzNe2GTdNaUg9b9qcejL12hkfsQfRNyy
-         ywhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zR3F/9DDyLDml5HLZtlb3GBYAZ72/4f2Si1r92K3OLs=;
-        fh=xAS8kwPmABbk6Q5k+pYnsr0tjST8GNS5uuHTnn4FkjA=;
-        b=N/dSVttOewRFQburltkv99lyzo0nNllRqSd1v1HFjCxYXjK71oeC+bvBBpVaNPTTkr
-         T1x4GTjNIYz/4POXn2PnctRtTyG3EIZCq5mYobbfWciE3QCkkR+A4JamJiwJdtXVD+sw
-         189FKdqbauIvE7GoOCiwsFH9pZJObj5ohpZgQULw271/8zs9sBHQWWQ84e6Xamw2UegJ
-         YJTYi77ZM8Xt805OQTRujA5RV84k9q779QdqDTDBqxbf0tWVZD9cvhrqL1lMhHuec/8G
-         yDkVp1b1Kf1yALNFHJdg/OUULYgEkmDEexOpXkylef0Drzt+Gqw3Ayqvgc8IMQ7ZSpy0
-         INww==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788939081; x=1789543881; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zR3F/9DDyLDml5HLZtlb3GBYAZ72/4f2Si1r92K3OLs=;
-        b=eml8NDlNHReTLC2vk9SpOjs1JVB9xUuuiqBhJkeiNKoF6PzL8rFCiVXYg0ja999H7C
-         pqYTNX6JLtUJl67NMBDVdAdJSbwjBjy6kYrjcFSCrzkSCRdJ9vXBdRv5/tRHqNoCDSJy
-         pr5lZbLMoo3XAAGvHsTB2S/fVxT2KBP9q2dsPgEn80TIpEf9sii0TIOXBOFhdmnaCDPe
-         lTCCXB6HFnEpPnCJbX2y83DkcCVZisNN+0H2MXblmyADUHzajomygkkMbwyCo+ioLaPN
-         tpGQ2YZ+e4T3krH47UGh4/1LwHDWD+/D4wEYHj+qq2Xg3y1LQgNo4C8ycE2ZivhtJkYc
-         P3+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788939081; x=1789543881;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zR3F/9DDyLDml5HLZtlb3GBYAZ72/4f2Si1r92K3OLs=;
-        b=G4yhY1OfuWEIypx4ngY42vTUFsjlPOqePDUuYLpHGFMKS+dNSWo+TwIfN/0J04K5Cp
-         gdOc88YXYdj0dcg4xG8DdY9vmAz9jiFd/GRjlqYuX0vdK3ITzQ8afbsloRAQDvcNb4oc
-         MgPB43+iY+f6yN8PZWn2GKyvRtTbX6/l/BOYsxfZFzf8Nn7p53bjFjyyv+NCE8M+bZ0H
-         0rmopHDL/r610P+lBvOFzKeYHkDwVjxoLY3jSJP2dpo2J057PHBZXOKNNe4HRBSi3cvx
-         LO6fPO297ZqlxrVUhNFFlbWFQ49LNrSgN2jFpOb39xUPzHYiHU2cSJmmtetZl4hTH70X
-         sFgw==
-X-Forwarded-Encrypted: i=1; AKwUvByoqNDTIRGiDSAOfZtOVaOKby20COAqjHwtwMeEQONr5wAw/Uec2uztLfHWPj+uQaX0fv4VnuhYgU1muWvt@vger.kernel.org
-X-Gm-Message-State: AFuF++l9N9tPwgUjuad1WoWNyRYzseQy1awjvJcnfYX0jtiP8hDLntNl
-	k/fjss1BE8ny4FkxJEDI0Ja91lv5/Y+ZMBfR4toF+J+8ULifcXtnnFm5QIgEpqWrveA7XhP0dbb
-	eaPjHgiQc9eLCPH2Pfg/ka+t2G4TqL88g7CvnSH8=
-X-Gm-Gg: AYBFou2PhnNUC/MeXdQAJMcMIZuQZlW4aaeuQ//fDevW5ZwPPGW20uh0BEL/PTu5Qcj
-	As8z6oLcLwN0YUZyGrPBMUu7OFgwq/AYAJrwsTKAltnnqEyk7oObhp8GCxqne60TUMHnVHozdBO
-	XAH4kHtcKxZR7uIPF+til0lrqQHclmkzNR/2sSFruR3lCFJGfRY4hVyI0+aGyVYy9iXhQa4zwiH
-	ryR4DBwLhwedp1/aSwFiyfN7ZcnufpE83+MpbCf8oIlSBmijDIWqfpyENOTnqfRKeQyBNjc4zQO
-	ES4Hgh3yxp8Yis0lc2RDpmb20e0pdukn8dpoFCmMtbXJDmDzlK1s6sHLoYtVpK2GGSY/hukGva+
-	Xxn9xz+XaHLjOo8RVI6nAUAA=
-X-Received: by 2002:a05:690c:e691:10b0:81e:6bd6:39a5 with SMTP id
- 00721157ae682-87f22b7f1f5mr17134887b3.1.1788939080568; Wed, 09 Sep 2026
- 00:31:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="YO/JgPR1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5HQsvzGq";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ns0hAuFj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="TikDKPai"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 341F02193C;
+	Wed,  9 Sep 2026 12:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788957129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ha9LLJuHIQjtS+3QwoANDmPwXPppOWITrUzxxHxGD8A=;
+	b=YO/JgPR1QUGEu2K9MnlBf9bV9UPWCG8GUcp476PYPH7smW46Rz5Qilcoyd94rksGWV4lUY
+	CfwnS5rtqMvf3phoUk7xbQIuSDX9WMATHrw7CIJACZ/pOMDUyGnB9oSm8RPZ3yxMheCI17
+	iEwVdrz3ILAK/UJLXPUpMeuuVr7pxN8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788957129;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ha9LLJuHIQjtS+3QwoANDmPwXPppOWITrUzxxHxGD8A=;
+	b=5HQsvzGqRP6llxChhsqTi8u1CsnW5YbbSF04h4qniy8UY0gJ8g6tOH3I40MozRrJ3Q+Lpf
+	38kg7fpRhju5azBA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1788957125; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ha9LLJuHIQjtS+3QwoANDmPwXPppOWITrUzxxHxGD8A=;
+	b=Ns0hAuFjg3s3vVNS1U/1H+/l/YyYUmaoXD7cZlWNgYCN0JjT5xJRWNCoHodp6LaWfyaMh7
+	EIe0ftC2sDjfuvjEAgIRTr1b+a+0gbyqaMMb2kDxiHA7/bUEkPZy0Yfw3Fkv/lkLSp/uzo
+	lyZsspXvmPT8ywRJYsAUqLNS8vuTDBI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1788957125;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ha9LLJuHIQjtS+3QwoANDmPwXPppOWITrUzxxHxGD8A=;
+	b=TikDKPaimHsLN6I5ty6WEMZrRnstEFmpiXb+5jAYsc/uX9fpBD5GC30PsSaijS5tGkGAc8
+	jktSJFBYrpZymIDw==
+Date: Wed, 9 Sep 2026 14:32:05 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Petr Mladek <pmladek@suse.com>
+cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, jikos@kernel.org, 
+    joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
+Subject: Re: Replace rules: was: Re: [PATCH v7 for-next 3/8] livepatch:
+ Implement replace set for scoped atomic replace
+In-Reply-To: <apk9f_LsGRYHzN0Z@pathway.suse.cz>
+Message-ID: <alpine.LSU.2.21.2609091424420.10918@pobox.suse.cz>
+References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-4-laoar.shao@gmail.com> <apfQ6c_3giN615Ll@pathway.suse.cz> <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com> <apk9f_LsGRYHzN0Z@pathway.suse.cz>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909024324.16002-1-laoar.shao@gmail.com> <20260909024324.16002-9-laoar.shao@gmail.com>
- <20260909025756.19AEF1F00A3A@smtp.kernel.org>
-In-Reply-To: <20260909025756.19AEF1F00A3A@smtp.kernel.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 9 Sep 2026 15:30:43 +0800
-X-Gm-Features: AcwNN1WlnXUbKH1a-V5kY1yknsJbl7P2Fl8izGKWXaQQ2vwTHlxZ-sqwJ_vAplE
-Message-ID: <CALOAHbAft8tOO4H-Zo2tnDH1xP+u-QnKeTN3ofSngr2cK_7b=w@mail.gmail.com>
-Subject: Re: [PATCH v8 8/9] selftests/livepatch: Add state test for provides/obsoletes
-To: sashiko-reviews@lists.linux.dev
-Cc: jpoimboe@kernel.org, song@kernel.org, pmladek@suse.com, mbenes@suse.cz, 
-	jikos@kernel.org, joe.lawrence@redhat.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_COUNT_ZERO(0.00)[0];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,redhat.com,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[]
 
-On Wed, Sep 9, 2026 at 10:57=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 3 potential issu=
-e(s) to consider:
-> - [Medium] Unloading independent livepatches in FIFO order permanently al=
-ters the global `console_loglevel`.
-> - [Medium] Mutable module parameter 'state' causes a memory leak and fail=
-ure to restore kernel state if modified via sysfs after load.
-> - [Low] Missing sysfs value verification in test 'misc states, misc provi=
-des'.
-> --
->
-> commit 253fd167cb01a1b8aeead3420135a4b275836ef3
-> Author: Yafang Shao <laoar.shao@gmail.com>
-> Subject: selftests/livepatch: Add state test for provides/obsoletes
->
-> This commit adds `provides` and `obsoletes` module parameters to
-> `test_klp_state` and `test_klp_state2` selftests. It introduces testing
-> coverage to ensure that reusing a state ID across different provides IDs
-> is rejected, while it is allowed when the new livepatch obsoletes the old
-> one.
->
-> > diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.=
-sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > index c2fbac3d0e06f..8b7b5eded80c7 100755
-> > --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> > +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> [ ... ]
-> > @@ -213,4 +215,238 @@ livepatch: '$MOD_CMDLINE': unpatching complete
-> [ ... ]
-> > +# - load two livepatches with different provides ids (provides=3D1 and
-> > +#   provides=3D2) that modify different system states (state=3D1 and
-> > +#   state=3D2). Neither of them replaces the other, because their
-> > +#   provides ids differ (and the obsoletes lists are empty), so they
-> > +#   can coexist.
-> > +# - verify the provides sysfs value of both livepatches
-> > +# - disable and unload both livepatches
-> > +
-> > +start_test "misc states, misc provides"
-> > +
-> > +load_lp $MOD_STATE state=3D1 provides=3D1
-> > +load_lp $MOD_STATE2 state=3D2 provides=3D2
-> > +
->
-> [Severity: Low]
-> The test documentation states it will "verify the provides sysfs value of=
- both
-> livepatches". Is this verification missing here before we disable and unl=
-oad
-> them?
+> > > But '0' is special. It obsoletes anything. Maybe, we could
+> > > make it even more special and say that it can't obsoleted.
+> > > Then we would be able to use it as the trailing element
+> > > in the array...
+> > >
+> > > I do not have strong opinion about this. It is just an idea.
+> > 
+> > Making '0' special is good for backward compatibility, but it
+> > complicates usage for users. Therefore, I prefer not to treat '0' as a
+> > special case.
+> 
+> Ah, I have missed that the current code does not treat '0' special.
+> I was confused by the following sentence in the commit message:
+> 
+> <paste>
+>   By default (provides=0), any livepatch replaces any other livepatch.
+> </paste>
+> 
+> and this paragraph in the documentation:
+> 
+> <paste>
+>  It should be emphasized that the preferred and most secure way is to always use
+>  the default ``provides = 0``. In this mode, any livepatch replaces any other
+>  livepatch, preventing any unexpected interactions between incompatible
+>  livepatches.
+> </paste>
+> 
+> I understood it the way that ``provides = 0`` was supposed to be
+> special and always replace all other livepatches.
+> 
+> I think that I was affected by Miroslav. I had an off-list discussion
+> with him about this some time ago. My understanding is that Miroslav
+> would prefer to somehow preserve the original ``replace = true``
+> when the livepatch patch replaced anything.
+> 
+> It might be useful for OS providers who want to make sure that their
+> kernel critical fixes can be installed on the user system. Otherwise,
+> customers might complain that some update failed, ...
+> 
+> Of course, it has a drawback that any livepatch with ``prov ides= 0``
+> would wipe any 3rd party livepatches, even when they are against 3rd
+> party modules.
 
-will update it
+My intention was not to regress and disallow a use case which is currently 
+supported. That is to replace everything applied no matter what.
 
---- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-+++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-@@ -404,6 +404,9 @@ start_test "misc states, misc provides"
- load_lp $MOD_STATE state=3D1 provides=3D1
- load_lp $MOD_STATE2 state=3D2 provides=3D2
+If I take my SUSE hat on, I think we can happily live with provides being 
+set to a random number and be done with it. A customer with their own live 
+patches applied is on their own anyway so we can ignore it.
 
-+check_sysfs_value "$MOD_STATE" "provides" "1"
-+check_sysfs_value "$MOD_STATE2" "provides" "2"
-+
- disable_lp $MOD_STATE
- unload_lp $MOD_STATE
- disable_lp $MOD_STATE2
+[ changing hats ]
 
->
-> > +disable_lp $MOD_STATE
-> > +unload_lp $MOD_STATE
-> > +disable_lp $MOD_STATE2
-> > +unload_lp $MOD_STATE2
->
-> [Severity: Medium]
-> Does unloading these livepatches in FIFO order permanently alter the glob=
-al
-> console_loglevel?
->
-> If MOD_STATE saves the original loglevel and sets it to 15, and then
-> MOD_STATE2 saves 15 and sets it to 15, wouldn't unloading MOD_STATE first
-> restore the original loglevel, only for unloading MOD_STATE2 to subsequen=
-tly
-> overwrite it with 15? Should the teardown be LIFO to properly unwind the
-> loglevel changes?
+So I only wanted to preserve the behaviour for a potential user out there 
+relying on it. Maybe not worth it if it complicates the implementation. It 
+can be emulated using provides/obsoletes and the fact that a 
+user/admin/distributor should have their systems under control. If not, it 
+can lead to weird states anyway (yes, I still think that allowing 
+different parties to livepatch the same fleet is a call for trouble :)).
 
-Ah, it should be LIFO
-I will update it.
-
->
-> > +
-> > +check_result "% insmod test_modules/$MOD_STATE.ko state=3D1 provides=
-=3D1
-> [ ... ]
-> > diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_st=
-ate.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> > index 5c5872ff25665..1de63c2438d68 100644
-> > --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> > +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> > @@ -9,10 +9,25 @@
-> >  #include <linux/printk.h>
-> >  #include <linux/livepatch.h>
-> >
-> > -#define CONSOLE_LOGLEVEL_STATE 1
-> >  /* Version 1 does not support migration. */
-> >  #define CONSOLE_LOGLEVEL_STATE_VERSION 1
-> >
-> > +static unsigned int state =3D 1;
-> > +module_param(state, uint, 0644);
->
-> [Severity: Medium]
-> Could this mutable module parameter cause a memory leak and failure to re=
-store
-> the kernel state if modified via sysfs after load?
->
-> Since the permissions are set to 0644, if root modifies the state paramet=
-er
-> while the livepatch is loaded, subsequent callbacks like free_loglevel_st=
-ate()
-> using klp_get_state(&patch, state) will return NULL. Does this silently s=
-kip
-> cleanup (kfree) and state restoration during patch unload?
->
-> This same issue also applies to test_klp_state2.c.
-
-will change it to 0444 to fix it.
-
---=20
-Regards
-Yafang
+Miroslav
