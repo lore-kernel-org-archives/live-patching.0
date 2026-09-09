@@ -1,149 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAF3492E53
-	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 02:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788922678; cv=none; b=MCskGNCiuMAOQYXmJgiRikxDb4K7DEID9OIHYk8XcsmQ4gGSDFYFTraVQo4A16kaqgKbbfiN/NspXKBVX2wjMf0nMDnFouMOhQO8TM+d0AI3buMX0ZCXGltzHtcqW4AeyVwJnlQv7p0l9Bg2KdutZ7NBaRdbzOZOqrnMDjWhk9M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788922678; c=relaxed/simple;
-	bh=G5hLWHhf8LvsnHndXhBedINbBuB38jwU3BHbBXEnmnk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y747Sx7CbeFA4oOlY+LdB0uAorimY/Tf778uuXFG8+MxCYF0LkW7iyLHqppDshzhbRZcOIc/a+qTXNopaa3LUaj9ML/xz1FY5Fv+40lIlf73zsdjiaJVKAUTfNVfZ7GMsMIfAKQensn97MkHywk1Y+F9vSi1Nia27KK+K+9ktZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8Bh8N94; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2152AD37
+	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 03:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788925535; cv=pass; b=lKIc2kAqlMLhIhBdogr5AdGMYq3WRO7G3ZyyG6AyzolaIkFz9bz7cj98V1aCzFlwuhWMhSv+6PXThkczdK2bga/hsINXofcrrLabn7SOsZiCpyrV0vTjjyggL4y1vH8sfbzvTs/c3zFT26eE00rvXSxIEPbT/fZa/nnD5TFD5Ug=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788925535; c=relaxed/simple;
+	bh=IXNmuepENNR4tE9HqqYaDhxsSc1n6zibwfYbLVTCyO4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iqROGNneEgy5PZoTQfb98md/FGHgClQS+/R85aNLL2vtK5qG0DazGk6HByHBdTUHdk2ycvw2dIgrraZ1UKuwZTwjM6jYXkI+Rv+xtWHpku0elxLo7/E/BaN3qBWEG3dzDWweZQuauF8v+mbcmuLTc4TXSZG552dLUJKljmz5XIo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vj3zYOht; arc=pass smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8Bh8N94"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AEF1F00A3A;
-	Wed,  9 Sep 2026 02:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788922676;
-	bh=+xo1IsczY7BZzp0rzFhToLZz2jVzzIRmrRGr34FDlsw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R8Bh8N94FHo0T2IYijDPg5uPTKxn2xtaQtWiLeCTu4puIAAfTIYNC4nhXlfhaRUVk
-	 Wbvvxp0bFCFMTHrEUNrDW+idL43hlr8XGxAkGCMGLzbjIRnxLDGsRMYiMaSm3PVI4J
-	 DsMDXWIMbUA/5ybtdGKQhkBihAf1A5b2VaZ7kWqPgi27pU1KqqJkiu4dTYLWhgyR5N
-	 ySZQoD3ZWo/aezlRiOGDsopoI9VDT/7DnfNaqSFyTZoDwKpm2HLDIF2NLrKtn82+An
-	 O71feDoLPcvekBN03Vm3yOU+IID1WUq7FbZtWJf9LvfusjTj/wW0m6/Zuz6fIm4m7C
-	 krP0kw9v3bukw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v8 8/9] selftests/livepatch: Add state test for
- provides/obsoletes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: jpoimboe@kernel.org, song@kernel.org, pmladek@suse.com, mbenes@suse.cz, "Yafang
- Shao" <laoar.shao@gmail.com>, jikos@kernel.org, joe.lawrence@redhat.com
-Cc: live-patching@vger.kernel.org
-In-Reply-To: <20260909024324.16002-9-laoar.shao@gmail.com>
-References: <20260909024324.16002-1-laoar.shao@gmail.com>
- <20260909024324.16002-9-laoar.shao@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 09 Sep 2026 02:57:55 +0000
-Message-Id: <20260909025756.19AEF1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vj3zYOht"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-866e57f63a3so61524997b3.3
+        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 20:45:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788925533; cv=none;
+        d=google.com; s=arc-20260327;
+        b=axFieOWK/FB51gRoLyyyhOZWq3pivC3ce6Kl3tkGjsEC7N8JVHMSs9eHaDVst+jiE6
+         axq+3xdbj6N9QGokkKOKj4quB3DunrTVHR9KUktxCWbPp1YKxvV/w1aiI2CUeRfqP1j/
+         WVN8DPRCavQe0XdEmZcorlAd9e/3dpRiGW3rVBvB1lqUsKiX53B4jLk3rqfvXI7NMiwh
+         R4jY7ODPgct+ci/9IZTMrpY11EllhS+BpENnE+AzL8eO0Ozota07u235pbJa4m7ZjBgB
+         UNuaKSlbNAicE4UkvIZLo8l+Obaz1BqKe8DbyZ4N9sSCWY9jcD/DSxtwlYwA08Wvkg+K
+         VHwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hZn/g/PqABJQU3OOPezBemcwd84aUSRVAJ6HUBRncq0=;
+        fh=6+V4CxQ5lKzA1GpJ6T54rLsObYVeqilE7cBDufSSWHA=;
+        b=V1wvbeYczfAi+4k/xP89e2WJQfBJJ4P0N8KprpSJBw14d4w9vZdNnjmTwf97HIWzsf
+         4J/CzOQFhWYsExk2FykQws5zuAKYBCOz9xAw131DRswhgLrJEzjY+6Gd/GbtVsm5mFwr
+         K/5Kq250nzX5FB5aj3A2wc/VKKoVC4b0+khn6rvRbTrujg1keTvol/2yq1A5qJjKEAcH
+         dxm33zLIcwhxjTyDutK7A32UXATU/op6gWt/xcg+il7t8B85t7gS6ZU9l3ZyJ83/vTDN
+         nn2XcBYBDbc9HqreXHUDQL8XPEpOuFTtNNGbYoxhHfHT00FQ49DoOvhQD5tq/E69uTzu
+         gqiA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788925533; x=1789530333; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hZn/g/PqABJQU3OOPezBemcwd84aUSRVAJ6HUBRncq0=;
+        b=Vj3zYOhtQckg995b+vxDrugWiG/JZwhgsvEyVbTZ2KcaOCqc2gokNduJ3A9tO6+BkC
+         2CsIc/URn31YNDDxzgaumTzOYv6CMAepKa9tUXCDhakZm03vBT7xVIdt4MZ1GuC/JMOM
+         d2iadWsYwu4w4iwWw7N81fRNqDimWsdsVQ7why3COi2q8TercN2PIylrH0o5M/ILQWNX
+         3P03SVAiFPiS9uJWSeJ60NdofMkhmTGR6p4BgnVHJF3iUT/g3QjeBIZKlBrV8Gn4yQGr
+         jCv6RcLn2xOKBw7SE1EJjeqgsjW+j/Ct4F/RPp67L0qyO2L2tnInn7I1ElrDqH0CBDOf
+         eVDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788925533; x=1789530333;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hZn/g/PqABJQU3OOPezBemcwd84aUSRVAJ6HUBRncq0=;
+        b=pY0hyqH/toYrEFg2tZtKRxQefUUFgdiX4cMlD6kWmruCCAF27qmT4KMKcKE7OtPU5s
+         2B9va6Aov8Kn1JlTSj8OOSP2FP7x8S1UTkAWafaJJQ30Z9vv0sQSoy9CPLY1k3nR5P1Z
+         vO+aNllO93QQoRuwD5xk/+4tmXLJOoEUMdy9yB5h3PjezNPIBQ9hmmEsIPoj8eaS10gF
+         /zmt+R1TkQyvZ9dhA2Jw3TcG5edOQlALrUchSLmtjOccbMhpQx34vUmHWRvs5Ne4SkZz
+         ocD0r5UJYSu2OgdUQG+fxWQumDBR+zf2UvRqBCYFWKuihcq2OWgOAZKmEN3mZ00gAJp6
+         EBjw==
+X-Forwarded-Encrypted: i=1; AKwUvBwF+JEGPNwbq4popZgETlqz3lVwZtWz69j/tydoVACDevFoKmnAxvFrkaG6g2PhWCNX3JypdlkzBspG+MwN@vger.kernel.org
+X-Gm-Message-State: AFuF++mjDP71S9GUaBaezUt6QWTkyBwiybxCqOeCq3Y+eZdzCnn2NlCQ
+	p+L/kQt+bnmqpSji558dK3dkSQQUAR5EXu4ld/60unBB7Cgi51w5sYoL6C+bvV2jXcFEJloOLnH
+	tu0QcTWh/kb3J4a3atsIFtFmXJV8rF2k=
+X-Gm-Gg: AYBFou0Lzxie072WPFE5V8j7q9tFrzS4eIITX8wc/1QpGpQRLiY0x5UNrA3L1IpE/T0
+	clelWQMs65V/GYYSy4QdSaT/iifsCBYNFpSZAhtJXmAEBc4JuCr0zD6P+qUCNsFTg7p6j0nru/2
+	Z9bkYUtUfH/ONgxEJ1GPj3M9MIOBtdj6FmcCXwh1rn7NNc5LRvE7EaRp8rEnOAJVZl7gR4LxOZX
+	jy9x+NgQ3V8p5o2x2NJJYSAGQkoOA5uzA1lEr5OOvIzpdlCPGAZaFPqwHsaJTqBaT4smkaA5UdS
+	B8uuhW2lNuO/kBCkEm+Sn0swnEKi9FmB4y+4rn1NHsGFgiFabJZ5t3GUt9jUZMnAYCvF3iFTtHC
+	ZD22MxlPjr2Ix
+X-Received: by 2002:a05:690c:a1ce:b0:873:5ddf:d879 with SMTP id
+ 00721157ae682-8735ddfda51mr71341387b3.68.1788925533074; Tue, 08 Sep 2026
+ 20:45:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260909024324.16002-1-laoar.shao@gmail.com> <20260909024324.16002-5-laoar.shao@gmail.com>
+ <20260909025625.110F31F00A3A@smtp.kernel.org>
+In-Reply-To: <20260909025625.110F31F00A3A@smtp.kernel.org>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Wed, 9 Sep 2026 11:44:55 +0800
+X-Gm-Features: AcwNN1VwiwpG2WQP02MARWQxkcNbYWqZelwY3kpV9fIJSd5ESRPFeD9J7Iz66Yk
+Message-ID: <CALOAHbCOFvcDy9kVVKRBAECnDi-vRcwh=dQQSC0ENeVxLYB_GQ@mail.gmail.com>
+Subject: Re: [PATCH v8 4/9] livepatch: Call klp_init_patch_early() earlier
+To: sashiko-reviews@lists.linux.dev
+Cc: jikos@kernel.org, joe.lawrence@redhat.com, song@kernel.org, mbenes@suse.cz, 
+	jpoimboe@kernel.org, pmladek@suse.com, live-patching@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Unloading independent livepatches in FIFO order permanently alte=
-rs the global `console_loglevel`.
-- [Medium] Mutable module parameter 'state' causes a memory leak and failur=
-e to restore kernel state if modified via sysfs after load.
-- [Low] Missing sysfs value verification in test 'misc states, misc provide=
-s'.
---
+On Wed, Sep 9, 2026 at 10:56=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] Fatal UAF / Kernel Panic on module unload due to unparented kobj=
+ects triggering delayed work in freed memory.
 
-commit 253fd167cb01a1b8aeead3420135a4b275836ef3
-Author: Yafang Shao <laoar.shao@gmail.com>
-Subject: selftests/livepatch: Add state test for provides/obsoletes
+This has already been fixed by commit 7f4ca0d0b40a ("livepatch: Fix
+UAF of unregistered patch kobjects"), which is in the livepatching
+for-next branch:
 
-This commit adds `provides` and `obsoletes` module parameters to
-`test_klp_state` and `test_klp_state2` selftests. It introduces testing=20
-coverage to ensure that reusing a state ID across different provides IDs=20
-is rejected, while it is allowed when the new livepatch obsoletes the old=20
-one.
+  https://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching=
+.git/commit/?id=3D7f4ca0d0b40ac1ccd82ebaf1514c2d26c3db71c4
 
-> diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh=
- b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> index c2fbac3d0e06f..8b7b5eded80c7 100755
-> --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-> +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-[ ... ]
-> @@ -213,4 +215,238 @@ livepatch: '$MOD_CMDLINE': unpatching complete
-[ ... ]
-> +# - load two livepatches with different provides ids (provides=3D1 and
-> +#   provides=3D2) that modify different system states (state=3D1 and
-> +#   state=3D2). Neither of them replaces the other, because their
-> +#   provides ids differ (and the obsoletes lists are empty), so they
-> +#   can coexist.
-> +# - verify the provides sysfs value of both livepatches
-> +# - disable and unload both livepatches
-> +
-> +start_test "misc states, misc provides"
-> +
-> +load_lp $MOD_STATE state=3D1 provides=3D1
-> +load_lp $MOD_STATE2 state=3D2 provides=3D2
-> +
-
-[Severity: Low]
-The test documentation states it will "verify the provides sysfs value of b=
-oth
-livepatches". Is this verification missing here before we disable and unload
-them?
-
-> +disable_lp $MOD_STATE
-> +unload_lp $MOD_STATE
-> +disable_lp $MOD_STATE2
-> +unload_lp $MOD_STATE2
-
-[Severity: Medium]
-Does unloading these livepatches in FIFO order permanently alter the global
-console_loglevel?
-
-If MOD_STATE saves the original loglevel and sets it to 15, and then
-MOD_STATE2 saves 15 and sets it to 15, wouldn't unloading MOD_STATE first
-restore the original loglevel, only for unloading MOD_STATE2 to subsequently
-overwrite it with 15? Should the teardown be LIFO to properly unwind the
-loglevel changes?
-
-> +
-> +check_result "% insmod test_modules/$MOD_STATE.ko state=3D1 provides=3D1
-[ ... ]
-> diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_stat=
-e.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> index 5c5872ff25665..1de63c2438d68 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> +++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-> @@ -9,10 +9,25 @@
->  #include <linux/printk.h>
->  #include <linux/livepatch.h>
-> =20
-> -#define CONSOLE_LOGLEVEL_STATE 1
->  /* Version 1 does not support migration. */
->  #define CONSOLE_LOGLEVEL_STATE_VERSION 1
-> =20
-> +static unsigned int state =3D 1;
-> +module_param(state, uint, 0644);
-
-[Severity: Medium]
-Could this mutable module parameter cause a memory leak and failure to rest=
-ore
-the kernel state if modified via sysfs after load?
-
-Since the permissions are set to 0644, if root modifies the state parameter
-while the livepatch is loaded, subsequent callbacks like free_loglevel_stat=
-e()
-using klp_get_state(&patch, state) will return NULL. Does this silently skip
-cleanup (kfree) and state restoration during patch unload?
-
-This same issue also applies to test_klp_state2.c.
-
-> +MODULE_PARM_DESC(state, "console loglevel state (default=3D1)");
-> +
+It seems sashiko-bot's review was not generated against the
+livepatching for-next branch.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909024324.1600=
-2-1-laoar.shao@gmail.com?part=3D8
+Regards
+Yafang
