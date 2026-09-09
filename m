@@ -1,138 +1,169 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E68F3B4E9B
-	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 06:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEEC3C3F71
+	for <live-patching@vger.kernel.org>; Wed,  9 Sep 2026 07:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937194; cv=pass; b=j2kgqiJ4o9KmUA5kc5tQdnKigIc29Qg3TT3QROF4el4uKaX+j9/rDZMz9rmwJ0cN6YDvPGLWoRr/gqz0zXqCGBak3/g3ImDnLuCDbOZEQz9bYbq+Pgg1t+Rnctmz4T1Q2K3fZNosr65WKxajbDLWBsNn/pivlAXtjEo1Ft5OLMs=
+	t=1788937335; cv=pass; b=E3CKMUTwbn9R5c3cAJdabV0oeYDrc7sIjiDfZHzRG5B70gzmn9595ox16u8XsdFdVZV6LONc7oPJcaIVolmMf0n+667ZlEjy+PltTp8DlADR8E0IrQNqBVtRHq+0bxsShqBAm1tF2n3FuX9W1HaUgEGfvxos7DXcnjiXxQMWBrw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937194; c=relaxed/simple;
-	bh=Oc9WFsPSUGc1zv3+n30cvXqdc4oUwLf1ybDOL44QFvc=;
+	s=arc-20240116; t=1788937335; c=relaxed/simple;
+	bh=2J+vU0dHxTEM2Vn+6tCclkeUSsHDRRGywNVKfsL5GqA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OpxU7pfQquU5237BoPMU5bM6BYN2WgcvVPImAuPp47zg/WmcbgN7ad1HsAsGxHQCqKp3D1ccbKse8ZJg2F1l1H+pARR9H+1rJcmXtWf8Z+vFE9cNfyMYMz03vbkpzFlzUPNm9Fj5Qp/di8UxQ4ZZaZs6G8ADzpy4PPRWD40/Udc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=plU0QlyK; arc=pass smtp.client-ip=209.85.128.176
+	 To:Cc:Content-Type; b=NjnYhmFwxdkIoVbP8f+dQ9WfwGm2l9jgp56mNNMdiOaxb00knFMT/0XvGjtGphxfB6dYEcwQZ3mkRy8bodhKtcr1FKuAcVPcNMRJm6iT1VI//Fat7EWEy0vgySchS1aRN+rl7OAcQ9AStgfA/z38iOCKTQMOh7GypmIf6iAvo8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g7oUTzhu; arc=pass smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="plU0QlyK"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-86d43cdee51so68566797b3.2
-        for <live-patching@vger.kernel.org>; Tue, 08 Sep 2026 23:59:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788937191; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7oUTzhu"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8588583a7c3so56059157b3.2
+        for <live-patching@vger.kernel.org>; Wed, 09 Sep 2026 00:02:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788937328; cv=none;
         d=google.com; s=arc-20260327;
-        b=av9YB1ByEuEDszHIRjrm6FPuRB2ee2iRmS93tMca20wMzeVqR0pCIHQZGos/6AW7UZ
-         24v2h/IgXM46RM1W1yj2s57sd6wrpzJsS4tJ5LU6b2wQAR+4ui5ptITEJfsDv6BzAuen
-         1KaetixFqOPP4PfVava2uGuBw/twt0DK2V+pq3rc3uc2s9Fje/HFewTVUDTSp1WkpKsW
-         pZrfCmVKiRywIoc+u7UZgeMaqtTxOAn2IU5t2cEA0dlEA2ltNdlA8kwt8nnF9YLjj4L8
-         EUqVvXE14nkn6vtSn2WKyQOIJ5WUECVCJ9ni56GCO549qQyt6fT5OekeaDXxqBFsW2S0
-         P4Mg==
+        b=Je3WWH+PEejAV/mA6VIVpYQz1Ic1DQ9fmbA6bZ8OHRzv5NHk4Rpvmi1OFFoXt8mGts
+         2ZY3+6GEZmHa3qAGVhQqAQB6J54VbeeS25B8NZiYlTrBgUHz8pB+CdjUwQXbdzFHQani
+         Y10+sd5/Utif3Im08a/WO8rzbuA54cwrSgAkAN4XQQINYDX/DmSGHV9N1qKTFLkN1IdO
+         xpj/opHCvtAQNMzRIQU/GkyD9pKEXETE2wD2RvcTj4maddwBaGzGFIGTe/KM3PfVrzPk
+         wjvGU0F/EB59XL+3CWKg1xw3LV3hpOY/5dVwEG4mvnLsiS8RU2ixFE4vbBgvvwZxJ1Sw
+         KL7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=CDdn0MPfpfnKpCCiCY1yHBVe9ymTCedi3+08W6KqZf4=;
-        fh=u6ZMUOr8aaAxgQKZQ916R5D5+U6XRUq1UR5lQaAy58c=;
-        b=CNa/2rT+ICMOX8htC/uYbzt3taVLzpt8EdhvEHXpZ//t0+y+ICEDumK67v8W/poZuv
-         jhco2QJgYgyx17hoZjChY6vDCaWxLoj1WFiCxYxHq1VePMn8dB91c4TqZY7wIPWuWXWY
-         wHR6ggnxAaBLhhWv6J9+hAGWz9PHzLZRB6ySOgnYzJTXOqae1mHGpOzrTqrToxsEWDlq
-         oM4nRmrfvfjblSF4l2/yzdSDIxKmJt6nBWmoze1KrcFRXT5Zpxo5vi+2s+0yq9bW5gLJ
-         sUViO13gyaRFkQUYDKG/SvozgGP39SKmdaefGvoy0w074NqZLS2epEDEODJL4copYH6n
-         6jTQ==;
+        bh=mtHcV2BeRJN7u2qRKVsV7oQ2/f0s7oaSuNmPDH3kCBk=;
+        fh=BlE9OUzLEgnqUv1Tw4ursWyjj+Mq1GX9xjTJSpMmfTc=;
+        b=nkZcEwPaSc+Js/yLYPZgvG6kscqPM6yH9m5yKAg0IgHvJmX/Bh7QpqPE4gJJGowsVA
+         zcQwAFspqsRH8RJOdAT+IeMJwphu4jybMElMWptikJA4kQSZYmYnrbMpgGNhwLPaHrKS
+         LUjAgJButiUt98l2omhUYuRQKTKNqKf1sxGb/SjrLLhOMJMXlVeRdEuXFu7g58CAN15W
+         jOI5WF0soO3oCJ1nqADkTCNbElMYDNhz7fdIbr8jX7EN85xSsTpaZYfTJmTxKcGm73Z9
+         //4s/EctSCUROZ6hTY0bj0vTX4KYD3cMygfqoPXiTswx8x12qUuEtUaItwGjjhfFbpwU
+         CNsQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788937191; x=1789541991; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788937328; x=1789542128; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CDdn0MPfpfnKpCCiCY1yHBVe9ymTCedi3+08W6KqZf4=;
-        b=plU0QlyKYIBWGaCR8vHT/7uVmhrBzmORBNj3PzJvG9kSeq2yqBeABA0yFGxMj2ryDt
-         T45BfTSVZUixruf16etWaLpxq/SNTL+LxzE9ZzrZhK6Lkqkfo2TlSoxEnC6OFeS8Tipo
-         1TCwI0exuTaXAu9uqYFiGnaSDQRhA96fxtZEtABrOMNwdOWATKIpaFolElvDWM4wpxAK
-         XyX9DkSqvG1fv8uHZcVD5YBlLYoS33X36GAigHn+0++mzOj/0B9B5APASlw3/668Drg8
-         l+kbivu8pt0caGRowIg0rkukhVduT5W9xiVVhDFEmIDoXb3g3W9d8cnRmJ1wpOqB8SgM
-         wEXA==
+        bh=mtHcV2BeRJN7u2qRKVsV7oQ2/f0s7oaSuNmPDH3kCBk=;
+        b=g7oUTzhuUtMIZ1jTzrp/17aow88vPVkclmM44CdO2ibfN1YBy500J2Z4F0+AC31eLw
+         o4VcW7E6F0cFptRjmzwL+OZrJwqA4Eg18f8RXTOIBVnGFO4MB1FDxRDnLF9Ysvuwl8RP
+         yWLAqfBK2CAUV4QWsM15lUTscxuk5onMVxBzZkdHV3DRmoP00iW5L8/d4WlyterfUDpc
+         qJzAZcBmPmo7qV1WYM4ZqLzxGrKC1yb73hGBdvMwQD5C1QQ49N/8ngt2aZa1SSxIQw6G
+         neLs3CP1Mj4tLMEXgotToyHxAD9OIK6Ajju+vOKb8FIBgxYgbUCMWIKkTn3zO2UhFotV
+         W6Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788937191; x=1789541991;
+        d=1e100.net; s=20251104; t=1788937328; x=1789542128;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CDdn0MPfpfnKpCCiCY1yHBVe9ymTCedi3+08W6KqZf4=;
-        b=pH4yd6HCX6DDUFL3Xh8w9EnlHS1G8FbpxCtc+U9Tfkt20VFzHTT1qdUGX1o4rbjasH
-         idGHFzjhny76t8LQuUtGrsSWbR8ocbVxbuSWW+7tQDDvWepcAh+D2EAl3ygw2H3E6Dc7
-         dtC0hSnFDntAOVn6jbeJ96dzbCk16NKl7B/NwlZHv1vCBpWazHOGm+mEOS3hCMRo6+YY
-         Q3VfhJtYrHiSZo5KR1s8i8y/S+JLsiIdX81NVIxCpaABkmElY8enElW+8tyaKPq67T84
-         tnIKheruzVKye9Gm7SEW4LcYt25F5+sOw1KONJLaAb9skFGFIGPC2eOsXYqH9U28Gy4o
-         Nikw==
-X-Forwarded-Encrypted: i=1; AKwUvBxOjlMIvnTkqcSIdJggkBvDMLdYo7ZpUv3fyCkTV4fdkWro45jnkJ+vHJSyf4cG1xXkLczPdo2URm1nuCMe@vger.kernel.org
-X-Gm-Message-State: AFuF++ku0KOE3aqvVo04KXMw86SQiFci9kqfyk4klRi0oO6A3bBBEuXf
-	ykarxZzT+qt2YEnAPEVUWRH/CZo17XOHCieYgqn2nIhSAMkuVEWGDZ6XloInshJieXZ3gqnQXwL
-	3sFPRLaxu5I6y3+e0wM5Y+N3xcUbW8RI=
-X-Gm-Gg: AYBFou1F+VPoVnTemje8ZfKfV8euzIUlgDpgzhI/SM93ZuYMjFlxjmnXRx4WEJZchs0
-	51y0K6gzfpiGH4ZqibkOBdrQ3SfdY0GtX+gOG+gjlwKer8J+4WcoLRYVwLNCfJr+2wzrRBSbpLD
-	VeUKPTD8/NLFMnXG1FsEyLmsFez9TeRz43pGsbhzYlij8H2lND4MChZoBd2V3gA9Vf1qFV0GBkU
-	TP+MLljGVtcNoHa71kTbIvJYlvqD6cKqhsykfBFHYkIPChRUJlU10tkOymgCGZqMHyVgDrHNWoC
-	hzjNRTYZfG71pRhHTjxclw9vWcN9ZmnIB7f5EBRGdrTDU36erbNoNJX1mXcEsvDtT2LHVr3k7Qa
-	I5oe1MPuWDSwn
-X-Received: by 2002:a05:690c:9a8e:b0:81d:c233:aea0 with SMTP id
- 00721157ae682-8712a415be9mr129403717b3.18.1788937191399; Tue, 08 Sep 2026
- 23:59:51 -0700 (PDT)
+        bh=mtHcV2BeRJN7u2qRKVsV7oQ2/f0s7oaSuNmPDH3kCBk=;
+        b=MYcY4frca59baudbBeeawXW6TDsWa41fa+GTShPHN25Kbiak08naWB5aqtFA6qeCDG
+         x1e422pIwiInAP26RwrHa62WSWFHHn8R+yXvFZKeY6KD60wnisYPopGu1opVqvfqYnw2
+         THXOEghzw4wdH5fELe9GefTrL38rL1m753KJVPdTeWYyISTaRy6Zcwq63MH6wsb4pCXv
+         X3SZ8U/jBjlMjonkLHNyartv9WYgW0WDo3drKXTtU3Fpy3gWQe8oDiO1tl24r+k6cFks
+         +3h1z6fA87oZMEt1e0wDvT/gr+30nLzFj1JU+LDfuwU4WBb0iZ101BlFrQZ+Eke7s1+N
+         lCYw==
+X-Forwarded-Encrypted: i=1; AKwUvBxDKLCSYipFP52WERAdYEQCqYmWIjwf7OCxBMEizz/BDlR5ezedFD83QdiOtsB/P8NPzDjDzVQxEmERnWnO@vger.kernel.org
+X-Gm-Message-State: AFuF++mzdWlV6nAaGZ0qHktrzutDj9l4OGIOY6/deUCA/f/X9clUsQyg
+	7vGnxBYDi2O1l0/RzxQnny0GyqfLUEwZPta0jFnNRAu8BOFdiZxdAdqG8jJEy9PLJ03ncQnOvpo
+	nMtSCFYfDU3Mki7cDS0arVNasio4bA/I=
+X-Gm-Gg: AYBFou1Ic0CgHVaF6U1hmMOnu3ds0DlerbKHUG/4LQ5/NLswD9WiH32AGOihQU6fgxJ
+	PpYzq8nx200TjsE9BcHEVMIOZBIOZ6uMLe8q1vReFEVbp9JzmPn2+kS0aEfsNffCK2fIm+rj95j
+	hHvkIT2wY9M5Fve6CrwElKzYxl89RBv7PuYd9APP7kDDWjApuAMSFwB19M1Ovb/BCwfG9gaMWNo
+	wUfo+I6VY2PnzKgSBxychsWKD4UWlGCy0v9QtlRHlv7nAjSFnDELIyD7t2fI0o7h6eila3FezAk
+	7MWLJgfNoXS8yJKVRACZQfGyGBUtwfEpzwSeL7eyzAZt7zFESdY8UI16/oZXm7bWr2TecrhZXir
+	pqhyejWUVqnsU
+X-Received: by 2002:a05:690c:15:b0:873:5bb2:6bfd with SMTP id
+ 00721157ae682-8735bb26dafmr96729107b3.39.1788937328146; Wed, 09 Sep 2026
+ 00:02:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909024324.16002-1-laoar.shao@gmail.com> <20260909024324.16002-3-laoar.shao@gmail.com>
- <CAPhsuW7iK5QeOGdbNr=0ygch=ySNbUuVPdvy2BWFieFAb14u4Q@mail.gmail.com>
-In-Reply-To: <CAPhsuW7iK5QeOGdbNr=0ygch=ySNbUuVPdvy2BWFieFAb14u4Q@mail.gmail.com>
+References: <20260909024324.16002-1-laoar.shao@gmail.com> <20260909024324.16002-10-laoar.shao@gmail.com>
+ <20260909025604.14C2C1F00A3A@smtp.kernel.org>
+In-Reply-To: <20260909025604.14C2C1F00A3A@smtp.kernel.org>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 9 Sep 2026 14:59:13 +0800
-X-Gm-Features: AcwNN1WDD35CjhL0ylhm-HomRwfmFluqu4tzQjxt1RFL8b29gouM2h1PpNna_eE
-Message-ID: <CALOAHbBjbGu3E8Tfu6z2CZqcaJUSYYrPB3LsT54V1DpTDok75w@mail.gmail.com>
-Subject: Re: [PATCH v8 2/9] selftests/livepatch: Adapt atomic replace tests to provides/obsoletes
-To: Song Liu <song@kernel.org>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, live-patching@vger.kernel.org
+Date: Wed, 9 Sep 2026 15:01:32 +0800
+X-Gm-Features: AcwNN1VAmTZpGCZaes0KAMDlEawTsQnOVz10d90Gk4r_1ogB0jj3Jg4oDnaUcTo
+Message-ID: <CALOAHbAQQ8odjtyYjGvzPF-dYT61tYgOHpW_nMuvcRxtjzeC1w@mail.gmail.com>
+Subject: Re: [PATCH v8 9/9] selftests/livepatch: Add function test for provides/obsoletes
+To: sashiko-reviews@lists.linux.dev
+Cc: song@kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, mbenes@suse.cz, 
+	jpoimboe@kernel.org, jikos@kernel.org, live-patching@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 9, 2026 at 1:28=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+On Wed, Sep 9, 2026 at 10:56=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
 >
-> On Tue, Sep 8, 2026 at 7:43=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com>=
- wrote:
-> >
-> > The legacy "replace" field in struct klp_patch will be replaced by the
-> > provides/obsoletes mechanism. As a result, the atomic replace
-> > selftests fail to build against kernels that only support
-> > provides/obsoletes.
-> >
-> > Adapt the selftests so that they build and run on both old and new
-> > kernels.  On kernels without the legacy "replace" support, the
-> > replace-related test cases are skipped with a SKIP message instead
-> > of being run.
-> >
-> > The provides/obsoletes based selftests will be added later after the
-> > provides/obsoletes are substituted.
-> >
-> > Suggested-by: Petr Mladek <pmladek@suse.com>
-> > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] The test fails to verify its own claim that a function is func=
+tionally unpatched after an atomic replacement.
+> --
 >
-> Shall we add functions for code blocks inside
+> commit abfccb0026870ac46d37d3802586498b0874cba2
+> Author: Yafang Shao <laoar.shao@gmail.com>
 >
->    if [[ "$HAS_PROVIDES_ATTR" !=3D "1" ]]; then
+> selftests/livepatch: Add function test for provides/obsoletes
 >
-> etc.?
+> This commit adds selftest scenarios for livepatches using the provides
+> and obsoletes features to ensure patches with different provides IDs do
+> not modify the same function. It verifies replacement and coexistence
+> behaviors for different function combinations. Tests are skipped on legac=
+y
+> kernels.
+>
+> > diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.=
+sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> > --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> > +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+> [ ... ]
+> > +# - after the replacement /proc/meminfo is no longer patched, while
+> > +#   /proc/cmdline is patched
+> > +# - unload the replacing livepatch, then the replaced one
+> > +
+> > +start_test "different functions, atomic replace works (nops)"
+> > +
+> > +load_lp $MOD_MEMINFO provides=3D1
+> > +
+> > +grep 'live patched' /proc/meminfo > /dev/kmsg
+> > +
+> > +load_lp $MOD_CMDLINE provides=3D1
+> > +
+> > +grep 'live patched' /proc/cmdline > /dev/kmsg
+> > +
+> > +disable_lp $MOD_CMDLINE
+>
+> [Severity: Medium]
+> The test documentation explicitly claims that after the replacement,
+> /proc/meminfo is no longer patched while /proc/cmdline is patched.
+> However, only /proc/cmdline is checked during this sequence.
+>
+> Should there be an additional step to grep /proc/meminfo and verify it
+> is functionally unpatched before disabling the livepatch? If the atomic
+> replace logic had a flaw that accidentally left /proc/meminfo patched,
+> it appears this verification would be missed and the test would still pas=
+s.
+>
 
-Makes sense. It will be clearer.
-I will rework it in the next version.
+Nice catch.
 
->
-> Other than this.
->
-> Acked-by: Song Liu <song@kernel.org>
+I will update it with the following change
 
+--- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
++++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
+@@ -545,6 +545,7 @@ grep 'live patched' /proc/meminfo > /dev/kmsg
 
+ load_lp $MOD_CMDLINE provides=3D1
+
++grep 'live patched' /proc/meminfo > /dev/kmsg
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+
+ disable_lp $MOD_CMDLINE
 
 --=20
 Regards
