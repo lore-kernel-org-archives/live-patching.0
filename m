@@ -1,148 +1,213 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653D73AC0CD
-	for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 08:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723AD3D413C
+	for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 08:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029093; cv=none; b=HQD9nOVLP9TfGHZWMrL9qDAT/QkHwujVHz9UgHyckB93DeoweIqspmw/nBhvutkQbBC4bID8KduZt41JxxsVwem64x54m6tRQC3Uj8ieFaseHDfW0Z+cqVMhLjGBsv0663gRujmRbYDCD6GUCAUACkK6QteCNOItiqfJhb+2h8c=
+	t=1789030374; cv=none; b=Rmmv/2m/LkQUATptfxwycsvYMxUya9NHhR77Mo7fPDkyKfFGN+JYqTux+Ckkj44C56RNAJLqMpdSTSa4TI/4Pkzgf5RLvo8188b3f8KAy9+hN1cgUalL/VHVymxw2vEjCMyJNCMDukQv939rFfKrO0BRQCMFjZ4we0SyqomVteA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029093; c=relaxed/simple;
-	bh=02P+Nto+8FWZEXgUD3DRmTvIK9sX1/Ts21EYtwsObwI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=pQCZlGJkL0fHeklSbn2uZwPcANgTqSSIM8wuaQIEEBQ1nQIn5iqEJzFqNN+H7xPSfwzQZFdNdvsTjn89uH+BT4hLuWnBBfnrXGy0eDIA5HOHpLIRZ/Y0aSs9oFIp6R0owuJS6XiNmvNaSFfGSJXT+BR25a6JARZdus7WABq8hYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=y6+9qZnx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=KLdVFVLx; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uxZAO0kv; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HgDliL2Q; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1789030374; c=relaxed/simple;
+	bh=rrm13CJYZunrLWG7hU6QetzTbhxmTMu87q02Sg14ElU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tKPUPcq/9hWqU3NFRvmXyVouvWZSvExOWIi5aA7iR9Ke+BRr6fjs46xGSx+4H8MHoTcwzMCMUmJ5UYhNux2CDWphqGVV3T7xS+kgOnIenOae9Tx8Q2yAVhYVgSITK5nj5xVR8P+wVZkClhlgmeFs/2XyRMoFEn1/1KHvhrzzpfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pF8D03HL; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="y6+9qZnx";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="KLdVFVLx";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uxZAO0kv";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HgDliL2Q"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 33C0921C49;
-	Thu, 10 Sep 2026 08:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789029086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=37IEAbIWrUNJnl9LHFJqNm2NXYX/0Jnvv4R+pvrVzB8=;
-	b=y6+9qZnxF/q3zBA58AvQZpGuTuRXCPqNal9z3QRZiHjMLhy24ClzBfFFDtvKgb361BU2Um
-	l2lUN6ubcLs7cXRiB+c3D4MQHZlLmKZbVmYSEctMbWS2ai5Fr5mjkkuws6orAhjx/JQ727
-	1rW7Wd1nNP57jU3B6USJqv5UnIlG3Qw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789029086;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=37IEAbIWrUNJnl9LHFJqNm2NXYX/0Jnvv4R+pvrVzB8=;
-	b=KLdVFVLxopp/6ekLY9vyd05WDXEURbhAkRzC1ETdJN7nxDUpe3j2unFNkV+P59sMFqLrkc
-	KnqN3BrJ3fYjykAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789029082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=37IEAbIWrUNJnl9LHFJqNm2NXYX/0Jnvv4R+pvrVzB8=;
-	b=uxZAO0kv1HQ8OgAiBxWpSqMMJsZjzxMKh3RADKSLSUsmJRzJwwH4oAyz0Z5aaeJF+/qVUF
-	FGfy+GOmV47mMFK1eYh2Zdg4fvoe+ReKNsN3FHA5tVaNrdcX5PnIULxKhJY5IYQLAMBb3N
-	CRe/8JU6ZdMaInhfz4Ce6EJ+kEfvNio=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789029082;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=37IEAbIWrUNJnl9LHFJqNm2NXYX/0Jnvv4R+pvrVzB8=;
-	b=HgDliL2Qb8VtXUkZy9n/v3WQH24nsW507Y4Tt//hxsD5fxyIdgfOVb2e5H10/80NUzE9Af
-	QNsVP4ZrtLbPIdCA==
-Date: Thu, 10 Sep 2026 10:31:22 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Song Liu <song@kernel.org>
-cc: Petr Mladek <pmladek@suse.com>, Yafang Shao <laoar.shao@gmail.com>, 
-    jpoimboe@kernel.org, jikos@kernel.org, joe.lawrence@redhat.com, 
-    live-patching@vger.kernel.org
-Subject: Re: Replace rules: was: Re: [PATCH v7 for-next 3/8] livepatch:
- Implement replace set for scoped atomic replace
-In-Reply-To: <CAPhsuW6OVt8oYr3YW9MbapXi6Z97CF-7J0fHXakKYkvvOp6A_Q@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2609101029080.608@pobox.suse.cz>
-References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-4-laoar.shao@gmail.com> <apfQ6c_3giN615Ll@pathway.suse.cz> <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com> <apk9f_LsGRYHzN0Z@pathway.suse.cz>
- <alpine.LSU.2.21.2609091424420.10918@pobox.suse.cz> <CAPhsuW6OVt8oYr3YW9MbapXi6Z97CF-7J0fHXakKYkvvOp6A_Q@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pF8D03HL"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc1c73645a1so5378818a12.1
+        for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 01:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789030368; x=1789635168; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kxcbzpXnDDxrcl2saQVe1hhAk6NoKOLwMsiYrhPEWo0=;
+        b=pF8D03HLX9IlLL4+VI82Z1JC/05hD4XKteN1P4N4w9otMJB9jwbhFGOYSxvVl8F49T
+         He0zXHAqkev2cXLGPVz0fai5XgC5apwUBEPJB7yLUflqyz9wgNfjXSSiAr2PS4rjr1F2
+         y2RIgcWMcZWurKyDpYPs+UfFUAmV89tf6TsaQLBV20RwLuU5KfWCOOwp/p9y+FXakYJk
+         IGMyi8nfNHrF78QdvUxi/EzE6PiCT4aMLb0R8hSjMHqvX7dc16uwJl/dXWj567c8L41C
+         KRxjtzLP2vWKPkYHn3U5VrQS+PK3xEKPOloi73tR92jewgnRUr1SSLh8xlsHf0nj4CYO
+         PPiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789030368; x=1789635168;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kxcbzpXnDDxrcl2saQVe1hhAk6NoKOLwMsiYrhPEWo0=;
+        b=F1nQLutheMhznMPGvi3uX/HJT01u4aLDliwAuh2mzSYVOq3u61cP3ihyuIQ7Fw5TNz
+         iJ86uHYNVFE56VzcH9f292AT/+BIJjRrgypWyYK/xXzlbPA/fswrzC2Z0QAcR0Ylcxpv
+         S9TftmtwP2MGNmFYkMDa9KHXU0VdeV41jjKpBZo8VxD/eo8/hf+bUF0HwceqwsWaUjjM
+         ISZH2CLIhxIU1vm8DU09v+R/w94r11FvQzptBTGZzlTawqncqRcc8Upk3uQoCdtAT2rU
+         pvnT5b+eRFyoVPQl1uy811uymmj+LZe3C9mZZRx0J6olFFochX6/73BWqfXBT2SBJn9J
+         iRbw==
+X-Forwarded-Encrypted: i=1; AKwUvBxMYhqwU7Gg9AQcXkZ4pQr/gUED+FX/n+RKv9l/Ph952y5z2409Nt1aBLkJE22VzePL5Rpl+DlWGXY1KDG2@vger.kernel.org
+X-Gm-Message-State: AFuF++kpnxlBU1Q+YGZYIBiIZxZ8iTbKiXMbbo/o5cgsyArWcUD4Y+zL
+	xmQ6GIwFKUPHFH9TpdSlZknTDjLqqdbiNg5EVt+O0DBsS7rTPnDKaVtj
+X-Gm-Gg: AYBFou0MRWg6pdcXjXtqHH/0LSjQexKN8uBMZrqk1RlH232kOR/xd3fQMPnRsEO3Sqz
+	ea9PRWB3J2XLJcx5gj3MMvcwfNc/+lFXmfiNtYzuDtlmzenkIj5ARgWBDTudpg3VL9TqCRWRxN7
+	uxC/8VY13DqMx2dxWv/9zTMulWx36lepCDuNRumBweK649obm7yBhQBMBatwMfFKdtovcnVGWFa
+	rWj3n5wbYCOfDk1W6WsmqZzHYkegBYntVBOj8oPDlRG/8fKTJ0ge7BzLiEHgMTlIbw0qQUlBVyc
+	nD0Usss+AY27dqnHbz/QZOTG6Gva5ZjZEaEpLUCjNxlaioypLvoCAwYSj22/NzK2+bT5AOsPo4a
+	6WS67rZpJPpGz3QJY1wh+wbrOYHler6JudASRtQKz+5mspxDnimcQM4bW9qpwuFC/SfvF/155If
+	H7hnBc29Q5WXkCtDBPQ/1NkbcZTVAVphDl2ahif6+/Pe6s6eonq641mX0ZfiEFeVT/V23DgCjli
+	VAmj7j/OWEjQhN6rTNMjNs0C4xVChnoDON015GoepBSTdOYPg==
+X-Received: by 2002:a17:90b:274c:b0:398:9be9:ab92 with SMTP id 98e67ed59e1d1-39b2629b27fmr62967751a91.23.1789030367765;
+        Thu, 10 Sep 2026 01:52:47 -0700 (PDT)
+Received: from ANATASLUO-MC0.tencent.com ([43.132.141.24])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d7e3f603dsm3379015a91.2.2026.09.10.01.52.45
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 10 Sep 2026 01:52:47 -0700 (PDT)
+From: Longjun Luo <luolongjuna@gmail.com>
+To: jpoimboe@kernel.org,
+	peterz@infradead.org
+Cc: song@kernel.org,
+	jikos@kernel.org,
+	pmladek@suse.com,
+	live-patching@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Longjun Luo <luolongjuna@gmail.com>
+Subject: [PATCH] objtool/klp: Fix missed changes to same-named symbol references
+Date: Thu, 10 Sep 2026 16:52:18 +0800
+Message-ID: <20260910085218.66565-1-luolongjuna@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-2146828000-790178653-1789029082=:608"
-X-Spam-Level: 
-X-Spam-Score: -1.80
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	TAGGED_RCPT(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_CC(0.00)[suse.com,gmail.com,kernel.org,redhat.com,vger.kernel.org];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email]
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hashing symbol references by demangled_name alone can miss target
+changes while the instruction or data bytes and normalized relocation
+offsets remain unchanged. This occurs when:
 
----2146828000-790178653-1789029082=:608
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+  - A global function moves between files and calls a same-named static
+    function with a different implementation.
+  - A function's call target changes from a global function to a
+    same-named static function, without moving the caller.
+  - A data object, such as an ops structure, changes its function pointer
+    from a global function to a same-named static function.
 
-On Wed, 9 Sep 2026, Song Liu wrote:
+These false negatives can silently omit changed functions from a
+livepatch or fail to reject changed data.
 
-> On Wed, Sep 9, 2026 at 5:32 AM Miroslav Benes <mbenes@suse.cz> wrote:
-> [...]
-> > >
-> > > It might be useful for OS providers who want to make sure that their
-> > > kernel critical fixes can be installed on the user system. Otherwise,
-> > > customers might complain that some update failed, ...
-> > >
-> > > Of course, it has a drawback that any livepatch with ``prov ides= 0``
-> > > would wipe any 3rd party livepatches, even when they are against 3rd
-> > > party modules.
-> >
-> > My intention was not to regress and disallow a use case which is currently
-> > supported. That is to replace everything applied no matter what.
-> 
-> I am curious about this use case. Do we really have users who:
->   - Load patch A, with replace=false;
->   - Load patch B, with replace=false;
->   - Load patch C, with replace=true, replacing both A and B?
-> 
-> I think this is not good practice anyway. Instead, users would either use
-> a bunch of patches with replace=false; or only load one patch at a time,
-> and keep replace=true for all of them.
-> 
-> Did I miss any reasonable users or use cases here?
+Hash referenced symbols as (filename, demangled_name) instead. Use an
+empty filename when no FILE is associated, and include both terminating
+NULs to delimit the fields.
 
-I am not aware of anyone specific but the scenario above does not look too 
-crazy to me. And the experience taught me that if something is possible, 
-there is definitely someone out there doing it. However, as I said, I 
-think the current implementation of the scoped replace should be enough 
-for everybody. If not, we will learn about the use case in a couple of 
-years.
+Verified all three cases with klp-build on x86-64: the function cases
+produce livepatch modules with the expected target relocations, and the
+data case is rejected. Hand-built unchanged-input controls produce
+identical checksums. Module loading was not tested.
 
-Miroslav
----2146828000-790178653-1789029082=:608--
+Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
+Assisted-by: LLM
+Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
+---
+ tools/objtool/include/objtool/checksum.h | 27 ++++++++++++++++++++++++
+ tools/objtool/klp-checksum.c             | 13 ++++--------
+ 2 files changed, 31 insertions(+), 9 deletions(-)
+
+diff --git a/tools/objtool/include/objtool/checksum.h b/tools/objtool/include/objtool/checksum.h
+index d46293f54716..1834d34dfd47 100644
+--- a/tools/objtool/include/objtool/checksum.h
++++ b/tools/objtool/include/objtool/checksum.h
+@@ -20,6 +20,16 @@ static inline void __checksum_update(struct symbol *sym, const void *data,
+ 	XXH3_64bits_update(sym->csum.state, data, size);
+ }
+ 
++/* Include FILE identity to distinguish same-named local targets. */
++static inline void __checksum_update_symbol_identity(struct symbol *sym,
++						     struct symbol *target)
++{
++	const char *file_name = target->file ? target->file->name : "";
++
++	__checksum_update(sym, file_name, strlen(file_name) + 1);
++	__checksum_update(sym, target->demangled_name, strlen(target->demangled_name) + 1);
++}
++
+ static inline void __checksum_update_insn(struct symbol *sym,
+ 					  struct instruction *insn,
+ 					  const void *data, size_t size)
+@@ -28,6 +38,14 @@ static inline void __checksum_update_insn(struct symbol *sym,
+ 	dbg_checksum_insn(sym, insn, XXH3_64bits_digest(sym->csum.state));
+ }
+ 
++static inline void __checksum_update_symbol(struct symbol *sym,
++					    struct instruction *insn,
++					    struct symbol *target)
++{
++	__checksum_update_symbol_identity(sym, target);
++	dbg_checksum_insn(sym, insn, XXH3_64bits_digest(sym->csum.state));
++}
++
+ static inline void __checksum_update_object(struct symbol *sym,
+ 					    unsigned long offset,
+ 					    const char *what, const void *data,
+@@ -38,6 +56,15 @@ static inline void __checksum_update_object(struct symbol *sym,
+ 	dbg_checksum_object(sym, offset, what, XXH3_64bits_digest(sym->csum.state));
+ }
+ 
++static inline void __checksum_update_object_symbol(struct symbol *sym,
++						   unsigned long offset,
++						   struct symbol *target)
++{
++	__checksum_update(sym, &offset, sizeof(offset));
++	__checksum_update_symbol_identity(sym, target);
++	dbg_checksum_object(sym, offset, "reloc name", XXH3_64bits_digest(sym->csum.state));
++}
++
+ static inline void checksum_finish(struct symbol *sym)
+ {
+ 	if (sym && sym->csum.state) {
+diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
+index b8e47f28997e..3da3fe11bf76 100644
+--- a/tools/objtool/klp-checksum.c
++++ b/tools/objtool/klp-checksum.c
+@@ -85,8 +85,7 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 			__checksum_update_insn(func, insn, buf, len);
+ 
+ 			if (call_dest) {
+-				__checksum_update_insn(func, insn, call_dest->demangled_name,
+-						       strlen(call_dest->demangled_name));
++				__checksum_update_symbol(func, insn, call_dest);
+ 
+ 			} else if (jump_dest) {
+ 				struct symbol *dest_sym;
+@@ -102,8 +101,7 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 				if (!dest_sym)
+ 					goto alts;
+ 
+-				__checksum_update_insn(func, insn, dest_sym->demangled_name,
+-						       strlen(dest_sym->demangled_name));
++				__checksum_update_symbol(func, insn, dest_sym);
+ 
+ 				offset = jump_dest->offset - dest_sym->offset;
+ 				__checksum_update_insn(func, insn, &offset, sizeof(offset));
+@@ -137,8 +135,7 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
+ 		offset -= sym->offset;
+ 	}
+ 
+-	__checksum_update_insn(func, insn, sym->demangled_name,
+-			       strlen(sym->demangled_name));
++	__checksum_update_symbol(func, insn, sym);
+ 	__checksum_update_insn(func, insn, &offset, sizeof(offset));
+ 
+ alts:
+@@ -206,9 +203,7 @@ static void checksum_update_object(struct objtool_file *file, struct symbol *sym
+ 			offset -= target->offset;
+ 		}
+ 
+-		__checksum_update_object(sym, sym_offset, "reloc name",
+-					 target->demangled_name,
+-					 strlen(target->demangled_name));
++		__checksum_update_object_symbol(sym, sym_offset, target);
+ 		__checksum_update_object(sym, sym_offset, "reloc addend",
+ 					 &offset, sizeof(offset));
+ 	}
+
+base-commit: 50d05c7c76c96b90462f24debacca971d2e86713
+-- 
+2.43.7
+
