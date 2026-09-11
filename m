@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEED338C40E
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060F725A321
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152705; cv=none; b=lJzvjBFPBtqNph2Dc0XF5DBIKLs6pAC/dvALrA647AiovAE0iYZbVs0ZTN4zzCraQfJR/nFxPCAM72umXlMW28UBI7vtZkBOOvdWfM3orqHIM6fi9GxrtgauV+UVXpwoCAKJtHEiWYmJ9MbfyFu/2Ld/JhCp4qmCnSAFEywUujk=
+	t=1789152710; cv=none; b=hhTP5So5DxFHh7TW8k6/ALd8eNVcAzQzyg5AhLfmEJYmjr89ADIWcqV3wn86Sbw7pEV3gSgKRcFfPeL+ayhHpfZcrouf5terY6An+4xSgFVQxocWgt+2GhNSaIrraLDBoSvQ9mvCSdzOElXj02R3dBR8ZLtDTdLRlZRZ10gV5Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152705; c=relaxed/simple;
-	bh=3iVoK4BkPE7Ao2mIIlFXdexW1442xptVOxNVtYYEQ+8=;
+	s=arc-20240116; t=1789152710; c=relaxed/simple;
+	bh=9VkOOa/dxFloPprvA5NLKRjti9MhXwAO7Ym7ZjypavQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uwk3u7563LGYIOfE0M6tG2oTwypc9w1TXGLkOKCfTmDeqg/O/hjvPKOSOvBuVq8xPdueKoyXRCOxQqSuCXYKVh5gNMkDAmbH6e7AjipAQcaS40DlRv+AKnCIaMSB7bRhWebsN6QVkAOy1L4UFuzPEiCnBhbGp2xngLOdFnmGI/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ko67j0wR; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=U8udaYtDtqeDBaXXKyIrCyC24ob9auEJmErZw1RZbt/IwSsxFS1jg2dg5kFad1ITXDN81OIKoQAdsQhnZKad5xAxAH88L09Ky/k8pASiQFqcn6qHY6AHyALdSMXVn+gwc7JB8p18bzkMpxs/slK3bsV45Gs6iXdbPKOnpFCP9cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecSC4Jex; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ko67j0wR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDAA11F000FF;
-	Fri, 11 Sep 2026 18:51:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecSC4Jex"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC491F000FF;
+	Fri, 11 Sep 2026 18:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152703;
-	bh=qDD8qst+lNvXm1mMrcNe9/GCFXs/oxrzCZsX6CQt3qQ=;
+	s=k20260515; t=1789152708;
+	bh=TytgfA9jV9W804/xZyHJkzNMViFROkvOB+CPuLqpfww=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ko67j0wRnfnpO6tZqjP7X6VG2WiHg6E1/sTj8Ph2QL9s5ArQy7RAY5ZKLTpkgfLGf
-	 a13agQEJOkdpui6ciXoFDJA+ZUZbxCMrt1pJrNPf0KEyIKpm0xTljhYVAgV+v1AdPB
-	 ezypUdPFMwwsEpZFGAWjpcwy0WaGq0W2PQWfPXe+W0npf4voOSE5Ngm4tzS+8AQRpv
-	 5HGxnV/2rbfZNgGRAnCwDSloOak3Z00U3s3hbGlr4IZriVBlxKHc3Y4oKdo4JRSonB
-	 foj1+0lqrZBPVzD4/EwTtNjskH+y7wHRMtR5u40j35BhWrMoA0fUeHio91vr0CMRy+
-	 UqLkcFBZ4O2Jw==
+	b=ecSC4JexGePsiw0mBQrIUxTg+dBh2qFoYB//QzZLHMFvjMxA/EynNivVI4kvy1I7M
+	 ZU5n19D6Ya8ubcOltC+3zKHxqGWTuQgatjoGSjFNCqy5oSaOWyOTrdV4wbkBUVX0Ny
+	 stPHSPkKDaTnpM7WrxkOa7RodR905inV4MNmxN/bzrNPJNZf8taT/BO63BdqSqQUJR
+	 NWCdLPwGXVZyP+6Q4qNVT0Kr9mepee4flXGfh+876VjP3m4SCd2slmdPHekltIDVcr
+	 V268Y4qEPVUMVyRFg0RxwbKlAwdr85pPOPNDEwRcvHI8PSlJ5Q5CeNCAK2Fe+TfSmQ
+	 0g/Uhqz7wyydQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 37/58] objtool/klp: Add test for sympos in module objects
-Date: Fri, 11 Sep 2026 11:50:10 -0700
-Message-ID: <20260911185031.1534046-12-song@kernel.org>
+Subject: [PATCH 38/58] objtool/klp: Add test for sympos resolved against a linked vmlinux
+Date: Fri, 11 Sep 2026 11:50:11 -0700
+Message-ID: <20260911185031.1534046-13-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911185031.1534046-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -52,44 +52,59 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-klp-sympos.c had no coverage at all.  sympos disambiguates same-named
-symbols for livepatch, counting from 1, with 0 meaning the name is unique.
-Resolving to the wrong one is not a load failure -- it is a patch quietly
-wired to the wrong object.
+vmlinux is not like a module: the final link reorders sub-sections, so a
+symbol's position has to come from the linked image rather than from symbol
+table order.  klp diff bridges that with .klp.symid, and looks for it only
+when the object it was handed is called vmlinux.o with a vmlinux beside it.
 
-Covers the module path, where the position is a count in symbol table order
-and klp diff can work it out from the object alone.
+This was assigned to an end-to-end test on the assumption that it needs a
+real kernel build.  It needs "ld -r" and "ld -e 0", and takes a fraction of
+a second.
+
+The fixture places the static appearing first in the symbol table at the
+higher address, and the link passes --sort-section=name to force the
+reordering the kernel's linker script performs.  Without that the two ways
+of computing sympos agree, and a first version passed with the vmlinux path
+disabled.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/sympos_dup.c       | 32 ++++++++++++
- tools/objtool/tests/generic/test-sympos.sh    | 51 +++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/sympos_dup.c
- create mode 100755 tools/objtool/tests/generic/test-sympos.sh
+ .../tests/generic/fixtures/sympos_vmlinux.c   | 40 +++++++++++++
+ .../tests/generic/test-sympos-vmlinux.sh      | 57 +++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+ create mode 100755 tools/objtool/tests/generic/test-sympos-vmlinux.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/sympos_dup.c b/tools/objtool/tests/generic/fixtures/sympos_dup.c
+diff --git a/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
 new file mode 100644
-index 000000000000..7eded9b12cfc
+index 000000000000..d5e70994c582
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/sympos_dup.c
-@@ -0,0 +1,32 @@
++++ b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+@@ -0,0 +1,40 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A static whose name recurs in every translation unit that includes it.
-+ * Compiled once for a single-copy object and twice, partially linked, for one
-+ * with duplicates -- which is the only case where sympos is non-zero.
++ * Two translation units with a same-named static, placed so that the linker
++ * puts them in the opposite order to the one they appear in the symbol table.
 + *
-+ * FUNC_NAME keeps the referencing functions distinct so both get patched.
-+ * Only the first copy carries .modinfo; two would be a second thing to
-+ * disambiguate and is not what this fixture is about.
++ * VARSEC selects the section the static lands in.  Linking with
++ * --sort-section=name then orders them alphabetically rather than by object
++ * order, so the first symbol in the symbol table ends up at the *higher*
++ * address.  That is the whole point: counting symbol table order and reading
++ * the linked image's addresses now give different answers, which is what makes
++ * it possible to tell which one klp diff used.
++ *
++ * Only use_a is patched, so exactly one sympos is emitted and there is nothing
++ * to attribute.
 + */
 +
 +#ifndef FUNC_NAME
 +#define FUNC_NAME use_a
++#endif
++#ifndef VARSEC
++#define VARSEC ".data.mmm"
 +#endif
 +
 +#ifndef NO_MODINFO
@@ -98,7 +113,7 @@ index 000000000000..7eded9b12cfc
 +#endif
 +
 +/* volatile so it survives as an STT_OBJECT rather than being folded away */
-+static volatile int dup_counter = 1;
++static volatile int dup_counter __attribute__((section(VARSEC))) = 1;
 +
 +int FUNC_NAME(int x)
 +{
@@ -109,63 +124,69 @@ index 000000000000..7eded9b12cfc
 +	return dup_counter;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-sympos.sh b/tools/objtool/tests/generic/test-sympos.sh
+diff --git a/tools/objtool/tests/generic/test-sympos-vmlinux.sh b/tools/objtool/tests/generic/test-sympos-vmlinux.sh
 new file mode 100755
-index 000000000000..b71d4930a22a
+index 000000000000..b2b44001446f
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-sympos.sh
-@@ -0,0 +1,51 @@
++++ b/tools/objtool/tests/generic/test-sympos-vmlinux.sh
+@@ -0,0 +1,57 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# sympos is what livepatch uses to tell duplicate symbol names apart in the
-+# patched object: which "dup_counter" of several the relocation means.  Get it
-+# wrong and the patch resolves to the wrong object at load time, silently.
++# sympos for vmlinux, which is resolved differently from sympos for a module.
 +#
-+# klp_find_sympos() reports 0 when a name is unique and a 1-based position when
-+# it is not, so both need checking -- always reporting a position, or never,
-+# each looks right in one of the two cases.
++# A module's .ko preserves symbol table order, so klp diff can count -- that is
++# what test-sympos covers.  vmlinux cannot be counted: the final link reorders
++# sub-sections, so the order in vmlinux.o is not the order the running kernel
++# has.  klp diff bridges that with .klp.symid, a table of { id, address }
++# emitted into vmlinux.o whose addresses the linker resolves, read back out of
++# the linked vmlinux.
 +#
-+# This is the module path, counting symbol table order.  vmlinux is reordered
-+# by the final link and goes through .klp.symid instead; that needs a linked
-+# vmlinux next to vmlinux.o and is not covered here.
++# Getting it wrong points the relocation at a different symbol of the same
++# name.  Nothing fails to build or load; the patched code uses the wrong
++# object.
++#
++# The fixture is arranged so the two answers differ: the static that comes
++# first in the symbol table is placed at the *higher* address, so counting
++# gives 1 and reading the linked image gives 2.  Without that, both paths agree
++# and the test cannot tell them apart.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
 +
-+# One copy: the name is unique, so there is nothing to disambiguate.
-+build_one sympos_dup.c orig.o    -DFUNC_NAME=use_a
-+build_one sympos_dup.c patched.o -DFUNC_NAME=use_a -DPATCHED
-+run_diff
++# use_a's static sorts last by section name, use_b's first.  Only use_a is
++# patched, so exactly one sympos comes out.
++build_one sympos_vmlinux.c orig_a.o    -DFUNC_NAME=use_a -DVARSEC='".data.zzz"'
++build_one sympos_vmlinux.c patched_a.o -DFUNC_NAME=use_a -DVARSEC='".data.zzz"' -DPATCHED
++build_one sympos_vmlinux.c b.o         -DFUNC_NAME=use_b -DVARSEC='".data.aaa"' -DNO_MODINFO
 +
-+assert_klp_sympos dup_counter 0
++make_vmlinux_pair "$workdir/orig_a.o" "$workdir/b.o" \
++	       -- "$workdir/patched_a.o" "$workdir/b.o"
 +
-+# Two copies: positions, in symbol table order.
-+for p in "" "-DPATCHED"; do
-+	# shellcheck disable=SC2086
-+	build_one sympos_dup.c "a$p.o" -DFUNC_NAME=use_a $p
-+	# shellcheck disable=SC2086
-+	build_one sympos_dup.c "b$p.o" -DFUNC_NAME=use_b -DNO_MODINFO $p
-+done
-+partial_link "$workdir/orig.o"    "$workdir/a.o"         "$workdir/b.o" ||
-+	probe_skip "partial link unavailable"
-+partial_link "$workdir/patched.o" "$workdir/a-DPATCHED.o" "$workdir/b-DPATCHED.o" ||
-+	probe_skip "partial link unavailable"
-+
-+# Without duplicates in the input there is nothing for sympos to number.
-+[ "$(count_input_symbols orig.o dup_counter)" = 2 ] ||
++[ "$(count_input_symbols vmlinux.o dup_counter)" = 2 ] ||
 +	fail "fixture did not produce two dup_counter symbols"
++has_input_section vmlinux.o .klp.symid ||
++	fail "objtool --klp-symids emitted no .klp.symid table"
++has_input_section vmlinux .klp.symid ||
++	fail ".klp.symid did not survive the link"
 +
++# The premise: symbol table order and address order must disagree, or the test
++# proves nothing.
++first_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2; exit }')"
++low_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2 }' | sort | head -1)"
++[ "$first_addr" != "$low_addr" ] ||
++	probe_skip "linker did not reorder the two statics"
++
++assert_input_symbol dup_counter
 +run_diff
 +
-+assert_klp_sympos dup_counter 1
++# Address order says 2.  Counting symbol table order would say 1.
 +assert_klp_sympos dup_counter 2
-+# ... and nothing still claiming the name is unique
-+out_symbols | grep -qE '\.klp\.sym\.[^.]+\.dup_counter,0([[:space:]]|$)' &&
-+	fail "sympos 0 emitted for a duplicated symbol"
++out_symbols | grep -q 'dup_counter,1' &&
++	fail "sympos 1 emitted: counted symbol table order instead of reading the linked vmlinux"
 +
-+pass "sympos numbers duplicate symbols and stays 0 for unique ones"
++pass "vmlinux sympos taken from the linked image, not from symbol table order"
 -- 
 2.53.0-Meta
 
