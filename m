@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72ED4A8FF3
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323394A8FF3
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152315; cv=none; b=IQ5RAflaF7TmdsBntwyDBLuPl7dEGYHBnvlhGehlrcLv1sWbQxhcCdO5+rIaeyONG8LdKJTme8NnNc8rwBLDXYy13+lnhB6HARPa3ZNoR9rI5ZWmvIQwzuqLdPDA37ZaLXbLHjHB2Upz3F7Qd8juHPtRaNfDRkZ5IyNdjDdErUQ=
+	t=1789152319; cv=none; b=IGhlvoT7/sO6v/SdHH8hN6jRSuyewImCqYMvJfUEoJB+PWJQigc8jWMt/OeS8dQgTqeV/2EXW2gKlbfb3LN17JpaOHK+mpVvL9V2/193fHyPgQQRTT9ClqZgOBQs9/LqriOKt1F+ebO7k8wfe6b+iYLYk6MWCNAr7j4GbFGqGfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152315; c=relaxed/simple;
-	bh=P28h7MNDgtZWqr4WDmOYefcYtepbUq0byuLDapd/1iM=;
+	s=arc-20240116; t=1789152319; c=relaxed/simple;
+	bh=nfGfU3LaIh7bgGt7j7/PkZRVj5wdsODeLERr39LlXPs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DugZKKOk/UbR9rbOBmcJGUT7JlLJOX4HKUC+WKYLyajNzGi0+N5zFRjGeait07CRso6BHquA5gCE46EAKp8XDiTRFj0LlQ7KY3euKqI0lJW51pUMKkoVYmC8nxv66XLvK+zkFCUpiQ5UDULYysbdU1zP6X62R91Mkb6QogpfLnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZedY4uA; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=tOSnAEnVgBHUJ7ZH5ZuROpPZ3Q3Wp8dbEGo70OYMfp0CmaXM8pFYwWibwwyHwNZnJdJGou9ZQ00cAJmlq5FZR8bO+SIwT/n7ZOlECXz4dpvCx7/OnNVUf/8vyneVsDkCpOqiY512cEeM4Eb3MkHb/vUT/8y8x5d50IPkODMPQZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MyGHy0hV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZedY4uA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D966C1F000FF;
-	Fri, 11 Sep 2026 18:45:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MyGHy0hV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AA81F000FF;
+	Fri, 11 Sep 2026 18:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152313;
-	bh=cAZwMrBw6GHczvYXPp4WPmfpviRDbyVvXFUzyS29Q8Q=;
+	s=k20260515; t=1789152317;
+	bh=w+q/DLez5PlneJgCmCrVqPe34qCrkcVpE4zDb70j/T0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dZedY4uApG/q0hYN2oCj2+7A47WvvF/i/z33jcqT6w0miWVoYfF/A30vh62w3LoUh
-	 JB3KjL5WBWOCDMgQg2besNmtGMjH1pk8BnMsMnySZR5wrksIROT5TjDldTn+r7duWY
-	 VFik1E5Z3dq1Dmvu52z4SlZ3ZhGOtUyxXkz7FzkLaFpClhkRjdkSZ+QcQiOA7O35QE
-	 RX2Q0lalZnWssVaqUiNzVhceiIjC6V/2INftRIC3aCig08Xa/tJhcdUaC5cDvxiyWj
-	 UMBymtS169oxLobN7n14ZwhsH+nfPdL35Ch3h/qgEHHJGE08hCalTnE5aV28Zgggew
-	 YRSelEUQGBkIA==
+	b=MyGHy0hVtCCn+vBx7LS5+QJB6HO0i18QtwpaaBuoRg/CVS95r85UqxRsD0PKUwwII
+	 hf/Dx8wqQDoB2j/bGuLwkqEuxj0QmTKR/bPwOAQzJVuhk9jFZS8F6xLY6u/GSKWSV8
+	 7KhkJQzQZUGTSpl6mpbk2SJq89CSr7CPHL8w5rWZ/AU64TqfKW6DV9El5cwIhGSHfY
+	 VrfnoPp7UnM86IN+hxdcjoY+UEd+hs+8oxK8rQa0KYysRrZR7EkJa/UnlJ8m8Jlqf6
+	 inQFuKBzvV/kgYsJr3PfhbFLqX7sO9AaCEz1T60org3YUNMDPLwEyc2RPCIdOaYpuE
+	 KH5VIA5rqLo8A==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 19/58] objtool/klp: Add test for jump table key relocations
-Date: Fri, 11 Sep 2026 11:42:26 -0700
-Message-ID: <20260911184305.1457308-20-song@kernel.org>
+Subject: [PATCH 20/58] objtool/klp: Add test for rejecting module-owned static branch keys
+Date: Fri, 11 Sep 2026 11:42:27 -0700
+Message-ID: <20260911184305.1457308-21-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911184305.1457308-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -53,163 +53,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-A cloned __jump_table entry must keep a relocation in its key slot.
-objtool parses the table again after klp diff to convert the static
-branch's scaffold instruction, and an empty slot leaves it unable to do so.
-The scaffold then stays as emitted and the module trips BUG() in
-__jump_label_patch() once the key's state differs from its compile-time
-default.
+A static branch key belonging to a module cannot be reached with a klp
+relocation: the patch may be applied after that module's static branch init
+has run, which corrupts the code.  Emitting one anyway produces a module
+which loads and then BUG()s the first time the key changes state, so klp
+diff has to refuse it.
 
-Check both halves for a vmlinux-owned key: unexported gives a tombstone
-plus a klp relocation, exported gives an ordinary relocation and no klp
-machinery.
-
-The fixture defines the key as an STT_OBJECT, which is what the kernel
-emits. validate_special_section_klp_reloc() ignores anything else, so a
-fixture using an undefined extern would skip the interesting paths.
+The fixture differs from the accepted case only in the module name recorded
+in .modinfo.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/jump_label.c       | 76 +++++++++++++++++++
- .../tests/generic/test-jump-label-key.sh      | 44 +++++++++++
- 2 files changed, 120 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/jump_label.c
- create mode 100755 tools/objtool/tests/generic/test-jump-label-key.sh
+ .../generic/test-jump-label-module-key.sh     | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-module-key.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/jump_label.c b/tools/objtool/tests/generic/fixtures/jump_label.c
-new file mode 100644
-index 000000000000..ecd3c06912af
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/jump_label.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Static branch in a patched function.  The jump table entry is written out by
-+ * hand, mirroring JUMP_TABLE_ENTRY(), so the fixture builds without kernel
-+ * headers.  The key is an STT_OBJECT; anything else is ignored by
-+ * validate_special_section_klp_reloc().
-+ *
-+ * MODNAME selects whether the key is taken to belong to vmlinux or a module.
-+ *
-+ * NEW_KEY puts the whole static branch behind PATCHED, so the patch introduces
-+ * one where the original had none -- a different question from patching code
-+ * that already has a key, because the __jump_table entry itself is new.
-+ *
-+ * KEY_NAME renames the key.  Two names are special to
-+ * validate_special_section_klp_reloc(): a __tracepoint_* key and the
-+ * __UNIQUE_ID_ddebug_* one pr_debug() generates are both unsupported in a
-+ * module, but are disabled with a warning rather than rejected, because the
-+ * kernel is full of them and refusing outright would make ordinary functions
-+ * unpatchable.
-+ *
-+ * STATIC_KEY makes the key file-local.  That changes the shape of the
-+ * relocation rather than the meaning of the code: a reference to a static lands
-+ * on the section symbol plus an addend, so the key has to be resolved from the
-+ * section before it can be recognised as a key at all.
-+ */
-+
-+#ifndef MODNAME
-+#define MODNAME "vmlinux"
-+#endif
-+
-+#ifndef KEY_NAME
-+#define KEY_NAME klp_test_key
-+#endif
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=" MODNAME;
-+
-+#ifdef STATIC_KEY
-+static long KEY_NAME;
-+#else
-+long KEY_NAME;
-+#endif
-+
-+int target(int x)
-+{
-+	int r = x;
-+
-+#if defined(NEW_KEY) && !defined(PATCHED)
-+	/* The original has no static branch at all. */
-+	return r + 1;
-+#else
-+	asm goto(
-+		"1:	nop\n\t"
-+		".pushsection	__jump_table, \"aw\"\n\t"
-+		".balign	8\n\t"
-+		"912:\n\t"
-+		".pushsection	.discard.annotate_data, \"M\", @progbits, 8\n\t"
-+		".long		912b - ., 1\n\t"
-+		".popsection\n\t"
-+		".long		1b - ., %l[l_yes] - .\n\t"
-+		".quad		%c0 - .\n\t"
-+		".popsection\n\t"
-+		: : "i" (&KEY_NAME) : : l_yes);
-+
-+	r += 1;
-+	goto out;
-+l_yes:
-+	r += 2;
-+out:
-+#endif
-+#ifdef PATCHED
-+	return r + 100;
-+#else
-+	return r;
-+#endif
-+}
-diff --git a/tools/objtool/tests/generic/test-jump-label-key.sh b/tools/objtool/tests/generic/test-jump-label-key.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-module-key.sh b/tools/objtool/tests/generic/test-jump-label-module-key.sh
 new file mode 100755
-index 000000000000..142f94bd38ec
+index 000000000000..7c3f82cdd3c1
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-jump-label-key.sh
-@@ -0,0 +1,44 @@
++++ b/tools/objtool/tests/generic/test-jump-label-module-key.sh
+@@ -0,0 +1,22 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A cloned __jump_table entry must keep a relocation in its key slot, whether
-+# the key needs a klp relocation or not.
++# A static branch key owned by a module cannot be reached with a klp
++# relocation and must be rejected.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+key=klp_test_key
-+
 +setup
-+build_pair jump_label.c
++build_pair jump_label.c -DMODNAME='"klp_testmod"'
 +
 +has_input_section orig.o __jump_table ||
 +	probe_skip "fixture produced no __jump_table on this arch"
 +
-+key_slot_relocs()
-+{
-+	out_relocs | awk '/rela__jump_table/,/^$/' | grep -c "^0*8[[:space:]]"
-+}
++run_diff 255
 +
-+# Unexported: klp relocation, key slot holds a tombstone.
-+export_syms
-+run_diff
++diff_log | grep -q 'unsupported static branch key klp_test_key' ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
++[ -e "$workdir/out.o" ] &&
++	fail "output object produced for a rejected input"
 +
-+[ "$(key_slot_relocs)" = 1 ] ||
-+	fail "unexported key: key slot has no relocation"
-+out_relocs | awk '/rela__jump_table/,/^$/' | grep -q "\.klp\.tombstone\.$key" ||
-+	fail "unexported key: expected a .klp.tombstone.$key relocation"
-+out_symbols | grep -q "\.klp\.sym\..*\.$key," ||
-+	fail "unexported key: no .klp.sym reference for the real relocation"
-+
-+# Exported: ordinary relocation, no klp machinery.
-+export_syms "$key"
-+run_diff
-+
-+[ "$(key_slot_relocs)" = 1 ] ||
-+	fail "exported key: key slot has no relocation"
-+out_relocs | awk '/rela__jump_table/,/^$/' | grep -q "[[:space:]]$key[[:space:]]*+" ||
-+	fail "exported key: expected a direct relocation to $key"
-+out_symbols | grep -q '\.klp\.tombstone\.' &&
-+	fail "exported key: tombstone emitted for an exported symbol"
-+
-+pass "key slot populated for exported and unexported vmlinux keys"
++pass "module-owned static branch key rejected"
 -- 
 2.53.0-Meta
 
