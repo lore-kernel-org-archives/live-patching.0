@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC703DAACE
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F7935F60A
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152670; cv=none; b=eTzsa1nhFFcylUGE0rA2SoZrHVYk/ZiFXOVVi4ZP5Hu1Vgl2rleOrJevTCqP6DwzsQwLIXGtEJ6Yji3MqSIbVB019FXTEkQCgkjWq2sz8VCpEPZceP/rh+H0fwxgS1d0/yMu5BLao9fWvfZPdOed+FXVDvGaVB+SI/zqdV64170=
+	t=1789152675; cv=none; b=c2nwlANml4l2wQbuon3INrAQv7abjYEaPeuqb1Ce0dm4Aok+WKydelOxuuIDoDyA7yzuGpnBO+WG3sCYOVJqOm2+GIsKpD4gy4dpfVx+V060/4T9G1DNexgZeCn1dR2t3HkKVcWNEcs9ppX58GPytJg0Um5af9bdeCloUcQx5nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152670; c=relaxed/simple;
-	bh=Ito7ebvG1LNLBlrJb6fD4kRKtT4NltRovU60aVKrIfU=;
+	s=arc-20240116; t=1789152675; c=relaxed/simple;
+	bh=n7WVRwfT8KB6KbQV67XYBT/y+bUh1Nv5RGm5QzTz6co=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DcDGsYW8WP9VPIGrZI8kRCLHaAm8oukT+eU0sOPyr2rVLIb6+5szNCl4pVlQN+6gc9ccXjEGEvJISxA1iEbNLjoa00xZIhQxx6dDHbUGbCG5gR4AYvQrVpS+K4+CQc/jKnwKJm1hBxa+7Cs/eIMecEu3ac5xXON30940+65yyDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAabZFMx; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=JhHkHstqS9q2tVcBgEhGoqLgF/HlC41Sc8Ro+bFdDGJocaWpYtTJR7Tepr8x/l0ED53NABAt6m/uvH4DKMvi5a8jyBrDcrsCAHU3RrHqJ1vqAWDrSCt6aljpfnN8IwEwQcGICv4UwCJlidYnb02inrPqAjYuqKDk5BjKcvoEejg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OvT2HUB2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAabZFMx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F911F000FF;
-	Fri, 11 Sep 2026 18:51:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvT2HUB2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354601F000FF;
+	Fri, 11 Sep 2026 18:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152669;
-	bh=eG2JSvi9ve7FmKyFYGEcVlfvCpZ5lHgOSVC3BH1rHkQ=;
+	s=k20260515; t=1789152674;
+	bh=M1JB/yRh/wPtStJHhjJW7qswY2A/P7sViKF3tegwlrY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=aAabZFMxaKT/w/UtiIv8MzAZYtqJOasD2S7b7EVcjOBkVsEc75FbB0SwAsIMjznaw
-	 RUCIrBnRYQnQAcBcoVwH9BmEMIqNbHMB1bA1XjIYK6wMHQmIdo8KQ8Gh6e5aWOmjIz
-	 UHwZs/0oYFhfXtYAEspVnFXgBU6y4x3qa3qc6laZoV2QcgFGofusNNAH8QQjJoIzTy
-	 QHmo3hHRRddc/DSzbaqK9mQIxb7iCvErg827agg1dVtF4PgynddvZJKwsfjC/r3V9G
-	 kEFReUSTC4bVzKrgiUM2fksqQUTN1AYhMXwgxQf79PtCClP4Zjh55FS9d+6wx3gD+P
-	 ywUO812jV1VVA==
+	b=OvT2HUB2hPzrvVc6wUToQiaxlWwx1dTNb35aksunVD6ndYPUEppOIWc0LF+5hquib
+	 yKfEicEhMysYYXKXvyR3Aj6Gx6zlOP7HFroIq6lAjunXI+2PxbbzIGaAmz0d6YG/ua
+	 3DJsFcLK6ur/luXk91vtBVESLtNdHt6MR2ipIRlWHhDnZk+73dkwH2cPpBE2aFUAX8
+	 xhJGwSDtW9p/0fOK6mHTwQficgrCeESxyIsX8Ygr9an2ubpZQKXrwNUPJDpfQfah5O
+	 wq1dkAWvxrAnS+lXSJM1sPMs7cy6/HT3D6ULipWWuGvrkMALn3d705GsMoQV3CNpui
+	 5BmB+LjdSMLVQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 30/58] objtool/klp: Add test for Module.symvers path normalization
-Date: Fri, 11 Sep 2026 11:50:03 -0700
-Message-ID: <20260911185031.1534046-5-song@kernel.org>
+Subject: [PATCH 31/58] objtool/klp: Add test for the contents of the klp_funcs list
+Date: Fri, 11 Sep 2026 11:50:04 -0700
+Message-ID: <20260911185031.1534046-6-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911185031.1534046-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -52,55 +52,114 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Module.symvers names an export's owner by build path, and the kernel knows
-modules by their runtime name.  Without normalizing one to the other, an
-export owned by a module is not recognised as owned by anything, and a
-reference that should become a klp relocation stays an ordinary one.
+The patch list is what livepatch acts on, and asserting only that it exists
+does not say it is right.  A function that should have been patched and is
+missing leaves the bug in place; one that should not be there patches code
+nobody changed.
 
-This tests the behavior of commit 8668bf91e050 ("objtool/klp: Normalize
-Module.symvers paths to module names").
+The fixture changes two of three functions and asserts on all three: the
+two by name, and the third by its absence.  It checks the strings in
+.rodata.klp.str1.1 as well as the relocations, since the names the kernel
+matches on are real strings.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/test-modname-normalize.sh   | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100755 tools/objtool/tests/generic/test-modname-normalize.sh
+ .../tests/generic/fixtures/klp_funcs.c        | 31 +++++++++++++
+ .../tests/generic/test-klp-funcs-content.sh   | 44 +++++++++++++++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/klp_funcs.c
+ create mode 100755 tools/objtool/tests/generic/test-klp-funcs-content.sh
 
-diff --git a/tools/objtool/tests/generic/test-modname-normalize.sh b/tools/objtool/tests/generic/test-modname-normalize.sh
-new file mode 100755
-index 000000000000..a8059bdbd667
+diff --git a/tools/objtool/tests/generic/fixtures/klp_funcs.c b/tools/objtool/tests/generic/fixtures/klp_funcs.c
+new file mode 100644
+index 000000000000..3f0d3e206cef
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-modname-normalize.sh
-@@ -0,0 +1,26 @@
++++ b/tools/objtool/tests/generic/fixtures/klp_funcs.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Two changed functions and one untouched, so the patch's function list has a
++ * length worth checking and something that must not appear in it.
++ */
++
++static const char __modinfo[]
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++
++int first(int x)
++{
++#ifdef PATCHED
++	return x + 11;
++#else
++	return x + 1;
++#endif
++}
++
++int second(int x)
++{
++#ifdef PATCHED
++	return x + 22;
++#else
++	return x + 2;
++#endif
++}
++
++int third(int x)
++{
++	return x + 3;
++}
+diff --git a/tools/objtool/tests/generic/test-klp-funcs-content.sh b/tools/objtool/tests/generic/test-klp-funcs-content.sh
+new file mode 100755
+index 000000000000..c4ec7098d948
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-klp-funcs-content.sh
+@@ -0,0 +1,44 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Module.symvers records the build-tree path of the object that exports a
-+# symbol, not the name the module has at runtime: "arch/x86/kvm/kvm-intel",
-+# where the kernel knows the module as "kvm_intel".
++# .init.klp_funcs is the list the kernel walks to decide what to patch, and
++# .init.klp_objects points at it.  Existing tests assert only that the sections
++# exist, which they do whether the list names the right functions, the wrong
++# ones, or none at all -- and a patch module with an empty function list loads
++# perfectly happily and patches nothing.
 +#
-+# The klp symbol name embeds the owning object, and livepatch matches it
-+# against loaded modules by name.  Left unnormalized it names a module that
-+# does not exist, and the relocation is never resolved -- at load time, with no
-+# build-time complaint.
++# Each entry pairs a name string in .rodata.klp.str1.1 with a relocation to the
++# new function, so both halves are checkable.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_module_pair cross_module.c klp_testmod
-+
-+# A path with directory components, a dash, and no extension.
-+export_syms
-+add_exports "arch/x86/kvm/kvm-intel" other_mod_func
++build_pair klp_funcs.c
 +run_diff
 +
-+# Directories stripped, dash to underscore.
-+assert_klp_sym other_mod_func kvm_intel
++assert_section .init.klp_funcs
++assert_section .init.klp_objects
 +
-+pass "Module.symvers paths normalized to runtime module names"
++# Two functions changed, so two entries, each contributing a name relocation
++# and a function relocation.
++assert_reloc_count .init.klp_funcs 4
++
++# The functions that changed are named ...
++assert_reloc_sym .init.klp_funcs first
++assert_reloc_sym .init.klp_funcs second
++# ... and the one that did not is absent, from the list and from the patch.
++assert_no_reloc_sym .init.klp_funcs third
++assert_not_patched third
++
++# The names the kernel matches on are real strings, not just relocations.
++out_strings .rodata.klp.str1.1 |
++	grep -q '\bfirst\b' ||
++	fail "no 'first' string in .rodata.klp.str1.1"
++out_strings .rodata.klp.str1.1 |
++	grep -q '\bsecond\b' ||
++	fail "no 'second' string in .rodata.klp.str1.1"
++
++# The object list has to reach the function list, or nothing is walked.
++assert_reloc_sym .init.klp_objects .init.klp_funcs
++
++pass "klp_funcs lists exactly the changed functions, by name and relocation"
 -- 
 2.53.0-Meta
 
