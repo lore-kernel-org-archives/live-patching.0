@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3816B361977
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AAE364029
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152329; cv=none; b=lsI62m1HpaTGIoTSMxnYwB3RlDZ7aj0R19m4iYoK8XCbQNfvA41oayrVtyIaYdyV9hVTFmcQHeg/5001v5D3H16LoNjJkbS2nIbi52wBIhNmDHDyXJpWdST4r5s5jV+ow6YvS6GA2tR9NyKWtY+Pfot5A/G9onROWq/4tG26uic=
+	t=1789152334; cv=none; b=GbQZi8QJ0v8NmXtHN01LsmBUjuT+aEL4nAJL8y4e0ZO5NpTPP9OYHzD6dlzfyZb6F+DM7+0OVSDQPrfNES1Q/SJCmQpTC77SJCLRYt2xkqIsZtwHqLmhL3OnURkg8nPZImQL2Axw7lbLjPYCBwVfvFeakTmpvalMukfy+WsXXps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152329; c=relaxed/simple;
-	bh=Hpc8eV9YUuJjcfTtf/++IRXFmsn3zz3LHYhT9H2rXV4=;
+	s=arc-20240116; t=1789152334; c=relaxed/simple;
+	bh=paJuQdKNH5Ytr4PlK+0pYUCu5AJ2vyCncP4mTTaiM1g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RX8wYMlW15KMoZ+tVXD87fy38DXdc4KyHIXcHNYvqCE0WRWc96khJJLWma96ramy4V+lAnquoaRPmunYsZLSsW6Y/L1ijX/MhzpQQlEZDtZ9fK4tdvY7OqYxPSNs+r8FTr6y7YNLqKvyFuSlDM+ZzRAHyV0Fagw5R684GvbiFYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gca5C8Ei; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ChmVlU7cmvg9bpKrpxl2H0uSlPvW57Ope4ejRDLgWqCxGFgbKl2PxuPIgWFdCM+slIkEmDW8WhIZ2sdBWG6Jm1M3Mv1CYLVpgWKkxd7hDBRqw9wXT+C/eGMdzPjVhZ7tPKHtEb3XLxc78Ie8XclpIbYH0kdYfhJQKZslpw6sIuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=osgPL0WO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gca5C8Ei"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE86D1F000FF;
-	Fri, 11 Sep 2026 18:45:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osgPL0WO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A361F000FF;
+	Fri, 11 Sep 2026 18:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152327;
-	bh=hA0hZsrt0/jr18TQlcGZGo0x/XtImYu+Pw3jl/+a/3E=;
+	s=k20260515; t=1789152332;
+	bh=K19l8H4b3DtUsBqJ1QSkV5L6QGCnBAjDG37ydmV5tuk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Gca5C8EiwUWlrLUDSwcf25f1xf40c+4dI0gFY7HusICTbQz0IfRweuoFzM1KtEZqY
-	 oa2M8Y62OgUKg3jI0lR/wW1xhraF+6kkjiZmbl1Yz3rNuKlZWodf2HIxH1ZEAc00tz
-	 d3v6AWsK+2cu/olYXHqU2WmLtbTyRi9xau4OfcskXFCeZ9S1UUFj7ZrdQLgPMYdY7G
-	 NoXj9TOMfooYdDt+B0gOf5FfGj38blaPYyLX+tjhqJaKjDTM8idF0eRFFYSqUW/UDs
-	 V/GsJhoKNb2D8TPMxTh1YQ8yOoI3Nq1szDgvhdvMsmQAUR73n3b5Uz9DgaW1APDNhU
-	 xM+84pdyfLCOw==
+	b=osgPL0WOEEHFM8Z4T2XiMMuCYer6fjnDBIBK6MDqM3k3uHbTpUuUh4zP8drCdsfv+
+	 04P4GvU3aMh8Mac0XR6gwMRa0UjiUmNMhgFHjdHenvoexAiMk9mAcPlZmHn1c0IaKb
+	 UD7IUL568DkHXci2UEUce2piD3JWa4ogJHD6ySvlnSZIUpPajUs5LXEX1jrtbQljoC
+	 CWxqIw/GSxq23oI6c4Z36lGrDyQNcDohiZT0Hm6FnljzAW4RGcjcQCUbJjy5S35FU+
+	 nTvk/RUNSzE6Bfj3OViRwBjKAwwE6/PcwI3fhDjuLTD66z+bUP9pk0RgU6haNZbwpn
+	 czRXhWpwf5Nzg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 22/58] objtool/klp: Add test for symids in discarded sections
-Date: Fri, 11 Sep 2026 11:42:29 -0700
-Message-ID: <20260911184305.1457308-23-song@kernel.org>
+Subject: [PATCH 23/58] objtool/klp: Add test for rejecting references to init code/data
+Date: Fri, 11 Sep 2026 11:42:30 -0700
+Message-ID: <20260911184305.1457308-24-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911184305.1457308-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -53,113 +53,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-.klp.symid records duplicate-named locals so klp diff can work out their
-sympos.  Symbols in sections the vmlinux link throws away have to be left
-out, or the table references symbols which no longer exist and the link
-fails:
-
-  `__exitcall_foo' referenced in section `.klp.symid' of vmlinux.o:
-      defined in discarded section `.exitcall.exit' of vmlinux.o
-
-Two translation units are compiled from one fixture and partially linked so
-the result has duplicate locals, which symid_needed() requires.  One
-duplicate is in a live section and one in .exitcall.exit.
-
-Checking the live duplicate as well keeps the test honest: it would
-otherwise pass just as happily if symid generation stopped working
-entirely.
+Init code and data are freed once boot finishes, so a klp relocation
+against them can never resolve.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/symid_discarded.c  | 25 +++++++++++
- .../tests/generic/test-symid-discarded.sh     | 44 +++++++++++++++++++
- 2 files changed, 69 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/symid_discarded.c
- create mode 100755 tools/objtool/tests/generic/test-symid-discarded.sh
+ .../tests/generic/fixtures/init_reference.c      | 16 ++++++++++++++++
+ .../objtool/tests/generic/test-init-reference.sh | 16 ++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/init_reference.c
+ create mode 100755 tools/objtool/tests/generic/test-init-reference.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/symid_discarded.c b/tools/objtool/tests/generic/fixtures/symid_discarded.c
+diff --git a/tools/objtool/tests/generic/fixtures/init_reference.c b/tools/objtool/tests/generic/fixtures/init_reference.c
 new file mode 100644
-index 000000000000..573cc2d4474b
+index 000000000000..51b2a57dde14
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/symid_discarded.c
-@@ -0,0 +1,25 @@
++++ b/tools/objtool/tests/generic/fixtures/init_reference.c
+@@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Compiled twice and partially linked so the result has duplicate locals,
-+ * which is what symid_needed() requires.  dup_normal is in a live section,
-+ * dup_discarded in one the vmlinux link throws away.  DISCARDED_SEC selects
-+ * which discarded section, since there is more than one and each was its own
-+ * bug.
-+ */
-+
-+#ifndef DISCARDED_SEC
-+#define DISCARDED_SEC ".exitcall.exit"
-+#endif
++/* Patched function referencing data in an .init section. */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+static int dup_normal = 1;
++static int init_only __attribute__((section(".init.data"), used)) = 5;
 +
-+static void *dup_discarded
-+	__attribute__((section(DISCARDED_SEC), used)) = &dup_normal;
-+
-+int FUNC_NAME(void)
++int target(int x)
 +{
-+	return dup_normal + (dup_discarded != (void *)0);
++#ifdef PATCHED
++	return x + init_only + 1;
++#else
++	return x + init_only;
++#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-symid-discarded.sh b/tools/objtool/tests/generic/test-symid-discarded.sh
+diff --git a/tools/objtool/tests/generic/test-init-reference.sh b/tools/objtool/tests/generic/test-init-reference.sh
 new file mode 100755
-index 000000000000..388a24984ec0
+index 000000000000..8bf4b98bf458
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-symid-discarded.sh
-@@ -0,0 +1,44 @@
++++ b/tools/objtool/tests/generic/test-init-reference.sh
+@@ -0,0 +1,16 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# .klp.symid must not reference symbols in sections the vmlinux link discards.
-+# Each such section has been its own bug, found only when someone built a
-+# config where a duplicate happened to land there, so cover the whole list
-+# rather than whichever one was reported last.
++# Init code and data are freed after boot, so a klp relocation against them can
++# never resolve.  Such a patch must be rejected.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
++build_pair init_reference.c
++run_diff 255
 +
-+# Allocated sections which vmlinux.lds.h discards unconditionally.  A symid
-+# referencing one of these fails the vmlinux link outright:
-+#
-+#   `__exitcall_hid_exit' referenced in section `.klp.symid' of vmlinux.o:
-+#   defined in discarded section `.exitcall.exit' of vmlinux.o
-+for sec in .exitcall.exit .no_trim_symbol; do
-+	build_one symid_discarded.c a.o \
-+		-DFUNC_NAME=use_a -DDISCARDED_SEC="\"$sec\""
-+	build_one symid_discarded.c b.o \
-+		-DFUNC_NAME=use_b -DDISCARDED_SEC="\"$sec\""
++diff_log | grep -q "can't patch or reference init code/data" ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
 +
-+	# --klp-symids only runs on a file named vmlinux.o
-+	rm -f "$workdir/vmlinux.o"
-+	partial_link "$workdir/vmlinux.o" "$workdir/a.o" "$workdir/b.o" ||
-+		probe_skip "partial link unavailable"
-+
-+	"$OBJTOOL" --klp-symids --link "$workdir/vmlinux.o" ||
-+		fail "objtool --klp-symids failed"
-+
-+	symids="$(in_relocs vmlinux.o |
-+		  awk '/rela.klp.symid/,/^$/')"
-+
-+	# Without this the test would also pass if symid generation stopped
-+	# entirely.
-+	echo "$symids" | grep -q 'dup_normal' ||
-+		fail "$sec: no symid for the duplicate in a live section"
-+
-+	echo "$symids" | grep -q 'dup_discarded' &&
-+		fail "symid emitted for a symbol in discarded section $sec"
-+done
-+
-+pass "no symids for symbols in discarded sections"
++pass "reference to init data rejected"
 -- 
 2.53.0-Meta
 
