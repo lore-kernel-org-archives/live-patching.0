@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DEA3803DC
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 19:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85FD3F86EE
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 19:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789153400; cv=none; b=OgaLFG1hXCMQHrz1NTd0pYsPGwipalJCvpaWfFrRC/FcaMvmfo1EJXEeNKbBsTV5fu9u3S0brsEde0D2MSTTa0K4TI88bgoqoCA3YdNw7m9qUk4/HJ1xf69hWctb8zbuNUDo03lItVhtel8lz8TiukUen6vvCx1IB72oRA1uYZg=
+	t=1789153639; cv=none; b=gsV+ujfpl9fEacbG168nXmfez3rPdFlYyqJf0zK5m+nUHKuc5svRhvx7lkMvjEGfLApvDRly1MtB4ZYK5ALZv6vmOFhH7nbu0R+5UABN8oe5sY0qE7sTlzXs31jypa0mHMFIgqWXzfewGKnej/6dsSQbxDilNV4gfMEa61ZKqik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789153400; c=relaxed/simple;
-	bh=n/34ljLIxDLXl8eu+/ARwl8/bxFDZH3DpEVfTkWRtUw=;
+	s=arc-20240116; t=1789153639; c=relaxed/simple;
+	bh=u0CyDhDHnOlh7xRbg4xHj2qN16CPslq23B1rqD8c0YI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dTuLAiTNrBLnPhsDinVJrI0Mk5kRqTczvVCAuJ0Cksv8QXu8GzN99f2FyDp3dQRqzDBY2ixvlEDaQGuVj/dg/eu+IyZ4MS2R5bYCIV91AHjgz3+2kTsT1/iwtlECAWzxABYUQ/DBtsI6R3les72UankNekMmLYvcTraXRSNcUA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJSk6U+C; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hmQMRFH4R9H2yyBFEUyPlWVQkZb7UldK7lG+qkM8SnRQzXV5pzWYSxc4VLjJJovB9BLIILFJFHkYopwRWFJjcZGDnSOoKvOTn/42wWmOyQJ+buxNSQKncZV926OvyZfO3q8/CkJtJQ8Vnh0wZvdEoLDf1NMk9xDRteHHx9dOpwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R02kFer5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJSk6U+C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D96E1F000FF;
-	Fri, 11 Sep 2026 19:03:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R02kFer5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 248B91F00893;
+	Fri, 11 Sep 2026 19:07:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789153398;
-	bh=+6U/5peUDtgaFaAfpSchGAR4MlkDgbVw4jIB81BQkoY=;
+	s=k20260515; t=1789153625;
+	bh=n1psJ6VwQBx2FaHKh5i2fRi7QJvJxjiO75GW1tpqptw=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WJSk6U+CjQkF0ZIi6ENNzTnQs+ak53r/ANhss3vXnoR4V6Fp978pEqp60lPL+Soo5
-	 hzPwmROP2jG5rjfASlVcpP+zVDWKmN43/kOiLgq7LxqAVTNzvmraGvOxrM4DYE9IG9
-	 ZdKsZPN5QZJZHYvnOXwgw3CZt8qm/X4/oNqTS6AXpS/YbXkbfP+AF+TBwR490KLYso
-	 xeDff5CHHRxU43hKqB1suZ9YAaJKKXLYdBRlajimwHikcvZSqWcDFbbApz9hDG0zzE
-	 uPhbIQ/yiwTO5HOpSnEQmu0wBTNDL9/Jbb+IPyStLyFMyKVjcGL94h2KCGyYyEsJdt
-	 grl367O38fBrA==
+	b=R02kFer5wPEz0O1uzBzfK9Qo1BLrzU5EK1jtqtQ9XL2WCNtqTAXWwFrHKcruBTMw+
+	 +YSgzL2OiKWKCW9TGpWD3gDCxsddWsrZ2sZhtbcZN7rWGOt9WpoxIDD6RHNtNQRX4u
+	 Nhesogk/OCYJPYMbxhO0ITTVrJRE5S+tFzhBJlNkCTCB3zrmIdL2Hi58eXdyL4LTGT
+	 zKTvTcEfqOY34eKZgNVSu0y9TlSmGUDnQ1jzNWtBNmMsxN+8Sj7SmiNtuFd1rwuk8S
+	 P7H0cIjVSvtXjl4NupO5rfPdmzRl8CiyrRy96bWyAjhPnv4PQhcmDeqXTyD5lKS0zk
+	 E3cfgHalcGVpw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 06/58] objtool/klp: Grow the klp test harness vocabulary
+Subject: Re: [PATCH 10/58] objtool: Keep failing test workdirs by default
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: puranjay@kernel.org, joe.lawrence@redhat.com, kernel-team@meta.com, pmladek@suse.com, peterz@infradead.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz
-In-Reply-To: <20260911184305.1457308-7-song@kernel.org>
+Cc: peterz@infradead.org, jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com, puranjay@kernel.org, mbenes@suse.cz, jpoimboe@kernel.org, kernel-team@meta.com
+In-Reply-To: <20260911184305.1457308-11-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
- <20260911184305.1457308-7-song@kernel.org>
+ <20260911184305.1457308-11-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 19:03:17 +0000
-Message-Id: <20260911190318.1D96E1F000FF@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 19:07:04 +0000
+Message-Id: <20260911190705.248B91F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -46,151 +46,124 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Symbol names containing dots act as unescaped wildcards in grep =
-assertions, contradicting the commit message's goal.
-- [Medium] Missing regex boundary anchors in section_relocs and assert_tomb=
-stone allow partial substring or prefix matches, leading to false positives.
+- [Medium] Tests that fail due to unexpected termination (e.g., shell error=
+s, signals) or undeclared skips have their working directories incorrectly =
+deleted despite KEEP=3Dfailed, while the runner falsely claims they were ke=
+pt.
+- [Medium] When a test is executed standalone (not via run-tests.sh) and fa=
+ils, KEEP=3Dfailed silently leaks the temporary directory without printing =
+its path.
 --
 
-commit f3b84a0b37e33c6da0d81d19f9f2963fe5db6d2e
-Author: Song Liu <song@kernel.org>
+commit 14c7ac654e8638035a6ea9f8c26ee25df0293be4
+Author: Joe Lawrence <joe.lawrence@redhat.com>
 
-objtool/klp: Grow the klp test harness vocabulary
+objtool: Keep failing test workdirs by default
 
-Assertions for what klp diff produces, and for what went into it.
-
-The output side covers the things a livepatch is made of: cloned sections
-and symbols, klp symbols and their sympos, tombstones, relocations by
-section and by count, the converted .klp.rela sections and their
-SHF_RELA_LIVEPATCH flag, SHN_LIVEPATCH symbols, recorded checksums, and klp
-diff's own diagnostics -- a rejection for the wrong reason is not a pass.
+Change the default behavior of the klp test runner to save failing test
+working directories instead of deleting them on failure. Provide a KEEP
+Makefile variable that can optionally retain 'all' or 'none' of those
+directories.
 
 > diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> index 0a9da178f4dc8..a4d126e6c9cb3 100644
+> index 4d8401ee8b412..6c607a0435023 100644
 > --- a/tools/objtool/tests/lib.sh
 > +++ b/tools/objtool/tests/lib.sh
 [ ... ]
-> @@ -458,7 +566,251 @@ assert_patched()
-> =20
->  assert_not_patched()
+> @@ -186,12 +187,14 @@ cleanup()
 >  {
-> -	out_sections | grep -q "[[:space:]].text.$1[[:space:]]" &&
-> +	out_sections | grep -q "[[:space:]]$(re_quote ".text.$1")[[:space:]]" &&
->  		fail "function '$1' should not have been cloned"
->  	return 0
+>  	[ -n "$workdir" ] || return 0
+> =20
+> -	if [ -n "${KLP_TEST_KEEP:-}" ]; then
+> -		[ -n "${KLP_TEST_WORKDIR:-}" ] || echo "# kept $workdir"
+> -		return 0
+> -	fi
+> -
+> -	rm -rf "$workdir"
+
+[Severity: Medium]
+When a test is executed standalone (not via run-tests.sh) and fails, does t=
+his
+change silently leak the temporary directory without printing its path?=20
+
+Before this patch, standalone test failures using KEEP=3Dfailed informed the
+user of the generated /tmp directory path. Without the print statement,
+developers might not be aware of the leaked directory location.
+
+> +	case "${KLP_TEST_KEEP:-failed}" in
+> +	all)	return 0 ;;
+> +	none)	rm -rf "$workdir" ;;
+> +	failed|*)
+> +		[ -n "${KLP_TEST_FAILED:-}" ] && return 0
+> +		rm -rf "$workdir"
+
+[Severity: Medium]
+If a test script exits unexpectedly without setting KLP_TEST_FAILED=3D1
+(e.g., syntax error, shell error, or signal), will this incorrectly delete
+the working directory despite KEEP=3Dfailed being set?
+
+> +		;;
+> +	esac
 >  }
-> +
-> +# section_relocs <section>
-> +#
-> +# The relocations against one section.  readelf prints every relocation =
-section
-> +# in turn, so a test asking about ".smp_locks" has to cut its block out =
-of the
-> +# listing first.
-> +section_relocs()
-> +{
-> +	local sec=3D"${1//./\\.}"
-> +
-> +	out_relocs | awk "/rela$sec/,/^\$/"
-
-[Severity: Medium]
-Will this awk range pattern match more sections than intended?
-
-Without a trailing anchor like '/rela$sec$/', searching for a section like
-".text" might match and extract relocation blocks for both ".rela.text" and
-".rela.text.unlikely".
-
-This could cause assertions like assert_reloc_count() to inadvertently count
-entries across all matched blocks.
-
-> +}
-> +
-> +assert_reloc_sym()
-> +{
-> +	section_relocs "$1" | grep -qw -- "$2" ||
-
-[Severity: Medium]
-Does this grep command need to use re_quote() for the symbol name ($2)?
-
-Since compilers can generate symbol names with dots (e.g., foo.isra.0), lea=
-ving
-the dot unescaped could allow grep to treat it as a wildcard character,
-matching things like "foo_isra_0".
-
-The commit message mentions names are quoted before reaching grep to avoid
-this, but it appears some symbol assertions might be missing this quoting.
-
-> +		fail "expected a relocation to '$2' in '$1'"
-> +}
+> =20
+>  # setup [exported symbol...]
+> diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-t=
+ests.sh
+> index e6f1ac1b5d0da..e7bd25097ea58 100755
+> --- a/tools/objtool/tests/run-tests.sh
+> +++ b/tools/objtool/tests/run-tests.sh
 [ ... ]
-> +assert_klp_sym()
-> +{
-> +	out_symbols | grep -q "\.klp\.sym\.${2:-[^.]*}\.$1," ||
-
-[Severity: Medium]
-Should the symbol name ($1) be escaped here as well?
-
-An unescaped dot in the symbol name could act as a wildcard in this regular
-expression, allowing false positive matches in the test harness.
-
-> +		fail "expected klp symbol for '$1'"
-> +}
-> +
-> +# assert_klp_sympos <symbol> <sympos>
-> +#
-> +# The number after the comma in .klp.sym.<object>.<symbol>,<sympos> says=
- which
-> +# of several same-named symbols livepatch should resolve to, counting fr=
-om 1;
-> +# 0 means the name is unique and no disambiguation is needed.  Resolving=
- to the
-> +# wrong one is not a load failure, it is a patch quietly wired to the wr=
-ong
-> +# object.
-> +assert_klp_sympos()
-> +{
-> +	out_symbols | grep -qE "\.klp\.sym\.[^.]+\.$1,$2([[:space:]]|\$)" ||
-
-[Severity: Medium]
-Is it possible for an unescaped dot in $1 to cause false matches in this
-extended regular expression?
-
-> +		fail "expected klp symbol for '$1' with sympos $2, found:$(
-> +			out_symbols | grep -o "\.klp\.sym\.[^.]*\.$1,[0-9]*" |
-> +			sort -u | tr '\n' ' ')"
-> +}
+> @@ -147,16 +162,16 @@ for t in "${tests[@]}"; do
+>  		rest=3D"$rest${rest:+$'\n'}was: $result"
+>  		result=3D"not ok - $(basename "$t" .sh): undeclared skip"
+>  		result=3D"$result (use gcc_only/clang_only or require_input_*)"
+> -		fail=3D$((fail + 1)) ;;
+> +		fail=3D$((fail + 1)); failed_dirs+=3D( "$rundir/${t%.sh}" ) ;;
+>  	"not ok"*"# TODO"*)	xfail=3D$((xfail + 1)) ;;
+> -	"ok"*"# TODO"*)		xpass=3D$((xpass + 1)) ;;
+> -	"not ok"*)		fail=3D$((fail + 1)) ;;
+> +	"ok"*"# TODO"*)		xpass=3D$((xpass + 1)); failed_dirs+=3D( "$rundir/${t%=
+.sh}" ) ;;
+> +	"not ok"*)		fail=3D$((fail + 1)); failed_dirs+=3D( "$rundir/${t%.sh}" )=
+ ;;
+>  	"ok"*)			pass=3D$((pass + 1)) ;;
+>  	*)
+>  		# No result line at all: the test died before reporting.
+>  		rest=3D"$rest${rest:+$'\n'}exited $rc without a result line"
+>  		result=3D"not ok - $(basename "$t" .sh): no TAP result"
+> -		fail=3D$((fail + 1)) ;;
+> +		fail=3D$((fail + 1)); failed_dirs+=3D( "$rundir/${t%.sh}" ) ;;
+>  	esac
+> =20
+>  	echo "$result"
 [ ... ]
-> +assert_tombstone()
-> +{
-> +	out_symbols | grep -q "\.klp\.tombstone\.$1" ||
+> @@ -167,15 +182,35 @@ done
+>  echo "# pass:$pass fail:$fail static-skip:$static_skip" \
+>       "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
+[ ... ]
+> +failed)
+> +	if [ "${#failed_dirs[@]}" -gt 0 ]; then
+> +		echo "# keep=3Dfailed: ${#failed_dirs[@]} failing test(s) kept under $=
+rundir:"
+> +		for d in "${failed_dirs[@]}"; do
+> +			echo "#   ${d#"$rundir"/}/"
+> +		done
 
 [Severity: Medium]
-Could this pattern match partial symbol names?
+Will this instruct the user to inspect directories that have already been
+wiped?
 
-Without a trailing word boundary or end-of-line anchor, querying for a
-tombstone for "foo" might falsely succeed if a tombstone for "foo_bar"
-exists.
+When a test crashes or skips without setting KLP_TEST_FAILED, the main loop=
+ in
+run-tests.sh correctly detects this as a failure and adds it to failed_dirs.
+However, cleanup() in lib.sh will have already deleted the directory because
+KLP_TEST_FAILED is empty, leading to confusing instructions for the user.
 
-Additionally, does $1 need to be escaped here so that dots in the symbol na=
-me
-are treated literally?
-
-> +		fail "expected a tombstone for '$1'"
-> +}
-> +
-> +assert_symbol()
-> +{
-> +	out_symbols | grep -qw -- "$1" ||
-
-[Severity: Medium]
-Does this direct call to grep need to escape the symbol name?
-
-Like the other assertions, if a symbol name contains a dot, it could act
-as an unescaped wildcard character here.
-
-> +		fail "expected symbol '$1' in output"
-> +}
+> +		echo "# inspect: diff.log  readelf -S out.o"
+> +		echo "# one test: $PWD/run-tests.sh <name>"
+> +		echo "# cleanup: rm -rf $rundir"
+> +	elif ! rmdir "$rundir" 2>/dev/null; then
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911185031.1534=
-046-1-song@kernel.org?part=3D6
+046-1-song@kernel.org?part=3D10
