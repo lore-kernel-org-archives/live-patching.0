@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AAE364029
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C87535B63D
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152334; cv=none; b=GbQZi8QJ0v8NmXtHN01LsmBUjuT+aEL4nAJL8y4e0ZO5NpTPP9OYHzD6dlzfyZb6F+DM7+0OVSDQPrfNES1Q/SJCmQpTC77SJCLRYt2xkqIsZtwHqLmhL3OnURkg8nPZImQL2Axw7lbLjPYCBwVfvFeakTmpvalMukfy+WsXXps=
+	t=1789152341; cv=none; b=iAVaRQgFOxPB7P4s9ZzeX/m2ar1TZ0FWbYW1elB9/39Ie+zxCSpebQBY5sJ2v2yj8ANwePOEvtQA+afhq8c6+kHK2ra5CIeBAx4F5/ZxuXfg6phkR9h+0JguP2sHdUWlNqLd/iZexveDb5P2RQO8RZY7ldGoeA5KCp9dcU3BGhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152334; c=relaxed/simple;
-	bh=paJuQdKNH5Ytr4PlK+0pYUCu5AJ2vyCncP4mTTaiM1g=;
+	s=arc-20240116; t=1789152341; c=relaxed/simple;
+	bh=YDSwqqP7cXkrMf+53oUyzV+9tY4sCHuw8jELBcCPP5s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ChmVlU7cmvg9bpKrpxl2H0uSlPvW57Ope4ejRDLgWqCxGFgbKl2PxuPIgWFdCM+slIkEmDW8WhIZ2sdBWG6Jm1M3Mv1CYLVpgWKkxd7hDBRqw9wXT+C/eGMdzPjVhZ7tPKHtEb3XLxc78Ie8XclpIbYH0kdYfhJQKZslpw6sIuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=osgPL0WO; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=KCGj9YHzhK09gj/7Fud4m8X7PUlePwjdQnHM7+4oUDYPGLd1fT+aZ9MrIY07MpqXLA/WuIXragswUDnsnE/ihznWhDFO7EGYvVbguSADeepnWDcj51suVDiSXO3rp3Y1gjhD752cvvYTDAshc1Wd8iIppoREcADczmKnHLuhM3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LKEq+ooM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osgPL0WO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A361F000FF;
-	Fri, 11 Sep 2026 18:45:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LKEq+ooM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7ABC1F000FF;
+	Fri, 11 Sep 2026 18:45:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152332;
-	bh=K19l8H4b3DtUsBqJ1QSkV5L6QGCnBAjDG37ydmV5tuk=;
+	s=k20260515; t=1789152337;
+	bh=DbTItdY5Cxv0po+qgOuXN912tWUbBKAw8xnWKx1/m5Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=osgPL0WOEEHFM8Z4T2XiMMuCYer6fjnDBIBK6MDqM3k3uHbTpUuUh4zP8drCdsfv+
-	 04P4GvU3aMh8Mac0XR6gwMRa0UjiUmNMhgFHjdHenvoexAiMk9mAcPlZmHn1c0IaKb
-	 UD7IUL568DkHXci2UEUce2piD3JWa4ogJHD6ySvlnSZIUpPajUs5LXEX1jrtbQljoC
-	 CWxqIw/GSxq23oI6c4Z36lGrDyQNcDohiZT0Hm6FnljzAW4RGcjcQCUbJjy5S35FU+
-	 nTvk/RUNSzE6Bfj3OViRwBjKAwwE6/PcwI3fhDjuLTD66z+bUP9pk0RgU6haNZbwpn
-	 czRXhWpwf5Nzg==
+	b=LKEq+ooMtxo8RU6E6p1Et8zgI1G7VvPLi6ZwMRiQnovlQgnkmlXCjMx3tL4x7mMx9
+	 /pd+8A+dgu+3NSM6jI5dOqIz5zrmT5cpmIW57/GsTt19xJZOxvQx7OhNCh1f2xFnZz
+	 qbHl+d7N8L9oJkeeHhx2hv+L3K1p9A8WGzhriDq6qTK6KiO6fRt/z2b19GVwiIQKcV
+	 mrJlLky31z6FE/8ghG9I9pxACsavr90D10eNwN7ig9S3bxgdac++D7sqvffF0L8WN1
+	 U+UPKjtRK02O3oI7ge2K+P5e0DpaWqTZ4bALBvpmSza2G5bc1MMfa+bmDVTr1MNb/E
+	 d1ybfrdhTX4QQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 23/58] objtool/klp: Add test for rejecting references to init code/data
-Date: Fri, 11 Sep 2026 11:42:30 -0700
-Message-ID: <20260911184305.1457308-24-song@kernel.org>
+Subject: [PATCH 24/58] objtool/klp: Add test for correlation across ThinLTO name mangling
+Date: Fri, 11 Sep 2026 11:42:31 -0700
+Message-ID: <20260911184305.1457308-25-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911184305.1457308-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -53,63 +53,136 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-Init code and data are freed once boot finishes, so a klp relocation
-against them can never resolve.
+ThinLTO promotes the file-local symbols an imported function touches,
+renaming them name.llvm.<hash>.  The hash is content derived, so it changes
+whenever the module does:
+
+  original: counter.llvm.13663304415433785070
+  patched:  counter.llvm.10543383937958011340
+
+Correlating the two objects therefore requires demangling the suffix;
+matching raw names would see two unrelated symbols and treat the variable
+as new.
+
+The resulting klp relocation also has to name the original symbol, since
+that is the one in the running kernel's kallsyms.  Naming the patched
+build's symbol produces a relocation which can never be resolved.
+
+ThinLTO is a clang feature, so the test declares itself clang-only.  It
+also needs an lld from the same LLVM release as $CC; a mismatched pair
+fails with "Invalid summary version", which reads like a broken test rather
+than a broken environment, so probe for a working lld and skip if there is
+none.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/init_reference.c      | 16 ++++++++++++++++
- .../objtool/tests/generic/test-init-reference.sh | 16 ++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/init_reference.c
- create mode 100755 tools/objtool/tests/generic/test-init-reference.sh
+ .../tests/generic/fixtures/thinlto_local.c    | 39 +++++++++++++++
+ .../tests/generic/test-thinlto-local.sh       | 48 +++++++++++++++++++
+ 2 files changed, 87 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/thinlto_local.c
+ create mode 100755 tools/objtool/tests/generic/test-thinlto-local.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/init_reference.c b/tools/objtool/tests/generic/fixtures/init_reference.c
+diff --git a/tools/objtool/tests/generic/fixtures/thinlto_local.c b/tools/objtool/tests/generic/fixtures/thinlto_local.c
 new file mode 100644
-index 000000000000..51b2a57dde14
+index 000000000000..fe9f9e6bf44f
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/init_reference.c
-@@ -0,0 +1,16 @@
++++ b/tools/objtool/tests/generic/fixtures/thinlto_local.c
+@@ -0,0 +1,39 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Patched function referencing data in an .init section. */
++/*
++ * Two translation units (TU_B selects the second) linked with ThinLTO.
++ * Importing bump() promotes the file-local counter, renaming it
++ * counter.llvm.<hash>.  The hash is content derived, so it differs between the
++ * original and patched builds.
++ */
++
++#ifdef TU_B
++
++extern int bump(void);
++
++int other_entry(void)
++{
++	return bump() + bump();
++}
++
++#else
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+static int init_only __attribute__((section(".init.data"), used)) = 5;
++static int counter;
 +
-+int target(int x)
++int bump(void)
++{
++	return ++counter;
++}
++
++int target(void)
 +{
 +#ifdef PATCHED
-+	return x + init_only + 1;
++	return counter + 1;
 +#else
-+	return x + init_only;
++	return counter;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-init-reference.sh b/tools/objtool/tests/generic/test-init-reference.sh
++
++#endif
+diff --git a/tools/objtool/tests/generic/test-thinlto-local.sh b/tools/objtool/tests/generic/test-thinlto-local.sh
 new file mode 100755
-index 000000000000..8bf4b98bf458
+index 000000000000..a266263676ed
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-init-reference.sh
-@@ -0,0 +1,16 @@
++++ b/tools/objtool/tests/generic/test-thinlto-local.sh
+@@ -0,0 +1,48 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Init code and data are freed after boot, so a klp relocation against them can
-+# never resolve.  Such a patch must be rejected.
++# Correlating ThinLTO-promoted locals requires demangling the .llvm.<hash>
++# suffix, and the resulting klp relocation must name the original symbol: that
++# is the one in the running kernel's kallsyms.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair init_reference.c
-+run_diff 255
++clang_only "ThinLTO requires clang"
 +
-+diff_log | grep -q "can't patch or reference init code/data" ||
-+	fail "expected rejection, got: $(diff_log | tail -1)"
++find_thinlto_toolchain ||
++	probe_skip "no matching clang/lld pair for a ThinLTO link; set THIN_LD to one"
 +
-+pass "reference to init data rejected"
++build_thinlto()		# $1 output object, $2 extra flags
++{
++	$THIN_CC -flto=thin -O2 -ffunction-sections -fdata-sections $2 \
++		-c "$FIXTURES_DIR/thinlto_local.c" -o "$workdir/tu_a.o" 2>/dev/null || return 1
++	$THIN_CC -flto=thin -O2 -ffunction-sections -fdata-sections $2 -DTU_B \
++		-c "$FIXTURES_DIR/thinlto_local.c" -o "$workdir/tu_b.o" 2>/dev/null || return 1
++	"$THIN_LD" -r "$workdir/tu_a.o" "$workdir/tu_b.o" -o "$1" 2>/dev/null || return 1
++}
++
++build_thinlto "$workdir/orig.o" "" ||
++	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
++build_thinlto "$workdir/patched.o" -DPATCHED ||
++	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
++
++orig_sym="$(in_symbols orig.o    | grep -o 'counter\.llvm\.[0-9]*' | head -1)"
++new_sym="$( in_symbols patched.o | grep -o 'counter\.llvm\.[0-9]*' | head -1)"
++
++[ -n "$orig_sym" ] && [ -n "$new_sym" ] ||
++	probe_skip "$THIN_CC did not promote the local symbol"
++
++# Equal hashes would make plain name matching work, testing nothing.
++[ "$orig_sym" != "$new_sym" ] ||
++	probe_skip "$THIN_CC gave the same ThinLTO hash for both builds"
++
++run_diff
++assert_patched target
++
++out_symbols | grep -q "\.klp\.sym\.vmlinux\.$orig_sym," ||
++	fail "expected a klp relocation naming $orig_sym"
++out_symbols | grep -q "\.klp\.sym\.vmlinux\.$new_sym," &&
++	fail "klp relocation names $new_sym, which the running kernel does not have"
++
++pass "ThinLTO-mangled local correlated across differing hashes ($THIN_CC, $THIN_LD)"
 -- 
 2.53.0-Meta
 
