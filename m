@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6354B40A945
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EF33FE37B
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152782; cv=none; b=Wd3+oXLkfsKb7XTNDCLeN1eTnickqiWI7SZrCTG+FN8wHaZatZiBuUURLid9H1DmwhLKHDzZ9kaTTMpJ/mWibBJsXETKSjFidTs5VATuIwtq6WeGUpPx/bYJapzGIITgP50D437dfaEDC6Lxes7Cpuv3dSv+9afE0Ka3sdvTHK4=
+	t=1789152787; cv=none; b=YIEa8rvcKCcJXyY+8sLHnoFPLmCcJCpqmaycZJSUAgdS9TbKeAfOA/PyTZZPF8dFMMK2OpikfkNLG6ORvCx8hfM/ZgqWcsa+nv+tNXAXRIXz43Pf92hZf6IERuwRaGnEPkIVu9nnrG2GT9UOGaNYcfPFGTWbVzepqqtNsMpUgKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152782; c=relaxed/simple;
-	bh=dNsoLDOsjatn8ernSQJs2322H9khD9J41r5cjRmyWpw=;
+	s=arc-20240116; t=1789152787; c=relaxed/simple;
+	bh=yXYLWodDoIyhEqj3pNNBqPJ85jvN/ebcd1bgdr+w1k8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DbZekSL+XCwuYuGP3zPcsQAS86OtQRbnEvje9ss6RVY0OT0xIgEA0OODOp06vm4YlsduxVEOBIoREbGcdD2F/dB2yGU20LrHpLHfhS81EFmGGom+AGtfzJpRePLVvz8FfMlohcjH9RQ+H+4xJ3BT1ZFbc94qqj1PNIAzkYyu4ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJWN16sz; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=u74RIcPuRwtpAwTE2XAlEcwMzF5KUV2ZxFLZ8g9ZZotLyUVmrlq8osazHxOmadX48dPZ94aLHsCtSC+jsXrMWwaEfClYp8eUpetVKDcWCp3dIPX+kVqVBa2CcdQLM5oTeRqkat5uD1eyIGz7jFAqNOmQFSfwPDC27js2C+lkJpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5HARc+V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJWN16sz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CF321F00893;
-	Fri, 11 Sep 2026 18:52:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5HARc+V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5691F000FF;
+	Fri, 11 Sep 2026 18:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152778;
-	bh=NpL69YcF5SMZvs0goXYty+DlRERVTRtApsj5gbKz03Y=;
+	s=k20260515; t=1789152783;
+	bh=LJCHKRPsT/HuMK3A6Aox1+L7b80tbGGCcZ+526NEH7g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XJWN16szx/jLnpnWdL7x5wViIkxLdBksJGtm6dNMnCMyoc36tVbdkM5O3BwmLW+YO
-	 ydPP0d5U2wA4UxWLZK47QJqs/vc1+A+qlWNQepXQ06AN4yrGtJNMQPPSKVxg/AilnV
-	 AfyY0Q4hpQrxeAkgrmDGAYnOZ7emkc1SsyO7cLE6ybSxsLeX5mRu9Idc21+Fp6XM/j
-	 QLbxxtJVKy6dC5jHoTuV7bgAQK2LFVT52nJqbEeHkYCso8Qp7sAN2frbkCfoxPdPpo
-	 lXxvaMu4IWHa7LEgPh1Gfh+0qhcQlR9ZiQhjQhYRaf4GPgA3K+w0e6UrLOPKwoj/Jh
-	 VorO5RgdAvtRA==
+	b=G5HARc+VDP9Fqh7NdRDkvb8a7VI8PAt78OnrFyJeLRS4l6EltbXyTg7HZEaxijLV7
+	 bECofC1oEqS1hv0TPMA8wNRAp2zp7X8h27inIWXgxvogYpuEA+t3HsmdOH6s4Uzyly
+	 NyC89kDTmmfT36FYmhHu7wuBIHSAkbniGnmdbWfgV4cbedfM/RIa3Fjhc4TvUos10l
+	 l0DNBLYY1t2mlDVG8Wr/cOQ6hoHozcziPSmIn6Cid52FhSdav39dMli2eXptdrokEI
+	 9Jx3sC9SROn2aIROKTud6M3noH9TMYCyRCXyjl7okZpPh8a/MB8fjYG7o+/BHSF20f
+	 7qRX1/I2UwWKw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 52/58] objtool/klp: Add test for alternative replacement code in checksums
-Date: Fri, 11 Sep 2026 11:50:25 -0700
-Message-ID: <20260911185031.1534046-27-song@kernel.org>
+Subject: [PATCH 53/58] objtool/klp: Add test for the alignment of cloned data sections
+Date: Fri, 11 Sep 2026 11:50:26 -0700
+Message-ID: <20260911185031.1534046-28-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911185031.1534046-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -52,158 +52,115 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-checksum_update_insn() walks insn->alts after hashing the instruction
-itself: the alternative's type, and where the replacement forms a group,
-its feature number and every instruction in it.  A patch which edits only
-the replacement -- code that runs on some CPUs and not others -- still has
-to move the function's checksum.
+A cloned data section has to keep its sh_addralign.  Plenty of kernel data
+is aligned for correctness rather than speed -- per-CPU variables, anything
+touched by an aligned vector move, structures padded to own a cacheline --
+and a clone that lands under-aligned either faults on first use or silently
+shares a line it was laid out to avoid.  Neither shows up until the patch
+is loaded on hardware that cares.
 
-When it does not, klp diff calls the function unchanged and leaves it out.
-The patch ships the old replacement, and the bug is fixed only on machines
-whose CPU takes the other arm.  Which machines those are depends on the
-feature bit, so it presents as a machine-specific bug rather than a missing
-patch.
+The fixture's data is new in the patched build, so klp diff has to clone it
+rather than reference the kernel's copy, and it asserts that premise before
+asserting the result.
 
-insn->alts is built by objtool's check pass, not by the compiler, so the
-pair goes through that first.  --mcount is the action used: it is the
-cheapest one that does not also need --link.
-
-Two of the three paths are isolated.  Skipping the alts walk and dropping
-the feature hash both make this fail, and the second of those only exists
-inside the alt_group branch, so reaching it proves the grouped path is
-taken.  The alternative's type is hashed but not varied here -- the fixture
-emits one kind of alternative -- so that line is covered without being
-isolated, as is the in_alt recursion guard, which wants nested
-alternatives.
+Commit 2f2600decb30 ("objtool/klp: fix data alignment in __clone_symbol()")
+cannot be reverted to check this -- the revert is a no-op against the
+current code, which has been rewritten since.  Verified instead by forcing
+the clone's alignment to 1, which the test reports as "alignment 1,
+expected 64".
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../objtool/tests/x86/fixtures/checksum_alt.c | 60 +++++++++++++++++++
- tools/objtool/tests/x86/test-checksum-alt.sh  | 45 ++++++++++++++
- 2 files changed, 105 insertions(+)
- create mode 100644 tools/objtool/tests/x86/fixtures/checksum_alt.c
- create mode 100755 tools/objtool/tests/x86/test-checksum-alt.sh
+ .../tests/generic/fixtures/data_alignment.c   | 29 ++++++++++++++
+ .../tests/generic/test-data-alignment.sh      | 40 +++++++++++++++++++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/data_alignment.c
+ create mode 100755 tools/objtool/tests/generic/test-data-alignment.sh
 
-diff --git a/tools/objtool/tests/x86/fixtures/checksum_alt.c b/tools/objtool/tests/x86/fixtures/checksum_alt.c
+diff --git a/tools/objtool/tests/generic/fixtures/data_alignment.c b/tools/objtool/tests/generic/fixtures/data_alignment.c
 new file mode 100644
-index 000000000000..47ff93bc7755
+index 000000000000..900253dfb2cb
 --- /dev/null
-+++ b/tools/objtool/tests/x86/fixtures/checksum_alt.c
-@@ -0,0 +1,60 @@
++++ b/tools/objtool/tests/generic/fixtures/data_alignment.c
+@@ -0,0 +1,29 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * An x86 alternative whose replacement code is part of the patched function's
-+ * checksum.
++ * Data with an alignment stricter than its size.
 + *
-+ * checksum_update_insn() walks insn->alts after hashing the instruction
-+ * itself, hashing the alternative's type and, when the replacement forms a
-+ * group, its feature number and every instruction in it.  So editing only the
-+ * replacement -- code the CPU may or may not ever run -- has to move the
-+ * function's checksum.
++ * A cloned data section has to keep its sh_addralign.  The kernel has plenty
++ * of data whose alignment is a correctness property rather than an
++ * optimisation -- per-CPU variables, anything touched by an aligned SSE move,
++ * cacheline-aligned locks -- and a clone that lands under-aligned faults or
++ * silently shares a cacheline it was written to avoid.
 + *
-+ * It is reached through objtool's own alternative handling, so the object has
-+ * to go through the check pass first: insn->alts is built there, not by the
-+ * compiler.
-+ *
-+ * struct alt_instr is written out by hand as in empty_alternative.c: s32
-+ * instr_offset, s32 repl_offset, u32 ft_flags, u8 instrlen, u8 replacementlen.
-+ *
-+ * Variants, applied to the patched build only:
-+ *
-+ *   ALT_REPL     the replacement instruction changes; the original does not
-+ *   ALT_FEATURE  the feature number changes; no code changes at all
++ * The object is new in the patched build, so klp diff has to clone it rather
++ * than reference the kernel's copy.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+#if defined(PATCHED) && defined(ALT_REPL)
-+#define REPL_INSN "	xchg %ax, %ax\n\t"
-+#else
-+#define REPL_INSN "	nop\n\t"
-+#endif
-+
-+#if defined(PATCHED) && defined(ALT_FEATURE)
-+#define FEATURE "7"
-+#else
-+#define FEATURE "3"
++#ifdef PATCHED
++int aligned_data[2] __attribute__((aligned(64))) = { 1, 2 };
 +#endif
 +
 +int target(int x)
 +{
-+	asm volatile(
-+		"661:	nop\n\t"
-+		"662:\n\t"
-+		".pushsection .altinstr_replacement, \"ax\"\n\t"
-+		".globl target_repl\n\t"
-+		"target_repl:\n\t"
-+		REPL_INSN
-+		"target_repl_end:\n\t"
-+		".popsection\n\t"
-+		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
-+		".long 661b - .\n\t"
-+		".long target_repl - .\n\t"
-+		".long " FEATURE "\n\t"
-+		".byte 662b - 661b\n\t"
-+		".byte target_repl_end - target_repl\n\t"
-+		".popsection\n\t");
-+
-+	return x + 1;
++#ifdef PATCHED
++	return x + aligned_data[0];
++#else
++	return x;
++#endif
 +}
-diff --git a/tools/objtool/tests/x86/test-checksum-alt.sh b/tools/objtool/tests/x86/test-checksum-alt.sh
+diff --git a/tools/objtool/tests/generic/test-data-alignment.sh b/tools/objtool/tests/generic/test-data-alignment.sh
 new file mode 100755
-index 000000000000..74ebfca2b3ff
+index 000000000000..8e389544a3b1
 --- /dev/null
-+++ b/tools/objtool/tests/x86/test-checksum-alt.sh
-@@ -0,0 +1,45 @@
++++ b/tools/objtool/tests/generic/test-data-alignment.sh
+@@ -0,0 +1,40 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# An alternative's replacement code counts towards the checksum of the function
-+# it belongs to.
++# A cloned data section keeps its alignment.
 +#
-+# checksum_update_insn() walks insn->alts after hashing the instruction itself:
-+# the alternative's type, and where the replacement forms a group, its feature
-+# number and every instruction in it.  So a patch which edits only the
-+# replacement -- code that runs on some CPUs and not others -- still has to
-+# move the function's checksum.
++# Plenty of kernel data is aligned for correctness rather than speed: per-CPU
++# variables, anything touched by an aligned vector move, structures padded to
++# own a cacheline. A clone that lands under-aligned either faults on first use
++# or silently shares a line it was laid out to avoid, and neither shows up
++# until the patch is loaded on hardware that cares.
 +#
-+# If it does not, klp diff decides the function is unchanged and leaves it out.
-+# The patch then ships the old replacement, and the bug is fixed only on
-+# machines whose CPU takes the other arm.  Which machines those are depends on
-+# the feature bit, so the failure looks like a machine-specific bug rather than
-+# a missing patch.
++# Fixed by 2f2600decb30 ("objtool/klp: Fix alignment of cloned data
++# sections").
 +#
-+# insn->alts exists only after objtool's check pass, so the pair goes through
-+# that first -- the compiler emits none of this structure itself.
-+#
-+# Covers the same ground as corpus/x86_64/checksum-alt-group,
-+# checksum-alt-no-group and checksum-alt-recursion-guard in Joe Lawrence's
-+# klp-build unit test corpus.
++# Covers the same ground as corpus/x86_64/cloned-data-alignment in Joe
++# Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
++build_pair data_alignment.c
 +
-+check()
-+{
-+	build_pair checksum_alt.c "-D$1"
-+	assert_input_section .altinstructions
-+	run_objtool_check --mcount
-+	run_checksum
++# The premise: the compiler really did over-align it, and the object is new in
++# the patch so it has to be cloned rather than referenced.
++want="$(in_sections patched.o | sed 's/^ *\[[ 0-9]*\] *//' |
++	awk '$1 == ".data.aligned_data" { print $NF }')"
++[ "$want" = 64 ] ||
++	probe_skip "compiler gave .data.aligned_data alignment '$want', not 64"
++has_input_section orig.o .data.aligned_data &&
++	fail "fixture put aligned_data in the original; nothing to clone"
 +
-+	assert_checksum_differs target
-+}
++run_diff
++assert_section .data.aligned_data
 +
-+# The replacement instruction itself.
-+check ALT_REPL
-+# The feature number, with no instruction anywhere changed.
-+check ALT_FEATURE
++got="$(out_sections | sed 's/^ *\[[ 0-9]*\] *//' |
++       awk '$1 == ".data.aligned_data" { print $NF }')"
++[ "$got" = "$want" ] ||
++	fail "cloned .data.aligned_data has alignment $got, expected $want"
 +
-+pass "alternative replacement code counts towards the checksum"
++pass "cloned data section keeps its alignment"
 -- 
 2.53.0-Meta
 
