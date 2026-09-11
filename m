@@ -1,112 +1,363 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7694D49B5D9
-	for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 21:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 032AD4BB282
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789077598; cv=none; b=TjebQp3CTDYh7xyRLhJwa+YhJbnVEwExCQ0uR1WOsvGHmNv4yPiCsohIbQyb3X7CToHxdh3M7Ygt28qKE+q6cr7+01OQGWXtqI2HIreZU2MiGxl1w75j0ccZ6GuA6M8gMcytYdsh5OhbMrFFCqqPayF2oBjpMncXnS7YfsXWm/o=
+	t=1789152225; cv=none; b=AVMHm6E9mTJ2fLjX0Equ1imlOvlWNgGEoYGTygxhMZT4bNIApTxh7oRYXEgw1QwVApXWekalxpqLaAsbd2/9Q98dSYzDaAu9kxhz7YvfHNaAliI9nJJdoxlCbQe9ErMfcjdVOzQuglV9Vzk9hmy19rpuNB8VqEvmbrwMML6piKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789077598; c=relaxed/simple;
-	bh=dA1s9egCac7HuWOZ0ym0DPuEA647TpSZpBFicau1Go8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P8+pm3KeQv/fHvcORUdvPQwY9BW7lq1bB6oBSVpm6+8FF1JsD376IZmOek1cg+ZPfGx4iDVapHYkuk1yIG4PvMGj7Hhl+BYWdx7Ox5juRXXQ/VH+ky9bs9F30L20Q5P/sXEX17hb70MeEbCwVfBEqBZ3OhLj3j4vrSxLtTWLfOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZhcaXcOu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789152225; c=relaxed/simple;
+	bh=KWXF7TYnQs4MtXB7bco4FC3pLPX4dHsh9/8bo6gDxgk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RFr6eV5GvIhfF4tGPpf/YPHtP76RAk0V7GFqtvJc2w0seS6bCgBhQV6hd3Vdj2dnoZUAyP8rQvAcUYsAH9cQCiZ0dUjw9k45Zn3l2xTvj73T6vmp8rKCB9guNubUep8/Pyx6cSlOj6Tpc+mWuaIwQjBA+qg+lS/B5YC8YrIfQ0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etD27rEh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZhcaXcOu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070B31F000FF
-	for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 21:59:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etD27rEh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84F81F000FF;
+	Fri, 11 Sep 2026 18:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789077596;
-	bh=tC8Aswk4UztqImAdEWDmAGfFDgdlcEaDTEg2MB6bjxY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=ZhcaXcOucup3kndHjSS19b4EitdTp1vx+BtwiNT/lU63qgiJGPXGjZM6QVQw1KSQr
-	 zLwDLLDZ+WKHl1tILmRSO4/kBd3kHHHOaEYO6TPmsauQWHFP7ftH8OyYLR3XGjTEXG
-	 btaQeSFRYfNJylq/B/V0Y9PFTNC7FcvcqYKlVyRnS0QpN+84Ghs+lLvMxR7rtKiebR
-	 eJn8pvV7jw1v96LgXB7YH3Mscnq8PczrJgMNTs3YJNxZiSYHGIkX9lVpUKcfU2sqbU
-	 kxeDthKTyM0ywjFDFTYMCMSRa7hrzO/y1ihmAkhSiyuhQN1gt4eGBN7Ia8rAz+XiTM
-	 fg5SICBFq4qsA==
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-9399a1c21c1so17977585a.3
-        for <live-patching@vger.kernel.org>; Thu, 10 Sep 2026 14:59:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByZ+nyLmSxvnENtVpaXkmLDHnzsQV9wBHYg3NklO9RBX5tVip6Q6rYEO8iINlWx5AO9BZc+GW8S4csn2+Nw@vger.kernel.org
-X-Gm-Message-State: AFuF++nF4YKLoGHFA+MHRdw+oAZOKJCVXS5ihaKSMlZkYSPDMxOxjA+u
-	sYM0pGESdK4SsqNg3+61HMsmTAadEOb9rP+af7uWwKl9AjcRYLoKBCXuA+JNBzXfg7fGu4cxY4p
-	q1N1uBOwxDLW+Gtvh+FQa3zuq1EIRMf0=
-X-Received: by 2002:a05:620a:171e:b0:939:35e5:94ba with SMTP id
- af79cd13be357-939ea105fafmr131046385a.6.1789077595344; Thu, 10 Sep 2026
- 14:59:55 -0700 (PDT)
+	s=k20260515; t=1789152218;
+	bh=57If+344rOghLZ+aLXtJvYqE8dBLN9s87nFAEm6K5/I=;
+	h=From:To:Cc:Subject:Date;
+	b=etD27rEhhET006Lv2ugUAs+y2/1Grf3JQK7Rfsh0DnPJI8Jz4eYyeUGRUOMol7Lyx
+	 Iit7std4AVAYw0zwkzQVM9Iuc/N1k4tpLZuOeYaeP6lgDUyYzs2tduQMoV6kE2nAOJ
+	 vyjn8RGScdDKodICDeTbS/97CMQF94SItKeUhzsnUviv9tBZzWZ8vs/xQLkO5l9hRb
+	 2qpjz+D8mjI1hhC2R8xClokjzgo3Vp/paz+o74PuABRfTS2/zQJFPVdydk6A1Gw1Uw
+	 54/kt54oo2JQoL/570oCHSh1blIaQMbhnGDPpX1uTIuSUodSyhyoWwvOfsyWz5iLhQ
+	 SCwV3ldjJE6Pw==
+From: Song Liu <song@kernel.org>
+To: live-patching@vger.kernel.org
+Cc: jpoimboe@kernel.org,
+	peterz@infradead.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	puranjay@kernel.org,
+	kernel-team@meta.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH 00/58] Unit test framework for klp-build toolchain
+Date: Fri, 11 Sep 2026 11:42:07 -0700
+Message-ID: <20260911184305.1457308-1-song@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260825114641.80452-1-laoar.shao@gmail.com> <20260825114641.80452-4-laoar.shao@gmail.com>
- <apfQ6c_3giN615Ll@pathway.suse.cz> <CALOAHbAb3Hiv5HZ0b0r_GjqCpZRx53Yq-NJo=eo7PxE_tD9asQ@mail.gmail.com>
- <apk9f_LsGRYHzN0Z@pathway.suse.cz> <alpine.LSU.2.21.2609091424420.10918@pobox.suse.cz>
- <CAPhsuW6OVt8oYr3YW9MbapXi6Z97CF-7J0fHXakKYkvvOp6A_Q@mail.gmail.com> <alpine.LSU.2.21.2609101029080.608@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2609101029080.608@pobox.suse.cz>
-From: Song Liu <song@kernel.org>
-Date: Thu, 10 Sep 2026 14:59:43 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4hEe9aj=Fgcr85x3yi4Ob8ohcc2bRkRSYPtoy6+D4F9g@mail.gmail.com>
-X-Gm-Features: AcwNN1WNXW6LXQzQTdvOqSk_dCYtMJTjoHIWVKMT3XZj9WKayABgYknzC4hY0DQ
-Message-ID: <CAPhsuW4hEe9aj=Fgcr85x3yi4Ob8ohcc2bRkRSYPtoy6+D4F9g@mail.gmail.com>
-Subject: Re: Replace rules: was: Re: [PATCH v7 for-next 3/8] livepatch:
- Implement replace set for scoped atomic replace
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Petr Mladek <pmladek@suse.com>, Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org, 
-	jikos@kernel.org, joe.lawrence@redhat.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 10, 2026 at 1:31=E2=80=AFAM Miroslav Benes <mbenes@suse.cz> wro=
-te:
->
-> On Wed, 9 Sep 2026, Song Liu wrote:
->
-> > On Wed, Sep 9, 2026 at 5:32=E2=80=AFAM Miroslav Benes <mbenes@suse.cz> =
-wrote:
-> > [...]
-> > > >
-> > > > It might be useful for OS providers who want to make sure that thei=
-r
-> > > > kernel critical fixes can be installed on the user system. Otherwis=
-e,
-> > > > customers might complain that some update failed, ...
-> > > >
-> > > > Of course, it has a drawback that any livepatch with ``prov ides=3D=
- 0``
-> > > > would wipe any 3rd party livepatches, even when they are against 3r=
-d
-> > > > party modules.
-> > >
-> > > My intention was not to regress and disallow a use case which is curr=
-ently
-> > > supported. That is to replace everything applied no matter what.
-> >
-> > I am curious about this use case. Do we really have users who:
-> >   - Load patch A, with replace=3Dfalse;
-> >   - Load patch B, with replace=3Dfalse;
-> >   - Load patch C, with replace=3Dtrue, replacing both A and B?
-> >
-> > I think this is not good practice anyway. Instead, users would either u=
-se
-> > a bunch of patches with replace=3Dfalse; or only load one patch at a ti=
-me,
-> > and keep replace=3Dtrue for all of them.
-> >
-> > Did I miss any reasonable users or use cases here?
->
-> I am not aware of anyone specific but the scenario above does not look to=
-o
-> crazy to me. And the experience taught me that if something is possible,
-> there is definitely someone out there doing it. However, as I said, I
-> think the current implementation of the scoped replace should be enough
-> for everybody. If not, we will learn about the use case in a couple of
-> years.
+This is the unit test part of a test framework for the klp-build toolchain.
+The other part of the test framework will be some integration tests,
+similar to an earlier propose [1].
 
-Agreed that current version is capable to cover all these cases. Let's
-ship it. :)
+This is joint work by Puranjay Mohan, Joe Lawrence, and myself (Song Liu).
+Note that, while only two patches here are under Joe's authorship, his
+contribution to this set is much bigger than the number represents. A lot
+of these tests are based on Joe's earlier work in this area [2].
+
+As the Assisted-by tags show, a lot of the work here is done with assists
+of AI. We actually designed the framework to so that we expect AI to write
+these tests in the future. AI also contributed in the design of the test
+framework. However, we (human) carefully reviewed the test framework. Also,
+this cover letter is 100% written by a human being (Song Liu).
+
+Here are some key design choices we made for this unit tests framework:
+
+1. We do not need different unit test here for different kernel CONFIG_*
+   options. Instead, the tests cover different CONFIG_* options by passing
+   different arguments to the compiler and objtool.
+
+2. The test is NOT designed to be backward compatible. Similar to objtool
+   itself, the unit tests are delivered with the kernel tree. The user of
+   these tests should test the objtool with the unit tests in the same
+   branch. Once this test framework lands, future changes and fixes to the
+   objtool klp command should land with unit tests that cover the changes.
+
+3. It is possible to run these tests on a different architecture with
+   proper cross compilers. However, for automated CI, we are planning to
+   focus on native tests. Please refer to "Future work" section below for
+   more information about the CI.
+
+4. AI will help write tests. We found AI is very cable to write good tests.
+   tools/objtool/Documentation/klp-write-tests.txt is added for AI to read,
+   so that AI can write tests for this test framework.
+
+Future work
+1. The integration test simiar to [1]. Unlike the unit tests, the
+   integration tests will need separate runs to cover different kernel
+   CONFIG_* combinations.
+
+2. CI. The plan is to build a lore => patchwork => GitHub CI framework.
+   This is the model used by subsystems such as netdev, bpf, and risc-v.
+   We also have some ideas on "who will pay for the CI" issue, but I would
+   rather not promise anything yet.
+
+3. More tests.
 
 Thanks,
 Song
+
+
+[1] https://lore.kernel.org/live-patching/20260226005436.379303-9-song@kernel.org/
+[2] https://github.com/joe-lawrence/klp-build-unit-tests
+
+
+Joe Lawrence (2):
+  objtool: Keep failing test workdirs by default
+  objtool: Forward toolchain variables to the klp test runner
+
+Puranjay Mohan (16):
+  objtool: Add test harness for the klp subcommands
+  objtool/klp: Add test for rejecting changed data
+  objtool/klp: Add test for newly introduced data
+  objtool/klp: Add test for newly introduced functions
+  objtool/klp: Add test for static local correlation
+  objtool/klp: Add test for cold function halves
+  objtool/klp: Add test for special section extraction
+  objtool/klp: Add test for selective special section extraction
+  objtool/klp: Add test for jump table key relocations
+  objtool/klp: Add test for rejecting module-owned static branch keys
+  objtool/klp: Add test for rejecting module-owned static call keys
+  objtool/klp: Add test for symids in discarded sections
+  objtool/klp: Add test for rejecting references to init code/data
+  objtool/klp: Add test for correlation across ThinLTO name mangling
+  objtool/klp: Add test for objects without .modinfo
+  objtool/klp: Add test for unchecksummed input
+
+Song Liu (40):
+  objtool/klp: Check the klp test environment once, before any test
+  objtool/klp: Group the klp tests by architecture
+  objtool/klp: Classify klp test outcomes
+  objtool/klp: Build klp test fixtures through the harness
+  objtool/klp: Grow the klp test harness vocabulary
+  objtool/klp: Give each run one working directory, one per test inside
+    it
+  objtool/klp: Run the klp tests under set -u
+  objtool/klp: Document the klp test harness
+  objtool/klp: Add klp diff and post-link regression tests
+  objtool/klp: Add test for klp reloc section naming in module objects
+  objtool/klp: Add test for vmlinux relocs in a patched module
+  objtool/klp: Add test for Module.symvers path normalization
+  objtool/klp: Add test for the contents of the klp_funcs list
+  objtool/klp: Add test for EXPORT_SYMBOL_FOR_MODULES references
+  objtool/klp: Add test for new references to exported symbols
+  objtool/klp: Add test for empty x86 alternative replacements
+  objtool/klp: Add test for recorded checksum values
+  objtool/klp: Add test for position-independent checksums
+  objtool/klp: Add test for sympos in module objects
+  objtool/klp: Add test for sympos resolved against a linked vmlinux
+  objtool/klp: Add test for static locals which must not be correlated
+  objtool/klp: Add test for __bug_table, __ex_table and __mcount_loc
+    extraction
+  objtool/klp: Add test for kCFI prefix symbols and traps
+  objtool/klp: Add test for symbols whose linkage the patch changes
+  objtool/klp: Test rejection of a file-local static branch key
+  objtool/klp: Test a hand-built livepatch module's static call keys
+  objtool/klp: Test text annotations on alternative replacements
+  objtool/klp: Add test for data object checksums
+  objtool/klp: Add test for symbols with no checksum entry of their own
+  objtool/klp: Add test for a static branch introduced by the patch
+  objtool/klp: Add test for tracepoint and pr_debug static branch keys
+  objtool/klp: Add test for a static call introduced by the patch
+  objtool/klp: Add test for instruction operand checksums
+  objtool/klp: Add test for alternative replacement code in checksums
+  objtool/klp: Add test for the alignment of cloned data sections
+  objtool/klp: Add test for a patch which strips a data annotation
+  objtool/klp: Add test for absolute and __ADDRESSABLE symbols
+  objtool/klp: Add test for UBSAN metadata in an unchanged function
+  objtool/klp: Add test for Clang switch jump tables
+  objtool/klp: Add test for ThinLTO symbols sharing a demangled name
+
+ .../objtool/Documentation/klp-test-design.txt | 276 ++++++
+ .../objtool/Documentation/klp-write-tests.txt | 260 ++++++
+ tools/objtool/Makefile                        |   7 +-
+ .../generic/fixtures/abs_and_addressable.c    |  44 +
+ tools/objtool/tests/generic/fixtures/basic.c  |  20 +
+ .../tests/generic/fixtures/changed_data.c     |  16 +
+ .../tests/generic/fixtures/checksum_data.c    | 116 +++
+ .../tests/generic/fixtures/checksum_insn.c    |  78 ++
+ .../generic/fixtures/checksum_position.c      |  45 +
+ .../tests/generic/fixtures/checksum_skip.c    |  47 +
+ .../tests/generic/fixtures/cold_function.c    |  21 +
+ .../tests/generic/fixtures/cross_module.c     |  25 +
+ .../tests/generic/fixtures/data_alignment.c   |  29 +
+ .../tests/generic/fixtures/function_removal.c |  25 +
+ .../tests/generic/fixtures/init_reference.c   |  16 +
+ .../tests/generic/fixtures/jump_label.c       |  76 ++
+ .../tests/generic/fixtures/klp_funcs.c        |  31 +
+ .../tests/generic/fixtures/local_to_global.c  |  34 +
+ .../objtool/tests/generic/fixtures/new_data.c |  18 +
+ .../tests/generic/fixtures/new_export_ref.c   |  20 +
+ .../tests/generic/fixtures/new_function.c     |  21 +
+ .../tests/generic/fixtures/no_modinfo.c       |  11 +
+ .../tests/generic/fixtures/special_section.c  |  24 +
+ .../generic/fixtures/special_section_shared.c |  31 +
+ .../tests/generic/fixtures/static_call.c      |  53 ++
+ .../tests/generic/fixtures/static_local.c     |  17 +
+ .../fixtures/static_local_uncorrelated.c      |  41 +
+ .../tests/generic/fixtures/switch_rodata.c    |  31 +
+ .../tests/generic/fixtures/symid_discarded.c  |  25 +
+ .../tests/generic/fixtures/sympos_dup.c       |  32 +
+ .../tests/generic/fixtures/sympos_vmlinux.c   |  40 +
+ .../generic/fixtures/thinlto_ambiguity.c      |  55 ++
+ .../tests/generic/fixtures/thinlto_local.c    |  39 +
+ .../tests/generic/fixtures/ubsan_noise.c      |  49 +
+ .../tests/generic/test-abs-and-addressable.sh |  50 ++
+ tools/objtool/tests/generic/test-basic.sh     |  17 +
+ .../tests/generic/test-changed-data.sh        |  18 +
+ .../tests/generic/test-checksum-data.sh       |  61 ++
+ .../tests/generic/test-checksum-debug.sh      |  49 +
+ .../tests/generic/test-checksum-insn.sh       |  49 +
+ .../tests/generic/test-checksum-position.sh   |  35 +
+ .../tests/generic/test-checksum-skip.sh       |  74 ++
+ .../tests/generic/test-checksum-value.sh      |  37 +
+ .../tests/generic/test-cold-function.sh       |  30 +
+ .../tests/generic/test-data-alignment.sh      |  40 +
+ .../generic/test-export-symbol-for-modules.sh |  39 +
+ .../tests/generic/test-function-removal.sh    |  34 +
+ .../tests/generic/test-init-reference.sh      |  16 +
+ .../generic/test-jump-label-exempt-keys.sh    |  51 ++
+ .../tests/generic/test-jump-label-key.sh      |  44 +
+ .../generic/test-jump-label-module-key.sh     |  22 +
+ .../test-jump-label-module-static-key.sh      |  45 +
+ .../tests/generic/test-jump-label-new-key.sh  |  51 ++
+ .../tests/generic/test-klp-funcs-content.sh   |  44 +
+ .../generic/test-local-to-global-flip.sh      |  50 ++
+ .../tests/generic/test-local-vs-export.sh     |  32 +
+ .../tests/generic/test-missing-checksum.sh    |  18 +
+ .../tests/generic/test-missing-modinfo.sh     |  16 +
+ .../tests/generic/test-modname-normalize.sh   |  26 +
+ .../tests/generic/test-module-object.sh       |  31 +
+ .../generic/test-module-vmlinux-reloc.sh      |  40 +
+ tools/objtool/tests/generic/test-new-data.sh  |  17 +
+ .../tests/generic/test-new-export-ref.sh      |  34 +
+ .../tests/generic/test-new-function.sh        |  17 +
+ tools/objtool/tests/generic/test-post-link.sh |  39 +
+ .../generic/test-special-section-shared.sh    |  26 +
+ .../tests/generic/test-special-section.sh     |  20 +
+ .../test-static-call-annotate-stripped.sh     |  41 +
+ .../generic/test-static-call-module-key.sh    |  25 +
+ .../tests/generic/test-static-call-new.sh     |  45 +
+ .../generic/test-static-local-uncorrelated.sh |  40 +
+ .../tests/generic/test-static-local.sh        |  24 +
+ .../tests/generic/test-switch-rodata.sh       |  53 ++
+ .../tests/generic/test-symid-discarded.sh     |  44 +
+ .../tests/generic/test-sympos-vmlinux.sh      |  57 ++
+ tools/objtool/tests/generic/test-sympos.sh    |  51 ++
+ .../tests/generic/test-symvers-parse-error.sh |  23 +
+ .../tests/generic/test-thinlto-ambiguity.sh   |  77 ++
+ .../tests/generic/test-thinlto-local.sh       |  48 +
+ .../objtool/tests/generic/test-ubsan-noise.sh |  48 +
+ tools/objtool/tests/lib.sh                    | 834 ++++++++++++++++++
+ tools/objtool/tests/run-tests.sh              | 216 +++++
+ .../objtool/tests/x86/fixtures/alt_annotate.c |  57 ++
+ .../objtool/tests/x86/fixtures/checksum_alt.c |  60 ++
+ .../tests/x86/fixtures/empty_alternative.c    |  77 ++
+ tools/objtool/tests/x86/fixtures/kcfi.c       |  39 +
+ .../tests/x86/fixtures/special_sections.c     |  57 ++
+ .../tests/x86/fixtures/static_call_no_key.c   |  32 +
+ .../objtool/tests/x86/test-alt-annotation.sh  |  38 +
+ tools/objtool/tests/x86/test-checksum-alt.sh  |  45 +
+ .../tests/x86/test-empty-alternative.sh       |  31 +
+ tools/objtool/tests/x86/test-kcfi.sh          |  39 +
+ .../tests/x86/test-manual-klp-static-call.sh  |  40 +
+ .../tests/x86/test-special-sections.sh        |  42 +
+ 94 files changed, 5027 insertions(+), 1 deletion(-)
+ create mode 100644 tools/objtool/Documentation/klp-test-design.txt
+ create mode 100644 tools/objtool/Documentation/klp-write-tests.txt
+ create mode 100644 tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/basic.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/changed_data.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/checksum_data.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/checksum_insn.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/checksum_position.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/checksum_skip.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/cold_function.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/cross_module.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/data_alignment.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/function_removal.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/init_reference.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/jump_label.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/klp_funcs.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/local_to_global.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/new_data.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/new_export_ref.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/new_function.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/no_modinfo.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/special_section.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/special_section_shared.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/static_call.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/static_local.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/switch_rodata.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/symid_discarded.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/sympos_dup.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/thinlto_ambiguity.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/thinlto_local.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/ubsan_noise.c
+ create mode 100755 tools/objtool/tests/generic/test-abs-and-addressable.sh
+ create mode 100755 tools/objtool/tests/generic/test-basic.sh
+ create mode 100755 tools/objtool/tests/generic/test-changed-data.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-data.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-debug.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-insn.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-position.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-skip.sh
+ create mode 100755 tools/objtool/tests/generic/test-checksum-value.sh
+ create mode 100755 tools/objtool/tests/generic/test-cold-function.sh
+ create mode 100755 tools/objtool/tests/generic/test-data-alignment.sh
+ create mode 100755 tools/objtool/tests/generic/test-export-symbol-for-modules.sh
+ create mode 100755 tools/objtool/tests/generic/test-function-removal.sh
+ create mode 100755 tools/objtool/tests/generic/test-init-reference.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-module-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-module-static-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-new-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-klp-funcs-content.sh
+ create mode 100755 tools/objtool/tests/generic/test-local-to-global-flip.sh
+ create mode 100755 tools/objtool/tests/generic/test-local-vs-export.sh
+ create mode 100755 tools/objtool/tests/generic/test-missing-checksum.sh
+ create mode 100755 tools/objtool/tests/generic/test-missing-modinfo.sh
+ create mode 100755 tools/objtool/tests/generic/test-modname-normalize.sh
+ create mode 100755 tools/objtool/tests/generic/test-module-object.sh
+ create mode 100755 tools/objtool/tests/generic/test-module-vmlinux-reloc.sh
+ create mode 100755 tools/objtool/tests/generic/test-new-data.sh
+ create mode 100755 tools/objtool/tests/generic/test-new-export-ref.sh
+ create mode 100755 tools/objtool/tests/generic/test-new-function.sh
+ create mode 100755 tools/objtool/tests/generic/test-post-link.sh
+ create mode 100755 tools/objtool/tests/generic/test-special-section-shared.sh
+ create mode 100755 tools/objtool/tests/generic/test-special-section.sh
+ create mode 100755 tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
+ create mode 100755 tools/objtool/tests/generic/test-static-call-module-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-static-call-new.sh
+ create mode 100755 tools/objtool/tests/generic/test-static-local-uncorrelated.sh
+ create mode 100755 tools/objtool/tests/generic/test-static-local.sh
+ create mode 100755 tools/objtool/tests/generic/test-switch-rodata.sh
+ create mode 100755 tools/objtool/tests/generic/test-symid-discarded.sh
+ create mode 100755 tools/objtool/tests/generic/test-sympos-vmlinux.sh
+ create mode 100755 tools/objtool/tests/generic/test-sympos.sh
+ create mode 100755 tools/objtool/tests/generic/test-symvers-parse-error.sh
+ create mode 100755 tools/objtool/tests/generic/test-thinlto-ambiguity.sh
+ create mode 100755 tools/objtool/tests/generic/test-thinlto-local.sh
+ create mode 100755 tools/objtool/tests/generic/test-ubsan-noise.sh
+ create mode 100644 tools/objtool/tests/lib.sh
+ create mode 100755 tools/objtool/tests/run-tests.sh
+ create mode 100644 tools/objtool/tests/x86/fixtures/alt_annotate.c
+ create mode 100644 tools/objtool/tests/x86/fixtures/checksum_alt.c
+ create mode 100644 tools/objtool/tests/x86/fixtures/empty_alternative.c
+ create mode 100644 tools/objtool/tests/x86/fixtures/kcfi.c
+ create mode 100644 tools/objtool/tests/x86/fixtures/special_sections.c
+ create mode 100644 tools/objtool/tests/x86/fixtures/static_call_no_key.c
+ create mode 100755 tools/objtool/tests/x86/test-alt-annotation.sh
+ create mode 100755 tools/objtool/tests/x86/test-checksum-alt.sh
+ create mode 100755 tools/objtool/tests/x86/test-empty-alternative.sh
+ create mode 100755 tools/objtool/tests/x86/test-kcfi.sh
+ create mode 100755 tools/objtool/tests/x86/test-manual-klp-static-call.sh
+ create mode 100755 tools/objtool/tests/x86/test-special-sections.sh
+
+--
+2.53.0-Meta
