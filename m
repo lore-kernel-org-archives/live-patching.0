@@ -1,149 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C683F1075
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 19:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726D4414416
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 19:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789154309; cv=none; b=uMlap2n9bzO42GafguyR+69AZWtkHTj+ResnfprNOTRBJgCGZP6lDvWV712fhuhNKYhGG1AbpunO5wyKgXD5p1zepFjGTkBTbQKV92TnZJhtUYstuwMVL6ugKCyD/HNfanProhSftmgMCidqA0+wBVzbTdTw8gdGGa46tVfWHTE=
+	t=1789154465; cv=none; b=CmmCg6XyJaQDU2EVPh/GdFLByrKGeZi6NeeNiB5Vm/8hUm6vJ9A4Wu/UtKv1GfqTxcsoehnXSayLiGliFY6NoXvKhDZ61k/DiCkKwNU//WqMlnf7tp+zeashQsA/k1SBsBJOaZiQdPldZ09OTjKC1MOefLLCz0cg+ytWQk4py2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789154309; c=relaxed/simple;
-	bh=RKx0DXS42tWX5gA4nxN3zuTQ5Bmf4m+ba8Tn7XcabCY=;
+	s=arc-20240116; t=1789154465; c=relaxed/simple;
+	bh=fnYZZ+uJheCTEC/e8juT4Q1e5IkAYNUvE4jhrI1u+eY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=p5soZUn0myhbL9+WnQEQR149gdaNEzaeOmES4Et3INEbwZL42rUjJBQ+UZly+x3KiVsL0KcbELpCBJJDw2pN1mRpffQcmGYkar7zqe/LGNqSdfECtkrUYs1jgcODVOpygfZr/rJsXg0CwfIqzC75OlSiivUEkSm6ehvGP2MZUAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKPu8fjK; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=RvUKqmsKaUsn/3txhEjNn3Wq+iLAcdDsVmR0YTWFr1CsnkTXAwYiKTQsK2CV/NlcWmMznkFA1J3hxcTbY2Fbc1iA2Fok0w9G/mv6vJjk2+rSft6XVGKNoZ/qG2ro+qvdqCwNJDg9mP8U7S1qKoPsiUsLN62SLDWD8zJMsvAd2I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EYoqrRrJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKPu8fjK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89AB61F000FF;
-	Fri, 11 Sep 2026 19:18:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EYoqrRrJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73431F000FF;
+	Fri, 11 Sep 2026 19:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789154301;
-	bh=Uh+/kqnyS8vHLeo30AzH5wkr5wBz+vUiYl3/giXIORE=;
+	s=k20260515; t=1789154452;
+	bh=m3B/+iqnkqRv5WsaO88VJ903dSXWuPxX/rFyZz1O6HY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nKPu8fjKJclMlInOnoqPayczTAdyILnC5jN0ZqdeMhMS2U5UtNo0rzFpSGexS5ZCS
-	 8750hJyPISD1Ekqstf1Y9mqBWOn4O4eg5gQqdtFwIWo8iuJHaeIgBW9KxqbXsVoMbW
-	 RaehwN83EjeFSp5lOgGXvADEly3kl/HodNImjfmg7TNDofkgHsKopqwccGljD0E8q8
-	 cdj1U01Yw6URQoubLU0GSH1i3hh7toT9Qpw0taC7Uk2Kg0Dpu8M8WVpwpj2WUoegkg
-	 T3eBDkf/Kfyz+P4Nh/2JqUHGwVnYwpvCtyeWoa6dSJJxhj3P+p2u8vz9o2aImVvhC/
-	 u/KvysncffDaw==
+	b=EYoqrRrJV1vylT29DywRa8ubr+wGUSF3EfNkhkMDzUBZvilspk/bRDkJUsoIVaxxT
+	 SCw0SO+9ZzE++KV1jn5WyZeOQchf9V37m53py6I5nCLj2Cf+QmIEtwxvNiPzdiS1wo
+	 mErWN+V0k6WHO1wMkCMxM5ZiAt5usEOkd7g9RVHjQKbcsQwTJyteCk+IdxKiUudG+G
+	 C4u+7Nfpc7mg51HGx4L6pmbhXos43+IpEQEJZgMCML3yjt6aAYdRwHEdjI4T0n/qBs
+	 pc+0QEFIOauy8rCToJ5C+XsGV+V/FV1BbZzp0Mx2WHcePWBglo4Wfg72RHu6oGvg2m
+	 CgU7mwdwTOGxA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 23/58] objtool/klp: Add test for rejecting references to
- init code/data
+Subject: Re: [PATCH 40/58] objtool/klp: Add test for __bug_table, __ex_table
+ and __mcount_loc extraction
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: joe.lawrence@redhat.com, kernel-team@meta.com, puranjay@kernel.org, mbenes@suse.cz, jikos@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, pmladek@suse.com
-In-Reply-To: <20260911184305.1457308-24-song@kernel.org>
+Cc: joe.lawrence@redhat.com, kernel-team@meta.com, mbenes@suse.cz, pmladek@suse.com, peterz@infradead.org, jikos@kernel.org, puranjay@kernel.org, jpoimboe@kernel.org
+In-Reply-To: <20260911185031.1534046-15-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
- <20260911184305.1457308-24-song@kernel.org>
+ <20260911185031.1534046-1-song@kernel.org>
+ <20260911185031.1534046-15-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 19:18:20 +0000
-Message-Id: <20260911191820.89AB61F000FF@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 19:20:51 +0000
+Message-Id: <20260911192051.B73431F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-New issues:
-- [Medium] The test fixture `init_reference.c` defines `init_only` as a `st=
-atic` variable that is never written to, which allows the compiler to fold =
-its read into a constant. This prevents the expected relocation from being =
-emitted, breaking the test.
-
-Pre-existing issues:
-- [High] `objtool klp` fails to reject references to exported init symbols =
-because `klp_find_sympos()` (which enforces the init check) is completely b=
-ypassed for exports.
+- [Low] Test assertion for filtering unpatched functions evaluates vacuousl=
+y because the control function emits no special section entries.
 --
 
-commit 89481f125a4328fb499128f2365603f31f38782d
-Author: Puranjay Mohan <puranjay@kernel.org>
+commit 0a4615bf68e772413ad07a598da719d764e4517c
+Author: Song Liu <song@kernel.org>
 
-objtool/klp: Add test for rejecting references to init code/data
+objtool/klp: Add test for __bug_table, __ex_table and __mcount_loc extracti=
+on
+   =20
+This commit adds a test suite for extracting entries from three special
+sections using klp diff. The test verifies that patched functions retain
+their entries while unpatched functions do not.
 
-This commit introduces a new test fixture and script to ensure objtool's
-klp mode correctly rejects livepatches that reference init code or data.
-
-> diff --git a/tools/objtool/tests/generic/fixtures/init_reference.c b/tool=
-s/objtool/tests/generic/fixtures/init_reference.c
-> new file mode 100644
-> index 0000000000000..51b2a57dde14f
+> diff --git a/tools/objtool/tests/x86/fixtures/special_sections.c b/tools/=
+objtool/tests/x86/fixtures/special_sections.c
+> index 0000000000000..ad447e679bf82
 > --- /dev/null
-> +++ b/tools/objtool/tests/generic/fixtures/init_reference.c
-> @@ -0,0 +1,16 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Patched function referencing data in an .init section. */
-> +
+> +++ b/tools/objtool/tests/x86/fixtures/special_sections.c
+[ ... ]
 > +static const char __modinfo[]
 > +	__attribute__((section(".modinfo"), used, aligned(1))) =3D "\0name=3Dvm=
 linux";
 > +
-> +static int init_only __attribute__((section(".init.data"), used)) =3D 5;
-> +
-> +int target(int x)
+> +int other(int x)
 > +{
-> +#ifdef PATCHED
-> +	return x + init_only + 1;
-
-[Severity: Medium]
-Since init_only is declared static and is never written to, won't the
-compiler optimize its reads in target() via constant folding?
-
-If the compiler replaces the read with the literal 5, no relocation to
-the .init.data section will be emitted in the resulting object file. Does
-this missing relocation prevent objtool klp from detecting the reference,
-causing the test to silently fail its intended validation?
-
-> +#else
-> +	return x + init_only;
-> +#endif
+> +	return x + 9;
 > +}
-> diff --git a/tools/objtool/tests/generic/test-init-reference.sh b/tools/o=
-bjtool/tests/generic/test-init-reference.sh
-> new file mode 100755
-> index 0000000000000..8bf4b98bf4585
-> --- /dev/null
-> +++ b/tools/objtool/tests/generic/test-init-reference.sh
+
+[Severity: Low]
+Does this control function emit the necessary entries to properly test
+filtering?
+
+The other() function in tools/objtool/tests/x86/fixtures/special_sections.c
+is used as the unpatched control case, but it lacks the inline assembly to =
+emit
+a SPECIAL_SEC entry. Consequently, it generates no special section entries =
+in
+the input object file.
 
 [ ... ]
-
-> +setup
-> +build_pair init_reference.c
-> +run_diff 255
+> diff --git a/tools/objtool/tests/x86/test-special-sections.sh b/tools/obj=
+tool/tests/x86/test-special-sections.sh
+> index 0000000000000..8dfaa4fc9a360
+> --- /dev/null
+> +++ b/tools/objtool/tests/x86/test-special-sections.sh
+[ ... ]
+> +	# Extracted, and pointing at the function that was patched.
+> +	assert_section "$sec"
+> +	assert_reloc_sym "$sec" target
+> +	assert_patched target
 > +
-> +diff_log | grep -q "can't patch or reference init code/data" ||
+> +	# Nothing belonging to the function that was not.
+> +	assert_not_patched other
+> +	assert_no_reloc_sym "$sec" other
 
-[Severity: High]
-This is a pre-existing issue, but while reviewing this test, I noticed that
-the safety check it validates can be completely bypassed for exported symbo=
-ls.
+[Severity: Low]
+Will this negative test evaluate vacuously?
 
-In tools/objtool/klp-diff.c:clone_reloc_klp(), the branch handling exports
-bypasses klp_find_sympos():
+When running tools/objtool/tests/x86/test-special-sections.sh, the test
+executes assert_no_reloc_sym "$sec" other.
 
-        if (export) {
-                sym_modname =3D export->mod;
-                sym_orig_name =3D export->sym;
-                sympos =3D 0;
-        } else {
-                ...
-                sympos =3D klp_find_sympos(e->orig, patched_sym->twin);
-        }
+Because the unpatched function other() lacks special section entries in the
+input object file, there are no input relocations referencing other() for
+klp diff to filter out.
 
-Because is_init_sym() is only checked inside klp_find_sympos(), objtool klp
-will silently accept livepatches referencing exported .init code or data.
-
-Does this gap in validation allow a livepatch to execute freed memory or
-cause a use-after-free at runtime if it references an exported init symbol?
-
-> +	fail "expected rejection, got: $(diff_log | tail -1)"
-> +
-> +pass "reference to init data rejected"
+This assertion will pass even if the tool's filtering logic is broken and
+copies all entries to the output, missing the intended verification.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911185031.1534=
-046-1-song@kernel.org?part=3D23
+046-1-song@kernel.org?part=3D40
