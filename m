@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4128C4BD0EB
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EE64BE444
+	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 18:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152299; cv=none; b=O4hB2VSWq0HoGOXHuGI5C7kMyYtHj1xhjL+CkSSO++wOf9VqepkD7Iu1CbxjqwMonlKx8mC2MDEdtp4wsKS+l10oN/UiyS3Q0Ovn7F0+OKyo113wkX5nCaBOaIMCSjvxXvKo76JKzdeXNw7zcnxRqNvjnQjrjzitHNw4es3hwQ0=
+	t=1789152305; cv=none; b=pZuiZDYxmfufcQ/mhRLTVSB7LRi3Bv5J5p3EPC/WsXmpqLaByyu1BpqDG5BP/R5c26GWZAGRjwycDRMpk/yC/S02GMODGltC822T/sK9EdHqib7yaaoFDpPgP07duUFsyemGWf/B9o94bCptZC4mgUw4NIAOSl/O7PqE7Cto2l4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152299; c=relaxed/simple;
-	bh=6hioUzqtMI9Vfk9gwkqBKG+i+lTIAx2j0f049KbxUFk=;
+	s=arc-20240116; t=1789152305; c=relaxed/simple;
+	bh=oKIexGl6o6IfAOL4dK7/YEbBhpvrr9QsCqKSbZFVo2g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DE4RL7vzn+3sj+fPTnLJ5j1JBVGQe4/ydALnVmlMe9rH51RUdFzrCnjfgMSG5aAlBwtblTjLaFMnj3mV0WjxKzOr1KpfWkuqLahEMRisK3THyMnbklp97Y0/MnFSdOEk0Ce5vLKovSLcFt2ZRrcQeTWKqi63ER2FaS3xZy0kbD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctBljwA3; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=JN/+c5mt1qPgK8scJ7JF1lfzdU6oEkShUv97c1ZwQaIDaqDIESB9v6xKKICKaH2X9sttGLAc5nJHR4UBVhsxrKjvZruIkQz5vTJ1A8iH83y09fn0REUOjmEnBE1QPsHeA6IiKvGARCi1O+yuW7HZpBU3FoDRRDlsGOzn05wiD1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADYIEpyZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctBljwA3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED451F000FF;
-	Fri, 11 Sep 2026 18:44:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADYIEpyZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC4741F000FF;
+	Fri, 11 Sep 2026 18:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152297;
-	bh=aI0MVYF+v3t60CwIGIJD/9NLNoVLT6/wV9dtoglflZE=;
+	s=k20260515; t=1789152302;
+	bh=hNDwDggAztrl0d+M2aMDRMhoGtFrpvA2reEhUA87y1c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ctBljwA3lMXOKG1Q8ZJJXbYpY1ivOPB7j4JduG+WxPHA8551F6mkcbaPKJq1lxhSN
-	 jq/4dYvMSLNy2d0CV1Lj8p40btXKA8gEdk+5KLcRQPAKshLZ+OVBSyziKJ8pgARSOR
-	 svrVWNh8/se4pMIXrNoaDJ3uJOe5gcnQ6YEc78fs9eKjlME13p+nnB+ucULSIbQuYx
-	 9jcsan9qfXNcO1EktPGvR27m9X0JjoCuPcYBWUf8BVqa5MmkTeqxXP9byrinxKrTs9
-	 TURKVq0izea46dB49YTXu0Lc/ac6UBHKYAzFqQ2XkzvMGI0njqpMBRjUB9+qwJp6gE
-	 VwnQSWXuJdSOA==
+	b=ADYIEpyZsu0wv+kIBYIodEKJ3GgXc29WwxWO6PP0erFkquGrOfig0sh9NC1hmTAd4
+	 1O7mGyIFRUfJkRgb8y5KEyFvmqvCI1NY0WZxUMUv1La9Wj5Kl+S3JJPu7w6WnAfoRb
+	 qECQqDspqKRAbMGNeFo903ZCXCCXWiwjYXrn/NL++aDEyJiwpnypE/A5sytqbu03nD
+	 TMW9vP0khEe9HGNNM+iNEbHAJ7N0wD12Nw8FajEWn+dhMWaVRCY6TKxIKRqxPo6j5c
+	 jllg+ug2MXFZ91FYwNKEUXfCcY+dcyzoTgyb7F9kbv1cllfEEklhq6Cb12konWamUN
+	 m5Hg1uks3ZS+w==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 16/58] objtool/klp: Add test for cold function halves
-Date: Fri, 11 Sep 2026 11:42:23 -0700
-Message-ID: <20260911184305.1457308-17-song@kernel.org>
+Subject: [PATCH 17/58] objtool/klp: Add test for special section extraction
+Date: Fri, 11 Sep 2026 11:42:24 -0700
+Message-ID: <20260911184305.1457308-18-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260911184305.1457308-1-song@kernel.org>
 References: <20260911184305.1457308-1-song@kernel.org>
@@ -53,87 +53,86 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-The compiler splits unlikely code into a separate foo.cold symbol.  Both
-halves are the same function and both belong in the livepatch: carrying
-only the hot part leaves the cold path branching into unpatched code.
+create_fake_symbols() gives each special section entry a symbol so entries
+can be extracted individually.  Entries with ANNOTATE_DATA_SPECIAL are
+handled first; the rest have their boundaries derived from the entry or
+relocation size.
 
-GCC needs -freorder-blocks-and-partition to split reliably.  The flag is
-probed rather than assumed, and the test skips when the compiler declines
-to split at all.
+The second pass has to key off whether the first one created symbols, not
+off whether the section already has something at offset 0.  Clang puts an
+assembler-local label at the start of .kcfi_traps, and treating that as
+already handled means nothing is extracted: klp diff still reports the
+changed function and succeeds, but the special section is missing from the
+module.
+
+The fixture reproduces the shape without needing CFI or x86.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/cold_function.c    | 21 +++++++++++++
- .../tests/generic/test-cold-function.sh       | 30 +++++++++++++++++++
- 2 files changed, 51 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/cold_function.c
- create mode 100755 tools/objtool/tests/generic/test-cold-function.sh
+ .../tests/generic/fixtures/special_section.c  | 24 +++++++++++++++++++
+ .../tests/generic/test-special-section.sh     | 20 ++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/special_section.c
+ create mode 100755 tools/objtool/tests/generic/test-special-section.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/cold_function.c b/tools/objtool/tests/generic/fixtures/cold_function.c
+diff --git a/tools/objtool/tests/generic/fixtures/special_section.c b/tools/objtool/tests/generic/fixtures/special_section.c
 new file mode 100644
-index 000000000000..f6d410983ce2
+index 000000000000..d28c5541e337
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/cold_function.c
-@@ -0,0 +1,21 @@
++++ b/tools/objtool/tests/generic/fixtures/special_section.c
+@@ -0,0 +1,24 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Function the compiler may split into a hot part and a foo.cold part. */
++/*
++ * Special section entry with no ANNOTATE_DATA_SPECIAL annotation and a local
++ * label at offset 0, the shape Clang produces for .kcfi_traps.
++ */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+static void __attribute__((cold, noinline)) slow_path(int x)
-+{
-+	__asm__ volatile("" :: "r"(x));
-+}
-+
 +int target(int x)
 +{
-+	if (__builtin_expect(x < 0, 0))
-+		slow_path(x);
++	asm volatile(
++		"1:\n\t"
++		".pushsection	.kcfi_traps, \"a\"\n\t"
++		".balign	4\n\t"
++		"trap_marker:\n\t"
++		".long		1b - .\n\t"
++		".popsection\n\t");
 +#ifdef PATCHED
 +	return x + 2;
 +#else
 +	return x + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-cold-function.sh b/tools/objtool/tests/generic/test-cold-function.sh
+diff --git a/tools/objtool/tests/generic/test-special-section.sh b/tools/objtool/tests/generic/test-special-section.sh
 new file mode 100755
-index 000000000000..315f407d9ad7
+index 000000000000..b6a9139c0062
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-cold-function.sh
-@@ -0,0 +1,30 @@
++++ b/tools/objtool/tests/generic/test-special-section.sh
+@@ -0,0 +1,20 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Both halves of a split function belong to the patch; carrying only the hot
-+# part leaves the cold path branching into unpatched code.
++# A .kcfi_traps entry belonging to a patched function must be extracted even
++# without ANNOTATE_DATA_SPECIAL and with a local label already at offset 0.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+# Clang does not split functions into a cold part at all, so there is nothing
-+# for this test to look at there.  A given gcc may or may not split, which is a
-+# version property rather than a compiler choice -- that stays a probe below.
-+gcc_only "clang does not split functions into a cold part"
-+
 +setup
++build_pair special_section.c
 +
-+split_flag=-freorder-blocks-and-partition
-+cc_supports "$split_flag" || split_flag=
-+
-+build_pair cold_function.c $split_flag
-+
-+in_symbols orig.o | grep -qE 'target\.cold' ||
-+	probe_skip "compiler did not split the function into a cold part"
++in_symbols orig.o | grep -q 'trap_marker' ||
++	probe_skip "fixture produced no .kcfi_traps on this arch"
 +
 +run_diff
 +
 +assert_patched target
-+out_symbols | grep -qE 'target\.cold' ||
-+	fail "cold half was not carried into the patch"
++assert_section ".kcfi_traps"
 +
-+pass "cold half carried into the patch with its parent"
++pass ".kcfi_traps extracted despite a local label at offset 0"
 -- 
 2.53.0-Meta
 
