@@ -1,110 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050694AC151
-	for <live-patching@vger.kernel.org>; Fri, 11 Sep 2026 19:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC9BE30BF70;
+	Sat, 12 Sep 2026 08:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789155033; cv=none; b=KYMraVeTb+uZ8yTmfIls/ewGnSSumM5E/li7wzNOdtsDhtUJJiRZruFTzmRHHd1j1EIhkV10lyOrZQT3hQN8YoBxQSix+eq/5u2A3LZFltulQ1MTy0gKUxJuRgfAo4jcEUazwGZXs2LzsX6VojLh3mU7P5sGPB1k5CZy6soYYSk=
+	t=1789201325; cv=none; b=GFw0aQs8vk+pzIr82XONLVV6noL5pqt1VHsW5dbaRFe6ihs4hSaFoe2kGOSodgmO92eYgTMoloAsMkenL16hedK0f2JAKZly3QPwIvFxQMcXT6fX+9z/RPJ/axX27T2SdIOdI5tuSNmlc8WRiTRlzQMdpZXA8oxtDt0ypxg0UnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789155033; c=relaxed/simple;
-	bh=txhX4D348pIpcpc076fcmRc2BoYDX/5U5H7PSgndxFo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I/dcVBGBqMEcKL2RpiyHbQf+xWHoQAs6jHiKvcXsVDAOQfUh/PLWLvctmE/zOuXYPe9Kiitv06reWGSZy9HA7GhFc6/fWSevB+yO9gSsBr4L/TfzK7+5Mwli0HKaYM36PcqQQ+l2RyyrhpRiDgPVRdk61RGdLvuqWwUMr/S/Vrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6wRtG+H; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789201325; c=relaxed/simple;
+	bh=6lecuOle7Ixj6SHv7EC1GJI2hq1bWCtIp14b6x8pP1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VekqK8QaHSvmWiDlhiKwVILK8Nh/Gpd1k2yVTG76z1rgfNGpCiDJQw9+vrQz2eRhxrkzmPDLf4a/MuTuDG6h32r6g9whMapSmClsZOdBW5qJNb3uqKlFIa+jcyyPM7Ld+PlfUS1AgC8KqyHg2cL/xR8yDVkfizbiIHqHPNheGfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RnnYbq5L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6wRtG+H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BEE31F000FF;
-	Fri, 11 Sep 2026 19:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789155024;
-	bh=crSXL90rfQDgOn7aTLcNDwzFcuHsh1vwl2DQYNME46Q=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Z6wRtG+HrhpL3ACwNE11RSTEkNr8Z9Z1xtHLW6vQGJX40I8gJERQsXnUrGkSRMcxz
-	 yvDXYs38n1LZ9AcedTx5d+LDGZ/7EOsy70jZvX1gNCgguMWXT0x98s8Q390Dk/EyOE
-	 tywWauydTdmZmi+3KM8bx7akZZ1Ny+HVrGyb88cg5S+3p7b4fkgYyL+n+lPgOAiaxn
-	 Cq2Zs8erY7yPKRX8pqchehJE2+TUfSqONZuTDZBeJ68X9E3p9cKQ4KjmRy6gyk3q30
-	 HjmakuCYQe0PFrEuUpivujaBe4hZUHeabbrhRsItvoG3g3Faukw8EOlABoNC8Og+Nu
-	 HD7z4j8HBjN7g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 52/58] objtool/klp: Add test for alternative replacement
- code in checksums
-Reply-To: sashiko-reviews@lists.linux.dev
-To: live-patching@vger.kernel.org, "Song Liu" <song@kernel.org>
-Cc: kernel-team@meta.com, jikos@kernel.org, peterz@infradead.org, joe.lawrence@redhat.com, jpoimboe@kernel.org, puranjay@kernel.org, mbenes@suse.cz, pmladek@suse.com
-In-Reply-To: <20260911185031.1534046-27-song@kernel.org>
-References: <20260911184305.1457308-1-song@kernel.org>
- <20260911185031.1534046-1-song@kernel.org>
- <20260911185031.1534046-27-song@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 19:30:23 +0000
-Message-Id: <20260911193023.9BEE31F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RnnYbq5L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C481F000FF;
+	Sat, 12 Sep 2026 08:22:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1789201324;
+	bh=hRsur+re+sL9KsTfj0dmg614O5ALZSRF3aOeaM7jvZ4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=RnnYbq5LfwfV3Mx5db3/dYOqJqyfowR+HM/MMRtZhz4+nwI+QRaZMuMV6NxGrdPIA
+	 Q1hsS1EIGAMSxNB23z0EbYE0RZyO7JKKH1A/FvD9R+ulzHwJ2Ie8jGJeMsnVmTDXRm
+	 zLCvENMh0mIo6KVt0F1mDlNh6YKyCL6r4iMgo5yc=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Sashiko <sashiko-bot@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	live-patching@vger.kernel.org,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 7.2 0974/1815] objtool/klp: Fix module name normalization for paths with dots
+Date: Sat, 12 Sep 2026 08:45:24 +0200
+Message-ID: <20260912065711.841062563@linuxfoundation.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260912065648.999753832@linuxfoundation.org>
+References: <20260912065648.999753832@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] The test fixture defines a replacement instruction that is larger t=
-han the original instruction, violating x86 alternative constraints.
---
+7.2-stable review patch.  If anyone has any objections, please let me know.
 
-commit 509cbfff90fd6a32748a4ce13dc568b4181b4904
-Author: Song Liu <song@kernel.org>
+------------------
 
-objtool/klp: Add test for alternative replacement code in checksums
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-checksum_update_insn() walks insn->alts after hashing the instruction
-itself: the alternative's type, and where the replacement forms a group,
-its feature number and every instruction in it.  A patch which edits only
-the replacement -- code that runs on some CPUs and not others -- still has
-to move the function's checksum.
+[ Upstream commit 165affd6f095323d953b0ed5823ec4d0db3b7d0d ]
 
-> diff --git a/tools/objtool/tests/x86/fixtures/checksum_alt.c b/tools/objt=
-ool/tests/x86/fixtures/checksum_alt.c
-> new file mode 100644
-> index 0000000000000..47ff93bc77556
-> --- /dev/null
-> +++ b/tools/objtool/tests/x86/fixtures/checksum_alt.c
-> @@ -0,0 +1,60 @@
+When .modinfo has no "name=" tag, __find_modname() falls back to
+converting the object's build-tree path to a runtime module name by
+stripping directory components, converting '-' to '_' and truncating the
+file extension.
 
-[ ... ]
+It does all that in a single pass over the entire path, so the first dot
+anywhere in the path ends the name.  For an object built in a directory
+whose name contains a dot, e.g. "drivers/foo-1.0/bar.o", the result is a
+bogus module name.
 
-> +#if defined(PATCHED) && defined(ALT_REPL)
-> +#define REPL_INSN "	xchg %ax, %ax\n\t"
-> +#else
-> +#define REPL_INSN "	nop\n\t"
-> +#endif
+Strip the directory components up front so only the basename is scanned
+for the extension separator.
 
-[ ... ]
+Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Cc: live-patching@vger.kernel.org
+Link: https://patch.msgid.link/9017b4609553bed16674e8f924d34691cbc2b2c1.1785727106.git.jpoimboe@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/objtool/klp-diff.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-> +int target(int x)
-> +{
-> +	asm volatile(
-> +		"661:	nop\n\t"
-> +		"662:\n\t"
-> +		".pushsection .altinstr_replacement, \"ax\"\n\t"
-> +		".globl target_repl\n\t"
-> +		"target_repl:\n\t"
-> +		REPL_INSN
-[Severity: Low]
-Since the original instruction defined at label 661 in target() is a 1-byte
-nop, and REPL_INSN can be defined as xchg %ax, %ax (which is 2 bytes), does
-this replacement exceed the original instruction's size?
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index f8787d7d14547..aeb99d572300c 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -1140,7 +1140,7 @@ static struct export *find_export(struct symbol *sym)
+ static const char *__find_modname(struct elfs *e)
+ {
+ 	struct section *sec;
+-	char *name;
++	char *name, *slash;
+ 
+ 	sec = find_section_by_name(e->orig, ".modinfo");
+ 	if (!sec) {
+@@ -1158,10 +1158,12 @@ static const char *__find_modname(struct elfs *e)
+ 		return NULL;
+ 	}
+ 
++	slash = strrchr(name, '/');
++	if (slash)
++		name = slash + 1;
++
+ 	for (char *c = name; *c; c++) {
+-		if (*c == '/')
+-			name = c + 1;
+-		else if (*c == '-')
++		if (*c == '-')
+ 			*c = '_';
+ 		else if (*c == '.') {
+ 			*c = '\0';
+-- 
+2.53.0
 
-x86 alternatives strictly require the replacement instruction length to be =
-less
-than or equal to the original instruction length. While this test fixture in
-checksum_alt.c does not execute at runtime, emitting structurally invalid
-metadata into the object file could cause failures if objtool adds stricter
-size validation in the future.
 
-> +		"target_repl_end:\n\t"
-> +		".popsection\n\t"
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911185031.1534=
-046-1-song@kernel.org?part=3D52
