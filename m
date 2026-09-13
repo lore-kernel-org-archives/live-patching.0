@@ -1,115 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD54E1DD0EF
-	for <live-patching@vger.kernel.org>; Sun, 13 Sep 2026 02:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789268107; cv=none; b=MpjivO7LPRJ+DEAN1b/tSi2BZxXGp6kFft5XqLAMFg4lpikGO8kX6VSLckFm9snMQ0aPan3dOsWsFmWrS1A8ysHWnKQtpe8n7Ozw/LfPeGEY1AQ5kqCrnF/8i11+RNeBSbMPkbvw07Pdta+luN4ezPx5NTGe3vraF1M7SUKv3NE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789268107; c=relaxed/simple;
-	bh=/G27/qmqrtVe/eJBL2fjwbY2BBrlax8i7OYaZndibL0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qhyQbnoG3ddVqQB14Yz+d7rPbYh7Z0PuALYJ1X9wBilXUFLfG1QE328QrRfY/gWX9upz2kKsRXOXz963vJwcA+k2I/8nmJ+Heez+Hr7p5im6dSWfHrMPwnsPbiCi+Z/X1GCuRfm6xnf/82pvoQApykzrT5eu3o2cPw4fLbf69/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOZXqRvC; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C3D345CCD
+	for <live-patching@vger.kernel.org>; Sun, 13 Sep 2026 02:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789268166; cv=pass; b=BnS6begtGPdC+S4uKRsajwImCVCvDs/j0eguc2ft1TL9PkCVPnQON72Ck08fsrQwvfsG+4NQRUyy9hhCnQqufVpsTOpazdtnSWDEmgDoIbJV7LAfS7f0cNwxa/Kg7kmOWPRqcw8yOFwJGObrrbEiYS4XezAW3oz44c6V7GtORA4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789268166; c=relaxed/simple;
+	bh=DZGKf+y2yHjX0JATUvwRU5kGsye4Uuh7hr9rvML6qF0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R5cMHS+zmb/Y/QriOlTvtROjhVVJ9lZTFjGG5CTDht5XrheLe1DkusPh3enRoJ00hzY3m/bP27Ca5lSaa80f8qSSU9GaRCsywjeL3+fy/MTA6e8O37UpJ3cOrxmalbrKe5rzhzVNlmD5o9Ya3GV/nGnCjF9W8hL1joqdXXmIaMM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fscuVAZc; arc=pass smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOZXqRvC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F501F000FF;
-	Sun, 13 Sep 2026 02:55:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789268106;
-	bh=bNQPckbmpcDaiICRRx+e9935DYKqSWLKiyf00xB02FY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QOZXqRvCEetNkvsAPdhSsBzl4JWXouII5ae99Q/kkgLsc9foB22gqqRyuWJmPgbaE
-	 ELLR4VgZEt6y7f7Xs6xAwv3yBUtfsswwnK1w/6+P9mhHl0CyiCL+lEGl11hzXL07E/
-	 Tzwa7UTITWA6Xw10Sb6MVpE1iL+2Ic2lI6FpoeYcDB5QsA9S4ijCHW9SAuy9kMsdoR
-	 98CDyUOgpSdsUUQVbFK6rdB8QvDPi3Ir4Qocc1vWwzFItba//wxuRrFuE3hkpjB5jb
-	 hgaiN1Xb0GPyQWPXMqUxGU7fmaoxRpPUVX71FLRE0WUr3FujUCtb1v5TQwdSOsVi8g
-	 QtXgSI5d9ZZ0w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v9 4/9] livepatch: Call klp_init_patch_early() earlier
-Reply-To: sashiko-reviews@lists.linux.dev
-To: song@kernel.org, "Yafang Shao" <laoar.shao@gmail.com>, jikos@kernel.org, jpoimboe@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com
-Cc: live-patching@vger.kernel.org
-In-Reply-To: <20260913024228.72317-5-laoar.shao@gmail.com>
-References: <20260913024228.72317-1-laoar.shao@gmail.com>
- <20260913024228.72317-5-laoar.shao@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 13 Sep 2026 02:55:05 +0000
-Message-Id: <20260913025505.D1F501F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fscuVAZc"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e50968489so683498d50.0
+        for <live-patching@vger.kernel.org>; Sat, 12 Sep 2026 19:56:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789268164; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GTofsfrkNJsOB8Oe/eebOycicnd7NGRo+Me8byHRghxWWlAcFXRAX5V0HrME52yEAC
+         tprGjGEGfbG2RvODCi61pAZnD5YxHS01+gNBVSbb9PI/l30N2Vow6kaH2Wxs71ESpHp3
+         nCIXKXs2026r1fn/L5ndFRPlSz6SXMXbdhDO1LGEaVffSJAG04n3DjjiH1PkriHNHoRm
+         4ilI0ELc5lsY6MNP5P20orHVWpaNf/xt477sn7KdiOFPCwgdLwsnU2UaqJutfAoqZUFC
+         kNnjuub6EHEE6LYTUMOQcWW13O4wwRe1pPXhhrv1msw8CgzO+duRP6xELVILIpGGVQZX
+         PCXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DZGKf+y2yHjX0JATUvwRU5kGsye4Uuh7hr9rvML6qF0=;
+        fh=9L8j7NUmqYZnSokeWSz+7DgIkd0Ua2a0uWLYnllf6e8=;
+        b=r/mhUuSSyG8+3jOl6TSv0BspfrXstlXnkv9YD64MEkpQrQlUTMmxjzv7OE6SSkrTe+
+         iQsUgp2d5LFqhR1eVGDs/8Fj6kkPDd0XahbOseqIr5N9/WryQWfr3EL3toJ/fvaK0IdZ
+         eppxhYQYqqW1rShRMo37y154pJxFCCiHs/3J+CoWsoRsIZotHrMu07fvita+tI0if8pW
+         O86V15l4pSD6SLVXFDAMvDQ8MzTSaIDVIWVx4Hq5FgwsEb5gc7GvI93ymXpZTBjX7bh+
+         3AqHEXV2E8S5UgE2qKZ/t+45wxfHUgmBBqfRDxjbYtaLiHU9VEvA1xHI2AxuzhGbyEkJ
+         vP3g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789268164; x=1789872964; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DZGKf+y2yHjX0JATUvwRU5kGsye4Uuh7hr9rvML6qF0=;
+        b=fscuVAZcSd7tjy7Fm0XDFrxZ6B6RQ0O01jBp6AT0DJUq51bXiyo603lWkdBBU2lVim
+         u9pC4F/IHAbmGO6nIV2G9Ew8OAbGU/qSDeXy/+PTB8+g54zDZqTYVATSrhIFrdmczCYo
+         mvKkaFJKs7dMynQ+9KEhMi0f/SHADQpTbxMiakiYk9m1Ah3USwTRJk3cAQqO5VkGM1qx
+         wfTZZQoQcxUxWfg1LRN2ni062nTSpqRYojTSwJC0h27lsPJuogludiV6rhvwyRZe5WgF
+         SEqglGt1dQy0p+unCunGeN1CvOGQlFqLOlU4Uhds6fRNV8K506hHlWfh+NSrMvMjM7sm
+         s7Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789268164; x=1789872964;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DZGKf+y2yHjX0JATUvwRU5kGsye4Uuh7hr9rvML6qF0=;
+        b=fEo1NkovdBn9TyxboP38FExJV3JEaw4HVZa5SSKuU2rwPZP1ClPR7TqZkE94vIMzOl
+         VK1EKgLgK7mZ+8VoWAco37EMCV5ml6nFY71eDxf7NA8eFixr3frOGFtOQAs5sf//hvna
+         a6nkzTkqWlPbiZhVxeXQgPw4WovK81Z9/80FTg2CKzgiy2XdPhIMj0G9jS2xTpqqLMME
+         zoyLDq7n6HhoNBP3NrUtt7tQ+eFr+ojeKGOIvZKw8UsSb7S8loqNenmgQ+2UOENJSdAA
+         yuiGMqq36rPZTS8Anw8ewhuXf+tMtmvCmPjMKuJICDSTo/KzmRWIrZXZOfiGGfuFssKU
+         7kng==
+X-Forwarded-Encrypted: i=1; AKwUvByEtWpR4fv550I7xcxoHqh52hU/mBq+4vH2uvzpFsnqWuB6Aut4jEedpX6QX2QTK4BcLvVW52TiUHJ9ZZkZ@vger.kernel.org
+X-Gm-Message-State: AFuF++myA5WX+BhsbZoKwAdpJ1Npi5Qy0gtAkiI1PohVe+GvDD2xNtZV
+	zB8h7FKke+g3bzwfKJdxo8McFL2iA9ZwsQuVdXii5e1jezdVUEEHiy7DZuCRG46S2bVAR0vVwe5
+	Hacr0J+YwH0wBoyBEN1nFHI8AHr2K4tM=
+X-Gm-Gg: AYBFou1Qo8iJqCCY/w8i2rg3CB180a1uAJZUHcP590MnzQ3h4jDUx+Y2nh3JUHCux2y
+	jw1xChdVqWNCkfdgtsRucvGq5zBnYZOdccdYgQYsqCZnnBkkmZ91s5bJORnYHi7YuIIwl4fkDue
+	mWP1YGQcebffQUjACoIJGHA87TUuMbdE+YFK+stUSjTLchgoY+F9tv/ciLtqwT3rM9gk864UVQ5
+	X5eozmcSGVawww3ELXc9Lz076CY2YvK/4z1cjVvB34wHIxp9LHBDlr9Qluzme4lRT5S7loIXDjn
+	rwC/fHD1jV29Shqdiynuvq6j/Pl4rIb0a9CVF+YYtGURXIfdEJ4aPeY3HpJcKdDL0t8TPalK6mP
+	QrAUyKHZOL6wdLg==
+X-Received: by 2002:a05:690e:4806:b0:66f:7c64:9d47 with SMTP id
+ 956f58d0204a3-671245e99d1mr3820657d50.23.1789268159132; Sat, 12 Sep 2026
+ 19:55:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260913024228.72317-1-laoar.shao@gmail.com> <20260913024228.72317-7-laoar.shao@gmail.com>
+ <20260913024817.2A6DE1F00893@smtp.kernel.org>
+In-Reply-To: <20260913024817.2A6DE1F00893@smtp.kernel.org>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 13 Sep 2026 10:55:23 +0800
+X-Gm-Features: AcwNN1XGxR-mMsAb0YOJXftgs1Id2BmjtGz_un8fTW9E9IfSrfUP1F5C5C-13Hw
+Message-ID: <CALOAHbCyhyEhg0upyMgZSaArg1WEDtpOdZw7zC_+DtfF0_h__w@mail.gmail.com>
+Subject: Re: [PATCH v9 6/9] livepatch: Deprecate stack_order
+To: sashiko-reviews@lists.linux.dev
+Cc: song@kernel.org, mbenes@suse.cz, pmladek@suse.com, jikos@kernel.org, 
+	jpoimboe@kernel.org, joe.lawrence@redhat.com, live-patching@vger.kernel.org, 
+	Wardenjohn <zhangwarden@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Sun, Sep 13, 2026 at 10:48=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Low] The patch removes the 'stack_order' sysfs attribute from the kern=
+el but does not remove the corresponding test code from the livepatch selft=
+ests, leaving a block of dead test code.
+> --
 
-Pre-existing issues:
-- [High] Use-after-free on statically allocated kobjects when CONFIG_DEBUG_=
-KOBJECT_RELEASE is enabled
---
-
-commit 482a331678a5995d891ae6ebde80245198dd0aba
-Author: Yafang Shao <laoar.shao@gmail.com>
-
-livepatch: Call klp_init_patch_early() earlier
-
-Invoke klp_init_patch_early() during early initialization to avoid
-mixing for_each_() and for_each_*_static() variants later in the code.
-
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index c34306ecfb0bb..f088955de8557 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-
-[ ... ]
-
-> @@ -1159,6 +1152,13 @@ int klp_enable_patch(struct klp_patch *patch)
-> =20
->  	klp_init_patch_early(patch);
-> =20
-> +	if (!klp_is_patch_compatible(patch)) {
-> +		pr_err("Livepatch patch (%s) is not compatible with the already instal=
-led livepatches.\n",
-> +			patch->mod->name);
-> +		ret =3D -EINVAL;
-> +		goto err;
-
-[Severity: High]
-This is a pre-existing issue, but could jumping to the error path here
-cause a use-after-free when CONFIG_DEBUG_KOBJECT_RELEASE is enabled?
-
-If klp_enable_patch() fails here due to patch incompatibility, the error
-path calls klp_free_patch_start(), which eventually invokes kobject_put()
-on the statically allocated obj and func structures:
-
-kernel/livepatch/core.c:__klp_free_objects() {
-    ...
-    kobject_put(&obj->kobj);
-    ...
-}
-
-When CONFIG_DEBUG_KOBJECT_RELEASE is enabled, kobject_put() schedules
-delayed release works for these kobjects, which are embedded within the
-livepatch module's memory.
-
-Since klp_enable_patch() only waits for the patch kobject's completion and
-ignores the obj and func kobjects, module_init() returns an error. This
-leads the kernel to unload the module and free its memory while the delayed
-release works are still pending.
-
-Is there a way to ensure the module memory isn't freed before these
-delayed works complete?
-
-> +	}
-> +
->  	ret =3D klp_init_patch(patch);
->  	if (ret)
->  		goto err;
+No, the test cases won't be removed, as they may still run on older
+kernels that support stack_order.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260913024228.7231=
-7-1-laoar.shao@gmail.com?part=3D4
+Regards
+Yafang
