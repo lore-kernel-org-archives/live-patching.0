@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA8C2C21D9
-	for <live-patching@vger.kernel.org>; Sun, 13 Sep 2026 02:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD54E1DD0EF
+	for <live-patching@vger.kernel.org>; Sun, 13 Sep 2026 02:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789267698; cv=none; b=NxqTe8Xvt6M03cE7ELy10zhu5d/9jhNx590zHpAWOAu3ApUcf6sZO7LK8aJwVU72ZPiNsNpoFSAfaR+XImRRXd0g8ccFvhWbaP/kZFyDIGYzuGGH76Z8l1tn49DDkivXBl98t/MeoEIWaAaUFMkNz6SEiJbY3nxtcF2qZMOja7s=
+	t=1789268107; cv=none; b=MpjivO7LPRJ+DEAN1b/tSi2BZxXGp6kFft5XqLAMFg4lpikGO8kX6VSLckFm9snMQ0aPan3dOsWsFmWrS1A8ysHWnKQtpe8n7Ozw/LfPeGEY1AQ5kqCrnF/8i11+RNeBSbMPkbvw07Pdta+luN4ezPx5NTGe3vraF1M7SUKv3NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789267698; c=relaxed/simple;
-	bh=HzKb/cSIkXUXwECfvm9rOApB18mZEa3JUDtAwlV9G+8=;
+	s=arc-20240116; t=1789268107; c=relaxed/simple;
+	bh=/G27/qmqrtVe/eJBL2fjwbY2BBrlax8i7OYaZndibL0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NAmbS3jhNvKv5ieehH4a1mcx5jN/RO+YlnFUx4Lqzmt6Bezy8Fx1rvJAp3yUc3drhCOUAY7V1+Lt9EtZzIdvLZSdgV9ESRjctwBfPt/+AnDmSnqGjInGObdPV6qwxtuh1kmfmY0IT/BHPTZfurpuuMxhjZqApjp/TnWlybzKeBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a29X3zAR; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qhyQbnoG3ddVqQB14Yz+d7rPbYh7Z0PuALYJ1X9wBilXUFLfG1QE328QrRfY/gWX9upz2kKsRXOXz963vJwcA+k2I/8nmJ+Heez+Hr7p5im6dSWfHrMPwnsPbiCi+Z/X1GCuRfm6xnf/82pvoQApykzrT5eu3o2cPw4fLbf69/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOZXqRvC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a29X3zAR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6DE1F00893;
-	Sun, 13 Sep 2026 02:48:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOZXqRvC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F501F000FF;
+	Sun, 13 Sep 2026 02:55:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789267697;
-	bh=r6EbI/kSYABfQgLuQEVYiiuHc09DNL2oCJ7mhJEW0oE=;
+	s=k20260515; t=1789268106;
+	bh=bNQPckbmpcDaiICRRx+e9935DYKqSWLKiyf00xB02FY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=a29X3zAR9ZHsTQcUyGlZtiIyrl7qcUn2gN6MIbKKyw97NoHQp6SaCJwRC2d87lalh
-	 eEkckc2OqeFQ907QgoadDjiUSuiG0r0Jsn6PmhhZ4t1mQeGFNaWwNR0kPbwlNo5EYY
-	 lQNBp26u17YMnR1xYthAjuW70CoDPAbmn7jb/IT0j7kT5t2AYTPLQMGLd6VG2GwfZE
-	 scRqi4R3T+tIEeSSC7Ax0cDstHSp9NUGUObfzCgtEmHwZWHu/S5u7uEzJoCChkAB+A
-	 jF7uWsnOMiMwTtzhp0YbLDQ4no8o+LAzaGqiur+jFBewR3piO0bHBLkMVoVfg3gTfX
-	 hqMoRaXefn+LA==
+	b=QOZXqRvCEetNkvsAPdhSsBzl4JWXouII5ae99Q/kkgLsc9foB22gqqRyuWJmPgbaE
+	 ELLR4VgZEt6y7f7Xs6xAwv3yBUtfsswwnK1w/6+P9mhHl0CyiCL+lEGl11hzXL07E/
+	 Tzwa7UTITWA6Xw10Sb6MVpE1iL+2Ic2lI6FpoeYcDB5QsA9S4ijCHW9SAuy9kMsdoR
+	 98CDyUOgpSdsUUQVbFK6rdB8QvDPi3Ir4Qocc1vWwzFItba//wxuRrFuE3hkpjB5jb
+	 hgaiN1Xb0GPyQWPXMqUxGU7fmaoxRpPUVX71FLRE0WUr3FujUCtb1v5TQwdSOsVi8g
+	 QtXgSI5d9ZZ0w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v9 6/9] livepatch: Deprecate stack_order
+Subject: Re: [PATCH v9 4/9] livepatch: Call klp_init_patch_early() earlier
 Reply-To: sashiko-reviews@lists.linux.dev
-To: song@kernel.org, mbenes@suse.cz, pmladek@suse.com, jikos@kernel.org, jpoimboe@kernel.org, "Yafang
- Shao" <laoar.shao@gmail.com>, joe.lawrence@redhat.com
-Cc: live-patching@vger.kernel.org, Wardenjohn <zhangwarden@gmail.com>
-In-Reply-To: <20260913024228.72317-7-laoar.shao@gmail.com>
+To: song@kernel.org, "Yafang Shao" <laoar.shao@gmail.com>, jikos@kernel.org, jpoimboe@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com
+Cc: live-patching@vger.kernel.org
+In-Reply-To: <20260913024228.72317-5-laoar.shao@gmail.com>
 References: <20260913024228.72317-1-laoar.shao@gmail.com>
- <20260913024228.72317-7-laoar.shao@gmail.com>
+ <20260913024228.72317-5-laoar.shao@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 13 Sep 2026 02:48:16 +0000
-Message-Id: <20260913024817.2A6DE1F00893@smtp.kernel.org>
+Date: Sun, 13 Sep 2026 02:55:05 +0000
+Message-Id: <20260913025505.D1F501F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,88 +46,70 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The patch removes the 'stack_order' sysfs attribute from the kernel=
- but does not remove the corresponding test code from the livepatch selftes=
-ts, leaving a block of dead test code.
+
+Pre-existing issues:
+- [High] Use-after-free on statically allocated kobjects when CONFIG_DEBUG_=
+KOBJECT_RELEASE is enabled
 --
 
-commit a8f748fc5d239275aee15cc15603ad2749191463
+commit 482a331678a5995d891ae6ebde80245198dd0aba
 Author: Yafang Shao <laoar.shao@gmail.com>
 
-livepatch: Deprecate stack_order
+livepatch: Call klp_init_patch_early() earlier
 
-The stack_order sysfs attribute was added to determine which active
-livepatch is used for a given function. It is no longer needed because
-recent changes refuse loading another livepatch which would modify
-an already livepatched function unless the new livepatch would replace
-the conflicting one.
+Invoke klp_init_patch_early() during early initialization to avoid
+mixing for_each_() and for_each_*_static() variants later in the code.
 
 > diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 8813f035087de..a5ff34a377a57 100644
+> index c34306ecfb0bb..f088955de8557 100644
 > --- a/kernel/livepatch/core.c
 > +++ b/kernel/livepatch/core.c
-> @@ -477,40 +476,17 @@ static ssize_t obsoletes_show(struct kobject *kobj,
->  	return len;
->  }
-> =20
-> -static ssize_t stack_order_show(struct kobject *kobj,
-> -				struct kobj_attribute *attr, char *buf)
-> -{
+
 [ ... ]
-> -}
-> -
->  static struct kobj_attribute enabled_kobj_attr =3D __ATTR_RW(enabled);
->  static struct kobj_attribute transition_kobj_attr =3D __ATTR_RO(transiti=
-on);
->  static struct kobj_attribute force_kobj_attr =3D __ATTR_WO(force);
->  static struct kobj_attribute provides_kobj_attr =3D __ATTR_RO(provides);
->  static struct kobj_attribute obsoletes_kobj_attr =3D __ATTR_RO(obsoletes=
-);
-> -static struct kobj_attribute stack_order_kobj_attr =3D __ATTR_RO(stack_o=
-rder);
->  static struct attribute *klp_patch_attrs[] =3D {
->  	&enabled_kobj_attr.attr,
->  	&transition_kobj_attr.attr,
->  	&force_kobj_attr.attr,
->  	&provides_kobj_attr.attr,
->  	&obsoletes_kobj_attr.attr,
-> -	&stack_order_kobj_attr.attr,
->  	NULL
->  };
 
-[Severity: Low]
-Since the stack_order sysfs attribute is being removed, should the
-corresponding test code in tools/testing/selftests/livepatch/test-sysfs.sh
-be removed as well?
+> @@ -1159,6 +1152,13 @@ int klp_enable_patch(struct klp_patch *patch)
+> =20
+>  	klp_init_patch_early(patch);
+> =20
+> +	if (!klp_is_patch_compatible(patch)) {
+> +		pr_err("Livepatch patch (%s) is not compatible with the already instal=
+led livepatches.\n",
+> +			patch->mod->name);
+> +		ret =3D -EINVAL;
+> +		goto err;
 
-Because the test script checks for the existence of the sysfs attribute
-before testing it, the dead code will not cause the test to fail. However,
-it leaves behind blocks that will never execute:
+[Severity: High]
+This is a pre-existing issue, but could jumping to the error path here
+cause a use-after-free when CONFIG_DEBUG_KOBJECT_RELEASE is enabled?
 
-tools/testing/selftests/livepatch/test-sysfs.sh:sysfs test() {
+If klp_enable_patch() fails here due to patch incompatibility, the error
+path calls klp_free_patch_start(), which eventually invokes kobject_put()
+on the statically allocated obj and func structures:
+
+kernel/livepatch/core.c:__klp_free_objects() {
     ...
-    if does_sysfs_exist "$MOD_LIVEPATCH" "stack_order"; then
-        check_sysfs_rights "$MOD_LIVEPATCH" "stack_order" "-r--r--r--"
-        check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
-        HAS_STACK_ORDER_ATTR=3D1
-    fi
+    kobject_put(&obj->kobj);
     ...
 }
 
-Which leaves the following test block permanently dead:
+When CONFIG_DEBUG_KOBJECT_RELEASE is enabled, kobject_put() schedules
+delayed release works for these kobjects, which are embedded within the
+livepatch module's memory.
 
-tools/testing/selftests/livepatch/test-sysfs.sh:sysfs test stack_order valu=
-e() {
-    ...
-    if [[ "$HAS_STACK_ORDER_ATTR" =3D=3D "1" ]]; then
-        start_test "sysfs test stack_order value"
+Since klp_enable_patch() only waits for the patch kobject's completion and
+ignores the obj and func kobjects, module_init() returns an error. This
+leads the kernel to unload the module and free its memory while the delayed
+release works are still pending.
 
-        load_lp $MOD_LIVEPATCH
+Is there a way to ensure the module memory isn't freed before these
+delayed works complete?
 
-        check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
-    ...
-}
+> +	}
+> +
+>  	ret =3D klp_init_patch(patch);
+>  	if (ret)
+>  		goto err;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260913024228.7231=
-7-1-laoar.shao@gmail.com?part=3D6
+7-1-laoar.shao@gmail.com?part=3D4
