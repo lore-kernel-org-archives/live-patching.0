@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80B53CAE93
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B443CCFB4
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789429535; cv=none; b=uZcZ6G2Bh8Nes2vBPeb9bUHdw7Y88GX6+HBZw4QtbuPiCPgi5N6U2pOKqMbeRPyBI9W4HruJfw/rcCoE9zkc0RQpLqub9gwtlaw7OzPhEKyzHjzFYD0rf7zJt2n9REih6qQJa5FckeYzpCtjFT09gC/pdofyNkbnuEHmuYraUto=
+	t=1789429581; cv=none; b=sM1Q+RUDStq6m044mJDdJtKW2YluD5AQ4YMdR5NF42ikyN4kfZUxuxw2+tCWDgIDz3De4kHN90RfLtzlbzTAf2BIOJW4dUczzl5BVC1Td0V1NDsq0YofLgHJ0bagFU/4ww/lWJD4L/QtEJSaiWyij3aYN/f45pJ0G7njTZzvSZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789429535; c=relaxed/simple;
-	bh=HCkrcuZd4GoJVU8djKGl7N8UoYDfWseeFYryPvGMiCk=;
+	s=arc-20240116; t=1789429581; c=relaxed/simple;
+	bh=KHFf9WXKsXuBfEwwKXPlw6zIMbYpCF3oWgrl/WpaMIY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=OScwIrK4s726ROp2teEhZwKGnfhyNUB6pCvKRWDGWLSHlQwmRzsdfTJ568HHvFwRR2fcgSuat5bg+dWcjXiWPXjoqCb2QszFloEuSwgT7G3M/7N0N4oc2zOxk1X5lq3MFpc5LJw6j3Vf8FgMB+j6+raxdpPqkf3YbyY2zZ7foUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BC6rK1Iv; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=H9+ygvUmrIUkT3neOqSvePLwT98+tzHn4P69JJyjOOTBymCKH7BThpQUiVWkueyh2a2yWMU7QPIwgxX5xfVUDNtwz6CUqlnfmFV6YyOu55LCM2WWNsoQ7OS0LSKg0fE10ajnhdyWYNwL9y6tBpNhC+5jGNicS5zFpyU/VrOfjII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BqeX99mZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BC6rK1Iv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81AF1F00893;
-	Mon, 14 Sep 2026 23:45:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BqeX99mZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 122791F000FF;
+	Mon, 14 Sep 2026 23:46:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789429534;
-	bh=DvHX45aXVo8BREfCCKvK9TGYgHnfRfKUnUAL3DjPprg=;
+	s=k20260515; t=1789429580;
+	bh=/sfcR+xM1YkF9GHrSHeRRk7hlJnc4EAEq/HLcXkcGnY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=BC6rK1Ivd8KSrwnHuLTi/yVvWw97yz0Rh1355YShzNvkgZ2/Byttht9cC7vAcMXa3
-	 m68/4T7zutYsUpBCNTvZxwigNRgcOJtEdV7HJA7H77rqaMUI9rgB/qnXZ9cdCZZDZr
-	 LokveUcV9gNFW0c6fX/ADRcZVrDoKVYXSuyp5sElu+0BpjcJ7bn4+LBgzV2faTYZac
-	 5iXMjFeFsBf4Mfl7Edo+R+gQI7MZ6f2Rb4d0MWPtlVQO2niVdpYsEN0IYkgZhHbaDY
-	 QcM4mBlBTJikrvQU0U9ey/ZDhtNQglnWPbtIJLllyTlgba2VpixnfeGiA0tiuFOkMM
-	 PdCyLZouXsdxA==
+	b=BqeX99mZtph4SkNfwBPMMENP7imCpOf0KXcHaDqZ3w6yCO/4tL88hlIZQiWiCTpee
+	 lTDIe5iNbZADr5VFwNadRHK0gROnbC5cYaguFaBHcs1ruIgZB4k/Rl5ykiCidA2hqG
+	 Ki2llkTcYgI0H+WviiqiqgM5CcWLm4WrO3DWberopFg2t9OzdfhNE16v47S/u7K5Fz
+	 S/dVYE6e9DJ4kvUrYmdTDlO9ix3tWp0i2coPiCrv8Wbg2wzK/3SAgrVC5P5zlIoPZY
+	 IWt8NSnH0zlx27nv0cmvhPbTkvRGDVE0TA0so+21Hxp/FJJncJ6jkNkMsWRro5T+Ia
+	 nDF/0sOWMznbA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 11/58] objtool: Forward toolchain variables to the
- klp test runner
+Subject: Re: [PATCH v3 14/58] objtool/klp: Add test for newly introduced
+ functions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: joe.lawrence@redhat.com, jpoimboe@kernel.org, mbenes@suse.cz, peterz@infradead.org, pmladek@suse.com, jikos@kernel.org, puranjay@kernel.org, kernel-team@meta.com
-In-Reply-To: <20260914230355.3422996-12-song@kernel.org>
+Cc: pmladek@suse.com, peterz@infradead.org, joe.lawrence@redhat.com, jikos@kernel.org, jpoimboe@kernel.org, puranjay@kernel.org, kernel-team@meta.com, mbenes@suse.cz
+In-Reply-To: <20260914230355.3422996-15-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
- <20260914230355.3422996-12-song@kernel.org>
+ <20260914230355.3422996-15-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 23:45:33 +0000
-Message-Id: <20260914234533.D81AF1F00893@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 23:46:19 +0000
+Message-Id: <20260914234620.122791F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,58 +47,51 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] objtool: tests target silently falls back to GNU objcopy under L=
-LVM=3D1
+- [Medium] selftests/objtool: fragile symbol check matches section names
 --
 
-commit 11c79ea0e223d9512f0e164886cfdec6a0e5e3b2
-Author: Joe Lawrence <joe.lawrence@redhat.com>
+commit da3ad59507d5d910ed876f2401fd7f2746140303
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-objtool: Forward toolchain variables to the klp test runner
+objtool/klp: Add test for newly introduced functions
 
-The tests target passes toolchain variables like CC, LD, READELF, and OBJCO=
-PY
-into the test scripts so that fixtures are built and inspected with the
-selected toolchain.
+A function added by the patch has no original to correlate against, and
+still has to be carried into the livepatch or the changed caller ends up
+referencing something which does not exist.
+
+> diff --git a/tools/objtool/tests/generic/test-new-function.sh b/tools/obj=
+tool/tests/generic/test-new-function.sh
+> new file mode 100755
+> index 0000000000000..17af18545b7de
+> --- /dev/null
+> +++ b/tools/objtool/tests/generic/test-new-function.sh
+> @@ -0,0 +1,17 @@
 
 [ ... ]
 
-> diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-> index ed5cf146ef2e2..a3d09a5af7a20 100644
-> --- a/tools/objtool/Makefile
-> +++ b/tools/objtool/Makefile
-> @@ -153,6 +153,8 @@ mrproper: clean
-> =20
->  tests: $(OBJTOOL)
->  	$(Q)OBJTOOL=3D$(abspath $(OBJTOOL)) ARCH=3D$(ARCH) CROSS_COMPILE=3D$(CR=
-OSS_COMPILE) \
-> +		CC=3D'$(CC) $(CLANG_CROSS_FLAGS)' LD=3D'$(LD)' \
-> +		READELF=3D'$(READELF)' OBJCOPY=3D'$(OBJCOPY)' \
+> +setup
+> +build_pair new_function.c
+> +run_diff
+> +
+> +assert_patched target
+> +out_symbols | grep -q 'klp_new_helper' ||
+> +	fail "new function was not carried into the patch"
 
 [Severity: Medium]
-Will the tests target silently fall back to GNU objcopy when building with
-LLVM=3D1?
+Will this grep check falsely pass on newer versions of binutils?
 
-It appears that tools/scripts/Makefile.include defines LLVM_OBJCOPY but lea=
-ves
-OBJCOPY unset for LLVM builds. As a result, $(OBJCOPY) evaluates to an empty
-string here in the tests recipe.
+It seems `grep -q 'klp_new_helper'` matches substrings, and newer versions =
+of
+binutils print section names (e.g., `.text.klp_new_helper`) in `readelf -s`
+output. This could cause the test to erroneously pass if the section symbol
+is present but the actual function symbol is missing.
 
-When this empty variable is passed to tools/objtool/tests/lib.sh, the fallb=
-ack
-logic:
+Could this be updated to use the robust `assert_symbol` helper provided by
+the test framework rather than directly grepping `out_symbols`?
 
-OBJCOPY=3D"${OBJCOPY:-${CROSS_COMPILE}objcopy}"
-
-treats the empty OBJCOPY as null due to the :- operator. This substitutes t=
-he
-default GNU objcopy instead of the intended llvm-objcopy, which defeats the
-goal of using the selected LLVM toolchain.
-
->  		KEEP=3D$(KEEP) $(srctree)/tools/objtool/tests/run-tests.sh
-> =20
->  FORCE:
+> +
+> +pass "new function carried into the patch with its caller"
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914230355.3422=
-996-1-song@kernel.org?part=3D11
+996-1-song@kernel.org?part=3D14
