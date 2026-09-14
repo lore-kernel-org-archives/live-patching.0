@@ -1,178 +1,105 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AB7418A4F
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 12:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789387968; cv=pass; b=Xb6zpqnAKo4s+sE/d0rko+e4f3MK5PxBU8lh7whAzTuLNevdrkdIyZZ9PxierTew1PVRmOP/xczZzG/2PtJl8mtl6MpDzAQX6Gs4Okg4XgOxNAXhwc+RrpeKx8d5Yuyxj/AQ1/KFeIa92BVNu7fikEkEEjRMQGWGS4mrqATW6qA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789387968; c=relaxed/simple;
-	bh=ryQcQuPS+2XmD1NaNExEeSnELndx+edUOJaGhyzXc1k=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE69A38757C
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789410325; cv=none; b=Hm2xhQRmAkvrR7QeVX0PJ39S5BWtPvDrrcj3tD1guvvD6urPLsi1hlHimEungHFwVsRYQsOEb6Uxh/+M3SuGXTSdVnnCxXidmmNkjP5ZVP+2HNsnLzfnWj0fCqLV/L9YFhT126ut6LibdfoW30+UQ1NjWBiK1JWRCA470zSEXPE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789410325; c=relaxed/simple;
+	bh=sqsbDhf8/vykTPI0FFSA0x67K7EgbRexIgykj5m32F4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fsOwgAj/DUZAdKsbnSkfZF6e25vscbh8slorGgGcvVJ6FPtChKnKheauV95W+KH3ot4zzkaasXd9UtMpIh0QmcgaHIRtDE1QInPA7302k7PCfaJrwAIXFJJLNU92fkxJzFmYoLZehI7w4fikLYA/CIKTsCopQPH/bVCdPWUrYHw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HcgrXCvz; arc=pass smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=oVbnlTggcJVQ49vrV0wxOcVl4iC7bzNEL2CHLQ1HZ/OVP0RbuTpnh5RIHvZEJhN3VOCvqUvbX+sCyzUULk/n2Qp6KVy6u8d+8roFMHaxWkW4ZzX6i0NqCqf/gxJ7gvbDL8zyaXRNfo7ih5Nx0IJd5oL+1ap74eQERcbGDbXQzYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jFPBKqJo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HcgrXCvz"
-Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d43ac6072so13823707b3.0
-        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 05:12:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789387966; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iMKInIphcuCourhx3+K9Fv1K3EOwUWvA9ENu0P2nRZYeS5rhSrdblSjDdzcqfO9ggl
-         c3i78wQFiCx6BhUn7DBSQowFzLWzGPFycEPPdrE2ZtaRMaVhcKvhLOgfKihSEUkhY2iD
-         PbszwgwmCJ6cvowhQScfUBMepYvl/dmJ7WUVk0Pt23ncHimoHfEJp9vW3sx/8vAEU91z
-         EvLD3RKTq92KAHdDJRZR/gyWhPRY+J1RUVjUlJaW0qvM8zqFIaAXqK6Y0KvBFO13ybI/
-         ul91F5rIlF1dqXoPbegnzgAhCYX+gze9JdIff9TIDHeaarNagnZfl/hMAAa+FqVbp3rK
-         VfzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7BIAvMWopcvY6eMkSv6Lr9DtxhYMnsNqKS0qpVHpq28=;
-        fh=UrllmnkA2iDUetd5NSrpOZYnxiQmox6gxzBybfdv1HU=;
-        b=V9r1v5dxN8P4nycXXBigS+h7DnMVNblDt3zCle6E9cgwwnGv09JgbnGeqYZEk4LtEv
-         YHr4dsXxI0/3RpnFZJWhjHVQYI5ow2RmiPWL7xC1az4Pur8u2D5UBcQQu3QYScSCDHQy
-         e+QitGrPmS5v16w47jgWlw7cGz+zeaG8Q2oXbi0wJBPLaRqih5TnINKQpE2iKL0kbi0R
-         KzzMc5N0R+CIzfEUlLxALly2fUdD1XBugOj+EdwuZfM42o2bHcQ/9MYCer0ZwAHUaD97
-         pD/b8y0K1OuTVom007tfVIBXfdhOvwz8QhtyyIfJz/rXqg/FjcK6M6pFz4u1es1/dJPu
-         Sq1w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789387966; x=1789992766; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7BIAvMWopcvY6eMkSv6Lr9DtxhYMnsNqKS0qpVHpq28=;
-        b=HcgrXCvzff51S3oR1UKMRiO0OUdUV9ohfusNKbHe+TpLybMoNc6CrvbJ8wYVxUg/iO
-         y5RjR7puUk/c0ZmY5jK+BQqVrf9MfZty8WiF632l0omdiqEaQvQUqHuSA3vqubmBHwf0
-         Ygf2xQxNOaTfSDBsZ8lvYZW0Ssrh9iv2D42ZBzO/5cajhbOQUHaaOWy0gxWdCzd6Ymem
-         ZCEPlGYfonAykDPI1r+/mVSwlWT4TAOZElcVldPik6vfffaOAA3ryW/WcTaOZKhjOFLi
-         ENI62LnLcEBh8lWPrM+fI8NKTS7tKBRrugguplIJID6iUQx1k/wQgarazj1Ibutl9POf
-         uJrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789387966; x=1789992766;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7BIAvMWopcvY6eMkSv6Lr9DtxhYMnsNqKS0qpVHpq28=;
-        b=ceNaUDCI/Khun1lUkrMZqD4fUvMo1NMsjeRohm+3QycERzIn1M4k6w3VCJPUpTAl9c
-         V564zqKHOCQ4YS5oQIbtV4DKtLa65bFil41W2Vwg5BXBIJEG0RKFHMTODLdOomX6GK4f
-         PBbCC/N5MZhdY8yXsdV23mHm1YG9GXS3VOXKDnAzrZFXe3zIUmqk48gBEN5vSbaKF88P
-         lRm4LhzZYL2rzrrFWrNztaeoU5M49P2P4pnXT/fQpSnga3tx6E8IOkPDxxqGjNnVfUnA
-         Vs+ZpRsT5NeYNoluvPC6X3pSxtJQ7hNMz7/yBLEiFscgRm2r/0PKz7qWuRk0WZqL4Q7h
-         8a6A==
-X-Forwarded-Encrypted: i=1; AKwUvBx/QMI73DZWQtry+zFnVDat582PxtyE6uNuujchFkQJxj13r674stBWoijF36ISr1W4jra8PWnyexq9mgGE@vger.kernel.org
-X-Gm-Message-State: AFuF++lnblHP6nPdCiRJmv9ZS+BHPZtB4zTMnq34MIpEuT4V48eA6HNX
-	LKfg3sPSS25lw80peUqlLQ+k7e8ghVBdvIjmnEcXjfXMix/iJWpjDCvcOpMSd5zlzP3LzmL+N4c
-	8V8rXCrmspwhGZOhn75e67ApEIyaEnD0=
-X-Gm-Gg: AYBFou0PR4KGamoUBnH4xWocYiC9x3ngH86LHDQWpdX5roCxicwWUHLPg6u57YiTT4K
-	+j5FQmoICrZIII8qCfBN2UCdm4QGWpaDCXubjOgM7j1/BZ3HtPsFoikxRFWxoSXRRg52XZXCiEv
-	J2plDabKTahR3fjfSNjLKtvXqOVzkIjDFr/shoTD61GumSYS5r4jX5C5m5m9ghsguV/+E2llYr1
-	xKdhwp3FbJDgdHA3v3V3+RpR4Z0OYVPVp5EKqEN8eoOmW9oC8TR62bg2W1LP30/K/pwZQPfqbhq
-	7alSDxPh4uH8IuPUT1dZI2grHzU3HQGhx3hPNU9DLH+nRd/zoq7nldvZsw==
-X-Received: by 2002:a05:690c:a706:b0:884:b55c:312 with SMTP id
- 00721157ae682-88d1ed2be81mr5233187b3.16.1789387965963; Mon, 14 Sep 2026
- 05:12:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jFPBKqJo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 883681F00893
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789410323;
+	bh=pJdmS+x/1vPF2Qs60Ujuk+QWWE5dNTLa5JBaBjShvas=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=jFPBKqJokivmbz+VQ+0kSyIcRiQwUaQikqLDTNKoqxE6uItQyDkexZS1hFJUc2Dmr
+	 zrIcDBgCt7pm9DPingLmI+fGScGo5NfO1C8v/W8A326OJTwGlnIZ4z9sFYQqsAH0l+
+	 QQ/WPakwC8If6WJZvvMruSUXaUGWhXrtPYCkPaiCZQDwglzyDeOOIRln2xJN76jbAi
+	 sDL4+psmW53CsGP1Wy2GyaZSabDOmmdX0FehC8QdBEJ2xHHsUPtAlEvhHweeawfZSU
+	 bpNFLrKE0F4h+aGHQ2bUS8SClavoXmDq2IWMPDOiE7uiC/owA4S57SIPxtqHcaSp/L
+	 tlSgsrikj6SEA==
+Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93910cc46c8so161234785a.0
+        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 11:25:23 -0700 (PDT)
+X-Gm-Message-State: AFuF++kHpW+NIk4ULnV91dHcV7Zk2iW+rXBaaxhj3PYFaPzRE7EKzwPy
+	y6469R4Uh9Jw4YBbstcfjI90owF1O8NUuS2/xB3uPHLHAmcuDQ3/501Xk2a06nkIG4k5HWsxuza
+	2uXX1u+yuCBMvRJGiitRi85An/CG2ADE=
+X-Received: by 2002:a05:620a:2548:b0:939:78ab:3c5f with SMTP id
+ af79cd13be357-93a297c8d1cmr542380885a.9.1789410322806; Mon, 14 Sep 2026
+ 11:25:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260910085218.66565-1-luolongjuna@gmail.com> <aqc5Q4_9bHpAI4jh@jpoimboe>
-In-Reply-To: <aqc5Q4_9bHpAI4jh@jpoimboe>
-From: Longjun Luo <luolongjuna@gmail.com>
-Date: Mon, 14 Sep 2026 20:12:33 +0800
-X-Gm-Features: AcwNN1VWIDE0Lm0zG9p9IKWDNgAy2X1r_VfEjrf_Hkil4vrEE1LkGs-9AP2sQ-Q
-Message-ID: <CAKL4jwV8ZxAzkZ-0LWP9jzWvfw5-EKFS7LPKiibp5McY4Yubng@mail.gmail.com>
-Subject: Re: [PATCH] objtool/klp: Fix missed changes to same-named symbol references
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: peterz@infradead.org, song@kernel.org, jikos@kernel.org, pmladek@suse.com, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-11-song@kernel.org>
+ <20260914063734.71E531F000FF@smtp.kernel.org>
+In-Reply-To: <20260914063734.71E531F000FF@smtp.kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Mon, 14 Sep 2026 11:25:11 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6D=wVVNWLOkYBVaSVsVcS=rf2HDW_m7m8AWRWy1=YdLA@mail.gmail.com>
+X-Gm-Features: AcwNN1Xni1Kt8KtwU2LaozWdg9R3wKky_BCliNy5lwwVTNo3V8_0n75xlCDMvjA
+Message-ID: <CAPhsuW6D=wVVNWLOkYBVaSVsVcS=rf2HDW_m7m8AWRWy1=YdLA@mail.gmail.com>
+Subject: Re: [PATCH v2 10/58] objtool: Keep failing test workdirs by default
+To: sashiko-reviews@lists.linux.dev
+Cc: live-patching@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz, 
+	kernel-team@meta.com, peterz@infradead.org, jpoimboe@kernel.org, 
+	pmladek@suse.com, puranjay@kernel.org, joe.lawrence@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Josh,
+On Sun, Sep 13, 2026 at 11:37=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] Incorrect shell logic nesting hides failure hints and masks le=
+aked artifacts in KEEP=3Dnone mode
+> --
+>
+> commit 3f45b4f5eca60d068a16adeda22b98b456f84450
+> Author: Joe Lawrence <joe.lawrence@redhat.com>
+>
+> objtool: Keep failing test workdirs by default
+>
+> Change the default test behavior to save failing test working directories
+> instead of deleting them. Add a KEEP Makefile variable to optionally reta=
+in
+> all or none of these directories.
+>
+> > diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run=
+-tests.sh
+> > index e6f1ac1b5d0da..81dd33f1819b5 100755
+> > --- a/tools/objtool/tests/run-tests.sh
+> > +++ b/tools/objtool/tests/run-tests.sh
+> [ ... ]
+> > @@ -167,15 +182,44 @@ done
+> [ ... ]
+> > +none)
+> > +     if ! rmdir "$rundir"/*/ "$rundir" 2>/dev/null; then
+> > +             if [ "$fail" !=3D 0 ] || [ "$xpass" !=3D 0 ]; then
+>
+> [Severity: Medium]
+> Does nesting the failure hint inside the ! rmdir check in the KEEP=3Dnone
+> case block prevent the hint from being printed when tests successfully
+> clean up?
+>
+> If rmdir succeeds, meaning tests cleaned up properly, this entire block i=
+s
+> skipped. Also, if a test leaks files (causing rmdir to fail) and tests
+> also fail, won't this logic print the hint but skip the leak warning due =
+to
+> the elif statement? This would effectively mask the leaked artifacts when
+> tools/objtool/tests/run-tests.sh is run with KEEP=3Dnone.
 
-> These seem like unusual edge cases, is this problem theoretical or was
-> it a real-world bug?
-
-These are constructed reproducers, not production failures. We have
-been working on userspace livepatching, including symbol correlation
-under LTO. I built and tested these cases while comparing klp-build
-and kpatch-build.
-
-> If the .patch upgrades a function from static to global then the
-> function no longer has a FILE associated with it.  Then with the above,
-> all callers to that function would be marked as changed.  And note that
-> LTO does a lot of that, so static-to-global and global-to-static changes
-> are common between orig and patched objects.
-
-I confirmed locally that kernel LTO can change a function's binding
-without changing its name.
-
-For context, in our userspace ThinLTO tests, promoted locals usually
-acquired a .llvm.<hash> suffix. The kernel's ThinLTO build uses
--always-rename-promoted-locals=3Dfalse when supported by the toolchain,
-so promotion need not add that suffix.
-
-I agree that this FILE-based checksum change is too restrictive.
-Please drop this patch.
-
-You are right that patch authors need to verify the changed-function
-list. However, in these cases the current checksums do not distinguish
-the old and new targets, and no diagnostic points to the missed change.
-That could make a resulting problem difficult and time-consuming to
-diagnose. Would it be useful to document these cases as a known
-limitation?
+I think this is OK. We still print out "not ok" and "fail: <none zero>".
 
 Thanks,
-Longjun
-
-Josh Poimboeuf <jpoimboe@kernel.org> =E4=BA=8E2026=E5=B9=B49=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=B8=80 08:27=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Sep 10, 2026 at 04:52:18PM +0800, Longjun Luo wrote:
-> > Hashing symbol references by demangled_name alone can miss target
-> > changes while the instruction or data bytes and normalized relocation
-> > offsets remain unchanged. This occurs when:
-> >
-> >   - A global function moves between files and calls a same-named static
-> >     function with a different implementation.
-> >   - A function's call target changes from a global function to a
-> >     same-named static function, without moving the caller.
-> >   - A data object, such as an ops structure, changes its function point=
-er
-> >     from a global function to a same-named static function.
->
-> These seem like unusual edge cases, is this problem theoretical or was
-> it a real-world bug?
->
-> > +/* Include FILE identity to distinguish same-named local targets. */
-> > +static inline void __checksum_update_symbol_identity(struct symbol *sy=
-m,
-> > +                                                  struct symbol *targe=
-t)
-> > +{
-> > +     const char *file_name =3D target->file ? target->file->name : "";
-> > +
-> > +     __checksum_update(sym, file_name, strlen(file_name) + 1);
-> > +     __checksum_update(sym, target->demangled_name, strlen(target->dem=
-angled_name) + 1);
-> > +}
->
-> If the .patch upgrades a function from static to global then the
-> function no longer has a FILE associated with it.  Then with the above,
-> all callers to that function would be marked as changed.  And note that
-> LTO does a lot of that, so static-to-global and global-to-static changes
-> are common between orig and patched objects.
->
-> Note that function change detection isn't intended to be 100% perfect
-> for all edge cases.  The patch author needs to verify the changed
-> function list matches what they expect.
->
-> --
-> Josh
+Song
