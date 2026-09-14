@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3739535F5ED
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D531C3E3169
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367348; cv=none; b=rKC1cPf2SyzuDI+8TieExXiu45mrn/wNn3N+/sd1zV11IyP4aPzTWoXwfto0HRI/ln+OEWShfnd0KSbtC63/8QdILhG3UfowjXYAk0FYLEBPjzlgQe4NCz4mhIHmtiY8sCoMgc7of6msDc3KJasEStRuGy7aj4bNIvCQgspLDH4=
+	t=1789367354; cv=none; b=MYZZvXjMrB7rQ5fJRhGtKBQVRpv2yvdyOfE7vTjjxDCOhoOQDDFu1agnTa5Roo7z2C+smkGhaKcUDLG+DXrLRvfjmnj+9gCrKQ4ivTULhKYfA89qF0CRxUUxkV82Y0CEwor0tpfvA3C6EuJyIi2CW4Hdq4DOARg0GCufDpha9zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367348; c=relaxed/simple;
-	bh=EUllrK2ob0byegLQraQasGEOHSPgqWzPpz89wAFozwg=;
+	s=arc-20240116; t=1789367354; c=relaxed/simple;
+	bh=3IF4lwu8eKTEK1ufxZvhMpeAWm5ghZUCWXHofJd21vQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KcXby9aBU9jaEwgWKBKBK0j7hr/5qnBjpZ73FAv7VgUlau9P32bXonLxT9uFWo0jBHWPIpqZu/luRXE8lpkHAmpAFNo49JUQvd2CJ7pwcrf2axaglDTuTknr9a6dmX5Yc0XxLKwy6zOYqvOGEyMgN/pIhpIDKZJXRiVV6zt2yCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QRC+r2cK; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=b0E9ppItxx/m28XC8bBZMgPRXYC3d7HskvHcblOuArND2/MKUSqB0KV1IeE1JW/WyCtQm+CKje2imihcQ7NhHhMtcfVU81/8/XzKLGd6QUihS2HlYay3qSq7bHUpNIHxP2NtQl2/6Qhv528eZVOBtvubaEKe11IZWtc0tyOgPlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGOv8AEt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QRC+r2cK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85361F000FF;
-	Mon, 14 Sep 2026 06:29:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGOv8AEt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C791F000FF;
+	Mon, 14 Sep 2026 06:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367347;
-	bh=v6CnK39IiT17AexXoU1tlXRI9DIx6WBmq+qkliR9b9g=;
+	s=k20260515; t=1789367352;
+	bh=pQrHaj1z1rFNs2qLTE2Dj/p72NcRw66DM7CTgrt8/uk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QRC+r2cK4BYT+tEilA5k6oU7qzNQzEldAvftha8eff0pR3Xbw++QhFMTNOHI3v4kp
-	 c04vy5R7n5nRHjqALUo+/DQFWHeTuuCUliC5M3wcjGLISuYxIw09PfZIIymi02G9hj
-	 RRML3eENDXh/xLz+Yg/T8f6JFpbQENwUUYSPYC7N97o0iXL/nO6eZZ86LoHyX7Sq+D
-	 3LSwlHC1HW/N0j48jCMGEop3sPa1nRrLPz+hyljd0vAOCtnk7WXc/xkN3eB2z9r8Ys
-	 Bb4XtC1sczIsRDUy4cg9Tnv7RqMBDLSCG37eb9XSbBobyFCWh+jh9HIw3KesO3xXKN
-	 587lMswxHtHdw==
+	b=GGOv8AEtfblsGs1BYEV0SrZrm7/rbRP7+0xR0k3gHKH3m97L2J3oKGYhmb9NAHiAO
+	 68ZnzWGJij6UB3TcYMKiqa6J9OTUcxXMW7Hh7R4RpcuKWN/+MpUO6mZqmBnS44EHLO
+	 ZEMeJeulnSnCFRBZ9g0bvPksWldQ4i9ZgflD4qcKZcEZlY0hL71cmbo0OI9fUF85uQ
+	 VVUVsLWIKbMOqJrGoPs4R2x2LZ+qQuxaSk7r4JH6EMZ94U9ahOHTingMEdDDE3O6Te
+	 WGLnnRgUlc8CyqX1nn7NvCR3r/RWWv6YJ0DncHhwNC98ywT1RxFZuv7rG1Iw27rgby
+	 SqiVCaviAC2Ug==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 41/58] objtool/klp: Add test for kCFI prefix symbols and traps
-Date: Sun, 13 Sep 2026 23:24:57 -0700
-Message-ID: <20260914062514.926997-42-song@kernel.org>
+Subject: [PATCH v2 42/58] objtool/klp: Add test for symbols whose linkage the patch changes
+Date: Sun, 13 Sep 2026 23:24:58 -0700
+Message-ID: <20260914062514.926997-43-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914062514.926997-1-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
@@ -51,125 +51,134 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two properties, asserted separately because they fail differently:
+A patch can move a symbol between static and global without renaming it:
+dropping "static" from a helper so something else can call it, or adding it
+to one that is no longer shared.  Correlation keys off more than the name,
+so a symbol whose binding moved has to still pair with itself.
 
-  - the __cfi_<func> prefix symbol has to be carried with the patched
-    function, or the function has no type identity and indirect calls to it
-    trap;
-  - its .kcfi_traps entry has to be extracted, or the trap is not
-    recognised as a CFI failure and a clean report becomes an oops.
+Failing to is not a build failure.  The symbol looks new, and a new data
+symbol is either rejected or cloned as a second copy -- at which point the
+patched code updates its own private variable while the rest of the kernel
+keeps reading the original.
 
-test-special-section hand-assembles a .kcfi_traps entry, which is what
-makes it catch commit 7df1638df97b ("objtool/klp: Fix .kcfi_traps special
-section extraction").  Nothing until now built real kCFI code.
+The test covers both directions in one fixture, a function going global and
+a variable going static, and asserts the outcome rather than the absence of
+a warning: each symbol resolves back to the kernel's copy through a klp
+symbol, and neither is cloned into the patch.
 
-This tests the behavior of commit da4326573ae8 ("objtool/klp: Fix kCFI trap
-handling").  Commit f7ceffd21a8a ("objtool/klp: Fix kCFI prefix
-finding/cloning") cannot be tested as such, its code having been rewritten
-by commit fe6a87e0abac ("objtool: Improve and simplify prefix symbol
-detection"); this guards the current implementation's behaviour instead.
+An earlier version asserted only that no "no correlation" or "changed data"
+message appeared, and passed with correlation deliberately broken.  What
+the messages say and what the patch contains are not the same question.
+
+Verified to fail with correlation made to require matching symbol bindings.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/tests/x86/fixtures/kcfi.c | 39 +++++++++++++++++++++++++
- tools/objtool/tests/x86/test-kcfi.sh    | 39 +++++++++++++++++++++++++
- 2 files changed, 78 insertions(+)
- create mode 100644 tools/objtool/tests/x86/fixtures/kcfi.c
- create mode 100755 tools/objtool/tests/x86/test-kcfi.sh
+ .../tests/generic/fixtures/local_to_global.c  | 34 +++++++++++++
+ .../generic/test-local-to-global-flip.sh      | 50 +++++++++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/local_to_global.c
+ create mode 100755 tools/objtool/tests/generic/test-local-to-global-flip.sh
 
-diff --git a/tools/objtool/tests/x86/fixtures/kcfi.c b/tools/objtool/tests/x86/fixtures/kcfi.c
+diff --git a/tools/objtool/tests/generic/fixtures/local_to_global.c b/tools/objtool/tests/generic/fixtures/local_to_global.c
 new file mode 100644
-index 000000000000..b62fc60634cf
+index 000000000000..3c9eb9200ce5
 --- /dev/null
-+++ b/tools/objtool/tests/x86/fixtures/kcfi.c
-@@ -0,0 +1,39 @@
++++ b/tools/objtool/tests/generic/fixtures/local_to_global.c
+@@ -0,0 +1,34 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * An indirect call, which under kCFI is preceded by a type check and a trap.
-+ *
-+ * Clang emits a __cfi_<func> prefix symbol carrying the type hash ahead of
-+ * every address-taken function, and records the trap site in .kcfi_traps.
-+ * Both belong to the function and both have to come with it into a patch.
-+ *
-+ * Needs -fsanitize=kcfi, which only Clang has.
++ * A function which the patch changes from static to non-static, and a variable
++ * that goes the other way.  The names are unchanged; only the binding moves.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+static int impl_a(int x)
++/* noinline, or the static one is folded into its caller and has no symbol */
++#ifdef PATCHED
++__attribute__((noinline)) int flipped_up(int x)		/* was static */
++#else
++__attribute__((noinline)) static int flipped_up(int x)
++#endif
 +{
 +	return x + 1;
 +}
 +
-+static int impl_b(int x)
-+{
-+	return x * 2;
-+}
-+
-+__attribute__((noinline)) int (*pick(int x))(int)
-+{
-+	return (x & 1) ? impl_a : impl_b;
-+}
-+
-+int target(int x)
-+{
-+	int (*fn)(int arg) = pick(x);
-+
 +#ifdef PATCHED
-+	return fn(x) + 2;
++static volatile int flipped_down = 5;	/* was global */
 +#else
-+	return fn(x) + 1;
++volatile int flipped_down = 5;
++#endif
++
++int caller(int x)
++{
++	flipped_down += x;
++#ifdef PATCHED
++	return flipped_up(x) + flipped_down + 2;
++#else
++	return flipped_up(x) + flipped_down + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/x86/test-kcfi.sh b/tools/objtool/tests/x86/test-kcfi.sh
+diff --git a/tools/objtool/tests/generic/test-local-to-global-flip.sh b/tools/objtool/tests/generic/test-local-to-global-flip.sh
 new file mode 100755
-index 000000000000..b583ef608747
+index 000000000000..b4dca6cff0f2
 --- /dev/null
-+++ b/tools/objtool/tests/x86/test-kcfi.sh
-@@ -0,0 +1,39 @@
++++ b/tools/objtool/tests/generic/test-local-to-global-flip.sh
+@@ -0,0 +1,50 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Under kCFI an indirect call checks a type hash before jumping, and traps on a
-+# mismatch.  Two things belong to the calling function and must come with it
-+# into a patch:
++# A patch can change a symbol's linkage without renaming it: dropping "static"
++# from a helper so something else can call it, or adding it to one that is no
++# longer shared.  Correlation keys off more than the name, so a symbol whose
++# binding moved can fail to pair with itself.
 +#
-+#   - the __cfi_<func> prefix symbol holding the hash.  Lose it and the patched
-+#     function has no type identity, so indirect calls to it trap.
-+#   - its .kcfi_traps entry.  Lose that and the trap is not recognised as a
-+#     CFI failure, so what should be a clean report becomes an oops.
-+#
-+# Neither shows up at build time.
++# Failing to correlate is not a build failure.  The symbol looks new, and a
++# "new" data symbol is either rejected or cloned as a second copy -- at which
++# point the patched code updates its own private variable and the rest of the
++# kernel keeps reading the original.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+clang_only "kCFI is a Clang feature"
-+
 +setup
++build_pair local_to_global.c
 +
-+# Declared above that this is Clang's; a given Clang may still be too old.
-+cc_supports -fsanitize=kcfi ||
-+	probe_skip "this clang does not support -fsanitize=kcfi"
-+
-+build_pair kcfi.c -fsanitize=kcfi
-+
-+assert_input_section .kcfi_traps
-+assert_input_symbol __cfi_target
++# Confirm the fixture really moved the bindings, in both directions.
++in_symbols orig.o    | grep -qE 'LOCAL.*flipped_up' ||
++	fail "flipped_up is not local in the original"
++in_symbols patched.o | grep -qE 'GLOBAL.*flipped_up' ||
++	fail "flipped_up is not global in the patched object"
++in_symbols orig.o    | grep -qE 'GLOBAL.*flipped_down' ||
++	fail "flipped_down is not global in the original"
++in_symbols patched.o | grep -qE 'LOCAL.*flipped_down' ||
++	fail "flipped_down is not local in the patched object"
 +
 +run_diff
 +
-+assert_patched target
++assert_diff_log 'changed function: caller'
 +
-+# The prefix symbol comes with its function ...
-+assert_symbol __cfi_target
-+# ... and so does the trap entry.
-+assert_section .kcfi_traps
++# Correlated means each pairs with its own counterpart in the original, so the
++# patch refers back to the kernel's copy ...
++assert_klp_sym flipped_up vmlinux
++assert_klp_sym flipped_down vmlinux
 +
-+pass "kCFI prefix symbol and trap entry carried with the patched function"
++# ... rather than carrying its own.  A second copy of flipped_down is the bad
++# outcome: patched code would update its private one while the rest of the
++# kernel keeps reading the original.
++assert_not_patched flipped_up
++assert_no_section .data.flipped_down
++assert_no_section .bss.flipped_down
++
++diff_log | grep -q 'no correlation' &&
++	fail "linkage change reported as an uncorrelated symbol"
++diff_log | grep -q 'changed data' &&
++	fail "linkage change reported as changed data"
++
++pass "symbols correlated across a change of linkage"
 -- 
 2.53.0-Meta
 
