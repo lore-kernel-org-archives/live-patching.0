@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA12639B4A5
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED813B774F
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789428961; cv=none; b=moT+eVEHE6PSsN3R2M+MsX0qPUsHJ6hEZkAYhVcLKE46VlAVAc2oJmoM2RO+wYqAwNje4N2FXhvWQCAKM8iR0lLlh7p7aqt2L9haX21+E2Du15vgmVytb8PSc/qZ8AJXSpU4sFAcG3PHgiyPCmsRizNgG+PQ0zTyv2yF1Q0Lhjk=
+	t=1789429279; cv=none; b=chL0dRktyX9R4I/5wup7j/o/Sk8Mx/V+MYqqpdG4vVAKB6MqnB1k8Z48Uo9ntgICBB2pIx1dDZon/cyNqum/hmRMFCmWhdXBF4d0R99foTVobAWxAAiRdZKuXckVAgm5upQ02Czlz6VFZHTYpScryeAr3acWzCqTbVyt6VcCjO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789428961; c=relaxed/simple;
-	bh=BavRyNJlcb8vO6SvzyXyfyjVj6yD7pb3cNZ7lNQ5hDw=;
+	s=arc-20240116; t=1789429279; c=relaxed/simple;
+	bh=Tst70YFC47gg6Hx97GuUJ/61R/sohzZatEUVtjXS/Xk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VNEcnZkb4J78wsGLJllCbnaXzq4v9dAQ9XlgEVnMq8xH2X3dQ59sdb+cGPiawQDFY27aAUTJkgKpNtxyj8AqdVEALo+cT3E1DMEBFlfY7nkdYqHepqyQdRZkTAYwgwhVgHUaVkOVabgD0kX8zkJM5BX6xVd5ylgmJigYQN6Vm+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KemC9e0G; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=QXWAwkg7JMNi2M7tc8QCySLtaeJp1up3KFFFo5BNRtWzKI2VSiw5ZGRlOTIaE6ym35/OtLU3S3/nBKSy+I/Tvr06BbP0J6xJUZ6Tm2hUGMLp1jjdb3OBoN6eAuLNGlGXwX2Ni4rXvTQR+Pqtmjcuhr8yksxw3+5p2gnJIHdie5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bweUI3iV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KemC9e0G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C05F1F000FF;
-	Mon, 14 Sep 2026 23:35:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bweUI3iV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F551F000FF;
+	Mon, 14 Sep 2026 23:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789428959;
-	bh=cTti2NYJoRcO5E4evtWXkiCWTASFQZOFKVg8pyVTDOs=;
+	s=k20260515; t=1789429271;
+	bh=qr9TaeAox/KxfzyexIIuerc4MVOQ3xNxkv+qN2xoHEM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KemC9e0Gx7CimLrO+0HZBuUR3xZqbDAxsKntoTPRwIAyKb1zsGO3oK9NDLyPthnF8
-	 ck60f27U9MRDde+gsNJauhXy0YkjOTaje34dzPYGEaTOSJ6EWv/tFbsy7MjeDqPf3P
-	 uLV6j0nghrPC5hSRigkKBQ6pm4BA1s1XoNcDsKm9p+70NwuaJsS8wVUIWNmEHZW9Im
-	 VpKNGz54Y8lmWWqYFuRY67IgmBWRQfRgFExVC6n2Zmw7HeWE3dV3m79Acch5NjHxe+
-	 L0VpRIh601Py1BGX0qgR+9tMoz64UjBLURapWZmiJLNhYl6NYF/wv2LjSb+KfwqJYl
-	 zykmd8CjkpcLw==
+	b=bweUI3iV6Gsx833QplD9rb3vIt7opVr2O3I2Y5DqocvO6JeZZg4kfwSvnyU7Bwl4l
+	 YZfAMbR7YrNvTf3fObS7zq7A4Qni7nO64Y2x8SJNasyIbT96RJXr7gEdtpU9ImYdOG
+	 5Zw4RYrVW2l05/wQQF2//5NIE81ecgQWi71yKsCzGYOfNOhzjfXBWE6JP0oNrEpqWS
+	 45+cKrUlNT1kdSo+MUUg9goOJ9oetepMeTDGhxarG/pFOjGplDKh2GDget/sUiFsRY
+	 ZMJzlvNlzyHyzDPyotK384uzIm7qqy8YhmORZU1ekFPhVGwgx93vuWiyTnB8WF3rS4
+	 K4hblayMQdmFQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 06/58] objtool/klp: Grow the klp test harness
- vocabulary
+Subject: Re: [PATCH v3 10/58] objtool: Keep failing test workdirs by default
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: pmladek@suse.com, mbenes@suse.cz, jikos@kernel.org, puranjay@kernel.org, jpoimboe@kernel.org, peterz@infradead.org, joe.lawrence@redhat.com, kernel-team@meta.com
-In-Reply-To: <20260914230355.3422996-7-song@kernel.org>
+To: live-patching@vger.kernel.org, "Song Liu" <song@kernel.org>
+Cc: joe.lawrence@redhat.com, jikos@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, pmladek@suse.com, puranjay@kernel.org, mbenes@suse.cz, kernel-team@meta.com
+In-Reply-To: <20260914230355.3422996-11-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
- <20260914230355.3422996-7-song@kernel.org>
+ <20260914230355.3422996-11-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 23:35:58 +0000
-Message-Id: <20260914233559.2C05F1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 23:41:10 +0000
+Message-Id: <20260914234110.97F551F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,105 +46,70 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] objtool/klp: run_checksum failures swallowed in subshells mask t=
-est failures
+- [Medium] objtool/tests: misplaced artifact removal warning in KEEP=3Dnone=
+ block
 --
 
-commit 3b088080b3fc17cb3c6bcdacd83b5a2febf34918
-Author: Song Liu <song@kernel.org>
+commit 6a850bca1e88fd95f7b038a701cf95c2d9700c66
+Author: Joe Lawrence <joe.lawrence@redhat.com>
 
-objtool/klp: Grow the klp test harness vocabulary
+objtool: Keep failing test workdirs by default
 
-Adds assertions for the output produced by klp diff, as well as for the
-input objects. Includes helpers to extract and verify checksums recorded
-for livepatch symbols.
+This commit modifies the objtool test runner to keep the working
+directories of failing tests by default. It introduces a KEEP variable
+that can be set to 'all', 'none', or 'failed' to manage these artifacts.
 
-> diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> index 35be42758ece8..1b1baff80a712 100644
-> --- a/tools/objtool/tests/lib.sh
-> +++ b/tools/objtool/tests/lib.sh
+> diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-t=
+ests.sh
+> index e6f1ac1b5d0da..81dd33f1819b5 100755
+> --- a/tools/objtool/tests/run-tests.sh
+> +++ b/tools/objtool/tests/run-tests.sh
+
 [ ... ]
-> +checksum_of()
-> +{
-> +	local obj=3D"$workdir/$1" sym=3D"$2" off
-> +
-> +	run_checksum
-> +
-> +	off=3D"$($READELF -rW "$obj" 2>/dev/null |
-> +	       awk -v s=3D"$sym" '/rela\.discard\.sym_checksum/,/^$/ {
-> +			if ($5 =3D=3D s) { print $1; exit }
-> +	       }')"
-> +
-> +	[ -n "$off" ] || return 1
-> +
-> +	$OBJCOPY -O binary --only-section=3D.discard.sym_checksum \
-> +		"$obj" "$workdir/checksums.bin" 2>/dev/null || return 1
-> +
-> +	dd if=3D"$workdir/checksums.bin" bs=3D1 skip=3D$((16#$off + 8)) count=
-=3D8 \
-> +		status=3Dnone | od -An -tx1 | tr -d ' \n'
-> +}
-> +
-> +# assert_checksum_differs <symbol> / assert_checksum_matches <symbol>
-> +#
-> +# Compare what klp checksum recorded for a symbol in the original agains=
-t the
-> +# patched object.  This is what decides whether klp diff treats a functi=
-on as
-> +# changed, so a test asserting only that the right functions were cloned=
- cannot
-> +# tell a correct checksum from one which happens to differ.
-> +checksum_pair()
-> +{
-> +	orig_checksum=3D"$(checksum_of "$orig_obj" "$1")"
-> +	patched_checksum=3D"$(checksum_of "$patched_obj" "$1")"
+
+> @@ -167,15 +182,44 @@ done
+>  echo "# pass:$pass fail:$fail static-skip:$static_skip" \
+>       "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
+> =20
+> -# A failure is the one time the objects matter, and by default they are
+> -# already gone.  Say so then rather than in the usage text nobody reads =
+while
+> -# something is broken.
+> -if [ -n "${KLP_TEST_KEEP:-}" ]; then
+> -	echo "# working directories kept in $rundir -- inspect, then rm -rf it"
+> -elif ! rmdir "$rundir"/*/ "$rundir" 2>/dev/null; then
+> -	echo "# $rundir was not empty; a test did not clean up after itself"
+> -elif [ "$fail" !=3D 0 ] || [ "$xpass" !=3D 0 ]; then
+> -	echo "# re-run with --keep to hold on to what a failing test built"
+> -fi
+> +case "$KLP_TEST_KEEP" in
+
+[ ... ]
+
+> +none)
+> +	if ! rmdir "$rundir"/*/ "$rundir" 2>/dev/null; then
+> +		if [ "$fail" !=3D 0 ] || [ "$xpass" !=3D 0 ]; then
+> +			echo "# keep=3Dnone: artifacts were removed" \
+> +			     "(re-run with KEEP=3Dfailed or KEEP=3Dall)"
+> +		elif [ -d "$rundir" ]; then
+> +			echo "# $rundir was not empty; a test did not clean up after itself"
+> +		fi
+> +	fi
+> +	;;
+> +esac
 
 [Severity: Medium]
-Will run_checksum failures be swallowed by these subshells, potentially
-masking test failures?
+Does nesting the failure advice inside the if ! rmdir block prevent it from
+being displayed?
 
-If objtool klp checksum fails for orig_obj, it triggers the call chain
-checksum_pair() -> checksum_of() -> run_checksum() -> fail() in
-tools/objtool/tests/lib.sh. Since this occurs within a subshell, fail()
-exits only the subshell and its stdout (the "not ok..." string) is
-captured into orig_checksum instead of terminating the test. No
-.checksummed marker is created.
+If a test fails but successfully cleans up its individual subdirectories, t=
+he
+rmdir command will succeed and return 0. This skips the entire block,
+swallowing the intended "artifacts were removed" advice message.
 
-When checksum_of() runs for patched_obj, run_checksum() attempts to process
-orig_obj again and fails identically, capturing the exact same failure
-string into patched_checksum.
-
-Both variables will contain the identical "not ok..." error string.
-
-> +
-> +	[ -n "$orig_checksum" ] ||
-> +		fail "no checksum recorded for '$1' in $orig_obj"
-> +	[ -n "$patched_checksum" ] ||
-> +		fail "no checksum recorded for '$1' in $patched_obj"
-> +}
-> +
-> +assert_checksum_differs()
-> +{
-> +	checksum_pair "$1"
-> +
-> +	[ "$orig_checksum" !=3D "$patched_checksum" ] ||
-> +		fail "checksum for '$1' unchanged at $orig_checksum, expected it to di=
-ffer"
-> +}
-> +
-> +assert_checksum_matches()
-> +{
-> +	checksum_pair "$1"
-> +
-> +	[ "$orig_checksum" =3D "$patched_checksum" ] ||
-
-As a result, assert_checksum_matches() evaluates to true here, and the test
-silently passes despite a toolchain failure.
-
-> +		fail "checksum for '$1' changed from $orig_checksum to" \
-> +		     "$patched_checksum, expected no change"
-> +}
+Could this also fail to report test leaks if they occur alongside test
+failures?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914230355.3422=
-996-1-song@kernel.org?part=3D6
+996-1-song@kernel.org?part=3D10
