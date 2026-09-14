@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D521C75F9
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:48:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A313793B3
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789368538; cv=none; b=CPO1PpnuhkW+Mk9B/eUA9zJ5SS4wWtb5ZcSXzejLP0mKXBlpyi6NgQq7CAcN6nzna5fuJM7mhS8xOiVwn+1G5kzsHN4IqPZXPXPiSDMorfBOCnnVmcWTRalyvBNB+UaOvVAVSgxDYOVy5D/0Wmv38KQX9FaG5jkRrKTzlBTWoCU=
+	t=1789368560; cv=none; b=CpJjSDfdXYKDHozLWMuHD4yp9dj7lKJv99DvDYIZA8b0piJHCbpJs6p5LSEnKVFF31bhTkVkjqYA/Z7GqKuslPUwj5UPpplAbuk6ylv8cWbmwNxogdyP7GF4xCVif67Vpn1TT3ZfkeJyfGS5V4ePslcRVVEpjg52kOHky3PE0d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789368538; c=relaxed/simple;
-	bh=I/nw9VNrLtATpyOhZmwORNLrpBl7bGFmc4qu8T05wO0=;
+	s=arc-20240116; t=1789368560; c=relaxed/simple;
+	bh=4vmbLsK/9Qa1ovp8a4P8TItXy3iqrTBClv529M4gA5E=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=mpHWBj448unWhhTtX8k8pn00ryLAIAn2avHuskpaYwPYHBW3gfFo99Lek79OAztFgz6CaOllFcdam7/bolw+tdAkXA2kWeAcgHInJBczssiIkAaYlKzmmlAkk2697TpZU5d/lzBYLABv+nlGs38DvK290s+xdmVybAZXjRzT6LU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/QF5x40; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=m0bHW4eUOdu7B8JyoVi1uskPMNT33C5p0/TvGo3vY1oLjG9Ur2ry9yLw8SKGUoXJgfvW0hmhh9re/5TWgU9dsNZtsGGXJnSCMbrp0JS/krclIA2YEwBXDRL1zpWRKinss82d50FM0C0s4K3N6OJRQvR5tbFPYXbDEfoaAdRwz8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHYXTTmo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/QF5x40"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15421F000FF;
-	Mon, 14 Sep 2026 06:48:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHYXTTmo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132B41F00899;
+	Mon, 14 Sep 2026 06:49:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789368537;
-	bh=/NE0pz9WDSgCrJ9mPf+3jPqHwsJwqB8Qw1I9p/UlM6s=;
+	s=k20260515; t=1789368558;
+	bh=KUzQmjNNDL+avtKik4pUVQbofRc8jdlXamYHQdY6PWA=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h/QF5x40jl9WcSVPDGBYPWQi2i1NYU950bP5jfhXRHNpVqvPdEM4+0XEKSgTDGqT7
-	 A9nScMbU8/sGQtW14xjZRWmBAc/cCYRqOsPnYs6aIYgLZLqsW66dovHVtyuKktmgFz
-	 chSxWrYU6IZDv1jN7l9PBWp/kpEzVTKvQ48zznATV7FJNv90dhzJavHsTo7h8p5qsG
-	 XshGYIWeiKPUkQBE7D2IqV2j9t0CQ2v8+sAGWw1EduC48F6z0cQuxMXBJRtAbLPv2K
-	 pduAQMf0Jdw03emV3qaJJWNzFqNs8Pu8u4D3E1s8Py0AexoBXDw6nE0s+btIPg0O1z
-	 jSApOzbqRTfFQ==
+	b=PHYXTTmoZTKSUbxrfCXaZDwtPlS/8R6zBPsN5kW1RdrTgxprXoWNdUK1Fmrnyyd8Z
+	 es89wr8aXAwKuyIF+mx8r/3ifhdM58mAvwjqhDIfYRusXgeOZ/Em2tSlUlatcKA4wo
+	 emONd4kIURvhUMxa53+prfJpPSJaO0bJqWIUbfH3jjaaBoMqpiqtIW5RfDtB7XWaJJ
+	 yX9tNNRD9qLqg8qYFD5PjzklNOb3886/KF9KC6zyR1vmsYnpUXYtYpCkrM4E8Nhtg1
+	 uAAkbyXsC4Us948enKwqz2SFekIHDXtzD+CqvKqM+Fe0ZpZcXb78tUYXlH66pbavlK
+	 HVnFi5xCmDaGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 47/58] objtool/klp: Add test for symbols with no
- checksum entry of their own
+Subject: Re: [PATCH v2 37/58] objtool/klp: Add test for sympos in module
+ objects
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: mbenes@suse.cz, jikos@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, kernel-team@meta.com, puranjay@kernel.org
-In-Reply-To: <20260914062514.926997-48-song@kernel.org>
+Cc: pmladek@suse.com, jpoimboe@kernel.org, mbenes@suse.cz, kernel-team@meta.com, joe.lawrence@redhat.com, peterz@infradead.org, jikos@kernel.org, puranjay@kernel.org
+In-Reply-To: <20260914062514.926997-38-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
- <20260914062514.926997-48-song@kernel.org>
+ <20260914062514.926997-38-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 06:48:56 +0000
-Message-Id: <20260914064856.E15421F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 06:49:17 +0000
+Message-Id: <20260914064918.132B41F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,68 +47,69 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The generic check for duplicate addresses in the test script uses s=
-ymbol names instead of actual addresses (symbol value + addend).
+
+Pre-existing issues:
+- [High] Objtool's klp_find_sympos() for modules counts symbols in init and=
+ non-alloc sections, causing livepatch resolution to fail if applied after =
+the target module is initialized.
 --
 
-commit 8da269007d7ca99a4b81784ec070f665fec2ad95
+commit 22d70a31297d85e4712560a5e8b6e9de9ffd35be
 Author: Song Liu <song@kernel.org>
+Subject: objtool/klp: Add test for sympos in module objects
 
-objtool/klp: Add test for symbols with no checksum entry of their own
+This commit introduces test coverage for the klp-sympos logic in objtool.
+It adds a new fixture and bash script to verify that duplicate symbols are
+correctly numbered by sympos in module objects.
 
-This commit adds a test script and a C fixture to verify that objtool
-correctly skips checksum entries for zero-length, alias, and cold-part
-symbols. It ensures that the invariant of one entry per address in
-.discard.sym_checksum is maintained.
-
-> diff --git a/tools/objtool/tests/generic/test-checksum-skip.sh b/tools/ob=
-jtool/tests/generic/test-checksum-skip.sh
+> diff --git a/tools/objtool/tests/generic/test-sympos.sh b/tools/objtool/t=
+ests/generic/test-sympos.sh
 > new file mode 100755
-> index 0000000000000..6e3e7055d31c3
+> index 0000000000000..b71d4930a22af
 > --- /dev/null
-> +++ b/tools/objtool/tests/generic/test-checksum-skip.sh
-> @@ -0,0 +1,72 @@
+> +++ b/tools/objtool/tests/generic/test-sympos.sh
 [ ... ]
+> +run_diff
 > +
-> +# entries_for <object>
-> +#
-> +# The symbol names .discard.sym_checksum has an entry for, one per line.
-> +entries_for()
-> +{
-> +	in_relocs "$1" | awk '/rela\.discard\.sym_checksum/,/^$/ {
-> +		if ($1 ~ /^[0-9a-f]{8,}/) print $5
-> +	}'
-> +}
-> +
-> +entries=3D"$(entries_for orig.o)"
-> +
-[ ... ]
-> +
-> +# One entry per address, which is what the skipping is for.
-> +dupes=3D"$(entries_for orig.o | sort | uniq -d)"
-> +[ -z "$dupes" ] ||
-> +	fail "two checksum entries for one address: $dupes"
+> +assert_klp_sympos dup_counter 1
+> +assert_klp_sympos dup_counter 2
 
-[Severity: Low]
-Does this generic uniqueness check correctly identify duplicate addresses?
+[Severity: High]
+This is a pre-existing issue, but since this test checks the output of
+klp_find_sympos(), I wanted to ask about its symbol counting logic.
 
-Since entries_for() extracts only the symbol name (column 5 of the readelf
-output), this check doesn't seem to evaluate the actual resolved address
-(symbol value + addend).
+Currently, klp_find_sympos() counts all identically-named symbols in the
+module's ELF symtab:
 
-Wouldn't it fail to detect two different symbols mapping to the same addres=
-s,
-or potentially fail spuriously if multiple static functions share a section
-symbol with different addends?
+tools/objtool/klp-sympos.c:klp_find_sympos() {
+...
+	for_each_sym(elf, s) {
+		if (!strcmp(s->name, sym->name)) {
+			nr_matches++;
+			if (s =3D=3D sym)
+				sympos =3D nr_matches;
+			else
+				has_dup =3D true;
+		}
+	}
+...
+}
 
-Since this is a test script with a tightly controlled C fixture (without
-static functions) and the alias case is explicitly tested beforehand, it
-doesn't break this specific test case. However, should the check be updated
-to use actual resolved addresses instead of just symbol names?
+Does blindly counting symbols in .init or non-alloc sections cause
+livepatch resolution to fail?
 
-> +
-> +pass "zero-length symbols and aliases get no checksum entry of their own"
+When a livepatch is loaded after the target module is initialized, the
+kernel's module_kallsyms_on_each_symbol() uses mod->core_kallsyms, which
+strips init and non-alloc symbols via is_core_symbol().
+
+If a livepatch targets a module symbol that shares its name with another
+symbol located in an .init or non-alloc section, it seems klp_find_sympos()
+assigns an inflated sympos (e.g., 2). However, the kernel would only find 1
+matching symbol, see a mismatch with sympos=3D2, and reject the patch with
+-EINVAL.
+
+Should klp_find_sympos() be skipping init and non-alloc sections?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914062514.9269=
-97-1-song@kernel.org?part=3D47
+97-1-song@kernel.org?part=3D37
