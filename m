@@ -1,113 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B6D35C6B0
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF395396D1A
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789411180; cv=none; b=Xl9IM8FF3HHZ1fC0LjkKQVPwAEdQA5jeaCbvAVzAvAH7w/UbksiSFnxhLeBN1Dphb9cHkXsfRz6bps4lVH2LsQtFua643I6XxMDKzZ8ZEwRpFdfrm/Zww0bjsFEmxl4ytCseTUhgpXWwVQi6Gfc8t4aJG5K0WP3dyMvdhBw0izM=
+	t=1789411842; cv=none; b=jc1oQU5W/DW3fo8BkzOEus5flh2MXLyUs9SNy4EvA0PU6E648wMrVoMDxP2r3xt9iLc+y0fAzZGcGwvO4IsE0ltLNLiIPk1CjgmfKC3mVWa6rlWLXvMbUQffa5A3PLUl1lD2DhwZ7zz9P9OF2tEg8y/AbKXmVTWaDS2cMDlccHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789411180; c=relaxed/simple;
-	bh=0cjHsYPE4uzApcMmEedWQHQQybBBsMRH52pqMeGxe6g=;
+	s=arc-20240116; t=1789411842; c=relaxed/simple;
+	bh=E9q1DJdg0472QlXMjxwYvaljUHOOvgxBJY7nyPZKCME=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YcHUYOpnPlhW/aqmAkOOiVYJ/Igph/UtWJtdxj8wvNwfMiuAqJ8+T0cHmHHHn54dAp5oiXKGlgkGxDutnMQ8BXU3jU0l79l4JWFf1IJx/8eudRvd9w6ptdYU+KcNntslzO83Y+i0Yg68NmGcEA8hO0TQmku/fD55qD3NRRYiwhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZiT0CY1; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=MRG1+Kbrw2XAQtYrLUcm6y+oT44FTqyqZYPo+c37YJVxJahih959Md6Mv1yobH53JPfP0QXPiJayd4kZTsPwhbR3pTUDZl4BPaV3CmmhEuas39BjHbl6FZeO+UfC2HPs5ybYga24ZzStrJwvq/7Nhz59mN7y+NPVz5z+HD2Hjwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l76juJDK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZiT0CY1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70CA51F000FF
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:39:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l76juJDK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916C31F0089F
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 18:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789411178;
-	bh=9gPO7vsbHabM/rxLVUYdhRPBBqKMntRT1m25EdVzS3E=;
+	s=k20260515; t=1789411840;
+	bh=ZPlZzEDD1mFZWNrLhXM48j7ztWTsjBkQryMVet4AyjQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=nZiT0CY162+oEfO8rreFGvhdpAR2CPKVj4tfSdp2CBrhyZEI+32bMRWKNvRwOPcYl
-	 G1J2KSmy+TBTdAGg72xkD18NWmNQGJXguAycKY+Xfcs5jPYHp+GWoJ9V0OlE3OuEF3
-	 kDuDLjysVavCqBaAP2hfYATpEeu9Ny9JvgauhbDmYaYQa+vuO2Lru8DnCfCWcG8viq
-	 0hzBLi+afKxQY5vWEtnBi+awjhkLmVVK1WDvGCtKA12I42XjMVkKJ7y53hFzFRhPZa
-	 Vc3fPmAjpKgrHcjqMZ+wP+YNn+/HZqC1p41aEvAo9v8mF9BE0qBnm7ycK5EmxGPh0t
-	 z3oEux255bQFg==
-Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-939eb3249c1so301424185a.2
-        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 11:39:38 -0700 (PDT)
-X-Gm-Message-State: AFuF++kF/sco4tXj2NCpV291z3Ui2b6eEDjf3/QC5S8yf+l4TfxkbvBk
-	/e1kqAFZcOgOnGxgxpf4twIp9558ofnj/8J6la8r+H0DVnhssVGntybgyJaQFra0xVE3hd5Ve+3
-	eKFeyYKfZDXE0ZGi6N0GAfF4gQ34vgrE=
-X-Received: by 2002:a05:620a:890e:b0:939:2c5c:7977 with SMTP id
- af79cd13be357-93a29855523mr691895685a.20.1789411177574; Mon, 14 Sep 2026
- 11:39:37 -0700 (PDT)
+	b=l76juJDKykcTaLyfx/V2NZWjhS18kmWF0N8uNb2BfdheCbGkdiCYo+OwNisK+/Saf
+	 Wq8PjcNXtxYk5kI2ByTugiF/5mI7vzEXpBc6jPoAwvTfx/KtiPrsfoKFPKiqJlFQgQ
+	 7a4VpKXPltn9lt9cVnoQczfOq8Lg3QZNGtD6HTtO1ECojXow6z4nW82UAIvyCKMf/x
+	 gZul4BOAh56hhNezctBuqkydnJ2lWBR8Nw7K5Su7z6cOlTBAJEhrze7A7xSMeURrxn
+	 87UoZg/Ij52WtsS33iVzJDAfJGa59JyF8rjtPUca6Sy3c3SmW5yMXvRD8rg26uAd+g
+	 dtxPpUtL45ajA==
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-939b5ded99dso361840385a.2
+        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 11:50:40 -0700 (PDT)
+X-Gm-Message-State: AFuF++nf4iPV0iNv4kyaXITjbM7HYCTt/cNW/nv6ZdnUlhhMsSZ8N3DH
+	SC9rmL694O4f4PkcGleSEu+yxKhfGw3lo197Hzj5WHoXFQEWdESJ8BjRe4fZB6zF4w+hp0EjprV
+	AUPmhYzV6blY+G2PyPFN6dREXWnIJOZo=
+X-Received: by 2002:a05:620a:6504:b0:939:13a7:70f0 with SMTP id
+ af79cd13be357-93a297251cbmr564811685a.5.1789411839763; Mon, 14 Sep 2026
+ 11:50:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-3-song@kernel.org>
- <20260914063745.7D8EE1F000FF@smtp.kernel.org>
-In-Reply-To: <20260914063745.7D8EE1F000FF@smtp.kernel.org>
+References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-5-song@kernel.org>
+ <20260914063950.CE1F21F000FF@smtp.kernel.org>
+In-Reply-To: <20260914063950.CE1F21F000FF@smtp.kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Mon, 14 Sep 2026 11:39:24 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5i0Kdmdx-4mn8w3AY8b1x9m2kYEHGAAt9muzSbgWOu7Q@mail.gmail.com>
-X-Gm-Features: AcwNN1XIxiTJzpMs4h0zJm-HLRQTbp-DnYzC6713whLZkq_8rNDQmlWLzQYfzL8
-Message-ID: <CAPhsuW5i0Kdmdx-4mn8w3AY8b1x9m2kYEHGAAt9muzSbgWOu7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/58] objtool/klp: Check the klp test environment
- once, before any test
+Date: Mon, 14 Sep 2026 11:50:27 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4C7gB38T4GdEDCc8O=CmbVSMQ639AeBWwd8tfmTbT62A@mail.gmail.com>
+X-Gm-Features: AcwNN1VLWJ01ullAT8oDW2BrT9LU5DNk8famPpHVoi1dvYsxnzaM6jbYvo5NsKU
+Message-ID: <CAPhsuW4C7gB38T4GdEDCc8O=CmbVSMQ639AeBWwd8tfmTbT62A@mail.gmail.com>
+Subject: Re: [PATCH v2 04/58] objtool/klp: Classify klp test outcomes
 To: sashiko-reviews@lists.linux.dev
-Cc: live-patching@vger.kernel.org, pmladek@suse.com, kernel-team@meta.com, 
-	jikos@kernel.org, jpoimboe@kernel.org, peterz@infradead.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, puranjay@kernel.org
+Cc: live-patching@vger.kernel.org, mbenes@suse.cz, puranjay@kernel.org, 
+	joe.lawrence@redhat.com, kernel-team@meta.com, jikos@kernel.org, 
+	jpoimboe@kernel.org, peterz@infradead.org, pmladek@suse.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 13, 2026 at 11:37=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Sun, Sep 13, 2026 at 11:39=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [Low] Tool existence checks for READELF, OBJCOPY, and LD will fail if t=
-hese variables contain CLI arguments, incorrectly aborting the test suite.
+> - [Low] Literal `$'\n'` string is appended instead of a newline character=
+ during TAP output manipulation.
 > --
 >
-> commit 2ddfaa45c9b45195802f915e9ca42e1e7b224f4b
+> commit df7f112de2ce31cfbac30c00e5d997457d3c2710
 > Author: Song Liu <song@kernel.org>
 >
-> objtool/klp: Check the klp test environment once, before any test
+> objtool/klp: Classify klp test outcomes
 >
-> This commit adds a preflight check to evaluate the objtool test environme=
-nt
-> once before the test suite runs. It exports the environment answers and f=
-ails
-> the entire run if prerequisites are missing, rather than skipping tests
-> individually.
+> This commit introduces better classification of test outcomes for objtool=
+ klp
+> tests, distinguishing between different types of skips (declared, probe,
+> undeclared) and TAP directives (xfail, xpass). It modifies the test runne=
+r to
+> explicitly handle these cases and improve result reporting.
 >
-> > diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> > index 714371232fa30..6e4e54b108659 100644
-> > --- a/tools/objtool/tests/lib.sh
-> > +++ b/tools/objtool/tests/lib.sh
+> > diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run=
+-tests.sh
+> > index 48728a98d9950..6b937fc7f5bda 100755
+> > --- a/tools/objtool/tests/run-tests.sh
+> > +++ b/tools/objtool/tests/run-tests.sh
 > [ ... ]
-> > +klp_preflight()
-> > +{
-> > +     local tmp tool cc_version host cc_arch
-> > +
-> > +     bail() { echo "Bail out! $*" >&2; exit 1; }
+> > @@ -23,31 +61,99 @@ cd "$(dirname "$0")" || exit 1
 > [ ... ]
-> > +     command -v "${CC%% *}" >/dev/null || bail "compiler not found: $C=
-C"
-> > +
-> > +     for tool in "$READELF" "$OBJCOPY" "$LD"; do
-> > +             command -v "$tool" >/dev/null || bail "$tool not found"
-> > +     done
+> > +     case "$result" in
+> > +     *"# SKIP (declared)"*)  static_skip=3D$((static_skip + 1)) ;;
+> > +     *"# SKIP (probe)"*)     probe_skip=3D$((probe_skip + 1)) ;;
+> > +     *"# SKIP"*)
+> > +             # An undeclared skip: the test gave up for a reason it ne=
+ver
+> > +             # said it might.  That is a hole, not an expected outcome=
+.
+> > +             #
+> > +             # Replace the line rather than adding one.  Every test ow=
+es the
+> > +             # plan exactly one result, and a consumer counting them i=
+s
+> > +             # entitled to say so when the totals disagree.
+> > +             rest=3D"$rest${rest:+$'\n'}was: $result"
 >
 > [Severity: Low]
-> Will this check fail if the toolchain variables contain CLI arguments?
+> Does this append a literal dollar sign and single quotes instead of a new=
+line?
 >
-> Unlike the compiler check just above it which correctly uses parameter
-> expansion to strip arguments (`${CC%% *}`), passing the full string to
-> `command -v` when it contains spaces (e.g., if a developer or CI system
-> overrides `OBJCOPY=3D"llvm-objcopy --target=3Darm64"`) will cause `comman=
-d -v`
-> to treat the entire string as a single binary name and fail.
+> When a test fails via an undeclared skip and has already produced other o=
+utput,
+> the test runner attempts to append a newline to the rest string. Due to B=
+ash's
+> double-quoting rules, the $'\n' syntax is not expanded inside double quot=
+es and
+> is instead appended as literal characters. This can garble the terminal o=
+utput.
 >
-> Could this incorrectly abort the test suite under valid configurations?
+> > +             result=3D"not ok - $(basename "$t" .sh): undeclared skip"
+> > +             result=3D"$result (use gcc_only/clang_only or require_inp=
+ut_*)"
+> > +             fail=3D$((fail + 1)) ;;
+> > +     "not ok"*"# TODO"*)     xfail=3D$((xfail + 1)) ;;
+> > +     "ok"*"# TODO"*)         xpass=3D$((xpass + 1)) ;;
+> > +     "not ok"*)              fail=3D$((fail + 1)) ;;
+> > +     "ok"*)                  pass=3D$((pass + 1)) ;;
+> > +     *)
+> > +             # No result line at all: the test died before reporting.
+> > +             rest=3D"$rest${rest:+$'\n'}exited $rc without a result li=
+ne"
 >
-Good catch, fixed in v3.
+> [Severity: Low]
+> Is it possible this will also append literal characters rather than a new=
+line
+> when a test dies without outputting a valid TAP result line?
+
+This doesn't seem to be an issue.
 
 Thanks,
 Song
