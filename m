@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF709397E86
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C2A397E86
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367415; cv=none; b=AyeGyxmmlDFYdRBiMHjq5evt2RLPVPmDD0ajE7sTSCdkxhoxYZrErS8gCWQYIT+o7dxJzt3wGCTLricsQYYtkmuQ+OChUQabrIUC8+y47iWWEsknD/6dnMrAVe+x/kMuZx7iAZmlWcdk1exIHNmqznPhSyPlWT7E/8/RxToIQBE=
+	t=1789367421; cv=none; b=jlskYSxjImiBR2Q8iSutS8N5oK1eElaWyaZDB4w+2bfmS+kEa95pw8IzTH8b4YAIzS26uDTltkF7fz0MukDBuxbDTQWKZbq2510jvu/4vvvPkU3PepSgO2nA3Mn8zj5ApmRm87l59NzdaWUr9TMFUONeSSpXH0hAiTos523DnPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367415; c=relaxed/simple;
-	bh=yXYLWodDoIyhEqj3pNNBqPJ85jvN/ebcd1bgdr+w1k8=;
+	s=arc-20240116; t=1789367421; c=relaxed/simple;
+	bh=FGb2aQyX7NyyKBhjchuvgIYGATaiwX3/EywyJ6hG3WY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f9/Cf6ZVudP7hBv2p1F+fqTcCJ/KHISubGU1zSdisJ5XmFAYz7IwM6GIj3rRsD3b0K1yL+UAVYchAHvpiKHtXGqCBouRj5rYEPQyyLGTegtLnWn3gdzwROec5CjO0z/aWe//yoRvKmCBu9IAtWUkFcf29qtksL3SKBNjOP1gUeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4I5/mKO; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Votky3G9esG7cP5gXiKQ9yEm3VCcclxuy+r5b4Gbfv5qOgUgIr9ur43T8XyG+eyeSa+z+4hgeFo4+hebAyuzKbsMYnf1VyAgv4nYPSK6pyf2ACQt3jOHVqqS5kmi/aaVSNP0GhqCHPQ5QvN+ikFkoOccGwpcQmkAcNnXpxeIo7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BL5hdWsv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4I5/mKO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 084D31F000FF;
-	Mon, 14 Sep 2026 06:30:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BL5hdWsv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6121B1F00893;
+	Mon, 14 Sep 2026 06:30:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367411;
-	bh=LJCHKRPsT/HuMK3A6Aox1+L7b80tbGGCcZ+526NEH7g=;
+	s=k20260515; t=1789367416;
+	bh=40Xjg1WBvFiz/vd2PQBiblx5fPDphgAkDmglsYBmaSw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=j4I5/mKOK+4baBQMCVu1+GRIHwrw770p5OEPrzWsuhc96OAra1TsNHwSWsfg5+ym3
-	 yiC8ZP/ueMr5LQ/GNEYBdKSEwbJqQvjEv2l2CrKLIksfyKGtvpDeJbNiY6hz+Z2v8V
-	 S2l+JS+0zvKFD1s3elnPKAghItJRGpWdpFtuZe9x4dfbux0crnYD5193dRiKepN2EG
-	 BpaG7FZqAYmwdnRo5Gdf9cSRq+oCW+9Qr8ilTVXWrZmDAzT1lZHQfzla12At5Z3abw
-	 as2n2Ubt0Ao0nJwtTBT4CKTMLPzPj30g0pTCHdmqdDaEvnQAznnlkr4ztklnyu/Q3a
-	 KRT9hzmMNKs/Q==
+	b=BL5hdWsvhiGDQPsEXMxacvUwVLxeSt/IVuiz4zfzFupGwM93DMy9Mj5IZJqZeZr7p
+	 AyIb8Np99yFhhmecq3jhsM6ckb0rs9AMK/ts+ZnOQeEb7L2MaHVXeDHDY5FGvmbouC
+	 aOKo9rkd1YxYGSuhF3FW4JG/mCSZR3PzIlxwibsjILEiljnaronpyFMs3w7EBbib68
+	 AYMy6AtsjLCADogdSdEu9Zu72kRJ0CQbuoy7advmM1L0OPdLKsFYUu/QJBdnxECyrX
+	 7uQY8pgAm7KJlMBJzHG8dYKkCNVp8yo0+d+AJzXsyLi/jJhjnKaN3nkEgcgGKr7x4j
+	 OEecd8WaBa19Q==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 53/58] objtool/klp: Add test for the alignment of cloned data sections
-Date: Sun, 13 Sep 2026 23:25:09 -0700
-Message-ID: <20260914062514.926997-54-song@kernel.org>
+Subject: [PATCH v2 54/58] objtool/klp: Add test for a patch which strips a data annotation
+Date: Sun, 13 Sep 2026 23:25:10 -0700
+Message-ID: <20260914062514.926997-55-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914062514.926997-1-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
@@ -51,115 +51,81 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A cloned data section has to keep its sh_addralign.  Plenty of kernel data
-is aligned for correctness rather than speed -- per-CPU variables, anything
-touched by an aligned vector move, structures padded to own a cacheline --
-and a clone that lands under-aligned either faults on first use or silently
-shares a line it was laid out to avoid.  Neither shows up until the patch
-is loaded on hardware that cares.
+klp diff needs entry boundaries for a special section: either an entsize,
+or ANNOTATE_DATA_SPECIAL annotations naming where each entry starts.
+.static_call_sites has no entsize, so the annotations are all there is --
+and a patch can remove the last one in a translation unit while leaving the
+section itself in place, so that only the patched side has lost them.
 
-The fixture's data is new in the patched build, so klp diff has to clone it
-rather than reference the kernel's copy, and it asserts that premise before
-asserting the result.
+The section still has to be handled.  Dropping it leaves the patched
+function's static call unregistered; misreading its boundaries attaches the
+entry to the wrong code.  Neither is reported at build time.
 
-Commit 2f2600decb30 ("objtool/klp: fix data alignment in __clone_symbol()")
-cannot be reverted to check this -- the revert is a no-op against the
-current code, which has been rewritten since.  Verified instead by forcing
-the clone's alignment to 1, which the test reports as "alignment 1,
-expected 64".
+Give the fixture a NO_ANNOTATE knob and assert the premise -- annotation
+present in the original, absent in the patched object, section present in
+both -- before asserting the result.
+
+Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
+skipping entsize-based sections").  Verified by making klp diff skip
+.static_call_sites when cloning special sections: the test fails.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/data_alignment.c   | 29 ++++++++++++++
- .../tests/generic/test-data-alignment.sh      | 40 +++++++++++++++++++
- 2 files changed, 69 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/data_alignment.c
- create mode 100755 tools/objtool/tests/generic/test-data-alignment.sh
+ .../test-static-call-annotate-stripped.sh     | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/data_alignment.c b/tools/objtool/tests/generic/fixtures/data_alignment.c
-new file mode 100644
-index 000000000000..900253dfb2cb
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/data_alignment.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Data with an alignment stricter than its size.
-+ *
-+ * A cloned data section has to keep its sh_addralign.  The kernel has plenty
-+ * of data whose alignment is a correctness property rather than an
-+ * optimisation -- per-CPU variables, anything touched by an aligned SSE move,
-+ * cacheline-aligned locks -- and a clone that lands under-aligned faults or
-+ * silently shares a cacheline it was written to avoid.
-+ *
-+ * The object is new in the patched build, so klp diff has to clone it rather
-+ * than reference the kernel's copy.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+#ifdef PATCHED
-+int aligned_data[2] __attribute__((aligned(64))) = { 1, 2 };
-+#endif
-+
-+int target(int x)
-+{
-+#ifdef PATCHED
-+	return x + aligned_data[0];
-+#else
-+	return x;
-+#endif
-+}
-diff --git a/tools/objtool/tests/generic/test-data-alignment.sh b/tools/objtool/tests/generic/test-data-alignment.sh
+diff --git a/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
 new file mode 100755
-index 000000000000..8e389544a3b1
+index 000000000000..818b047ed4b6
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-data-alignment.sh
-@@ -0,0 +1,40 @@
++++ b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
+@@ -0,0 +1,42 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A cloned data section keeps its alignment.
++# A patch may remove the last ANNOTATE_DATA_SPECIAL in a translation unit while
++# leaving the special section it described in place.
 +#
-+# Plenty of kernel data is aligned for correctness rather than speed: per-CPU
-+# variables, anything touched by an aligned vector move, structures padded to
-+# own a cacheline. A clone that lands under-aligned either faults on first use
-+# or silently shares a line it was laid out to avoid, and neither shows up
-+# until the patch is loaded on hardware that cares.
++# klp diff needs entry boundaries for a special section: either an entsize, or
++# annotations naming where each entry starts.  .static_call_sites has no
++# entsize, so the annotations are all there is -- and when the patched object
++# is the only side that lost them, the two sides no longer agree on how the
++# section divides up.
 +#
-+# Fixed by 2f2600decb30 ("objtool/klp: Fix alignment of cloned data
-+# sections").
++# The section must still be handled.  Dropping it would leave the patched
++# function's static call unregistered; misreading its boundaries would attach
++# the entry to the wrong code.  Either way nothing is reported at build time.
 +#
-+# Covers the same ground as corpus/x86_64/cloned-data-alignment in Joe
++# Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
++# skipping entsize-based sections").
++#
++# Covers the same ground as corpus/x86_64/static-call-annotate-stripped in Joe
 +# Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair data_alignment.c
++build_pair static_call.c -DNO_ANNOTATE
 +
-+# The premise: the compiler really did over-align it, and the object is new in
-+# the patch so it has to be cloned rather than referenced.
-+want="$(in_sections patched.o | sed 's/^ *\[[ 0-9]*\] *//' |
-+	awk '$1 == ".data.aligned_data" { print $NF }')"
-+[ "$want" = 64 ] ||
-+	probe_skip "compiler gave .data.aligned_data alignment '$want', not 64"
-+has_input_section orig.o .data.aligned_data &&
-+	fail "fixture put aligned_data in the original; nothing to clone"
++# The premise: the original describes its entry, the patched one no longer
++# does, and both still have the section itself.
++has_input_section orig.o .discard.annotate_data ||
++	fail "fixture produced no annotation in the original"
++has_input_section patched.o .discard.annotate_data &&
++	fail "patched object still has the annotation; nothing was stripped"
++assert_input_section .static_call_sites
 +
 +run_diff
-+assert_section .data.aligned_data
 +
-+got="$(out_sections | sed 's/^ *\[[ 0-9]*\] *//' |
-+       awk '$1 == ".data.aligned_data" { print $NF }')"
-+[ "$got" = "$want" ] ||
-+	fail "cloned .data.aligned_data has alignment $got, expected $want"
++assert_patched target
++assert_section .static_call_sites
++assert_reloc_sym .static_call_sites target
 +
-+pass "cloned data section keeps its alignment"
++pass "static call site kept when the patch strips its data annotation"
 -- 
 2.53.0-Meta
 
