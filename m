@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9123ACF0E
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21F939B4A5
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789428535; cv=none; b=qCBQBjA0KVuIbs/7Nv/3oWHOIsfW6a0nsbjoa8olO8UFGwV9ZVFylXAV75LuC8SAMnUOgJo8BznGiskn7dmhAnnCjw59UKkqECUI/v7zj4jPKU9PJa+Cwc6Xi7h+OFWzHbmR9lrpz/q2Rom18nxzeKrv7m1LDGrSFS7qM5pR21U=
+	t=1789428868; cv=none; b=izdR8MILvpKPGh2d8/vsThi6loJd/ANhR46haxK/lkGftciNz8Ik9hEa2HgMVGF1MTA/YmYsUrM5qMC6evFpihg55zcJ2VWRntc1wOApKwxo48GsDc7/QIfKGE8mTZDEFtkaox9Qlmkqec5yyJ9qbDNAmdgiTNFIP98V7UxZKMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789428535; c=relaxed/simple;
-	bh=tiJ2DBGZlVnEtGnnnmxHwVNwDGFnRzU5GecMvJvXBMk=;
+	s=arc-20240116; t=1789428868; c=relaxed/simple;
+	bh=Z/R3BhsoXNlly1HMVUPryjDpv3ZK2rRa2cU5EKyYY7I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZEjKjNHVCH1jXKq4iOBD3DjIBVfqL3HTudmLoUHVAdYqNPkvmRT0nmOP8JKPEdZfU9i5LlES66O+CML4Ixgb4b5gB1mokJHr9+JxXExOjPk1m5UWQ6PXux6INNwKptInFDAW6s85HLCmapMu3pUbg4Bz9idQHtPE7X7toT1CIvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=movitolD; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=rbsC1xITgiyJ85z0dZBg4qEtwxTPWyVB7yISsOO1DWUMicNCz3ny2FDSC6AoYdbRy9NhynEXZHqolCvaXUNSPnOyTGOCoVdqZsurySrqMrANpPDZcLyQrvduL2VnZQQeap8s2Q3b8ymAupIIh7Kg6XqvT4vSmEwgy9MR2Kg8NOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Onpwp/HM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="movitolD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9DC1F00898;
-	Mon, 14 Sep 2026 23:28:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Onpwp/HM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96CE1F000FF;
+	Mon, 14 Sep 2026 23:34:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789428533;
-	bh=FXQ5gG1yAJa9G/g0emzWDHpFgPz73SOHzs/SMHeb1Hg=;
+	s=k20260515; t=1789428867;
+	bh=hNmteMedIXzoMVj/a8SoGh2F5V+SisT5XoTZ8BdV44g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=movitolDLGJudEzoZ8grXAno+a3xsDJWHJ+oH6lV7UWGWhxuDzSzxR2+XnHbWLWo8
-	 wpbWPzN5prOuT41UrLgVaKVx2ADy1t7Lgrthc6yWSHBcNWtEc/EA2naoBu+EIx2qy9
-	 GM/BI4tPcIJbaAc3Gx99vqnyxc0yuqhrEZ8BhlgnzmXzos/trQEyYY6E/MTa6k2zc4
-	 PCURqQmVN+5F1QOlRnW8QWjz+I7lAwvjrdiE6pLknM/K+G+DHviAR0QUcleldd/p3u
-	 a+QOeGgLvG3xEKXy8Gt/EZBi9NttAxd5O4oj8pQEVkW19AF0ycNKIp8EE136PI14LV
-	 vLoBQCqF26Mbg==
+	b=Onpwp/HMUAXw22ryR08AZPmgl/jE4uAwthj39kuuOjf/TVCZk0IpmQuj2uvtK4BSb
+	 nAovGVVXiWYGrMCO47lYdS7XZBcXPQ90Wmqt9AiKte5ScxZqAiaxf48ABReOp3Is0C
+	 OBxV0/8ug4O8RdeTrbXKtIakE//uq23moQkzP6A+j/UzqrCYzL85WKprrOEvWcp8Yg
+	 xy5LwAm/i444OFJ5YkswTtmUFPG/vighOku5QVr/RTyWgQFeYzXNM8nAvPavbmnqUP
+	 J6LDlIEzlxs9bsLuKPVqfxYqdTlRnCCUnDY+gBqzCICxj9l+6RcFei+QZdeoiVPKZz
+	 yUyczwgmEeTOQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 01/58] objtool: Add test harness for the klp
- subcommands
+Subject: Re: [PATCH v3 05/58] objtool/klp: Build klp test fixtures through
+ the harness
 Reply-To: sashiko-reviews@lists.linux.dev
-To: live-patching@vger.kernel.org, "Song Liu" <song@kernel.org>
-Cc: joe.lawrence@redhat.com, puranjay@kernel.org, jpoimboe@kernel.org, kernel-team@meta.com, peterz@infradead.org, jikos@kernel.org, pmladek@suse.com, mbenes@suse.cz
-In-Reply-To: <20260914230355.3422996-2-song@kernel.org>
+To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
+Cc: mbenes@suse.cz, jpoimboe@kernel.org, puranjay@kernel.org, kernel-team@meta.com, pmladek@suse.com, peterz@infradead.org, joe.lawrence@redhat.com, jikos@kernel.org
+In-Reply-To: <20260914230355.3422996-6-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
- <20260914230355.3422996-2-song@kernel.org>
+ <20260914230355.3422996-6-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 23:28:52 +0000
-Message-Id: <20260914232853.6A9DC1F00898@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 23:34:26 +0000
+Message-Id: <20260914233426.D96CE1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,44 +47,65 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] objtool: test harness fails if OBJTOOL is a relative path
+- [Medium] objtool: test harness leaks vmlinux.o state across build_pair() =
+calls
 --
 
-commit a0117b0a0e9e827479f6a5d87a6aea205470f1e3
-Author: Puranjay Mohan <puranjay@kernel.org>
-objtool: Add test harness for the klp subcommands
+commit 87b920426dfa2a217d6f9104d0f701cab5d67f5e
+Author: Song Liu <song@kernel.org>
 
-This commit introduces a test harness for the "objtool klp checksum"
-and "objtool klp diff" subcommands. The tests compile fixtures into
-objects and assert on the properties of the objtool output.
+objtool/klp: Build klp test fixtures through the harness
+
+This patch standardizes how klp test fixtures are built by shifting the
+compile steps into harness helpers like build_one() and build_pair(). It
+also establishes make_vmlinux_pair() to correctly build and diff vmlinux
+images for tests.
 
 > diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> new file mode 100644
-> --- /dev/null
+> index efe0a71326799..35be42758ece8 100644
+> --- a/tools/objtool/tests/lib.sh
 > +++ b/tools/objtool/tests/lib.sh
 [ ... ]
-> +run_diff()
-> +{
-> +	local expect=3D"${1:-0}" rc=3D0
+> @@ -179,6 +192,13 @@ setup()
+>  	workdir=3D"$(mktemp -d)" || fail "mktemp failed"
+>  	trap cleanup EXIT
+> =20
+> +	# A test may run several segments, and make_vmlinux_pair() repoints
+> +	# orig_obj at the image it builds.  Start each segment from the
+> +	# defaults, or the next build_pair() diffs the previous segment's
+> +	# object against the new one.
+> +	orig_obj=3Dorig.o
+> +	patched_obj=3Dpatched.o
+> +
+>  	export_syms "$@"
+>  }
+
+[Severity: Medium]
+Since setup() only executes once during script initialization, doesn't this
+fail to reset the state between test segments?
+
+If a test calls make_vmlinux_pair() (which repoints orig_obj to vmlinux.o)
+and subsequently calls build_pair() for a new segment, orig_obj will still
+point to the stale vmlinux.o from the previous segment instead of orig.o.
+This appears to cause run_diff() to evaluate the wrong file.
+
 [ ... ]
-> +	# klp diff looks for Module.symvers relative to the working directory.
-> +	( cd "$workdir" && "$OBJTOOL" klp diff orig.o patched.o out.o ) \
-> +		> "$workdir/diff.log" 2>&1 || rc=3D$?
+>  # build_pair <fixture.c> [cflags...]
+>  build_pair()
+>  {
+> -	local fixture=3D"$FIXTURES_DIR/$1"; shift
+> +	local fixture=3D"$1"; shift
+> =20
+> -	[ -f "$fixture" ] || fail "missing fixture $fixture"
+> +	build_one "$fixture" orig.o "$@"
+> +	build_one "$fixture" patched.o "$@" -DPATCHED
+> +}
 
-[Severity: Low]
-If a relative path is provided for OBJTOOL (such as OBJTOOL=3D./objtool),
-the check in setup() allows it to remain a relative path:
-
-    [ -x "$OBJTOOL" ] || [ ! -x "$TESTS_DIR/../$OBJTOOL" ] ||
-        OBJTOOL=3D"$TESTS_DIR/../$OBJTOOL"
-
-When run_diff() subsequently changes the directory to the temporary
-$workdir, will the relative "$OBJTOOL" path fail to resolve and break
-the test execution with a "No such file or directory" error?
-
-Would it be safer to convert OBJTOOL to an absolute path (perhaps using
-realpath or readlink -f) during setup() to prevent this?
+[Severity: Medium]
+Should the state reset logic for orig_obj and patched_obj be placed here in
+build_pair() instead of setup(), to ensure run_diff() evaluates the correct
+objects when multiple segments are executed?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914230355.3422=
-996-1-song@kernel.org?part=3D1
+996-1-song@kernel.org?part=3D5
