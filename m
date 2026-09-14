@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1C13AD50D
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4BE3B14D4
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:08:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427315; cv=none; b=gXDTo8h/KFjegzv68+SnKh2ZwssuAQRGU3dXPAgH+kFMRDfOCAI4vN0lXdTgVoYoNt3ijv+nn8epxtQDylM4VmpEn9QABRZtSf4JaVd7wj1qEVDI4UHAEc5j2JMYF2QvLPziLvddRKlrzTJV/VnTRCHx5gB1hrDg4KbGJ7IyiaU=
+	t=1789427320; cv=none; b=RTJKzyhNTddbDz//Uy5CC7fBj2zbgPS9kDGCaB8IY0KzGzNxrum4lcpT+MzSEBEA/clIb2ue5XffV5LMnhs8JiDXMlCCmRo12WoQuUrKjbBRoneEOrWIjzZHxfbB/mSOEImPcG0Ht5uP9DScADQpU93cPd+TPUiKh7ZqdFOsUns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427315; c=relaxed/simple;
-	bh=pBwH2wFu+NiIVySpYgC87486vfd0PCKvK7mTF1mio+U=;
+	s=arc-20240116; t=1789427320; c=relaxed/simple;
+	bh=kaGsqlDt2FGFLrvubpvFyKDDUpUWoZw7fPdurBZJ9j4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k7bIJyd+EsuOpHAXzSCuKglOwggOxxD1w+5/kDkDMHRmW1AexQt68ZIXmtnYZYanTBfgps6ufTbp3XmBi1yI52k4HcTANFaEDH2lvtB+In8vQx1HtUQn3PXu5f0nd34+TQB/XYoIiZrMxHOYUo3iLDuESCKP09+Z6fcEKC5Fcxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hCvb6StL; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=OkClsWeeBdGz32JuMlyvoXT1OxE8voEZCkK6HGn2R9szWLAWM4GJtti7T8htOKNqLL6TDxvahHAwA7w3cL3hJBNtBIASam3359GHgV4n25DpuKQi3PMveU6BlJhqbddORkVcCVWXXqPfa8nR16v6V08zMAkitOv7weuqoM+3keM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Efz1X1JF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCvb6StL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5DD1F00893;
-	Mon, 14 Sep 2026 23:08:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Efz1X1JF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E502B1F00893;
+	Mon, 14 Sep 2026 23:08:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427314;
-	bh=cjyRBCC2Rd1ZtytczYZYuaGhSXzYVtRWny8C4I0AYUQ=;
+	s=k20260515; t=1789427318;
+	bh=vk+lGcMau+Se59LLvGTGgNpImzsrOuOQp+Xzn1uNulM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hCvb6StLxGxK5f6FgcyZAJkSJQiHmKDbxS/S/rh/xbEe9m0Sr8lfk8TWQhw+Ik094
-	 6BXhLh4HKjiGsOEDHiE33AVgAgR/Jga5anZN8ZJHC/h0iGa1TlBkPTD0+XH2jxbCDy
-	 S0+Q/ovb6zRkSUCx9jjSdrOrfH6vO8ajKd1PI7UpXpPcYMwinNbAE3V1iUl+AWNAjG
-	 DL1de+/oLF9Ma6y82lcrGnbW5LprdUJUaRjC+qU8ZATTVh//I0DMERD7yp71SMQ23C
-	 1GHhdDM7cSq2EWetNYK8tQF4MFPxNorTu16S1CzIkTgtMljx5zy4JJWUHmFa4kFTP+
-	 L84XNy+nSfJ4A==
+	b=Efz1X1JFF20ySTQsVHW2w13ZVAHoMr9grXjLAQ3zBaHf3vruLv30PArc4FES3mhpW
+	 LdCd2xmXcG1u9TNdCK+cgWo6cpB3CBxAj2rthe86r+ETjH0o4DS0zjB769x2ROwrbg
+	 l3yc6FMg/yPuIsJ3PQMtf/P6JJazuGxn7QGsSRit/oy2EgE7Yf5WVAigstYkb4jqfs
+	 RCJZLusZ2VpvQ8mP7+o6uBh2eufQPA9f1ye9IRCe89E4cYKtD5dlhdaUNtcGwPGdYO
+	 gyPIZWy8zqHVH9XIQyvwYcdiNSyqqlyiZUfyBdvF2DkEsr0lOZqWXVlyYle8cJn9v5
+	 TL/J1nwoE1p1g==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 56/58] objtool/klp: Add test for UBSAN metadata in an unchanged function
-Date: Mon, 14 Sep 2026 16:03:53 -0700
-Message-ID: <20260914230355.3422996-57-song@kernel.org>
+Subject: [PATCH v3 57/58] objtool/klp: Add test for Clang switch jump tables
+Date: Mon, 14 Sep 2026 16:03:54 -0700
+Message-ID: <20260914230355.3422996-58-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -51,149 +51,130 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Every instrumented operation gets a per-callsite metadata object in an
-anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
-GCC, .data..L__unnamed_ from Clang -- whose names are compiler-generated
-and mean nothing across a rebuild.  is_uncorrelated_section() exists so klp
-diff does not try to pair them up, and nothing tested it.
+For a dense enough switch Clang emits the targets as a table in
+.rodata..Lswitch.table.<function> -- named after the function but not part
+of it.  The patched function indexes into that table, so a clone which does
+not bring it along jumps through whatever the kernel's copy holds, which
+after a patch that changed the switch is the wrong set of targets.  An
+indirect jump to a stale address reports nothing at build or load time.
 
-The failure it prevents is a false positive, which is the direction this
-suite has least coverage of.  Metadata belonging to a function nobody
-touched compares as different and drags that function into the patch.  That
-is not a build failure: it is a larger livepatch than intended, pulling in
-dependencies with it, and every extra function is one more that can fail to
-correlate or to apply.
+The fixture asserts its own premise twice over, since both halves depend on
+what this Clang chose to do: that a table was built rather than a chain of
+comparisons, and that the added case actually changed it.
 
-The fixture is built with -fsanitize=shift, which both compilers
-instrument; neither emits a bounds check for an index it can prove in
-range.  One function changes, the other is byte-identical and carries
-instrumentation of its own, and the test asserts the second is left alone.
-
-Verified by removing each rule from is_uncorrelated_section() in turn,
-which splits neatly by toolchain: dropping the .data..Lubsan rule fails the
-test under gcc, dropping .data..L__unnamed_ fails it under clang.  One
-test, two code paths, each checked by the compiler that reaches it.
+objtool has no switch-specific code -- the table is carried by the general
+mechanism for data a cloned function references -- so this guards that
+mechanism reaching an easily-mishandled shape rather than a particular
+line, and the test says so.  Making the table uncorrelated, the nearest
+available sabotage, does not change the outcome.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/ubsan_noise.c      | 49 +++++++++++++++++++
- .../objtool/tests/generic/test-ubsan-noise.sh | 48 ++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/ubsan_noise.c
- create mode 100755 tools/objtool/tests/generic/test-ubsan-noise.sh
+ .../tests/generic/fixtures/switch_rodata.c    | 31 +++++++++++
+ .../tests/generic/test-switch-rodata.sh       | 53 +++++++++++++++++++
+ 2 files changed, 84 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/switch_rodata.c
+ create mode 100755 tools/objtool/tests/generic/test-switch-rodata.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/ubsan_noise.c b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
+diff --git a/tools/objtool/tests/generic/fixtures/switch_rodata.c b/tools/objtool/tests/generic/fixtures/switch_rodata.c
 new file mode 100644
-index 000000000000..bf5999254163
+index 000000000000..817ddac92d81
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
-@@ -0,0 +1,49 @@
++++ b/tools/objtool/tests/generic/fixtures/switch_rodata.c
+@@ -0,0 +1,31 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A translation unit built with UBSAN, where only one of two functions is
-+ * patched.
++ * A switch dense enough that Clang builds a jump table for it, in a section of
++ * its own: .rodata..Lswitch.table.<function>.
 + *
-+ * Every instrumented operation gets a per-callsite metadata object in an
-+ * anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
-+ * GCC, .data..L__unnamed_ from Clang -- and a call to a __ubsan_handle_*
-+ * routine.  The names are compiler-generated and carry no meaning across a
-+ * rebuild, so klp diff has to treat those sections as uncorrelated rather than
-+ * pairing them up by name.
++ * The table belongs to the function and has to travel with it.  It is named
++ * after the function but is not part of it, so klp diff has to associate the
++ * two rather than treating the table as unrelated data.
 + *
-+ * untouched() is byte-identical in both builds and exists to catch the false
-+ * positive: if the metadata were correlated by name, its shifts would look
-+ * changed and it would be dragged into the patch.
-+ *
-+ * The shifts are what draw the instrumentation.  A bounds check would do as
-+ * well but neither compiler emits one for an index it can prove in range.
++ * The patch adds a case, which changes the table's contents and length.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+int shift_by(int v, int n);
-+
-+int untouched(int v, int n)
++const char *status_to_string(unsigned int c)
 +{
-+	int s = 0;
-+
-+	s += v << (n & 31);
-+	s += v << ((n + 1) & 31);
-+	s += shift_by(v, n);
-+
-+	return s;
-+}
-+
-+int touched(int v, int n)
-+{
-+	int s = 0;
-+
-+	s += v << (n & 31);
++	switch (c) {
++	case 0: return "idle";
++	case 1: return "running";
++	case 2: return "stopped";
++	case 3: return "error";
++	case 4: return "paused";
++	case 5: return "waiting";
++	case 6: return "starting";
++	case 7: return "stopping";
 +#ifdef PATCHED
-+	s += v << ((n + 3) & 31);
-+#else
-+	s += v << ((n + 2) & 31);
++	case 8: return "completed";
 +#endif
-+
-+	return s;
++	}
++	return "unknown";
 +}
-diff --git a/tools/objtool/tests/generic/test-ubsan-noise.sh b/tools/objtool/tests/generic/test-ubsan-noise.sh
+diff --git a/tools/objtool/tests/generic/test-switch-rodata.sh b/tools/objtool/tests/generic/test-switch-rodata.sh
 new file mode 100755
-index 000000000000..b415eb16bfd2
+index 000000000000..fb27e96c65f6
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-ubsan-noise.sh
-@@ -0,0 +1,48 @@
++++ b/tools/objtool/tests/generic/test-switch-rodata.sh
+@@ -0,0 +1,53 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# UBSAN instrumentation in an unchanged function must not make it look changed.
++# A Clang switch jump table travels with the function it belongs to.
 +#
-+# Every instrumented operation gets a per-callsite metadata object in an
-+# anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from GCC,
-+# .data..L__unnamed_ from Clang -- whose names are compiler-generated and mean
-+# nothing across a rebuild.  is_uncorrelated_section() exists so klp diff does
-+# not try to pair them up.
++# For a dense enough switch Clang emits the targets as a table in
++# .rodata..Lswitch.table.<function>, named after the function but not part of
++# it.  klp diff has to associate the two: the patched function indexes into
++# that table, so a clone which does not bring it along jumps through whatever
++# the kernel's copy holds -- which, when the patch changed the switch, is the
++# wrong set of targets.
 +#
-+# Without that, the metadata belonging to a function nobody touched compares as
-+# different and drags the function into the patch.  A livepatch which replaces
-+# functions the patch never changed is not a build failure: it is a larger
-+# patch than intended, taking its dependencies with it, and every extra
-+# function is one more that can fail to correlate or to apply.
++# That is an indirect jump to a stale address, not a missing symbol, so nothing
++# reports it at build or load time.
 +#
-+# Covers the same ground as corpus/x86_64-ubsan/{ubsan-shift-noise,
-+# ubsan-metadata-data-section,gcc-ubsan-anonymous-data,ubsan-handler-cloning}
-+# and corpus/x86_64-llvm-ubsan/{clang-ubsan-bounds-noise,
-+# clang-ubsan-handler-cloning} in Joe Lawrence's klp-build unit test corpus.
++# objtool has no switch-specific code: the table is carried by the general
++# mechanism for data a cloned function references.  So this is a regression
++# test on that mechanism reaching a shape it is easy to get wrong, not a guard
++# on a particular line -- making the table uncorrelated, the nearest sabotage,
++# does not change the outcome.
++#
++# Covers the same ground as corpus/x86_64-llvm-switch-rodata/
++# clang-switch-rodata-assoc in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+setup
-+build_pair ubsan_noise.c -fsanitize=shift
++clang_only "only Clang emits switch jump tables in their own section"
 +
-+# The premise: this compiler really did instrument, and left its metadata in an
-+# anonymous section.  Without that the test is just test-basic again.
-+ubsan_sec="$(in_sections orig.o |
-+	grep -oE '\.data\.\.L(ubsan_data|__unnamed_)[A-Za-z0-9_.]*' | head -1)"
-+[ -n "$ubsan_sec" ] ||
-+	probe_skip "compiler emitted no anonymous UBSAN data section"
-+assert_input_symbol untouched
++setup
++build_pair switch_rodata.c
++
++# The premise: this Clang really did build a table rather than a chain of
++# comparisons, and the added case really did change it.
++tbl=.rodata..Lswitch.table.status_to_string
++has_input_section orig.o "$tbl" ||
++	probe_skip "this clang built no jump table for the switch"
++# readelf prefixes each line with "[nn]", which splits into one or two fields
++# depending on the index, so strip it before counting columns.
++tbl_size()
++{
++	in_sections "$1" | sed 's/^ *\[[ 0-9]*\] *//' |
++		awk -v s="$tbl" '$1 == s { print $5 }'
++}
++[ "$(tbl_size orig.o)" != "$(tbl_size patched.o)" ] ||
++	fail "fixture's added case did not change the jump table"
 +
 +run_diff
 +
-+# The changed function is patched, and the untouched one is left alone despite
-+# carrying instrumentation of its own.
-+assert_patched touched
-+assert_not_patched untouched
++assert_patched status_to_string
++assert_section "$tbl"
++assert_reloc_sym .text.status_to_string "$tbl"
 +
-+# The handler the patched code calls has to come with it, or the clone calls
-+# nothing when its check fires.
-+out_symbols | grep -q '__ubsan_handle_' ||
-+	fail "no __ubsan_handle_* reference in the patched output"
-+
-+pass "UBSAN metadata in an unchanged function does not drag it into the patch"
++pass "Clang switch jump table carried with the function it belongs to"
 -- 
 2.53.0-Meta
 
