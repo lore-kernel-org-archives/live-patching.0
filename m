@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64ADF340DA6
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 311173ACF14
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427123; cv=none; b=ZT2Db55xuH0JxAmRpyYIYIg2p3iDEoWExQdcbwdZ4gL4JMm9GO07alHF93fT9/Jt7QMuGlZr0B4lCaD7NC2oL3CU8nUyvvlMDEcXFLtBu/Fo/+8fQANQ/30ykkk9fyV83O8/c1dUH00SXqmYjzgBpdhOrfXBnrOLkSr+txsjEyc=
+	t=1789427128; cv=none; b=m3tYxGoUb5Jw4szryDG4e/EDopk69tD4XcczXt1NYhSoI1Xa29FR0zoQtU0upc676nzXoTtFWNQ7b7GuyJNKSS8jdJnJ0el82xAiMZXYzfwHp+sb0HQJ0JRlpGVRP6c4FbXPmE225tg+VDaWgmcnfitYyuja3cuhZOdCb8nel+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427123; c=relaxed/simple;
-	bh=oKIexGl6o6IfAOL4dK7/YEbBhpvrr9QsCqKSbZFVo2g=;
+	s=arc-20240116; t=1789427128; c=relaxed/simple;
+	bh=K1Ntqv2jSjrO5YQZcv1dTN/Od8c8VkXztXZpC/gknYg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q/P6/JnCKj5raKN3yEsTPaKDjlDG9XybwBbCIr72SmfKKOxBdDG8R0WBVgFsp0q3grBIVpimkSwyZXYKRuq5xwYxxRu7mZReHfjOw/4lqFCAUSOp3OKc7sDpmf45yW4jirgRZv9VoCntdM06Lbo7Nk7uf8D7f+soIjDCBR/+Xm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AottSkCs; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Ypi+knXwyoKo/HYLhFsfIM+91mCTgZ3JACSvXLvmyscq279t+Gh1BF9ZaoYF/hGakWPlpWuGjcmOARZsSoEcY+L8RsgR7ZF5uVE/20b/SbBcQaiB9ucxx4TpJraewlk5yP51y7x0npBGJbwfYGEjxQKpxneeqnkdbD5oCihC6es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nGLhEAJd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AottSkCs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D0E51F000FF;
-	Mon, 14 Sep 2026 23:05:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGLhEAJd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B681F000FF;
+	Mon, 14 Sep 2026 23:05:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427122;
-	bh=hNDwDggAztrl0d+M2aMDRMhoGtFrpvA2reEhUA87y1c=;
+	s=k20260515; t=1789427127;
+	bh=r+S3kGYa/Hx7o6EOEIdlSdLsyGiYTPYPCIAH7y1XtcA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AottSkCs7b5H3xHZWPSY0rOxbN09hUeg4eSVXJhlls0kf+YmEWBKxUWM30Tuh7uM+
-	 zbvLOIR/XlZvUFIiBInzU/qfWAhMLPjzVEvNoOXvVa2Sp3Ln/XPvqeMxesHwQ5r1T9
-	 8xoMcO5zpAXbwbO3w/ekKdhpmGgFbeBrsk8p6PG5IsAuWzjXW8OX4Ar6NvZTG8zsZP
-	 OicmIhebRWYLU3wF/wbb26s3jiyp6vYKywPdXZaeORLoplSLMZ8jVZK1X46G4PEJu8
-	 gSHrHfyeeMVvzWOukYQh+lr95lzj+cSW61RgoTawfFnHHB3fEok1U3sqD9JNd8c9rF
-	 WnJIWxQIEUykQ==
+	b=nGLhEAJd7TlDQb+04sWtnPbJZimQ1vD//9rkNbFZdToU8uY3kI2x9mZXvQFVpb4WO
+	 1NLLcsFQIwLNOB17N8FDIyQDl3G29vpTG0u1O6Xl1O11BnGzbgaKzE5KgD7e0PWimX
+	 Y0Znwvzg+H5gc60WapHiTWawp+04WG7wFZSoXa6lyK50UIRhJtM+DRn9spC+vpsXvY
+	 jrcx4DJPFD3vEKmlIAx9e+jeaMyrLBj0oa4SGhFX1Pv40SlewVN8300HJCFkUWvbn5
+	 ll8OSTvTOo+oclDhVSjLyWLLfevmhaS3ddrQpCjiSkcrTrXczGGU5SuNU79MM74KID
+	 jnI9+1bvUk6QQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 17/58] objtool/klp: Add test for special section extraction
-Date: Mon, 14 Sep 2026 16:03:14 -0700
-Message-ID: <20260914230355.3422996-18-song@kernel.org>
+Subject: [PATCH v3 18/58] objtool/klp: Add test for selective special section extraction
+Date: Mon, 14 Sep 2026 16:03:15 -0700
+Message-ID: <20260914230355.3422996-19-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -53,44 +53,43 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-create_fake_symbols() gives each special section entry a symbol so entries
-can be extracted individually.  Entries with ANNOTATE_DATA_SPECIAL are
-handled first; the rest have their boundaries derived from the entry or
-relocation size.
-
-The second pass has to key off whether the first one created symbols, not
-off whether the section already has something at offset 0.  Clang puts an
-assembler-local label at the start of .kcfi_traps, and treating that as
-already handled means nothing is extracted: klp diff still reports the
-changed function and succeeds, but the special section is missing from the
-module.
-
-The fixture reproduces the shape without needing CFI or x86.
+Two functions contribute entries to one special section but only one is
+patched.  Cloning the neighbouring entry drags in whatever it points at,
+which is how a livepatch ends up holding relocations against unrelated
+code.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/special_section.c  | 24 +++++++++++++++++++
- .../tests/generic/test-special-section.sh     | 20 ++++++++++++++++
- 2 files changed, 44 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/special_section.c
- create mode 100755 tools/objtool/tests/generic/test-special-section.sh
+ .../generic/fixtures/special_section_shared.c | 31 +++++++++++++++++++
+ .../generic/test-special-section-shared.sh    | 26 ++++++++++++++++
+ 2 files changed, 57 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/special_section_shared.c
+ create mode 100755 tools/objtool/tests/generic/test-special-section-shared.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/special_section.c b/tools/objtool/tests/generic/fixtures/special_section.c
+diff --git a/tools/objtool/tests/generic/fixtures/special_section_shared.c b/tools/objtool/tests/generic/fixtures/special_section_shared.c
 new file mode 100644
-index 000000000000..d28c5541e337
+index 000000000000..f54e24f862c6
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/special_section.c
-@@ -0,0 +1,24 @@
++++ b/tools/objtool/tests/generic/fixtures/special_section_shared.c
+@@ -0,0 +1,31 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Special section entry with no ANNOTATE_DATA_SPECIAL annotation and a local
-+ * label at offset 0, the shape Clang produces for .kcfi_traps.
-+ */
++/* Two functions contribute to one special section; only one is patched. */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++
++int other(int x)
++{
++	asm volatile(
++		"2:\n\t"
++		".pushsection	.kcfi_traps, \"a\"\n\t"
++		".balign	4\n\t"
++		".long		2b - .\n\t"
++		".popsection\n\t");
++	return x * 5;
++}
 +
 +int target(int x)
 +{
@@ -98,7 +97,6 @@ index 000000000000..d28c5541e337
 +		"1:\n\t"
 +		".pushsection	.kcfi_traps, \"a\"\n\t"
 +		".balign	4\n\t"
-+		"trap_marker:\n\t"
 +		".long		1b - .\n\t"
 +		".popsection\n\t");
 +#ifdef PATCHED
@@ -107,32 +105,38 @@ index 000000000000..d28c5541e337
 +	return x + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-special-section.sh b/tools/objtool/tests/generic/test-special-section.sh
+diff --git a/tools/objtool/tests/generic/test-special-section-shared.sh b/tools/objtool/tests/generic/test-special-section-shared.sh
 new file mode 100755
-index 000000000000..b6a9139c0062
+index 000000000000..05c6110b6aef
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-special-section.sh
-@@ -0,0 +1,20 @@
++++ b/tools/objtool/tests/generic/test-special-section-shared.sh
+@@ -0,0 +1,26 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A .kcfi_traps entry belonging to a patched function must be extracted even
-+# without ANNOTATE_DATA_SPECIAL and with a local label already at offset 0.
++# Only the patched function's special section entry may be extracted.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair special_section.c
++build_pair special_section_shared.c
 +
-+in_symbols orig.o | grep -q 'trap_marker' ||
++has_input_section orig.o .kcfi_traps ||
 +	probe_skip "fixture produced no .kcfi_traps on this arch"
 +
 +run_diff
 +
-+assert_patched target
-+assert_section ".kcfi_traps"
++assert_patched     target
++assert_not_patched other
++assert_section     ".kcfi_traps"
 +
-+pass ".kcfi_traps extracted despite a local label at offset 0"
++entries="$(out_relocs | awk '/rela\.kcfi_traps/,/^$/' | grep -c 'target')"
++[ "$entries" = 1 ] || fail "expected one .kcfi_traps entry, found $entries"
++
++out_relocs | awk '/rela\.kcfi_traps/,/^$/' | grep -q 'other' &&
++	fail "the untouched function's entry was dragged in"
++
++pass "only the patched function's entry extracted"
 -- 
 2.53.0-Meta
 
