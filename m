@@ -1,119 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1033F44CD
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:55:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0727493D49
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789419316; cv=none; b=mRIcaWBaFtK6r3b5T2ZjDp0dYgjAQ0BCw+aiuk1STN7Ci6r4OTqYT2bVygmB7hjgtjjYK5riBKOzjt1izLXHs4ccIjBDSMw7tA8vXT79u9Buv2TU+ZylRWLM3Qm3L4KXVZgiIhkSlCJrazSltKPkt/RHYwGoNvIdAeEoR2HwMu8=
+	t=1789419368; cv=none; b=c9ITwsh2Ho/1XpmeoK+O+eYM8NqMkyXEoXZAcjzymH/6WXkDXi7CV4WLQV7Ocd4ft0PC8ML/tWpElP8e5bQ8oShyOY/8iZeBveaj0z0DGpPOyqVZvXG8KPdA7jbnDIivMdh2IsS3RM0LszZZgkUyMgOysFCML/fx29zTnDhfLFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789419316; c=relaxed/simple;
-	bh=8E7atf4YfYzQLMasJoiWHOnQRlBrufJewgMVbTUtEHE=;
+	s=arc-20240116; t=1789419368; c=relaxed/simple;
+	bh=kK+XZi3serLxSxlna0a7F+eRCY8aqT2zVyXAoySBNF0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CgcknkF6U+f3iAaH/MemAEV2ox1Xmc11irb2dK3O3tkYwxwX+ZwlH833TKW/tLJh/f0sG46YKp1spmOkm5WKF06D4PgVS0wlAKPJF1ow9kHESTsbPUSIm24YDP52ST6RmFBAf6zkOsr3KVt7Q4piHY/vZIqqf88GmzxrFKSlIJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cpk4jMEf; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=IK+3tG9ZzBPA3kh5QDmv3+4kbArLc2NUZOgS9fuqq41T8+14ldbkme8BLTwI7zY+nan3of/1tfIB/JEF4vGySUtUnpAlZiZfltdz8aOW/Hs/JfwUiirvKVXSynpNxS0A1YJ6d909xkj5ctGMUxlzblYi/7ktezY2fUmSDtuOzdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1Zcbpsr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cpk4jMEf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72CE1F00898
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:55:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1Zcbpsr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DCE01F0089C
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789419314;
-	bh=4ebf7YRHG/0h2NTh+FNZdL9/q1jcOd1htKo5h1HP4c0=;
+	s=k20260515; t=1789419367;
+	bh=AJmm8xNxEyPjZePvLMeOoP9YufNJ6rDf23wcJS6k1MU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Cpk4jMEfnoZoLorOXnAJfj1JGNPyWrlXvMg4MMMBh3mpKGvkyf8gG/b/MU53V9Iw2
-	 j/s2/GbIOxFc0zW165ycT9B6yXN9rUUgz3rrWyHH+S6NfpmDaDaMK2Th2lehrFE+3p
-	 YBzXJgep1SW1DSA8J20dR4BXzm2XiYSqzMhh2AI3F5/ajAmw2XL0+pBWcvU2nK2IX8
-	 AfLBQBeA+y1zOv715rRRgBE2HybI9QWK0O9LHCqboZIeItIeN7WWb5sptwkiAlmi+Y
-	 eb4cbVAR04wiAa39LmNvVHM91FbWVyk2BWebQbnDBvM+Q6z1hGl+BhVjFQ636Hf1uM
-	 umwPVW6mjYGng==
-Received: by mail-qk2-f12.google.com with SMTP id af79cd13be357-939109fafd7so252877285a.2
-        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 13:55:14 -0700 (PDT)
-X-Gm-Message-State: AFuF++nFdfVpcSa+PPY6u/lOaf1K8fLxRsxYOXQy1bG4f1Wgx5f8G751
-	jPEb9JkmymgvMTNj0Mce6P/OWsQHKMUWByTXVzkXqa6S4mWuA1PLc4ApnXnnx64NkUDPaA/kYJg
-	uy0x/ZCz7SDBtC28NjGTelwMleo93fGA=
-X-Received: by 2002:a05:620a:2a08:b0:939:5ae7:2dad with SMTP id
- af79cd13be357-93a29b94250mr643123885a.38.1789419313952; Mon, 14 Sep 2026
- 13:55:13 -0700 (PDT)
+	b=K1ZcbpsrCXM0RMUU6I3FTKh6oBK/UXX84i/mYOwirKuIGWmsEb2pTMNlOpLc6zrIY
+	 ZU+IUb7nC0YUx1+PkwU2GRQty18rUxz5kFjekdmmxCI6f7EklwINRb2kOWmrQ7Q8cx
+	 /nnfR10v6L8cTUqdOVw5NeYiGXzhBuAqL1t2qi15NAK3tbJNWCosCHIzFqP9NYv2Ff
+	 YJtXIT98Ah5okt12O9+D+TYhUdc5OIMdP6Rk0hsCGAg3dkTy+1xksGZrPt8uSFQ4cF
+	 KNavK37wFg9Ipo2n9jgZO36445OlP5y1Rs0gQivG1gV+17VIm3rmyrNAyfGt1R60Dt
+	 KJPYdz6ziy7Xg==
+Received: by mail-qk2-f12.google.com with SMTP id af79cd13be357-939109f067cso221994085a.3
+        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 13:56:07 -0700 (PDT)
+X-Gm-Message-State: AFuF++nnInLaTyDA4E3+4kulA+YGTd0k6JeG05JGY96vniprquRG0dow
+	Bt0/7w3+kTLnZ0Pf8yXyENqTq/Zq2yHLdm6ar8z4+TM8V5onUzl9q27qSthtTwzPAq8Uhsc67S+
+	SL3bbw85sN8q1D+ZPra8ij3PQAe/h8A8=
+X-Received: by 2002:a05:620a:2556:b0:937:5298:7820 with SMTP id
+ af79cd13be357-93a2973a1e5mr625763385a.8.1789419366620; Mon, 14 Sep 2026
+ 13:56:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-17-song@kernel.org>
- <20260914063833.0F9951F000FF@smtp.kernel.org>
-In-Reply-To: <20260914063833.0F9951F000FF@smtp.kernel.org>
+References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-20-song@kernel.org>
+ <20260914064605.EE08C1F000FF@smtp.kernel.org>
+In-Reply-To: <20260914064605.EE08C1F000FF@smtp.kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Mon, 14 Sep 2026 13:55:01 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW75MKDc93c=Ufi-Y3jcJj15Ox-yCUTjGGA9aU7sWO=Dmw@mail.gmail.com>
-X-Gm-Features: AcwNN1WYAIJvb5G2MV2Veg9DIhsYGx0W0pvPyHkucKe4B44qmQQ3RQhiUlu68XY
-Message-ID: <CAPhsuW75MKDc93c=Ufi-Y3jcJj15Ox-yCUTjGGA9aU7sWO=Dmw@mail.gmail.com>
-Subject: Re: [PATCH v2 16/58] objtool/klp: Add test for cold function halves
+Date: Mon, 14 Sep 2026 13:55:54 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4yfq_VFNYLpFeivKOuk+YZ=X2i2Sk_Sb4Q8k-ey6ivCw@mail.gmail.com>
+X-Gm-Features: AcwNN1W2BrB4WxApQZroyilrRnfbZnHV-IEDDnthtvKx1J9ofv3ZvbAtVXHktCw
+Message-ID: <CAPhsuW4yfq_VFNYLpFeivKOuk+YZ=X2i2Sk_Sb4Q8k-ey6ivCw@mail.gmail.com>
+Subject: Re: [PATCH v2 19/58] objtool/klp: Add test for jump table key relocations
 To: sashiko-reviews@lists.linux.dev
-Cc: live-patching@vger.kernel.org, puranjay@kernel.org, peterz@infradead.org, 
-	joe.lawrence@redhat.com, pmladek@suse.com, mbenes@suse.cz, jikos@kernel.org, 
-	kernel-team@meta.com, jpoimboe@kernel.org
+Cc: live-patching@vger.kernel.org, joe.lawrence@redhat.com, pmladek@suse.com, 
+	jikos@kernel.org, mbenes@suse.cz, jpoimboe@kernel.org, kernel-team@meta.com, 
+	puranjay@kernel.org, peterz@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 13, 2026 at 11:38=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Sun, Sep 13, 2026 at 11:46=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [Medium] The test assertion for the carried cold function incorrectly p=
-asses with `llvm-readelf` when the cold half is left behind.
+> - [Low] The jump label test fixture hardcodes a 64-bit PC-relative reloca=
+tion which causes assembler errors on 32-bit architectures.
 > --
 >
-> commit a04e65cdf7036d7ab3a10a22fc0efb8a0c3873bd
+> commit 12aec6304341b6d166d36c18d507d8088ff90b91
 > Author: Puranjay Mohan <puranjay@kernel.org>
 >
-> objtool/klp: Add test for cold function halves
+> objtool/klp: Add test for jump table key relocations
 >
-> The compiler splits unlikely code into a separate foo.cold symbol. Both
-> halves are the same function and both belong in the livepatch. This adds
-> a test to ensure cold paths branching into unpatched code are handled.
+> A cloned __jump_table entry must keep a relocation in its key slot.
+> This patch adds tests and fixtures to ensure the relocation stays
+> properly populated for both exported and unexported vmlinux keys
+> during a klp diff.
 >
-> > diff --git a/tools/objtool/tests/generic/test-cold-function.sh b/tools/=
-objtool/tests/generic/test-cold-function.sh
-> > new file mode 100755
-> > index 0000000000000..dd4a7297af044
+> > diff --git a/tools/objtool/tests/generic/fixtures/jump_label.c b/tools/=
+objtool/tests/generic/fixtures/jump_label.c
+> > new file mode 100644
+> > index 0000000000000..ecd3c06912af5
 > > --- /dev/null
-> > +++ b/tools/objtool/tests/generic/test-cold-function.sh
+> > +++ b/tools/objtool/tests/generic/fixtures/jump_label.c
+> > @@ -0,0 +1,76 @@
 >
 > [ ... ]
 >
-> > +assert_patched target
-> > +# Not a bare name match: had the cold half been left behind, the branc=
-h to
-> > +# it would appear as an undefined .klp.sym.vmlinux.target.cold, whose =
-name
-> > +# contains the one being looked for.  Require a defined symbol.
-> > +out_symbols | awk '$7 !=3D "UND" && $8 ~ /target\.cold/ { found =3D 1 =
-}
-> > +     END { exit !found }' ||
-> > +     fail "cold half was not carried into the patch"
+> > +int target(int x)
+> > +{
+> > +     int r =3D x;
+> > +
+> > +#if defined(NEW_KEY) && !defined(PATCHED)
+> > +     /* The original has no static branch at all. */
+> > +     return r + 1;
+> > +#else
+> > +     asm goto(
+> > +             "1:     nop\n\t"
+> > +             ".pushsection   __jump_table, \"aw\"\n\t"
+> > +             ".balign        8\n\t"
+> > +             "912:\n\t"
+> > +             ".pushsection   .discard.annotate_data, \"M\", @progbits,=
+ 8\n\t"
+> > +             ".long          912b - ., 1\n\t"
+> > +             ".popsection\n\t"
+> > +             ".long          1b - ., %l[l_yes] - .\n\t"
+> > +             ".quad          %c0 - .\n\t"
 >
-> [Severity: Medium]
-> Will this awk script correctly detect missing cold halves when the test i=
-s
-> run with llvm-readelf?
+> [Severity: Low]
+> This inline assembly in target() explicitly requests a 64-bit PC-relative
+> relocation. On 32-bit x86 (which is supported by the test runner), the GN=
+U
+> assembler cannot represent a 64-bit PC-relative relocation.
 >
-> When the cold half is left behind, klp diff converts unresolved reference=
-s
-> into SHN_LIVEPATCH symbols. llvm-readelf formats these as:
->
-> OS[0xff20] .klp.sym.vmlinux.target.cold,0
->
-> Because there is no space between the section name and the symbol name in
-> this output format, $7 evaluates to "OS[0xff20]" (which is not "UND") and=
- $8
-> matches the /target\.cold/ regex.
->
-> Does this condition evaluate to true and cause the test to falsely pass w=
-hen
-> the cold half is actually left behind?
+> Will this cause the test fixture to fail to build when running objtool
+> tests in a 32-bit environment?
 
-Seems to be an issue introduced in v2. Fixing it in v3.
+I guess we don't care 32-bit any more..
 
 Thanks,
 Song
