@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0746F3AD515
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792C930E827
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427186; cv=none; b=cHhOy2ADJPHpRGXkUbCxjnS3j1wLJwTfrJ0+KaajjRfXuyT0Tq2dQMjdjqSfetwdWYJsdzamwkI77/7c2jWUSlZPt3od2gdplmqiYF90BXNACE4yCm9nt2eezC3nW0IkT4rtGP0HdVfbAPRa+frU8L7aK0pzQYwxpCe2WNdvL34=
+	t=1789427190; cv=none; b=hqH3KM3j8rG6QMuz0Abgw/afVkvkzrTPGc6G5hsEE0/Trsrh5b4a/87MlDsNmJ4ef27V9FhyxruyhVOA8/ljAR+vMoAP2X/rpHDOzTRoqNWJ66VfLZTkw6WxDKfyUSk4DcIQZTE8W6S3ZFdRiIpWWzC5rAWFzzoa/P68fmRgyeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427186; c=relaxed/simple;
-	bh=OV3PG5RHEQDDlfYICSq8BEj5/hfrpKxcNJpcc4Pl8iM=;
+	s=arc-20240116; t=1789427190; c=relaxed/simple;
+	bh=Ito7ebvG1LNLBlrJb6fD4kRKtT4NltRovU60aVKrIfU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gaTvbcI3500h+VtMUGkbYv7YTWF59aq+NESbinGAfzH200nhRXTGLAC1ozwAuSUNRVMN0fei7yj978XgQCgieoU6fpCFGiy7zxRb0HROAQdRc2LmJKDmZZ+R2Oje7vIgTKEyy41RG8axvHSu/zp5I/ZMgMtPnKDJtVRYNkd6AdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=POY7/znI; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=uCdj+tqGEDUZAobKnjV6MY+Nam9YCfZeAhzfQwU8WlH4FaSMYpqf7QHhYbzPJ1H6uvw8sE8MeU+XdthROAR7sUeS3H2q9xEStrqkC66WyFkCLtjc+j38LSepW8oOnfF0+UN8+WKBqZhWp9H4lamARq0ZYX70PF1CJDE7w9APROI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZM/JMm5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="POY7/znI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963D91F000FF;
-	Mon, 14 Sep 2026 23:06:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZM/JMm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745051F000FF;
+	Mon, 14 Sep 2026 23:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427184;
-	bh=+mQmUlzGh2hgexbyzeasUkjBtvD1pESiZPPcrmg700o=;
+	s=k20260515; t=1789427189;
+	bh=eG2JSvi9ve7FmKyFYGEcVlfvCpZ5lHgOSVC3BH1rHkQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=POY7/znI3e8bsDD5sLwH8/exPPvL1VBUgkR+6j+tn+D18NnZFMWiD2uypFsKEeTBz
-	 2InYRy9xCWjAZuTmw/xCxk0C2iRH50uTo8JH9s9dFN6K1eqGSqESJw0Nbq8YFhaIcV
-	 BRxv8SjmtfWtpThjQUfBs7igO3q7K8ZjjZ1haF96B/C5pNObDt3WAJXh8D7bwRM7p9
-	 6UmJlplt8tz/9bR2YjnsMZGn0xJAT7vPNEQAek3btwybSLK7XNcmBBrVi1vkaZhz+d
-	 +SwfkoGSIVG1sndTqf2RuNATSZmhbyHY5N5NoB+mmpLkmQkVEmJKofaxQa4ZlPQ9NZ
-	 DbO5cUZd5QdnQ==
+	b=aZM/JMm5wjiJWQ/o+Gri0n1eDGq7b2SdW647DSz1R8e/ZcJfVVmmHhrykTFNOf0cD
+	 viX83cACIW3ZIA2FovQnWi8u943l0EjkSxl12oABOUjgJXteiGa75Gz0LEuGKswMOK
+	 RqPV1ErcQdOGQnF5x1IiZtd9smpGRDcwVuyymrd13OGQczK/tOi6n+wXeeAKxujI86
+	 czV9dkRtylc/qb0ttxD0657tttpq3XNDjokKO6kBszBedkAR9Pxg/Sj9Fcfo+VepPX
+	 QuEUMZxIdowchHSXSZiRuO0N856WE0nMBMlOkrkaea+WGiat5jOeC9yZHtH3+T7IWv
+	 LDANKtuDAUlyA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -36,11 +36,10 @@ Cc: jpoimboe@kernel.org,
 	joe.lawrence@redhat.com,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
-	Song Liu <song@kernel.org>,
-	Dylan Hatch <dylanbhatch@google.com>
-Subject: [PATCH v3 29/58] objtool/klp: Add test for vmlinux relocs in a patched module
-Date: Mon, 14 Sep 2026 16:03:26 -0700
-Message-ID: <20260914230355.3422996-30-song@kernel.org>
+	Song Liu <song@kernel.org>
+Subject: [PATCH v3 30/58] objtool/klp: Add test for Module.symvers path normalization
+Date: Mon, 14 Sep 2026 16:03:27 -0700
+Message-ID: <20260914230355.3422996-31-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -52,72 +51,55 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The kernel refuses a module-targeted klp relocation which names a vmlinux
-symbol.  An EXPORT_SYMBOL_FOR_MODULES() symbol needs a klp relocation, so
-patching a module function that references one only loads if klp diff files
-that relocation under vmlinux rather than under the patched module.
+Module.symvers names an export's owner by build path, and the kernel knows
+modules by their runtime name.  Without normalizing one to the other, an
+export owned by a module is not recognised as owned by anything, and a
+reference that should become a klp relocation stays an ordinary one.
 
-This fails at load, not at build: klp-build produces a module and static
-checks of it find nothing wrong.  Hence the assertion on which object the
-relocation is filed against.
+This tests the behavior of commit 8668bf91e050 ("objtool/klp: Normalize
+Module.symvers paths to module names").
 
-Reported by Dylan Hatch, whose mod-ns-lp branch carries the kernel-side
-half of this case.
-
-Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+Assisted-by: Claude:claude-opus-4
+Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../generic/test-module-vmlinux-reloc.sh      | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100755 tools/objtool/tests/generic/test-module-vmlinux-reloc.sh
+ .../tests/generic/test-modname-normalize.sh   | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-modname-normalize.sh
 
-diff --git a/tools/objtool/tests/generic/test-module-vmlinux-reloc.sh b/tools/objtool/tests/generic/test-module-vmlinux-reloc.sh
+diff --git a/tools/objtool/tests/generic/test-modname-normalize.sh b/tools/objtool/tests/generic/test-modname-normalize.sh
 new file mode 100755
-index 000000000000..635a75f6b8ba
+index 000000000000..a8059bdbd667
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-module-vmlinux-reloc.sh
-@@ -0,0 +1,40 @@
++++ b/tools/objtool/tests/generic/test-modname-normalize.sh
+@@ -0,0 +1,26 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Patching a module, where the patched code references a vmlinux symbol which
-+# needs a klp relocation.
++# Module.symvers records the build-tree path of the object that exports a
++# symbol, not the name the module has at runtime: "arch/x86/kvm/kvm-intel",
++# where the kernel knows the module as "kvm_intel".
 +#
-+# The kernel does not allow a module-targeted klp relocation to reference a
-+# vmlinux symbol, and a symbol exported with EXPORT_SYMBOL_FOR_MODULES gets a
-+# klp relocation.  Put together, filing that relocation under the patched
-+# module produces a patch the kernel refuses to apply to its target.
-+#
-+# So it goes under vmlinux instead, and is applied when the patch module loads
-+# rather than when the patched module does.  That is the opposite of the rule
-+# for a reference to a module's symbol, which test-module-object covers; this
-+# is the other branch of the same decision.
++# The klp symbol name embeds the owning object, and livepatch matches it
++# against loaded modules by name.  Left unnormalized it names a module that
++# does not exist, and the relocation is never resolved -- at load time, with no
++# build-time complaint.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+# The object being patched is a module ...
 +build_module_pair cross_module.c klp_testmod
 +
-+# ... and the symbol it references belongs to vmlinux, exported in a way that
-+# still requires a klp relocation.
++# A path with directory components, a dash, and no extension.
 +export_syms
-+add_exports_ns vmlinux module:kvm other_mod_func
++add_exports "arch/x86/kvm/kvm-intel" other_mod_func
 +run_diff
 +
-+# Filed against vmlinux, applied when the patch loads.
-+assert_section __klp_relocs.vmlinux
-+assert_klp_sym other_mod_func vmlinux
++# Directories stripped, dash to underscore.
++assert_klp_sym other_mod_func kvm_intel
 +
-+# Not against the patched module: that is the relocation the kernel rejects.
-+assert_no_section __klp_relocs.klp_testmod
-+
-+run_post_link
-+assert_klp_rela vmlinux .text.target
-+assert_no_section ".klp.rela.klp_testmod..text.target"
-+
-+pass "klp relocation to a vmlinux symbol filed under vmlinux, not the patched module"
++pass "Module.symvers paths normalized to runtime module names"
 -- 
 2.53.0-Meta
 
