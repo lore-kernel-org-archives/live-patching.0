@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F49C352030
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6E03AD50D
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:08:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427305; cv=none; b=uek34OwsUcL4jZozohInAwxaCn/D6K8LokGjPUrQ71B3Re46UdFr0aOAaKyzcMI9IEFSKqSwPr7yrgtK5URR5HZvhP3OLZZ6/WFISI0o2P8GdtEJVbM6OYs+8NBddEU1UYkhXdtwD5mPp5cNdxX5oonKZ8t30T/t8ZCL8UCX2+I=
+	t=1789427310; cv=none; b=RYrDd3mlxIVKFvVmCBQTB2ESyspZp75NubN0N7mPyOJpJSK7wpprNyYwv28myw3/qFZDr1ROXmkM4ck1r4IVIqCtX2YhAl4+EFjaY2mMVepeySAo6TwMP6/m7VnVEfdsETecUXmI/Fzli5I7B8l6EUP0veXHmCQ4uB0qYR3swzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427305; c=relaxed/simple;
-	bh=FGb2aQyX7NyyKBhjchuvgIYGATaiwX3/EywyJ6hG3WY=;
+	s=arc-20240116; t=1789427310; c=relaxed/simple;
+	bh=b5KyROuZxh+WwoTgI3HxMj54P9MfUkbHbg/duW+jiB4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NAq+lIdEGqiVluUM5944mj1ocaypeytgQcbpCmro428e/wbdn7dKtgYI9zoVKyzbNt2NWtKLX4wXkcMVqdsmgx7b4M9HxWRDzZFvR4J09/Kqy3YYFL6Plb+Q3DQ1xe28f+3bHtRvMOamOG5jtjTFa+BUhAeFIOq7/EUyLaf9KXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XhoJjaDa; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=YA4IIJCOTgnSc8Rp89ZeTs0xfZARpaN6mkWkpwU9CG/3se11W5/bjNicWeOhHrg13oo1FosEk/2obEqO8akhceogqAR3P34ndRI2ZJMGjlFBvkuxyLZeUhCAWjl2YqjeSBcQFyRkcJMbgU2k4Vu2JgWnVnR7ijFaCrafNGuy1ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdP1Qp5g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XhoJjaDa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD8F1F000FF;
-	Mon, 14 Sep 2026 23:08:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdP1Qp5g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6107F1F000FF;
+	Mon, 14 Sep 2026 23:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427304;
-	bh=40Xjg1WBvFiz/vd2PQBiblx5fPDphgAkDmglsYBmaSw=;
+	s=k20260515; t=1789427309;
+	bh=aUp49JyynfN8hjkRFq4mGHCtvKsDixFfpxlinBJVmTo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=XhoJjaDaMiQCelALLBQjx9Y+yXs/kwa+PQSTHJzuRPeV1vWnYg4fbd6GM5OTyI3NC
-	 um9DGkC0Zzwv9GKlnTWiNgfGsATL8D7mlkedM7O4173Xl93JJb0CO4l6IVimS7Bsky
-	 Ijk8RbTRqV2RMw4QyCk29iBDnvopdmJ5CFUwDIxPBrXORdSAxJSkUEcL0by+i/czIw
-	 qlXAHHcGjkvR2MVGtxT81Ov3QDnA9fxe7sPz5xD4J1bbhVt9eKfCBb2LvJmH50t2DQ
-	 p5PiwUJdTgeRUGMwtlNm/9D+RcvYUffk99CH71kN+nfHdk1vAKBExo4JwdeE8sBbe1
-	 icOxvmajkUmKw==
+	b=TdP1Qp5goji9BRR56vXEHUpdB19IppCUWSh4XQVOo5xI97dm5HYTDHkEw6ZZj8Wfx
+	 w7EkXNXwe/2IBhOdCCB8uZ+9umwNPbgf22Q5ydZC73gG6fxlSJKYmdCHKkL08rVGTN
+	 uIjiECfYRV3LIgnKeNkbweNaqWyLUD0QmHbKDjrMrTFCGufEIpgBD7B65h6Cc60EPS
+	 PZdE+G/wUsh+x97CXO8aDPPnReKonBCKjsxylFwIJbdQc6rF/EkLt6WR8WqgSMbQbL
+	 MzjzZK1MLMaKoYl6IzAf0ReIklLc36gP3X3FCV4+nYoLL7wOR7+CSTa85S2GM8NlHK
+	 D/szd/eD65RNQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 54/58] objtool/klp: Add test for a patch which strips a data annotation
-Date: Mon, 14 Sep 2026 16:03:51 -0700
-Message-ID: <20260914230355.3422996-55-song@kernel.org>
+Subject: [PATCH v3 55/58] objtool/klp: Add test for absolute and __ADDRESSABLE symbols
+Date: Mon, 14 Sep 2026 16:03:52 -0700
+Message-ID: <20260914230355.3422996-56-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -51,81 +51,138 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-klp diff needs entry boundaries for a special section: either an entsize,
-or ANNOTATE_DATA_SPECIAL annotations naming where each entry starts.
-.static_call_sites has no entsize, so the annotations are all there is --
-and a patch can remove the last one in a translation unit while leaving the
-section itself in place, so that only the patched side has lost them.
+A SHN_ABS symbol has no section, so any walk of sym->sec which does not
+check dereferences NULL, and the kernel has plenty of them -- from linker
+scripts and from .set in assembly.  __ADDRESSABLE() emits a pointer into
+.discard.addressable purely to keep a symbol referenced; it means nothing
+to a livepatch and is discarded at link time, but it is a relocation like
+any other and gets looked at.
 
-The section still has to be handled.  Dropping it leaves the patched
-function's static call unregistered; misreading its boundaries attaches the
-entry to the wrong code.  Neither is reported at build time.
+Neither is what the patch changes.  What this guards against is not a wrong
+answer but a crash or an error on input the kernel produces routinely,
+which would make every function near one unpatchable.
 
-Give the fixture a NO_ANNOTATE knob and assert the premise -- annotation
-present in the original, absent in the patched object, section present in
-both -- before asserting the result.
-
-Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
-skipping entsize-based sections").  Verified by making klp diff skip
-.static_call_sites when cloning special sections: the test fails.
+Not isolated to a single line, and the test says so: the absolute symbol
+here has zero length, so it is excluded before the section check is reached
+and removing that check alone changes nothing observable.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../test-static-call-annotate-stripped.sh     | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100755 tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
+ .../generic/fixtures/abs_and_addressable.c    | 44 ++++++++++++++++
+ .../tests/generic/test-abs-and-addressable.sh | 50 +++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+ create mode 100755 tools/objtool/tests/generic/test-abs-and-addressable.sh
 
-diff --git a/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
-new file mode 100755
-index 000000000000..818b047ed4b6
+diff --git a/tools/objtool/tests/generic/fixtures/abs_and_addressable.c b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+new file mode 100644
+index 000000000000..6392ff99af42
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
-@@ -0,0 +1,42 @@
++++ b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Two constructs which appear all over the kernel and must not upset klp
++ * checksum or klp diff.
++ *
++ * An absolute symbol (SHN_ABS) has no section, so anything walking sym->sec
++ * without checking dereferences NULL.  The kernel makes them with linker
++ * scripts and with .set in asm; VDSO and the fixed-address per-cpu bases are
++ * the usual sources.
++ *
++ * __ADDRESSABLE() emits a pointer into .discard.addressable purely to keep a
++ * symbol referenced.  It is discarded at link time and means nothing to a
++ * livepatch, but the pointer is a relocation like any other and has to survive
++ * being looked at.
++ *
++ * Neither is the subject of the patch; the point is that their presence does
++ * not disturb the function that is.
++ */
++
++static const char __modinfo[]
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++
++/* SHN_ABS, referenced from code. */
++extern char abs_sym[];
++__asm__(".globl abs_sym\n"
++	".set abs_sym, 0x1234\n");
++
++int helper(int x);
++int helper(int x) { return x + 1; }
++
++/* The shape of __ADDRESSABLE(helper). */
++__asm__(".pushsection .discard.addressable, \"aw\"\n"
++	".balign 8\n"
++	".quad helper\n"
++	".popsection\n");
++
++int target(int x)
++{
++#ifdef PATCHED
++	return helper(x) + (int)(long)abs_sym + 1;
++#else
++	return helper(x) + (int)(long)abs_sym;
++#endif
++}
+diff --git a/tools/objtool/tests/generic/test-abs-and-addressable.sh b/tools/objtool/tests/generic/test-abs-and-addressable.sh
+new file mode 100755
+index 000000000000..6adb23ed4b88
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-abs-and-addressable.sh
+@@ -0,0 +1,50 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A patch may remove the last ANNOTATE_DATA_SPECIAL in a translation unit while
-+# leaving the special section it described in place.
++# An absolute symbol and an __ADDRESSABLE() pointer must not disturb the
++# function being patched.
 +#
-+# klp diff needs entry boundaries for a special section: either an entsize, or
-+# annotations naming where each entry starts.  .static_call_sites has no
-+# entsize, so the annotations are all there is -- and when the patched object
-+# is the only side that lost them, the two sides no longer agree on how the
-+# section divides up.
++# A SHN_ABS symbol has no section, so any walk of sym->sec which does not check
++# dereferences NULL -- and the kernel has plenty, from linker scripts and from
++# .set in assembly.  __ADDRESSABLE() emits a pointer into .discard.addressable
++# to keep a symbol referenced; it means nothing to a livepatch and is discarded
++# at link time, but it is a relocation like any other and gets looked at.
 +#
-+# The section must still be handled.  Dropping it would leave the patched
-+# function's static call unregistered; misreading its boundaries would attach
-+# the entry to the wrong code.  Either way nothing is reported at build time.
++# Neither is what the patch changes.  The failure this guards against is not a
++# wrong answer but a crash or an error on input the kernel produces routinely,
++# which would make any function near one unpatchable.
 +#
-+# Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
-+# skipping entsize-based sections").
++# Not isolated to a single guard: the absolute symbol here has zero length, so
++# it is excluded before the section check is reached and removing that check
++# alone changes nothing observable.  This stands as a check on the behaviour
++# rather than on the line which produces it.
 +#
-+# Covers the same ground as corpus/x86_64/static-call-annotate-stripped in Joe
-+# Lawrence's klp-build unit test corpus.
++# Covers the same ground as corpus/x86_64/checksum-abs-sym-skip and
++# addressable-symbols in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair static_call.c -DNO_ANNOTATE
++build_pair abs_and_addressable.c
 +
-+# The premise: the original describes its entry, the patched one no longer
-+# does, and both still have the section itself.
-+has_input_section orig.o .discard.annotate_data ||
-+	fail "fixture produced no annotation in the original"
-+has_input_section patched.o .discard.annotate_data &&
-+	fail "patched object still has the annotation; nothing was stripped"
-+assert_input_section .static_call_sites
++# The premise: the fixture really did produce both.
++in_symbols orig.o | grep -q 'ABS.*abs_sym' ||
++	probe_skip "assembler did not make abs_sym absolute here"
++assert_input_section .discard.addressable
 +
++# Checksumming has to survive them, and still see the function that changed.
++run_checksum
++assert_checksum_differs target
++assert_checksum_matches helper
++
++# So does the diff.
 +run_diff
-+
 +assert_patched target
-+assert_section .static_call_sites
-+assert_reloc_sym .static_call_sites target
++assert_not_patched helper
 +
-+pass "static call site kept when the patch strips its data annotation"
++# An absolute symbol has no address to record a checksum against, so it gets
++# no entry -- the reference to it is what mattered, not the symbol itself.
++in_relocs orig.o | awk '/rela\.discard\.sym_checksum/,/^$/' | grep -qw abs_sym &&
++	fail "absolute symbol got a checksum entry"
++
++pass "absolute and __ADDRESSABLE symbols do not disturb the patched function"
 -- 
 2.53.0-Meta
 
