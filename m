@@ -1,95 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492847FB1C;
-	Mon, 14 Sep 2026 19:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6223E638D
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789415760; cv=none; b=gj8aIb8Y96hLFFJGvuOj0/paSXKlRSD9fzK7BOORr2zft4SdJbYwt6A7QjbW3ihAGltKzi48bifFrU1MGUCjXlUyYiRX8l8zHSmikRw5QiBQwdfwYXggKuvLtd4z/pAfxQNxO9gLAOpJChudo19EK37tuEqwpZ6N7vP1ei4u8PQ=
+	t=1789418260; cv=none; b=u6Z/ABcROOgiWtt+KzKUZEchzg1wOSOjt/jaUI+52Zzvg86fihruAUSS2hGasjpGefz70lTpnXas0GvBJw+eKJCgNGw5y+m4quORc12XjlLj1B3MZpcWOhdplLMI7aCRMQKNmaxzxmCN7ePKVhxysYdmZJUY3Cm2U/QAVys+GQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789415760; c=relaxed/simple;
-	bh=e9cyYIx1SSiY1QqfENk7IAjubYdiB9lSrDyppNfPr10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ay78uApuFWFZivYWZ0F1vxtdnONr6tc1pTgVFKZ0LMeWvYZzUTEPuwOmtyvB18tH4kULApKy4GeMb78kHECYZBP9CTUKAyhk3Sewws5BiFzr2ADFbInTq4GBj8AG1JdgR/xwDO0Y6lgq8boHvLcaULVvaOp64WxY/E6zw9H4cXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lt0Qchuw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789418260; c=relaxed/simple;
+	bh=b48asTn0wdvaGkrugHyVu7XhE9anx3Kqyy50V9PpMlw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MjTRXt5LG7DGarf3STOhnVshMhIr5jpmySNMl9t/gM0mmYK8kXv/ueSYeT5YqYkFsNUZ4vYSXyyzajBld8/vkaYsd2w73nrPEDHzlsk4qmNd0zMhAeNb/vUw5z6oJQABFEcmfHUGAzbU7B6UyefwixD6o3jQnX9JR+zBIhwV1gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c44NMlO6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lt0Qchuw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C071F00893;
-	Mon, 14 Sep 2026 19:55:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c44NMlO6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 872051F0089C
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 20:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789415758;
-	bh=3nOavNcgJHeCM+sFQDM1RISxIzblWm9N/B8XER02QDo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lt0QchuwIgLqMGWqbkUNvk/FdQi+P8KAdeNf0ExZhIOWdyOy7TLY6SZrI/X33sImG
-	 yaJeQk1a3zfG1VzzfuhWGGc7AGN7sopkxClw/UZHn8nEdMEz+p0R3j7qjJXasPFvSI
-	 YtnS95T0NTBNsU1sZYDqRh9KpLWmeT3QIxspOlwdowga0OQ4lcnGeRxGAi2alDF+uM
-	 ravmn1pypsKThDxjWogyOV5GKgzJSN1im7/Exzw9U5JWVppoj91MfqSuo59bCvHCm8
-	 Q7l5kLQM/CWfSv4+/u9s4Yn1vGqe62N/0Jui+Wddp+Al17V3/AtQ/siQWx4oL3h9ZF
-	 ustqJy/u8UN9w==
-Date: Mon, 14 Sep 2026 12:55:56 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Longjun Luo <luolongjuna@gmail.com>
-Cc: peterz@infradead.org, song@kernel.org, jikos@kernel.org, 
-	pmladek@suse.com, live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] objtool/klp: Fix missed changes to same-named symbol
- references
-Message-ID: <aqhQl64XvK0V2aJT@jpoimboe>
-References: <20260910085218.66565-1-luolongjuna@gmail.com>
- <aqc5Q4_9bHpAI4jh@jpoimboe>
- <CAKL4jwV8ZxAzkZ-0LWP9jzWvfw5-EKFS7LPKiibp5McY4Yubng@mail.gmail.com>
+	s=k20260515; t=1789418258;
+	bh=lnqw0YQ3/1MlDRL6yBeuiYQoFqnQKMVeC8u5gpTWh2w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=c44NMlO6ojhQW0cH9DZH7VbmvQh2GfaioarIAsdc2CsLIaBaE3ydCHy+Vmje03PxL
+	 sCxbef8mo1vT1jhYHrsgU4ZHOPPNvFvqtHu6Hj43c6CaWPLzQmySkjh7zNToJH98Ou
+	 QhckDIg/7gUfyVQQHF704Z6tTqPEUtLO4hyCVOP+08yVXEZYWHZOR4hKs+uTo1BKdX
+	 WFSik4VGgTxLspA34dKv/E5BT4/1dMunK2gQA3CtzKwhNpBDfpizSlNTACmaP6FeCH
+	 HrhUsO0B4d/KQmqlnZeqKHsrUua92404mu2kAtxAN3VCn2V5IeQhxkvI3DsSXPcddU
+	 gO4VOcoZuizUQ==
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-939e59ff27eso355807685a.3
+        for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 13:37:38 -0700 (PDT)
+X-Gm-Message-State: AFuF++lT25ZvXSnE8f9KJ8XJZm1ISsGS5ZIhVtBKTEBHdiUt+1q733gT
+	98PsfQC6WTtYkHScqyMB299a2yz9470jYUptY7lhJvMTF3ya2I+P8RXMXTzhIplsu7iiyFyqGnR
+	fXNfyYOPm0LtAJENlq3erxKrewXsXymU=
+X-Received: by 2002:a05:620a:6892:b0:939:8ecf:6025 with SMTP id
+ af79cd13be357-93a297bbc66mr588336485a.20.1789418257585; Mon, 14 Sep 2026
+ 13:37:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKL4jwV8ZxAzkZ-0LWP9jzWvfw5-EKFS7LPKiibp5McY4Yubng@mail.gmail.com>
+References: <20260914062514.926997-1-song@kernel.org> <20260914062514.926997-7-song@kernel.org>
+ <20260914064106.D54991F000FF@smtp.kernel.org>
+In-Reply-To: <20260914064106.D54991F000FF@smtp.kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Mon, 14 Sep 2026 13:37:25 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5V4cxhYJL9awK3yO3Kz8QW3Od0gUhVCF8QTg=vQ5Z=mQ@mail.gmail.com>
+X-Gm-Features: AcwNN1XtYcpY7ablM23GzcNBZ7WvJnmvycBM08szbQiy-jYr9xvfQyDMqzdcN5k
+Message-ID: <CAPhsuW5V4cxhYJL9awK3yO3Kz8QW3Od0gUhVCF8QTg=vQ5Z=mQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/58] objtool/klp: Grow the klp test harness vocabulary
+To: sashiko-reviews@lists.linux.dev
+Cc: live-patching@vger.kernel.org, joe.lawrence@redhat.com, 
+	kernel-team@meta.com, jpoimboe@kernel.org, jikos@kernel.org, 
+	puranjay@kernel.org, peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 14, 2026 at 08:12:33PM +0800, Longjun Luo wrote:
-> Hi Josh,
-> 
-> > These seem like unusual edge cases, is this problem theoretical or was
-> > it a real-world bug?
-> 
-> These are constructed reproducers, not production failures. We have
-> been working on userspace livepatching, including symbol correlation
-> under LTO. I built and tested these cases while comparing klp-build
-> and kpatch-build.
-> 
-> > If the .patch upgrades a function from static to global then the
-> > function no longer has a FILE associated with it.  Then with the above,
-> > all callers to that function would be marked as changed.  And note that
-> > LTO does a lot of that, so static-to-global and global-to-static changes
-> > are common between orig and patched objects.
-> 
-> I confirmed locally that kernel LTO can change a function's binding
-> without changing its name.
-> 
-> For context, in our userspace ThinLTO tests, promoted locals usually
-> acquired a .llvm.<hash> suffix. The kernel's ThinLTO build uses
-> -always-rename-promoted-locals=false when supported by the toolchain,
-> so promotion need not add that suffix.
-> 
-> I agree that this FILE-based checksum change is too restrictive.
-> Please drop this patch.
-> 
-> You are right that patch authors need to verify the changed-function
-> list. However, in these cases the current checksums do not distinguish
-> the old and new targets, and no diagnostic points to the missed change.
-> That could make a resulting problem difficult and time-consuming to
-> diagnose. Would it be useful to document these cases as a known
-> limitation?
+On Sun, Sep 13, 2026 at 11:41=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] Regex boundary matching using `grep -qw` fails to enforce exac=
+t symbol name matches because GNU grep treats characters like `.` and `,` a=
+s non-word boundaries.
+> --
+>
+> commit cfe07e1e9cf1d7d13ada28e3a4fcdc25e8dd8672
+> Author: Song Liu <song@kernel.org>
+>
+> objtool/klp: Grow the klp test harness vocabulary
+>
+> This commit expands the objtool livepatch test harness vocabulary by addi=
+ng
+> assertions for both input and output objects. It validates properties lik=
+e
+> relocations, symbols, sections, and checksums produced by klp diff.
+>
+> > diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
+> > index 0a9da178f4dc8..40fe740821582 100644
+> > --- a/tools/objtool/tests/lib.sh
+> > +++ b/tools/objtool/tests/lib.sh
+> [ ... ]
+> > +count_input_symbols()
+> > +{
+> > +     in_symbols "$1" | awk -v n=3D"$2" '$4 =3D=3D "OBJECT" && $8 =3D=
+=3D n' | wc -l
+> > +}
+> > +
+> > +# re_quote <string>
+> > +#
+> > +# A string as a literal basic regular expression.  Nearly every name t=
+hese
+> > +# assertions match on contains a dot -- .text.target, .klp.rela.vmlinu=
+x -- and
+> > +# an unescaped dot matches any character, so an assertion for one sect=
+ion can be
+> > +# satisfied by a different one whose name merely lines up.
+> > +re_quote() { printf '%s' "$1" | sed 's/[].[^$*\\/]/\\&/g'; }
+> > +
+> > +has_input_section() { in_sections "$1" | grep -q "[[:space:]]$(re_quot=
+e "$2")[[:space:]]"; }
+> > +has_input_symbol()  { in_symbols "$1" | grep -qw -- "$(re_quote "$2")"=
+; }
+>
+> [Severity: Medium]
+> Since GNU grep treats characters like dots as non-word boundaries (as acc=
+urately
+> noted in the comment for count_input_symbols() above), won't this allow f=
+alse
+> positive matches?
+>
+> If a test checks for the symbol "target", couldn't this falsely match a s=
+ymbol
+> named ".text.target" or ".klp.tombstone.target"?
+>
+> [ ... ]
+> > +assert_reloc_sym()
+> > +{
+> > +     section_relocs "$1" | grep -qw -- "$(re_quote "$2")" ||
+> > +             fail "expected a relocation to '$2' in '$1'"
+> > +}
+>
+> [Severity: Medium]
+> Will this assertion mistakenly match base sections like ".text.unlikely" =
+if $2
+> is ".text", because grep -qw relies on word boundaries that do not stop a=
+t dots?
+>
+> > +
+> > +assert_no_reloc_sym()
+> > +{
+> > +     section_relocs "$1" | grep -qw -- "$(re_quote "$2")" &&
+> > +             fail "unexpected relocation to '$2' in '$1'"
+> > +     return 0
+> > +}
+>
+> [Severity: Medium]
+> Could this negative assertion falsely fail if a similarly-named dotted sy=
+mbol
+> is present? For example, failing to verify the absence of "foo" because
+> "foo.isra.0" is present.
+>
+> [ ... ]
+> > +assert_symbol()
+> > +{
+> > +     out_symbols | grep -qw -- "$(re_quote "$1")" ||
+> > +             fail "expected symbol '$1' in output"
+> > +}
+>
+> [Severity: Medium]
+> Can this check pass falsely if only a tombstone or section symbol like
+> ".klp.tombstone.foo" exists when verifying the presence of "foo"?
+>
+> > +
+> > +assert_no_symbol()
+> > +{
+> > +     out_symbols | grep -qw -- "$(re_quote "$1")" &&
+> > +             fail "unexpected symbol '$1' in output"
+> > +     return 0
+> > +}
+>
+> [Severity: Medium]
+> Similar to assert_no_reloc_sym(), will this incorrectly fail if a cloned
+> function like "foo.isra.0" exists when asserting the removal of "foo"?
+>
+> [ ... ]
+> > +assert_livepatch_sym()
+> > +{
+> > +     out_symbols | grep -E 'OS ?\[0xff20\]' | grep -qw -- "$(re_quote =
+"$1")" ||
+> > +             fail "expected '$1' to be an SHN_LIVEPATCH symbol"
+> > +}
+>
+> [Severity: Medium]
+> Is this also prone to the same grep -qw boundary matching issue, potentia=
+lly
+> causing false passes on substring matches bounded by dots or other non-wo=
+rd
+> characters?
 
-Yes, and in fact we need a "patch author guide" for humans/LLMs to read
-when using klp-build, as there are pitfalls to watch out for.
+Replaced all the "git -qw" cases with awk or other git commands in v3.
 
-Something similar to what kpatch has...
-
-  https://github.com/dynup/kpatch/blob/master/doc/patch-author-guide.md
-
-in case anybody wants to try porting that over.
-
--- 
-Josh
+Thanks,
+Song
