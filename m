@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE02C3E2746
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:28:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB5A3D7D8C
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367312; cv=none; b=Uc+2p4AO6ChgM2Vo7H7+xLv8ULdbA3fZKlA7phduj9wmyygKJc/vzMikQMLF6Suc4kr1NUUF6D7f9W5zEsGi2p2/S4xO350sm3wVRHPnH5nKr6ExiVpxhhlECbUJlwafcPEbnmsXbJVK96K5oToFDmVapyG4jaS8pu5x5EUYP9k=
+	t=1789367316; cv=none; b=Pwv4N/4teTEIKui5Lb32wZPi3P044cdjbd/yP34RgI9RexZ7yy72zgB3QpYtX8YEQVYmFQ1tQ1bNk3Cq46qiK7C7RbgBk77fmSLrcBmdaV52BH68SWM12oLDL2koHHf41+hc7Lk/+jLWY4Km4YfY4PL0z1mecG4HOZtUfXXRXgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367312; c=relaxed/simple;
-	bh=2SbUUxGToJEJvGNQaH2J/aVQaEwz2IrFLRGPV9UJmh8=;
+	s=arc-20240116; t=1789367316; c=relaxed/simple;
+	bh=O/Vyyquoe8PAs/bXEMIJGZdXPAzwhVdbV6aQFeqCMwg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QBlZzPNW5RNfCgRY1Tnmpsytugq59paJSfpNgijuRcn1e5qCx2719KFV7E/+0hvO7p4DQp2db2uymDqGe4fCTwQR3l3gQKkyIQLCvOYPRa8QCai4+sGAcI8d9n1zjLOurEl3etPqJ7A5vBuHUEtgcgZmh6xILYcJjER5CuMKDXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlPLwu/8; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=PhyL6qgZ4LHbSqqnrDgA8MynoOkV+bLpwi+4IT9jraGYfvvqFLGtTzf7tH/6jOfgQbmLXRZLrFAohEMdfVE9UHsVdqbmW3BKRt0XbPe6Z8QwaotrVUap0ge4cCGY+g34g2Tdv+qe6SuXjQGO0n1w9mbcBaaXkupaYp8CE1Pir8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/iN1xJC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlPLwu/8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3C31F000FF;
-	Mon, 14 Sep 2026 06:28:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/iN1xJC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C51E1F000FF;
+	Mon, 14 Sep 2026 06:28:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367310;
-	bh=qYy3MMZEwe6P1EkjSGHGFbZ3clEseRh7XJE968GpDK4=;
+	s=k20260515; t=1789367315;
+	bh=WV5VeW8fRzrqpwY3VtpGMwei4VK+vatQRHwjjgTf53I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ZlPLwu/8/h96ONe+mGAoEWW2nERX0RqdoBU8xS1napeOjvYJ4fXLhZasc0+A1MSvs
-	 4oZ14XYIcqdnkmWTdYz3DUUcFlQAL4CLTgWdgIZoxBs4Zqpi8vreVR1RqDkFOErjUJ
-	 hOcT8IVEOYsCROW9KVXUaBYdDSOIU5EItzNhcq2LOdlwuGlGqBdSnNuV5lghYI8MXU
-	 kkTbwCEdtgpA6YHAxmga2ZLF0X3u65Lda1YkbsmYCu0gasAefLg3CWXacevZrds6aa
-	 lVKdO651XiWiPKjKEtqNpciXE1GtwAhD8L34YbkGr7Cn+icqX8KqtOxL6p71hwk1jk
-	 8Z/ZQOeygPlsQ==
+	b=m/iN1xJC+xGmhaJqCCiqfAsxgNoxcbt1MpoVpmdOASdMbwG8gHeRAbdje1IBwU+Cz
+	 8dOMue0DGtiOpWkiBdSa6X/535SySpNVTXtAjChdlUDdfJ3FKq2Lf0O0CGmXZOq3KI
+	 VRV7wH4rwamFAJcLm6SZemmi6BIz4NFgxmIDUuyqsTDUURBMKycHnjXpNomnu/ck3G
+	 trLL+Zl58fZqVClcI+rDC3swgEYk3UbRnt+m+QYa1KP+96RKwtPdPM06BUFAwYJToq
+	 DjpOaq6zr5vDfQYQL5ViWeKNA06y1WS0YghKPbaZzIQJDrPpUNa1DmQanJfeim10yY
+	 M2aojzis5jAzA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 34/58] objtool/klp: Add test for empty x86 alternative replacements
-Date: Sun, 13 Sep 2026 23:24:50 -0700
-Message-ID: <20260914062514.926997-35-song@kernel.org>
+Subject: [PATCH v2 35/58] objtool/klp: Add test for recorded checksum values
+Date: Sun, 13 Sep 2026 23:24:51 -0700
+Message-ID: <20260914062514.926997-36-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914062514.926997-1-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
@@ -51,151 +51,68 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ALTERNATIVE_2("orig", "repl", ft1, "", ft2) produces a second entry whose
-replacement is empty.  Its replacement offset still carries a relocation,
-but the label it points at is the end of the previous replacement -- which
-is also where the next one begins.  The value is meaningless and only ever
-used with a length of zero, so cloning must not follow it.
+Whether klp diff treats a function as changed is decided by its checksum,
+and until now nothing looked at one.  A test asserting only that the right
+functions were cloned cannot tell a correct checksum from one that happens
+to differ.
 
-The first version of this fixture passed with the fix reverted, because the
-empty entry pointed at its own end label rather than at the neighbour's
-replacement.  It has to reach into another function's replacement to
-distinguish the behaviour.
-
-This tests the behavior of commit 636f230ce21e ("objtool/klp: Ignore
-replacement offset of empty x86 alternatives").
+Asserts both directions -- the changed function's checksum moves, the
+untouched one's does not -- and that checksumming identical input twice
+gives the same answer, since otherwise every rebuild reports spurious
+changes.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/x86/fixtures/empty_alternative.c    | 77 +++++++++++++++++++
- .../tests/x86/test-empty-alternative.sh       | 31 ++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 tools/objtool/tests/x86/fixtures/empty_alternative.c
- create mode 100755 tools/objtool/tests/x86/test-empty-alternative.sh
+ .../tests/generic/test-checksum-value.sh      | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-checksum-value.sh
 
-diff --git a/tools/objtool/tests/x86/fixtures/empty_alternative.c b/tools/objtool/tests/x86/fixtures/empty_alternative.c
-new file mode 100644
-index 000000000000..9336d74bfa92
---- /dev/null
-+++ b/tools/objtool/tests/x86/fixtures/empty_alternative.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * An x86 alternative with an empty replacement, as the second entry of
-+ * ALTERNATIVE_2("orig", "repl", ft1, "", ft2) produces.  Its replacement
-+ * offset still gets a relocation, but the label it points at is the end of the
-+ * previous replacement, which is also where the *next* one begins -- here,
-+ * neighbor()'s.  The value is meaningless; it is only ever used with a length
-+ * of zero.
-+ *
-+ * struct alt_instr is written out by hand so the fixture builds without kernel
-+ * headers: s32 instr_offset, s32 repl_offset, u32 ft_flags, u8 instrlen,
-+ * u8 replacementlen.  The section carries an entsize because klp diff needs
-+ * either that or an ANNOTATE_DATA_SPECIAL annotation to find entry boundaries.
-+ *
-+ * The replacement labels are global so the relocations name them rather than
-+ * .altinstr_replacement plus an addend.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+extern int neighbor_only(int x);
-+
-+int target(int x)
-+{
-+	asm volatile(
-+		"661:	nop\n\t"
-+		".pushsection .altinstr_replacement, \"ax\"\n\t"
-+		".globl target_repl\n\t"
-+		"target_repl:\n\t"
-+		"	nop\n\t"
-+		"target_repl_end:\n\t"
-+		".popsection\n\t"
-+		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
-+		/* a real replacement */
-+		".long 661b - .\n\t"
-+		".long target_repl - .\n\t"
-+		".long 0\n\t"
-+		".byte 1\n\t"
-+		".byte target_repl_end - target_repl\n\t"
-+		/* an empty one, pointing at neighbor()'s replacement */
-+		".long 661b - .\n\t"
-+		".long neighbor_repl - .\n\t"
-+		".long 0\n\t"
-+		".byte 1\n\t"
-+		".byte 0\n\t"
-+		".popsection\n\t");
-+#ifdef PATCHED
-+	return x + 2;
-+#else
-+	return x + 1;
-+#endif
-+}
-+
-+/*
-+ * Unrelated, unpatched, and referencing a symbol nothing else does, so that
-+ * dragging its replacement in is visible.
-+ */
-+int neighbor(int x)
-+{
-+	asm volatile(
-+		"771:	nop\n\t"
-+		".pushsection .altinstr_replacement, \"ax\"\n\t"
-+		".globl neighbor_repl\n\t"
-+		"neighbor_repl:\n\t"
-+		"	call neighbor_only\n\t"
-+		"neighbor_repl_end:\n\t"
-+		".popsection\n\t"
-+		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
-+		".long 771b - .\n\t"
-+		".long neighbor_repl - .\n\t"
-+		".long 0\n\t"
-+		".byte 1\n\t"
-+		".byte neighbor_repl_end - neighbor_repl\n\t"
-+		".popsection\n\t");
-+	return x;
-+}
-diff --git a/tools/objtool/tests/x86/test-empty-alternative.sh b/tools/objtool/tests/x86/test-empty-alternative.sh
+diff --git a/tools/objtool/tests/generic/test-checksum-value.sh b/tools/objtool/tests/generic/test-checksum-value.sh
 new file mode 100755
-index 000000000000..9d40c3a405af
+index 000000000000..feae6a12e98d
 --- /dev/null
-+++ b/tools/objtool/tests/x86/test-empty-alternative.sh
-@@ -0,0 +1,31 @@
++++ b/tools/objtool/tests/generic/test-checksum-value.sh
+@@ -0,0 +1,37 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# An x86 alternative with an empty replacement still gets a relocation for its
-+# replacement offset, but the label it points at is the end of the previous
-+# replacement -- which is also the start of the next one.  The value is
-+# meaningless, and get_alt_entry() already ignores it.
++# The per-function checksums klp checksum records are what klp diff uses to
++# decide which functions changed.  A checksum covering too little misses a real
++# change and the patch silently omits the function; one covering too much, or
++# unstable across identical input, clones functions nobody patched and drags
++# their dependencies in with them.
 +#
-+# Cloning it drags in an unrelated neighboring replacement and everything that
-+# replacement references.  In the reported case an empty alternative in
-+# meminfo_proc_show() pulled in one from proc_kcore_init(), emitting a klp
-+# relocation against init text which is long freed by the time the patch is
-+# applied.
++# test-basic covers which functions got cloned, which is downstream of this and
++# passes for either kind of wrong checksum as long as the two errors do not
++# happen to cancel.  This checks the checksums themselves.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair empty_alternative.c
++build_pair basic.c
 +
-+assert_input_section .altinstructions
-+assert_input_section .altinstr_replacement
++assert_input_symbol changed
++assert_input_symbol untouched
 +
-+run_diff
++run_checksum
 +
-+# target's own replacement comes along ...
-+assert_symbol target_repl
-+# ... neighbor's does not, nor what it references.
-+assert_no_symbol neighbor_repl
-+assert_no_symbol neighbor_only
++# The edited function's checksum has to move, the untouched one's must not.
++assert_checksum_differs changed
++assert_checksum_matches untouched
 +
-+pass "empty alternative's replacement offset ignored when cloning"
++# And it has to be a function of the code, not of the build: checksumming the
++# same input twice has to give the same answer, or every rebuild reports
++# spurious changes.
++first="$(checksum_of orig.o changed)"
++build_pair basic.c
++run_checksum
++[ "$(checksum_of orig.o changed)" = "$first" ] ||
++	fail "checksum for 'changed' differs between builds of identical source"
++
++pass "checksums track the changed function and are stable across rebuilds"
 -- 
 2.53.0-Meta
 
