@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4134F32A3E5
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275A4381EA9
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:04:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427061; cv=none; b=DI9uKsTuH1TSVCP3oBf4shNL4SjI7I9+06Bo8f08tTzxyGeEcsnDjMrLcJ/BYQ+i4avNFjjA3vW/Ckyhqogyncrcw1OejUPEVAhKDZ5LFpeLXSyFxrXd6RUG5K1/pEoUmgICB2+72k5khUZxgybyKO9QODnkvUnWcpUBuJChU+c=
+	t=1789427066; cv=none; b=AgjPYoGZINF9g+9SGBgENtGzeDZcFMZHpgtHLrFbV2k68OShZGWM3xnWkza/ZlBfMY1QWslHYJBA+YPlxFptP1uTvh3+Gh0812X0P8o3tfKAyVwrxJRFCWzYP1Tqc7F1Iaq7xiJOq4Aul+LKaYHzQMADRpBzWWeXHAf11gpbGjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427061; c=relaxed/simple;
-	bh=SOCzNHOKfI7gU2UzUZyeDSIhagOwOfrjZdXIPLJUPho=;
+	s=arc-20240116; t=1789427066; c=relaxed/simple;
+	bh=CxAt5uSHoCmtOAAto5s+v93+ZwN6V+3jFtKAM2dintE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qGwNRiTVxHB0/N5MDPWsuOudZrGcVeMW+en53DE6Jf5I7KT0kSoX4EXqzPCuhzwrYNO418+KFeN9nDvxQezaMu6Y3U+RVjCf4rq0pOsBuDgXa2fvXQ/fXQNLqOLffYa7eJ0Q0xyA0qlJlPQind7Fl9owGl2pwu8qvwr8nky/9nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbK3DOCD; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=NsRBNbrSgz4/wchjCAv6lzp67WN0dKE9IbhEN/xvgUAjTAPjO9gBLJhF/AUI7B39wGuIoJB0L7nXv20ItQiDOmSocT4E7EwNvJbEMp9dDD3+ZG7xmtWXD1Jo3r2vU+AU9GkdlvUxMMBHPE90Dq0c8vIo6PkMWZOpEnL2VmYZDVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QK2gAdsK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbK3DOCD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 170FF1F000FF;
-	Mon, 14 Sep 2026 23:04:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QK2gAdsK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8A5A1F000FF;
+	Mon, 14 Sep 2026 23:04:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427060;
-	bh=q+SvSAvoYHMr2MzOnhwG0tRzmgSbrl5maPim2w4dr74=;
+	s=k20260515; t=1789427064;
+	bh=b9bWCfSA21ZFTjqLCseWJqq0uJevuzCMOcZfZEUSh8c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GbK3DOCD5f0+zYpVrZroKc/1ntrK9E/fPLL+V8SBL+gMy0XM/jFrRdz4YuvcvZ9o8
-	 C635t+syiXjivj5nyFS8tgjoRnlk2nD+SFr0/qUAdMK6GJdoCKlklqlhJtoQl1lFBT
-	 +xiIW3H/Sj9imxxm3Zi9dWGyQUF3V83AcRcy7+2TLlQY4plH0rkclBeegekH1bSy6u
-	 7O9sQrgHqZiC4thIkkTFk09wYGvBWHAxZRLQzQgsKq9RaJ/Xoggxf4IpLlnVUECSwW
-	 tAzySJ+eUFXLspJ1mEBIcrGnjZE1TOu/bGvLbic+SC3seNUVOCwfdBCBhObOyZtqV7
-	 +FE3A/9nWcm2w==
+	b=QK2gAdsKNdOkx0VZ98DeDqCUWwl8qEoBwyIBO21Tku4W9M59tj3VH+W37dBLKBIqq
+	 RSuIghVqPDI1Pg0xlFYgIJ+dlJiSbPplY8+TISFD9XjHylf9O0MYFyBX0J280RfX6H
+	 t9HtmTHvX0vo3VmSIHITgiZmJn/gEDy/AZnHPO+hLddJYtcHy5gDlzLzz9ryV3VP8+
+	 E95UMDAN5lortu6HeA/RvF5XHlMdMco6LqJWpBdO2XTuyQ8e3kjLofnV1982QWwCQT
+	 an967FK1uWMfi3e52BaM3eauvPtRgBYuKhxEc5JwR9g10PR1tw2wkgpxQMizNRiNkn
+	 mHA0KLv0fpllw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 04/58] objtool/klp: Classify klp test outcomes
-Date: Mon, 14 Sep 2026 16:03:01 -0700
-Message-ID: <20260914230355.3422996-5-song@kernel.org>
+Subject: [PATCH v3 05/58] objtool/klp: Build klp test fixtures through the harness
+Date: Mon, 14 Sep 2026 16:03:02 -0700
+Message-ID: <20260914230355.3422996-6-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -51,330 +51,290 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A test could pass, fail, or skip, and the runner reported only the exit
-status of the last one to fail.  Skips are the interesting case: they are
-how a suite quietly stops testing anything.
+Compiling a fixture is the one thing every test does, and it has more
+invariants than it looks.
 
-Three kinds, and the runner counts them separately:
+  - The flags describe the kernel a fixture stands in for, and each is
+    written down with its reason.  That substitution is the whole mechanism
+    by which these tests cover configurations without building a kernel --
+    objtool reads no .config, so a configuration reaches it only as
+    compiler flags and the bytes they produce -- and a flag with no stated
+    motive is indistinguishable from a mistake.
 
-  declared   the test said in advance it does not apply here, e.g. gcc_only
-             on a clang run.  Expected indefinitely.
-  probe      the construct did not turn up in the built object this time.
-             Weaker: one which becomes permanent is a fixture that stopped
-             testing anything.
-  undeclared counted as a failure.  A test which gives up for a reason it
-             never declared is a hole, not an outcome.
+  - -c is not one of them.  Producing an object rather than a program is
+    the helper's contract, not something a test may reconsider, so it lives
+    at the compile and an override cannot drop it.
 
-xfail and xpass come with them, so a known failure is reported rather than
-commented out and forgotten, and one which starts passing says so instead
-of going quietly green.
+  - A fixture which will not compile is a failure, not a skip.  It is far
+    more often a mistake in the fixture than a compiler which cannot
+    express the construct, and the two are indistinguishable once reported
+    as a skip.
 
-The result line is what gets classified, not the whole of a test's output:
-objtool warns on stderr and the runner captures it, and a stray line ahead
-of the result would otherwise leave the exit status to decide -- counting
-an expected failure, which exits 0, as a pass.
+  - A newly produced object has no checksums in it, so producing one
+    invalidates the record that checksumming has already been done.  Left
+    to itself that invariant ends up in each test which rebuilds.
 
-Every test owes the plan exactly one result line, so a substituted verdict
-replaces the test's own rather than being printed beside it, and a test
-which dies before reporting gets a result of its own instead of being
-inferred from its exit status.
+build_one handles a single object for the tests which need more than two or
+different names; build_pair and build_module_pair are expressed in terms of
+it, so none of the above can be lost by going around them.
 
-Also: a TAP version line, LC_ALL=C so the order tests run in and the
-behaviour of grep's character ranges inside them do not depend on the
-invoking shell's locale, and fail() on stdout with every other verdict.
+run_checksum comes out of run_diff for the same reason: a test which wants
+checksums without a diff should not have to run one.
 
-Co-developed-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/tests/lib.sh       |  67 ++++++++++++--
- tools/objtool/tests/run-tests.sh | 148 ++++++++++++++++++++++++++-----
- 2 files changed, 186 insertions(+), 29 deletions(-)
+ tools/objtool/tests/lib.sh | 194 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 175 insertions(+), 19 deletions(-)
 
 diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-index e6bc5307d44c..efe0a7132679 100644
+index efe0a7132679..35be42758ece 100644
 --- a/tools/objtool/tests/lib.sh
 +++ b/tools/objtool/tests/lib.sh
-@@ -135,8 +135,38 @@ test_name="$(basename "$0" .sh)"
+@@ -127,13 +127,26 @@ EOF
+ 
+ [ -n "${KLP_TEST_PREFLIGHT:-}" ] || klp_preflight
+ 
+-# klp-build compiles the kernel this way; klp diff needs per-symbol sections to
+-# extract individual functions.
+-FIXTURE_CFLAGS="-c -O2 -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables"
++# What every fixture is built with.  These describe the kernel a fixture stands
++# in for; -c is build_one's contract rather than a property of that kernel, so
++# it lives at the compile where an override cannot drop it.
++#
++#   -O2					the kernel's default
++#   -ffunction-sections -fdata-sections	klp-build passes these itself, through
++#					KCFLAGS, whatever the configuration
++#   -fno-asynchronous-unwind-tables	arch/x86/Makefile sets this always, so
++#					kernel objects carry no .eh_frame
++#
++# A test overrides it; see tools/objtool/Documentation/klp-write-tests.txt.
++FIXTURE_CFLAGS="-O2 -ffunction-sections -fdata-sections \
++		-fno-asynchronous-unwind-tables"
+ 
+ test_name="$(basename "$0" .sh)"
  workdir=
  
++orig_obj=orig.o
++patched_obj=patched.o
++
  pass() { echo "ok - $test_name${1:+: $1}"; exit 0; }
--fail() { echo "not ok - $test_name: $1" >&2; exit 1; }
--skip() { echo "ok - $test_name # SKIP $1"; exit 0; }
-+fail() { echo "not ok - $test_name: $1"; exit 1; }
-+
-+# Two kinds of skip, and the runner tells them apart.
-+#
-+#   declared_skip  the test said in advance it does not apply here, e.g.
-+#                  gcc_only on a clang run.  Expected indefinitely.
-+#   probe_skip     the construct did not turn up in the built object this
-+#                  time.  Weaker: it may appear on another compiler version,
-+#                  and one which becomes permanent is a fixture that quietly
-+#                  stopped testing anything.
-+#
-+# A bare skip() is neither, and the runner counts it as a failure: a test which
-+# gives up for a reason it never declared is a hole, not an outcome.
-+declared_skip() { echo "ok - $test_name # SKIP (declared) $*"; exit 0; }
-+probe_skip()    { echo "ok - $test_name # SKIP (probe) $*"; exit 0; }
-+skip()          { echo "ok - $test_name # SKIP $*"; exit 0; }
-+
-+# TAP directives.  A test which is known to fail reports it rather than being
-+# commented out and forgotten, and one which starts passing again says so
-+# instead of quietly going green: the expectation has to be removed by hand,
-+# which is the point.
-+xfail()
-+{
-+	echo "not ok - $test_name${1:+: $1} # TODO known failure"
-+	exit 0
-+}
-+
-+xpass()
-+{
-+	echo "ok - $test_name${1:+: $1} # TODO expected failure, but passed"
-+	exit 1
-+}
+ fail() { echo "not ok - $test_name: $1"; exit 1; }
  
- cleanup() { [ -n "$workdir" ] && rm -rf "$workdir"; }
+@@ -179,6 +192,13 @@ setup()
+ 	workdir="$(mktemp -d)" || fail "mktemp failed"
+ 	trap cleanup EXIT
  
-@@ -166,6 +196,23 @@ export_syms()
- 	done
++	# A test may run several segments, and make_vmlinux_pair() repoints
++	# orig_obj at the image it builds.  Start each segment from the
++	# defaults, or the next build_pair() diffs the previous segment's
++	# object against the new one.
++	orig_obj=orig.o
++	patched_obj=patched.o
++
+ 	export_syms "$@"
  }
  
-+# gcc_only / clang_only <reason>
-+gcc_only()
+@@ -213,17 +233,69 @@ clang_only()
+ 	declared_skip "clang only${1:+: $1}"
+ }
+ 
++# build_one <fixture.c> <output object> [cflags...]
++build_one()
 +{
-+	case "$($CC --version 2>/dev/null | head -1)" in
-+	*[Gg][Cc][Cc]*)	return 0 ;;
-+	esac
-+	declared_skip "gcc only${1:+: $1}"
-+}
++	local fixture out
++	fixture="$FIXTURES_DIR/$1"
++	out="$workdir/$2"
++	shift 2
 +
-+clang_only()
-+{
-+	case "$($CC --version 2>/dev/null | head -1)" in
-+	*clang*)	return 0 ;;
-+	esac
-+	declared_skip "clang only${1:+: $1}"
++	[ -f "$fixture" ] || fail "missing fixture $fixture"
++
++	# run_checksum only runs once per workdir.  A fresh object has no
++	# checksums in it, so anything built now needs that to happen again.
++	rm -f "$workdir/.checksummed"
++
++	$CC -c $FIXTURE_CFLAGS "$@" -o "$out" "$fixture" 2>"$workdir/cc.log" ||
++		fail "$(basename "$fixture") does not build: $(tail -1 "$workdir/cc.log")"
 +}
 +
  # build_pair <fixture.c> [cflags...]
  build_pair()
  {
-@@ -174,9 +221,9 @@ build_pair()
- 	[ -f "$fixture" ] || fail "missing fixture $fixture"
+-	local fixture="$FIXTURES_DIR/$1"; shift
++	local fixture="$1"; shift
  
- 	$CC $FIXTURE_CFLAGS "$@" -o "$workdir/orig.o" "$fixture" 2>"$workdir/cc.log" ||
--		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
- 	$CC $FIXTURE_CFLAGS "$@" -DPATCHED -o "$workdir/patched.o" "$fixture" 2>"$workdir/cc.log" ||
--		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
+-	[ -f "$fixture" ] || fail "missing fixture $fixture"
++	build_one "$fixture" orig.o "$@"
++	build_one "$fixture" patched.o "$@" -DPATCHED
++}
++
++# run_objtool_check <objtool arguments...>
++#
++# Run objtool's ordinary check pass over the pair, as the kernel build does.
++#
++# Some of what klp diff consumes is produced by this pass rather than by the
++# compiler: .static_call_sites, .mcount_loc, .ibt_endbr_seal, ORC.
++#
++# Only module objects see it before klp-build -- with CONFIG_KLP_BUILD the
++# per-object pass is deferred, so built-in objects reach klp diff exactly as
++# the compiler left them.
++run_objtool_check()
++{
++	local obj
++
++	# This rewrites both objects, so checksums taken before it describe
++	# something that no longer exists.  As in build_one(), drop the marker
++	# so run_checksum() takes them again.
++	rm -f "$workdir/.checksummed"
++
++	for obj in "$orig_obj" "$patched_obj"; do
++		"$OBJTOOL" "$@" "$workdir/$obj" ||
++			fail "objtool $* failed on $obj"
++	done
++}
+ 
+-	$CC $FIXTURE_CFLAGS "$@" -o "$workdir/orig.o" "$fixture" 2>"$workdir/cc.log" ||
+-		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
+-	$CC $FIXTURE_CFLAGS "$@" -DPATCHED -o "$workdir/patched.o" "$fixture" 2>"$workdir/cc.log" ||
+-		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
++run_checksum()
++{
++	# Checksums live in the objects, so only generate them once even when a
++	# test diffs the same pair again with a different Module.symvers.
++	[ -e "$workdir/.checksummed" ] && return 0
++
++	"$OBJTOOL" klp checksum "$workdir/$orig_obj" ||
++		fail "klp checksum $orig_obj failed"
++	"$OBJTOOL" klp checksum "$workdir/$patched_obj" ||
++		fail "klp checksum $patched_obj failed"
++	touch "$workdir/.checksummed"
  }
  
  # run_diff [expected exit status]
-@@ -222,16 +269,20 @@ partial_link()
- 
- # find_thinlto_toolchain
- #
--# Set $THIN_CC and $THIN_LD to a clang and lld from the same LLVM release.  A
-+# Set $THIN_LD to an lld from the same LLVM release as $CC (or THIN_CC).  A
- # mismatched pair fails with "Invalid summary version", which reads like a
- # broken test rather than a broken environment.
-+#
-+# ThinLTO is clang-only; callers must use clang_only before calling this.
-+# Only $CC (or an explicit THIN_CC override) is consulted -- the harness does
-+# not search for a second compiler beside a gcc $CC.
- find_thinlto_toolchain()
+@@ -231,18 +303,10 @@ run_diff()
  {
--	local cc ld ver
-+	local cc ver ld
+ 	local expect="${1:-0}" rc=0
  
--	for cc in "${THIN_CC:-}" "$CC" clang; do
-+	for cc in "${THIN_CC:-}" "$CC"; do
- 		[ -n "$cc" ] || continue
--		command -v "${cc%% *}" >/dev/null 2>&1 || continue
-+		command -v "${cc%% *}" >/dev/null 2>&1 || return 1
+-	# Checksums live in the objects, so only generate them once even when a
+-	# test diffs the same pair again with a different Module.symvers.
+-	if [ ! -e "$workdir/.checksummed" ]; then
+-		"$OBJTOOL" klp checksum "$workdir/orig.o" ||
+-			fail "klp checksum orig.o failed"
+-		"$OBJTOOL" klp checksum "$workdir/patched.o" ||
+-			fail "klp checksum patched.o failed"
+-		touch "$workdir/.checksummed"
+-	fi
++	run_checksum
  
- 		ver=$($cc -dumpversion 2>/dev/null | cut -d. -f1)
+ 	# klp diff looks for Module.symvers relative to the working directory.
+-	( cd "$workdir" && "$OBJTOOL" klp diff orig.o patched.o out.o ) \
++	( cd "$workdir" && "$OBJTOOL" klp diff "$orig_obj" "$patched_obj" out.o ) \
+ 		> "$workdir/diff.log" 2>&1 || rc=$?
  
-diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-tests.sh
-index 48728a98d995..6b937fc7f5bd 100755
---- a/tools/objtool/tests/run-tests.sh
-+++ b/tools/objtool/tests/run-tests.sh
-@@ -8,13 +8,51 @@
- # apply here is not run rather than reporting a skip; what was left out is
- # reported once, as a comment, so differing coverage is still visible.
- #
-+# A run covers one compiler and one architecture; CI runs the combinations.
- # The harness checks the environment once up front and fails the run if the
- # suite cannot execute, rather than letting every test skip and exit 0.
+ 	[ "$rc" = "$expect" ] ||
+@@ -263,10 +327,102 @@ partial_link()
+ {
+ 	local out="$1"; shift
  
- set -u
- 
-+# Determinism: the order test-*.sh expands in, and how grep's character ranges
-+# and sort's collation behave inside the tests, are all locale-dependent.  A
-+# suite whose results depend on the invoking shell's locale is a suite whose
-+# failures cannot be reproduced.
-+export LC_ALL=C
++	rm -f "$workdir/.checksummed"
 +
-+usage()
+ 	$CC -r -nostdlib -o "$out" "$@" 2>/dev/null ||
+ 		$CC -r -nostdlib -fuse-ld=lld -o "$out" "$@" 2>/dev/null
+ }
+ 
++# link_vmlinux <output> <object...>
++#
++# Link objects into an executable, the way the kernel's final link produces
++# vmlinux from vmlinux.o.  Entry point 0 and no libc: nothing runs it, it only
++# has to be a linked image with resolved addresses.
++#
++# The sub-sections have to come out in name order rather than object order,
++# the way the kernel's linker script gathers .text.unlikely and .data.. apart
++# from the rest.  That reordering is the entire reason .klp.symid exists: a
++# link which preserves order cannot tell a correct sympos from one that merely
++# counted, and the caller checks the two orders really did diverge.
++#
++# A linker script rather than --sort-section=name, because lld accepts that
++# option and ignores it -- so on a host where only lld can link the target, the
++# test would quietly stop testing the thing it is named for.
++#
++# Three attempts because a cross run has neither $LD nor the compiler's default
++# linker able to touch the target: on an arm64 host linking x86 objects, only
++# lld will do it.
++link_vmlinux()
 +{
-+	cat <<EOF
-+usage: $(basename "$0") [test...]
++	local out="$1" lds="$workdir/sort.lds"; shift
 +
-+Run the objtool klp tests for this architecture: everything in generic/, plus
-+everything in the directory named for it.  With no arguments, runs all of them.
-+A test may be named with or without its "test-" prefix and ".sh" suffix, and is
-+looked for in both directories.
++	echo 'SECTIONS { .data : { *(SORT_BY_NAME(.data.*)) } }' > "$lds"
 +
-+Environment:
-+    OBJTOOL       objtool binary to test (default ../objtool)
-+    CC            compiler used to build fixtures (default gcc)
-+    ARCH          architecture the tests are for (default: uname -m)
-+
-+A test which needs something of its own says so in its skip message.
-+EOF
-+	exit "${1:-0}"
++	$LD -e 0 -T "$lds" -o "$out" "$@" 2>/dev/null ||
++		$CC -nostdlib -Wl,-e,0 -Wl,-T,"$lds" \
++			-o "$out" "$@" 2>/dev/null ||
++		$CC -nostdlib -fuse-ld=lld -Wl,-e,0 -Wl,-T,"$lds" \
++			-o "$out" "$@" 2>/dev/null
 +}
 +
- cd "$(dirname "$0")" || exit 1
- 
-+while [ $# -gt 0 ]; do
-+	case "$1" in
-+	-h|--help)	usage ;;
-+	--)		shift; break ;;
-+	-*)		echo "unknown option: $1" >&2; usage 1 ;;
-+	*)		break ;;
-+	esac
-+done
++# make_vmlinux_pair <orig object...> -- <patched object...>
++#
++# Build the vmlinux.o / vmlinux pair klp diff needs to resolve sympos the way
++# it does for built-in code, and point the diff at it.
++#
++# For a module, sympos is a count in symbol table order, which klp diff can do
++# from the object alone.  vmlinux is different: the final link reorders
++# sub-sections, so the position comes from the linked image, bridged by
++# .klp.symid.  klp diff only looks for that when the object it was handed is
++# called vmlinux.o and a vmlinux sits beside it -- so both the name and the
++# linked image matter.
++make_vmlinux_pair()
++{
++	local orig=() patched=() seen= arg
 +
-+echo "TAP version 13"
-+
- # Sourcing the harness runs its preflight, which decides which architecture
- # this run is for -- so the test list cannot be built before it has, and the
- # tests inherit the answers rather than working them out again.
-@@ -23,31 +61,99 @@ cd "$(dirname "$0")" || exit 1
- dirs=( generic )
- [ -d "$KLP_TEST_ARCH" ] && dirs+=( "$KLP_TEST_ARCH" )
- 
--tests=()
--for d in "${dirs[@]}"; do
--	for t in "$d"/test-*.sh; do
--		[ -f "$t" ] && tests+=( "$t" )
-+if [ $# -gt 0 ]; then
-+	tests=()
 +	for arg in "$@"; do
-+		name="test-${arg#test-}"; name="${name%.sh}.sh"
-+		found=
-+		for d in "${dirs[@]}"; do
-+			[ -f "$d/$name" ] || continue
-+			[ -x "$d/$name" ] ||
-+				{ echo "not executable: $d/$name" >&2; exit 1; }
-+			tests+=( "$d/$name" ); found=y
-+		done
-+		[ -n "$found" ] ||
-+			{ echo "no such test for $KLP_TEST_ARCH: $arg" >&2; exit 1; }
- 	done
--done
--[ "${#tests[@]}" -gt 0 ] || { echo "1..0 # SKIP no tests found"; exit 0; }
--
--# Tests for another architecture are absent from this run entirely.  Say how
--# many, so a run which covers less than the tree holds does not look like one
--# that covers all of it.
--for d in */; do
--	d="${d%/}"
--	case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
--	n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
--	[ "$n" -gt 0 ] || continue
--	echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
--	     "(this run is $KLP_TEST_ARCH)"
--done
-+else
-+	tests=()
-+	for d in "${dirs[@]}"; do
-+		for t in "$d"/test-*.sh; do
-+			[ -f "$t" ] && tests+=( "$t" )
-+		done
++		if [ "$arg" = -- ]; then seen=y; continue; fi
++		if [ -n "$seen" ]; then patched+=( "$arg" ); else orig+=( "$arg" ); fi
 +	done
-+	[ "${#tests[@]}" -gt 0 ] ||
-+		{ echo "1..0 # SKIP no tests found"; exit 0; }
 +
-+	# Tests for another architecture are absent from this run entirely.  Say
-+	# how many, so a run which covers less than the tree holds does not look
-+	# like one that covers all of it.
-+	for d in */; do
-+		d="${d%/}"
-+		case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
-+		n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
-+		[ "$n" -gt 0 ] || continue
-+		echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
-+		     "(this run is $KLP_TEST_ARCH)"
-+	done
-+fi
- 
- echo "1..${#tests[@]}"
- 
--rc=0
-+pass=0 fail=0 static_skip=0 probe_skip=0 xfail=0 xpass=0
++	# Both sides have to have been named.  Without this, forgetting the --
++	# leaves one list empty, the link of nothing fails, and the test skips
++	# saying the toolchain cannot link -- which is a test bug wearing the
++	# costume of an environment one.
++	[ "${#orig[@]}" -gt 0 ] && [ "${#patched[@]}" -gt 0 ] ||
++		fail "make_vmlinux_pair needs objects either side of --"
 +
- for t in "${tests[@]}"; do
--	./"$t" || rc=1
-+	out="$(./"$t" 2>&1)"
-+	rc=$?
++	partial_link "$workdir/vmlinux.o" "${orig[@]}" ||
++		probe_skip "partial link unavailable"
++	partial_link "$workdir/patched.o" "${patched[@]}" ||
++		probe_skip "partial link unavailable"
 +
-+	# A test prints one result line, but it is not necessarily the only
-+	# thing it prints: objtool warns on stderr, and the runner captures
-+	# that.  Classify the result line itself rather than the whole of the
-+	# output, or a stray line ahead of it makes every pattern below miss and
-+	# the exit status decide -- which would count an expected failure, which
-+	# exits 0, as a pass.
-+	result="$(printf '%s\n' "$out" | grep -E '^(ok|not ok)' | tail -1)"
-+	rest="$(printf '%s\n' "$out" | grep -Ev '^(ok|not ok)')"
++	"$OBJTOOL" --klp-symids --link "$workdir/vmlinux.o" ||
++		fail "objtool --klp-symids failed"
 +
-+	# Classify from the result line, not the exit status: a skip and a pass
-+	# both exit 0, and telling them apart is the point of counting.
-+	#
-+	# The two skip kinds differ in what they promise.  A static skip was
-+	# declared before the test ran ("clang does not do this"), so it is
-+	# expected indefinitely.  A probe skip means the construct did not turn
-+	# up this time, which is weaker and worth watching: one that becomes
-+	# permanent is a fixture that quietly stopped testing anything.
-+	case "$result" in
-+	*"# SKIP (declared)"*)	static_skip=$((static_skip + 1)) ;;
-+	*"# SKIP (probe)"*)	probe_skip=$((probe_skip + 1)) ;;
-+	*"# SKIP"*)
-+		# An undeclared skip: the test gave up for a reason it never
-+		# said it might.  That is a hole, not an expected outcome.
-+		#
-+		# Replace the line rather than adding one.  Every test owes the
-+		# plan exactly one result, and a consumer counting them is
-+		# entitled to say so when the totals disagree.
-+		rest="$rest${rest:+$'\n'}was: $result"
-+		result="not ok - $(basename "$t" .sh): undeclared skip"
-+		result="$result (use gcc_only/clang_only or require_input_*)"
-+		fail=$((fail + 1)) ;;
-+	"not ok"*"# TODO"*)	xfail=$((xfail + 1)) ;;
-+	"ok"*"# TODO"*)		xpass=$((xpass + 1)) ;;
-+	"not ok"*)		fail=$((fail + 1)) ;;
-+	"ok"*)			pass=$((pass + 1)) ;;
-+	*)
-+		# No result line at all: the test died before reporting.
-+		rest="$rest${rest:+$'\n'}exited $rc without a result line"
-+		result="not ok - $(basename "$t" .sh): no TAP result"
-+		fail=$((fail + 1)) ;;
-+	esac
++	link_vmlinux "$workdir/vmlinux" "$workdir/vmlinux.o" ||
++		probe_skip "cannot link a vmlinux here"
 +
-+	echo "$result"
-+	[ -n "$rest" ] && printf '%s\n' "$rest" | sed 's/^[^#]/# &/'
++	orig_obj=vmlinux.o
++}
 +
- done
- 
--exit $rc
-+echo "# pass:$pass fail:$fail static-skip:$static_skip" \
-+     "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
++# build_module_pair <fixture.c> <module name> [cflags...]
++#
++# Build the pair as objects belonging to a module rather than to vmlinux.  klp
++# diff reads the object's module name from .modinfo, and that decides which
++# object a relocation is attributed to and whether a reference counts as
++# cross-module, so a good deal of the code has a module path the vmlinux
++# fixtures never reach.
++#
++# The fixture defines its .modinfo name from MODNAME.  Passing that through
++# -D needs two levels of quoting, which is easy to get wrong at the call site.
++build_module_pair()
++{
++	local fixture="$1" modname="$2"; shift 2
 +
-+[ "$fail" = 0 ] && [ "$xpass" = 0 ]
++	build_pair "$fixture" -DMODNAME="\"$modname\"" "$@"
++}
++
+ # find_thinlto_toolchain
+ #
+ # Set $THIN_LD to an lld from the same LLVM release as $CC (or THIN_CC).  A
 -- 
 2.53.0-Meta
 
