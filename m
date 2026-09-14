@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F0E37AA65
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:46:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254A01C75F9
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:46:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789368368; cv=none; b=MROm7ucQR9L/7B3culQ3NJAoWPDE3NLLJ0TwEZYQyKwJHynf6w4cCm/y8EmnnF/2H8/sewyDBN7RYnDR/7dKQftTbRGXUueq27kmYTcEbq87ZmMhBbOdBNPx0dNzLPasdfAjrsm345nw6dZIvBwY+hDFoK5FEwbY2znu9BegeHE=
+	t=1789368414; cv=none; b=HnZuURlCQMNINCxkc9FXWYa7XgXn+0uQihUy2m/PU4dDi+u3EljCo9REEJdUbh4red7oxvUqXkLBVDPJUEsWzdCAyvxU6O+QVzyhLJNNQ/9fzKVxt3VNfbNN5luolyvygBrz5UT/q0TuoUr6Xe+lmqqfx20vXN8e7glQSFw/kAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789368368; c=relaxed/simple;
-	bh=NsYzt6QJ8S68EdIG3y9k7l0JWxL2vTKQf5xQn1DLbb4=;
+	s=arc-20240116; t=1789368414; c=relaxed/simple;
+	bh=eSQlDBFPtrQb62Z/Q0UAgRqNcwPyr9BubZ4Onx/sTGs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bD+Vk4XyzY4Aihkt9jek0lXYpbNYE7yqmrG9R0JjdWh84khGOEeifuVLKsbA1r3C1GVrLaXFqvIWq5/V8pX4uMOMU0COTfG6hrFj2scLPyEiTBWbSQJNKWB43XyYBFZMDfcS4q3xdLVgjeYJeiWBkbEQl8qYkBOn+cxxQitdYEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lgCLqrzG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Q1qB5PMIfyy4/ne523+m45veMrASApjKG/TEhRWm+M6zsq0zZGeAO/vyng5PGKkcQQlCMkek94SrYfSGEyNbJUOuTuaJjgHmTtqVzcTi0o/VMiWhsgjGpi/dY4rqH4jXfIvmDorPLYwdkB8fLuZfvjuwZAC9//Hp2P9vp4P+qlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=krtzwufM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lgCLqrzG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE08C1F000FF;
-	Mon, 14 Sep 2026 06:46:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="krtzwufM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9591F000FF;
+	Mon, 14 Sep 2026 06:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789368366;
-	bh=4IM3dmc99cwW5R5HbUqFNyY0qm8ZGhevVnilDEzyZ5U=;
+	s=k20260515; t=1789368412;
+	bh=LEOK/NsKrnk4Eyo0VEIWUpYDjKxqj2uB6tWxgFB3Tyg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lgCLqrzGhF7c3ZufW/HJxCA9BMdVsc0KOowGvueOYek/bPkzdZ+O6ou+sDiP4O9Tm
-	 gCj8Oy2Yg0Ncd0FZJQS64R0D2ceXT+ll5OQdow24cU1FjfJeG1QZDuRskUnMhr3IBt
-	 86iUKHGcLslKx7uk8wMDljVfK0Px+Gp5G3eBzqsPQtwpB2zpexqoD4MLKbHfdXKshp
-	 LlYG2M69IiVrpFbtJsu8VL9vCn7jId2kwa8fiG6PU8+hlxsN7EohAtgIZT9u5xicGP
-	 BRVnMwx14Ig7Ob+Pa3BCrA/sdh5gt+D/xNCNUujR0U1oNJIOuy5XVKGLfbzR/BOzLn
-	 W49/ANi5LwYxQ==
+	b=krtzwufM9Jx9RSYlDahLK6nZSuARlGlwankrK85LcU+qm95pzF/RJ4o3OcMSQtGSL
+	 vIuaSIPPt8LwqJ7UWhwisPulKgE64F05g84mXGjGsjFi/xzORBZ4rKuB5LXfC57uEq
+	 eWdtywZQ9M6MVvV5SnwzIRjyM/qqyHgQT8DS6LM67SH71C6tosGpUhdmkhbpa3W3Cq
+	 E/NcLTzdyNW0OmMIXfHR5VNJ7YeLBUKZQHxEr57fIEcIAOH2+DnziTAAnurH/dUFf3
+	 pfiJgxXEiHfjLrnMdAQLdHXnQ4NZbhvEiLp/Ab4PPfr7eHoTFVjCYPxlBpgYt4eE74
+	 8CG0QwcI5IhfQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 19/58] objtool/klp: Add test for jump table key
- relocations
+Subject: Re: [PATCH v2 36/58] objtool/klp: Add test for position-independent
+ checksums
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: joe.lawrence@redhat.com, pmladek@suse.com, jikos@kernel.org, mbenes@suse.cz, jpoimboe@kernel.org, kernel-team@meta.com, puranjay@kernel.org, peterz@infradead.org
-In-Reply-To: <20260914062514.926997-20-song@kernel.org>
+To: live-patching@vger.kernel.org, "Song Liu" <song@kernel.org>
+Cc: jpoimboe@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com, mbenes@suse.cz, peterz@infradead.org, jikos@kernel.org, kernel-team@meta.com, puranjay@kernel.org
+In-Reply-To: <20260914062514.926997-37-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
- <20260914062514.926997-20-song@kernel.org>
+ <20260914062514.926997-37-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 06:46:05 +0000
-Message-Id: <20260914064605.EE08C1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 06:46:51 +0000
+Message-Id: <20260914064652.3D9591F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,60 +47,64 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The jump label test fixture hardcodes a 64-bit PC-relative relocati=
-on which causes assembler errors on 32-bit architectures.
+- [Medium] The test script incorrectly assumes that if target() moves relat=
+ive to the section start, its relative displacement to callee() must have c=
+hanged. This allows the test to falsely pass if the compiler shifts both fu=
+nctions by the same amount.
 --
 
-commit 12aec6304341b6d166d36c18d507d8088ff90b91
-Author: Puranjay Mohan <puranjay@kernel.org>
+commit 3328da26fa650b64515b357106fb0c92f158e5b7
+Author: Song Liu <song@kernel.org>
 
-objtool/klp: Add test for jump table key relocations
+objtool/klp: Add test for position-independent checksums
+   =20
+A function that only moves has not changed, and its checksum must not move
+with it. This commit adds a test to verify position-independent checksums f=
+or
+non-relocated jumps/calls.
 
-A cloned __jump_table entry must keep a relocation in its key slot.
-This patch adds tests and fixtures to ensure the relocation stays
-properly populated for both exported and unexported vmlinux keys
-during a klp diff.
-
-> diff --git a/tools/objtool/tests/generic/fixtures/jump_label.c b/tools/ob=
-jtool/tests/generic/fixtures/jump_label.c
-> new file mode 100644
-> index 0000000000000..ecd3c06912af5
+> diff --git a/tools/objtool/tests/generic/test-checksum-position.sh b/tool=
+s/objtool/tests/generic/test-checksum-position.sh
+> new file mode 100755
+> index 0000000000000..459a718d75e7e
 > --- /dev/null
-> +++ b/tools/objtool/tests/generic/fixtures/jump_label.c
-> @@ -0,0 +1,76 @@
+> +++ b/tools/objtool/tests/generic/test-checksum-position.sh
 
 [ ... ]
 
-> +int target(int x)
-> +{
-> +	int r =3D x;
+> +orig_off=3D"$(in_symbols orig.o    | awk '$8 =3D=3D "target" { print $2 =
+}')"
+> +new_off=3D"$( in_symbols patched.o | awk '$8 =3D=3D "target" { print $2 =
+}')"
+> +[ -n "$orig_off" ] && [ -n "$new_off" ] ||
+> +	fail "target symbol not found in both objects"
+> +[ "$orig_off" !=3D "$new_off" ] ||
+> +	probe_skip "compiler did not move target() between builds"
+
+[Severity: Medium]
+Does this check guarantee the relative displacement between target() and
+callee() actually changed?
+
+Since the test is built with -O2 (which enables -ftoplevel-reorder) and=20
+-fno-function-sections, the compiler could group globals and statics,
+emitting padding() before both target() and callee(). In this case, target()
+and callee() would both shift by the exact size of padding().
+
+The script checks if target() moved relative to the section start:
+
+    [ "$orig_off" !=3D "$new_off" ]
+
+This would evaluate to true since target() did move, allowing the test to
+proceed. However, because the relative displacement between target() and
+callee() is unchanged, the encoded call displacement bytes within target()
+will be identical in both builds. The checksum will trivially match without
+exercising objtool's displacement-masking logic.
+
 > +
-> +#if defined(NEW_KEY) && !defined(PATCHED)
-> +	/* The original has no static branch at all. */
-> +	return r + 1;
-> +#else
-> +	asm goto(
-> +		"1:	nop\n\t"
-> +		".pushsection	__jump_table, \"aw\"\n\t"
-> +		".balign	8\n\t"
-> +		"912:\n\t"
-> +		".pushsection	.discard.annotate_data, \"M\", @progbits, 8\n\t"
-> +		".long		912b - ., 1\n\t"
-> +		".popsection\n\t"
-> +		".long		1b - ., %l[l_yes] - .\n\t"
-> +		".quad		%c0 - .\n\t"
-
-[Severity: Low]
-This inline assembly in target() explicitly requests a 64-bit PC-relative
-relocation. On 32-bit x86 (which is supported by the test runner), the GNU
-assembler cannot represent a 64-bit PC-relative relocation.
-
-Will this cause the test fixture to fail to build when running objtool
-tests in a 32-bit environment?
-
-> +		".popsection\n\t"
-> +		: : "i" (&KEY_NAME) : : l_yes);
+> +assert_checksum_matches target
+> +
+> +pass "checksum unchanged when the function only moves"
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914062514.9269=
-97-1-song@kernel.org?part=3D19
+97-1-song@kernel.org?part=3D36
