@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400AC3D1CAF
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3E43D1CAF
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367195; cv=none; b=V0pubbJ9EKClgTqZ6R47+8uDh+2tFSXFgEY/utnTKzwQEjgS/FKX1Gztpmn2tkgLlHdLaSxvAB+AxejNJJIz6f2P6Xt0vMaDFQKbAFS5OUT+C27BHdwyvcr8tpbtBtvobA3QGLKV+50N1yTbkAzYjK2bd7Bq9GcEA1ncotmJwv0=
+	t=1789367200; cv=none; b=MsPWiWRytqFhU54waS7usaZbExpWAuVw1Sa/JkZLWqth1F0sKeljizBCiSzIWIJF24Ru/dvBlTRj6hTemc/H8Ay7EIkHt50IuGCH7x3odprdBoevMAde6JPPoAEJGyG2ZAIfhCP81RGGsWvQqYZliyF7LZB/qO3VRDY5Q0nglW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367195; c=relaxed/simple;
-	bh=3t9WRMZC3WtGbhP1JpjLx0i5Vd0KR//kh+dHPQzlWkA=;
+	s=arc-20240116; t=1789367200; c=relaxed/simple;
+	bh=4P/ZjhWuj3Sv5SPtzjXmr2SztED6+RrDXKYQtjd4CVM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IeZmHK/wpii7yXzz2UkbWXSJIue7FLpW68uYtscIR3Gl3DS2zI45SQIZN7EgPiqxHtxRFBJt807JLWrqhx+hLB4YSBhNQioRAxo0ZOkiGcdjYecEqgPvy1Pj2Y1LM+L4MTmc86+HS2/ZTwAGrogfNAUtCykYFzIhyRxpD+sjT4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GkYqaEUF; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=B8hZKMYERKNlO/iRt2/cfvwfnVOjc44AD4xMAwvi8DgH3rjCExTQNljkfycD8bDLWAjQOtkLPwjqJbByh0V8PCWCxPnQGCJSZrtk2eONS0t2orhGyfkVBFz3+wI6zoCXqgkuRMUWz3BGzXsEGV1jEiyvzql+LG4k0qwvV5P/RBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gWW6MJDz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GkYqaEUF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D3A1F000FF;
-	Mon, 14 Sep 2026 06:26:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gWW6MJDz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327361F000FF;
+	Mon, 14 Sep 2026 06:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367194;
-	bh=rdkE/piEpaHExysLLETiJwi4o//fS58XpKis/FlZSq8=;
+	s=k20260515; t=1789367199;
+	bh=PbqFX46N/aYe588o1d3LULWk9j0gQrAQwDXGPPtqCf0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GkYqaEUFpPVe7LNQRUOrpTSmZHicG5sR2VcLwp53maJKsYufA26KbdCTb9ZwBhVcR
-	 Or08YxFoV93X7wmWC7iL9P8Kn+8+rm/KiOnGS41H11DUWVvX0qfA9QbFbC2Bs/vSyQ
-	 /NVrOvoWGA7nepWswqn5CMNIvZRBOM/5ZG9W9aeD0r3O3UDNaW+qu5eX1jh59xWChT
-	 ngpV1M8dsmcqNNz5LG/E6EMIdUL9W7PqPRtEhKm5FNmh/XWp+TRq0BhaguVypZfVyf
-	 0WkfoWJ0H06Ci0Lc8VMebMIAlExeFzi8NS6229XA91AYuKxUHqOIhnMVLKTfiS/l2J
-	 HhM69tTy8i4NA==
+	b=gWW6MJDzmFqSuKWc7en8oZ68UEiMTor3EuZR5f2ab0zydbIueOna66p0BPCVPY6ii
+	 86jc4xZDUDNqVpCwpoSaczEEE4SfjB8vQgXUG1szvV9JjsK1Lqh7d7q0MYg4U/lvgI
+	 fWx4mpVzAm72Y30uc8L0arWbD7TIbVNadhVF8yzGD9CUNhZLk8jKcsX93snq4o16+e
+	 PXz6Qb//CdMg0gdSwfJ2/cisVNdsl/vsKzyIQeOV6xkneH5BzkmQ0p897ySWXbCHBs
+	 KW/EbUnLLwROAnCZLZuAPiGmNlVwhEZaH9iDJt0oziJO2+EoNVIdrt4RSxpnkCEYd3
+	 nO6d6G4/8iFkg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 12/58] objtool/klp: Add test for rejecting changed data
-Date: Sun, 13 Sep 2026 23:24:28 -0700
-Message-ID: <20260914062514.926997-13-song@kernel.org>
+Subject: [PATCH v2 13/58] objtool/klp: Add test for newly introduced data
+Date: Sun, 13 Sep 2026 23:24:29 -0700
+Message-ID: <20260914062514.926997-14-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914062514.926997-1-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
@@ -53,66 +53,76 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-Livepatching replaces functions.  Nothing can swap a variable which live
-code already refers to, so a patch which changes one has to be refused
-rather than applied with the old value left in place.
+Adding data differs from changing it: nothing in the running kernel refers
+to a new variable, so it is safe and has to travel into the livepatch with
+the function using it.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/changed_data.c      | 16 ++++++++++++++++
- .../objtool/tests/generic/test-changed-data.sh | 18 ++++++++++++++++++
- 2 files changed, 34 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/changed_data.c
- create mode 100755 tools/objtool/tests/generic/test-changed-data.sh
+ .../objtool/tests/generic/fixtures/new_data.c | 18 +++++++++++++
+ tools/objtool/tests/generic/test-new-data.sh  | 26 +++++++++++++++++++
+ 2 files changed, 44 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/new_data.c
+ create mode 100755 tools/objtool/tests/generic/test-new-data.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/changed_data.c b/tools/objtool/tests/generic/fixtures/changed_data.c
+diff --git a/tools/objtool/tests/generic/fixtures/new_data.c b/tools/objtool/tests/generic/fixtures/new_data.c
 new file mode 100644
-index 000000000000..b52461835444
+index 000000000000..fa861fe81386
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/changed_data.c
-@@ -0,0 +1,16 @@
++++ b/tools/objtool/tests/generic/fixtures/new_data.c
+@@ -0,0 +1,18 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Data whose value differs between the two builds. */
++/* Data introduced by the patch. */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
 +#ifdef PATCHED
-+int klp_test_data = 2;
-+#else
-+int klp_test_data = 1;
++static const int klp_new_data[4] __attribute__((used)) = { 1, 2, 3, 4 };
 +#endif
 +
 +int target(int x)
 +{
-+	return x + klp_test_data;
++#ifdef PATCHED
++	return x + klp_new_data[x & 3];
++#else
++	return x;
++#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-changed-data.sh b/tools/objtool/tests/generic/test-changed-data.sh
+diff --git a/tools/objtool/tests/generic/test-new-data.sh b/tools/objtool/tests/generic/test-new-data.sh
 new file mode 100755
-index 000000000000..c5c7381bb409
+index 000000000000..c7336752f09a
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-changed-data.sh
-@@ -0,0 +1,18 @@
++++ b/tools/objtool/tests/generic/test-new-data.sh
+@@ -0,0 +1,26 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Livepatching replaces functions, not data.  A changed data symbol must be
-+# rejected.
++# Data added by the patch has no counterpart in the running kernel and must be
++# carried into the livepatch.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair changed_data.c
-+run_diff 255
++build_pair new_data.c
 +
-+diff_log | grep -q 'changed data: klp_test_data' ||
-+	fail "expected rejection, got: $(diff_log | tail -1)"
-+[ -e "$workdir/out.o" ] &&
-+	fail "output object produced for a rejected input"
++# State the premise on both sides.  The array is new in the patched build and
++# absent from the original; if the compiler folded it into the code instead of
++# emitting it, the assertion below would fail without saying why.
++has_input_symbol "$orig_obj" klp_new_data &&
++	fail "fixture put klp_new_data in the original; nothing new to carry"
++has_input_symbol "$patched_obj" klp_new_data ||
++	fail "compiler did not emit klp_new_data; the fixture tests nothing"
 +
-+pass "changed data symbol rejected"
++run_diff
++
++assert_patched target
++out_symbols | grep -q 'klp_new_data' ||
++	fail "new data was not carried into the patch"
++
++pass "new data carried into the patch"
 -- 
 2.53.0-Meta
 
