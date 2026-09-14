@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2323B0581
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1214E3AB26D
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789427205; cv=none; b=nDjWUcwRlsdSjbhDEFmzvftbwaYCMGnCgQE4IACFizB95zFAt0wD8M2kIwdPIJHczTfNaPCq+sLsBW66YAJNVnbPqcLFEBnmxBfLXoB4DDWekk0PbBhvd4472pSbk7YMZRnsPTnQ+iViUUC3gVmeumcPGBwenV4tY9dq8CvIc0E=
+	t=1789427210; cv=none; b=mAlIFsH6CcMw9ecl5NQkYWeAYesG35zJXZa/X75KwEmKdE35WmBJvUtli6VOTAtRjsVxkOa7Is7pMUT7VO/Jc/FgO3FYK/NiUmzfQqJMmjmdqZvGpidWCkuvuH8ddTLHdoR7QrAzYep48ohKHEonj19mCbIsUkWg2vm2xauRQy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789427205; c=relaxed/simple;
-	bh=lNHMFbs3ekNTFi+lZW1nnZaV8Y1OaF3nX61Z9cWyXVY=;
+	s=arc-20240116; t=1789427210; c=relaxed/simple;
+	bh=2SbUUxGToJEJvGNQaH2J/aVQaEwz2IrFLRGPV9UJmh8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WBUdHOjyt3mblB25RIWSh6J0JWp/td5S8ECMr0AMto7hFy3VAUH7T2zRrGdZqKdYGHSh3JKwLhNlzTFtvf/96dPkVx6UpVbdDccfOQ9Tic0e+88cPeahabxL4kPeD490duu+eHlBQX7kaRxaCKlrng9wvWuzI2b6x4A+SVMmN6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mX1/A5dc; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Dx7wyZJrjgq2WLA1EH7+bUESHLK8VXy0jMGPTiacC1RNPZZcuC1Wqwa/fhDZdi5/3qB0aGB1Dvm63ovhYbN/fUpI29wGPWhStjpdyaWfdppeQL7eSWnO7BgGVbVPmY1S6hH6dA+/9o9Cne0VPDEYRQ76rcc3t38uHG7vlFju6xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTDhNlqj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mX1/A5dc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01B31F000FF;
-	Mon, 14 Sep 2026 23:06:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTDhNlqj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB4A21F00893;
+	Mon, 14 Sep 2026 23:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789427203;
-	bh=DsnCtOqOOXiZ4gl1TewM260+vYJkxZbvt9RG8a4ou3w=;
+	s=k20260515; t=1789427208;
+	bh=qYy3MMZEwe6P1EkjSGHGFbZ3clEseRh7XJE968GpDK4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=mX1/A5dcwFUwnd4a4nG0GsMve2/5zNEte9VjjtJrkem8UfFxIOPTYGlNNe1kUNqme
-	 rEScipdexlSm7lavLWQlde527zhyzLlw5di0vsAWyk01q5sEsZ/em+kwUfLDEOAEHQ
-	 lp3mjbVzZNHe3FqiwFRYPuuXBe3atziMtab+oAiKAsJH3hMPgRpSeBVfCSZ0Ox95BZ
-	 AcNZbRAXuZiwSfFBAoX6UyRias6yvWVUoWHDHXKo6JP0syorJpB/PqQXCuiTU/+aJ5
-	 cnzY35vfNRTWLA7O0GbpepTVmUQoNYUdBmmz/vkRdhhPZ6vcb3DUK+BSwjMMen9s0W
-	 q+YkT8ajEba6w==
+	b=jTDhNlqjfRmbE62RdnP7EWEL/nH5VEYL8mQUTOXoxortzL17/VXbOdh9xbUDsj+2s
+	 d3w3RghS9cpa4AgcZ8n9nWWOs4xd3FRhB7aF4++vqdJSgS0HM6vbzMNvAsLm5Y/dx9
+	 K1CnijxwJUlL2WD+G+J4x1RIDfDtNY/db+/k5NLAryjGbRYKn4HMsTHcUtQ3S8uT3Z
+	 G/tyi1o/Zgy60V0xcj2fRPkApQWoSDYEoeD8yVgZD/ecGGfcmnms7oXIv9ldQz4Jnn
+	 IghozVhPoh3mneWRJPikeajCQp3Nsb5LscfS+bsSInorGzVfX9mRGT1sCq3c/sZZep
+	 qhU0ruQVtBAtA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v3 33/58] objtool/klp: Add test for new references to exported symbols
-Date: Mon, 14 Sep 2026 16:03:30 -0700
-Message-ID: <20260914230355.3422996-34-song@kernel.org>
+Subject: [PATCH v3 34/58] objtool/klp: Add test for empty x86 alternative replacements
+Date: Mon, 14 Sep 2026 16:03:31 -0700
+Message-ID: <20260914230355.3422996-35-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914230355.3422996-1-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
@@ -51,91 +51,151 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A patch may introduce a reference the original object did not have.  That
-is fine when the export belongs to vmlinux, and not fine when it belongs to
-a module: the livepatch would gain a module dependency nobody declared, and
-late module patching lets the patch load first.
+ALTERNATIVE_2("orig", "repl", ft1, "", ft2) produces a second entry whose
+replacement is empty.  Its replacement offset still carries a relocation,
+but the label it points at is the end of the previous replacement -- which
+is also where the next one begins.  The value is meaningless and only ever
+used with a length of zero, so cloning must not follow it.
 
-This tests the behavior of commit 72d76d0c18eb ("objtool/klp: Allow new
-references to module exports").
+The first version of this fixture passed with the fix reverted, because the
+empty entry pointed at its own end label rather than at the neighbour's
+replacement.  It has to reach into another function's replacement to
+distinguish the behaviour.
+
+This tests the behavior of commit 636f230ce21e ("objtool/klp: Ignore
+replacement offset of empty x86 alternatives").
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/new_export_ref.c   | 20 +++++++++++
- .../tests/generic/test-new-export-ref.sh      | 34 +++++++++++++++++++
- 2 files changed, 54 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/new_export_ref.c
- create mode 100755 tools/objtool/tests/generic/test-new-export-ref.sh
+ .../tests/x86/fixtures/empty_alternative.c    | 77 +++++++++++++++++++
+ .../tests/x86/test-empty-alternative.sh       | 31 ++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/objtool/tests/x86/fixtures/empty_alternative.c
+ create mode 100755 tools/objtool/tests/x86/test-empty-alternative.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/new_export_ref.c b/tools/objtool/tests/generic/fixtures/new_export_ref.c
+diff --git a/tools/objtool/tests/x86/fixtures/empty_alternative.c b/tools/objtool/tests/x86/fixtures/empty_alternative.c
 new file mode 100644
-index 000000000000..c046b9f87d0b
+index 000000000000..9336d74bfa92
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/new_export_ref.c
-@@ -0,0 +1,20 @@
++++ b/tools/objtool/tests/x86/fixtures/empty_alternative.c
+@@ -0,0 +1,77 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A reference which only exists in the patched build.  The symbol has no twin
-+ * in the original object, so what klp diff may do with it depends entirely on
-+ * whether Module.symvers says it is exported, and by what.
++ * An x86 alternative with an empty replacement, as the second entry of
++ * ALTERNATIVE_2("orig", "repl", ft1, "", ft2) produces.  Its replacement
++ * offset still gets a relocation, but the label it points at is the end of the
++ * previous replacement, which is also where the *next* one begins -- here,
++ * neighbor()'s.  The value is meaningless; it is only ever used with a length
++ * of zero.
++ *
++ * struct alt_instr is written out by hand so the fixture builds without kernel
++ * headers: s32 instr_offset, s32 repl_offset, u32 ft_flags, u8 instrlen,
++ * u8 replacementlen.  The section carries an entsize because klp diff needs
++ * either that or an ANNOTATE_DATA_SPECIAL annotation to find entry boundaries.
++ *
++ * The replacement labels are global so the relocations name them rather than
++ * .altinstr_replacement plus an addend.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+extern int newly_referenced(int x);
++extern int neighbor_only(int x);
 +
 +int target(int x)
 +{
++	asm volatile(
++		"661:	nop\n\t"
++		".pushsection .altinstr_replacement, \"ax\"\n\t"
++		".globl target_repl\n\t"
++		"target_repl:\n\t"
++		"	nop\n\t"
++		"target_repl_end:\n\t"
++		".popsection\n\t"
++		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
++		/* a real replacement */
++		".long 661b - .\n\t"
++		".long target_repl - .\n\t"
++		".long 0\n\t"
++		".byte 1\n\t"
++		".byte target_repl_end - target_repl\n\t"
++		/* an empty one, pointing at neighbor()'s replacement */
++		".long 661b - .\n\t"
++		".long neighbor_repl - .\n\t"
++		".long 0\n\t"
++		".byte 1\n\t"
++		".byte 0\n\t"
++		".popsection\n\t");
 +#ifdef PATCHED
-+	return newly_referenced(x);
++	return x + 2;
 +#else
 +	return x + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-new-export-ref.sh b/tools/objtool/tests/generic/test-new-export-ref.sh
++
++/*
++ * Unrelated, unpatched, and referencing a symbol nothing else does, so that
++ * dragging its replacement in is visible.
++ */
++int neighbor(int x)
++{
++	asm volatile(
++		"771:	nop\n\t"
++		".pushsection .altinstr_replacement, \"ax\"\n\t"
++		".globl neighbor_repl\n\t"
++		"neighbor_repl:\n\t"
++		"	call neighbor_only\n\t"
++		"neighbor_repl_end:\n\t"
++		".popsection\n\t"
++		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
++		".long 771b - .\n\t"
++		".long neighbor_repl - .\n\t"
++		".long 0\n\t"
++		".byte 1\n\t"
++		".byte neighbor_repl_end - neighbor_repl\n\t"
++		".popsection\n\t");
++	return x;
++}
+diff --git a/tools/objtool/tests/x86/test-empty-alternative.sh b/tools/objtool/tests/x86/test-empty-alternative.sh
 new file mode 100755
-index 000000000000..ad6fa3979942
+index 000000000000..9d40c3a405af
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-new-export-ref.sh
-@@ -0,0 +1,34 @@
++++ b/tools/objtool/tests/x86/test-empty-alternative.sh
+@@ -0,0 +1,31 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A reference the patch adds has no counterpart in the original object.  klp
-+# diff used to reject any such reference needing a klp relocation, which ruled
-+# out patches that call something they did not call before -- a common enough
-+# thing for a fix to do.
++# An x86 alternative with an empty replacement still gets a relocation for its
++# replacement offset, but the label it points at is the end of the previous
++# replacement -- which is also the start of the next one.  The value is
++# meaningless, and get_alt_entry() already ignores it.
 +#
-+# Module.symvers is what makes it safe: it says the symbol exists and who owns
-+# it.  But that is only sufficient for a vmlinux export.  A new reference to a
-+# module's export is a dependency the patch module does not declare, and the
-+# relocation would resolve only if that module happened to be loaded, so it
-+# stays an error.
++# Cloning it drags in an unrelated neighboring replacement and everything that
++# replacement references.  In the reported case an empty alternative in
++# meminfo_proc_show() pulled in one from proc_kcore_init(), emitting a klp
++# relocation against init text which is long freed by the time the patch is
++# applied.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair new_export_ref.c
++build_pair empty_alternative.c
 +
-+# Exported by vmlinux, in a module: namespace so it needs a klp relocation
-+# rather than an ordinary one.  Allowed.
-+export_syms
-+add_exports_ns vmlinux module:kvm newly_referenced
++assert_input_section .altinstructions
++assert_input_section .altinstr_replacement
++
 +run_diff
-+assert_klp_sym newly_referenced vmlinux
 +
-+# Exported by a module the patched object does not depend on.  Rejected, and
-+# for that reason rather than some other.
-+export_syms
-+add_exports other_mod newly_referenced
-+run_diff 255
-+assert_diff_log 'undeclared module dependency'
++# target's own replacement comes along ...
++assert_symbol target_repl
++# ... neighbor's does not, nor what it references.
++assert_no_symbol neighbor_repl
++assert_no_symbol neighbor_only
 +
-+pass "new reference allowed to a vmlinux export, rejected for a module export"
++pass "empty alternative's replacement offset ignored when cloning"
 -- 
 2.53.0-Meta
 
