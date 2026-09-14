@@ -1,97 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201081A7264
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8CF343899
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:38:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367867; cv=none; b=JlQNQol3Ly/4Z4qaPU3wlf3LEzqx7z2OzNTjhnHv6S382Hy3NRbYrckLTTSqMfkU72oYc8gPJVqKschfx4SK+2ISBnvc+V2W6XqB2IBqzIiNEmg+MTdqp4Cf/u2w6pGgIkCqIrIvQrAY3GGSBRDsIzaaiNegxleqlJ42hqZMLMw=
+	t=1789367883; cv=none; b=SPC5E6GSKx6+aENJgp+MqDY6HTEtwYk9fiqDiTHdrBD5JFAhWldD12caM0NXED0ZAPQ0i1+pcDGqIGqaqUgdSK5Bl6eQV51dAfqT0XYBSZTap4HhBHPkrAoYs2vFBSQ546po6kSyT6Pj4/mz+TwQqX4CPfwl1EfooWDQe65JP5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367867; c=relaxed/simple;
-	bh=HHVvwGZFfGdAiMUxE8XzlpROy+pU2bXpzBQniVlXdnE=;
+	s=arc-20240116; t=1789367883; c=relaxed/simple;
+	bh=mFGf9CwNc6JAxit13oHpifA1RUfuYvMfpyNgsLMWo2k=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Y+16+Sg8cpnopG4PaSR+58TShiZt9qTXYvu5Gjyqi33OFlNa7tH1+i84SdP6mvn2dLCOs/TkLeE/mVWUFj2zzy3okE08zIcHl+wShJBQDjU7Lm8EMNmf/o8uxzzijTwHdsGFdkTEEAlvw9zLIqaXnfb8lbeLOhCRPxOpIkHtciw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hnx45DZD; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=A0qjUV+YKz4Yqh/1XTyuvPtViyZX6fp7SH8x44nXq+H1SpDHjnAg3/D3hRRlpQIWSldtcckdREV+LlKuNe5aG0XLl8KQoZeARyTRYWiU0el08g6/PJq17D9m0CFmfOrA7Nu9I629rUf9c5/vzkdO24Q9fQIAWgosAWl+Q49IuKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZquBnCeo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hnx45DZD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8EE1F000FF;
-	Mon, 14 Sep 2026 06:37:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZquBnCeo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD641F000FF;
+	Mon, 14 Sep 2026 06:38:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367866;
-	bh=tfFkwtHNt4cdkPe/1dM7T4kto7j+ArQ6ULsC7GidNdo=;
+	s=k20260515; t=1789367882;
+	bh=q4nQLNTNU5tW6yG38O9FAzXPZjgro8fvYbQ3IJjixnM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hnx45DZD4jXu1cpMGn7AMB7O8S2Iym4q8ZnUnPaNcUldm1CvaYY7kZLwFQ7eZkLVi
-	 ZZfhvrMzOWQzvp4HFv/J6KeLKEA2GaGCDiVwXzTok08os7PwFgqjml1wnEduLwpMlo
-	 q6+n/p1MqHM8zS2jK5IGZ3vLY6Jpuc06Pgd4xAVILIYgf3kDPlJJTcp5E3acjv6V18
-	 DqJmhZKvpl6k11zpNtimF0Pu55CRplj5Uy6Mq2//sJSneE/6jDHmROERKX3VPsFhE0
-	 cwTP+J/0bPRefkAk3qIE20w+FidcrUZXZV7wTOmRX3ChOzEfrok7GGjvoT2LGwWoKm
-	 EWy+I4yLNir8w==
+	b=ZquBnCeo83Iu5KaxgdTurXSvJlYs6ye2ggCGzOfZXrcBteufM/zpXO7yX8vVBt6ph
+	 /kbxYv4j+tomiru9H5SSPU1g07f9MxijVsSxO2nXdgnJKfpsKroF9ezHYU0PVt1u5H
+	 PEiZ78x7VtFQi/OZwFQGucNWoWt1REeGUnN4xr2n4RdphLwaHksCkufJSuNtD7sAB9
+	 atkrjmnFarfHe98Mh49M21bK9nhBH4fzYQEiasapJTekbbzB8Fq0RTjLJfOafXsqah
+	 VyYGG1oLfUJaJhNFoR6O1zXZiv4MtNBYkcATlONd4MD6WI3Zb0TmcjyHaRgtaghkqA
+	 X0gUzh61MgUUQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 02/58] objtool/klp: Check the klp test environment
- once, before any test
+Subject: Re: [PATCH v2 13/58] objtool/klp: Add test for newly introduced
+ data
 Reply-To: sashiko-reviews@lists.linux.dev
-To: live-patching@vger.kernel.org, "Song Liu" <song@kernel.org>
-Cc: pmladek@suse.com, kernel-team@meta.com, jikos@kernel.org, jpoimboe@kernel.org, peterz@infradead.org, mbenes@suse.cz, joe.lawrence@redhat.com, puranjay@kernel.org
-In-Reply-To: <20260914062514.926997-3-song@kernel.org>
+To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
+Cc: jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, peterz@infradead.org, jpoimboe@kernel.org, puranjay@kernel.org, joe.lawrence@redhat.com, kernel-team@meta.com
+In-Reply-To: <20260914062514.926997-14-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
- <20260914062514.926997-3-song@kernel.org>
+ <20260914062514.926997-14-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 06:37:45 +0000
-Message-Id: <20260914063745.7D8EE1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 06:38:01 +0000
+Message-Id: <20260914063801.BDD641F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] Tool existence checks for READELF, OBJCOPY, and LD will fail if the=
-se variables contain CLI arguments, incorrectly aborting the test suite.
+- [Medium] The test uses `grep -q` which incorrectly matches section symbol=
+s in newer binutils, bypassing the check for the actual object symbol.
+- [Medium] The test fixture uses a predictable, linear `static const int` a=
+rray which the compiler can easily optimize away into arithmetic, causing a=
+ false test failure.
 --
 
-commit 2ddfaa45c9b45195802f915e9ca42e1e7b224f4b
-Author: Song Liu <song@kernel.org>
+commit 5c5aee1d82edada34865ca44a6b863b5d7f437f3
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-objtool/klp: Check the klp test environment once, before any test
+objtool/klp: Add test for newly introduced data
 
-This commit adds a preflight check to evaluate the objtool test environment=
-=20
-once before the test suite runs. It exports the environment answers and fai=
-ls=20
-the entire run if prerequisites are missing, rather than skipping tests=20
-individually.
+Adding data differs from changing it: nothing in the running kernel refers
+to a new variable, so it is safe and has to travel into the livepatch with
+the function using it.
 
-> diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> index 714371232fa30..6e4e54b108659 100644
-> --- a/tools/objtool/tests/lib.sh
-> +++ b/tools/objtool/tests/lib.sh
-[ ... ]
-> +klp_preflight()
+> diff --git a/tools/objtool/tests/generic/fixtures/new_data.c b/tools/objt=
+ool/tests/generic/fixtures/new_data.c
+> index 0000000000000..fa861fe813869
+> --- /dev/null
+> +++ b/tools/objtool/tests/generic/fixtures/new_data.c
+> @@ -0,0 +1,18 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Data introduced by the patch. */
+> +
+> +static const char __modinfo[]
+> +	__attribute__((section(".modinfo"), used, aligned(1))) =3D "\0name=3Dvm=
+linux";
+> +
+> +#ifdef PATCHED
+> +static const int klp_new_data[4] __attribute__((used)) =3D { 1, 2, 3, 4 =
+};
+> +#endif
+> +
+> +int target(int x)
 > +{
-> +	local tmp tool cc_version host cc_arch
-> +
-> +	bail() { echo "Bail out! $*" >&2; exit 1; }
+> +#ifdef PATCHED
+> +	return x + klp_new_data[x & 3];
+
+[Severity: Medium]
+Can the compiler fold this array lookup into arithmetic? The predictable,
+linear sequence of values here makes it a target for array-to-math
+optimizations (e.g. GCC at -O2 might compile klp_new_data[x & 3] as
+(x & 3) + 1).
+
+If the compiler optimizes this away into scalar arithmetic, it would elimin=
+ate
+the necessary relocation to klp_new_data in the target() function. Since
+objtool klp diff relies on this relocation to pull in the variable,
+eliminating it would cause the test to spuriously fail.
+
+> +#else
+> +	return x;
+> +#endif
+> +}
+> diff --git a/tools/objtool/tests/generic/test-new-data.sh b/tools/objtool=
+/tests/generic/test-new-data.sh
+> index 0000000000000..c7336752f09a8
+> --- /dev/null
+> +++ b/tools/objtool/tests/generic/test-new-data.sh
+
 [ ... ]
-> +	command -v "${CC%% *}" >/dev/null || bail "compiler not found: $CC"
+
+> +run_diff
 > +
-> +	for tool in "$READELF" "$OBJCOPY" "$LD"; do
-> +		command -v "$tool" >/dev/null || bail "$tool not found"
-> +	done
+> +assert_patched target
+> +out_symbols | grep -q 'klp_new_data' ||
+> +	fail "new data was not carried into the patch"
 
-[Severity: Low]
-Will this check fail if the toolchain variables contain CLI arguments?
+[Severity: Medium]
+Will this test falsely pass if the actual object symbol is dropped but the
+section is preserved?
 
-Unlike the compiler check just above it which correctly uses parameter=20
-expansion to strip arguments (`${CC%% *}`), passing the full string to=20
-`command -v` when it contains spaces (e.g., if a developer or CI system=20
-overrides `OBJCOPY=3D"llvm-objcopy --target=3Darm64"`) will cause `command =
--v`=20
-to treat the entire string as a single binary name and fail.=20
+This simple grep bypasses the symbol type check (OBJECT) and matches the
+section symbol in newer binutils where readelf prints section names. If
+grep -q incorrectly matches the section symbol (like .rodata.klp_new_data),
+it would mask regressions in objtool's handling of the object symbol itself.
 
-Could this incorrectly abort the test suite under valid configurations?
+> +
+> +pass "new data carried into the patch"
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914062514.9269=
-97-1-song@kernel.org?part=3D2
+97-1-song@kernel.org?part=3D13
