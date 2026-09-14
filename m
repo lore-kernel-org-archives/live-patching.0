@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21F939B4A5
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EBE39B4A5
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 23:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789428868; cv=none; b=izdR8MILvpKPGh2d8/vsThi6loJd/ANhR46haxK/lkGftciNz8Ik9hEa2HgMVGF1MTA/YmYsUrM5qMC6evFpihg55zcJ2VWRntc1wOApKwxo48GsDc7/QIfKGE8mTZDEFtkaox9Qlmkqec5yyJ9qbDNAmdgiTNFIP98V7UxZKMY=
+	t=1789428895; cv=none; b=TL8cpbX5ay+FOIyF9BKWOIREjBlKw66g0KU+CvqkcmHysHQt0KwFzqdRUKq9z6F3L1ns81iREtojJz+GoWE/uSWZGEpBBrhRZfMVNbeJWh2MwYHQPiDNydYPJpS63VjDsgQWurIc4bHoB/lrzvC2P1dkAcJQH4WahfmZDoW5jWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789428868; c=relaxed/simple;
-	bh=Z/R3BhsoXNlly1HMVUPryjDpv3ZK2rRa2cU5EKyYY7I=;
+	s=arc-20240116; t=1789428895; c=relaxed/simple;
+	bh=6RfAuZFb4oNnQbvxyibhfJzvgwWRRYBQKhhyhLyGySM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rbsC1xITgiyJ85z0dZBg4qEtwxTPWyVB7yISsOO1DWUMicNCz3ny2FDSC6AoYdbRy9NhynEXZHqolCvaXUNSPnOyTGOCoVdqZsurySrqMrANpPDZcLyQrvduL2VnZQQeap8s2Q3b8ymAupIIh7Kg6XqvT4vSmEwgy9MR2Kg8NOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Onpwp/HM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=t4AjtLKJpz805mqeg6zp5BB5Ei7sKgT/F2gaXv6XUw8CJVFjcRPF4I0yYNwOK+DM3iFQostZcu0IDKb1hoAOkofgN9x5OnnWQ33XiyCh77a/TJaUWweT/S+Ed2nMvpMwrZjohtFXYUzi7CHHdTlp7LxPccmPWT6q69rRtzygU8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zl7i8C9x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Onpwp/HM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96CE1F000FF;
-	Mon, 14 Sep 2026 23:34:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zl7i8C9x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEEB1F000FF;
+	Mon, 14 Sep 2026 23:34:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789428867;
-	bh=hNmteMedIXzoMVj/a8SoGh2F5V+SisT5XoTZ8BdV44g=;
+	s=k20260515; t=1789428893;
+	bh=ErAtH42bugnebGfd/iqt2vD4gpt7gxWl7qbptVFO6+4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Onpwp/HMUAXw22ryR08AZPmgl/jE4uAwthj39kuuOjf/TVCZk0IpmQuj2uvtK4BSb
-	 nAovGVVXiWYGrMCO47lYdS7XZBcXPQ90Wmqt9AiKte5ScxZqAiaxf48ABReOp3Is0C
-	 OBxV0/8ug4O8RdeTrbXKtIakE//uq23moQkzP6A+j/UzqrCYzL85WKprrOEvWcp8Yg
-	 xy5LwAm/i444OFJ5YkswTtmUFPG/vighOku5QVr/RTyWgQFeYzXNM8nAvPavbmnqUP
-	 J6LDlIEzlxs9bsLuKPVqfxYqdTlRnCCUnDY+gBqzCICxj9l+6RcFei+QZdeoiVPKZz
-	 yUyczwgmEeTOQ==
+	b=Zl7i8C9x0w8MirtnEljEMHiNNC5TyYEQxCi0NbHDI1HrRRQy7WG9z47SPBp+MwZVk
+	 cH1203vJNsvn8Ka5eUEbhoKIb+iTgf9pOTzJ042PwLSVLqBUd8ZjGSrw8/ApZPlIA0
+	 QZI+DE/5P8ZFw8VPL9Rh6MjwX+0S3pc2+rs58jqEAlrnW4n5S6zgb9a5BGCPaNnKvX
+	 gI1DUQ7U+TwAgDFZxW4yk6J1AQFObHRgmVO4aWfTMSnReYZLzNkc5wT/EyNQoy9x+q
+	 tcplheIdEgMTuNVliV99A23h5vBxLWF4CaLt01S1nodEK8aWlq8lm7o6kmKOnaY+CM
+	 hva9eRwMs3aZA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 05/58] objtool/klp: Build klp test fixtures through
- the harness
+Subject: Re: [PATCH v3 07/58] objtool/klp: Give each run one working
+ directory, one per test inside it
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
-Cc: mbenes@suse.cz, jpoimboe@kernel.org, puranjay@kernel.org, kernel-team@meta.com, pmladek@suse.com, peterz@infradead.org, joe.lawrence@redhat.com, jikos@kernel.org
-In-Reply-To: <20260914230355.3422996-6-song@kernel.org>
+Cc: kernel-team@meta.com, jpoimboe@kernel.org, jikos@kernel.org, joe.lawrence@redhat.com, mbenes@suse.cz, peterz@infradead.org, puranjay@kernel.org, pmladek@suse.com
+In-Reply-To: <20260914230355.3422996-8-song@kernel.org>
 References: <20260914230355.3422996-1-song@kernel.org>
- <20260914230355.3422996-6-song@kernel.org>
+ <20260914230355.3422996-8-song@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 23:34:26 +0000
-Message-Id: <20260914233426.D96CE1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 23:34:52 +0000
+Message-Id: <20260914233453.0FEEB1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -47,65 +47,74 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] objtool: test harness leaks vmlinux.o state across build_pair() =
-calls
+- [Medium] objtool/klp: test harness leaks top-level tmpdir on interrupt
 --
 
-commit 87b920426dfa2a217d6f9104d0f701cab5d67f5e
+commit e3c2fe244875e7154ea4380414b6732281ba9cd6
 Author: Song Liu <song@kernel.org>
 
-objtool/klp: Build klp test fixtures through the harness
+objtool/klp: Give each run one working directory, one per test inside it
 
-This patch standardizes how klp test fixtures are built by shifting the
-compile steps into harness helpers like build_one() and build_pair(). It
-also establishes make_vmlinux_pair() to correctly build and diff vmlinux
-images for tests.
+Each test made its own mktemp directory, so a run scattered them through
+/tmp among everything else using the same names, and there was no way to
+inspect what a failing test built -- the objects are gone the moment it
+exits, which is right every time but the one that matters.
 
-> diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> index efe0a71326799..35be42758ece8 100644
-> --- a/tools/objtool/tests/lib.sh
-> +++ b/tools/objtool/tests/lib.sh
+Give the run one directory and each test a subdirectory of it, named for
+the test and nested the way the source is.
+
+> diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-t=
+ests.sh
+> index 6b937fc7f5bda..e6f1ac1b5d0da 100755
+> --- a/tools/objtool/tests/run-tests.sh
+> +++ b/tools/objtool/tests/run-tests.sh
 [ ... ]
-> @@ -179,6 +192,13 @@ setup()
->  	workdir=3D"$(mktemp -d)" || fail "mktemp failed"
->  	trap cleanup EXIT
+> @@ -98,12 +103,18 @@ else
+>  	done
+>  fi
 > =20
-> +	# A test may run several segments, and make_vmlinux_pair() repoints
-> +	# orig_obj at the image it builds.  Start each segment from the
-> +	# defaults, or the next build_pair() diffs the previous segment's
-> +	# object against the new one.
-> +	orig_obj=3Dorig.o
-> +	patched_obj=3Dpatched.o
+> +# One directory for the whole run, one per test inside it, mirroring the
+> +# source layout.  A run then leaves a single thing behind instead of 39
+> +# scattered among everything else using mktemp.
+> +rundir=3D"$(mktemp -d "${TMPDIR:-/tmp}/klp-tests.XXXXXXXX")" ||
+> +	{ echo "Bail out! cannot create a working directory" >&2; exit 1; }
 > +
->  	export_syms "$@"
->  }
 
 [Severity: Medium]
-Since setup() only executes once during script initialization, doesn't this
-fail to reset the state between test segments?
+Could this leak the top-level temporary directory if the test suite is abor=
+ted
+with a shell signal like SIGINT?
 
-If a test calls make_vmlinux_pair() (which repoints orig_obj to vmlinux.o)
-and subsequently calls build_pair() for a new segment, orig_obj will still
-point to the stale vmlinux.o from the previous segment instead of orig.o.
-This appears to cause run_diff() to evaluate the wrong file.
+Since there is no trap registered for shell signals or EXIT, an abnormal
+termination will bypass the cleanup logic at the end of the script.
 
 [ ... ]
->  # build_pair <fixture.c> [cflags...]
->  build_pair()
->  {
-> -	local fixture=3D"$FIXTURES_DIR/$1"; shift
-> +	local fixture=3D"$1"; shift
+> @@ -156,4 +167,15 @@ done
+>  echo "# pass:$pass fail:$fail static-skip:$static_skip" \
+>       "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
 > =20
-> -	[ -f "$fixture" ] || fail "missing fixture $fixture"
-> +	build_one "$fixture" orig.o "$@"
-> +	build_one "$fixture" patched.o "$@" -DPATCHED
-> +}
+> +# A failure is the one time the objects matter, and by default they are
+> +# already gone.  Say so then rather than in the usage text nobody reads =
+while
+> +# something is broken.
+> +if [ -n "${KLP_TEST_KEEP:-}" ]; then
+> +	echo "# working directories kept in $rundir -- inspect, then rm -rf it"
+> +elif ! rmdir "$rundir"/*/ "$rundir" 2>/dev/null; then
 
 [Severity: Medium]
-Should the state reset logic for orig_obj and patched_obj be placed here in
-build_pair() instead of setup(), to ensure run_diff() evaluates the correct
-objects when multiple segments are executed?
+Will this cleanup logic be completely bypassed if the script exits early due
+to an interrupt?
+
+Setting a trap could ensure this directory removal runs even when the script
+terminates abnormally.
+
+> +	echo "# $rundir was not empty; a test did not clean up after itself"
+> +elif [ "$fail" !=3D 0 ] || [ "$xpass" !=3D 0 ]; then
+> +	echo "# re-run with --keep to hold on to what a failing test built"
+> +fi
+> +
+>  [ "$fail" =3D 0 ] && [ "$xpass" =3D 0 ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914230355.3422=
-996-1-song@kernel.org?part=3D5
+996-1-song@kernel.org?part=3D7
