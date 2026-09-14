@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE42833D6EE
-	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3128539F184
+	for <live-patching@vger.kernel.org>; Mon, 14 Sep 2026 06:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789367426; cv=none; b=AAP12S0PdqCVBClbrW51ChF0hhFB27aLqj4Vy3hGidQAV8EmRZyUTA03/Qrn3kKpbClGoSrib2yNJJDmogvxQqsoHTnRmHCHvJlS0iitcyNFTJ40k60R3yGyQLKpW/febnYCewIiCcGr6wYg+auYG4/PTIELCvV1vQeQVse2mRU=
+	t=1789367432; cv=none; b=qe2SbRjrRIOO0Fi31HSfDBfl6ipKbw7Gtoh1X6hAqlGc+GoSRB/jpLTnIvFknFIVG8hj6Hx+d4mLbti0sqy9gXQtG92jcpBQ5mmA7WLgJWAONoE+T+bUYB1dz8N427ybnwVmtsL39Ej8JNhsWI7hc06xjUODmgVAFhJFAsxYapM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789367426; c=relaxed/simple;
-	bh=b5KyROuZxh+WwoTgI3HxMj54P9MfUkbHbg/duW+jiB4=;
+	s=arc-20240116; t=1789367432; c=relaxed/simple;
+	bh=pBwH2wFu+NiIVySpYgC87486vfd0PCKvK7mTF1mio+U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y5joMpDzH7heHvjXCVd3GoOZpMLbxYaQupzOtaQyXxCwpvGiCip92bz6lS8++BhEUB6gNgo918cW1ItmqobJjg+fZ1fTv3oJayOIaUAHrakFkFWHc0zZJFY+LXVW8KL8bDwGADmtJ1NAG2WduwK3v+f49f9LlbnOZTXEnYkH1Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyHPw0Ag; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ugpiSk4drGhMb6ViNBtbb1mGlt/n2gS2hFB+QHPrdaOyqu3+8vG6G5cKucGqrnlEQlOQgwaUIGF1Ow9shNejPFGyHXFB7QFusSHMmcv9Dlw6UPlJo5XbEl1cDMJ/HoJkhqa2DQgQhdb/o6WhxwrW2i6d8wuUoxpTGOMpafrXs1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DihM7EVF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyHPw0Ag"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A69CB1F000FF;
-	Mon, 14 Sep 2026 06:30:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DihM7EVF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055111F00893;
+	Mon, 14 Sep 2026 06:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789367421;
-	bh=aUp49JyynfN8hjkRFq4mGHCtvKsDixFfpxlinBJVmTo=;
+	s=k20260515; t=1789367427;
+	bh=cjyRBCC2Rd1ZtytczYZYuaGhSXzYVtRWny8C4I0AYUQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IyHPw0Ag6ZaGHZpq5JTT3M2ort/W7ep0yGLmNga4Ta7FcXFDk1psiqeX9zl5pxSFC
-	 KOccoBQLPQNTM6dc44TyiL8tyMwoWqe7zFhPXuFW9B2JXNbVggUkMyVQdGCdY6+agg
-	 fnJqeR0ZuJG5WuaDqwJQpHNO23ikhK8KvRlMt48+3OEYTobbWdu3/f+fI7ZYBEndfW
-	 5v5swsCiHzE15fGAHvHohGIxmf0Z7Mo4hLVirFTCPo0QUKSf6ZQF62zd/4f3oO3EcU
-	 8A3tpeDNIRCQ7BnapReTHW4QEvsY1NhUtd3kTjz2BHE3YVzDkuMhv+jVLxqwKbY341
-	 nXvBtmjFBsgSg==
+	b=DihM7EVFbpEm1ftxiX9KdnyWIaNMjOdRysGUX5XDf5TXTSQtBWkUwRXC1tUVFX3v4
+	 y0GL/VhSf9XskJYQk/+k9g0TNsu3Pap/eRm+SJNmoham+anga4Q7KrTGS+KCTH9r4/
+	 W1TyZQNH16yVOydBlA9PxTRM/t6z5CCcpJI0Udr5GqVkfUcNHDrHiGKTCXHJpbtYJd
+	 +hi7jx2Smv93jv2p8n7ITzMUnSPWSnH9SjP0WBZc2T/pY5l4ImoZ/FjR4xL7vyJcoj
+	 i4ccxsoSpK6J8t/Ae3S+4jTKB70YTe2ki+IorE+eL0WdnM10o8cMjqIiM4VQT4rXYx
+	 BIsZG0vG5LhMQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 55/58] objtool/klp: Add test for absolute and __ADDRESSABLE symbols
-Date: Sun, 13 Sep 2026 23:25:11 -0700
-Message-ID: <20260914062514.926997-56-song@kernel.org>
+Subject: [PATCH v2 56/58] objtool/klp: Add test for UBSAN metadata in an unchanged function
+Date: Sun, 13 Sep 2026 23:25:12 -0700
+Message-ID: <20260914062514.926997-57-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914062514.926997-1-song@kernel.org>
 References: <20260914062514.926997-1-song@kernel.org>
@@ -51,138 +51,149 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A SHN_ABS symbol has no section, so any walk of sym->sec which does not
-check dereferences NULL, and the kernel has plenty of them -- from linker
-scripts and from .set in assembly.  __ADDRESSABLE() emits a pointer into
-.discard.addressable purely to keep a symbol referenced; it means nothing
-to a livepatch and is discarded at link time, but it is a relocation like
-any other and gets looked at.
+Every instrumented operation gets a per-callsite metadata object in an
+anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
+GCC, .data..L__unnamed_ from Clang -- whose names are compiler-generated
+and mean nothing across a rebuild.  is_uncorrelated_section() exists so klp
+diff does not try to pair them up, and nothing tested it.
 
-Neither is what the patch changes.  What this guards against is not a wrong
-answer but a crash or an error on input the kernel produces routinely,
-which would make every function near one unpatchable.
+The failure it prevents is a false positive, which is the direction this
+suite has least coverage of.  Metadata belonging to a function nobody
+touched compares as different and drags that function into the patch.  That
+is not a build failure: it is a larger livepatch than intended, pulling in
+dependencies with it, and every extra function is one more that can fail to
+correlate or to apply.
 
-Not isolated to a single line, and the test says so: the absolute symbol
-here has zero length, so it is excluded before the section check is reached
-and removing that check alone changes nothing observable.
+The fixture is built with -fsanitize=shift, which both compilers
+instrument; neither emits a bounds check for an index it can prove in
+range.  One function changes, the other is byte-identical and carries
+instrumentation of its own, and the test asserts the second is left alone.
+
+Verified by removing each rule from is_uncorrelated_section() in turn,
+which splits neatly by toolchain: dropping the .data..Lubsan rule fails the
+test under gcc, dropping .data..L__unnamed_ fails it under clang.  One
+test, two code paths, each checked by the compiler that reaches it.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../generic/fixtures/abs_and_addressable.c    | 44 ++++++++++++++++
- .../tests/generic/test-abs-and-addressable.sh | 50 +++++++++++++++++++
- 2 files changed, 94 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/abs_and_addressable.c
- create mode 100755 tools/objtool/tests/generic/test-abs-and-addressable.sh
+ .../tests/generic/fixtures/ubsan_noise.c      | 49 +++++++++++++++++++
+ .../objtool/tests/generic/test-ubsan-noise.sh | 48 ++++++++++++++++++
+ 2 files changed, 97 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/ubsan_noise.c
+ create mode 100755 tools/objtool/tests/generic/test-ubsan-noise.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/abs_and_addressable.c b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+diff --git a/tools/objtool/tests/generic/fixtures/ubsan_noise.c b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
 new file mode 100644
-index 000000000000..6392ff99af42
+index 000000000000..bf5999254163
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
-@@ -0,0 +1,44 @@
++++ b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
+@@ -0,0 +1,49 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Two constructs which appear all over the kernel and must not upset klp
-+ * checksum or klp diff.
++ * A translation unit built with UBSAN, where only one of two functions is
++ * patched.
 + *
-+ * An absolute symbol (SHN_ABS) has no section, so anything walking sym->sec
-+ * without checking dereferences NULL.  The kernel makes them with linker
-+ * scripts and with .set in asm; VDSO and the fixed-address per-cpu bases are
-+ * the usual sources.
++ * Every instrumented operation gets a per-callsite metadata object in an
++ * anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
++ * GCC, .data..L__unnamed_ from Clang -- and a call to a __ubsan_handle_*
++ * routine.  The names are compiler-generated and carry no meaning across a
++ * rebuild, so klp diff has to treat those sections as uncorrelated rather than
++ * pairing them up by name.
 + *
-+ * __ADDRESSABLE() emits a pointer into .discard.addressable purely to keep a
-+ * symbol referenced.  It is discarded at link time and means nothing to a
-+ * livepatch, but the pointer is a relocation like any other and has to survive
-+ * being looked at.
++ * untouched() is byte-identical in both builds and exists to catch the false
++ * positive: if the metadata were correlated by name, its shifts would look
++ * changed and it would be dragged into the patch.
 + *
-+ * Neither is the subject of the patch; the point is that their presence does
-+ * not disturb the function that is.
++ * The shifts are what draw the instrumentation.  A bounds check would do as
++ * well but neither compiler emits one for an index it can prove in range.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+/* SHN_ABS, referenced from code. */
-+extern char abs_sym[];
-+__asm__(".globl abs_sym\n"
-+	".set abs_sym, 0x1234\n");
++int shift_by(int v, int n);
 +
-+int helper(int x);
-+int helper(int x) { return x + 1; }
-+
-+/* The shape of __ADDRESSABLE(helper). */
-+__asm__(".pushsection .discard.addressable, \"aw\"\n"
-+	".balign 8\n"
-+	".quad helper\n"
-+	".popsection\n");
-+
-+int target(int x)
++int untouched(int v, int n)
 +{
-+#ifdef PATCHED
-+	return helper(x) + (int)(long)abs_sym + 1;
-+#else
-+	return helper(x) + (int)(long)abs_sym;
-+#endif
++	int s = 0;
++
++	s += v << (n & 31);
++	s += v << ((n + 1) & 31);
++	s += shift_by(v, n);
++
++	return s;
 +}
-diff --git a/tools/objtool/tests/generic/test-abs-and-addressable.sh b/tools/objtool/tests/generic/test-abs-and-addressable.sh
++
++int touched(int v, int n)
++{
++	int s = 0;
++
++	s += v << (n & 31);
++#ifdef PATCHED
++	s += v << ((n + 3) & 31);
++#else
++	s += v << ((n + 2) & 31);
++#endif
++
++	return s;
++}
+diff --git a/tools/objtool/tests/generic/test-ubsan-noise.sh b/tools/objtool/tests/generic/test-ubsan-noise.sh
 new file mode 100755
-index 000000000000..6adb23ed4b88
+index 000000000000..b415eb16bfd2
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-abs-and-addressable.sh
-@@ -0,0 +1,50 @@
++++ b/tools/objtool/tests/generic/test-ubsan-noise.sh
+@@ -0,0 +1,48 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# An absolute symbol and an __ADDRESSABLE() pointer must not disturb the
-+# function being patched.
++# UBSAN instrumentation in an unchanged function must not make it look changed.
 +#
-+# A SHN_ABS symbol has no section, so any walk of sym->sec which does not check
-+# dereferences NULL -- and the kernel has plenty, from linker scripts and from
-+# .set in assembly.  __ADDRESSABLE() emits a pointer into .discard.addressable
-+# to keep a symbol referenced; it means nothing to a livepatch and is discarded
-+# at link time, but it is a relocation like any other and gets looked at.
++# Every instrumented operation gets a per-callsite metadata object in an
++# anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from GCC,
++# .data..L__unnamed_ from Clang -- whose names are compiler-generated and mean
++# nothing across a rebuild.  is_uncorrelated_section() exists so klp diff does
++# not try to pair them up.
 +#
-+# Neither is what the patch changes.  The failure this guards against is not a
-+# wrong answer but a crash or an error on input the kernel produces routinely,
-+# which would make any function near one unpatchable.
++# Without that, the metadata belonging to a function nobody touched compares as
++# different and drags the function into the patch.  A livepatch which replaces
++# functions the patch never changed is not a build failure: it is a larger
++# patch than intended, taking its dependencies with it, and every extra
++# function is one more that can fail to correlate or to apply.
 +#
-+# Not isolated to a single guard: the absolute symbol here has zero length, so
-+# it is excluded before the section check is reached and removing that check
-+# alone changes nothing observable.  This stands as a check on the behaviour
-+# rather than on the line which produces it.
-+#
-+# Covers the same ground as corpus/x86_64/checksum-abs-sym-skip and
-+# addressable-symbols in Joe Lawrence's klp-build unit test corpus.
++# Covers the same ground as corpus/x86_64-ubsan/{ubsan-shift-noise,
++# ubsan-metadata-data-section,gcc-ubsan-anonymous-data,ubsan-handler-cloning}
++# and corpus/x86_64-llvm-ubsan/{clang-ubsan-bounds-noise,
++# clang-ubsan-handler-cloning} in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair abs_and_addressable.c
++build_pair ubsan_noise.c -fsanitize=shift
 +
-+# The premise: the fixture really did produce both.
-+in_symbols orig.o | grep -q 'ABS.*abs_sym' ||
-+	probe_skip "assembler did not make abs_sym absolute here"
-+assert_input_section .discard.addressable
++# The premise: this compiler really did instrument, and left its metadata in an
++# anonymous section.  Without that the test is just test-basic again.
++ubsan_sec="$(in_sections orig.o |
++	grep -oE '\.data\.\.L(ubsan_data|__unnamed_)[A-Za-z0-9_.]*' | head -1)"
++[ -n "$ubsan_sec" ] ||
++	probe_skip "compiler emitted no anonymous UBSAN data section"
++assert_input_symbol untouched
 +
-+# Checksumming has to survive them, and still see the function that changed.
-+run_checksum
-+assert_checksum_differs target
-+assert_checksum_matches helper
-+
-+# So does the diff.
 +run_diff
-+assert_patched target
-+assert_not_patched helper
 +
-+# An absolute symbol has no address to record a checksum against, so it gets
-+# no entry -- the reference to it is what mattered, not the symbol itself.
-+in_relocs orig.o | awk '/rela\.discard\.sym_checksum/,/^$/' | grep -qw abs_sym &&
-+	fail "absolute symbol got a checksum entry"
++# The changed function is patched, and the untouched one is left alone despite
++# carrying instrumentation of its own.
++assert_patched touched
++assert_not_patched untouched
 +
-+pass "absolute and __ADDRESSABLE symbols do not disturb the patched function"
++# The handler the patched code calls has to come with it, or the clone calls
++# nothing when its check fires.
++out_symbols | grep -q '__ubsan_handle_' ||
++	fail "no __ubsan_handle_* reference in the patched output"
++
++pass "UBSAN metadata in an unchanged function does not drag it into the patch"
 -- 
 2.53.0-Meta
 
