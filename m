@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622944D8D92
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858994D2ECE
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515516; cv=none; b=FNgDbv30ccycV1orTQ1DVAxYMsbZEsOt8OnTbAgbhQjBGnX559gWMtOm41qzwCrCv0jJQr5jRkzaADBCAsuPzydrzxVf2V7XdZLAUcIjD+0LRfOosUrgauZV1bNefBPEjGWvNxBhsBf2sXg6bYyPlDR2jfqPlh51InLCkf7Fdeg=
+	t=1789515521; cv=none; b=M66CYMFbazcnbsLuxEoMWHnAM1U3Sfrm2iQAP/28NTT5MwlY8ZF/QJcrox6m98j6OqVbnxz9mqzZvoisGu8Nc27T88zehS+9G151fQmBUfog+s0EBTiiimmbaz8cGSqTfSJv6iRJrm0EUHrqYhO+kTEqaa+nNWd+BvIoPSFXTO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515516; c=relaxed/simple;
-	bh=EoxCx+4VJJ1wvZurOZyRLu9Wua64YI2Ei+chMHKiOYo=;
+	s=arc-20240116; t=1789515521; c=relaxed/simple;
+	bh=tUoVne96ehJd+QvGOb0OXpfSfIIbrRKSyXKMvUvdOcc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MJYHtCVTi9+TPXjz3uJ8AO5Y7wBeYYYo+ES6Ls/MOAEOWYPRG8nMsXWqT3P4GCW4cf217w4iMO6IQZ0SgNtC30wGWhTP/6q/+T7QkJZ7krteXvYd/FUNJFWvpH5SXdKUfOQQyatPqAx5db87oOpSSGNQvoI6tTQ5WlXtzc4WLrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koS6Lm6u; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=sxEz0DoJCH54ojw/uiIGBJ2Qla5IrXp+oZkmUs/9xTwEWWszC3V3Ar7h/5NCCjTJxXS3EXE5zZpncroSrIiq3nU3XQSpvHCPBMLeoWNhuvBCIYQZc/CE0yySZonBA08WhhQM/990N0XidThr4vrI9zRcC2Tv0PXKLHY7ONB4KvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xkl4eudP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koS6Lm6u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FC21F000FF;
-	Tue, 15 Sep 2026 23:38:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xkl4eudP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB2C1F000FF;
+	Tue, 15 Sep 2026 23:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515515;
-	bh=wVawEWbnaQ/wDIfjJkNL/zxJxmYU+NPYykFOR1tSOQs=;
+	s=k20260515; t=1789515520;
+	bh=J5t5oTyOWAgasVDMf8QOuTh0d/t/ywtRowxjFQPFLXk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=koS6Lm6uwSn9aHWMp6I3C7Yfc538pR4Ya2tFiQrm3Vg5TXHahoRhSDsR3nvU5QSty
-	 Ck8ytFfOw8qshicZQmN0ZQnG9wyup8z9bDu2QCkDYH1mcGv7A3Fgg9DqsbPl+VUu5a
-	 N3airP2+F5SgeS5lFmQOvKmBrQ7Z/mWC7XxU2PfmslxMCXlelWxc7+lmT3VLu54yu9
-	 fM0km3z0ANX/SY1psqy7p96F338jCe9s5OLP4ypxgeRZiqFw2a6t/ip3HU9N9aDSsP
-	 /OfMLmCF34is0XpYjZofkrA7ZsfPlLhd3egk5YEbNk0s3HwvKQHjphlsOmJbKRYF5x
-	 6RsPSKWyc201g==
+	b=Xkl4eudPGzNo7BxKomddo+YXFfcgM5e2HSpLQUfWDrOAHXVXghGq761MvL2V8wchR
+	 6y6TWAQ8SOIbkyasqJMlHaQs4bhUzZsnP5Pn/7KKLV2jx3qPasiXMu9WYIkrH2BqHz
+	 APXMGQYw4OmJiIhmsUfiHSKC4/cYgxZwjGdHfwQBMq5V6vL2Kvi8d60jza+oH6o4qW
+	 4dHeNKBnq4ObCYJsW4gZaKSxQtTOv38pJ6SzxKi+Sxr+ljMhTl9l/MBFbyAiKMajWd
+	 8pr+A484NXbdlq+n4wrAgdLRtc9OwTx9hUmtu+Mi4XN1o6g2Y7QtL4eLOUjXm+oKtw
+	 MiTOSd6dutU7g==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 39/58] objtool/klp: Add test for static locals which must not be correlated
-Date: Tue, 15 Sep 2026 16:34:35 -0700
-Message-ID: <20260915233454.2405019-40-song@kernel.org>
+Subject: [PATCH v4 40/58] objtool/klp: Add test for __bug_table, __ex_table and __mcount_loc extraction
+Date: Tue, 15 Sep 2026 16:34:36 -0700
+Message-ID: <20260915233454.2405019-41-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,126 +51,153 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Most static locals have to be correlated so the patched code keeps using
-the running kernel's copy.  Two kinds must not: anything in .data..once,
-the flag behind WARN_ONCE and friends, and the well-known names the kernel
-generates for per-instance things (__warned, __key, __func__).
-
-Sharing a .data..once flag means a patch inherits "already warned" from
-before it was applied, and the warning it was meant to surface never fires.
-
-The fixture deliberately does not name its .data..once variable __warned:
-the name rule would then catch it and the section rule would go untested.
-gcc spells these <var>.<id> and Clang <func>.<var>, so both are covered.
-
-This tests the behavior of commit ff529864e738 ("objtool/klp: Fix
-.data..once static local non-correlation") and commit 84c304a534b8
-("objtool/klp: Fix is_uncorrelated_static_local() for Clang").
+Three special sections with no coverage.  An entry that is not carried into
+the patch is not a build failure: the patched function simply loses its
+WARN_ON location, its exception fixup, or its ftrace callsite, and nobody
+finds out until one of them is needed.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../fixtures/static_local_uncorrelated.c      | 41 +++++++++++++++++++
- .../generic/test-static-local-uncorrelated.sh | 40 ++++++++++++++++++
- 2 files changed, 81 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
- create mode 100755 tools/objtool/tests/generic/test-static-local-uncorrelated.sh
+ .../tests/x86/fixtures/special_sections.c     | 77 +++++++++++++++++++
+ .../tests/x86/test-special-sections.sh        | 42 ++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/objtool/tests/x86/fixtures/special_sections.c
+ create mode 100755 tools/objtool/tests/x86/test-special-sections.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c b/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
+diff --git a/tools/objtool/tests/x86/fixtures/special_sections.c b/tools/objtool/tests/x86/fixtures/special_sections.c
 new file mode 100644
-index 000000000000..cb4cdd7a496e
+index 000000000000..d42798848fda
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
-@@ -0,0 +1,41 @@
++++ b/tools/objtool/tests/x86/fixtures/special_sections.c
+@@ -0,0 +1,77 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Static locals of three kinds, in one patched function.
++ * A special section entry belonging to a patched function.  SPECIAL_SEC picks
++ * which section, since klp diff treats eight of them alike and each needs
++ * extracting for the patched function and no other.
 + *
-+ * Most static locals must be correlated, so the patched code keeps using the
-+ * running kernel's copy.  Two kinds must not:
++ * The entry is written out by hand so the fixture builds without kernel
++ * headers.  Only the leading relocation matters to klp diff; the rest is
++ * padded to the section's real entry size, because the entries have to be the
++ * right length for the boundaries between them to fall in the right places.
 + *
-+ *   - anything in .data..once, the flag behind WARN_ONCE and friends.  Sharing
-+ *     it would mean a patch inherits "already warned" from before the patch.
-+ *   - the well-known names the kernel generates for such things (__warned,
-+ *     __key, __func__, ...), which are per-instance by nature.  gcc names them
-+ *     <var>.<id> and Clang <func>.<var>, so both spellings have to be caught.
++ * SPECIAL_RELOCS covers __ex_table, whose entries relocate both the faulting
++ * instruction and its fixup; objtool rejects one with only the first.
 + */
++
++#ifndef SPECIAL_SEC
++#define SPECIAL_SEC "__bug_table"
++#endif
++#ifndef SPECIAL_ENTSIZE
++#define SPECIAL_ENTSIZE 12
++#endif
++#ifndef SPECIAL_RELOCS
++#define SPECIAL_RELOCS 1
++#endif
++
++#define STR_(x) #x
++#define STR(x) STR_(x)
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
++/*
++ * other() gets an entry of its own, so that "the untouched function's entry
++ * was not dragged in" is a question the section can actually answer.  With
++ * only target() contributing, there is nothing for klp diff to leave behind
++ * and the negative assertion holds however the extraction behaves.
++ */
++int other(int x)
++{
++	asm volatile(
++		"3:	nop\n\t"
++		"4:\n\t"
++		".pushsection " SPECIAL_SEC ", \"aM\", @progbits, "
++			STR(SPECIAL_ENTSIZE) "\n\t"
++		".long 3b - .\n\t"
++#if SPECIAL_RELOCS > 1
++		".long 4b - .\n\t"
++		".fill " STR(SPECIAL_ENTSIZE) " - 8, 1, 0\n\t"
++#else
++		".fill " STR(SPECIAL_ENTSIZE) " - 4, 1, 0\n\t"
++#endif
++		".popsection\n\t");
++
++	return x + 9;
++}
++
 +int target(int x)
 +{
-+	/*
-+	 * A .data..once variable whose name is *not* on the list below, so
-+	 * only the section can disqualify it.  Naming it __warned would let
-+	 * the name rule catch it and the section rule go untested.
-+	 */
-+	static int once_flag __attribute__((section(".data..once")));
-+	/* a never-correlate name, in an ordinary section */
-+	static int __key;
-+	/* and one that must be correlated */
-+	static int ordinary;
-+
-+	if (!once_flag)
-+		once_flag = 1;
-+	__key += x;
-+	ordinary += x;
-+
-+#ifdef PATCHED
-+	return __key + ordinary + once_flag + 2;
++	asm volatile(
++		"1:	nop\n\t"
++		"2:\n\t"
++		".pushsection " SPECIAL_SEC ", \"aM\", @progbits, "
++			STR(SPECIAL_ENTSIZE) "\n\t"
++		".long 1b - .\n\t"
++#if SPECIAL_RELOCS > 1
++		".long 2b - .\n\t"
++		".fill " STR(SPECIAL_ENTSIZE) " - 8, 1, 0\n\t"
 +#else
-+	return __key + ordinary + once_flag + 1;
++		".fill " STR(SPECIAL_ENTSIZE) " - 4, 1, 0\n\t"
++#endif
++		".popsection\n\t");
++#ifdef PATCHED
++	return x + 2;
++#else
++	return x + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-static-local-uncorrelated.sh b/tools/objtool/tests/generic/test-static-local-uncorrelated.sh
+diff --git a/tools/objtool/tests/x86/test-special-sections.sh b/tools/objtool/tests/x86/test-special-sections.sh
 new file mode 100755
-index 000000000000..fa4ce88a79b1
+index 000000000000..8dfaa4fc9a36
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-static-local-uncorrelated.sh
-@@ -0,0 +1,40 @@
++++ b/tools/objtool/tests/x86/test-special-sections.sh
+@@ -0,0 +1,42 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Some static locals must not be correlated with their counterparts in the
-+# running kernel; the patched code has to use a fresh copy instead.
++# klp diff extracts entries from eight special sections.  Between them the
++# existing tests reach .kcfi_traps, __jump_table, .static_call_sites and
++# .altinstructions; __bug_table, __ex_table and __mcount_loc are covered by
++# nothing, though the same extraction code serves all of them.
 +#
-+# .data..once holds the "have we warned yet" flags behind WARN_ONCE.  Correlate
-+# one and the patched function inherits the flag from before the patch, so the
-+# warning the patch was written to produce never fires.  The same goes for the
-+# names the kernel generates for per-instance state -- __warned, __key,
-+# __func__ and friends.
-+#
-+# Both directions matter, so an ordinary static local is here too: a rule that
-+# refuses to correlate anything would pass a test that only checks the
-+# refusals.
++# Losing an entry is quiet in every case and wrong in a different way for each:
++# a WARN() in patched code that no longer reports where it came from, an
++# exception fixup that is simply not there when the faulting instruction traps,
++# a function ftrace can no longer see.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+setup
-+build_pair static_local_uncorrelated.c
-+run_diff
 +
-+# Compilers mangle static locals differently -- gcc gives __key.1, Clang
-+# target.__key -- so match on the base name.
++# section, entry size, relocations per entry
++for spec in "__bug_table 12 1" "__ex_table 12 2" "__mcount_loc 8 1"; do
++	set -- $spec
++	sec=$1
 +
-+# Correlated: referenced through a klp symbol, pointing at the kernel's copy.
-+out_symbols | grep -q '\.klp\.sym\..*ordinary' ||
-+	fail "ordinary static local was not correlated"
++	# A fresh workdir per section: run_diff caches its checksums.
++	setup
++	build_pair special_sections.c \
++		-DSPECIAL_SEC="\"$1\"" -DSPECIAL_ENTSIZE="$2" -DSPECIAL_RELOCS="$3"
 +
-+# Not correlated: no klp symbol, and a copy cloned into the patch instead.
-+out_symbols | grep -q '\.klp\.sym\..*__key' &&
-+	fail "__key was correlated; it must use a fresh copy"
-+out_sections | grep -qE '\.(bss|data)[^ ]*__key' ||
-+	fail "__key was neither correlated nor cloned"
++	assert_input_section "$sec"
++	run_diff
 +
-+out_symbols | grep -q '\.klp\.sym\..*once_flag' &&
-+	fail ".data..once variable was correlated; it must use a fresh copy"
-+assert_section '.data..once'
++	# Extracted, and pointing at the function that was patched.
++	assert_section "$sec"
++	assert_reloc_sym "$sec" target
++	assert_patched target
 +
-+pass "per-instance static locals cloned, ordinary ones correlated"
++	# Nothing belonging to the function that was not.
++	assert_not_patched other
++	assert_no_reloc_sym "$sec" other
++
++	cleanup
++done
++
++pass "__bug_table, __ex_table and __mcount_loc entries extracted"
 -- 
 2.53.0-Meta
 
