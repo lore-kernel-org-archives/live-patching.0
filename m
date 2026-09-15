@@ -1,111 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F402235295C
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 21:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD0942AFB1
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789509377; cv=none; b=GOjMHmN7wzCNfP8HOcUJC7XnxYvnTjq0+Dfyg85oACxPKcmRNMdcbw2/UsM5CUXPFn2n9HtbK25wan7LzAqh5vHlOE7Co8yOzkbPbXJH7piizjByoZApna3prGWlRm6yZFs9wu7c/mcI6sHJL1C6/iSBDsnF5ImQuCCu6+yHe30=
+	t=1789513934; cv=none; b=rrpKbHjUL12l+4QVafH/h6zJv5eGb1LPE5X2r+/gcPCMfc1AKI0rolaH4d3e38M8y0Mfjc0jx+I955A+Bra+0rK29IrdSHuk6a9/cd1IE8Qxn2iTt+af88He3hEskNGY5BzC5xKj8XKLOqrr4YprCmhCrJdkfgu1PC53FgRG3As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789509377; c=relaxed/simple;
-	bh=gKPQVc+cna4+Hx3kVZSzb88SEZbuTTuSs2FHp81Jemw=;
+	s=arc-20240116; t=1789513934; c=relaxed/simple;
+	bh=5y89yViajF6E5sFOGF9VRWfKH3F2v8hmhVSzIiCTHd8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ofe3tJ5mg5n/oiRbywTfU+Mq4W3eTzJm8oD9ynSI5juB7CG0SzbEY698b4iT00IZ6wzFx8awTv6a7LhxVGjdX0xuI27FoAHWnMCIVCEarFQwrNQtQrNuMUF0+4BI5fYA+Xy3A2rng+ketb4TuUqDNX2Qdj5mytyYtyBxkcBH17o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUv2AeVQ; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=YZURhrrr8dNsBpZ7r+XBPQZjFAv+IUnXWgRCfBnn1eZE5mD7bkhAOsq3CcW6jewx/eK9vvygh/VH1iBW6x7/suzT+zG2JWsBVTolk13M3nIpXKT/wmHObKVybw6h4TSc3blHn2esRQcioXSU5B3TbRdyFT89DU0NtIXv9tAMxc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xu8Ga23L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUv2AeVQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFB81F0089A
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 21:56:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xu8Ga23L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2441F000FF
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789509375;
-	bh=Tk2ETKTorV/A6TS8+8Wkf7n3G73+O0mzgbaD7rvcfy0=;
+	s=k20260515; t=1789513932;
+	bh=HdE+Ntll/c2YhvON/Aio6I+tStN72YxB0IDBbOZNqsw=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=OUv2AeVQ/pyEVkoBhhkDHBZ62XdLnI3aaLrHK7U+FkpIqoJpOF95fGczifsI7fjxF
-	 5oC5laQNz2ibS5mcj6fphjVXJ0rK3IF28V7ZGDnhAKC1flLwnCSsqGZzbT8Gumiyp4
-	 0bEZkwtpSuFrm91ABkH8Ciqb0iBwbF9GnBdunTKigKzn+uQcXYY0c68ztu8esqdkQx
-	 SkwK9cEa5N41YffQCnSiBvYbBnceEKsANgk9Yo2q8QwVeL8Z6c5J3mbhPwycErTDiF
-	 2m9xFcdBDEvlAIfsrIJC35MVru/lRttOEJAxYxU9lwnJ1aXUhTqTm0iMM5c144MIez
-	 R3M4IewEFJDbQ==
-Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93910a0cefaso23705885a.2
-        for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 14:56:15 -0700 (PDT)
-X-Gm-Message-State: AFuF++lMopFt2nNqQEDaE3FqPeroaj9blCFTFIkHrj0RfXum3oUiOPZx
-	QaZmNYfZeU9U6tBe6/oziBPqXjKkJ2F3jKOzhiPhOaIqpVrF0KZjs3fRYZ7bx7MujFEbYGWROQn
-	Fi1RAJ1wGuGBnPqQy+abXzGnRPY/p4eQ=
-X-Received: by 2002:a05:620a:8014:b0:939:fce5:f6d2 with SMTP id
- af79cd13be357-93bb78f9fcemr12260585a.27.1789509374826; Tue, 15 Sep 2026
- 14:56:14 -0700 (PDT)
+	b=Xu8Ga23LuggFH7LqYrADx+WkWyUQ8tNj8K76Oqf9E6In16u7hk641gUA6xNkY4CDC
+	 Om7O9o9Tz+V7qjl5+0kR6/rqGG1snezliHS6qnH6g9QXA9KnBbvW9a0slUjswVTkXz
+	 9gaDalRIoFUjwYub+fG0BsHqpCaYOsG1jmKkAh9chu81moDyzt2t5G2JdwllhzZHdT
+	 3sDEjHCn/KeCDAcB8TKSj+hpYMYUZ7b1+Uz2M86M9i6S/sx0W+I69SU9oCknZio/FD
+	 rzCo5p4qx9riHp0O3P7fz1d8FTtO7fqUWTee20YXnJB/dzgJ+gUsfOTpjjGFhqc7XX
+	 OxpfJXH6VjTVw==
+Received: by mail-qk2-f20.google.com with SMTP id af79cd13be357-939656ff6d9so30854285a.1
+        for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 16:12:12 -0700 (PDT)
+X-Gm-Message-State: AFuF++l3k3CxqRCJQiKxZeBF+y7ksATVInRhlt1WsrxGyS16p9fT4Iux
+	94WiKikudHXHzdUYUvP1uGi2Wx9bCqwejNCMId+OyydwV54Rfq2p3jiJb4b/+vk2Kkd/+JB4sjt
+	eYaA+6Q5o8L86GpX301HhaPUmwN3uRJI=
+X-Received: by 2002:a05:620a:4542:b0:92e:5d44:73fc with SMTP id
+ af79cd13be357-93bb7668b19mr54909885a.12.1789513927735; Tue, 15 Sep 2026
+ 16:12:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914230355.3422996-1-song@kernel.org> <20260914230355.3422996-15-song@kernel.org>
- <20260914234620.122791F000FF@smtp.kernel.org>
-In-Reply-To: <20260914234620.122791F000FF@smtp.kernel.org>
+References: <20260914230355.3422996-1-song@kernel.org> <20260914230355.3422996-24-song@kernel.org>
+ <20260915000712.120901F000FF@smtp.kernel.org>
+In-Reply-To: <20260915000712.120901F000FF@smtp.kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Tue, 15 Sep 2026 14:56:03 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4+CgzPEsosV3dzw5BhBty1eiLwSPVTk3QazN+_nKh4ow@mail.gmail.com>
-X-Gm-Features: AcwNN1UdB_AtXXP_PuSuSEcBB1v4fjnD2paULr2tbVU4aGfVGfyL9qC8Kz-ZqB0
-Message-ID: <CAPhsuW4+CgzPEsosV3dzw5BhBty1eiLwSPVTk3QazN+_nKh4ow@mail.gmail.com>
-Subject: Re: [PATCH v3 14/58] objtool/klp: Add test for newly introduced functions
+Date: Tue, 15 Sep 2026 16:11:55 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5xdsKWuXRmAUgVDLgg8Zdx6LQoO6SrNA27w720ZLN7iw@mail.gmail.com>
+X-Gm-Features: AcwNN1WziJh66MCop_MAQk08v99qEwXeSvsKmI0G-Em0C0Rg-OWCQZcLJ0snBzw
+Message-ID: <CAPhsuW5xdsKWuXRmAUgVDLgg8Zdx6LQoO6SrNA27w720ZLN7iw@mail.gmail.com>
+Subject: Re: [PATCH v3 23/58] objtool/klp: Add test for rejecting references
+ to init code/data
 To: sashiko-reviews@lists.linux.dev
-Cc: live-patching@vger.kernel.org, pmladek@suse.com, peterz@infradead.org, 
-	joe.lawrence@redhat.com, jikos@kernel.org, jpoimboe@kernel.org, 
-	puranjay@kernel.org, kernel-team@meta.com, mbenes@suse.cz
+Cc: live-patching@vger.kernel.org, kernel-team@meta.com, puranjay@kernel.org, 
+	peterz@infradead.org, pmladek@suse.com, joe.lawrence@redhat.com, 
+	jpoimboe@kernel.org, mbenes@suse.cz, jikos@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 14, 2026 at 4:46=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Mon, Sep 14, 2026 at 5:07=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [Medium] selftests/objtool: fragile symbol check matches section names
+> - [Low] objtool: test suite aborts due to fragile compiler assumptions
 > --
 >
-> commit da3ad59507d5d910ed876f2401fd7f2746140303
+> commit fa8e7a87126e5978150272fd5c3b8728c0d8f68a
 > Author: Puranjay Mohan <puranjay@kernel.org>
 >
-> objtool/klp: Add test for newly introduced functions
+> objtool/klp: Add test for rejecting references to init code/data
 >
-> A function added by the patch has no original to correlate against, and
-> still has to be carried into the livepatch or the changed caller ends up
-> referencing something which does not exist.
+> Init code and data are freed once boot finishes, so a klp relocation
+> against them can never resolve.
 >
-> > diff --git a/tools/objtool/tests/generic/test-new-function.sh b/tools/o=
-bjtool/tests/generic/test-new-function.sh
-> > new file mode 100755
-> > index 0000000000000..17af18545b7de
+> > diff --git a/tools/objtool/tests/generic/fixtures/init_reference.c b/to=
+ols/objtool/tests/generic/fixtures/init_reference.c
+> > new file mode 100644
+> > index 0000000000000..51b2a57dde14f
 > > --- /dev/null
-> > +++ b/tools/objtool/tests/generic/test-new-function.sh
-> > @@ -0,0 +1,17 @@
->
-> [ ... ]
->
-> > +setup
-> > +build_pair new_function.c
-> > +run_diff
+> > +++ b/tools/objtool/tests/generic/fixtures/init_reference.c
+> > @@ -0,0 +1,16 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Patched function referencing data in an .init section. */
 > > +
-> > +assert_patched target
-> > +out_symbols | grep -q 'klp_new_helper' ||
-> > +     fail "new function was not carried into the patch"
+> > +static const char __modinfo[]
+> > +     __attribute__((section(".modinfo"), used, aligned(1))) =3D "\0nam=
+e=3Dvmlinux";
+> > +
+> > +static int init_only __attribute__((section(".init.data"), used)) =3D =
+5;
 >
-> [Severity: Medium]
-> Will this grep check falsely pass on newer versions of binutils?
+> [Severity: Low]
+> Can this static variable be constant-folded by the compiler since it lack=
+s the
+> volatile qualifier and is never modified?
 >
-> It seems `grep -q 'klp_new_helper'` matches substrings, and newer version=
-s of
-> binutils print section names (e.g., `.text.klp_new_helper`) in `readelf -=
-s`
-> output. This could cause the test to erroneously pass if the section symb=
-ol
-> is present but the actual function symbol is missing.
->
-> Could this be updated to use the robust `assert_symbol` helper provided b=
-y
-> the test framework rather than directly grepping `out_symbols`?
+> Modern compilers compiling at -O2 may constant-fold non-volatile static
+> variables or use symbol-relative relocations.
 
-Fixed in v4.
+Added "volatile" here in v4.
 
 Thanks,
 Song
