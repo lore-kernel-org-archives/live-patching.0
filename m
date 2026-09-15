@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B524D09F4
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FC44D90D7
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515563; cv=none; b=jRlAIIdVyjEH2tUj8PwGlu/0S26fMgq9ovACHY7GQJKwrrW3FYei/gW1eKZP3I7n/xWSRTRsyJV0xErfaGji/tcII2AhXGejXXIKajZF0OnJ0bYhKnTCadrGJ1NgUmeLBwtsiPAf0d37ocjjTt7uPy7GtJGZO5sfI4UKNsjLwUc=
+	t=1789515569; cv=none; b=TApIga1uO6rYLLbPBjs7OHyZNA/IRJZFLMQfB4ZpeEQZPoDOLVSowpErqVbmO5hrsNs0+uLk41RF6Jwlm8t2iz5eZJtLMtMLytDUxcw1SvNRwvA5kMYf3scLV2EoQGduLsFPfOyS128nY7n8A68tn1aHn5nHyJwckP7NwMtP67I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515563; c=relaxed/simple;
-	bh=e/pHIANHGDYMRXnxBmpEU2yFNHUvnLnAZ8w/B1ZL/ms=;
+	s=arc-20240116; t=1789515569; c=relaxed/simple;
+	bh=BnPfarbKRQ3iCIGhGkcAP8phh6qju9esOxbDxnCu1Bw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TBJVPrRA92gyjMhpWzP4ti3j0UCM00AJJ4JrdzVHlJo5mzN8T1YCQcZ/qGQGZDYAbwBxyIXYqMzjSdAzATCZ57qHxEFacbHWEzcDbg6Ki1Th2fJEFd5yE5WOMPKj+PzDEqr34/cFpdBM3cgMXcI24mS1RQcB//I5GnPbJUaYfDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbPRTB+5; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=q3VckhOtrzwXIXQcueEyhZElBZJ3I90tihoebfZ6FrdDG4FTSbezjEjAjj/ceKDqZZ/r3GEX4XfRU9h9yPLUD3LftBXKI0+aGnqup9QXFAPbGRrDEohCkn21Ck+QX2w2VkP2WnwvJ0v5GgwbF/MTkh13QEkHghj2Ki8iLKoMS04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=izBUQomu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbPRTB+5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FD111F000FF;
-	Tue, 15 Sep 2026 23:39:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="izBUQomu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0A51F000FF;
+	Tue, 15 Sep 2026 23:39:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515562;
-	bh=grYbOTHUMFqnye3BkRz1M3IDfTiEJErLed7bw7Y6x0o=;
+	s=k20260515; t=1789515567;
+	bh=RQ7omf0xNS0uK9GAW+/RIpG2YvJsXoTit1j7iA2dHJ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=KbPRTB+5HLe0tmDikEi59LZU+UaUAohCxd20yKUxlwzIg8MsslZmkLz/MC83PL6tG
-	 FpYIJaTi33m6Jt+OFlMtepDtUBb5WwJNlAbR2fyFMPg9nfc++TioB93SUDzYtZsnpM
-	 R4emGj4P+5dh5q5Phi7yfxqXYqXRCBrIaNjnHIk/FLxDBmU+w9l0C9KCGGWuPZma+V
-	 MjQ4QETCLamfWpe21Euj6GBukFLrrxk/r//p830aZbZQ2xOiuBvY7aRJTrwN5JtugV
-	 fHwtkQI1ZolnVIFo1lDSyEpCEiCKX70j5WGFFy24Zh7cvmrJpqCC74/q2vY/xD59SH
-	 9V1V426QOjmKA==
+	b=izBUQomusZk8nncLcJVqiz26KGzxq1XG4HdBUj0J+FFL20nXn/7VgP9g5NJCYP3vO
+	 O9mQuW7pIr0MX9+EOz4Fk/tiaJYuETOJ4aUBjwQWrdeprWdVHK3TYpJRPX+SP+F6Ob
+	 iaJnlImQd7yHS9ioB5zvA6ei7BRSF3mKFDDqWbq7utwPLwaRcVY1ZmAZiUElWR2S/Q
+	 nPWT4NBsWhOO4TR8H/1biFZFnQ14c9T+NXJqnPuAv6OXlLlJAo8PLbypP2pvflwVxZ
+	 pmpvrY2QUY75yMq0jVyCQrKi8O8fvW7BsBzXEwPxuRpV4M8w1TsJ2e6LgEYejhj6mb
+	 rqTKtR8CwWFWw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 48/58] objtool/klp: Add test for a static branch introduced by the patch
-Date: Tue, 15 Sep 2026 16:34:44 -0700
-Message-ID: <20260915233454.2405019-49-song@kernel.org>
+Subject: [PATCH v4 49/58] objtool/klp: Add test for tracepoint and pr_debug static branch keys
+Date: Tue, 15 Sep 2026 16:34:45 -0700
+Message-ID: <20260915233454.2405019-50-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,90 +51,91 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Patching a function which already has a static branch and adding one to a
-function which had none are different cases.  In the second the
-__jump_table entry is itself new, so there is nothing in the original to
-correlate it against: klp diff has to carry the entry into the patch from
-scratch and reach the key the way it reaches any other vmlinux symbol.
+A module-owned static branch key is normally fatal, because late module
+patching lets the livepatch load before the module it depends on and
+jump_label_add_module() then dereferences an unresolved entry.
 
-Dropping it is silent.  The patched function keeps a static branch the
-kernel never patches, so it takes the same arm forever whatever the key is
-set to.
+Tracepoints and pr_debug() generate such keys everywhere, so refusing them
+outright would make any function containing a trace_*() call or a
+pr_debug() unpatchable.  klp diff drops the entry, warns, and carries on:
+the patched code works with that one tracepoint or debug print permanently
+off.
 
-Give the fixture a NEW_KEY knob which puts the whole branch behind PATCHED,
-and assert the premise -- that the original really has no __jump_table --
-before asserting the result, since otherwise this is just a second copy of
-test-jump-label-key.
+Both halves matter, and the test asserts both.  A build which fails is a
+function nobody can patch; an entry left in place is the corruption the
+rejection exists to prevent.
 
-Verified by making klp diff skip __jump_table when cloning special
-sections: the test fails.
+Give the fixture a KEY_NAME knob so the same static branch can be built
+with either special name.  Verified by removing each exemption in turn --
+the test fails for both.  That the entry is then dropped is asserted but
+not isolated, and the test says so.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/test-jump-label-new-key.sh  | 51 +++++++++++++++++++
+ .../generic/test-jump-label-exempt-keys.sh    | 51 +++++++++++++++++++
  1 file changed, 51 insertions(+)
- create mode 100755 tools/objtool/tests/generic/test-jump-label-new-key.sh
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
 
-diff --git a/tools/objtool/tests/generic/test-jump-label-new-key.sh b/tools/objtool/tests/generic/test-jump-label-new-key.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh b/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
 new file mode 100755
-index 000000000000..3bc6005fc776
+index 000000000000..fa2f913d860b
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-jump-label-new-key.sh
++++ b/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
 @@ -0,0 +1,51 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A patch may introduce a static branch where the original function had none.
++# Two kinds of module-owned static branch key are disabled with a warning
++# instead of rejected.
 +#
-+# That is not the same case as patching a function which already has one.  The
-+# __jump_table entry is itself new, so there is no counterpart in the original
-+# to correlate it against: klp diff has to carry the entry and the key into the
-+# patch from scratch, and the key has to be reached the way any other reference
-+# to a vmlinux symbol is.
++# A module-local key is normally fatal: late module patching lets the livepatch
++# load before the module it depends on, so the unresolved __jump_table entry is
++# dereferenced by jump_label_add_module().  test-jump-label-module-key covers
++# that rejection.
 +#
-+# Get it wrong and the entry is dropped, leaving a static branch the kernel
-+# never patches -- the code takes the wrong arm forever, silently.
++# Tracepoints and pr_debug() generate such keys everywhere, though, and
++# refusing them outright would make any function containing a trace_*() call or
++# a pr_debug() unpatchable.  So klp diff drops the entry, says so, and carries
++# on: the patched code keeps working with that one tracepoint or debug print
++# permanently off.
 +#
-+# Where the key lives still decides whether that is allowed, exactly as it does
-+# for a key the original already had: a module-owned one cannot be reached, so
-+# introducing one has to stop the build rather than emit an entry nothing will
-+# resolve.
++# Both halves matter.  A build that fails is a function nobody can patch; an
++# entry left in place is the memory corruption the rejection exists to prevent.
 +#
-+# Covers the same ground as corpus/x86_64/static-branch-vmlinux-new and
-+# static-branch-module-new in Joe Lawrence's klp-build unit test corpus.
++# The two exemptions are isolated: remove either and this fails.  That the
++# entry is then dropped is asserted but not isolated -- making the caller keep
++# it anyway produces no output difference here, so that assertion stands as a
++# check on the behaviour rather than on the line which produces it.
++#
++# Covers the same ground as corpus/x86_64/static-call-module-tracepoint and
++# pr-debug-unsupported in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+setup klp_test_key
-+build_pair jump_label.c -DNEW_KEY
++setup
 +
-+# The premise: the original really has no jump table, and the patched one does.
-+has_input_section orig.o __jump_table &&
-+	fail "fixture put a __jump_table in the original; nothing new to add"
-+has_input_section patched.o __jump_table ||
-+	probe_skip "compiler produced no __jump_table on this arch"
++# check <key name> <expected warning>
++check()
++{
++	build_pair jump_label.c -DKEY_NAME="$1" -DMODNAME='"klp_testmod"'
++	require_input_section __jump_table
 +
-+run_diff
++	# Accepted, not rejected: this is the whole point.
++	run_diff
++	assert_diff_log "$2"
 +
-+assert_patched target
-+assert_section __jump_table
-+assert_reloc_sym __jump_table target
++	# And the entry is gone, not merely complained about.
++	assert_patched target
++	assert_no_section __jump_table
++}
 +
-+# The same new branch, with the key owned by a module.  Drop the vmlinux export
-+# first: while it is exported the key is reachable and being new changes
-+# nothing, which is what the first version of this got wrong.
-+export_syms
-+rm -f "$workdir/out.o"
-+build_pair jump_label.c -DNEW_KEY -DMODNAME='"klp_testmod"'
-+run_diff 255
-+assert_diff_log 'unsupported static branch key klp_test_key'
-+[ -e "$workdir/out.o" ] &&
-+	fail "output object produced for a rejected input"
++check __tracepoint_klp_test        'disabling unsupported tracepoint klp_test'
++check __UNIQUE_ID_ddebug_klp_test  'disabling unsupported pr_debug'
 +
-+pass "static branch introduced by the patch carried in, or rejected for a module key"
++pass "tracepoint and pr_debug keys disabled with a warning, not rejected"
 -- 
 2.53.0-Meta
 
