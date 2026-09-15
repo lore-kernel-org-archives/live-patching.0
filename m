@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD82A47F3C2
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B1A48CD60
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515321; cv=none; b=sxiuUJ6otE4KkKsp0ozy47yTCEu9t7LP2r7/CzM/4QorC2EHsQktwhV0XRt96culIiIXJvdoUmz0LubotnbTmZoni9x8eTZ00LuMbpNtn14zcOdr/0Gle1s1o/OqBPmf9BNyQzz+J12IozgOb0hjx232AC6n1A37WEoq0eZKUMg=
+	t=1789515326; cv=none; b=ErZdB2A/j3bPqlv+TmMN4txBGZatdFZPM5ZhVx8whSkiCl4Te6iA2uaxULOVgK46w57epJq1o9Dk/SEnPrBcgOO1TRSJwddmRY+MS05EY2UITQgjwb6S1j5gajiL3C/GCs6ApK8pmvG4wBTvMCcO1o42cuFmR5cDUaV26KJVSrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515321; c=relaxed/simple;
-	bh=7XKz+RJvFwhPljL0LEOP5YJZMivly/gX4hqh5ASA0n0=;
+	s=arc-20240116; t=1789515326; c=relaxed/simple;
+	bh=1jxSj458SN10njo6hbiPF4D5rry1Hub4x2LcORQjJ8Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q75uMZCRlMzAdhpejyNPbzNAOrt39iP/2ldonNmt7xg0BMUhjmUyUYWBtVNrABtY4Frie40eaPanjNZC/jUBLydO0F+2BzvpSJx5IcfmV9deoYP5/yInms6tAIQdPp8zipqaClED1vfToBOBvCPiY2qWZmS3x+56+Fio4mRhvhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwKp/4ZV; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=dUbEKrCz3PaWpJH0adFaIma8Vhmb+ufxPKBjTGO4GS10UxkCMYA8MMrxBZgcHQlf34Tmr3ypVWYfUDXPHBASexV9eD8euXWpqCrP4ZJCNoDXoxBaI6glAYLF5up5HK7r0fz6ONq/hZxzvLPil6F4VEOTqXiYdKxaZTcbv9kJLkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTa9jbLy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwKp/4ZV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F85F1F00893;
-	Tue, 15 Sep 2026 23:35:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTa9jbLy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E9361F000FF;
+	Tue, 15 Sep 2026 23:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515319;
-	bh=IejK4nasaq2ypMV8Vm3fqIMlqHcvhIXbbT1nJJuAYaA=;
+	s=k20260515; t=1789515324;
+	bh=NfvCsarIJHoNeKvJaEfclwwb6gA6ssbBlZUuxWUCyAU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iwKp/4ZVZI3jGqZ28RdPb0PWWgijhtDyp1vCQcx/arDOOapU89xPRV3cn5zVEo3AP
-	 /mxlADJwJ1XSfrvWXaCbUgGSGFELPxJ6l0RHY79B8B7cyPdtr2ttq5IG+M2ZRvZea/
-	 VpGRilSAwW4MVwpIDfj40cMdADAVlFqHB5PJBAsWK/7XSAdUOF3Qxho+7TjisvTUWr
-	 cVPp09nYLioAC9a88R9KLrF6oWXoDuzhkhrpXV+aQVv7DuCO53TvxQh4BX3E43dh1Z
-	 YHFxLu2AiVEMwBu8uB4KtanaVpBsiHB/rdkK0xWkgeNJwGmkUra/W3EJwgAWfQiuYF
-	 qlSIq0rI4M0Lw==
+	b=DTa9jbLy1mkBZSMsxM/1KW1tUXm8wxfxp9Qc5JuoIuUiuyV9jBFxXwx1JP08FTw+h
+	 rMoDFvIkyhdCWnHod8uCnOQ8Pir6cEmuQdOnCW85W3JUlBaWzfvPRe6LsCYxN0Idll
+	 SifQUAoACkbohmZrMYooV87MXnYxsBwyssaIEJUsvP5PrmtHsYUXkNNvnOvrJo5T0I
+	 cQ/zBHzrJlaN+ns+NM6O/fuYebOYlQqY1Ezuad3P7AEzxhQ/M2l3dzDxHcmBDZrJB7
+	 Y8j6sjrgqSm/e3XFqyDKRNYmA9YHsVRi9TglAFfAgi2SdFX2Gxc2s+V9fVE7TP06Hq
+	 ATIRSCHKOXW0w==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 03/58] objtool/klp: Group the klp tests by architecture
-Date: Tue, 15 Sep 2026 16:33:59 -0700
-Message-ID: <20260915233454.2405019-4-song@kernel.org>
+Subject: [PATCH v4 04/58] objtool/klp: Classify klp test outcomes
+Date: Tue, 15 Sep 2026 16:34:00 -0700
+Message-ID: <20260915233454.2405019-5-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,166 +51,330 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Which architecture a test is for is expressed by where it lives: tests are
-in generic/ or in a directory named for their architecture, each carrying
-its own fixtures, and the runner executes generic/ plus the one that
-matches.  A test which cannot apply here is then not run at all, rather
-than running in order to announce that it did not.
+A test could pass, fail, or skip, and the runner reported only the exit
+status of the last one to fail.  Skips are the interesting case: they are
+how a suite quietly stops testing anything.
 
-Layout does this better than a declaration would.  There is no x86_only(),
-and no lookup letting a fixtures/<arch>/ file shadow a generic one of the
-same name -- an arch-specific test simply carries its own fixtures.
+Three kinds, and the runner counts them separately:
 
-Compilers cannot work the same way: CI varies CC over the same tree, so a
-compiler requirement stays a declaration in the test.
+  declared   the test said in advance it does not apply here, e.g. gcc_only
+             on a clang run.  Expected indefinitely.
+  probe      the construct did not turn up in the built object this time.
+             Weaker: one which becomes permanent is a fixture that stopped
+             testing anything.
+  undeclared counted as a failure.  A test which gives up for a reason it
+             never declared is a hole, not an outcome.
 
-What a run leaves out is reported once:
+xfail and xpass come with them, so a known failure is reported rather than
+commented out and forgotten, and one which starts passing says so instead
+of going quietly green.
 
-  # not run: 5 tests in x86/ (this run is arm64)
+The result line is what gets classified, not the whole of a test's output:
+objtool warns on stderr and the runner captures it, and a stray line ahead
+of the result would otherwise leave the exit status to decide -- counting
+an expected failure, which exits 0, as a pass.
 
-Silence would have been cheaper and wrong.  A run covering less than the
-tree holds must not look like a run that covered all of it.
+Every test owes the plan exactly one result line, so a substituted verdict
+replaces the test's own rather than being printed beside it, and a test
+which dies before reporting gets a result of its own instead of being
+inferred from its exit status.
 
+Also: a TAP version line, LC_ALL=C so the order tests run in and the
+behaviour of grep's character ranges inside them do not depend on the
+invoking shell's locale, and fail() on stdout with every other verdict.
+
+Co-developed-by: Puranjay Mohan <puranjay@kernel.org>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/{ => generic}/fixtures/basic.c      |  0
- .../objtool/tests/{ => generic}/test-basic.sh |  2 +-
- tools/objtool/tests/lib.sh                    | 27 ++++++++++++--
- tools/objtool/tests/run-tests.sh              | 36 ++++++++++++++++---
- 4 files changed, 56 insertions(+), 9 deletions(-)
- rename tools/objtool/tests/{ => generic}/fixtures/basic.c (100%)
- rename tools/objtool/tests/{ => generic}/test-basic.sh (91%)
+ tools/objtool/tests/lib.sh       |  67 ++++++++++++--
+ tools/objtool/tests/run-tests.sh | 148 ++++++++++++++++++++++++++-----
+ 2 files changed, 186 insertions(+), 29 deletions(-)
 
-diff --git a/tools/objtool/tests/fixtures/basic.c b/tools/objtool/tests/generic/fixtures/basic.c
-similarity index 100%
-rename from tools/objtool/tests/fixtures/basic.c
-rename to tools/objtool/tests/generic/fixtures/basic.c
-diff --git a/tools/objtool/tests/test-basic.sh b/tools/objtool/tests/generic/test-basic.sh
-similarity index 91%
-rename from tools/objtool/tests/test-basic.sh
-rename to tools/objtool/tests/generic/test-basic.sh
-index 6b769962399a..562edfbc8646 100755
---- a/tools/objtool/tests/test-basic.sh
-+++ b/tools/objtool/tests/generic/test-basic.sh
-@@ -3,7 +3,7 @@
- #
- # Only functions whose code changed get cloned into the patch.
- 
--. "$(dirname "$0")/lib.sh"
-+. "$(dirname "$0")/../lib.sh"
- 
- setup
- build_pair basic.c
 diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-index 46bdb985765e..fdea9b790c4d 100644
+index fdea9b790c4d..1531caab4627 100644
 --- a/tools/objtool/tests/lib.sh
 +++ b/tools/objtool/tests/lib.sh
-@@ -9,7 +9,10 @@
- # of regressions.
+@@ -139,8 +139,38 @@ test_name="$(basename "$0" .sh)"
+ workdir=
  
- TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
--FIXTURES_DIR="$TESTS_DIR/fixtures"
+ pass() { echo "ok - $test_name${1:+: $1}"; exit 0; }
+-fail() { echo "not ok - $test_name: $1" >&2; exit 1; }
+-skip() { echo "ok - $test_name # SKIP $1"; exit 0; }
++fail() { echo "not ok - $test_name: $1"; exit 1; }
 +
-+# Tests live in generic/ or in an architecture directory beside it, and each
-+# carries its own fixtures.
-+FIXTURES_DIR="$(cd "$(dirname "$0")/fixtures" 2>/dev/null && pwd)"
++# Two kinds of skip, and the runner tells them apart.
++#
++#   declared_skip  the test said in advance it does not apply here, e.g.
++#                  gcc_only on a clang run.  Expected indefinitely.
++#   probe_skip     the construct did not turn up in the built object this
++#                  time.  Weaker: it may appear on another compiler version,
++#                  and one which becomes permanent is a fixture that quietly
++#                  stopped testing anything.
++#
++# A bare skip() is neither, and the runner counts it as a failure: a test which
++# gives up for a reason it never declared is a hole, not an outcome.
++declared_skip() { echo "ok - $test_name # SKIP (declared) $*"; exit 0; }
++probe_skip()    { echo "ok - $test_name # SKIP (probe) $*"; exit 0; }
++skip()          { echo "ok - $test_name # SKIP $*"; exit 0; }
++
++# TAP directives.  A test which is known to fail reports it rather than being
++# commented out and forgotten, and one which starts passing again says so
++# instead of quietly going green: the expectation has to be removed by hand,
++# which is the point.
++xfail()
++{
++	echo "not ok - $test_name${1:+: $1} # TODO known failure"
++	exit 0
++}
++
++xpass()
++{
++	echo "ok - $test_name${1:+: $1} # TODO expected failure, but passed"
++	exit 1
++}
  
- # The kernel's convention: CROSS_COMPILE is the one knob, with per-tool
- # overrides for what it does not cover.  objtool itself is always a host binary
-@@ -36,7 +39,7 @@ OBJTOOL="${OBJTOOL:-$TESTS_DIR/../objtool}"
- #
- klp_preflight()
+ cleanup() { [ -n "$workdir" ] && rm -rf "$workdir"; }
+ 
+@@ -170,6 +200,23 @@ export_syms()
+ 	done
+ }
+ 
++# gcc_only / clang_only <reason>
++gcc_only()
++{
++	case "$($CC --version 2>/dev/null | head -1)" in
++	*[Gg][Cc][Cc]*)	return 0 ;;
++	esac
++	declared_skip "gcc only${1:+: $1}"
++}
++
++clang_only()
++{
++	case "$($CC --version 2>/dev/null | head -1)" in
++	*clang*)	return 0 ;;
++	esac
++	declared_skip "clang only${1:+: $1}"
++}
++
+ # build_pair <fixture.c> [cflags...]
+ build_pair()
  {
--	local tmp tool cc_version host cc_arch
-+	local tmp tool cc_version arch host cc_arch
+@@ -178,9 +225,9 @@ build_pair()
+ 	[ -f "$fixture" ] || fail "missing fixture $fixture"
  
- 	bail() { echo "Bail out! $*" >&2; exit 1; }
+ 	$CC $FIXTURE_CFLAGS "$@" -o "$workdir/orig.o" "$fixture" 2>"$workdir/cc.log" ||
+-		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
++		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
+ 	$CC $FIXTURE_CFLAGS "$@" -DPATCHED -o "$workdir/patched.o" "$fixture" 2>"$workdir/cc.log" ||
+-		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
++		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
+ }
  
-@@ -96,8 +99,26 @@ klp_preflight()
- 	esac
- 	rm -rf "$tmp"
+ # run_diff [expected exit status]
+@@ -226,16 +273,20 @@ partial_link()
  
-+	# Normalize to the kernel's SRCARCH.
-+	case "${ARCH:-$(uname -m)}" in
-+	x86_64|i?86)	arch=x86 ;;
-+	aarch64*)	arch=arm64 ;;
-+	*)		arch="${ARCH:-$(uname -m)}" ;;
-+	esac
-+
-+	case "$(uname -m)" in
-+	x86_64|i?86)	host=x86 ;;
-+	aarch64*)	host=arm64 ;;
-+	*)		host="$(uname -m)" ;;
-+	esac
-+
-+	[ -z "$cc_arch" ] || [ "$cc_arch" = "$arch" ] ||
-+		bail "ARCH says $arch but '$CC' builds $cc_arch objects;" \
-+		     "the $arch tests would run against the wrong architecture"
-+
-+	KLP_TEST_ARCH="$arch"
- 	KLP_TEST_PREFLIGHT=done
--	export OBJTOOL CC KLP_TEST_PREFLIGHT
-+	export OBJTOOL CC KLP_TEST_ARCH KLP_TEST_PREFLIGHT
+ # find_thinlto_toolchain
+ #
+-# Set $THIN_CC and $THIN_LD to a clang and lld from the same LLVM release.  A
++# Set $THIN_LD to an lld from the same LLVM release as $CC (or THIN_CC).  A
+ # mismatched pair fails with "Invalid summary version", which reads like a
+ # broken test rather than a broken environment.
++#
++# ThinLTO is clang-only; callers must use clang_only before calling this.
++# Only $CC (or an explicit THIN_CC override) is consulted -- the harness does
++# not search for a second compiler beside a gcc $CC.
+ find_thinlto_toolchain()
+ {
+-	local cc ld ver
++	local cc ver ld
  
- 	cc_version="$($CC --version 2>/dev/null | head -1)"
- 	cat <<EOF
+-	for cc in "${THIN_CC:-}" "$CC" clang; do
++	for cc in "${THIN_CC:-}" "$CC"; do
+ 		[ -n "$cc" ] || continue
+-		command -v "${cc%% *}" >/dev/null 2>&1 || continue
++		command -v "${cc%% *}" >/dev/null 2>&1 || return 1
+ 
+ 		ver=$($cc -dumpversion 2>/dev/null | cut -d. -f1)
+ 
 diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-tests.sh
-index f6a3e1b7677e..48728a98d995 100755
+index 48728a98d995..6b937fc7f5bd 100755
 --- a/tools/objtool/tests/run-tests.sh
 +++ b/tools/objtool/tests/run-tests.sh
-@@ -3,6 +3,11 @@
+@@ -8,13 +8,51 @@
+ # apply here is not run rather than reporting a skip; what was left out is
+ # reported once, as a comment, so differing coverage is still visible.
  #
- # Run the objtool klp tests.  Each test-*.sh prints one TAP result line.
- #
-+# Tests live in generic/ and in a directory per architecture.  A run executes
-+# generic/ plus the one matching this architecture, so a test which cannot
-+# apply here is not run rather than reporting a skip; what was left out is
-+# reported once, as a comment, so differing coverage is still visible.
-+#
++# A run covers one compiler and one architecture; CI runs the combinations.
  # The harness checks the environment once up front and fails the run if the
  # suite cannot execute, rather than letting every test skip and exit 0.
  
-@@ -10,13 +15,34 @@ set -u
+ set -u
  
++# Determinism: the order test-*.sh expands in, and how grep's character ranges
++# and sort's collation behave inside the tests, are all locale-dependent.  A
++# suite whose results depend on the invoking shell's locale is a suite whose
++# failures cannot be reproduced.
++export LC_ALL=C
++
++usage()
++{
++	cat <<EOF
++usage: $(basename "$0") [test...]
++
++Run the objtool klp tests for this architecture: everything in generic/, plus
++everything in the directory named for it.  With no arguments, runs all of them.
++A test may be named with or without its "test-" prefix and ".sh" suffix, and is
++looked for in both directories.
++
++Environment:
++    OBJTOOL       objtool binary to test (default ../objtool)
++    CC            compiler used to build fixtures (default gcc)
++    ARCH          architecture the tests are for (default: uname -m)
++
++A test which needs something of its own says so in its skip message.
++EOF
++	exit "${1:-0}"
++}
++
  cd "$(dirname "$0")" || exit 1
  
--tests=( test-*.sh )
--[ "${tests[0]}" = "test-*.sh" ] && { echo "1..0 # SKIP no tests found"; exit 0; }
--
--# Sourcing the harness runs its preflight, and exports what it found so the
--# tests inherit it rather than working it out again.
-+# Sourcing the harness runs its preflight, which decides which architecture
-+# this run is for -- so the test list cannot be built before it has, and the
-+# tests inherit the answers rather than working them out again.
- . ./lib.sh
++while [ $# -gt 0 ]; do
++	case "$1" in
++	-h|--help)	usage ;;
++	--)		shift; break ;;
++	-*)		echo "unknown option: $1" >&2; usage 1 ;;
++	*)		break ;;
++	esac
++done
++
++echo "TAP version 13"
++
+ # Sourcing the harness runs its preflight, which decides which architecture
+ # this run is for -- so the test list cannot be built before it has, and the
+ # tests inherit the answers rather than working them out again.
+@@ -23,31 +61,99 @@ cd "$(dirname "$0")" || exit 1
+ dirs=( generic )
+ [ -d "$KLP_TEST_ARCH" ] && dirs+=( "$KLP_TEST_ARCH" )
  
-+dirs=( generic )
-+[ -d "$KLP_TEST_ARCH" ] && dirs+=( "$KLP_TEST_ARCH" )
-+
-+tests=()
-+for d in "${dirs[@]}"; do
-+	for t in "$d"/test-*.sh; do
-+		[ -f "$t" ] && tests+=( "$t" )
+-tests=()
+-for d in "${dirs[@]}"; do
+-	for t in "$d"/test-*.sh; do
+-		[ -f "$t" ] && tests+=( "$t" )
++if [ $# -gt 0 ]; then
++	tests=()
++	for arg in "$@"; do
++		name="test-${arg#test-}"; name="${name%.sh}.sh"
++		found=
++		for d in "${dirs[@]}"; do
++			[ -f "$d/$name" ] || continue
++			[ -x "$d/$name" ] ||
++				{ echo "not executable: $d/$name" >&2; exit 1; }
++			tests+=( "$d/$name" ); found=y
++		done
++		[ -n "$found" ] ||
++			{ echo "no such test for $KLP_TEST_ARCH: $arg" >&2; exit 1; }
+ 	done
+-done
+-[ "${#tests[@]}" -gt 0 ] || { echo "1..0 # SKIP no tests found"; exit 0; }
+-
+-# Tests for another architecture are absent from this run entirely.  Say how
+-# many, so a run which covers less than the tree holds does not look like one
+-# that covers all of it.
+-for d in */; do
+-	d="${d%/}"
+-	case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
+-	n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
+-	[ "$n" -gt 0 ] || continue
+-	echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
+-	     "(this run is $KLP_TEST_ARCH)"
+-done
++else
++	tests=()
++	for d in "${dirs[@]}"; do
++		for t in "$d"/test-*.sh; do
++			[ -f "$t" ] && tests+=( "$t" )
++		done
 +	done
-+done
-+[ "${#tests[@]}" -gt 0 ] || { echo "1..0 # SKIP no tests found"; exit 0; }
++	[ "${#tests[@]}" -gt 0 ] ||
++		{ echo "1..0 # SKIP no tests found"; exit 0; }
 +
-+# Tests for another architecture are absent from this run entirely.  Say how
-+# many, so a run which covers less than the tree holds does not look like one
-+# that covers all of it.
-+for d in */; do
-+	d="${d%/}"
-+	case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
-+	n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
-+	[ "$n" -gt 0 ] || continue
-+	echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
-+	     "(this run is $KLP_TEST_ARCH)"
-+done
-+
++	# Tests for another architecture are absent from this run entirely.  Say
++	# how many, so a run which covers less than the tree holds does not look
++	# like one that covers all of it.
++	for d in */; do
++		d="${d%/}"
++		case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
++		n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
++		[ "$n" -gt 0 ] || continue
++		echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
++		     "(this run is $KLP_TEST_ARCH)"
++	done
++fi
+ 
  echo "1..${#tests[@]}"
  
- rc=0
+-rc=0
++pass=0 fail=0 static_skip=0 probe_skip=0 xfail=0 xpass=0
++
+ for t in "${tests[@]}"; do
+-	./"$t" || rc=1
++	out="$(./"$t" 2>&1)"
++	rc=$?
++
++	# A test prints one result line, but it is not necessarily the only
++	# thing it prints: objtool warns on stderr, and the runner captures
++	# that.  Classify the result line itself rather than the whole of the
++	# output, or a stray line ahead of it makes every pattern below miss and
++	# the exit status decide -- which would count an expected failure, which
++	# exits 0, as a pass.
++	result="$(printf '%s\n' "$out" | grep -E '^(ok|not ok)' | tail -1)"
++	rest="$(printf '%s\n' "$out" | grep -Ev '^(ok|not ok)')"
++
++	# Classify from the result line, not the exit status: a skip and a pass
++	# both exit 0, and telling them apart is the point of counting.
++	#
++	# The two skip kinds differ in what they promise.  A static skip was
++	# declared before the test ran ("clang does not do this"), so it is
++	# expected indefinitely.  A probe skip means the construct did not turn
++	# up this time, which is weaker and worth watching: one that becomes
++	# permanent is a fixture that quietly stopped testing anything.
++	case "$result" in
++	*"# SKIP (declared)"*)	static_skip=$((static_skip + 1)) ;;
++	*"# SKIP (probe)"*)	probe_skip=$((probe_skip + 1)) ;;
++	*"# SKIP"*)
++		# An undeclared skip: the test gave up for a reason it never
++		# said it might.  That is a hole, not an expected outcome.
++		#
++		# Replace the line rather than adding one.  Every test owes the
++		# plan exactly one result, and a consumer counting them is
++		# entitled to say so when the totals disagree.
++		rest="$rest${rest:+$'\n'}was: $result"
++		result="not ok - $(basename "$t" .sh): undeclared skip"
++		result="$result (use gcc_only/clang_only or require_input_*)"
++		fail=$((fail + 1)) ;;
++	"not ok"*"# TODO"*)	xfail=$((xfail + 1)) ;;
++	"ok"*"# TODO"*)		xpass=$((xpass + 1)) ;;
++	"not ok"*)		fail=$((fail + 1)) ;;
++	"ok"*)			pass=$((pass + 1)) ;;
++	*)
++		# No result line at all: the test died before reporting.
++		rest="$rest${rest:+$'\n'}exited $rc without a result line"
++		result="not ok - $(basename "$t" .sh): no TAP result"
++		fail=$((fail + 1)) ;;
++	esac
++
++	echo "$result"
++	[ -n "$rest" ] && printf '%s\n' "$rest" | sed 's/^[^#]/# &/'
++
+ done
+ 
+-exit $rc
++echo "# pass:$pass fail:$fail static-skip:$static_skip" \
++     "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
++
++[ "$fail" = 0 ] && [ "$xpass" = 0 ]
 -- 
 2.53.0-Meta
 
