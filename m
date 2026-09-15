@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0B04CE696
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED7B4CE683
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515469; cv=none; b=RP19FS4ubzy+7kr8Z0IQzo6Z68+27xqnMmXeex006a+dPTHOJTdWQiRPT379Ki8X74GmFGZaswAr9rLxvhcWNRR+U63px3bZ99NsfyupQjdcHy5ff2Pip82sH75O4AiaqBeT7bYgpICurqzJMF1frbusgvXNZzN8cfDoVelUD8s=
+	t=1789515475; cv=none; b=ESbaJCeNZX2Fpy3sS+zh1eg1DrqDhX29XDCrDo3t17rSylc/jrlItKhYjF/nwdNZTfdPeu/oP3qj1DsqxWeUNYybvmKy9NIQ/EFWdaMEEBLCXWtwJ6quMIFkPb2+9uS+56HjXs3qYcCr4JZE/Hdhfe5fDPtorarcchv7Vcvmb1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515469; c=relaxed/simple;
-	bh=LZqabAG2PaUupp2EpLYyoYzBy9lS7sBy726qrEZSeoI=;
+	s=arc-20240116; t=1789515475; c=relaxed/simple;
+	bh=9dZQQjT7gBrV6do+mPpxHHa5isEc/REybxz6A65z0pw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=orWIlXnwpFttsZMMUqsg/F4IW05VzZeALz8Ksep3fI9K7xOT1Fjp8AqyNALdziC64dMTOnzf3vLusqK75LO9IJBrIpWRw0itMxxYAboBAbtE7kNqUuX4LumHlLTfv4ngrjz4HboqdSVyxgQavJZMJx5Jkn8Ew8QxPcistrlF9sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MJOxxhUk; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=StuAHmPHgfm8NWHhgF8XbIA+IBut1ydA18uHADx8jUenK4/U3QqdXyvr3NsRgGjIDizmjRqyyRijGZT21dH4iaPShKXEJr4x3YRn66kWlIam7agDLX9MlZVdXKQYQpxCgixPjl4IgUFTwjJpnHx6XZHOfwiM5EawpSK0C7lFkCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiz5kFD6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MJOxxhUk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E741F000FF;
-	Tue, 15 Sep 2026 23:37:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiz5kFD6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D5D1F000FF;
+	Tue, 15 Sep 2026 23:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515468;
-	bh=5lGF8muF9og8L53bcGvDOESg4mMYr24l99rhRmRnHIk=;
+	s=k20260515; t=1789515473;
+	bh=eeXxgEIrBCXYrCQ+wb46Uh/LU1ka3wm7l/PqpmW5DRA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MJOxxhUk4mzTJNbbx6r/t9KgjXtdUptdPqTd95g7FOdbMbU1K7WOmAt6NFoGjXzjZ
-	 tVYfrBFujADjme/sKJGXotOIZtIkKrrQ017bhWkxktnACekg7dgbzD4QPGNQDkVOGx
-	 628gC1ZO0RiqSb0ulxJDjYNUXp2JtuluIBz52bYd6mvd+nshquCPZVXnWNlI9yS/l3
-	 NXHImYBuzFw/YP0+2AIRXJw0UvLd6+tPkxCPlLBRt7gaxqM1tEUISRmUUgt6J+FdBF
-	 zsuxrI1iXL9tA5Wnra8TWmOKkWv92PMgMXeDE9sx74DBRjn3gUucYMPhQdT23rsmeu
-	 jqLeGF78kn7Qw==
+	b=kiz5kFD6jrJG/lAfgnnqcpi8JxsHjYalEmxAqt01WqFesHvSlFUeGqjfROJnFVU1h
+	 hz0Jrn1kwYO3gtykrsIjn+9XJvMeeDMyHnLB4JLrqBSSj4pv0aVbo7Wm0e0FueQ2RZ
+	 IBTz1C63hHPvAcJrm1EalDF6gQj0xKxoDT7YH2W/qtcvxW+MmVPJkE4W1nr5bM764H
+	 k02ySgrSxgnQSlSoMLsSFb+hMd0IJ+SkJIkBRjYFaRQDEJY2ldUfz3sjmbS3QJafG1
+	 9/pSPm219iAge9Ykg1DTKtcgG9M17I44uOZBeI5hV9qbDxIWRQII9zRdsq8S/yd1cP
+	 gJh6sEl0gDsLQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 31/58] objtool/klp: Add test for the contents of the klp_funcs list
-Date: Tue, 15 Sep 2026 16:34:27 -0700
-Message-ID: <20260915233454.2405019-32-song@kernel.org>
+Subject: [PATCH v4 32/58] objtool/klp: Add test for EXPORT_SYMBOL_FOR_MODULES references
+Date: Tue, 15 Sep 2026 16:34:28 -0700
+Message-ID: <20260915233454.2405019-33-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,115 +51,75 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The patch list is what livepatch acts on, and asserting only that it exists
-does not say it is right.  A function that should have been patched and is
-missing leaves the bug in place; one that should not be there patches code
-nobody changed.
+A symbol exported with EXPORT_SYMBOL_FOR_MODULES() is reachable only by the
+modules named in its namespace, and a livepatch module is never one of
+them. So a reference to it cannot be an ordinary relocation resolved by the
+module loader; it has to be a klp relocation applied at patch time.
 
-The fixture changes two of three functions and asserts on all three: the
-two by name, and the third by its absence.  It checks the strings in
-.rodata.klp.str1.1 as well as the relocations, since the names the kernel
-matches on are real strings.
+Getting this wrong is silent.  The module links, loads, and reads the wrong
+thing, or fails to load for a reason that does not name the cause.
+
+This tests the behavior of commit 4cd3cfb8b54f ("objtool/klp: Fix
+relocations for EXPORT_SYMBOL_FOR_MODULES() symbols").  Which object the
+resulting relocation is filed under is a separate question, and one this
+test cannot ask: the patched object here is vmlinux, so the vmlinux section
+is the one produced either way.  That is covered by the module case, in
+"objtool/klp: Add test for vmlinux relocs in a patched module".
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/klp_funcs.c        | 31 +++++++++++++
- .../tests/generic/test-klp-funcs-content.sh   | 45 +++++++++++++++++++
- 2 files changed, 76 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/klp_funcs.c
- create mode 100755 tools/objtool/tests/generic/test-klp-funcs-content.sh
+ .../generic/test-export-symbol-for-modules.sh | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-export-symbol-for-modules.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/klp_funcs.c b/tools/objtool/tests/generic/fixtures/klp_funcs.c
-new file mode 100644
-index 000000000000..3f0d3e206cef
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/klp_funcs.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Two changed functions and one untouched, so the patch's function list has a
-+ * length worth checking and something that must not appear in it.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+int first(int x)
-+{
-+#ifdef PATCHED
-+	return x + 11;
-+#else
-+	return x + 1;
-+#endif
-+}
-+
-+int second(int x)
-+{
-+#ifdef PATCHED
-+	return x + 22;
-+#else
-+	return x + 2;
-+#endif
-+}
-+
-+int third(int x)
-+{
-+	return x + 3;
-+}
-diff --git a/tools/objtool/tests/generic/test-klp-funcs-content.sh b/tools/objtool/tests/generic/test-klp-funcs-content.sh
+diff --git a/tools/objtool/tests/generic/test-export-symbol-for-modules.sh b/tools/objtool/tests/generic/test-export-symbol-for-modules.sh
 new file mode 100755
-index 000000000000..32fbd5f6a6fa
+index 000000000000..7e7bdde6a7ac
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-klp-funcs-content.sh
-@@ -0,0 +1,45 @@
++++ b/tools/objtool/tests/generic/test-export-symbol-for-modules.sh
+@@ -0,0 +1,39 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# .init.klp_funcs is the list the kernel walks to decide what to patch, and
-+# .init.klp_objects points at it.  Existing tests assert only that the sections
-+# exist, which they do whether the list names the right functions, the wrong
-+# ones, or none at all -- and a patch module with an empty function list loads
-+# perfectly happily and patches nothing.
++# EXPORT_SYMBOL_FOR_MODULES() puts a vmlinux symbol in a "module:<names>"
++# namespace, and the module loader grants access by matching the importing
++# module's name against that list.  A livepatch module is never on the list, so
++# referencing such a symbol with a normal relocation fails modpost, and if that
++# is silenced, fails to load with "Unknown symbol".  It needs a klp relocation,
++# the same as an unexported symbol.
 +#
-+# Each entry pairs a name string in .rodata.klp.str1.1 with a relocation to the
-+# new function, so both halves are checkable.
++# Ordinary namespaces are not affected: copy_import_ns() propagates the patched
++# object's import tags to the patch module, so a normal relocation works.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair klp_funcs.c
++build_pair cross_module.c
++
++sym=other_mod_func
++
++# Plain vmlinux export: a normal relocation is what we want.
++export_syms "$sym"
 +run_diff
++assert_no_klp_sym "$sym"
 +
-+assert_section .init.klp_funcs
-+assert_section .init.klp_objects
++# Ordinary namespace: still a normal relocation.
++export_syms
++add_exports_ns vmlinux MY_NS "$sym"
++run_diff
++assert_no_klp_sym "$sym"
 +
-+# Two functions changed, so two entries, each contributing a name relocation
-+# and a function relocation.
-+assert_reloc_count .init.klp_funcs 4
++# module: namespace: has to become a klp relocation.
++export_syms
++add_exports_ns vmlinux module:kvm "$sym"
++run_diff
++assert_klp_sym "$sym" vmlinux
++assert_section __klp_relocs.vmlinux
 +
-+# The functions that changed are named ...
-+assert_reloc_sym .init.klp_funcs first
-+assert_reloc_sym .init.klp_funcs second
-+# ... and the one that did not is absent, from the list and from the patch.
-+assert_no_reloc_sym .init.klp_funcs third
-+assert_not_patched third
-+
-+# The names the kernel matches on are real strings, not just relocations.
-+# readelf prints one per line as "[ offset]  <string>", so compare the whole
-+# name: a word-boundary match would also accept ".text.first", since a dot is
-+# not a word character.
-+for name in first second; do
-+	out_strings .rodata.klp.str1.1 | awk -v n="$name" '$NF == n' | grep -q . ||
-+		fail "no '$name' string in .rodata.klp.str1.1"
-+done
-+
-+# The object list has to reach the function list, or nothing is walked.
-+assert_reloc_sym .init.klp_objects .init.klp_funcs
-+
-+pass "klp_funcs lists exactly the changed functions, by name and relocation"
++pass "EXPORT_SYMBOL_FOR_MODULES symbol referenced with a klp relocation"
 -- 
 2.53.0-Meta
 
