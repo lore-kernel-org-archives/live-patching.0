@@ -1,132 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E9942F712
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 19:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D394CE67E
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 20:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789500431; cv=none; b=TAfvdk/fviksBezWetGxZv4mWNKpDfLnM07IxfgGtvW9FpypfldAM+P/z/bjV6GVM83V8Zv2VeykVdSwse3F8QJ4+79L7jV+jQ0jiCx0Cs7vh8uWD58vviYVtlHMcO0/WgIR8nRfHvMFIPIu2Uqfc0CA702+mWREd6ccgx2PkM4=
+	t=1789504272; cv=none; b=hkDv8+EAkhXK7czDObtL3Oa7kGm+nBCc6AS7RDBNMT1+j+z7otT4+M9IHtiF77DxmxUO3AIrYMZ2YSjscsYXjPlEhzij3Xi38gmBd3mWmfo09ockM6hA723XO1d5gwrVQ4wmX6QuaMvhcUoZxnsZwb44ID0XiSTApr0u2BWYQno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789500431; c=relaxed/simple;
-	bh=6vZzByWooelztu0aVp1ZLBmgN3h7FAk3Frk3TpIOl9g=;
+	s=arc-20240116; t=1789504272; c=relaxed/simple;
+	bh=D17fcssPPHgntO6sYGtC953/eS33YpklLTz3YG/tHHE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o65MgV20GF7Lrc/wWcRx4y142vEwGXT74JNW5OTs6bFGpWTkVtUK04oPZdAQ6OkbnUpNwUNOovT/RnxxDgvxQGjxGoxrUJ3MvW919UueHES+d+Dl/NCYobe0F7raemFFza7I6rXsTDRoF7zdfbp2Co8sSPaPc8nVllq9wBU1/3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2ONUZqY; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=FaY1m8ErTUZ00ADSjqy2yOPVr3I9fQRlLYPOkU+rbyI73lIjMZxng5CITqRu4g3xe/47uE3tDS0a8rGMfSdO2uQU7d/RWs7TDwGy7wjNQ65VIlJLW56fa65Tz33a9zyEYHFVJCYrYvQ9ug3hIOYzskwxuPooD4H4qliZvWClXGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOXsrFiY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2ONUZqY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7241F00899
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 19:27:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOXsrFiY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02111F00893
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 20:31:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789500430;
-	bh=rLDYLEgq12fxXE7+M4r63hCHWM72Qf52B0aKmQ4FbLI=;
+	s=k20260515; t=1789504270;
+	bh=FBWXluVx1jaJMNxKKm1HopUNeOzvfDXiWVLOj3is80c=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=m2ONUZqYOMcqjf4IjXqlWiZUc7qE5AHgetf3WUr5pUvP//VGi49q2jD/Zx19qwCBT
-	 r9NtTscAn1STAucBHqEvJK6EfYJ8eD0cQoaLBzQWkD7+qlevlNn6FPfL9Ubg01E38r
-	 FE3jWVlhDTA7de+6QNe1bHkH80oVpMu9wyb8E+Cgin1rDXNACuhERDzC+EuqM4JeW1
-	 Sms7sd3+Z4RL0u/piuWnEppYpUszaE7Pfl6C7rlIb/z/EO5cM2EHqBTvWP/IJx9hor
-	 XnsFO2+sSlcXRkDermU4YUFFV+0EGRgDtizXamL+4bxvQ2OwP/OunaL+phxiYVmDf8
-	 cNyNtPM6q08GA==
-Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-93910cc46c4so11877885a.2
-        for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 12:27:10 -0700 (PDT)
-X-Gm-Message-State: AFuF++m/ZMwn9VVNXQyRJtpEv6S2GVX4KEcR0Gg4fdj2vtvsBmN95rFT
-	BnYLsmBnFsuKoiWGSw7Yj/qdSaWeDt2lsDoOTrdrmPeJ9PUjuZDL2mYbtFsUgtAPR9WAfWJ9xUL
-	hZrB6CGuEh2JF0WBvZ9ecTb2HymfVjpw=
-X-Received: by 2002:a05:620a:4889:b0:934:ab73:ac53 with SMTP id
- af79cd13be357-93a294bf61cmr1354747585a.0.1789500429254; Tue, 15 Sep 2026
- 12:27:09 -0700 (PDT)
+	b=NOXsrFiYXO1U/JElBUHiqRgMiMRidi8JBsvS9gN8Slw3a6QifO9u9y78A8wtZTZ+1
+	 HK4Vc1Bb7hSyruFdZonM9kkioNXgwgwAjYju9osN3mQd6oiT/WWoWY7vj6+Fq1w+uO
+	 zvfz93doNhehJpJIdYmWcq40FPudaJQ50rS6BpbEbkq+n5RAQQywiGoasJBX005heX
+	 b1kVe5uJMXfvpYdirbcF/vWFY6v8ZLvi4Uk1URJQmWf2Bj3kruvChimx346EW8o+XF
+	 udTIKxBL1oEt9YDT1djd/WzAyAkBuYV2FOCwTVTvmmxFAGx4JlE29UndCly47tW0tg
+	 lcs9drkCn9aFw==
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-90e9ad1a373so10734186d6.0
+        for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 13:31:09 -0700 (PDT)
+X-Gm-Message-State: AFuF++lgZ61gCjMfpRkM97zfWmFtXMmpkXvkUtcM7QMkHL8/HmIqzjC6
+	and0IzRi8OGsHqFU8zRUrvwNuNAbUTex72fr9SXodf5XASn9fiD/6XaF+tMoruqrId7p8F7ZXo3
+	vj96vUaPF6d4mkAz+Dvy+xptpkOFvOeQ=
+X-Received: by 2002:a05:620a:6f0e:b0:939:72cb:baeb with SMTP id
+ af79cd13be357-93a347253d5mr745846985a.34.1789504269142; Tue, 15 Sep 2026
+ 13:31:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914230355.3422996-1-song@kernel.org> <20260914230355.3422996-6-song@kernel.org>
- <20260914233426.D96CE1F000FF@smtp.kernel.org>
-In-Reply-To: <20260914233426.D96CE1F000FF@smtp.kernel.org>
+References: <20260914230355.3422996-1-song@kernel.org> <20260914230355.3422996-7-song@kernel.org>
+ <20260914233559.2C05F1F000FF@smtp.kernel.org>
+In-Reply-To: <20260914233559.2C05F1F000FF@smtp.kernel.org>
 From: Song Liu <song@kernel.org>
-Date: Tue, 15 Sep 2026 12:26:57 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7V1uZHbZ9Qykh65xAVbLBuzkYzYF4-yN6OAL0NfzuDXA@mail.gmail.com>
-X-Gm-Features: AcwNN1UxhkJWbx35k_pBQxChuAFdBspNgPY0YgfDkHAOzIgCKFTB8ou_3OwwylI
-Message-ID: <CAPhsuW7V1uZHbZ9Qykh65xAVbLBuzkYzYF4-yN6OAL0NfzuDXA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/58] objtool/klp: Build klp test fixtures through the harness
+Date: Tue, 15 Sep 2026 13:30:57 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7YG9=dK=QvKuadpzMvLemE0Han1tLV9+_CM+nTo6y2CQ@mail.gmail.com>
+X-Gm-Features: AcwNN1Unt1XARvt-Hw6vtay5AL7lyW8dSkDsaN1M-Hxjcq1U3Tk3n0CrAEb_Xjc
+Message-ID: <CAPhsuW7YG9=dK=QvKuadpzMvLemE0Han1tLV9+_CM+nTo6y2CQ@mail.gmail.com>
+Subject: Re: [PATCH v3 06/58] objtool/klp: Grow the klp test harness vocabulary
 To: sashiko-reviews@lists.linux.dev
-Cc: live-patching@vger.kernel.org, mbenes@suse.cz, jpoimboe@kernel.org, 
-	puranjay@kernel.org, kernel-team@meta.com, pmladek@suse.com, 
-	peterz@infradead.org, joe.lawrence@redhat.com, jikos@kernel.org
+Cc: live-patching@vger.kernel.org, pmladek@suse.com, mbenes@suse.cz, 
+	jikos@kernel.org, puranjay@kernel.org, jpoimboe@kernel.org, 
+	peterz@infradead.org, joe.lawrence@redhat.com, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 14, 2026 at 4:34=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Mon, Sep 14, 2026 at 4:36=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
 >
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
-> - [Medium] objtool: test harness leaks vmlinux.o state across build_pair(=
-) calls
+> - [Medium] objtool/klp: run_checksum failures swallowed in subshells mask=
+ test failures
 > --
 >
-> commit 87b920426dfa2a217d6f9104d0f701cab5d67f5e
+> commit 3b088080b3fc17cb3c6bcdacd83b5a2febf34918
 > Author: Song Liu <song@kernel.org>
 >
-> objtool/klp: Build klp test fixtures through the harness
+> objtool/klp: Grow the klp test harness vocabulary
 >
-> This patch standardizes how klp test fixtures are built by shifting the
-> compile steps into harness helpers like build_one() and build_pair(). It
-> also establishes make_vmlinux_pair() to correctly build and diff vmlinux
-> images for tests.
+> Adds assertions for the output produced by klp diff, as well as for the
+> input objects. Includes helpers to extract and verify checksums recorded
+> for livepatch symbols.
 >
 > > diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-> > index efe0a71326799..35be42758ece8 100644
+> > index 35be42758ece8..1b1baff80a712 100644
 > > --- a/tools/objtool/tests/lib.sh
 > > +++ b/tools/objtool/tests/lib.sh
 > [ ... ]
-> > @@ -179,6 +192,13 @@ setup()
-> >       workdir=3D"$(mktemp -d)" || fail "mktemp failed"
-> >       trap cleanup EXIT
-> >
-> > +     # A test may run several segments, and make_vmlinux_pair() repoin=
-ts
-> > +     # orig_obj at the image it builds.  Start each segment from the
-> > +     # defaults, or the next build_pair() diffs the previous segment's
-> > +     # object against the new one.
-> > +     orig_obj=3Dorig.o
-> > +     patched_obj=3Dpatched.o
+> > +checksum_of()
+> > +{
+> > +     local obj=3D"$workdir/$1" sym=3D"$2" off
 > > +
-> >       export_syms "$@"
-> >  }
->
-> [Severity: Medium]
-> Since setup() only executes once during script initialization, doesn't th=
-is
-> fail to reset the state between test segments?
->
-> If a test calls make_vmlinux_pair() (which repoints orig_obj to vmlinux.o=
-)
-> and subsequently calls build_pair() for a new segment, orig_obj will stil=
-l
-> point to the stale vmlinux.o from the previous segment instead of orig.o.
-> This appears to cause run_diff() to evaluate the wrong file.
->
-> [ ... ]
-> >  # build_pair <fixture.c> [cflags...]
-> >  build_pair()
-> >  {
-> > -     local fixture=3D"$FIXTURES_DIR/$1"; shift
-> > +     local fixture=3D"$1"; shift
-> >
-> > -     [ -f "$fixture" ] || fail "missing fixture $fixture"
-> > +     build_one "$fixture" orig.o "$@"
-> > +     build_one "$fixture" patched.o "$@" -DPATCHED
+> > +     run_checksum
+> > +
+> > +     off=3D"$($READELF -rW "$obj" 2>/dev/null |
+> > +            awk -v s=3D"$sym" '/rela\.discard\.sym_checksum/,/^$/ {
+> > +                     if ($5 =3D=3D s) { print $1; exit }
+> > +            }')"
+> > +
+> > +     [ -n "$off" ] || return 1
+> > +
+> > +     $OBJCOPY -O binary --only-section=3D.discard.sym_checksum \
+> > +             "$obj" "$workdir/checksums.bin" 2>/dev/null || return 1
+> > +
+> > +     dd if=3D"$workdir/checksums.bin" bs=3D1 skip=3D$((16#$off + 8)) c=
+ount=3D8 \
+> > +             status=3Dnone | od -An -tx1 | tr -d ' \n'
 > > +}
+> > +
+> > +# assert_checksum_differs <symbol> / assert_checksum_matches <symbol>
+> > +#
+> > +# Compare what klp checksum recorded for a symbol in the original agai=
+nst the
+> > +# patched object.  This is what decides whether klp diff treats a func=
+tion as
+> > +# changed, so a test asserting only that the right functions were clon=
+ed cannot
+> > +# tell a correct checksum from one which happens to differ.
+> > +checksum_pair()
+> > +{
+> > +     orig_checksum=3D"$(checksum_of "$orig_obj" "$1")"
+> > +     patched_checksum=3D"$(checksum_of "$patched_obj" "$1")"
 >
 > [Severity: Medium]
-> Should the state reset logic for orig_obj and patched_obj be placed here =
-in
-> build_pair() instead of setup(), to ensure run_diff() evaluates the corre=
-ct
-> objects when multiple segments are executed?
+> Will run_checksum failures be swallowed by these subshells, potentially
+> masking test failures?
+>
+> If objtool klp checksum fails for orig_obj, it triggers the call chain
+> checksum_pair() -> checksum_of() -> run_checksum() -> fail() in
+> tools/objtool/tests/lib.sh. Since this occurs within a subshell, fail()
+> exits only the subshell and its stdout (the "not ok..." string) is
+> captured into orig_checksum instead of terminating the test. No
+> .checksummed marker is created.
+>
+> When checksum_of() runs for patched_obj, run_checksum() attempts to proce=
+ss
+> orig_obj again and fails identically, capturing the exact same failure
+> string into patched_checksum.
+>
+> Both variables will contain the identical "not ok..." error string.
+>
+> > +
+> > +     [ -n "$orig_checksum" ] ||
+> > +             fail "no checksum recorded for '$1' in $orig_obj"
+> > +     [ -n "$patched_checksum" ] ||
+> > +             fail "no checksum recorded for '$1' in $patched_obj"
+> > +}
+> > +
+> > +assert_checksum_differs()
+> > +{
+> > +     checksum_pair "$1"
+> > +
+> > +     [ "$orig_checksum" !=3D "$patched_checksum" ] ||
+> > +             fail "checksum for '$1' unchanged at $orig_checksum, expe=
+cted it to differ"
+> > +}
+> > +
+> > +assert_checksum_matches()
+> > +{
+> > +     checksum_pair "$1"
+> > +
+> > +     [ "$orig_checksum" =3D "$patched_checksum" ] ||
+>
+> As a result, assert_checksum_matches() evaluates to true here, and the te=
+st
+> silently passes despite a toolchain failure.
 
-This doesn't appear to be a real issue yet, but we will move these two
-line to build_pair() in v4.
+Fixed this by moving run_checksum call to checksum_pair().
 
 Thanks,
 Song
