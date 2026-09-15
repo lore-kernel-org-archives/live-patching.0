@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027394A263D
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A6A4A263D
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515364; cv=none; b=QWG/S9JrsTTfxyOjDxi/ahmGbTAcUlT5PxYSCsrj8VPBy/wjRD1YlnVUhe1pE79k4sgI8uwHcfv2A5ao03/o//DpGm8NnqHjExZURXoLzMCIAd/0K/CLvUZj5wrIIgmYPBoLaybKpABrPKaQPwBYmbRdWtjMRJpdTIT0Q0JwUkY=
+	t=1789515369; cv=none; b=Ef7tYDlQLhdwmhxMO2YVpGiAAizQWaky7ophp98KvZwQgaTcDYYOfYcYBDBoHUOQ4MVEnO2JaRaF+FDDPW9Mi3DrcMWJsmSz4Z7dE8qjK60gbYkZGo67A+u8cYb1HO/0uKzNwoueQs3oDd/B4dm0HUGpniOr7UKGzjFCfcR7yI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515364; c=relaxed/simple;
-	bh=2hKdIBFIpaj/tnQec2lhpCWNYijjjDsoF1c/0itRAKo=;
+	s=arc-20240116; t=1789515369; c=relaxed/simple;
+	bh=3t9WRMZC3WtGbhP1JpjLx0i5Vd0KR//kh+dHPQzlWkA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DZ6SvzjlYmjkHRfU8a0211qUldUNgCfN/lT3bAg0fM5PSsUnPmz/eHojIzkdHA3d2S86Rxj41SqRIveXBspy+InEozk6I0I2JCe5k6eaKyd87o04n1CpbXMSn26EcNWmUzOmnC3BBI6+PPIV9dWhq8fLOZgb1bj3qO+ae1WTn44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RHdeUrE1; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=uugqaCXwjIVjQ39SVuyu3VxUGPybwatbNrjeWtnT5sKNg1z1BTB9CbFLrOsBDIkILeoUepOeR6aAdL6u/7Rtj1Zr+ddMF+inTQ9fQ8EXhn8n7oh9YfPcXZP1Wf3sU5TKsKKf6aDR6yJ/ozjlC+EiIVTwOUAI/J6M+UuVDHaDLK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLFIJlB1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RHdeUrE1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0C9E1F000FF;
-	Tue, 15 Sep 2026 23:36:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLFIJlB1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA7C1F000FF;
+	Tue, 15 Sep 2026 23:36:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515362;
-	bh=BM1WECVhSKHB/G3UIe/RxbYzNxpDDnd7/c67bhSNEvE=;
+	s=k20260515; t=1789515368;
+	bh=rdkE/piEpaHExysLLETiJwi4o//fS58XpKis/FlZSq8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RHdeUrE1YjBVXiinTl/+hsBKu7x3T59He6yHSzevJJszS2bWGh1vaGdcswP/JjxXV
-	 e5nRMg4GQ0GNL0f8tl8nN8wo6jiIP6Rm+aTo49fbu9Ka5PATUEN67ZawfrxI1jiLQi
-	 WxGG++1pRzaUBB6MhO+0VGxHZLeZ0eKMdMN+HnefqzD0QfPosn1U9bSUGfmmn8/ztr
-	 Wx+YPTVRFco50Eb8ipunmEUERAk5l7x1dROSLNoLtXU+Utlg0IgXaaaBZAGAsYIXGv
-	 8bvsOL2DvaewolnQoCtyvnNl42UaTUtr5oToBpsSBGeDtTnlnUd8JvR61BUgNrkY2C
-	 Y6Dt6k3Gb2T6A==
+	b=TLFIJlB1kbCLi8rcz+hQ3aekL2V/KZQa8QH4drPJSSeRrhvTlNrbxeQo4DJ1Gxo+6
+	 rQ3DoblYjSHqfFRBY7nCRuTKsA2QP0JV0uIyEA73n3/B8LxaNv0oFgcjFxaiwFo/2d
+	 dO1fpBLVUZ+2r4ZcwW5zKBOIGfksk1KHn9y6YufFOyifyk76qBJjp+WSnhVLQ+P0O8
+	 E/pCDoJ5vcEs+bZETNXuXp/dJOljsI8xyaso52rH8D/820RD2hrcK6TiyaHJOjPoeX
+	 2HDBZ6PIJ2bWp6ZBunugj/CaI8RlQ/Ap802sb8LOxV0mKJAR0CSNZa/fyHMQZLCeMp
+	 vQsss7lirxpuQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 11/58] objtool: Forward toolchain variables to the klp test runner
-Date: Tue, 15 Sep 2026 16:34:07 -0700
-Message-ID: <20260915233454.2405019-12-song@kernel.org>
+Subject: [PATCH v4 12/58] objtool/klp: Add test for rejecting changed data
+Date: Tue, 15 Sep 2026 16:34:08 -0700
+Message-ID: <20260915233454.2405019-13-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,88 +51,68 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
+From: Puranjay Mohan <puranjay@kernel.org>
 
-The tests target already passes ARCH and CROSS_COMPILE into
-run-tests.sh.  lib.sh uses those to pick a default compiler and
-binutils:
+Livepatching replaces functions.  Nothing can swap a variable which live
+code already refers to, so a patch which changes one has to be refused
+rather than applied with the old value left in place.
 
-  CC=${CC:-${CROSS_COMPILE}gcc}
-  LD=${LD:-${CROSS_COMPILE}ld}
-  READELF=${READELF:-${CROSS_COMPILE}readelf}
-  OBJCOPY=${OBJCOPY:-${CROSS_COMPILE}objcopy}
-
-Those defaults only apply when the variables reach the shell that sources
-lib.sh.  The recipe passed OBJTOOL, ARCH and CROSS_COMPILE explicitly, but
-not CC or the binutils.  Makefile-assigned values (e.g. from LLVM=1) are
-not visible in the recipe environment unless forwarded:
-
-  $ LLVM=1 make -C tools/objtool tests
-  ...
-  # preflight
-  #   compiler  gcc (GCC) ...
-
-Pass CC, LD, READELF and OBJCOPY the same way as ARCH and CROSS_COMPILE,
-so fixtures are built and inspected with the toolchain make selected:
-
-  $ LLVM=1 make -C tools/objtool tests
-  ...
-  # preflight
-  #   compiler  clang version 21.1.8 ...
-
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/Documentation/klp-test-design.txt | 12 +++++++++++-
- tools/objtool/Makefile                          |  9 +++++++++
- 2 files changed, 20 insertions(+), 1 deletion(-)
+ .../tests/generic/fixtures/changed_data.c      | 16 ++++++++++++++++
+ .../objtool/tests/generic/test-changed-data.sh | 18 ++++++++++++++++++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/changed_data.c
+ create mode 100755 tools/objtool/tests/generic/test-changed-data.sh
 
-diff --git a/tools/objtool/Documentation/klp-test-design.txt b/tools/objtool/Documentation/klp-test-design.txt
-index 67d20bf0dc10..2082c277197f 100644
---- a/tools/objtool/Documentation/klp-test-design.txt
-+++ b/tools/objtool/Documentation/klp-test-design.txt
-@@ -243,7 +243,17 @@ setting a cross compiler cannot produce one the host is unable to run.  ARCH
- selects both the objtool target and the directory of tests to run.
- 
- clang needs telling, since it defaults to the host triple however it is
--invoked.  The fixtures include no kernel headers, so no sysroot is needed:
-+invoked.  LLVM=1 with CROSS_COMPILE does that for you -- the --target= it
-+derives is forwarded to the tests -- and the fixtures include no kernel
-+headers, so no sysroot is needed:
+diff --git a/tools/objtool/tests/generic/fixtures/changed_data.c b/tools/objtool/tests/generic/fixtures/changed_data.c
+new file mode 100644
+index 000000000000..b52461835444
+--- /dev/null
++++ b/tools/objtool/tests/generic/fixtures/changed_data.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Data whose value differs between the two builds. */
 +
-+::
++static const char __modinfo[]
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+    ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- LLVM=1 \
-+            make -C tools/objtool tests
++#ifdef PATCHED
++int klp_test_data = 2;
++#else
++int klp_test_data = 1;
++#endif
 +
-+Naming the compiler by hand works too, and is what to reach for when the
-+target triple is not the one CROSS_COMPILE implies:
- 
- ::
- 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index ed5cf146ef2e..47afe1e8a9c5 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -151,8 +151,17 @@ clean: $(LIBSUBCMD)-clean
- mrproper: clean
- 	$(call QUIET_CLEAN, objtool) $(RM) $(OBJTOOL)
- 
-+# The kernel's own Makefile sets OBJCOPY, to llvm-objcopy under LLVM and to
-+# $(CROSS_COMPILE)objcopy otherwise; tools/scripts/Makefile.include names only
-+# LLVM_OBJCOPY and leaves OBJCOPY unset.  Forwarding it unset would hand the
-+# tests an empty string, and they would fall back to GNU objcopy even when
-+# asked for an LLVM toolchain.
-+OBJCOPY ?= $(if $(LLVM),$(LLVM_OBJCOPY),$(CROSS_COMPILE)objcopy)
++int target(int x)
++{
++	return x + klp_test_data;
++}
+diff --git a/tools/objtool/tests/generic/test-changed-data.sh b/tools/objtool/tests/generic/test-changed-data.sh
+new file mode 100755
+index 000000000000..c5c7381bb409
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-changed-data.sh
+@@ -0,0 +1,18 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Livepatching replaces functions, not data.  A changed data symbol must be
++# rejected.
 +
- tests: $(OBJTOOL)
- 	$(Q)OBJTOOL=$(abspath $(OBJTOOL)) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) \
-+		CC='$(CC) $(CLANG_CROSS_FLAGS)' LD='$(LD)' \
-+		READELF='$(READELF)' OBJCOPY='$(OBJCOPY)' \
- 		KEEP=$(KEEP) $(srctree)/tools/objtool/tests/run-tests.sh
- 
- FORCE:
++. "$(dirname "$0")/../lib.sh"
++
++setup
++build_pair changed_data.c
++run_diff 255
++
++diff_log | grep -q 'changed data: klp_test_data' ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
++[ -e "$workdir/out.o" ] &&
++	fail "output object produced for a rejected input"
++
++pass "changed data symbol rejected"
 -- 
 2.53.0-Meta
 
