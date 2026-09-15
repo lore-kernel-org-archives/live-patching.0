@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9E14C1513
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA2E4CC267
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515401; cv=none; b=tqsnNWTL/iJI23gAIgsL0wueaSfNJYVJTYNKdp0WzOsa3CQ2T71HL6IjTgU7JqHj5ft5KV5Em40fFg3GR6LDQdDLNrmaezodWjZzCyWDYyh1dJ5P26sQsnKQ6Q3BrH1HlRSb7WNGddT7ePgdwK2zPlxrDFRLyEB69kJCNG/pJPg=
+	t=1789515406; cv=none; b=GpT0CXd250/NiKIz464AozCRHn8/Rpp8hC65qzWdoekB8VaDefEnH45eyXqYZxwU4h+qblC3rMTFnw6vir11n27d4GhIFqR1R3eHBdeX/NFaXEVPCgc4nb3KzuqzrtkDNlKbw6Y3fnn9RVS5HrXbrMO5jA7OXyMPIyfylAkuJgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515401; c=relaxed/simple;
-	bh=K1Ntqv2jSjrO5YQZcv1dTN/Od8c8VkXztXZpC/gknYg=;
+	s=arc-20240116; t=1789515406; c=relaxed/simple;
+	bh=P28h7MNDgtZWqr4WDmOYefcYtepbUq0byuLDapd/1iM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B3DnaaJ4UgbeVFteD4CV6AKXMMbGC24rBoWZ57L/Tx91Q1lmVEJunAYviYKq71uxMAKbSfDBVxJVyXHB/HA3HBA6CZTym4DeAt6VsDVMC60fg9KXMa5jJsJyjc6SmdHgmsCVRuedRPw/hYwCXijOstt55bFl+dKPOJVIK+u28kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JrAV17fU; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Wesova2M+14AaY8ltYmY+OEzS2cpXz/mS3xOyre6xoonohex7waCyWuP4lz8RCKPCH2N8URDZHoWWC9vLiWSfaoTj4PqiHx4da10Nm3FM3YaZuyQTWQt76G8r1qo7LNpU4B4fp8AW7u+LhN60dnoFkvae/7/WlpJk6K0jr/qxAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SjQMQXl7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrAV17fU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF661F000FF;
-	Tue, 15 Sep 2026 23:36:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SjQMQXl7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B98A61F000FF;
+	Tue, 15 Sep 2026 23:36:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515399;
-	bh=r+S3kGYa/Hx7o6EOEIdlSdLsyGiYTPYPCIAH7y1XtcA=;
+	s=k20260515; t=1789515405;
+	bh=cAZwMrBw6GHczvYXPp4WPmfpviRDbyVvXFUzyS29Q8Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=JrAV17fUFwluVUGBQsv600y5q3mZNbSS+eEhy4PAiea0sffmbtHAGglfKVCoRHGq+
-	 MU5Hbx2HiL08RATLgFe1Q4CSgcUjB5nWq6YGltWkFr7ZUbzZBlVVZI1PaaOcHmE3Lq
-	 Kj0QiQv/62ZKQspKSkuE2tUtbA3/kG1gUrj8U1l6AxrXEOK9SqGh3mw7Ajm1JK5Nr3
-	 0DNxrLfG+SXl6gxH5EDfXamRa3fyuRR1sk8RB6ANR9K/fZoGImOR/VoutpgI9Pxy8I
-	 MutEA+zAR6xv84cVoKPUEbjPRY0kKuq96nqRdYXkGvrQLTxAYYs2txW18ZIcb/OUUj
-	 uuBxXemY1TGQg==
+	b=SjQMQXl7GWKnhx6vMQVy/6b2vfw7PVB9Sx53bkAiov3xmSjMWspe8GtUY+ccZ/bJW
+	 Xzg2TjJG/ZJJn2GTIEK5DPaf1MwLIJkuTGC0aizn8WmClNpZcA9Cr0g3CjtkXe+I7y
+	 5YoxvVct9fBJx8weMyUkeffgj9hRnWaQBPmKjC+gHMDMuuAoHGL/8P4MxHwqw2jnFs
+	 8qe3eInC/DSyQdjkIHZ4fE4Nn7ROeFzW9o0c/ZCdWzA+BGugmUgRKAnNulv9HRua13
+	 Sc356uz05WGJvGkoXZjeFAVEMvQfbfdfDa6NPIl8NaMwK61ljk82rHZll8GVUXpb0B
+	 viEceuHE9SW+Q==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 18/58] objtool/klp: Add test for selective special section extraction
-Date: Tue, 15 Sep 2026 16:34:14 -0700
-Message-ID: <20260915233454.2405019-19-song@kernel.org>
+Subject: [PATCH v4 19/58] objtool/klp: Add test for jump table key relocations
+Date: Tue, 15 Sep 2026 16:34:15 -0700
+Message-ID: <20260915233454.2405019-20-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -53,90 +53,163 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-Two functions contribute entries to one special section but only one is
-patched.  Cloning the neighbouring entry drags in whatever it points at,
-which is how a livepatch ends up holding relocations against unrelated
-code.
+A cloned __jump_table entry must keep a relocation in its key slot.
+objtool parses the table again after klp diff to convert the static
+branch's scaffold instruction, and an empty slot leaves it unable to do so.
+The scaffold then stays as emitted and the module trips BUG() in
+__jump_label_patch() once the key's state differs from its compile-time
+default.
+
+Check both halves for a vmlinux-owned key: unexported gives a tombstone
+plus a klp relocation, exported gives an ordinary relocation and no klp
+machinery.
+
+The fixture defines the key as an STT_OBJECT, which is what the kernel
+emits. validate_special_section_klp_reloc() ignores anything else, so a
+fixture using an undefined extern would skip the interesting paths.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../generic/fixtures/special_section_shared.c | 31 +++++++++++++++++++
- .../generic/test-special-section-shared.sh    | 26 ++++++++++++++++
- 2 files changed, 57 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/special_section_shared.c
- create mode 100755 tools/objtool/tests/generic/test-special-section-shared.sh
+ .../tests/generic/fixtures/jump_label.c       | 76 +++++++++++++++++++
+ .../tests/generic/test-jump-label-key.sh      | 44 +++++++++++
+ 2 files changed, 120 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/jump_label.c
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-key.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/special_section_shared.c b/tools/objtool/tests/generic/fixtures/special_section_shared.c
+diff --git a/tools/objtool/tests/generic/fixtures/jump_label.c b/tools/objtool/tests/generic/fixtures/jump_label.c
 new file mode 100644
-index 000000000000..f54e24f862c6
+index 000000000000..ecd3c06912af
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/special_section_shared.c
-@@ -0,0 +1,31 @@
++++ b/tools/objtool/tests/generic/fixtures/jump_label.c
+@@ -0,0 +1,76 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Two functions contribute to one special section; only one is patched. */
++/*
++ * Static branch in a patched function.  The jump table entry is written out by
++ * hand, mirroring JUMP_TABLE_ENTRY(), so the fixture builds without kernel
++ * headers.  The key is an STT_OBJECT; anything else is ignored by
++ * validate_special_section_klp_reloc().
++ *
++ * MODNAME selects whether the key is taken to belong to vmlinux or a module.
++ *
++ * NEW_KEY puts the whole static branch behind PATCHED, so the patch introduces
++ * one where the original had none -- a different question from patching code
++ * that already has a key, because the __jump_table entry itself is new.
++ *
++ * KEY_NAME renames the key.  Two names are special to
++ * validate_special_section_klp_reloc(): a __tracepoint_* key and the
++ * __UNIQUE_ID_ddebug_* one pr_debug() generates are both unsupported in a
++ * module, but are disabled with a warning rather than rejected, because the
++ * kernel is full of them and refusing outright would make ordinary functions
++ * unpatchable.
++ *
++ * STATIC_KEY makes the key file-local.  That changes the shape of the
++ * relocation rather than the meaning of the code: a reference to a static lands
++ * on the section symbol plus an addend, so the key has to be resolved from the
++ * section before it can be recognised as a key at all.
++ */
++
++#ifndef MODNAME
++#define MODNAME "vmlinux"
++#endif
++
++#ifndef KEY_NAME
++#define KEY_NAME klp_test_key
++#endif
 +
 +static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=" MODNAME;
 +
-+int other(int x)
-+{
-+	asm volatile(
-+		"2:\n\t"
-+		".pushsection	.kcfi_traps, \"a\"\n\t"
-+		".balign	4\n\t"
-+		".long		2b - .\n\t"
-+		".popsection\n\t");
-+	return x * 5;
-+}
++#ifdef STATIC_KEY
++static long KEY_NAME;
++#else
++long KEY_NAME;
++#endif
 +
 +int target(int x)
 +{
-+	asm volatile(
-+		"1:\n\t"
-+		".pushsection	.kcfi_traps, \"a\"\n\t"
-+		".balign	4\n\t"
-+		".long		1b - .\n\t"
-+		".popsection\n\t");
-+#ifdef PATCHED
-+	return x + 2;
++	int r = x;
++
++#if defined(NEW_KEY) && !defined(PATCHED)
++	/* The original has no static branch at all. */
++	return r + 1;
 +#else
-+	return x + 1;
++	asm goto(
++		"1:	nop\n\t"
++		".pushsection	__jump_table, \"aw\"\n\t"
++		".balign	8\n\t"
++		"912:\n\t"
++		".pushsection	.discard.annotate_data, \"M\", @progbits, 8\n\t"
++		".long		912b - ., 1\n\t"
++		".popsection\n\t"
++		".long		1b - ., %l[l_yes] - .\n\t"
++		".quad		%c0 - .\n\t"
++		".popsection\n\t"
++		: : "i" (&KEY_NAME) : : l_yes);
++
++	r += 1;
++	goto out;
++l_yes:
++	r += 2;
++out:
++#endif
++#ifdef PATCHED
++	return r + 100;
++#else
++	return r;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-special-section-shared.sh b/tools/objtool/tests/generic/test-special-section-shared.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-key.sh b/tools/objtool/tests/generic/test-jump-label-key.sh
 new file mode 100755
-index 000000000000..05c6110b6aef
+index 000000000000..142f94bd38ec
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-special-section-shared.sh
-@@ -0,0 +1,26 @@
++++ b/tools/objtool/tests/generic/test-jump-label-key.sh
+@@ -0,0 +1,44 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Only the patched function's special section entry may be extracted.
++# A cloned __jump_table entry must keep a relocation in its key slot, whether
++# the key needs a klp relocation or not.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
++key=klp_test_key
++
 +setup
-+build_pair special_section_shared.c
++build_pair jump_label.c
 +
-+has_input_section orig.o .kcfi_traps ||
-+	probe_skip "fixture produced no .kcfi_traps on this arch"
++has_input_section orig.o __jump_table ||
++	probe_skip "fixture produced no __jump_table on this arch"
 +
++key_slot_relocs()
++{
++	out_relocs | awk '/rela__jump_table/,/^$/' | grep -c "^0*8[[:space:]]"
++}
++
++# Unexported: klp relocation, key slot holds a tombstone.
++export_syms
 +run_diff
 +
-+assert_patched     target
-+assert_not_patched other
-+assert_section     ".kcfi_traps"
++[ "$(key_slot_relocs)" = 1 ] ||
++	fail "unexported key: key slot has no relocation"
++out_relocs | awk '/rela__jump_table/,/^$/' | grep -q "\.klp\.tombstone\.$key" ||
++	fail "unexported key: expected a .klp.tombstone.$key relocation"
++out_symbols | grep -q "\.klp\.sym\..*\.$key," ||
++	fail "unexported key: no .klp.sym reference for the real relocation"
 +
-+entries="$(out_relocs | awk '/rela\.kcfi_traps/,/^$/' | grep -c 'target')"
-+[ "$entries" = 1 ] || fail "expected one .kcfi_traps entry, found $entries"
++# Exported: ordinary relocation, no klp machinery.
++export_syms "$key"
++run_diff
 +
-+out_relocs | awk '/rela\.kcfi_traps/,/^$/' | grep -q 'other' &&
-+	fail "the untouched function's entry was dragged in"
++[ "$(key_slot_relocs)" = 1 ] ||
++	fail "exported key: key slot has no relocation"
++out_relocs | awk '/rela__jump_table/,/^$/' | grep -q "[[:space:]]$key[[:space:]]*+" ||
++	fail "exported key: expected a direct relocation to $key"
++out_symbols | grep -q '\.klp\.tombstone\.' &&
++	fail "exported key: tombstone emitted for an exported symbol"
 +
-+pass "only the patched function's entry extracted"
++pass "key slot populated for exported and unexported vmlinux keys"
 -- 
 2.53.0-Meta
 
