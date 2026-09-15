@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC033C988D
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090353C988D
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515532; cv=none; b=pSmXw1rcf+LGmCQ65Jm7Bs7SuQK5MmYtY77JsLHwTPjvnAUdq62v4fBrZDAbZJRaKHAbSGrZ3Af7SihU8L17UTqtn7OIoSbf8jkmnIQbLRxl0HzpDbhsKoxgEMoM3Tr9ZWXYY6i/9Tla068F7bE2ut/O9fI/4qA1IDjPUZuu6So=
+	t=1789515537; cv=none; b=WdVyL1JflAJjxoFu3D1hRtqTKBBpm8GEqVU/wHh5x2ApfaHM2G3Fp8J8QP8LsRKDiFKpOSc2OMhTyh9xevKIlkJ1ap1JvUFMree36sNX2bKmVM0vmhTl3IfOAOgcvS200zZFaOE4czNBZJ6qEV38T34x/WapwfGfH20Vr+TdSZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515532; c=relaxed/simple;
-	bh=AkzP+h0BdjY863kLvXaknAU9sntXslPv7FPkaNRJ9iU=;
+	s=arc-20240116; t=1789515537; c=relaxed/simple;
+	bh=BSpae24Mds/lGhzk2vxyAxx+PQ3JRQm4PJawLkRZbqc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O5w4HfE9049JYOFjsqM6+wEz4h/Smd3DrYAR8m1kDsh3JVZJ1viqgx/ALrLMX1w0fBcDpmrvn3lEXlaBW4paWgyY321Nek0Ua36KO4TXWZzMYSOJChm+UMiU656kY0okD+FnpC9KyViPy/2xpEvi6QMaFWM4B4D4mOLXKuBSNig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dT+86x7M; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=Y5liqxcLfeYW5CDLnP4EPhLj7M8BNqYDMVQ6XYTqeLtZxU5VjwwW9sbqtdSv38yAc++/NG08HjO06VUvpZ9PgTYHPkUP76dJrnEuAOkEmstEYBWBgEQh0CN+46twDWqRZ7w1AJbxyZ1uvHE/K6TvS7AhmE6mTU2jFElfo/Unu4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E/xhc1BD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dT+86x7M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F32D1F000FF;
-	Tue, 15 Sep 2026 23:38:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E/xhc1BD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BC51F000FF;
+	Tue, 15 Sep 2026 23:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515530;
-	bh=nkHSxgHWfItMOuH08MSuxwA8ZHEaSR7rh/j8fuqlras=;
+	s=k20260515; t=1789515535;
+	bh=GNOu5YQ1Yy1SjYktH98viMEcO3YEQ/LEWoqh6ezWyZA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dT+86x7MEXceGlVMY7quiQ4dWUYiXCnuHRhzh0dJ8be4cRItlA1oGygd+6zEMPymb
-	 v2r514F6qvAdJjlDSVTxWXF8UpXWZISYWgxC4OY/ZXe2d5ZJ6viVPEh1VQTxIGznKK
-	 PBxLcd5+cfohj7sgL1xCxbAfD4j2wLh2ra1Mzv5063gKa3ry4yY4q7LlBvyybV6K3D
-	 u0Kpi+q4rhCR0ILqWAqW2+6/v544sD1pCcz96UOESycQ8PUpiljix4aDzAdPphgfKS
-	 x5MsNSU3cIAoollf34F9AxrX6pmuRDNvo3vkdIyzk/LeRpQIwL9UFv2KL2DNx1zgXQ
-	 oqQ8/UKKShGqg==
+	b=E/xhc1BD1Mgj3nzkNj8rOSQ+zeFtt6JBSVoGkd2kACAnoZSKUUYtfPhtRAoD4+4x9
+	 BOTEns9baELmDPNKDFclDnAJXNLYg0VmqabY4GAqsNG/s9kLdZ+tXLhjQ0G2qJSXVo
+	 h0zG5yjKQ8+GdP2wz2JXT+lRWe3KRzzG7o4Y/hpbqaSpDWIUrcEFuadlaemT2RJyRy
+	 nfCsTYqsu3xy26ZIQvOdjqtYiAqf7vfUD9YymDrFcRpZtFUAuqOmKeIhIGf9WBXYbx
+	 EKzaNn1DSM+fV9J4uoB+MkrPqA4m6Kf7wmFZj3o56bqp34U2OK0fXY9eU9tvFpnMfx
+	 Mhlg5n+4I2Jvg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 42/58] objtool/klp: Add test for symbols whose linkage the patch changes
-Date: Tue, 15 Sep 2026 16:34:38 -0700
-Message-ID: <20260915233454.2405019-43-song@kernel.org>
+Subject: [PATCH v4 43/58] objtool/klp: Test rejection of a file-local static branch key
+Date: Tue, 15 Sep 2026 16:34:39 -0700
+Message-ID: <20260915233454.2405019-44-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,147 +51,86 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A patch can move a symbol between static and global without renaming it:
-dropping "static" from a helper so something else can call it, or adding it
-to one that is no longer shared.  Correlation keys off more than the name,
-so a symbol whose binding moved has to still pair with itself.
+A static branch key owned by a module cannot be reached with a klp reloc:
+late module patching allows the livepatch module to load first, leaving the
+__jump_table entry unresolved for jump_label_add_module() to dereference.
+validate_special_section_klp_reloc() rejects it at build time.
 
-Failing to is not a build failure.  The symbol looks new, and a new data
-symbol is either rejected or cloned as a second copy -- at which point the
-patched code updates its own private variable while the rest of the kernel
-keeps reading the original.
+test-jump-label-module-key covers that for a global key.  A file-local one
+takes a different route to the same check: the compiler references a static
+through its section symbol plus an addend, so the key has to be resolved
+from the section before it can be recognised as STT_OBJECT at all.  Until
+commit f9fb44b0ecef ("objtool/klp: Fix detection of corrupt static
+branch/call entries") it was not, and the reference was silently emitted.
 
-The test covers both directions in one fixture, a function going global and
-a variable going static, and asserts the outcome rather than the absence of
-a warning: each symbol resolves back to the kernel's copy through a klp
-symbol, and neither is cloned into the patch.
+Give the fixture a STATIC_KEY knob and cover it.  The test checks that the
+input really does reference the key through its section, since without that
+it is only a second copy of the existing test.
 
-An earlier version asserted only that no "no correlation" or "changed data"
-message appeared, and passed with correlation deliberately broken.  What
-the messages say and what the patch contains are not the same question.
-
-Verified to fail with correlation made to require matching symbol bindings.
+Verified by reverting commit f9fb44b0ecef ("objtool/klp: Fix detection of
+corrupt static branch/call entries"): klp diff accepts the input and the
+test fails, under both gcc and clang.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/local_to_global.c  | 34 ++++++++++
- .../generic/test-local-to-global-flip.sh      | 63 +++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/local_to_global.c
- create mode 100755 tools/objtool/tests/generic/test-local-to-global-flip.sh
+ .../test-jump-label-module-static-key.sh      | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-module-static-key.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/local_to_global.c b/tools/objtool/tests/generic/fixtures/local_to_global.c
-new file mode 100644
-index 000000000000..3c9eb9200ce5
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/local_to_global.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A function which the patch changes from static to non-static, and a variable
-+ * that goes the other way.  The names are unchanged; only the binding moves.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+/* noinline, or the static one is folded into its caller and has no symbol */
-+#ifdef PATCHED
-+__attribute__((noinline)) int flipped_up(int x)		/* was static */
-+#else
-+__attribute__((noinline)) static int flipped_up(int x)
-+#endif
-+{
-+	return x + 1;
-+}
-+
-+#ifdef PATCHED
-+static volatile int flipped_down = 5;	/* was global */
-+#else
-+volatile int flipped_down = 5;
-+#endif
-+
-+int caller(int x)
-+{
-+	flipped_down += x;
-+#ifdef PATCHED
-+	return flipped_up(x) + flipped_down + 2;
-+#else
-+	return flipped_up(x) + flipped_down + 1;
-+#endif
-+}
-diff --git a/tools/objtool/tests/generic/test-local-to-global-flip.sh b/tools/objtool/tests/generic/test-local-to-global-flip.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-module-static-key.sh b/tools/objtool/tests/generic/test-jump-label-module-static-key.sh
 new file mode 100755
-index 000000000000..45e92797190b
+index 000000000000..7bdcbaf2fa60
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-local-to-global-flip.sh
-@@ -0,0 +1,63 @@
++++ b/tools/objtool/tests/generic/test-jump-label-module-static-key.sh
+@@ -0,0 +1,45 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A patch can change a symbol's linkage without renaming it: dropping "static"
-+# from a helper so something else can call it, or adding it to one that is no
-+# longer shared.  Correlation keys off more than the name, so a symbol whose
-+# binding moved can fail to pair with itself.
++# A static branch key owned by a module is rejected whether the key is global
++# or file-local.
 +#
-+# Failing to correlate is not a build failure.  The symbol looks new, and a
-+# "new" data symbol is either rejected or cloned as a second copy -- at which
-+# point the patched code updates its own private variable and the rest of the
-+# kernel keeps reading the original.
++# The rejection matters because late module patching allows the livepatch
++# module to load before the module it depends on: the __jump_table klp reloc is
++# then unresolved, and jump_label_add_module() dereferences an uninitialized
++# pointer.  Catching it at build time is the only defence.
++#
++# test-jump-label-module-key covers the global key.  A file-local one reaches
++# the same check by a different route: the compiler emits the reference against
++# the section symbol plus an addend, so validate_special_section_klp_reloc()
++# has to resolve it to the underlying object before it can see a key at all.
++# Until it did, a static key was passed over as "not STT_OBJECT" and the
++# unsupported reference was emitted with nothing said.
++#
++# Fixed by f9fb44b0ecef ("objtool/klp: Fix detection of corrupt static
++# branch/call entries").
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair local_to_global.c
++build_pair jump_label.c -DSTATIC_KEY -DMODNAME='"klp_testmod"'
 +
-+# Confirm the fixture really moved the bindings, in both directions.
-+#
-+# Match the binding and the name as fields, not as substrings of the line.
-+# -ffunction-sections and -fdata-sections give these symbols sections of their
-+# own, and the section symbols -- .text.flipped_up, .data.flipped_down -- are
-+# always LOCAL, so "does a LOCAL line mention flipped_up" is answered by the
-+# wrong symbol.  GNU readelf 2.35 happens to leave section symbol names blank,
-+# but llvm-readelf prints them, and a premise that holds on one readelf and
-+# not the other is no premise at all.
-+has_binding()   # $1 object, $2 binding, $3 symbol
-+{
-+	in_symbols "$1" | awk -v b="$2" -v n="$3" '$5 == b && $NF == n' | grep -q .
-+}
++require_input_section __jump_table
 +
-+has_binding orig.o    LOCAL  flipped_up ||
-+	fail "flipped_up is not local in the original"
-+has_binding patched.o GLOBAL flipped_up ||
-+	fail "flipped_up is not global in the patched object"
-+has_binding orig.o    GLOBAL flipped_down ||
-+	fail "flipped_down is not global in the original"
-+has_binding patched.o LOCAL  flipped_down ||
-+	fail "flipped_down is not local in the patched object"
++# The premise: the key is reached through its section symbol, not by name.
++# Without that this is just a second copy of test-jump-label-module-key.
++input_jump_relocs="$(in_relocs orig.o | awk '/rela__jump_table/,/^$/')"
 +
-+run_diff
++echo "$input_jump_relocs" | grep -q klp_test_key ||
++	fail "fixture produced no __jump_table reference to the key"
++echo "$input_jump_relocs" | grep -qE '\.(bss|data)\.klp_test_key' ||
++	probe_skip "compiler referenced the static key by name, not through its section"
 +
-+assert_diff_log 'changed function: caller'
++run_diff 255
 +
-+# Correlated means each pairs with its own counterpart in the original, so the
-+# patch refers back to the kernel's copy ...
-+assert_klp_sym flipped_up vmlinux
-+assert_klp_sym flipped_down vmlinux
++diff_log | grep -q 'unsupported static branch key klp_test_key' ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
++[ -e "$workdir/out.o" ] &&
++	fail "output object produced for a rejected input"
 +
-+# ... rather than carrying its own.  A second copy of flipped_down is the bad
-+# outcome: patched code would update its private one while the rest of the
-+# kernel keeps reading the original.
-+assert_not_patched flipped_up
-+assert_no_section .data.flipped_down
-+assert_no_section .bss.flipped_down
-+
-+diff_log | grep -q 'no correlation' &&
-+	fail "linkage change reported as an uncorrelated symbol"
-+diff_log | grep -q 'changed data' &&
-+	fail "linkage change reported as changed data"
-+
-+pass "symbols correlated across a change of linkage"
++pass "module-owned file-local static branch key rejected"
 -- 
 2.53.0-Meta
 
