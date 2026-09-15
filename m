@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBB34D8D80
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622944D8D92
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515511; cv=none; b=dhwYz9BWWCQbnl+BKHYTcYHwGK8TEhCWDxHkiYFvIUyb0rV3e1eYNOVKhPJ2Tadp1FmDEgRFzijYLx0O0lAFJ9u9zNBwWU1Wyot3Of58pEA/s6Iydry+MvATHUrfg2mmdGzlNVrUcrt6ARSdlArUd44k0S+2m21kNH//j6bjsR8=
+	t=1789515516; cv=none; b=FNgDbv30ccycV1orTQ1DVAxYMsbZEsOt8OnTbAgbhQjBGnX559gWMtOm41qzwCrCv0jJQr5jRkzaADBCAsuPzydrzxVf2V7XdZLAUcIjD+0LRfOosUrgauZV1bNefBPEjGWvNxBhsBf2sXg6bYyPlDR2jfqPlh51InLCkf7Fdeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515511; c=relaxed/simple;
-	bh=9VkOOa/dxFloPprvA5NLKRjti9MhXwAO7Ym7ZjypavQ=;
+	s=arc-20240116; t=1789515516; c=relaxed/simple;
+	bh=EoxCx+4VJJ1wvZurOZyRLu9Wua64YI2Ei+chMHKiOYo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cf88afar7qjaKCzO24zcSJ2NFx00huO7D3Ua88A0BJbFD06E0Lo4RXe6upqZbQuDOsccZoDlTBTKHAYmYmGhdvmuP6AOeHVLKTjrYv0k4b1yNBldA0gaJAbW7UCpJyJgc6eJs1vezGujkmewuCAmL60N0smL2klro95bMGb87c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSFcPLw0; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=MJYHtCVTi9+TPXjz3uJ8AO5Y7wBeYYYo+ES6Ls/MOAEOWYPRG8nMsXWqT3P4GCW4cf217w4iMO6IQZ0SgNtC30wGWhTP/6q/+T7QkJZ7krteXvYd/FUNJFWvpH5SXdKUfOQQyatPqAx5db87oOpSSGNQvoI6tTQ5WlXtzc4WLrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koS6Lm6u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSFcPLw0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE081F000FF;
-	Tue, 15 Sep 2026 23:38:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koS6Lm6u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FC21F000FF;
+	Tue, 15 Sep 2026 23:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515510;
-	bh=TytgfA9jV9W804/xZyHJkzNMViFROkvOB+CPuLqpfww=;
+	s=k20260515; t=1789515515;
+	bh=wVawEWbnaQ/wDIfjJkNL/zxJxmYU+NPYykFOR1tSOQs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bSFcPLw04sEpRYfd9dTlvC8vqpb7B/AbQc+KBJ/d8k7yaXpgqp23RS5hMZatmgMUn
-	 AhDo8yz1LeQ0Yj4ZJux7UYKIKzkQ/Cru9xZPXH3I9uwEPXrqeY+yb7WR2XOHbatcFW
-	 aTazuM4KDfhNU/aZ/eulaGD1+TsKbL/D4wiQfy1qSrUtSFEa23DijqLKnBSF6rNI08
-	 0WlOLp92jH0QX3n5N9B1slRy3QgBz/69gFzXt0TO6l4FOfne+IeRUov0+VMJG611oJ
-	 9Zo8erSlenOq16wPIA1uzKZEjU/Z9fMk/jFswVtqaTS/FW81ophbl1Gmasz5hdBPSz
-	 CRdnVFJ2fJGKQ==
+	b=koS6Lm6uwSn9aHWMp6I3C7Yfc538pR4Ya2tFiQrm3Vg5TXHahoRhSDsR3nvU5QSty
+	 Ck8ytFfOw8qshicZQmN0ZQnG9wyup8z9bDu2QCkDYH1mcGv7A3Fgg9DqsbPl+VUu5a
+	 N3airP2+F5SgeS5lFmQOvKmBrQ7Z/mWC7XxU2PfmslxMCXlelWxc7+lmT3VLu54yu9
+	 fM0km3z0ANX/SY1psqy7p96F338jCe9s5OLP4ypxgeRZiqFw2a6t/ip3HU9N9aDSsP
+	 /OfMLmCF34is0XpYjZofkrA7ZsfPlLhd3egk5YEbNk0s3HwvKQHjphlsOmJbKRYF5x
+	 6RsPSKWyc201g==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 38/58] objtool/klp: Add test for sympos resolved against a linked vmlinux
-Date: Tue, 15 Sep 2026 16:34:34 -0700
-Message-ID: <20260915233454.2405019-39-song@kernel.org>
+Subject: [PATCH v4 39/58] objtool/klp: Add test for static locals which must not be correlated
+Date: Tue, 15 Sep 2026 16:34:35 -0700
+Message-ID: <20260915233454.2405019-40-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,141 +51,126 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-vmlinux is not like a module: the final link reorders sub-sections, so a
-symbol's position has to come from the linked image rather than from symbol
-table order.  klp diff bridges that with .klp.symid, and looks for it only
-when the object it was handed is called vmlinux.o with a vmlinux beside it.
+Most static locals have to be correlated so the patched code keeps using
+the running kernel's copy.  Two kinds must not: anything in .data..once,
+the flag behind WARN_ONCE and friends, and the well-known names the kernel
+generates for per-instance things (__warned, __key, __func__).
 
-This was assigned to an end-to-end test on the assumption that it needs a
-real kernel build.  It needs "ld -r" and "ld -e 0", and takes a fraction of
-a second.
+Sharing a .data..once flag means a patch inherits "already warned" from
+before it was applied, and the warning it was meant to surface never fires.
 
-The fixture places the static appearing first in the symbol table at the
-higher address, and the link passes --sort-section=name to force the
-reordering the kernel's linker script performs.  Without that the two ways
-of computing sympos agree, and a first version passed with the vmlinux path
-disabled.
+The fixture deliberately does not name its .data..once variable __warned:
+the name rule would then catch it and the section rule would go untested.
+gcc spells these <var>.<id> and Clang <func>.<var>, so both are covered.
+
+This tests the behavior of commit ff529864e738 ("objtool/klp: Fix
+.data..once static local non-correlation") and commit 84c304a534b8
+("objtool/klp: Fix is_uncorrelated_static_local() for Clang").
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/sympos_vmlinux.c   | 40 +++++++++++++
- .../tests/generic/test-sympos-vmlinux.sh      | 57 +++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
- create mode 100755 tools/objtool/tests/generic/test-sympos-vmlinux.sh
+ .../fixtures/static_local_uncorrelated.c      | 41 +++++++++++++++++++
+ .../generic/test-static-local-uncorrelated.sh | 40 ++++++++++++++++++
+ 2 files changed, 81 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
+ create mode 100755 tools/objtool/tests/generic/test-static-local-uncorrelated.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+diff --git a/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c b/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
 new file mode 100644
-index 000000000000..d5e70994c582
+index 000000000000..cb4cdd7a496e
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
-@@ -0,0 +1,40 @@
++++ b/tools/objtool/tests/generic/fixtures/static_local_uncorrelated.c
+@@ -0,0 +1,41 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Two translation units with a same-named static, placed so that the linker
-+ * puts them in the opposite order to the one they appear in the symbol table.
++ * Static locals of three kinds, in one patched function.
 + *
-+ * VARSEC selects the section the static lands in.  Linking with
-+ * --sort-section=name then orders them alphabetically rather than by object
-+ * order, so the first symbol in the symbol table ends up at the *higher*
-+ * address.  That is the whole point: counting symbol table order and reading
-+ * the linked image's addresses now give different answers, which is what makes
-+ * it possible to tell which one klp diff used.
++ * Most static locals must be correlated, so the patched code keeps using the
++ * running kernel's copy.  Two kinds must not:
 + *
-+ * Only use_a is patched, so exactly one sympos is emitted and there is nothing
-+ * to attribute.
++ *   - anything in .data..once, the flag behind WARN_ONCE and friends.  Sharing
++ *     it would mean a patch inherits "already warned" from before the patch.
++ *   - the well-known names the kernel generates for such things (__warned,
++ *     __key, __func__, ...), which are per-instance by nature.  gcc names them
++ *     <var>.<id> and Clang <func>.<var>, so both spellings have to be caught.
 + */
 +
-+#ifndef FUNC_NAME
-+#define FUNC_NAME use_a
-+#endif
-+#ifndef VARSEC
-+#define VARSEC ".data.mmm"
-+#endif
-+
-+#ifndef NO_MODINFO
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+#endif
 +
-+/* volatile so it survives as an STT_OBJECT rather than being folded away */
-+static volatile int dup_counter __attribute__((section(VARSEC))) = 1;
-+
-+int FUNC_NAME(int x)
++int target(int x)
 +{
-+	dup_counter += x;
++	/*
++	 * A .data..once variable whose name is *not* on the list below, so
++	 * only the section can disqualify it.  Naming it __warned would let
++	 * the name rule catch it and the section rule go untested.
++	 */
++	static int once_flag __attribute__((section(".data..once")));
++	/* a never-correlate name, in an ordinary section */
++	static int __key;
++	/* and one that must be correlated */
++	static int ordinary;
++
++	if (!once_flag)
++		once_flag = 1;
++	__key += x;
++	ordinary += x;
++
 +#ifdef PATCHED
-+	return dup_counter + 1;
++	return __key + ordinary + once_flag + 2;
 +#else
-+	return dup_counter;
++	return __key + ordinary + once_flag + 1;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-sympos-vmlinux.sh b/tools/objtool/tests/generic/test-sympos-vmlinux.sh
+diff --git a/tools/objtool/tests/generic/test-static-local-uncorrelated.sh b/tools/objtool/tests/generic/test-static-local-uncorrelated.sh
 new file mode 100755
-index 000000000000..b2b44001446f
+index 000000000000..fa4ce88a79b1
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-sympos-vmlinux.sh
-@@ -0,0 +1,57 @@
++++ b/tools/objtool/tests/generic/test-static-local-uncorrelated.sh
+@@ -0,0 +1,40 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# sympos for vmlinux, which is resolved differently from sympos for a module.
++# Some static locals must not be correlated with their counterparts in the
++# running kernel; the patched code has to use a fresh copy instead.
 +#
-+# A module's .ko preserves symbol table order, so klp diff can count -- that is
-+# what test-sympos covers.  vmlinux cannot be counted: the final link reorders
-+# sub-sections, so the order in vmlinux.o is not the order the running kernel
-+# has.  klp diff bridges that with .klp.symid, a table of { id, address }
-+# emitted into vmlinux.o whose addresses the linker resolves, read back out of
-+# the linked vmlinux.
++# .data..once holds the "have we warned yet" flags behind WARN_ONCE.  Correlate
++# one and the patched function inherits the flag from before the patch, so the
++# warning the patch was written to produce never fires.  The same goes for the
++# names the kernel generates for per-instance state -- __warned, __key,
++# __func__ and friends.
 +#
-+# Getting it wrong points the relocation at a different symbol of the same
-+# name.  Nothing fails to build or load; the patched code uses the wrong
-+# object.
-+#
-+# The fixture is arranged so the two answers differ: the static that comes
-+# first in the symbol table is placed at the *higher* address, so counting
-+# gives 1 and reading the linked image gives 2.  Without that, both paths agree
-+# and the test cannot tell them apart.
++# Both directions matter, so an ordinary static local is here too: a rule that
++# refuses to correlate anything would pass a test that only checks the
++# refusals.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+
-+# use_a's static sorts last by section name, use_b's first.  Only use_a is
-+# patched, so exactly one sympos comes out.
-+build_one sympos_vmlinux.c orig_a.o    -DFUNC_NAME=use_a -DVARSEC='".data.zzz"'
-+build_one sympos_vmlinux.c patched_a.o -DFUNC_NAME=use_a -DVARSEC='".data.zzz"' -DPATCHED
-+build_one sympos_vmlinux.c b.o         -DFUNC_NAME=use_b -DVARSEC='".data.aaa"' -DNO_MODINFO
-+
-+make_vmlinux_pair "$workdir/orig_a.o" "$workdir/b.o" \
-+	       -- "$workdir/patched_a.o" "$workdir/b.o"
-+
-+[ "$(count_input_symbols vmlinux.o dup_counter)" = 2 ] ||
-+	fail "fixture did not produce two dup_counter symbols"
-+has_input_section vmlinux.o .klp.symid ||
-+	fail "objtool --klp-symids emitted no .klp.symid table"
-+has_input_section vmlinux .klp.symid ||
-+	fail ".klp.symid did not survive the link"
-+
-+# The premise: symbol table order and address order must disagree, or the test
-+# proves nothing.
-+first_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2; exit }')"
-+low_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2 }' | sort | head -1)"
-+[ "$first_addr" != "$low_addr" ] ||
-+	probe_skip "linker did not reorder the two statics"
-+
-+assert_input_symbol dup_counter
++build_pair static_local_uncorrelated.c
 +run_diff
 +
-+# Address order says 2.  Counting symbol table order would say 1.
-+assert_klp_sympos dup_counter 2
-+out_symbols | grep -q 'dup_counter,1' &&
-+	fail "sympos 1 emitted: counted symbol table order instead of reading the linked vmlinux"
++# Compilers mangle static locals differently -- gcc gives __key.1, Clang
++# target.__key -- so match on the base name.
 +
-+pass "vmlinux sympos taken from the linked image, not from symbol table order"
++# Correlated: referenced through a klp symbol, pointing at the kernel's copy.
++out_symbols | grep -q '\.klp\.sym\..*ordinary' ||
++	fail "ordinary static local was not correlated"
++
++# Not correlated: no klp symbol, and a copy cloned into the patch instead.
++out_symbols | grep -q '\.klp\.sym\..*__key' &&
++	fail "__key was correlated; it must use a fresh copy"
++out_sections | grep -qE '\.(bss|data)[^ ]*__key' ||
++	fail "__key was neither correlated nor cloned"
++
++out_symbols | grep -q '\.klp\.sym\..*once_flag' &&
++	fail ".data..once variable was correlated; it must use a fresh copy"
++assert_section '.data..once'
++
++pass "per-instance static locals cloned, ordinary ones correlated"
 -- 
 2.53.0-Meta
 
