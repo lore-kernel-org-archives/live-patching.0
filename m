@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827BF3C988D
-	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:39:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2674D8D98
+	for <live-patching@vger.kernel.org>; Tue, 15 Sep 2026 23:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789515542; cv=none; b=oEZNb2X1oxbrt6Et/RnaS1/XNLDq6cC/E+5hUTZKhCHIGsHXL47rt0rRBtQx8qEuZIj36KuohSdE+fq6iJMIbiRFq7NFdFS6ZOZ4EBBHXPgvsJIq1BywUO22in45e7h9BnXv8nFV7SyynbcfNtRzKEK9Db2mHNU5Sv7t4JO5l7Y=
+	t=1789515548; cv=none; b=ctwvxNINiF/7qlIhp4xZXvaDP2SVM/vs2TlsJAzH7aq8j4pVFlKgzaIS5ln/5z9kkYvfWxcG8znSk1lfe7Gi7myHEf9Smi79OLmJ9YJpEaWhadCEN7m8EULx7Ouxvba0UXS0nujIJYxCqlJergubqQonRSUkI7HZ3oDz0U/AZ4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789515542; c=relaxed/simple;
-	bh=cQIZoefZUwWp6fbnmTG30qZXnyGqIT3SUmsLOqO/kPE=;
+	s=arc-20240116; t=1789515548; c=relaxed/simple;
+	bh=cpS3O/hdWdhabstIWmc5lfULduMP9ax/O4HPZ6czKQI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rjKt6eu8Tv6p7yu+ILUr+37JTsGm7LqfuFHB2aqbvgt4Yxz+6B7x2y9rrqnN7Rc6uZJy+DZ3S+2qjjntxzEsGZAJn91mA7Piqm60mriIgun499++I42ybeSfXZ2peuvol644G4ahKrhocvH6f+ho2XzE2pf8zm3IkAIqGH1Lq7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4CisAwM; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=f2Q2h01hRk7UWufGp8WgGUcg6QS/8Fg3BvTBCbSgaxafgzNKdG4RH3fDfbz4jDsJZRQEfM07XYi9cmMQ7/maw5yrnIHiF/zqF99/kXQk9ad09uJWBGJ5lYQt7m11aMbExzHic7PQ8K+XQI8CdMholVJ4GtpDZAJyOOXtIbGG4Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oAyGLCaK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4CisAwM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBD41F000FF;
-	Tue, 15 Sep 2026 23:38:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oAyGLCaK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704161F000FF;
+	Tue, 15 Sep 2026 23:39:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789515541;
-	bh=X4yJwjv6WugfmPSFXiMLXGUKtrL2pviNt6swm83doX8=;
+	s=k20260515; t=1789515546;
+	bh=m1UuD1cwPKJuY+NgS4Y53i0Ymq07Df585cULuiyeVeU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=P4CisAwMNo/Fi0D7vyI3HE4krHyddv93MGY2OdmZgK0wrDePRNXCnBgtI+PbCowTQ
-	 4wKxqcWQctotfOFxoCpWnQW85w1X2zOo5NisPEIl5LMwQTKJai8xzbU6IFD/0bO8WZ
-	 VBtYsyOlH/JcWOeiWvyi4gXXZWjTdxLaORhlQutnCyrUsHuMH+kmiqElTj+gJibMI5
-	 34kgaypUiHTyXEIgWrgL2k2EtFoqa04IgOxKBOvSIr4WqRR71P5D8hWThax8691f4r
-	 CKIgYm0nlg7m0b/NOrqlF/Z5be4ll3qSWeP9+ewvSDRJo8ZR5x96/IsZPrKHx5Q4/w
-	 IUxt4oeT+YBOQ==
+	b=oAyGLCaKYRn0oY1aAzjLTXMmVP/kZF7VPyyqNFmF21uSMVjBJDAPOYsYE89eNacS9
+	 3xjnuJLGr1f+n/5Bfi8JV6VXKnli4T9uyRh5QfJD7G5v6wo0wbQlbGYb57gHWh9tMF
+	 NpmJ/ZvoWl+qYTX+rNxkLHLIqe5i5feUU3+9gESeQoo7CAX/xrtLSM/xdmoqyxkIQh
+	 dVGVggGA4ASRsG6Qo6Ch8mL8Kvk2hdSNWK5MfV001av17HWG6Uw1sKUixR0uf2eAN+
+	 EiqUr2Pk//1XFFhTNjEq+A9Mmz0uwyPj4OB8I4VzfeQKnEU0pcE0zlifdS7tooyIEl
+	 bk9jdNodxZR6Q==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v4 44/58] objtool/klp: Test a hand-built livepatch module's static call keys
-Date: Tue, 15 Sep 2026 16:34:40 -0700
-Message-ID: <20260915233454.2405019-45-song@kernel.org>
+Subject: [PATCH v4 45/58] objtool/klp: Test text annotations on alternative replacements
+Date: Tue, 15 Sep 2026 16:34:41 -0700
+Message-ID: <20260915233454.2405019-46-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260915233454.2405019-1-song@kernel.org>
 References: <20260915233454.2405019-1-song@kernel.org>
@@ -51,125 +51,145 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-__SCK__* static call keys are not exported; modules are given read-only
-access at load time.  Livepatch modules built by klp-build do have full
-access to theirs, and commit 164c9201e1da ("objtool: Add base objtool
-support for livepatch modules") added a check on that basis -- but a
-livepatch module can also be written by hand, as everything under
-samples/livepatch is, and such a module hits an unexported key as soon as
-it does anything expanding to a static call.  With
-CONFIG_MEM_ALLOC_PROFILING_DEBUG that includes allocating memory, which is
-how livepatch-shadow-fix1 came to fail to build.
+The kernel annotates instructions inside an ALTERNATIVE's replacement
+wherever objtool has to be told something about them -- a retpoline-safe
+indirect branch, a deliberately absent ENDBR.  klp diff dropped those
+annotations, for two reasons: replacement code has no real symbol, so the
+NOTYPE fake symbol objtool invents for it was not recognised as worth
+keeping a reference to, and .discard.annotate_insn was processed before
+.altinstructions, so the replacement it named had no clone yet.
 
-Cover it, with the plain module as a control: it takes the same path and
-has always been accepted, so a test that built only the livepatch variant
-could not tell this fix from the check being deleted.
+Nothing fails at build time when the annotation goes missing.  It surfaces
+later as objtool warning about, or rejecting, the very code the annotation
+was there to explain.
 
-This is objtool's ordinary check pass rather than a klp subcommand, which
-is the first test here to exercise it -- and is the point, since that pass
-is what runs over a hand-built livepatch module during a normal kernel
-build.
+The fixture keeps the replacement label global, as empty_alternative.c
+does, so the relocations name it instead of .altinstr_replacement plus an
+addend -- which klp diff rejects outright.  The label is still NOTYPE,
+which is the property under test.  The test asserts the relocation as well
+as the section, since an entry whose relocation was dropped would otherwise
+pass.
 
-Verified by reverting commit f495054bd12e ("objtool/klp: Fix unexported
-static call key access for manually built livepatch modules"): objtool
-reports "can't find static_call_key symbol: __SCK__klp_test_call" and the
-test fails, under both gcc and clang.
+Verified by reverting commit 62a7a01fde87 ("objtool/klp: Fix extraction of
+text annotations for alternatives"): the output has no
+.discard.annotate_insn at all and the test fails, under both gcc and clang.
 
-Assisted-by: Claude:claude-opus-4
-Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/x86/fixtures/static_call_no_key.c   | 32 +++++++++++++++
- .../tests/x86/test-manual-klp-static-call.sh  | 40 +++++++++++++++++++
- 2 files changed, 72 insertions(+)
- create mode 100644 tools/objtool/tests/x86/fixtures/static_call_no_key.c
- create mode 100755 tools/objtool/tests/x86/test-manual-klp-static-call.sh
+ .../objtool/tests/x86/fixtures/alt_annotate.c | 57 +++++++++++++++++++
+ .../objtool/tests/x86/test-alt-annotation.sh  | 38 +++++++++++++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 tools/objtool/tests/x86/fixtures/alt_annotate.c
+ create mode 100755 tools/objtool/tests/x86/test-alt-annotation.sh
 
-diff --git a/tools/objtool/tests/x86/fixtures/static_call_no_key.c b/tools/objtool/tests/x86/fixtures/static_call_no_key.c
+diff --git a/tools/objtool/tests/x86/fixtures/alt_annotate.c b/tools/objtool/tests/x86/fixtures/alt_annotate.c
 new file mode 100644
-index 000000000000..748ba7c0f86d
+index 000000000000..af44d320dcb0
 --- /dev/null
-+++ b/tools/objtool/tests/x86/fixtures/static_call_no_key.c
-@@ -0,0 +1,32 @@
++++ b/tools/objtool/tests/x86/fixtures/alt_annotate.c
+@@ -0,0 +1,57 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A static call to a trampoline whose key symbol this object cannot see.
++ * An x86 alternative whose replacement instruction carries a text annotation.
 + *
-+ * That is the normal situation for a module: __SCK__* keys are not exported,
-+ * and read-only access is granted at load time instead.  objtool's static call
-+ * handling has to accept it for any module, including a livepatch module built
-+ * by hand rather than by klp-build.
++ * The kernel does this wherever an ALTERNATIVE contains something objtool has
++ * to be told about -- a retpoline-safe indirect branch, an intentionally
++ * missing ENDBR -- so the .discard.annotate_insn entry references an address
++ * inside .altinstr_replacement rather than inside a function.
 + *
-+ * LIVEPATCH adds the .modinfo tag which makes objtool treat this as a
-+ * livepatch module.
++ * Two things make that awkward for klp diff, and both are why this fixture
++ * exists.  Replacement code has no real symbol: objtool invents a NOTYPE fake
++ * symbol for it, so an annotation pointing there does not reference a FUNC.
++ * And .discard.annotate_insn has to be cloned after .altinstructions, or the
++ * replacement it names has no clone to point at yet.
++ *
++ * struct alt_instr is written out by hand as in empty_alternative.c: s32
++ * instr_offset, s32 repl_offset, u32 ft_flags, u8 instrlen, u8 replacementlen,
++ * with an entsize so klp diff can find the entry boundaries.
++ * .discard.annotate_insn entries are s32 offset, s32 type; type 2 is
++ * ANNOTYPE_RETPOLINE_SAFE.
++ *
++ * The replacement label is global so the relocations name it rather than
++ * .altinstr_replacement plus an addend, which klp diff cannot convert.  It is
++ * still NOTYPE, which is the shape that matters here.
 + */
 +
 +static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) =
-+#ifdef LIVEPATCH
-+	"\0livepatch=Y"
-+#endif
-+	"\0name=klp_testmod";
-+
-+/*
-+ * The trampoline is undefined here, exactly as it is for a module calling a
-+ * static call defined in vmlinux.  No __SCK__klp_test_call accompanies it.
-+ */
-+extern void __SCT__klp_test_call(void);
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
 +int target(int x)
 +{
-+	__asm__ volatile("call __SCT__klp_test_call\n\t" ::: "memory");
-+
++	asm volatile(
++		"661:	nop\n\t"
++		".pushsection .altinstr_replacement, \"ax\"\n\t"
++		".globl target_repl\n\t"
++		"target_repl:\n\t"
++		"	nop\n\t"
++		/* The annotation lands inside the replacement. */
++		".pushsection .discard.annotate_insn, \"M\", @progbits, 8\n\t"
++		".long target_repl - .\n\t"
++		".long 2\n\t"
++		".popsection\n\t"
++		"target_repl_end:\n\t"
++		".popsection\n\t"
++		".pushsection .altinstructions, \"aM\", @progbits, 14\n\t"
++		".long 661b - .\n\t"
++		".long target_repl - .\n\t"
++		".long 0\n\t"
++		".byte 1\n\t"
++		".byte target_repl_end - target_repl\n\t"
++		".popsection\n\t");
++#ifdef PATCHED
++	return x + 2;
++#else
 +	return x + 1;
++#endif
 +}
-diff --git a/tools/objtool/tests/x86/test-manual-klp-static-call.sh b/tools/objtool/tests/x86/test-manual-klp-static-call.sh
+diff --git a/tools/objtool/tests/x86/test-alt-annotation.sh b/tools/objtool/tests/x86/test-alt-annotation.sh
 new file mode 100755
-index 000000000000..6c4d275e3549
+index 000000000000..96760e6df9e5
 --- /dev/null
-+++ b/tools/objtool/tests/x86/test-manual-klp-static-call.sh
-@@ -0,0 +1,40 @@
++++ b/tools/objtool/tests/x86/test-alt-annotation.sh
+@@ -0,0 +1,38 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# objtool's static call handling must accept a livepatch module which cannot
-+# see a static call's key symbol.
++# A text annotation on an instruction inside an alternative's replacement must
++# be carried into the patch.
 +#
-+# __SCK__* keys are not exported; modules get read-only access at load time
-+# instead.  Livepatch modules built by klp-build do have full access to their
-+# keys, and a check was added on the strength of that -- but a livepatch module
-+# can also be written by hand, and samples/livepatch is full of them.  One of
-+# those needs a key it cannot see as soon as it does anything that expands to a
-+# static call, which with CONFIG_MEM_ALLOC_PROFILING_DEBUG includes allocating
-+# memory:
++# The kernel annotates replacement code wherever objtool has to be told
++# something about it -- a retpoline-safe indirect branch, a deliberately absent
++# ENDBR.  Two things made klp diff drop those annotations:
 +#
-+#   samples/livepatch/livepatch-shadow-fix1.o: error: objtool: static_call:
-+#     can't find static_call_key symbol: __SCK__WARN_trap
++#   - replacement code has no real symbol, so objtool invents a NOTYPE fake
++#     one, and the extraction only kept references to FUNC symbols;
++#   - .discard.annotate_insn was processed before .altinstructions, so the
++#     replacement it referenced had no clone to point at yet.
 +#
-+# The module built without the livepatch tag is the control: it takes the same
-+# path and has always been accepted, so a test which only built the livepatch
-+# one could not tell this fix from the check being removed altogether.
++# Nothing fails at build time when the annotation goes missing.  It surfaces
++# later as objtool warning about, or rejecting, the patched code it was there
++# to explain.
 +#
-+# Fixed by f495054bd12e ("objtool/klp: Fix unexported static call key access
-+# for manually built livepatch modules").
++# Fixed by 62a7a01fde87 ("objtool/klp: Fix extraction of text annotations for
++# alternatives").
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
++build_pair alt_annotate.c
 +
-+# Not a klp subcommand: this is objtool's ordinary check pass, which is what
-+# runs over a hand-built livepatch module during a normal kernel build.
-+for tag in "" -DLIVEPATCH; do
-+	build_one static_call_no_key.c mod.o $tag
++assert_input_section .altinstructions
++assert_input_section .discard.annotate_insn
 +
-+	"$OBJTOOL" --module --static-call "$workdir/mod.o" \
-+		> "$workdir/objtool.log" 2>&1 ||
-+		fail "objtool rejected a ${tag:+livepatch }module which cannot" \
-+		     "see its static call key: $(tail -1 "$workdir/objtool.log")"
-+done
++run_diff
 +
-+pass "livepatch module accepted without access to its static call key"
++# The annotation has to survive, and to still name the replacement.  Checking
++# only the section would pass on an entry whose relocation was dropped.
++assert_section .discard.annotate_insn
++assert_reloc_sym .discard.annotate_insn target_repl
++
++pass "text annotation on an alternative replacement carried into the patch"
 -- 
 2.53.0-Meta
 
