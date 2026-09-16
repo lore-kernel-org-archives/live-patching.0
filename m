@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE184D7D2A
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15624D7968
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584528; cv=none; b=himRocL83dt7i/Iqnb4/61+UyCAJwcZMacM1wKmoPeRmFWCCYLyN9gc0Z3OGLfzvUrQ55wXxI0HIsWKpetIjsZS/JiUy0PqEi8FqqXNofGpeRpFDemPG6lJ/qottBZR8egLghRk3/Tff3Mi/jKfaoc9ZPJuIj5Z2T9ldAYHS/WE=
+	t=1789584533; cv=none; b=CzeO1FI+REMisQUQLKs5nCQ2KmoA3/pLq45QhPJb5wt6X9jFiFDLrGkbMvrnl46Dui/7RDsJNxUDHpHOV1OWncdzMoZkvFNQbabgY7Z259NacsStI7flKpxPp8I4vqP+SiUnThClkSKvrnWxrMPAorbXDPGy/tpGjV9Yh4EgfgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584528; c=relaxed/simple;
-	bh=kaGsqlDt2FGFLrvubpvFyKDDUpUWoZw7fPdurBZJ9j4=;
+	s=arc-20240116; t=1789584533; c=relaxed/simple;
+	bh=b5KyROuZxh+WwoTgI3HxMj54P9MfUkbHbg/duW+jiB4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D0pFW6wVEWiVwq9aEqUNNmIwxuHQayBXt2YoTVWHeiAjIl99SH6aRhUWWfmK5A2lbah9v2uPFUZeUVykU+O8TgaKjM9Jy4fxwcBUIUSjBjB9nkd6/HiDn51iCOQziV2tIFQjciFrPe1VD97ruwi1ySMg3kMuHXb7XtITeyvFt8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i3hgW6dD; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=hsht26RjrQ3Ni3jR0XFm8f88ya7yd4V2ki8zeQTXdkPmhe6M0btqZDQ0a9SFIHarK1ao9rNckGN69Msml+6k8tXEFrwcUqe1uQEz2rMNyXHcmtIIm30XqzVstcNdNv3fX5Gxv9H0FdM1SQhYqjUTTNdnXh4wOwsjyFAK+Ezh8dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+eT/BHc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i3hgW6dD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9821F000FF;
-	Wed, 16 Sep 2026 18:48:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+eT/BHc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673111F00898;
+	Wed, 16 Sep 2026 18:48:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584511;
-	bh=vk+lGcMau+Se59LLvGTGgNpImzsrOuOQp+Xzn1uNulM=;
+	s=k20260515; t=1789584502;
+	bh=aUp49JyynfN8hjkRFq4mGHCtvKsDixFfpxlinBJVmTo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=i3hgW6dDfa3Omz1dLJefe7UvRN3bZbqtmNb/zYT0NyKWco11ZOrjDrOV5Xf6I15Go
-	 WUAlnEr13T6H5U0TU7ZaU8xO1eraw0tDEU23KClh9AdD24eWKcjs/c2SSPOA1Ee+XE
-	 OV7kK8cycIc1CS8QMi+7pqUqvFRv5z2Drvfzcs5xPOkjgQWRMPSeeizH+WNApuTwdi
-	 JJqRyKfe6s6utNI+Ipx6GYWJBcGYbcdJeOs/y7vYwrm7PgdAt4IU1v1NageJ722k2x
-	 xyHmortVj9w9GGl3VyyH9Q2FhaFocJf+4bCyqsU7CshDyW076qGKfbxMtQEQf+Cotg
-	 C6E85yL21fdIw==
+	b=M+eT/BHcXvHvEyt0lsSxnjZDp/VVspWDLydjGkhbiUbRWl8h0cNYHysvqiqLqX+SW
+	 /c/QGD8Yv16KaPQAu76dN52cVayjpr2xW7mxSLwM1+Fu6+MCz366ftY9SlrJod5whf
+	 DfGtStddr2XaR4MhUwoD4cJsffXpfl6S14Qkyriq9cf9VH1RLdGLEypxupD2TT6QZv
+	 H3jL+M1dothAqib4r+XkZz2j+Z9MsDIBkGtxYenMI2AUspS7A7Si4C+RvyDyBI/fPL
+	 G9TfATNuAvlMA0DfK/H5Td5Gb0BCQ4mWptLK4q286Df/ApBvs8pInDi1L52mL+puSl
+	 gq6YedykcnK4w==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 57/58] objtool/klp: Add test for Clang switch jump tables
-Date: Wed, 16 Sep 2026 11:43:50 -0700
-Message-ID: <20260916184351.2720310-58-song@kernel.org>
+Subject: [PATCH v5 55/58] objtool/klp: Add test for absolute and __ADDRESSABLE symbols
+Date: Wed, 16 Sep 2026 11:43:48 -0700
+Message-ID: <20260916184351.2720310-56-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,130 +51,138 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-For a dense enough switch Clang emits the targets as a table in
-.rodata..Lswitch.table.<function> -- named after the function but not part
-of it.  The patched function indexes into that table, so a clone which does
-not bring it along jumps through whatever the kernel's copy holds, which
-after a patch that changed the switch is the wrong set of targets.  An
-indirect jump to a stale address reports nothing at build or load time.
+A SHN_ABS symbol has no section, so any walk of sym->sec which does not
+check dereferences NULL, and the kernel has plenty of them -- from linker
+scripts and from .set in assembly.  __ADDRESSABLE() emits a pointer into
+.discard.addressable purely to keep a symbol referenced; it means nothing
+to a livepatch and is discarded at link time, but it is a relocation like
+any other and gets looked at.
 
-The fixture asserts its own premise twice over, since both halves depend on
-what this Clang chose to do: that a table was built rather than a chain of
-comparisons, and that the added case actually changed it.
+Neither is what the patch changes.  What this guards against is not a wrong
+answer but a crash or an error on input the kernel produces routinely,
+which would make every function near one unpatchable.
 
-objtool has no switch-specific code -- the table is carried by the general
-mechanism for data a cloned function references -- so this guards that
-mechanism reaching an easily-mishandled shape rather than a particular
-line, and the test says so.  Making the table uncorrelated, the nearest
-available sabotage, does not change the outcome.
+Not isolated to a single line, and the test says so: the absolute symbol
+here has zero length, so it is excluded before the section check is reached
+and removing that check alone changes nothing observable.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/switch_rodata.c    | 31 +++++++++++
- .../tests/generic/test-switch-rodata.sh       | 53 +++++++++++++++++++
- 2 files changed, 84 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/switch_rodata.c
- create mode 100755 tools/objtool/tests/generic/test-switch-rodata.sh
+ .../generic/fixtures/abs_and_addressable.c    | 44 ++++++++++++++++
+ .../tests/generic/test-abs-and-addressable.sh | 50 +++++++++++++++++++
+ 2 files changed, 94 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+ create mode 100755 tools/objtool/tests/generic/test-abs-and-addressable.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/switch_rodata.c b/tools/objtool/tests/generic/fixtures/switch_rodata.c
+diff --git a/tools/objtool/tests/generic/fixtures/abs_and_addressable.c b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
 new file mode 100644
-index 000000000000..817ddac92d81
+index 000000000000..6392ff99af42
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/switch_rodata.c
-@@ -0,0 +1,31 @@
++++ b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+@@ -0,0 +1,44 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A switch dense enough that Clang builds a jump table for it, in a section of
-+ * its own: .rodata..Lswitch.table.<function>.
++ * Two constructs which appear all over the kernel and must not upset klp
++ * checksum or klp diff.
 + *
-+ * The table belongs to the function and has to travel with it.  It is named
-+ * after the function but is not part of it, so klp diff has to associate the
-+ * two rather than treating the table as unrelated data.
++ * An absolute symbol (SHN_ABS) has no section, so anything walking sym->sec
++ * without checking dereferences NULL.  The kernel makes them with linker
++ * scripts and with .set in asm; VDSO and the fixed-address per-cpu bases are
++ * the usual sources.
 + *
-+ * The patch adds a case, which changes the table's contents and length.
++ * __ADDRESSABLE() emits a pointer into .discard.addressable purely to keep a
++ * symbol referenced.  It is discarded at link time and means nothing to a
++ * livepatch, but the pointer is a relocation like any other and has to survive
++ * being looked at.
++ *
++ * Neither is the subject of the patch; the point is that their presence does
++ * not disturb the function that is.
 + */
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+const char *status_to_string(unsigned int c)
++
++/* SHN_ABS, referenced from code. */
++extern char abs_sym[];
++__asm__(".globl abs_sym\n"
++	".set abs_sym, 0x1234\n");
++
++int helper(int x);
++int helper(int x) { return x + 1; }
++
++/* The shape of __ADDRESSABLE(helper). */
++__asm__(".pushsection .discard.addressable, \"aw\"\n"
++	".balign 8\n"
++	".quad helper\n"
++	".popsection\n");
++
++int target(int x)
 +{
-+	switch (c) {
-+	case 0: return "idle";
-+	case 1: return "running";
-+	case 2: return "stopped";
-+	case 3: return "error";
-+	case 4: return "paused";
-+	case 5: return "waiting";
-+	case 6: return "starting";
-+	case 7: return "stopping";
 +#ifdef PATCHED
-+	case 8: return "completed";
++	return helper(x) + (int)(long)abs_sym + 1;
++#else
++	return helper(x) + (int)(long)abs_sym;
 +#endif
-+	}
-+	return "unknown";
 +}
-diff --git a/tools/objtool/tests/generic/test-switch-rodata.sh b/tools/objtool/tests/generic/test-switch-rodata.sh
+diff --git a/tools/objtool/tests/generic/test-abs-and-addressable.sh b/tools/objtool/tests/generic/test-abs-and-addressable.sh
 new file mode 100755
-index 000000000000..fb27e96c65f6
+index 000000000000..6adb23ed4b88
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-switch-rodata.sh
-@@ -0,0 +1,53 @@
++++ b/tools/objtool/tests/generic/test-abs-and-addressable.sh
+@@ -0,0 +1,50 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A Clang switch jump table travels with the function it belongs to.
++# An absolute symbol and an __ADDRESSABLE() pointer must not disturb the
++# function being patched.
 +#
-+# For a dense enough switch Clang emits the targets as a table in
-+# .rodata..Lswitch.table.<function>, named after the function but not part of
-+# it.  klp diff has to associate the two: the patched function indexes into
-+# that table, so a clone which does not bring it along jumps through whatever
-+# the kernel's copy holds -- which, when the patch changed the switch, is the
-+# wrong set of targets.
++# A SHN_ABS symbol has no section, so any walk of sym->sec which does not check
++# dereferences NULL -- and the kernel has plenty, from linker scripts and from
++# .set in assembly.  __ADDRESSABLE() emits a pointer into .discard.addressable
++# to keep a symbol referenced; it means nothing to a livepatch and is discarded
++# at link time, but it is a relocation like any other and gets looked at.
 +#
-+# That is an indirect jump to a stale address, not a missing symbol, so nothing
-+# reports it at build or load time.
++# Neither is what the patch changes.  The failure this guards against is not a
++# wrong answer but a crash or an error on input the kernel produces routinely,
++# which would make any function near one unpatchable.
 +#
-+# objtool has no switch-specific code: the table is carried by the general
-+# mechanism for data a cloned function references.  So this is a regression
-+# test on that mechanism reaching a shape it is easy to get wrong, not a guard
-+# on a particular line -- making the table uncorrelated, the nearest sabotage,
-+# does not change the outcome.
++# Not isolated to a single guard: the absolute symbol here has zero length, so
++# it is excluded before the section check is reached and removing that check
++# alone changes nothing observable.  This stands as a check on the behaviour
++# rather than on the line which produces it.
 +#
-+# Covers the same ground as corpus/x86_64-llvm-switch-rodata/
-+# clang-switch-rodata-assoc in Joe Lawrence's klp-build unit test corpus.
++# Covers the same ground as corpus/x86_64/checksum-abs-sym-skip and
++# addressable-symbols in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+clang_only "only Clang emits switch jump tables in their own section"
-+
 +setup
-+build_pair switch_rodata.c
++build_pair abs_and_addressable.c
 +
-+# The premise: this Clang really did build a table rather than a chain of
-+# comparisons, and the added case really did change it.
-+tbl=.rodata..Lswitch.table.status_to_string
-+has_input_section orig.o "$tbl" ||
-+	probe_skip "this clang built no jump table for the switch"
-+# readelf prefixes each line with "[nn]", which splits into one or two fields
-+# depending on the index, so strip it before counting columns.
-+tbl_size()
-+{
-+	in_sections "$1" | sed 's/^ *\[[ 0-9]*\] *//' |
-+		awk -v s="$tbl" '$1 == s { print $5 }'
-+}
-+[ "$(tbl_size orig.o)" != "$(tbl_size patched.o)" ] ||
-+	fail "fixture's added case did not change the jump table"
++# The premise: the fixture really did produce both.
++in_symbols orig.o | grep -q 'ABS.*abs_sym' ||
++	probe_skip "assembler did not make abs_sym absolute here"
++assert_input_section .discard.addressable
 +
++# Checksumming has to survive them, and still see the function that changed.
++run_checksum
++assert_checksum_differs target
++assert_checksum_matches helper
++
++# So does the diff.
 +run_diff
++assert_patched target
++assert_not_patched helper
 +
-+assert_patched status_to_string
-+assert_section "$tbl"
-+assert_reloc_sym .text.status_to_string "$tbl"
++# An absolute symbol has no address to record a checksum against, so it gets
++# no entry -- the reference to it is what mattered, not the symbol itself.
++in_relocs orig.o | awk '/rela\.discard\.sym_checksum/,/^$/' | grep -qw abs_sym &&
++	fail "absolute symbol got a checksum entry"
 +
-+pass "Clang switch jump table carried with the function it belongs to"
++pass "absolute and __ADDRESSABLE symbols do not disturb the patched function"
 -- 
 2.53.0-Meta
 
