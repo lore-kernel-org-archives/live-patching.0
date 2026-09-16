@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F8C2DCF45
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA574D597E
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584474; cv=none; b=l0zhbYGUI2Eb1u7pxFcEWDfEMr7W1iAlnYRdEM2VhWwnRk+EM3uQpXNTXCbcczVzxAO09LeXQXY4GBwVhrhsBN9LWByv2nRjWl0c/8bmdYYBOLQRkGT5URuytVmBXr1QVtq2LHbHSAQeu3L7+BvlutC4oSr15ESibXmj3aiJxzI=
+	t=1789584487; cv=none; b=Z+M+IAbUhxe64r+++eY1w8NXlBMNmQ1OUczsNJdpdEQw8AbnzQk8kHeAVf5Rgds1TiVOoZhtxxH15QAovIaPjTXbVQOF8zoeP0hs4mfvoacwy4u+MS8athzU7Bagl7S7NTz+kwCjMFLa/ezEEhJtj4U7TJEB23InyVt3JZ+jGkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584474; c=relaxed/simple;
-	bh=NuIxpY7fKIS2Fk6KmUCdREL8Y5X1T7gjpV7phrC6Ito=;
+	s=arc-20240116; t=1789584487; c=relaxed/simple;
+	bh=e/pHIANHGDYMRXnxBmpEU2yFNHUvnLnAZ8w/B1ZL/ms=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gNdple5rb/yA6cLa/CtdtnLwiYml+FO+KwaaYieDwBJQGDGcdHb8oHBn8qvE4qy2gj7j/k+lPd6xTFTK6ynX8f1WY5WXSv6KLxpenJZEcv+bZg0BK+rTQPzy/MVbXhFJQL2bFZ3pBbW5obxX+aDVm/LE8R7ZOdWtxVptf/2I9iw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9ykbN4W; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=FtZg+9xtw9THqvhA32DUVLR11/cvvsZRcceqfRbY3sOn5LvA9Dao9JXEXZz1CAJhjS/DNSqVBPfjZ1PGdRYsF79AVb8av1mJWFCGbye5GMRtTKT5OmNzdc/ROp7tEOAGT8ulz5n8GTo4VtUjQHxT5J+60DlBoeO9cslrNkxrjQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JpXhYlfy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9ykbN4W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E797D1F00898;
-	Wed, 16 Sep 2026 18:47:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JpXhYlfy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3721F000FF;
+	Wed, 16 Sep 2026 18:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584458;
-	bh=5Yi/fQhmPc3N5rSzfQX5f1hnecz8C7hPLt24knCE7PA=;
+	s=k20260515; t=1789584468;
+	bh=grYbOTHUMFqnye3BkRz1M3IDfTiEJErLed7bw7Y6x0o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=e9ykbN4WpJczCymFbVHEo1OVQ60Jz+XngO5QSygyrsXXjEal4PccsC1umCB45Gg9k
-	 UVoBOCipk4Cj60ITOnQj1OXiZ9QsmDHQTQxtD3kN0EiS6N1z40MqfC/XevUdOfqnWY
-	 YjzAVR7rGkDSSbBpopTd7zkroBPxd1FZBqYJ08qI/oMgNfUMR1Z7oX1sWkOgs5N13v
-	 8s7PWilnVnbAJi7Dz+B/ZAuGPtV/FNPNoB1G7Zq4Z4uDmMPH+UyqGjawF6jJ1rihkZ
-	 t7rdG1bzPydVanGuXKAXtzeuqWxNrvCO3BG389WVFT8Cyn7Zoa6AirLWBREUJgRUL4
-	 DKQuiZRs9g6dA==
+	b=JpXhYlfy9OMxxU1Yxw6uGCQZwzQSbWRjRre0GavnIK58i5NK0kEa3AYDEYFemG7zZ
+	 +Fop5F8P7nvJVXkiGf1bEV2H/cS9LUyrxhSWTyEYhYS1lDnETUDW+9/lfPtNC1Xend
+	 0gG0U1B57bCUh59gG/dIsNyRMayGIVdrzpvvVm4oHwzgZ5wXNQOkttFTLaTAVq4cYz
+	 vnLCbQHtLtYQ1dTo8uPAe3JcYPSM4Li1m0kXqOOG0OQb7aI2JuDHp54UHBdu3FFbLE
+	 yFZumKAlUiSc2kXRT1fq22O8N8xp8fMYV5NG6sz2t6P/HPES2f/dkey1kUxF42LFrg
+	 QxAgnG5gJ3GVQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 46/58] objtool/klp: Add test for data object checksums
-Date: Wed, 16 Sep 2026 11:43:39 -0700
-Message-ID: <20260916184351.2720310-47-song@kernel.org>
+Subject: [PATCH v5 48/58] objtool/klp: Add test for a static branch introduced by the patch
+Date: Wed, 16 Sep 2026 11:43:41 -0700
+Message-ID: <20260916184351.2720310-49-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,235 +51,90 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-klp checksum hashes a data symbol's length, its bytes, and every relocation
-it carries -- as the target's name and adjusted addend, except a reference
-into a string section, which contributes the string's contents instead.
-Nothing covered any of it.
+Patching a function which already has a static branch and adding one to a
+function which had none are different cases.  In the second the
+__jump_table entry is itself new, so there is nothing in the original to
+correlate it against: klp diff has to carry the entry into the patch from
+scratch and reach the key the way it reaches any other vmlinux symbol.
 
-Each is load-bearing, and the failure is always the same shape: a checksum
-which ignores one calls a changed object unchanged, klp diff leaves it out
-of the patch, and the patched code goes on reading the kernel's old copy.
-The string case cannot be caught by hashing bytes: the pointer is
-identical, same section and same offset, and only the text it refers to
-moved.
+Dropping it is silent.  The patched function keeps a static branch the
+kernel never patches, so it takes the same arm forever whatever the key is
+set to.
 
-One fixture, six variants applied to the patched build alone.  Each was
-verified by sabotaging the line it covers and watching the test fail:
+Give the fixture a NEW_KEY knob which puts the whole branch behind PATCHED,
+and assert the premise -- that the original really has no __jump_table --
+before asserting the result, since otherwise this is just a second copy of
+test-jump-label-key.
 
-  raw bytes            initialiser change
-  length               a .bss object grows; its bytes are never hashed
-  string contents      literal edited in place, pointer untouched
-  reloc target name    pointer moved to another function
-  reloc addend         same array, different index
-  section-symbol path  the same, via a static's section symbol
-
-Two of those needed the fixture rebuilding.  An initialised array does not
-isolate the length, because growing one changes the hashed bytes too --
-hence .bss, where there are none.  And a named char[] does not reach the
-contents-hashing path at all: that keys on SHF_STRINGS, which the compiler
-sets on the mergeable section a literal lands in and not on an array given
-a section of its own.
+Verified by making klp diff skip __jump_table when cloning special
+sections: the test fails.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/checksum_data.c    | 116 ++++++++++++++++++
- .../tests/generic/test-checksum-data.sh       |  61 +++++++++
- 2 files changed, 177 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/checksum_data.c
- create mode 100755 tools/objtool/tests/generic/test-checksum-data.sh
+ .../tests/generic/test-jump-label-new-key.sh  | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-new-key.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/checksum_data.c b/tools/objtool/tests/generic/fixtures/checksum_data.c
-new file mode 100644
-index 000000000000..6310af5c02d3
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/checksum_data.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Data objects whose checksums must move for reasons the raw bytes do not
-+ * show.
-+ *
-+ * checksum_update_object() hashes a data symbol's length and its bytes, and
-+ * then walks its relocations: a reference into a string section contributes
-+ * the string's *contents*, and any other reference contributes the target
-+ * symbol's name and the adjusted addend.  So three changes that leave the
-+ * object's own bytes identical still have to change its checksum:
-+ *
-+ * Each variant is selected by a -D on the patched build only, so the original
-+ * is always the baseline:
-+ *
-+ *   WHICH_FUNC   the function pointer points somewhere else
-+ *   WHICH_STR    the string pointer points at a different literal
-+ *   STR_CONTENT  the string it points at is edited in place
-+ *   WHICH_SLOT   the same array, at a different index: addend only
-+ *   WHICH_PRIV   likewise, but a static, reached through its section symbol
-+ *
-+ * The last is the interesting one.  Nothing in the pointer changes -- same
-+ * section, same offset -- so a checksum that hashed only the relocation and
-+ * not what it referred to would call the object unchanged, and the patched
-+ * kernel would keep the old string.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+int callee_a(int x);
-+int callee_b(int x);
-+int callee_a(int x) { return x + 1; }
-+int callee_b(int x) { return x + 2; }
-+
-+/*
-+ * String *literals*, not named arrays.  The contents-hashing path keys on
-+ * SHF_STRINGS, which the compiler sets on the mergeable .rodata.str1.1 a
-+ * literal lands in and not on a named char[] given a section of its own.  A
-+ * fixture using the latter exercises the ordinary name-and-addend path and
-+ * reports nothing when the text changes.
-+ */
-+#if defined(PATCHED) && defined(STR_CONTENT)
-+#define MESSAGE "edited"
-+#else
-+#define MESSAGE "original"
-+#endif
-+
-+/* A plain data object: only its own bytes decide the checksum. */
-+#if defined(PATCHED) && defined(PLAIN_VALUE)
-+int plain = 43;
-+#else
-+int plain = 42;
-+#endif
-+
-+/*
-+ * A .bss object, where length is the only thing there is to hash: the section
-+ * has no data, so the bytes are skipped and only sym->len distinguishes this
-+ * from an object of another size.  An initialised array would not isolate it
-+ * -- growing one changes the hashed bytes as well.
-+ */
-+#if defined(PATCHED) && defined(LONGER)
-+char sized[4];
-+#else
-+char sized[2];
-+#endif
-+
-+/*
-+ * A reference into the middle of an array: same target symbol, different
-+ * addend.  Nothing else in the object changes, so this is the only way to see
-+ * whether the addend is hashed at all.
-+ */
-+int slots[4];
-+
-+/*
-+ * A file-local array.  A reference to a static lands on its section symbol
-+ * plus an offset, so the hash has to resolve that back to the underlying
-+ * object before it has a name to hash at all -- a different code path from the
-+ * global above, and one that silently contributes nothing when it fails.
-+ */
-+static int priv_slots[4];
-+
-+struct desc {
-+	int (*fn)(int arg);
-+	const char *str;
-+	int *slot;
-+	int *priv;
-+};
-+
-+const struct desc descriptor = {
-+#if defined(PATCHED) && defined(WHICH_FUNC)
-+	.fn = callee_b,
-+#else
-+	.fn = callee_a,
-+#endif
-+#if defined(PATCHED) && defined(WHICH_STR)
-+	.str = "a different literal",
-+#else
-+	.str = MESSAGE,
-+#endif
-+#if defined(PATCHED) && defined(WHICH_SLOT)
-+	.slot = &slots[2],
-+#else
-+	.slot = &slots[1],
-+#endif
-+#if defined(PATCHED) && defined(WHICH_PRIV)
-+	.priv = &priv_slots[3],
-+#else
-+	.priv = &priv_slots[1],
-+#endif
-+};
-+
-+int target(int x)
-+{
-+	return descriptor.fn(x) + plain + sized[0] + (int)descriptor.str[0] +
-+	       *descriptor.slot + *descriptor.priv;
-+}
-diff --git a/tools/objtool/tests/generic/test-checksum-data.sh b/tools/objtool/tests/generic/test-checksum-data.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-new-key.sh b/tools/objtool/tests/generic/test-jump-label-new-key.sh
 new file mode 100755
-index 000000000000..e915026b79a7
+index 000000000000..3bc6005fc776
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-checksum-data.sh
-@@ -0,0 +1,61 @@
++++ b/tools/objtool/tests/generic/test-jump-label-new-key.sh
+@@ -0,0 +1,51 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# What a data object's checksum has to cover.
++# A patch may introduce a static branch where the original function had none.
 +#
-+# checksum_update_object() hashes the symbol's length, its bytes (when the
-+# section has any -- .bss does not), and then
-+# every relocation it carries -- as the target's name plus the adjusted addend,
-+# except for a reference into a string section, which contributes the string's
-+# contents instead.
++# That is not the same case as patching a function which already has one.  The
++# __jump_table entry is itself new, so there is no counterpart in the original
++# to correlate it against: klp diff has to carry the entry and the key into the
++# patch from scratch, and the key has to be reached the way any other reference
++# to a vmlinux symbol is.
 +#
-+# Each of those is load-bearing, and the failure is always the same shape: a
-+# checksum that ignores one of them calls a changed object unchanged, klp diff
-+# leaves it out of the patch, and the patched code goes on reading the
-+# kernel's old copy.  Nothing says so at build time.
++# Get it wrong and the entry is dropped, leaving a static branch the kernel
++# never patches -- the code takes the wrong arm forever, silently.
 +#
-+# The string case is the one that cannot be caught by hashing bytes alone.  The
-+# pointer is identical -- same section, same offset -- and only the text it
-+# refers to moved.
++# Where the key lives still decides whether that is allowed, exactly as it does
++# for a key the original already had: a module-owned one cannot be reached, so
++# introducing one has to stop the build rather than emit an entry nothing will
++# resolve.
 +#
-+# Covers the same ground as corpus/x86_64/checksum-data-basic,
-+# checksum-data-func-ptr, checksum-data-string-ptr and checksum-string-reloc in
-+# Joe Lawrence's klp-build unit test corpus.
++# Covers the same ground as corpus/x86_64/static-branch-vmlinux-new and
++# static-branch-module-new in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
-+setup
++setup klp_test_key
++build_pair jump_label.c -DNEW_KEY
 +
-+# check <flag> <symbol> <what changed>
-+#
-+# Build the pair with one difference and require that symbol's checksum to move.
-+check()
-+{
-+	build_pair checksum_data.c "-D$1"
-+	run_checksum
++# The premise: the original really has no jump table, and the patched one does.
++has_input_section orig.o __jump_table &&
++	fail "fixture put a __jump_table in the original; nothing new to add"
++has_input_section patched.o __jump_table ||
++	probe_skip "compiler produced no __jump_table on this arch"
 +
-+	assert_checksum_differs "$2"
-+}
++run_diff
 +
-+# The object's own bytes.
-+check PLAIN_VALUE plain
-+# Its length, for a .bss object whose bytes are not hashed at all.
-+check LONGER sized
-+# A relocation's target: same bytes in the object, different symbol named.
-+check WHICH_FUNC descriptor
-+check WHICH_STR descriptor
-+# The contents of a string the object points at, with the pointer untouched.
-+check STR_CONTENT descriptor
-+# A relocation's addend: same target symbol, different offset into it.
-+check WHICH_SLOT descriptor
-+# The same, for a static reached through its section symbol: the reference has
-+# to be resolved back to the object before there is a name or offset to hash.
-+check WHICH_PRIV descriptor
++assert_patched target
++assert_section __jump_table
++assert_reloc_sym __jump_table target
 +
-+# Having shown five things that must change it, show one that must not: an
-+# unrelated edit elsewhere in the file leaves this object alone.
-+build_pair checksum_data.c -DPLAIN_VALUE
-+run_checksum
-+assert_checksum_matches descriptor
++# The same new branch, with the key owned by a module.  Drop the vmlinux export
++# first: while it is exported the key is reachable and being new changes
++# nothing, which is what the first version of this got wrong.
++export_syms
++rm -f "$workdir/out.o"
++build_pair jump_label.c -DNEW_KEY -DMODNAME='"klp_testmod"'
++run_diff 255
++assert_diff_log 'unsupported static branch key klp_test_key'
++[ -e "$workdir/out.o" ] &&
++	fail "output object produced for a rejected input"
 +
-+pass "data checksums cover length, bytes, reloc targets and string contents"
++pass "static branch introduced by the patch carried in, or rejected for a module key"
 -- 
 2.53.0-Meta
 
