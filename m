@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED015476E2
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28244B1D1D
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584492; cv=none; b=hDA3/k3y2z0fsrKFzL54/p4jn0J/nRy+gOQFU6nCUXmIaLt1Avlvt7f+LH8mflHOWS8gehGP8YDA0fb/oD7Sic1HF13pfgDHjYXQYwRZE1oyVRmbQNJ0kE0kzdcigt+8QkK93kJjrm2RnP6hKMGA4NWslyjEDVBGdqGWS+SCNQQ=
+	t=1789584492; cv=none; b=SnQYNZ1eni8+dXes5zmHUS4Z+ccFTmqHJMrF6ptgQKGLBMzUHQ5lzMl/fCDjIegfEiMSlMiN7JUNzuUr9NZwQKjII94mgsoxY8rcD/9A5kr4xlrkqVSNiac/r8AOQvXmqbcYu6btSHWE/asXz/e0w8EYAwOn72ujqbOPYNOUZZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789584492; c=relaxed/simple;
-	bh=ha2j3D/e6XIkNPOz4ElxWb1u69psoZKFym68nHq0y4s=;
+	bh=BnPfarbKRQ3iCIGhGkcAP8phh6qju9esOxbDxnCu1Bw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UOMde3mUkjVFxbPVXlzigtVcLgqxvgJFc5lY6A50yX0vtcjsHZxZL/lNyNkJUoayeezXdsNUzfhOeUvVVcXyoNf/Bjhjfm7vU+ie+SJNKysElG6MVnkx5z1z+mTrseHvVhngm1DhduHxCCKXYi/1/Y34Uov3QneSyZbcwTurWsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B0oKA51E; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=dYvpmRgW6kY93ouASSuvbYMnDsn6n5giCRbXveuikN14rf9wo2bX9+htCkJLGWKP82hR664GxO80RQbXwfGvz80TJaGPd2dXuXJQj8PBwrzCpSXaT823gWt90c0+WYaonO7C4oknCgTjHjABVrwOXtYQjin2+TIUW8yEX4pjB1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DOp2pyEu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B0oKA51E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B73421F0089A;
-	Wed, 16 Sep 2026 18:47:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DOp2pyEu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672C51F00893;
+	Wed, 16 Sep 2026 18:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584463;
-	bh=/HU4aPOVrXte0M4++toz3r7qo41DyjK3t7DMHb2SN5U=;
+	s=k20260515; t=1789584473;
+	bh=RQ7omf0xNS0uK9GAW+/RIpG2YvJsXoTit1j7iA2dHJ0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=B0oKA51EK1z0j47YqtmRtwJ1VrkgZnTVGVT10HD7C4NpW7SkHhZiroC6WjFZCmICu
-	 9EncSJUDIknFUg25NnmHAIdrd6J46X9uHCBBjl4df7bgzt39qnVNBmXi46XtReOAx7
-	 kgqlFtOwPcsDZs05YPBxmzhR14lX/K7k0ONQucZMtf7ZniGMth2FRXYkbVNApWIr2P
-	 xJGxSukko+tXG8pMNyBuxPECmkTlT3uUD3ESMjCazGgPLXw+LArO2yY18nSp6ETvx6
-	 m6Jicdiyos8W6NW71+zIwe2lkykm+542UKYi/NnSmngEGV8zfYLBYdlhIXZMqxrxLQ
-	 Kr6eZXpdZtlqw==
+	b=DOp2pyEuifVI+A7Dc7uNlpWSZMLJyJl+eitOiOe9ybVeVIDVfpE3xhegiVTy7hCk9
+	 rCj5YWb5WdgzQ5uKNNkbotwWNcgw3j89JL+qSBL96AbkGbE9hM3rB82Pj8yFRxO+XV
+	 UDytmoSLpMl2blCyfF3Qs+s7VlkuQoO41ohUVpP0GyVXs0w2FDdLGwAiCaaIJvdikf
+	 u0hPw+g3ABJLvKfSgBURrbcXh/YW1T0oY+j7bW/R0p4y8djnR5AGj0xrw25MTg7Yiz
+	 aCv2cBJuDcZMH8dQU3V6XEHw3M/okX5roUIi58Y4JmFx8ZYHaojE6fB7sMdeAtErBV
+	 jyB2EZVpRf0iQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 47/58] objtool/klp: Add test for symbols with no checksum entry of their own
-Date: Wed, 16 Sep 2026 11:43:40 -0700
-Message-ID: <20260916184351.2720310-48-song@kernel.org>
+Subject: [PATCH v5 49/58] objtool/klp: Add test for tracepoint and pr_debug static branch keys
+Date: Wed, 16 Sep 2026 11:43:42 -0700
+Message-ID: <20260916184351.2720310-50-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,179 +51,91 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-.discard.sym_checksum is an array of { address, checksum } looked up by the
-address a relocation points at, so the invariant is one entry per address.
-calculate_checksums() skips zero-length symbols, aliases and cold parts to
-keep it, and nothing checked that it does.
+A module-owned static branch key is normally fatal, because late module
+patching lets the livepatch load before the module it depends on and
+jump_label_add_module() then dereferences an unresolved entry.
 
-A duplicate entry is not a build failure.  It makes the lookup ambiguous,
-and whichever checksum loses is never consulted again -- so a function
-whose code changed can be read as unchanged and dropped from the patch.
+Tracepoints and pr_debug() generate such keys everywhere, so refusing them
+outright would make any function containing a trace_*() call or a
+pr_debug() unpatchable.  klp diff drops the entry, warns, and carries on:
+the patched code works with that one tracepoint or debug print permanently
+off.
 
-The alias skip is verified the usual way: remove it and the test fails.
-The other two are not isolated, and the test says so rather than implying
-otherwise.  A zero-length symbol is excluded by several of the guards at
-once -- its section has no data either -- so removing any one of them
-changes nothing observable; the assertion stands as a check on the
-behaviour, not on the line that produces it.  The cold-part skip needs a
-compiler that splits functions and is not reached here at all.
+Both halves matter, and the test asserts both.  A build which fails is a
+function nobody can patch; an entry left in place is the corruption the
+rejection exists to prevent.
 
-Which of an aliased pair keeps the entry falls out of symbol table order,
-so the test requires exactly one of the two rather than naming a winner --
-as written first it named real_function and failed, because gcc kept the
-alias.
+Give the fixture a KEY_NAME knob so the same static branch can be built
+with either special name.  Verified by removing each exemption in turn --
+the test fails for both.  That the entry is then dropped is asserted but
+not isolated, and the test says so.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/checksum_skip.c    | 47 +++++++++++
- .../tests/generic/test-checksum-skip.sh       | 81 +++++++++++++++++++
- 2 files changed, 128 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/checksum_skip.c
- create mode 100755 tools/objtool/tests/generic/test-checksum-skip.sh
+ .../generic/test-jump-label-exempt-keys.sh    | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/checksum_skip.c b/tools/objtool/tests/generic/fixtures/checksum_skip.c
-new file mode 100644
-index 000000000000..973bdc10295d
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/checksum_skip.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Symbols calculate_checksums() must not give an entry of their own.
-+ *
-+ * Three kinds are skipped, for two different reasons:
-+ *
-+ *   zero-length   there is nothing to hash, and an entry keyed on the
-+ *                 symbol's address would collide with whatever really lives
-+ *                 there.
-+ *   alias         a second name for an address already checksummed.
-+ *   cold part     hashed as part of its parent, which func_for_each_insn()
-+ *                 walks into, so a separate entry would double-count it.
-+ *
-+ * An entry per address is the invariant: .discard.sym_checksum is looked up by
-+ * the address a relocation points at, so two entries for one address make the
-+ * lookup ambiguous and one of the two checksums unreachable.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+/* Zero-length: an object symbol of size 0, in a section of its own. */
-+extern char empty_marker[];
-+__asm__(".pushsection .data.empty_marker,\"aw\",@progbits\n"
-+	".globl empty_marker\n"
-+	".type empty_marker, @object\n"
-+	"empty_marker:\n"
-+	".size empty_marker, 0\n"
-+	".popsection\n");
-+
-+int real_function(int x);
-+int real_function(int x)
-+{
-+#ifdef PATCHED
-+	return x + 2;
-+#else
-+	return x + 1;
-+#endif
-+}
-+
-+/* Alias: a second name for real_function's address. */
-+int alias_function(int x) __attribute__((alias("real_function")));
-+
-+int target(int x)
-+{
-+	return real_function(x) + alias_function(x) + (int)(long)empty_marker;
-+}
-diff --git a/tools/objtool/tests/generic/test-checksum-skip.sh b/tools/objtool/tests/generic/test-checksum-skip.sh
+diff --git a/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh b/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
 new file mode 100755
-index 000000000000..f245535a0f36
+index 000000000000..fa2f913d860b
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-checksum-skip.sh
-@@ -0,0 +1,81 @@
++++ b/tools/objtool/tests/generic/test-jump-label-exempt-keys.sh
+@@ -0,0 +1,51 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Symbols which must not get a checksum entry of their own.
++# Two kinds of module-owned static branch key are disabled with a warning
++# instead of rejected.
 +#
-+# .discard.sym_checksum is an array of { address, checksum } looked up by the
-+# address a relocation points at, so the invariant is one entry per address.
-+# calculate_checksums() skips three kinds of symbol to keep it:
++# A module-local key is normally fatal: late module patching lets the livepatch
++# load before the module it depends on, so the unresolved __jump_table entry is
++# dereferenced by jump_label_add_module().  test-jump-label-module-key covers
++# that rejection.
 +#
-+#   zero-length   nothing to hash, and its address belongs to whatever really
-+#                 lives there
-+#   alias         a second name for an address already covered
-+#   cold part     hashed into its parent, which func_for_each_insn() walks
-+#                 into, so its own entry would double-count
++# Tracepoints and pr_debug() generate such keys everywhere, though, and
++# refusing them outright would make any function containing a trace_*() call or
++# a pr_debug() unpatchable.  So klp diff drops the entry, says so, and carries
++# on: the patched code keeps working with that one tracepoint or debug print
++# permanently off.
 +#
-+# A duplicate entry is not a build failure.  It makes the lookup ambiguous, and
-+# whichever checksum loses is simply never consulted again -- so a function
-+# whose code changed can be read as unchanged and dropped from the patch.
++# Both halves matter.  A build that fails is a function nobody can patch; an
++# entry left in place is the memory corruption the rejection exists to prevent.
 +#
-+# Of the three, only the alias skip is isolated here: removing it makes this
-+# test fail.  A zero-length symbol is excluded by more than one of the guards
-+# at once -- its section has no data either -- so no single change makes that
-+# assertion fail, and it stands as a check on the behaviour rather than on the
-+# line which produces it.  Nothing here reaches the cold-part skip, which
-+# wants a compiler that splits functions; test-cold-function covers that
-+# symbol surviving into the patch, not its checksum.
++# The two exemptions are isolated: remove either and this fails.  That the
++# entry is then dropped is asserted but not isolated -- making the caller keep
++# it anyway produces no output difference here, so that assertion stands as a
++# check on the behaviour rather than on the line which produces it.
 +#
-+# Covers the same ground as corpus/x86_64/checksum-zero-len-sym,
-+# checksum-alias-skip and checksum-cold-skip in Joe Lawrence's klp-build unit
-+# test corpus.
++# Covers the same ground as corpus/x86_64/static-call-module-tracepoint and
++# pr-debug-unsupported in Joe Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair checksum_skip.c
 +
-+assert_input_symbol empty_marker
-+assert_input_symbol alias_function
-+run_checksum
-+
-+# entries_for <object> [-t]
-+#
-+# The symbol names .discard.sym_checksum has an entry for, one per line.  With
-+# -t, what each entry points at instead: the name and its addend, which is the
-+# address the kernel looks the entry up by.  A name alone is not that address,
-+# since a relocation against a section symbol names the section and puts the
-+# offset in the addend, and several entries can then share a name honestly.
-+entries_for()
++# check <key name> <expected warning>
++check()
 +{
-+	in_relocs "$1" | awk -v target="${2:-}" '/rela\.discard\.sym_checksum/,/^$/ {
-+		if ($1 !~ /^[0-9a-f]{8,}/)
-+			next
-+		if (target == "-t")
-+			print $5, $6, $7
-+		else
-+			print $5
-+	}'
++	build_pair jump_label.c -DKEY_NAME="$1" -DMODNAME='"klp_testmod"'
++	require_input_section __jump_table
++
++	# Accepted, not rejected: this is the whole point.
++	run_diff
++	assert_diff_log "$2"
++
++	# And the entry is gone, not merely complained about.
++	assert_patched target
++	assert_no_section __jump_table
 +}
 +
-+entries="$(entries_for orig.o)"
++check __tracepoint_klp_test        'disabling unsupported tracepoint klp_test'
++check __UNIQUE_ID_ddebug_klp_test  'disabling unsupported pr_debug'
 +
-+# The control: something real did get an entry, so an empty listing cannot
-+# make the rest of this pass by default.
-+echo "$entries" | grep -qx target ||
-+	fail "no checksum entry for target"
-+
-+echo "$entries" | grep -qx empty_marker &&
-+	fail "zero-length symbol got a checksum entry"
-+
-+# One of the two names for that address is kept and the other skipped; which
-+# one falls out of symbol table order and is not the point.  Two would be.
-+n="$(echo "$entries" | grep -cxE 'real_function|alias_function')"
-+[ "$n" = 1 ] ||
-+	fail "expected 1 checksum entry across real_function and its alias, found $n"
-+
-+# One entry per address, which is what the skipping is for.
-+dupes="$(entries_for orig.o -t | sort | uniq -d)"
-+[ -z "$dupes" ] ||
-+	fail "two checksum entries for one address: $dupes"
-+
-+pass "zero-length symbols and aliases get no checksum entry of their own"
++pass "tracepoint and pr_debug keys disabled with a warning, not rejected"
 -- 
 2.53.0-Meta
 
