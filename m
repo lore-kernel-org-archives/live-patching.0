@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCD64BF944
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5334D597E
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584442; cv=none; b=c8FewoEFiAYkBmXi6VmcoL/nJgTG0zsTxl8hym8rtuK9Fqq+YmPzBLnugLjcOKZMuEjGrPQ/UZw5KoSghzVsGTNuBxW11aSZW8YJOmFiDpVK1vPGOzk14+AZ7Q1tw2u3Sh4nEJs1l5xnVekO9+OthKpi5AkZVepY8kF8MrRWMJA=
+	t=1789584444; cv=none; b=YyUNpEpw4+ytjDt/UUdQO3TfuoHOG2PXMaL6B+ABFAptOijr29NXW2H2U/O/oF6DqCTLq9WYwbs8VYJt9+8CMgB09elCvdkFgzOoBiFxUZ4KelzSOA2BDRx1+c3rwTWC/u9Shj2TcIIy1uSiitvWA+rnBk5ZnHu2KfbKt/2lhuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584442; c=relaxed/simple;
-	bh=x23WLfRz/WNl+R8iPHplQ5d4l3VeD68nBcNw7LYT7M4=;
+	s=arc-20240116; t=1789584444; c=relaxed/simple;
+	bh=EUllrK2ob0byegLQraQasGEOHSPgqWzPpz89wAFozwg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u9v8VclhdBhDkpnnirCp9yho+YR/NdJfpk+5ikyiY4LaLOc6gD5JDuwWwXPr2DBhEliJNSWSMf2lIJtySWv2BgcfoNOECGslHvK0iVUbZgfjZEToFPUtlNbHseaQoPiqahX0dCj9w6CaoOuaWlcDm4OEF26snemIm35JQz5yo4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rt9w3PgZ; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=XrqKBlbRNxjdSoRjkhvBGshpPDt4GrkYYX/xQzjRlIXhsTl/ySWMUxdWKm7PWVy+Hlddr5l/B01GvD/p+VoFi9FHdLejm/npdBdCKTogf2uUDFXvv3x5euN3BkHR73dj4tmQz6diAy8FhqysQQ7KbJcpeT/dGhTYqbR+Noo7Rck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c79W60Iz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rt9w3PgZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB2A1F000FF;
-	Wed, 16 Sep 2026 18:46:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c79W60Iz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA571F008A2;
+	Wed, 16 Sep 2026 18:47:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584411;
-	bh=aIGNw+u2EyDNP535o9X8wnUBsBv3duJFuIjIcLTg34k=;
+	s=k20260515; t=1789584435;
+	bh=v6CnK39IiT17AexXoU1tlXRI9DIx6WBmq+qkliR9b9g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Rt9w3PgZJtZ/4y9xrQjBPUNlPSf1FojHDM5/TsItXMwlyxrF2yGsOQxlQCENp4ZGI
-	 Y3uP6JoF7M+PNzSv18EkJWrvay5pTB3y2ZK4Z//KpJURWlC1kY9rRChev6vHWmcZqj
-	 4v4620TO0yITmxXTKunBgGpf8r+RBpGIutfWRWsNbennCyjku9518+kIKHw4c/QCOZ
-	 22r4eodOmX2P/ji/yuJVqgyLDSEjEaeU0YG48/oe7J3+zY+VW3bZMDoStuau01TqSS
-	 QV8OszHT29rEme6J91ulRQxx22S7bAggFgry0DbTxOi7aetKAbEVW4U9SMHXJ3je2z
-	 E7rUnKrgpQ2hw==
+	b=c79W60IzMUcQ+y+B9DtIOUPdSdFs7+qwYbP6jtVzmtFzrigh6yGy4rzYiuiOsldDd
+	 OGCBD5juyoLtxHkwARa+y/ScqrKkW70n5U9V9JJ/oKpyqda0UOI2QOXqnYTPalXHAQ
+	 0QyN2JNbB6rSPFcSKuJd9X2jo1IV88Q0F3cKDeRFoz+Og/yBSggW4EAJPtHUU6GlOF
+	 4O7yuw3YkiryCIVPcs+vM6DuSRSGHQ+2mKdS8L0m9g9ZHt4M6LEg1P3QgfMiWvO1yY
+	 pWZBs9LinICpnIgesS906NQFI+SVr2ykG5qNNCWBmAV7JLJ8MdYui1HSnD8dJohBj7
+	 RkxtOTLCWKAWw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 36/58] objtool/klp: Add test for position-independent checksums
-Date: Wed, 16 Sep 2026 11:43:29 -0700
-Message-ID: <20260916184351.2720310-37-song@kernel.org>
+Subject: [PATCH v5 41/58] objtool/klp: Add test for kCFI prefix symbols and traps
+Date: Wed, 16 Sep 2026 11:43:34 -0700
+Message-ID: <20260916184351.2720310-42-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,135 +51,125 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A function that only moves has not changed, and its checksum must not move
-with it.  Otherwise every patch reports as changed everything that shifted
-because something ahead of it grew.
+Two properties, asserted separately because they fail differently:
 
-The fixture is built with -fno-function-sections, overriding the harness
-default: with per-function sections every function sits at offset 0 of its
-own section and nothing ever moves, so the test would prove nothing.  It
-also calls across to another function rather than looping within itself --
-a loop branch keeps the same displacement wherever the function goes, so it
-is not position-dependent to begin with.
+  - the __cfi_<func> prefix symbol has to be carried with the patched
+    function, or the function has no type identity and indirect calls to it
+    trap;
+  - its .kcfi_traps entry has to be extracted, or the trap is not
+    recognised as a CFI failure and a clean report becomes an oops.
 
-This tests the behavior of commit cca84cb12908 ("objtool/klp: Fix
-position-dependent checksums for non-relocated jumps/calls").
+test-special-section hand-assembles a .kcfi_traps entry, which is what
+makes it catch commit 7df1638df97b ("objtool/klp: Fix .kcfi_traps special
+section extraction").  Nothing until now built real kCFI code.
+
+This tests the behavior of commit da4326573ae8 ("objtool/klp: Fix kCFI trap
+handling").  Commit f7ceffd21a8a ("objtool/klp: Fix kCFI prefix
+finding/cloning") cannot be tested as such, its code having been rewritten
+by commit fe6a87e0abac ("objtool: Improve and simplify prefix symbol
+detection"); this guards the current implementation's behaviour instead.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../generic/fixtures/checksum_position.c      | 42 ++++++++++++++++
- .../tests/generic/test-checksum-position.sh   | 50 +++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/checksum_position.c
- create mode 100755 tools/objtool/tests/generic/test-checksum-position.sh
+ tools/objtool/tests/x86/fixtures/kcfi.c | 39 +++++++++++++++++++++++++
+ tools/objtool/tests/x86/test-kcfi.sh    | 39 +++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 tools/objtool/tests/x86/fixtures/kcfi.c
+ create mode 100755 tools/objtool/tests/x86/test-kcfi.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/checksum_position.c b/tools/objtool/tests/generic/fixtures/checksum_position.c
+diff --git a/tools/objtool/tests/x86/fixtures/kcfi.c b/tools/objtool/tests/x86/fixtures/kcfi.c
 new file mode 100644
-index 000000000000..4320bc220592
+index 000000000000..b62fc60634cf
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/checksum_position.c
-@@ -0,0 +1,42 @@
++++ b/tools/objtool/tests/x86/fixtures/kcfi.c
+@@ -0,0 +1,39 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A function whose position in the section changes between the two builds,
-+ * without the function itself changing.
++ * An indirect call, which under kCFI is preceded by a type check and a trap.
 + *
-+ * target() calls callee() twice, and a call within the same section needs no
-+ * relocation: the displacement is in the instruction.  It is that displacement
-+ * which moves, and hashing those bytes makes the checksum move with it.  Both
-+ * must therefore share a section, which is why the test passes
-+ * -fno-function-sections.
++ * Clang emits a __cfi_<func> prefix symbol carrying the type hash ahead of
++ * every address-taken function, and records the trap site in .kcfi_traps.
++ * Both belong to the function and both have to come with it into a patch.
 + *
-+ * What has to change is the distance between the two, and PATCHED changes it
-+ * by aligning them rather than by inserting a function between them.  Where a
-+ * compiler puts an added function is its own business: gcc emits these in
-+ * source order, so a function written between callee() and target() separates
-+ * them, but clang emits target() immediately before callee() whatever the
-+ * source says, and an added function lands ahead of both.  That moves target()
-+ * without moving it relative to callee(), the displacement comes out identical
-+ * in both builds, and the test passes without having asked anything.
-+ *
-+ * Alignment moves the functions apart on both, and moves neither function's
-+ * own instructions -- which is exactly the distinction under test.
++ * Needs -fsanitize=kcfi, which only Clang has.
 + */
-+
-+#ifdef PATCHED
-+#define MOVED	__attribute__((aligned(64)))
-+#else
-+#define MOVED
-+#endif
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+__attribute__((noinline)) MOVED static int callee(int x)
++static int impl_a(int x)
 +{
-+	return x * 5 + 1;
++	return x + 1;
 +}
 +
-+__attribute__((noinline)) MOVED int target(int x)
++static int impl_b(int x)
 +{
-+	return callee(x) + callee(x + 1);
++	return x * 2;
 +}
-diff --git a/tools/objtool/tests/generic/test-checksum-position.sh b/tools/objtool/tests/generic/test-checksum-position.sh
++
++__attribute__((noinline)) int (*pick(int x))(int)
++{
++	return (x & 1) ? impl_a : impl_b;
++}
++
++int target(int x)
++{
++	int (*fn)(int arg) = pick(x);
++
++#ifdef PATCHED
++	return fn(x) + 2;
++#else
++	return fn(x) + 1;
++#endif
++}
+diff --git a/tools/objtool/tests/x86/test-kcfi.sh b/tools/objtool/tests/x86/test-kcfi.sh
 new file mode 100755
-index 000000000000..d05e28014e1e
+index 000000000000..b583ef608747
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-checksum-position.sh
-@@ -0,0 +1,50 @@
++++ b/tools/objtool/tests/x86/test-kcfi.sh
+@@ -0,0 +1,39 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A function's checksum must not depend on where the function sits.
++# Under kCFI an indirect call checks a type hash before jumping, and traps on a
++# mismatch.  Two things belong to the calling function and must come with it
++# into a patch:
 +#
-+# A jump or call without a relocation encodes its target as an offset from the
-+# instruction.  Hashing those bytes makes the checksum change whenever anything
-+# ahead of the function changes size -- so an unrelated edit elsewhere in the
-+# file reports this function as changed too, and the patch grows to include it
-+# and everything it references.  Nothing fails; the livepatch is just larger and
-+# riskier than the patch it came from.
++#   - the __cfi_<func> prefix symbol holding the hash.  Lose it and the patched
++#     function has no type identity, so indirect calls to it trap.
++#   - its .kcfi_traps entry.  Lose that and the trap is not recognised as a
++#     CFI failure, so what should be a clean report becomes an oops.
 +#
-+# Here the "patch" adds a function ahead of target() and changes nothing else.
++# Neither shows up at build time.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
++clang_only "kCFI is a Clang feature"
++
 +setup
 +
-+# -fno-function-sections, or each function is at offset 0 of its own section
-+# and target() never moves.
-+build_pair checksum_position.c -fno-function-sections
++# Declared above that this is Clang's; a given Clang may still be too old.
++cc_supports -fsanitize=kcfi ||
++	probe_skip "this clang does not support -fsanitize=kcfi"
 +
-+assert_input_symbol target
++build_pair kcfi.c -fsanitize=kcfi
 +
-+# The fixture is only meaningful if target() actually moved.
-+# What has to change is the displacement target's calls encode, and that is
-+# the distance to callee() -- not target's own offset.  A compiler which put
-+# the added function ahead of both would move target and leave the distance
-+# alone, and then the bytes are identical and the checksum matches for the
-+# uninteresting reason.  Ask about the distance.
-+sym_off()   # $1 object, $2 symbol
-+{
-+	in_symbols "$1" | awk -v n="$2" '$NF == n { print $2; exit }'
-+}
++assert_input_section .kcfi_traps
++assert_input_symbol __cfi_target
 +
-+orig_t="$(sym_off orig.o target)";    orig_c="$(sym_off orig.o callee)"
-+new_t="$(sym_off patched.o target)";  new_c="$(sym_off patched.o callee)"
++run_diff
 +
-+[ -n "$orig_t" ] && [ -n "$orig_c" ] && [ -n "$new_t" ] && [ -n "$new_c" ] ||
-+	fail "target or callee missing from one of the objects"
++assert_patched target
 +
-+orig_gap=$(( 16#$orig_t - 16#$orig_c ))
-+new_gap=$((  16#$new_t  - 16#$new_c ))
-+[ "$orig_gap" != "$new_gap" ] ||
-+	probe_skip "this compiler moved target() and callee() together;" \
-+		   "the call displacement did not change"
++# The prefix symbol comes with its function ...
++assert_symbol __cfi_target
++# ... and so does the trap entry.
++assert_section .kcfi_traps
 +
-+assert_checksum_matches target
-+
-+pass "checksum unchanged when the function only moves"
++pass "kCFI prefix symbol and trap entry carried with the patched function"
 -- 
 2.53.0-Meta
 
