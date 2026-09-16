@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15624D7968
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B5A4B1D1C
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584533; cv=none; b=CzeO1FI+REMisQUQLKs5nCQ2KmoA3/pLq45QhPJb5wt6X9jFiFDLrGkbMvrnl46Dui/7RDsJNxUDHpHOV1OWncdzMoZkvFNQbabgY7Z259NacsStI7flKpxPp8I4vqP+SiUnThClkSKvrnWxrMPAorbXDPGy/tpGjV9Yh4EgfgM=
+	t=1789584545; cv=none; b=Z82KU3vMCgk16geAVgpmS+6BrtgPdeJE7/5sjQ4c2BH/rRzRvXPIdPfyiL/F0ZioYLUAwLAe0mXGd+MdquZ6KWuCYMdSmNM5DMCWG8/RYylmL1dsxOYVRvQiDiY+B8430paS8BJGyXmhiSXEtkfXiHUU556ILA8PV5yEQlSLM4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584533; c=relaxed/simple;
-	bh=b5KyROuZxh+WwoTgI3HxMj54P9MfUkbHbg/duW+jiB4=;
+	s=arc-20240116; t=1789584545; c=relaxed/simple;
+	bh=s7BcnOfp+dyOEe3WTKVX/deM6ZlO4tPhcXj2jkzPZ8U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hsht26RjrQ3Ni3jR0XFm8f88ya7yd4V2ki8zeQTXdkPmhe6M0btqZDQ0a9SFIHarK1ao9rNckGN69Msml+6k8tXEFrwcUqe1uQEz2rMNyXHcmtIIm30XqzVstcNdNv3fX5Gxv9H0FdM1SQhYqjUTTNdnXh4wOwsjyFAK+Ezh8dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+eT/BHc; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=IUJebTb8wMnvsR18GdldVVysdvuzm5S3ac0JJXX/7YJm7qwDn5aszyrRR7TyY6vypww9XFF4jn9tzyF2tFVd0rIyiX3ek1JXzwXUYtN+xEepifyY9KYvI60uxbfkHc75fll1DrVA0Ywn6Ig728piuDyMX+rVvc7oTCRwGH5mx5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NqsxkADT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+eT/BHc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 673111F00898;
-	Wed, 16 Sep 2026 18:48:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NqsxkADT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87E41F00893;
+	Wed, 16 Sep 2026 18:48:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584502;
-	bh=aUp49JyynfN8hjkRFq4mGHCtvKsDixFfpxlinBJVmTo=;
+	s=k20260515; t=1789584516;
+	bh=xGH9iUIdFsQ4GRRgLGwPafRP6gcudBHK9UzFB1lSXPE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=M+eT/BHcXvHvEyt0lsSxnjZDp/VVspWDLydjGkhbiUbRWl8h0cNYHysvqiqLqX+SW
-	 /c/QGD8Yv16KaPQAu76dN52cVayjpr2xW7mxSLwM1+Fu6+MCz366ftY9SlrJod5whf
-	 DfGtStddr2XaR4MhUwoD4cJsffXpfl6S14Qkyriq9cf9VH1RLdGLEypxupD2TT6QZv
-	 H3jL+M1dothAqib4r+XkZz2j+Z9MsDIBkGtxYenMI2AUspS7A7Si4C+RvyDyBI/fPL
-	 G9TfATNuAvlMA0DfK/H5Td5Gb0BCQ4mWptLK4q286Df/ApBvs8pInDi1L52mL+puSl
-	 gq6YedykcnK4w==
+	b=NqsxkADT5c6UD1yXq807sVE+X28BFYGuG7Yk1G/jL0kmprtitfCs6ILzy5aYy26qP
+	 59U7Z0YeNOQC/0zh2CUZFuu5Lr52prIl7H5+q8/Hk1d+lWflAQkJM0KiXpLVYD7R9v
+	 H0LKBfxzH9IqPvuOmN1CdYc69vfsLOnuC3ExQEcd5WozGPVpeoFaA+Za47VOGYoq5W
+	 S3A/zTp/t4db6YkyWQ1pcOb1O0nnZ7uPItCp4jgtB3Dt8Il47AdokCMqEdEs2pzW9I
+	 t9K1MjB7gDvpEdTYuM3Dw5d1thqwPb7tZGjpPx6NidE3aqu3wrFxK7AiIARldYYBix
+	 +yHs0Kjg7oDbw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 55/58] objtool/klp: Add test for absolute and __ADDRESSABLE symbols
-Date: Wed, 16 Sep 2026 11:43:48 -0700
-Message-ID: <20260916184351.2720310-56-song@kernel.org>
+Subject: [PATCH v5 58/58] objtool/klp: Add test for ThinLTO symbols sharing a demangled name
+Date: Wed, 16 Sep 2026 11:43:51 -0700
+Message-ID: <20260916184351.2720310-59-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,138 +51,182 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A SHN_ABS symbol has no section, so any walk of sym->sec which does not
-check dereferences NULL, and the kernel has plenty of them -- from linker
-scripts and from .set in assembly.  __ADDRESSABLE() emits a pointer into
-.discard.addressable purely to keep a symbol referenced; it means nothing
-to a livepatch and is discarded at link time, but it is a relocation like
-any other and gets looked at.
+A file-local symbol which ThinLTO has to make visible is renamed
+helper.llvm.<hash>.  With two such helpers in one link, the original and
+the patched object hold two each, all four spelled differently, and
+demangling gives "helper" for every one of them -- so the name alone cannot
+say which corresponds to which.
 
-Neither is what the patch changes.  What this guards against is not a wrong
-answer but a crash or an error on input the kernel produces routinely,
-which would make every function near one unpatchable.
+Three translation units, two with a static helper of the same name and a
+third calling into both, which is what forces the promotion.  Only one
+helper changes: paired correctly that means exactly one is cloned, and
+paired the wrong way round the other is, or both are.  Had both bodies
+changed, both would be cloned either way and the test would prove nothing
+-- which is how the first version of this was written.
 
-Not isolated to a single line, and the test says so: the absolute symbol
-here has zero length, so it is excluded before the section check is reached
-and removing that check alone changes nothing observable.
+The outcome is asserted, not the machinery.  With the clang tested here the
+pairing survives disabling the .llvm.<hash> suffix map and stubbing out
+llvm_suffix() entirely, so no single-line sabotage distinguishes it; the
+tiered matcher this case was written for is not needed for this shape.  The
+test says so rather than implying otherwise.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../generic/fixtures/abs_and_addressable.c    | 44 ++++++++++++++++
- .../tests/generic/test-abs-and-addressable.sh | 50 +++++++++++++++++++
- 2 files changed, 94 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/abs_and_addressable.c
- create mode 100755 tools/objtool/tests/generic/test-abs-and-addressable.sh
+ .../generic/fixtures/thinlto_ambiguity.c      | 57 ++++++++++++++
+ .../tests/generic/test-thinlto-ambiguity.sh   | 77 +++++++++++++++++++
+ 2 files changed, 134 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/thinlto_ambiguity.c
+ create mode 100755 tools/objtool/tests/generic/test-thinlto-ambiguity.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/abs_and_addressable.c b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
+diff --git a/tools/objtool/tests/generic/fixtures/thinlto_ambiguity.c b/tools/objtool/tests/generic/fixtures/thinlto_ambiguity.c
 new file mode 100644
-index 000000000000..6392ff99af42
+index 000000000000..b88830f41a92
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/abs_and_addressable.c
-@@ -0,0 +1,44 @@
++++ b/tools/objtool/tests/generic/fixtures/thinlto_ambiguity.c
+@@ -0,0 +1,57 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Two constructs which appear all over the kernel and must not upset klp
-+ * checksum or klp diff.
++ * Three translation units linked with ThinLTO, two of which have a file-local
++ * helper of the same name.
 + *
-+ * An absolute symbol (SHN_ABS) has no section, so anything walking sym->sec
-+ * without checking dereferences NULL.  The kernel makes them with linker
-+ * scripts and with .set in asm; VDSO and the fixed-address per-cpu bases are
-+ * the usual sources.
++ * TU_C calls into both of the others, so ThinLTO imports entry_a and entry_b
++ * and with them the static helper each one calls.  A file-local symbol which
++ * has to become visible is renamed helper.llvm.<hash>, and the hash is content
++ * derived -- so the two helpers get different hashes from each other, and
++ * TU_A's gets a different one again after the patch changes it.  Only TU_A's
++ * changes: were both bodies to change, both would be cloned whichever way
++ * they were paired, and the pairing would not be observable.
 + *
-+ * __ADDRESSABLE() emits a pointer into .discard.addressable purely to keep a
-+ * symbol referenced.  It is discarded at link time and means nothing to a
-+ * livepatch, but the pointer is a relocation like any other and has to survive
-+ * being looked at.
++ * That leaves klp diff with two symbols in the original and two in the patched
++ * object, all four named differently, which have to be paired up correctly.
++ * Demangling alone gives "helper" for all of them; something else has to
++ * decide which is which.
 + *
-+ * Neither is the subject of the patch; the point is that their presence does
-+ * not disturb the function that is.
++ * Only TU_A's helper changes.  That is what makes a wrong pairing observable:
++ * paired correctly, one helper is changed and the other is not, so exactly one
++ * is cloned.  Paired the wrong way round, both look changed -- or the wrong
++ * one does.  If both bodies changed the outcome would be the same either way
++ * and the test would prove nothing.
++ *
++ * BASE differs between the two so their bodies are not identical to begin
++ * with.
 + */
 +
++#if defined(TU_C)
++extern int entry_a(int x);
++extern int entry_b(int x);
++int glue(int x) { return entry_a(x) + entry_b(x + 1); }
++#else
++#ifdef TU_B
++#define ENTRY entry_b
++#define BASE 5
++#else
++#define ENTRY entry_a
++#define BASE 10
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+/* SHN_ABS, referenced from code. */
-+extern char abs_sym[];
-+__asm__(".globl abs_sym\n"
-+	".set abs_sym, 0x1234\n");
-+
-+int helper(int x);
-+int helper(int x) { return x + 1; }
-+
-+/* The shape of __ADDRESSABLE(helper). */
-+__asm__(".pushsection .discard.addressable, \"aw\"\n"
-+	".balign 8\n"
-+	".quad helper\n"
-+	".popsection\n");
-+
-+int target(int x)
-+{
-+#ifdef PATCHED
-+	return helper(x) + (int)(long)abs_sym + 1;
-+#else
-+	return helper(x) + (int)(long)abs_sym;
 +#endif
++static __attribute__((noinline)) int helper(int x, int len)
++{
++	int sum = 0, i;
++
++	for (i = 0; i < len; i++)
++#if defined(PATCHED) && !defined(TU_B)
++		sum += i * 2 + BASE;	/* only TU_A's helper changes */
++#else
++		sum += i + BASE;
++#endif
++	return sum + x;
 +}
-diff --git a/tools/objtool/tests/generic/test-abs-and-addressable.sh b/tools/objtool/tests/generic/test-abs-and-addressable.sh
++
++int ENTRY(int x) { return helper(x, 4); }
++#endif
+diff --git a/tools/objtool/tests/generic/test-thinlto-ambiguity.sh b/tools/objtool/tests/generic/test-thinlto-ambiguity.sh
 new file mode 100755
-index 000000000000..6adb23ed4b88
+index 000000000000..34f4f3a58e20
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-abs-and-addressable.sh
-@@ -0,0 +1,50 @@
++++ b/tools/objtool/tests/generic/test-thinlto-ambiguity.sh
+@@ -0,0 +1,77 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# An absolute symbol and an __ADDRESSABLE() pointer must not disturb the
-+# function being patched.
++# Two ThinLTO-promoted symbols sharing a demangled name must be paired up
++# correctly.
 +#
-+# A SHN_ABS symbol has no section, so any walk of sym->sec which does not check
-+# dereferences NULL -- and the kernel has plenty, from linker scripts and from
-+# .set in assembly.  __ADDRESSABLE() emits a pointer into .discard.addressable
-+# to keep a symbol referenced; it means nothing to a livepatch and is discarded
-+# at link time, but it is a relocation like any other and gets looked at.
++# A file-local symbol which ThinLTO has to make visible is renamed
++# helper.llvm.<hash>.  With two such helpers in one link the original and the
++# patched object hold two each, all four spelled differently, and demangling
++# gives "helper" for all of them -- so the name is not enough to say which
++# corresponds to which.
 +#
-+# Neither is what the patch changes.  The failure this guards against is not a
-+# wrong answer but a crash or an error on input the kernel produces routinely,
-+# which would make any function near one unpatchable.
++# Getting it wrong is silent and specific: the patch is built against the wrong
++# body, so one call site gets the other helper's arithmetic.  Nothing fails to
++# build and nothing fails to load.
 +#
-+# Not isolated to a single guard: the absolute symbol here has zero length, so
-+# it is excluded before the section check is reached and removing that check
-+# alone changes nothing observable.  This stands as a check on the behaviour
-+# rather than on the line which produces it.
++# test-thinlto-local covers the unambiguous case, one promoted symbol whose
++# hash moved.  This is the case where demangling alone is not an answer.
 +#
-+# Covers the same ground as corpus/x86_64/checksum-abs-sym-skip and
-+# addressable-symbols in Joe Lawrence's klp-build unit test corpus.
++# The outcome is asserted, not the machinery: with the clang tested here the
++# pairing succeeds even with the .llvm.<hash> suffix map disabled and with
++# llvm_suffix() stubbed out, so no single-line sabotage distinguishes it.  The
++# tiered matcher this case was written for is not needed for this shape.
++#
++# Covers the same ground as corpus/x86_64-llvm-thinlto/
++# thin-lto-demangled-ambiguity and thin-lto-demangled-global-match in Joe
++# Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair abs_and_addressable.c
++clang_only "ThinLTO requires clang"
 +
-+# The premise: the fixture really did produce both.
-+in_symbols orig.o | grep -q 'ABS.*abs_sym' ||
-+	probe_skip "assembler did not make abs_sym absolute here"
-+assert_input_section .discard.addressable
++find_thinlto_toolchain ||
++	probe_skip "no matching clang/lld pair for a ThinLTO link; set THIN_LD to one"
 +
-+# Checksumming has to survive them, and still see the function that changed.
-+run_checksum
-+assert_checksum_differs target
-+assert_checksum_matches helper
++build_thinlto()		# $1 output object, $2 extra flags
++{
++	local t
++	for t in "" -DTU_B -DTU_C; do
++		$THIN_CC -flto=thin -O2 -ffunction-sections -fdata-sections \
++			$2 $t -c "$FIXTURES_DIR/thinlto_ambiguity.c" \
++			-o "$workdir/tu$t.o" 2>/dev/null || return 1
++	done
++	"$THIN_LD" -r "$workdir/tu.o" "$workdir/tu-DTU_B.o" "$workdir/tu-DTU_C.o" \
++		-o "$1" 2>/dev/null || return 1
++}
 +
-+# So does the diff.
++build_thinlto "$workdir/orig.o" "" ||
++	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
++build_thinlto "$workdir/patched.o" -DPATCHED ||
++	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
++
++# The premise: two promoted helpers per object, and exactly one of them kept
++# its hash -- the one the patch did not touch.  Without that there is nothing
++# to disambiguate.
++orig_syms="$(in_symbols orig.o    | grep -oE 'helper\.llvm\.[0-9]+' | sort -u)"
++new_syms="$( in_symbols patched.o | grep -oE 'helper\.llvm\.[0-9]+' | sort -u)"
++[ "$(echo "$orig_syms" | wc -l)" = 2 ] && [ "$(echo "$new_syms" | wc -l)" = 2 ] ||
++	probe_skip "ThinLTO did not promote two distinct helpers here"
++
++kept="$(comm -12 <(echo "$orig_syms") <(echo "$new_syms"))"
++moved="$(comm -13 <(echo "$orig_syms") <(echo "$new_syms"))"
++[ "$(echo "$kept" | wc -w)" = 1 ] && [ "$(echo "$moved" | wc -w)" = 1 ] ||
++	probe_skip "expected one helper to keep its hash and one to move"
++
 +run_diff
-+assert_patched target
-+assert_not_patched helper
 +
-+# An absolute symbol has no address to record a checksum against, so it gets
-+# no entry -- the reference to it is what mattered, not the symbol itself.
-+in_relocs orig.o | awk '/rela\.discard\.sym_checksum/,/^$/' | grep -qw abs_sym &&
-+	fail "absolute symbol got a checksum entry"
++# Exactly one helper is cloned, and it is the one whose body changed.  Cloning
++# the other, or both, is what a wrong pairing looks like.
++assert_not_patched "$kept"
 +
-+pass "absolute and __ADDRESSABLE symbols do not disturb the patched function"
++n="$(out_sections | grep -cE '[[:space:]]\.text\.helper\.llvm\.[0-9]+[[:space:]]')"
++[ "$n" = 1 ] ||
++	fail "expected 1 cloned helper, found $n"
++
++pass "ThinLTO helpers sharing a demangled name paired up correctly"
 -- 
 2.53.0-Meta
 
