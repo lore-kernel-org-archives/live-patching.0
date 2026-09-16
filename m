@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBEE04BD0EF
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112AF4D9F64
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584363; cv=none; b=grxhwI72n/4Y77DWavKJyhFEZZA07AmAqiBO5eG9mh29eXflPgrsu/pBqoq+lcZGiShrt0myo37yOvYVoumCBO2DKgQHiQOVnRnYtNLo59spu3zh+M7VtFH8V9bFY9mSd1zXdm6xmxbBy3YKExyKEUTnicA9wZOweDOcChjp9Q0=
+	t=1789584371; cv=none; b=kURSJdsDc5Rw0hms4G65ZLr109EOoRdBBSzCIOXmUgnRldy00hdeo6e6wr+hTfumgnAgkFwPR/BvDsJF/1Q3wnr2irhMPlrxWtrMMJAbEundPFUklqz0yHzHlricRw/zi5pibYhLbfoUjzcRJJs2muJjmqtFuTNvth1PY9ykd1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584363; c=relaxed/simple;
-	bh=Hpc8eV9YUuJjcfTtf/++IRXFmsn3zz3LHYhT9H2rXV4=;
+	s=arc-20240116; t=1789584371; c=relaxed/simple;
+	bh=8wTVcLx30eXO7S4A2Igmj0Gjyz8HAXZlzTJQhpZ6EaY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P7+20ir1jivtixoimfJZIia1rwFYS28qvMwHEZC1rvkRPa4y5u0r4wFOjdMYeeFOWaQmclf1h4ZVzgfvMYQpb3Re716z/eAqiwILUlfbHECAZXr6pkTjC/P0geX3YRz7woUHrTEnOW4nePT9CFFr6u1odQSwFMDS6+ZOVRYReTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPp2aNRJ; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=WW/1vf3iOuqxenWV/2mH7WTnhsvKuH9CGkWvC2F1BIOXutPVNmJCq3c8qe5ibnBmbhB1jU3/JTOotTdDp9xFfZmfaDZsMK1hRZMt+ZC0eTQTmMd4FDKrBt0A+LTFFhSFkUvPrMEvSJmhtLKdbYku9bSn4aRmpWsSXuNPuKrmH84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QopA6InZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPp2aNRJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1B11F000FF;
-	Wed, 16 Sep 2026 18:45:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QopA6InZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC491F0089C;
+	Wed, 16 Sep 2026 18:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584343;
-	bh=hA0hZsrt0/jr18TQlcGZGo0x/XtImYu+Pw3jl/+a/3E=;
+	s=k20260515; t=1789584339;
+	bh=3T0EfzRwSX2m193d+Ks4ysPXshEdCV6mslo6m1k1bRs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jPp2aNRJaF6ettFNU1kN9OEb/zl+zFCLSW1OrQivshR0gCHoMSqNUKNqI+VKJlh5D
-	 H4hy2xpqWtXB8sz6RtUxlZ0aK1f/SfRcY7uf17txq44MG9FqVU5b/fTN7I7nEKT2G6
-	 YqoajVV1qjFPqhVRdm4LUd/LTjcmXnkUvdiEzvdxGyanQ8n1TWIVAuOeKEM2qAK/O8
-	 ejxd+8xr1BhpO4EWNjtEZ+7KQ3vrfbYRsCpM6jfH8K6CDwdHU25+gNRV6lQbrUE7vu
-	 Nlz4GQaonouo+9Y2LrL0o06zPSCFmB43Ch4gUxuXdlyfWuiSk7Lj8ebN+k0cU/Y1a0
-	 tnxsO8N+7DmGQ==
+	b=QopA6InZIJDfW9w+Q4Sj8hAWu6SWfC7afINjeQtzpX5cpwkVNdDRFGWatUJwQrZ5r
+	 Pf9moiIwWjABv6RZclEWlHsE/m8fB/LflVF09LQ0Mgl09LDmWoOtfTqSE8oxq0KuZS
+	 cEE8yaahHKOpKTmDOa+woXKB8+LM26uVG+pyemsNMQOKo3WztJKYwOMKhVnGNTaDhD
+	 tNV5LrhPCQm6iCtS3Tq3eNh16VRPv1LDRvQS117QI9LeyIxQrryslwuWG2MbowJnRw
+	 JtMguPP+/YXoWNL5h5rCoefOI7v0fLejMQn1iBwbwe0qxdlMZqomvTQeInIx5qVhj2
+	 5L0esR20u3kuw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 22/58] objtool/klp: Add test for symids in discarded sections
-Date: Wed, 16 Sep 2026 11:43:15 -0700
-Message-ID: <20260916184351.2720310-23-song@kernel.org>
+Subject: [PATCH v5 21/58] objtool/klp: Add test for rejecting module-owned static call keys
+Date: Wed, 16 Sep 2026 11:43:14 -0700
+Message-ID: <20260916184351.2720310-22-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -53,113 +53,126 @@ Content-Transfer-Encoding: 8bit
 
 From: Puranjay Mohan <puranjay@kernel.org>
 
-.klp.symid records duplicate-named locals so klp diff can work out their
-sympos.  Symbols in sections the vmlinux link throws away have to be left
-out, or the table references symbols which no longer exist and the link
-fails:
-
-  `__exitcall_foo' referenced in section `.klp.symid' of vmlinux.o:
-      defined in discarded section `.exitcall.exit' of vmlinux.o
-
-Two translation units are compiled from one fixture and partially linked so
-the result has duplicate locals, which symid_needed() requires.  One
-duplicate is in a live section and one in .exitcall.exit.
-
-Checking the live duplicate as well keeps the test honest: it would
-otherwise pass just as happily if symid generation stopped working
-entirely.
+Static calls carry the same constraint as static branches.  Check that a
+vmlinux-owned key is accepted and a module-owned one is refused.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/symid_discarded.c  | 25 +++++++++++
- .../tests/generic/test-symid-discarded.sh     | 44 +++++++++++++++++++
- 2 files changed, 69 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/symid_discarded.c
- create mode 100755 tools/objtool/tests/generic/test-symid-discarded.sh
+ .../tests/generic/fixtures/static_call.c      | 59 +++++++++++++++++++
+ .../generic/test-static-call-module-key.sh    | 36 +++++++++++
+ 2 files changed, 95 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/static_call.c
+ create mode 100755 tools/objtool/tests/generic/test-static-call-module-key.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/symid_discarded.c b/tools/objtool/tests/generic/fixtures/symid_discarded.c
+diff --git a/tools/objtool/tests/generic/fixtures/static_call.c b/tools/objtool/tests/generic/fixtures/static_call.c
 new file mode 100644
-index 000000000000..573cc2d4474b
+index 000000000000..4a0c4c25321e
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/symid_discarded.c
-@@ -0,0 +1,25 @@
++++ b/tools/objtool/tests/generic/fixtures/static_call.c
+@@ -0,0 +1,59 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Compiled twice and partially linked so the result has duplicate locals,
-+ * which is what symid_needed() requires.  dup_normal is in a live section,
-+ * dup_discarded in one the vmlinux link throws away.  DISCARDED_SEC selects
-+ * which discarded section, since there is more than one and each was its own
-+ * bug.
++ * Static call site in a patched function, laid out by hand as for
++ * jump_label.c.  MODNAME selects whether the key belongs to vmlinux or a
++ * module.
++ *
++ * objtool's check pass would emit the site, and klp-write-tests.txt says to
++ * let it.  Not here: it does not emit the ANNOTATE_DATA_SPECIAL describing
++ * the entry boundaries -- in the kernel that comes from the static_call
++ * macros -- and NO_ANNOTATE below has to be able to take it away.  A fixture
++ * which varies the annotation has to write the entry that goes with it.
++ *
++ * NO_ANNOTATE drops the ANNOTATE_DATA_SPECIAL block from the patched build,
++ * leaving .static_call_sites with no annotation to describe its entry
++ * boundaries.  The section carries no entsize either, so klp diff has to fall
++ * back on the annotations it can still see -- and when the patched object is
++ * the only one that lost them, the two sides disagree about how the section is
++ * divided up.
++ *
++ * NEW_CALL puts the call site behind PATCHED, so the patch introduces one
++ * where the original had none.  The .static_call_sites entry is then new, with
++ * nothing in the original to correlate it against.
 + */
 +
-+#ifndef DISCARDED_SEC
-+#define DISCARDED_SEC ".exitcall.exit"
++#ifndef MODNAME
++#define MODNAME "vmlinux"
 +#endif
 +
 +static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=" MODNAME;
 +
-+static int dup_normal = 1;
++long __SCK__klp_test_call;
 +
-+static void *dup_discarded
-+	__attribute__((section(DISCARDED_SEC), used)) = &dup_normal;
-+
-+int FUNC_NAME(void)
++int target(int x)
 +{
-+	return dup_normal + (dup_discarded != (void *)0);
++#if defined(NEW_CALL) && !defined(PATCHED)
++	/* The original has no static call at all. */
++	return x + 1;
++#else
++	__asm__ volatile(
++		"1:	nop\n\t"
++		".pushsection	.static_call_sites, \"aw\"\n\t"
++		".balign	8\n\t"
++		"912:\n\t"
++#if !(defined(PATCHED) && defined(NO_ANNOTATE))
++		".pushsection	.discard.annotate_data, \"M\", @progbits, 8\n\t"
++		".long		912b - ., 1\n\t"
++		".popsection\n\t"
++#endif
++		".long		1b - ., %c0 - .\n\t"
++		".popsection\n\t"
++		:: "i" (&__SCK__klp_test_call));
++#endif
++#ifdef PATCHED
++	return x + 2;
++#else
++	return x + 1;
++#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-symid-discarded.sh b/tools/objtool/tests/generic/test-symid-discarded.sh
+diff --git a/tools/objtool/tests/generic/test-static-call-module-key.sh b/tools/objtool/tests/generic/test-static-call-module-key.sh
 new file mode 100755
-index 000000000000..388a24984ec0
+index 000000000000..260c4af72e05
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-symid-discarded.sh
-@@ -0,0 +1,44 @@
++++ b/tools/objtool/tests/generic/test-static-call-module-key.sh
+@@ -0,0 +1,36 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# .klp.symid must not reference symbols in sections the vmlinux link discards.
-+# Each such section has been its own bug, found only when someone built a
-+# config where a duplicate happened to land there, so cover the whole list
-+# rather than whichever one was reported last.
++# As for static branches, a static call key owned by a module must be rejected
++# while a vmlinux-owned one is accepted.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
++build_pair static_call.c
 +
-+# Allocated sections which vmlinux.lds.h discards unconditionally.  A symid
-+# referencing one of these fails the vmlinux link outright:
-+#
-+#   `__exitcall_hid_exit' referenced in section `.klp.symid' of vmlinux.o:
-+#   defined in discarded section `.exitcall.exit' of vmlinux.o
-+for sec in .exitcall.exit .no_trim_symbol; do
-+	build_one symid_discarded.c a.o \
-+		-DFUNC_NAME=use_a -DDISCARDED_SEC="\"$sec\""
-+	build_one symid_discarded.c b.o \
-+		-DFUNC_NAME=use_b -DDISCARDED_SEC="\"$sec\""
++has_input_section orig.o .static_call_sites ||
++	probe_skip "fixture produced no .static_call_sites on this arch"
 +
-+	# --klp-symids only runs on a file named vmlinux.o
-+	rm -f "$workdir/vmlinux.o"
-+	partial_link "$workdir/vmlinux.o" "$workdir/a.o" "$workdir/b.o" ||
-+		probe_skip "partial link unavailable"
++run_diff
++assert_patched target
 +
-+	"$OBJTOOL" --klp-symids --link "$workdir/vmlinux.o" ||
-+		fail "objtool --klp-symids failed"
++# The accepted half has to show the entry was carried, not just that the
++# function was: dropping the section silently would leave the patched call
++# unregistered, and "target was cloned" cannot tell the two apart.
++assert_section .static_call_sites
++assert_reloc_sym .static_call_sites target
 +
-+	symids="$(in_relocs vmlinux.o |
-+		  awk '/rela.klp.symid/,/^$/')"
++rm -f "$workdir/out.o"
++build_pair static_call.c -DMODNAME='"klp_testmod"'
++run_diff 255
 +
-+	# Without this the test would also pass if symid generation stopped
-+	# entirely.
-+	echo "$symids" | grep -q 'dup_normal' ||
-+		fail "$sec: no symid for the duplicate in a live section"
++diff_log | grep -q 'unsupported static call key __SCK__klp_test_call' ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
 +
-+	echo "$symids" | grep -q 'dup_discarded' &&
-+		fail "symid emitted for a symbol in discarded section $sec"
-+done
++# A rejection has to leave nothing behind.  out.o was removed above, so
++# anything here was written by the run which was supposed to refuse.
++[ -e "$workdir/out.o" ] &&
++	fail "output object produced for a rejected input"
 +
-+pass "no symids for symbols in discarded sections"
++pass "module-owned static call key rejected, vmlinux-owned accepted"
 -- 
 2.53.0-Meta
 
