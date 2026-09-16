@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0FB4D9F70
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE64D599D
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584513; cv=none; b=irPr46FoBgqmK9MZCqYUDnIbNyZT8xjRepzKpiZlLcKpogk+vWKKaI5AUqu84RhFmTSyYYG8TORyffVweG0QhQqIXXxOfyP+hxvLxIqcl4u9UTQvWht1MUGqtGqAZ1zzlYmlHGxbvgL5fXtb7roCro6R9u/fWzgKUgR1IMldr/c=
+	t=1789584511; cv=none; b=QOF6N504xBP6esY7xKMhd5HtuQGK66QNsJ9WZwLwP3WXRmXJDOt1+FIrAkRlK/SEsK1Qh8JckuA1O65WILJ0GcmLk/m/00PX1OM34cIu1LeQTqgYZ6etcmx6E8Rdh5hv/69Oqz6qN9EmNlGGZw7A1TEV/r9mvgPpMWVPpWXkXf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584513; c=relaxed/simple;
-	bh=pBwH2wFu+NiIVySpYgC87486vfd0PCKvK7mTF1mio+U=;
+	s=arc-20240116; t=1789584511; c=relaxed/simple;
+	bh=FGb2aQyX7NyyKBhjchuvgIYGATaiwX3/EywyJ6hG3WY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qOt633bF3RnyXtfegjBhB9tyRkY07LYx0CQ2cIqyG10s3rNWOWtTb5QFf3bpt2zjcQtxM62VNkbcetrZ0r63/5IN34iZSPYqzVtLEGQSaLlLxEtKXwJIU/tYlONLRF6Hc5B77gLG9D84iE61vHwqECTVhVKsVKEFAk9ZWLREdGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MfZS7vm4; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=aET9NSxEG/veXyp6RjBSDXjAijIYFoz1sgA/BLQ1b1Um0a4tMx4o5dh/3iRJ3Cm+r+KQXc3fzc71KWE54x/Yw90USBhc6mx44Q0wk9HkU+jD39gtA3RDzBjxJsBGZY42PvXnaTAHzXJiHM1GlQL4xX5Dd0UPXFIhlx0q3onRCRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJZXuHDr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MfZS7vm4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC001F00899;
-	Wed, 16 Sep 2026 18:48:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJZXuHDr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C421F00893;
+	Wed, 16 Sep 2026 18:48:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584507;
-	bh=cjyRBCC2Rd1ZtytczYZYuaGhSXzYVtRWny8C4I0AYUQ=;
+	s=k20260515; t=1789584497;
+	bh=40Xjg1WBvFiz/vd2PQBiblx5fPDphgAkDmglsYBmaSw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MfZS7vm4kRKmvNMoBfz7MyWjDszJ0PGUl1oclxb89JH3lSrwRSllikRs9GxByInkf
-	 Iefer2bTxa3SnziGTcO3m8BmdzA/6IkdVs1ZygauabC2kPeGzKXuVQYRVvgI8jnqbu
-	 BSua1+nLsOg4gs6mheJ72kVD2Hp8s16NyCoVJrabGIMFSvcRZgnEXnCxLBMxSCNnfC
-	 6lStZU2bZvSe8xq7jPqoakvBN1lbFHBApV1FLJwgp5c9MyskYaSze1a/EJwa0HI3Ze
-	 CyjhlJPKu8ZC8vxUyvrrRQdxdzArFxoDbrx9eK68wkWQ5381XcLzjhjr+g6asieLXB
-	 V86lOCA9X6CTA==
+	b=aJZXuHDr4rFRKieuV/rwvJgFg/IS7HhujfRIKjdBfCPkK7w/c6y8YeByQTpIbyUNP
+	 lECyuOQ6UX/VKmaYZrcu4pnD2d36rwaEjcGysI4/ltGkzLk0g7Z6ZMs08ZdoGJmoGt
+	 GpNSSRqVgYnZ8zSn4p31DUP/VR3tC9CBWmQW0ppGMl0xWOCkaHNYpkKXBvl5maL4tn
+	 7n9ueVl5/8uyD9YJQlKrPciuS1ZuhDn9h+sy63kjkKp5vGBtNl2KlduMRYiPVS24+G
+	 d2qYyWOp9Me/7YBCqrzVP+W98MVoPMeW9e5DZ/2PQqd/S6shVRXnO3m1KIMr2ImmWL
+	 C+6nKLmCzizSg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 56/58] objtool/klp: Add test for UBSAN metadata in an unchanged function
-Date: Wed, 16 Sep 2026 11:43:49 -0700
-Message-ID: <20260916184351.2720310-57-song@kernel.org>
+Subject: [PATCH v5 54/58] objtool/klp: Add test for a patch which strips a data annotation
+Date: Wed, 16 Sep 2026 11:43:47 -0700
+Message-ID: <20260916184351.2720310-55-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,149 +51,81 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Every instrumented operation gets a per-callsite metadata object in an
-anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
-GCC, .data..L__unnamed_ from Clang -- whose names are compiler-generated
-and mean nothing across a rebuild.  is_uncorrelated_section() exists so klp
-diff does not try to pair them up, and nothing tested it.
+klp diff needs entry boundaries for a special section: either an entsize,
+or ANNOTATE_DATA_SPECIAL annotations naming where each entry starts.
+.static_call_sites has no entsize, so the annotations are all there is --
+and a patch can remove the last one in a translation unit while leaving the
+section itself in place, so that only the patched side has lost them.
 
-The failure it prevents is a false positive, which is the direction this
-suite has least coverage of.  Metadata belonging to a function nobody
-touched compares as different and drags that function into the patch.  That
-is not a build failure: it is a larger livepatch than intended, pulling in
-dependencies with it, and every extra function is one more that can fail to
-correlate or to apply.
+The section still has to be handled.  Dropping it leaves the patched
+function's static call unregistered; misreading its boundaries attaches the
+entry to the wrong code.  Neither is reported at build time.
 
-The fixture is built with -fsanitize=shift, which both compilers
-instrument; neither emits a bounds check for an index it can prove in
-range.  One function changes, the other is byte-identical and carries
-instrumentation of its own, and the test asserts the second is left alone.
+Give the fixture a NO_ANNOTATE knob and assert the premise -- annotation
+present in the original, absent in the patched object, section present in
+both -- before asserting the result.
 
-Verified by removing each rule from is_uncorrelated_section() in turn,
-which splits neatly by toolchain: dropping the .data..Lubsan rule fails the
-test under gcc, dropping .data..L__unnamed_ fails it under clang.  One
-test, two code paths, each checked by the compiler that reaches it.
+Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
+skipping entsize-based sections").  Verified by making klp diff skip
+.static_call_sites when cloning special sections: the test fails.
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/ubsan_noise.c      | 49 +++++++++++++++++++
- .../objtool/tests/generic/test-ubsan-noise.sh | 48 ++++++++++++++++++
- 2 files changed, 97 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/ubsan_noise.c
- create mode 100755 tools/objtool/tests/generic/test-ubsan-noise.sh
+ .../test-static-call-annotate-stripped.sh     | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/ubsan_noise.c b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
-new file mode 100644
-index 000000000000..bf5999254163
---- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/ubsan_noise.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A translation unit built with UBSAN, where only one of two functions is
-+ * patched.
-+ *
-+ * Every instrumented operation gets a per-callsite metadata object in an
-+ * anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from
-+ * GCC, .data..L__unnamed_ from Clang -- and a call to a __ubsan_handle_*
-+ * routine.  The names are compiler-generated and carry no meaning across a
-+ * rebuild, so klp diff has to treat those sections as uncorrelated rather than
-+ * pairing them up by name.
-+ *
-+ * untouched() is byte-identical in both builds and exists to catch the false
-+ * positive: if the metadata were correlated by name, its shifts would look
-+ * changed and it would be dragged into the patch.
-+ *
-+ * The shifts are what draw the instrumentation.  A bounds check would do as
-+ * well but neither compiler emits one for an index it can prove in range.
-+ */
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+int shift_by(int v, int n);
-+
-+int untouched(int v, int n)
-+{
-+	int s = 0;
-+
-+	s += v << (n & 31);
-+	s += v << ((n + 1) & 31);
-+	s += shift_by(v, n);
-+
-+	return s;
-+}
-+
-+int touched(int v, int n)
-+{
-+	int s = 0;
-+
-+	s += v << (n & 31);
-+#ifdef PATCHED
-+	s += v << ((n + 3) & 31);
-+#else
-+	s += v << ((n + 2) & 31);
-+#endif
-+
-+	return s;
-+}
-diff --git a/tools/objtool/tests/generic/test-ubsan-noise.sh b/tools/objtool/tests/generic/test-ubsan-noise.sh
+diff --git a/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
 new file mode 100755
-index 000000000000..b415eb16bfd2
+index 000000000000..818b047ed4b6
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-ubsan-noise.sh
-@@ -0,0 +1,48 @@
++++ b/tools/objtool/tests/generic/test-static-call-annotate-stripped.sh
+@@ -0,0 +1,42 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# UBSAN instrumentation in an unchanged function must not make it look changed.
++# A patch may remove the last ANNOTATE_DATA_SPECIAL in a translation unit while
++# leaving the special section it described in place.
 +#
-+# Every instrumented operation gets a per-callsite metadata object in an
-+# anonymous data section -- .data..Lubsan_data and .data..Lubsan_type from GCC,
-+# .data..L__unnamed_ from Clang -- whose names are compiler-generated and mean
-+# nothing across a rebuild.  is_uncorrelated_section() exists so klp diff does
-+# not try to pair them up.
++# klp diff needs entry boundaries for a special section: either an entsize, or
++# annotations naming where each entry starts.  .static_call_sites has no
++# entsize, so the annotations are all there is -- and when the patched object
++# is the only side that lost them, the two sides no longer agree on how the
++# section divides up.
 +#
-+# Without that, the metadata belonging to a function nobody touched compares as
-+# different and drags the function into the patch.  A livepatch which replaces
-+# functions the patch never changed is not a build failure: it is a larger
-+# patch than intended, taking its dependencies with it, and every extra
-+# function is one more that can fail to correlate or to apply.
++# The section must still be handled.  Dropping it would leave the patched
++# function's static call unregistered; misreading its boundaries would attach
++# the entry to the wrong code.  Either way nothing is reported at build time.
 +#
-+# Covers the same ground as corpus/x86_64-ubsan/{ubsan-shift-noise,
-+# ubsan-metadata-data-section,gcc-ubsan-anonymous-data,ubsan-handler-cloning}
-+# and corpus/x86_64-llvm-ubsan/{clang-ubsan-bounds-noise,
-+# clang-ubsan-handler-cloning} in Joe Lawrence's klp-build unit test corpus.
++# Fixed by commit 3de711fba73a ("objtool/klp: Fix create_fake_symbols()
++# skipping entsize-based sections").
++#
++# Covers the same ground as corpus/x86_64/static-call-annotate-stripped in Joe
++# Lawrence's klp-build unit test corpus.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_pair ubsan_noise.c -fsanitize=shift
++build_pair static_call.c -DNO_ANNOTATE
 +
-+# The premise: this compiler really did instrument, and left its metadata in an
-+# anonymous section.  Without that the test is just test-basic again.
-+ubsan_sec="$(in_sections orig.o |
-+	grep -oE '\.data\.\.L(ubsan_data|__unnamed_)[A-Za-z0-9_.]*' | head -1)"
-+[ -n "$ubsan_sec" ] ||
-+	probe_skip "compiler emitted no anonymous UBSAN data section"
-+assert_input_symbol untouched
++# The premise: the original describes its entry, the patched one no longer
++# does, and both still have the section itself.
++has_input_section orig.o .discard.annotate_data ||
++	fail "fixture produced no annotation in the original"
++has_input_section patched.o .discard.annotate_data &&
++	fail "patched object still has the annotation; nothing was stripped"
++assert_input_section .static_call_sites
 +
 +run_diff
 +
-+# The changed function is patched, and the untouched one is left alone despite
-+# carrying instrumentation of its own.
-+assert_patched touched
-+assert_not_patched untouched
++assert_patched target
++assert_section .static_call_sites
++assert_reloc_sym .static_call_sites target
 +
-+# The handler the patched code calls has to come with it, or the clone calls
-+# nothing when its check fires.
-+out_symbols | grep -q '__ubsan_handle_' ||
-+	fail "no __ubsan_handle_* reference in the patched output"
-+
-+pass "UBSAN metadata in an unchanged function does not drag it into the patch"
++pass "static call site kept when the patch strips its data annotation"
 -- 
 2.53.0-Meta
 
