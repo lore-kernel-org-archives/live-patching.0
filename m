@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5E14D5981
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A55CD49A3C1
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:44:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584255; cv=none; b=fhNNmoemxu+zL5H2yk/0MaZX+AjFyC9jObMSq+HWNw+26Wz6d0hr0Ve3w/hLpNAZvQVIp4aYkKp3lZYadtByj4ofaLEWsvdF/xHrcj/UWTru3s01hq0Ar2Ug5etnVPBqMAy/QxeJH+OBX96+UqqyZdWlylv2djHVZYz/Qnw8t/A=
+	t=1789584268; cv=none; b=X/sF8q0OyJB+sZ1gKDiCJyoGO6Rw0J25QQobee3hdifRJdEEdvd/dbW/jqxVa70tqCRILjzMhpu1vPp2wPWmSamXTkjZTJtQ5TQzqrRZbgZz7M6CTBx2yj/BhPDUPNTJ8UOtw6tCy+aq799C2qWKia07y1+Dgi6p4dyuKJwPpAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584255; c=relaxed/simple;
-	bh=hwzGRwwYi7HhbOWv6gBOxVqK2bHiWXgIDcod+n+gQzA=;
+	s=arc-20240116; t=1789584268; c=relaxed/simple;
+	bh=7XKz+RJvFwhPljL0LEOP5YJZMivly/gX4hqh5ASA0n0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m7NaoLBRFguk2XZNQKJPQXl7l6nHD3TXxoAhjAflUccyGLdttwnBtYdNJNRYx9Elv9+ByRa2JpejV9VcC2ufP9eQMUejkmEJ4hBhE/kW3S3oFBj29TLPMDDP59glXFRszwMwJuwE6X7QXXkQ7duFxoCBptgNJqA1/USYMjVjDsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fCA7ytWm; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=M7IJJnwf37FoijNfz0dGF2vdjewcPdx6DCdHDKmwfE6Nviqgg8wwEp++atqexry9RJmIDA96vCtK4LWNggEKSVwZWyrrefikHCkMWrML+V0JBSr69m7p3Tw/1iuxAw+X0Vm9lnzroAVZCrNiQ+u7f7Ci2Meu4aKZJcohZrSW3dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGDVDRtY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fCA7ytWm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41171F000FF;
-	Wed, 16 Sep 2026 18:44:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGDVDRtY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861201F00899;
+	Wed, 16 Sep 2026 18:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584242;
-	bh=qp6sf2eGF8Xg2aE4EXo3+VwmY4ClaJSN33SQ1mKYdi4=;
+	s=k20260515; t=1789584252;
+	bh=IejK4nasaq2ypMV8Vm3fqIMlqHcvhIXbbT1nJJuAYaA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fCA7ytWmNrOP+cAc/s8NCGyxWYmw+vqgBXRz1VlCQpsa5vF7DHjYXbte53gtd1Iug
-	 4lAZx5sDjPAFRE8PqG9BCXdbodV5lsbbjYWao/IXqRfgsJzr0XjQYcNfDmFb+xI6DG
-	 yRoxYquAVc4e8b5LXYgNRbI+c/dstHlUigVdmX9t3oEaayKkvB1WNqmq9nmGO6Lzpr
-	 t6ZC5k/2mh5S1eCxHzwtqH9hj74vNaHJtfEHarQ9Kabp0Xd+D+YQJIevTcaUVSI8iA
-	 dF8ezWExtsgeJtx+SccKB9PPvcLxCDc35wcv9/eyBOYczjKVSdptu5bWXUspqXAtoG
-	 ZXGdxj9jjwfxA==
+	b=bGDVDRtYKAmvXCV+wyXvLhoragZz1zX4xVI9Jb930n75GD8L/fXvpcvDuDswkT80P
+	 FchYFu65aXS14FWuCIlQSVeibQWFBhEssAWnAvwfEfMBqE6PAyFWXT0V9LkGidypYl
+	 OHFCLTwmVy+EalwacnR/WVRQVccZwmuq+A2QA6Tpevo7qI1Ex9UaYbH48Ndnq2AIWS
+	 F71UUi3M0H3d2kx8TkuxzerrqTfFMkUbl/XH0FVMy2xSbSs3q6qwJW7RmQ2WwSoNIc
+	 +IJwNYUZdOlaL6Fe0FBfOw28yNnDV7m0fV2ffi3quTXwpiV4DdhEjDKQNQrU0wMjgN
+	 MBx38eh9ELgRQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 01/58] objtool: Add test harness for the klp subcommands
-Date: Wed, 16 Sep 2026 11:42:54 -0700
-Message-ID: <20260916184351.2720310-2-song@kernel.org>
+Subject: [PATCH v5 03/58] objtool/klp: Group the klp tests by architecture
+Date: Wed, 16 Sep 2026 11:42:56 -0700
+Message-ID: <20260916184351.2720310-4-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,330 +51,166 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Puranjay Mohan <puranjay@kernel.org>
+Which architecture a test is for is expressed by where it lives: tests are
+in generic/ or in a directory named for their architecture, each carrying
+its own fixtures, and the runner executes generic/ plus the one that
+matches.  A test which cannot apply here is then not run at all, rather
+than running in order to announce that it did not.
 
-"objtool klp checksum" and "objtool klp diff" work on object files alone,
-with no kernel, vmlinux or configuration involved, so they can be tested
-directly. That is worth doing: most klp generation bugs so far have been in
-symbol correlation, special section extraction and relocation conversion,
-and several of them failed silently, producing a livepatch which built
-cleanly but was missing data.
+Layout does this better than a declaration would.  There is no x86_only(),
+and no lookup letting a fixtures/<arch>/ file shadow a generic one of the
+same name -- an arch-specific test simply carries its own fixtures.
 
-A test compiles a fixture twice, as the original and (with -DPATCHED) the
-patched object, runs both through klp checksum, diffs them and asserts on
-the result.  Fixtures are compiled at test time rather than committed as
-binaries: codegen varies between compilers and architectures, and that
-variation is where a good number of these bugs come from.
+Compilers cannot work the same way: CI varies CC over the same tree, so a
+compiler requirement stays a declaration in the test.
 
-Assertions check properties rather than compare against recorded output.
-Golden files would need re-recording for every compiler change and would
-report churn instead of regressions.
+What a run leaves out is reported once:
 
-klp diff resolves symbols against Module.symvers, so the harness writes
-one. Whether a symbol is listed there decides between an ordinary
-relocation and a klp relocation, which makes it the main knob tests use.
+  # not run: 5 tests in x86/ (this run is arm64)
 
-Run with:
+Silence would have been cheaper and wrong.  A run covering less than the
+tree holds must not look like a run that covered all of it.
 
-  make -C tools/objtool tests
-
-Tests skip when objtool was built without klp support or when a fixture
-does not build for the target architecture.  A missing objtool binary fails
-instead of skipping, since that means a broken invocation rather than an
-environment which cannot run the test.
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Co-developed-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/Makefile               |   5 +-
- tools/objtool/tests/fixtures/basic.c |  20 +++
- tools/objtool/tests/lib.sh           | 179 +++++++++++++++++++++++++++
- tools/objtool/tests/run-tests.sh     |  20 +++
- tools/objtool/tests/test-basic.sh    |  17 +++
- 5 files changed, 240 insertions(+), 1 deletion(-)
- create mode 100644 tools/objtool/tests/fixtures/basic.c
- create mode 100644 tools/objtool/tests/lib.sh
- create mode 100755 tools/objtool/tests/run-tests.sh
- create mode 100755 tools/objtool/tests/test-basic.sh
+ .../tests/{ => generic}/fixtures/basic.c      |  0
+ .../objtool/tests/{ => generic}/test-basic.sh |  2 +-
+ tools/objtool/tests/lib.sh                    | 27 ++++++++++++--
+ tools/objtool/tests/run-tests.sh              | 36 ++++++++++++++++---
+ 4 files changed, 56 insertions(+), 9 deletions(-)
+ rename tools/objtool/tests/{ => generic}/fixtures/basic.c (100%)
+ rename tools/objtool/tests/{ => generic}/test-basic.sh (91%)
 
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index a4484fd22a96..f4ec9f813a20 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -151,6 +151,9 @@ clean: $(LIBSUBCMD)-clean
- mrproper: clean
- 	$(call QUIET_CLEAN, objtool) $(RM) $(OBJTOOL)
+diff --git a/tools/objtool/tests/fixtures/basic.c b/tools/objtool/tests/generic/fixtures/basic.c
+similarity index 100%
+rename from tools/objtool/tests/fixtures/basic.c
+rename to tools/objtool/tests/generic/fixtures/basic.c
+diff --git a/tools/objtool/tests/test-basic.sh b/tools/objtool/tests/generic/test-basic.sh
+similarity index 91%
+rename from tools/objtool/tests/test-basic.sh
+rename to tools/objtool/tests/generic/test-basic.sh
+index 6b769962399a..562edfbc8646 100755
+--- a/tools/objtool/tests/test-basic.sh
++++ b/tools/objtool/tests/generic/test-basic.sh
+@@ -3,7 +3,7 @@
+ #
+ # Only functions whose code changed get cloned into the patch.
  
-+tests: $(OBJTOOL)
-+	$(Q)OBJTOOL=$(abspath $(OBJTOOL)) $(srctree)/tools/objtool/tests/run-tests.sh
-+
- FORCE:
+-. "$(dirname "$0")/lib.sh"
++. "$(dirname "$0")/../lib.sh"
  
--.PHONY: clean mrproper FORCE
-+.PHONY: clean mrproper tests FORCE
-diff --git a/tools/objtool/tests/fixtures/basic.c b/tools/objtool/tests/fixtures/basic.c
-new file mode 100644
-index 000000000000..811529e7bfb1
---- /dev/null
-+++ b/tools/objtool/tests/fixtures/basic.c
-@@ -0,0 +1,20 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* One changed function and one unchanged function. */
-+
-+/* klp diff takes the object's module name from .modinfo */
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+int untouched(int x)
-+{
-+	return x * 3;
-+}
-+
-+int changed(int x)
-+{
-+#ifdef PATCHED
-+	return x + 2;
-+#else
-+	return x + 1;
-+#endif
-+}
+ setup
+ build_pair basic.c
 diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-new file mode 100644
-index 000000000000..7b29db76aa5e
---- /dev/null
+index 46bdb985765e..fdea9b790c4d 100644
+--- a/tools/objtool/tests/lib.sh
 +++ b/tools/objtool/tests/lib.sh
-@@ -0,0 +1,179 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Helpers for the objtool klp tests.  A test builds a fixture twice, as the
-+# original and (with -DPATCHED) the patched object, runs both through
-+# "klp checksum" and diffs them, then asserts on the result.
-+#
-+# Assertions check properties rather than compare against recorded output:
-+# codegen varies between compilers and golden files would report churn instead
-+# of regressions.
+@@ -9,7 +9,10 @@
+ # of regressions.
+ 
+ TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+-FIXTURES_DIR="$TESTS_DIR/fixtures"
 +
-+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-+FIXTURES_DIR="$TESTS_DIR/fixtures"
++# Tests live in generic/ or in an architecture directory beside it, and each
++# carries its own fixtures.
++FIXTURES_DIR="$(cd "$(dirname "$0")/fixtures" 2>/dev/null && pwd)"
+ 
+ # The kernel's convention: CROSS_COMPILE is the one knob, with per-tool
+ # overrides for what it does not cover.  objtool itself is always a host binary
+@@ -36,7 +39,7 @@ OBJTOOL="${OBJTOOL:-$TESTS_DIR/../objtool}"
+ #
+ klp_preflight()
+ {
+-	local tmp tool cc_version host cc_arch
++	local tmp tool cc_version arch host cc_arch
+ 
+ 	bail() { echo "Bail out! $*" >&2; exit 1; }
+ 
+@@ -96,8 +99,26 @@ klp_preflight()
+ 	esac
+ 	rm -rf "$tmp"
+ 
++	# Normalize to the kernel's SRCARCH.
++	case "${ARCH:-$(uname -m)}" in
++	x86_64|i?86)	arch=x86 ;;
++	aarch64*)	arch=arm64 ;;
++	*)		arch="${ARCH:-$(uname -m)}" ;;
++	esac
 +
-+OBJTOOL="${OBJTOOL:-$TESTS_DIR/../objtool}"
-+CC="${CC:-gcc}"
++	case "$(uname -m)" in
++	x86_64|i?86)	host=x86 ;;
++	aarch64*)	host=arm64 ;;
++	*)		host="$(uname -m)" ;;
++	esac
 +
-+# klp-build compiles the kernel this way; klp diff needs per-symbol sections to
-+# extract individual functions.
-+FIXTURE_CFLAGS="-c -O2 -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables"
++	[ -z "$cc_arch" ] || [ "$cc_arch" = "$arch" ] ||
++		bail "ARCH says $arch but '$CC' builds $cc_arch objects;" \
++		     "the $arch tests would run against the wrong architecture"
 +
-+test_name="$(basename "$0" .sh)"
-+workdir=
-+
-+pass() { echo "ok - $test_name${1:+: $1}"; exit 0; }
-+fail() { echo "not ok - $test_name: $1" >&2; exit 1; }
-+skip() { echo "ok - $test_name # SKIP $1"; exit 0; }
-+
-+cleanup() { [ -n "$workdir" ] && rm -rf "$workdir"; }
-+
-+# setup [exported symbol...]
-+setup()
-+{
-+	# A relative $OBJTOOL is relative to the objtool directory, not to the
-+	# tests which run from tests/.
-+	[ -x "$OBJTOOL" ] || [ ! -x "$TESTS_DIR/../$OBJTOOL" ] ||
-+		OBJTOOL="$TESTS_DIR/../$OBJTOOL"
-+
-+	# Not finding objtool is a broken invocation, not an environment which
-+	# cannot run the test.  Skipping here would read as a pass.
-+	[ -x "$OBJTOOL" ] || fail "objtool not found at '$OBJTOOL', build it first"
-+
-+	# run_diff() runs objtool from inside the test's working directory, so
-+	# a relative path would resolve against that instead.
-+	OBJTOOL="$(realpath "$OBJTOOL")"
-+
-+	"$OBJTOOL" klp 2>&1 | grep -q checksum ||
-+		skip "objtool built without klp support (needs libxxhash)"
-+	command -v "${CC%% *}" >/dev/null || skip "no compiler ($CC)"
-+
-+	workdir="$(mktemp -d)" || fail "mktemp failed"
-+	trap cleanup EXIT
-+
-+	export_syms "$@"
-+}
-+
-+# export_syms [symbol...]
-+#
-+# Rewrite Module.symvers so exactly these symbols are exported by vmlinux.
-+# Whether a symbol is listed decides between an ordinary relocation and a klp
-+# relocation, so tests flip it to cover both.
-+export_syms()
-+{
-+	: > "$workdir/Module.symvers"
-+	for sym in "$@"; do
-+		printf '0x00000000\t%s\tvmlinux\tEXPORT_SYMBOL\t\n' \
-+			"$sym" >> "$workdir/Module.symvers"
-+	done
-+}
-+
-+# build_pair <fixture.c> [cflags...]
-+build_pair()
-+{
-+	local fixture="$FIXTURES_DIR/$1"; shift
-+
-+	[ -f "$fixture" ] || fail "missing fixture $fixture"
-+
-+	$CC $FIXTURE_CFLAGS "$@" -o "$workdir/orig.o" "$fixture" 2>"$workdir/cc.log" ||
-+		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+	$CC $FIXTURE_CFLAGS "$@" -DPATCHED -o "$workdir/patched.o" "$fixture" 2>"$workdir/cc.log" ||
-+		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+}
-+
-+# run_diff [expected exit status]
-+run_diff()
-+{
-+	local expect="${1:-0}" rc=0
-+
-+	# Checksums live in the objects, so only generate them once even when a
-+	# test diffs the same pair again with a different Module.symvers.
-+	if [ ! -e "$workdir/.checksummed" ]; then
-+		"$OBJTOOL" klp checksum "$workdir/orig.o" ||
-+			fail "klp checksum orig.o failed"
-+		"$OBJTOOL" klp checksum "$workdir/patched.o" ||
-+			fail "klp checksum patched.o failed"
-+		touch "$workdir/.checksummed"
-+	fi
-+
-+	# klp diff looks for Module.symvers relative to the working directory.
-+	( cd "$workdir" && "$OBJTOOL" klp diff orig.o patched.o out.o ) \
-+		> "$workdir/diff.log" 2>&1 || rc=$?
-+
-+	[ "$rc" = "$expect" ] ||
-+		fail "klp diff exited $rc, expected $expect: $(tail -2 "$workdir/diff.log")"
-+}
-+
-+cc_supports()
-+{
-+	echo 'int f(void) { return 0; }' > "$workdir/flagtest.c"
-+	$CC $1 -c "$workdir/flagtest.c" -o "$workdir/flagtest.o" 2>/dev/null
-+}
-+
-+# partial_link <output> <object...>
-+#
-+# "ld -r" through the compiler driver so the link targets the same
-+# architecture as the objects.
-+partial_link()
-+{
-+	local out="$1"; shift
-+
-+	$CC -r -nostdlib -o "$out" "$@" 2>/dev/null ||
-+		$CC -r -nostdlib -fuse-ld=lld -o "$out" "$@" 2>/dev/null
-+}
-+
-+# find_thinlto_toolchain
-+#
-+# Set $THIN_CC and $THIN_LD to a clang and lld from the same LLVM release.  A
-+# mismatched pair fails with "Invalid summary version", which reads like a
-+# broken test rather than a broken environment.
-+find_thinlto_toolchain()
-+{
-+	local cc ld ver
-+
-+	for cc in "${THIN_CC:-}" "$CC" clang; do
-+		[ -n "$cc" ] || continue
-+		command -v "${cc%% *}" >/dev/null 2>&1 || continue
-+
-+		ver=$($cc -dumpversion 2>/dev/null | cut -d. -f1)
-+
-+		for ld in "${THIN_LD:-}" "ld.lld-$ver" ld.lld; do
-+			[ -n "$ld" ] || continue
-+			command -v "$ld" >/dev/null 2>&1 || continue
-+
-+			echo 'int probe(void) { return 0; }' > "$workdir/probe.c"
-+			$cc -flto=thin -O2 -c "$workdir/probe.c" \
-+				-o "$workdir/probe.o" 2>/dev/null || continue
-+			"$ld" -r "$workdir/probe.o" -o "$workdir/probe.elf" \
-+				2>/dev/null || continue
-+
-+			THIN_CC="$cc"
-+			THIN_LD="$ld"
-+			return 0
-+		done
-+	done
-+
-+	return 1
-+}
-+
-+out_sections() { readelf -S -W "$workdir/out.o" 2>/dev/null; }
-+out_relocs()   { readelf -r -W "$workdir/out.o" 2>/dev/null; }
-+out_symbols()  { readelf -s -W "$workdir/out.o" 2>/dev/null; }
-+diff_log()     { cat "$workdir/diff.log"; }
-+
-+assert_section()
-+{
-+	out_sections | grep -q "[[:space:]]$1[[:space:]]" ||
-+		fail "expected section '$1' in output"
-+}
-+
-+assert_patched()
-+{
-+	assert_section ".text.$1"
-+}
-+
-+assert_not_patched()
-+{
-+	out_sections | grep -q "[[:space:]].text.$1[[:space:]]" &&
-+		fail "function '$1' should not have been cloned"
-+	return 0
-+}
++	KLP_TEST_ARCH="$arch"
+ 	KLP_TEST_PREFLIGHT=done
+-	export OBJTOOL CC KLP_TEST_PREFLIGHT
++	export OBJTOOL CC KLP_TEST_ARCH KLP_TEST_PREFLIGHT
+ 
+ 	cc_version="$($CC --version 2>/dev/null | head -1)"
+ 	cat <<EOF
 diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-tests.sh
-new file mode 100755
-index 000000000000..ab1dea58811e
---- /dev/null
+index f6a3e1b7677e..48728a98d995 100755
+--- a/tools/objtool/tests/run-tests.sh
 +++ b/tools/objtool/tests/run-tests.sh
-@@ -0,0 +1,20 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+@@ -3,6 +3,11 @@
+ #
+ # Run the objtool klp tests.  Each test-*.sh prints one TAP result line.
+ #
++# Tests live in generic/ and in a directory per architecture.  A run executes
++# generic/ plus the one matching this architecture, so a test which cannot
++# apply here is not run rather than reporting a skip; what was left out is
++# reported once, as a comment, so differing coverage is still visible.
 +#
-+# Run the objtool klp tests.  Each test-*.sh prints one TAP result line.
+ # The harness checks the environment once up front and fails the run if the
+ # suite cannot execute, rather than letting every test skip and exit 0.
+ 
+@@ -10,13 +15,34 @@ set -u
+ 
+ cd "$(dirname "$0")" || exit 1
+ 
+-tests=( test-*.sh )
+-[ "${tests[0]}" = "test-*.sh" ] && { echo "1..0 # SKIP no tests found"; exit 0; }
+-
+-# Sourcing the harness runs its preflight, and exports what it found so the
+-# tests inherit it rather than working it out again.
++# Sourcing the harness runs its preflight, which decides which architecture
++# this run is for -- so the test list cannot be built before it has, and the
++# tests inherit the answers rather than working them out again.
+ . ./lib.sh
+ 
++dirs=( generic )
++[ -d "$KLP_TEST_ARCH" ] && dirs+=( "$KLP_TEST_ARCH" )
 +
-+set -u
++tests=()
++for d in "${dirs[@]}"; do
++	for t in "$d"/test-*.sh; do
++		[ -f "$t" ] && tests+=( "$t" )
++	done
++done
++[ "${#tests[@]}" -gt 0 ] || { echo "1..0 # SKIP no tests found"; exit 0; }
 +
-+cd "$(dirname "$0")" || exit 1
-+
-+tests=( test-*.sh )
-+[ "${tests[0]}" = "test-*.sh" ] && { echo "1..0 # SKIP no tests found"; exit 0; }
-+
-+echo "1..${#tests[@]}"
-+
-+rc=0
-+for t in "${tests[@]}"; do
-+	./"$t" || rc=1
++# Tests for another architecture are absent from this run entirely.  Say how
++# many, so a run which covers less than the tree holds does not look like one
++# that covers all of it.
++for d in */; do
++	d="${d%/}"
++	case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
++	n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
++	[ "$n" -gt 0 ] || continue
++	echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
++	     "(this run is $KLP_TEST_ARCH)"
 +done
 +
-+exit $rc
-diff --git a/tools/objtool/tests/test-basic.sh b/tools/objtool/tests/test-basic.sh
-new file mode 100755
-index 000000000000..6b769962399a
---- /dev/null
-+++ b/tools/objtool/tests/test-basic.sh
-@@ -0,0 +1,17 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Only functions whose code changed get cloned into the patch.
-+
-+. "$(dirname "$0")/lib.sh"
-+
-+setup
-+build_pair basic.c
-+run_diff
-+
-+assert_patched     changed
-+assert_not_patched untouched
-+assert_section     ".init.klp_funcs"
-+assert_section     ".init.klp_objects"
-+
-+pass "changed function cloned, unchanged function left alone"
+ echo "1..${#tests[@]}"
+ 
+ rc=0
 -- 
 2.53.0-Meta
 
