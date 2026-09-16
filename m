@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CD54D795B
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C312249A3CA
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584395; cv=none; b=H8IadAWZu+4octaj3aiFIAsrIbl+PMmi2tADkbRs2S4p52yHA5QAt03wFyEG1KyrE47o3mcS2TlDk9eFGbdrbs+ThqFxSiwo3vBsFKTmoA5Mtb99N7RkvprDPbm18t70kIsZVFdyYPOHblXEx3Zj9TmyLDVFvP5ziluS79jn0c0=
+	t=1789584394; cv=none; b=gYbHjGLmCYnY5+8DSi685N+6wSdpR6mYL3G1XNIxlMFcYdYgA5TmJNW8V3nhb+SFBEW9R++neuikFrJesyWCI3LsfyQBmVE2Kwe/aO3b8jguzPFYTzRn/BjkEjdno4EyEQDeLAwdSobT3ogSvxbCt8U0+5rnpWV5HhPLf6qlJ7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584395; c=relaxed/simple;
-	bh=wfj+52iSB3C3wiGnKA41TSQ7NwHzHfDpdKaLos1l/lI=;
+	s=arc-20240116; t=1789584394; c=relaxed/simple;
+	bh=SwzPupEp9+zpuZx/OAS6ikPq63Z85B3/eqWblW563vY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ucg4KKWDlZ2v4BCswMLiFNROElc1n0Alz2VWMCLRiHbnDeVCQKancP6FdpobAxRte9fNSKYHR3T0aj9H/6ZClkQNuIaE3TWb/IZQi9putY38h2zgLufWdSUaF0Y42MACpkPW7ul+cPBi7577S0iVrlusg7M18LjBhqMvIApI2sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0EsyhpX; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=d0EpWkErnej9pte3DqlUyIjY5AHikQrUIDBalK4h7Fgfl7nZshSmZtflmWUX6aHPCJfaWpAmjXVRe0ukRSIvBt0K9F9eConOSDCk/I3DYRGJ8CQdf8MRd7fZk4yC9IFxqv1Mv/JeYDDewQc3QWPQo+xFU5EDRz7pRkfgj1v9I/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nkgZVVfu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0EsyhpX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88AF01F00898;
-	Wed, 16 Sep 2026 18:46:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nkgZVVfu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900B61F0089A;
+	Wed, 16 Sep 2026 18:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584372;
-	bh=ur3e/52GQ7ppgxsw2vpr84H7dU0tbH+g0jnj5wFsZQk=;
+	s=k20260515; t=1789584348;
+	bh=fhP4l8ajropeTe7r1rXj6++pDBvF6Bh7vYNO16hc7hA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=W0EsyhpXwi6dGf/jUmkr8J95PTZmCAvOQFqLroZWXy5EicJ/vKrPOw3OXO5QrwBkI
-	 MKNP005gBoXqJ7Yw7q6vGL4HiekC6cSu7rHPzsN70dAZ4hJrJEdxbHtIYeTNCaobOG
-	 YijjAFVEBcJrNdxjvAv28gwbNlQi+6T6/O4Xt4jS8R91AvdGWA67caSGR5iLeyadra
-	 2lUsEBM8mBo6Kp6aokUtmXTG/j3nce2+pXl9yaqCrKIN2VRktykNhSrnoUCnzZX2FA
-	 dfZZH9+4PKLvMNnizV9KbqQb8SgDgNHYcGdlIAKkAALHpxSCH5PQyDxBjU8hd7T0xk
-	 cG/olZAf1cO/g==
+	b=nkgZVVfuWoqAjKjf0NneKY4LknErm+woWJlbFoDDf0RIyqndOTMZunW5BvSyRBXGK
+	 RwFu4fMsNWtHgFjIwTPEvznzA79L/xdA4dA4RZcyqDa+6i42GsOY4x1tueGkbc36aR
+	 zXbWRaniUxzCWoT56sTfTNU9o6e+0Xi7msTKH12aHHOm/BoK+IE4677z0FuRgh2CjD
+	 0FImUvo0D8GByP7IaYFd55+GlH4w9e4QPdbWynGupZ5EP4UWknxdNKbOAEn+hTOfWY
+	 jm8W/aUMcZ0Wsz40a3UzbXbvXcr2RMPiy2yJOQK9RVdlxlvfIulYMUdyB1/VW/FNA1
+	 r75mEtFnKCAtw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 28/58] objtool/klp: Add test for klp reloc section naming in module objects
-Date: Wed, 16 Sep 2026 11:43:21 -0700
-Message-ID: <20260916184351.2720310-29-song@kernel.org>
+Subject: [PATCH v5 23/58] objtool/klp: Add test for rejecting references to init code/data
+Date: Wed, 16 Sep 2026 11:43:16 -0700
+Message-ID: <20260916184351.2720310-24-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,97 +51,79 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-klp diff names the intermediate __klp_relocs section after the object the
-relocation belongs to, and post-link turns that into
-.klp.rela.<object>.<sec>. Name it after the wrong object and the kernel
-applies the relocation when the wrong module loads, or never.
+From: Puranjay Mohan <puranjay@kernel.org>
 
-The fixture is the first here to honour MODNAME: most hardcode
-name=vmlinux, so passing -DMODNAME to them silently does nothing and the
-test quietly becomes a vmlinux test.
+Init code and data are freed once boot finishes, so a klp relocation
+against them can never resolve.
 
-This tests the behavior of commit 07f14d6af9d7 ("objtool/klp: Fix
-cross-module klp relocation section naming").
-
-Assisted-by: Claude:claude-opus-4
-Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/cross_module.c     | 25 +++++++++++++++
- .../tests/generic/test-module-object.sh       | 31 +++++++++++++++++++
- 2 files changed, 56 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/cross_module.c
- create mode 100755 tools/objtool/tests/generic/test-module-object.sh
+ .../tests/generic/fixtures/init_reference.c   | 17 +++++++++++
+ .../tests/generic/test-init-reference.sh      | 29 +++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/init_reference.c
+ create mode 100755 tools/objtool/tests/generic/test-init-reference.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/cross_module.c b/tools/objtool/tests/generic/fixtures/cross_module.c
+diff --git a/tools/objtool/tests/generic/fixtures/init_reference.c b/tools/objtool/tests/generic/fixtures/init_reference.c
 new file mode 100644
-index 000000000000..c170bde0666f
+index 000000000000..9e59bdf708d3
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/cross_module.c
-@@ -0,0 +1,25 @@
++++ b/tools/objtool/tests/generic/fixtures/init_reference.c
+@@ -0,0 +1,17 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * A function which calls out to another object.  MODNAME selects which object
-+ * this one is, so a test can make the caller a module and the callee's owner
-+ * something else.
-+ */
++/* Patched function referencing data in an .init section. */
 +
-+#ifndef MODNAME
-+#define MODNAME "vmlinux"
-+#endif
-+
-+/* klp diff takes the object's module name from .modinfo */
 +static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=" MODNAME;
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+extern int other_mod_func(int x);
++/* volatile so the read cannot be folded into a constant, leaving no reference */
++static volatile int init_only __attribute__((section(".init.data"), used)) = 5;
 +
 +int target(int x)
 +{
 +#ifdef PATCHED
-+	return other_mod_func(x) + 2;
++	return x + init_only + 1;
 +#else
-+	return other_mod_func(x) + 1;
++	return x + init_only;
 +#endif
 +}
-diff --git a/tools/objtool/tests/generic/test-module-object.sh b/tools/objtool/tests/generic/test-module-object.sh
+diff --git a/tools/objtool/tests/generic/test-init-reference.sh b/tools/objtool/tests/generic/test-init-reference.sh
 new file mode 100755
-index 000000000000..95c8402a523a
+index 000000000000..921cf493cd79
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-module-object.sh
-@@ -0,0 +1,31 @@
++++ b/tools/objtool/tests/generic/test-init-reference.sh
+@@ -0,0 +1,29 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# A klp relocation section is named for the object being patched, not for the
-+# object which happens to own the symbol being referenced.  Deriving it from
-+# the symbol means a cross-module reference lands in a section for an object
-+# the patch may not even touch, so the relocation is never applied and the call
-+# goes somewhere arbitrary.
++# Init code and data are freed after boot, so a klp relocation against them can
++# never resolve.  Such a patch must be rejected.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+build_module_pair cross_module.c klp_testmod
++build_pair init_reference.c
 +
-+# The fixture has to have built as a module for any of this to mean anything.
-+in_sections orig.o | grep -q '\.modinfo' ||
-+	fail "fixture has no .modinfo"
++# The rejection can only happen if the patched build really does reference the
++# init symbol.  The fixture makes init_only volatile so the read cannot be
++# folded away, and this checks that it worked: without a relocation klp diff
++# would succeed, and the failure below would read as a missing check rather
++# than as a fixture which stopped posing the question.
++# Either spelling will do.  A file-local variable is reached through its
++# section symbol -- .init.data -- and a global one by name; which of the two
++# the compiler picks is its business, and the reference is what matters.
++in_relocs "$patched_obj" |
++	awk '$5 == ".init.data" || $5 == "init_only"' | grep -q . ||
++	fail "patched object has no reference into .init.data; the fixture tests nothing"
 +
-+# other_mod_func belongs to a different module than the one being patched.
-+add_exports other_mod other_mod_func
-+run_diff
++run_diff 255
 +
-+# Named for the patched object ...
-+assert_section __klp_relocs.klp_testmod
-+# ... not for the object owning the symbol.
-+assert_no_section __klp_relocs.other_mod
++diff_log | grep -q "can't patch or reference init code/data" ||
++	fail "expected rejection, got: $(diff_log | tail -1)"
 +
-+run_post_link
-+assert_klp_rela klp_testmod .text.target
-+
-+pass "klp relocation section named for the patched object"
++pass "reference to init data rejected"
 -- 
 2.53.0-Meta
 
