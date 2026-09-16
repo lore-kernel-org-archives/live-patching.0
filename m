@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC4E4D5963
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEB34D596F
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584276; cv=none; b=HSCe34+0dW9/MoxKQsnAKiXvEft5jsTMMfee+GlHHOPmi5PtplEDgfsNbbFA/ru0VH2G2FRmpzDSOqQKQ/Q9pK0rRXdx8ftwo/MqvcE9h/r/Sj3motnEbBadQZsgaJxXSCLWKI/B2XtZSsKIIaxFBeEue4fYIr5BkYAAqJQO4K4=
+	t=1789584291; cv=none; b=ZhvGONmeGqwfb5InN9bosVigSMRVdXe8ro/iBSyW3SKHYhoUqpI6NRaJcZr0rK7tJitJyyrj9LQCwlHYeCaInYQAT1NdZxsGFLyaChhFRSm1BQ17o/e4vfmY6qaxLvujqSIBz7YcGQVwNrrNgMaS4FkqWKr2ZrMD427DkclXQ1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584276; c=relaxed/simple;
-	bh=1jxSj458SN10njo6hbiPF4D5rry1Hub4x2LcORQjJ8Q=;
+	s=arc-20240116; t=1789584291; c=relaxed/simple;
+	bh=xn8h3WT7LjCdZqQ68C+Rewa2PTFRXSP9eQELBuWRUiI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WEY9WRrkUd9uDQeHZY1Iff44+ViujFA9/xTKdLqGZx4M2foGPoI+asKllbMZl7TytDWXNQHCLIia3vAo8pEEF7Rqr53GWqQFdJq/Bx/xASbl6t8q6j8IJXJRyiTuONSX3wPAnTlTeXx3/QzPgkkZHHNuvwIGRtHam9EU/wTEFyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xy4XbnFi; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=tc7SeIRtes5jsQhhXwrzT8DZm09SJ5D3kJGc62wbg7013qXCj8TjBVTzNKJOp4X/4Um3eqkovZfvEjs4NJWH8JCujGuLqmGBFTHB93xkxBaFkXpC/QgaltDD0hgNqymitnbjQ/Si5FdijRe4DtvTF/nWu7oUpshof+H1fLMyiVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M+2Rr1Pm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xy4XbnFi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E9A1F0089A;
-	Wed, 16 Sep 2026 18:44:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M+2Rr1Pm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED881F000FF;
+	Wed, 16 Sep 2026 18:44:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584257;
-	bh=NfvCsarIJHoNeKvJaEfclwwb6gA6ssbBlZUuxWUCyAU=;
+	s=k20260515; t=1789584266;
+	bh=s3p+DpqAUytpdwfABCAFiza0uCwgRk5NEkogOhSZYWQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Xy4XbnFimxqqv8MavgvobPHD2xfbNWy3zvhGYhEKh6CbZ1J0pynxZN0iX6RGlhkvk
-	 5t7K93Sf9DcWNDVeqZJlaex+VCYAoxaP5u4WOgVrpmlnHMjyWpuFOEKbyHojg9m6/6
-	 0w8OuonL0d5l2FuBMSAcXv5eb8hroeTFOTvAgetzPuSenmXoqIrPFXsRkzc1WcA5aj
-	 fYtD30nrGNUvTuv2jzbqYxXN+bmsbVTv8fsqN+L0mH7upRfG8/gQBoZ5gaDpSc7XTP
-	 krkYmuewh8aTXFpWuKqSItlEa3Ca5TqUpWCTb8F7sSUgQ96ncld/qfGiusQepeIwHg
-	 /lFrBO79af6/A==
+	b=M+2Rr1Pm9X2SE3kS5vmPozIyOnNKdvpFhg/AJVseTmBqn7+67dCcoUsmrTkaptiV1
+	 XkOnxC8hIkmdKHj+IyGRqwfItkfHKpp6uPQjoKAxKa8RDqXMWJ6YdXUf+A4ytm61mY
+	 yTVOmhvqd8SseWnbEMR87tEvVVD5ZASJnNTGusHDrNnLzslevP1ll2OePN4HhDVxJ0
+	 XWBkQvrFw+Bf94Hsofft1zuijSTMqFABRbzDYlE/6yt7/fAzcCbA1mFtoy4STSZkTQ
+	 G9uiVIper9c6hQBfdQItH0KafxqdjsPUMJnABQf3Uxh40MJeIgcR3U1/An+B10koV0
+	 Hn88CsoKzabkg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 04/58] objtool/klp: Classify klp test outcomes
-Date: Wed, 16 Sep 2026 11:42:57 -0700
-Message-ID: <20260916184351.2720310-5-song@kernel.org>
+Subject: [PATCH v5 06/58] objtool/klp: Grow the klp test harness vocabulary
+Date: Wed, 16 Sep 2026 11:42:59 -0700
+Message-ID: <20260916184351.2720310-7-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,330 +51,429 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A test could pass, fail, or skip, and the runner reported only the exit
-status of the last one to fail.  Skips are the interesting case: they are
-how a suite quietly stops testing anything.
+Assertions for what klp diff produces, and for what went into it.
 
-Three kinds, and the runner counts them separately:
+The output side covers the things a livepatch is made of: cloned sections
+and symbols, klp symbols and their sympos, tombstones, relocations by
+section and by count, the converted .klp.rela sections and their
+SHF_RELA_LIVEPATCH flag, SHN_LIVEPATCH symbols, recorded checksums, and klp
+diff's own diagnostics -- a rejection for the wrong reason is not a pass.
 
-  declared   the test said in advance it does not apply here, e.g. gcc_only
-             on a clang run.  Expected indefinitely.
-  probe      the construct did not turn up in the built object this time.
-             Weaker: one which becomes permanent is a fixture that stopped
-             testing anything.
-  undeclared counted as a failure.  A test which gives up for a reason it
-             never declared is a hole, not an outcome.
+The input side matters just as much, and is easier to forget.  A test which
+asserts only on the output passes when the compiler never emitted the
+construct under test, and reads as coverage it does not have.  So there are
+two forms, and the difference between them is a statement about why the
+thing might be absent:
 
-xfail and xpass come with them, so a known failure is reported rather than
-commented out and forgotten, and one which starts passing says so instead
-of going quietly green.
+  require_*  the compiler cannot produce it here     -> skip
+  assert_*   the fixture is supposed to produce it   -> fail
 
-The result line is what gets classified, not the whole of a test's output:
-objtool warns on stderr and the runner captures it, and a stray line ahead
-of the result would otherwise leave the exit status to decide -- counting
-an expected failure, which exits 0, as a pass.
+Names are quoted before they reach grep.  Nearly every name here contains
+dots -- .text.target, .klp.rela.vmlinux -- and an unescaped dot matches any
+character, so an assertion for one section could be satisfied by a
+different one whose name merely lines up.
 
-Every test owes the plan exactly one result line, so a substituted verdict
-replaces the test's own rather than being printed beside it, and a test
-which dies before reporting gets a result of its own instead of being
-inferred from its exit status.
-
-Also: a TAP version line, LC_ALL=C so the order tests run in and the
-behaviour of grep's character ranges inside them do not depend on the
-invoking shell's locale, and fail() on stdout with every other verdict.
-
-Co-developed-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/tests/lib.sh       |  67 ++++++++++++--
- tools/objtool/tests/run-tests.sh | 148 ++++++++++++++++++++++++++-----
- 2 files changed, 186 insertions(+), 29 deletions(-)
+ tools/objtool/tests/lib.sh | 364 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 360 insertions(+), 4 deletions(-)
 
 diff --git a/tools/objtool/tests/lib.sh b/tools/objtool/tests/lib.sh
-index fdea9b790c4d..1531caab4627 100644
+index a4513ae8dfce..817915e38a35 100644
 --- a/tools/objtool/tests/lib.sh
 +++ b/tools/objtool/tests/lib.sh
-@@ -139,8 +139,38 @@ test_name="$(basename "$0" .sh)"
- workdir=
- 
- pass() { echo "ok - $test_name${1:+: $1}"; exit 0; }
--fail() { echo "not ok - $test_name: $1" >&2; exit 1; }
--skip() { echo "ok - $test_name # SKIP $1"; exit 0; }
-+fail() { echo "not ok - $test_name: $1"; exit 1; }
-+
-+# Two kinds of skip, and the runner tells them apart.
-+#
-+#   declared_skip  the test said in advance it does not apply here, e.g.
-+#                  gcc_only on a clang run.  Expected indefinitely.
-+#   probe_skip     the construct did not turn up in the built object this
-+#                  time.  Weaker: it may appear on another compiler version,
-+#                  and one which becomes permanent is a fixture that quietly
-+#                  stopped testing anything.
-+#
-+# A bare skip() is neither, and the runner counts it as a failure: a test which
-+# gives up for a reason it never declared is a hole, not an outcome.
-+declared_skip() { echo "ok - $test_name # SKIP (declared) $*"; exit 0; }
-+probe_skip()    { echo "ok - $test_name # SKIP (probe) $*"; exit 0; }
-+skip()          { echo "ok - $test_name # SKIP $*"; exit 0; }
-+
-+# TAP directives.  A test which is known to fail reports it rather than being
-+# commented out and forgotten, and one which starts passing again says so
-+# instead of quietly going green: the expectation has to be removed by hand,
-+# which is the point.
-+xfail()
-+{
-+	echo "not ok - $test_name${1:+: $1} # TODO known failure"
-+	exit 0
+@@ -216,9 +216,42 @@ setup()
+ export_syms()
+ {
+ 	: > "$workdir/Module.symvers"
++	add_exports vmlinux "$@"
 +}
 +
-+xpass()
++# add_exports <object> [symbol...]
++#
++# Append exports owned by one object, without clearing what is already there,
++# so a test can describe a kernel where several objects export things.
++#
++# Which object owns a symbol is not cosmetic: a reference to a vmlinux symbol
++# is applied when the patch module loads, and a reference to a module's symbol
++# when that patched module loads, so klp diff files them in different sections.
++add_exports()
 +{
-+	echo "ok - $test_name${1:+: $1} # TODO expected failure, but passed"
-+	exit 1
++	local owner="$1"; shift
++
++	add_exports_ns "$owner" "" "$@"
 +}
- 
- cleanup() { [ -n "$workdir" ] && rm -rf "$workdir"; }
- 
-@@ -170,6 +200,23 @@ export_syms()
++
++# add_exports_ns <object> <namespace> [symbol...]
++#
++# Exports in a symbol namespace, the last field of a Module.symvers line.
++#
++# A "module:<names>" namespace is EXPORT_SYMBOL_FOR_MODULES(), where the module
++# loader grants access by matching the importing module's name against the
++# list.  A livepatch module is never on that list, so such a symbol has to be
++# referenced the way an unexported one is.  Ordinary namespaces are not
++# special here.
++add_exports_ns()
++{
++	local owner="$1" ns="$2"; shift 2
++
++	local sym
++
+ 	for sym in "$@"; do
+-		printf '0x00000000\t%s\tvmlinux\tEXPORT_SYMBOL\t\n' \
+-			"$sym" >> "$workdir/Module.symvers"
++		printf '0x00000000\t%s\t%s\tEXPORT_SYMBOL\t%s\n' \
++			"$sym" "$owner" "$ns" >> "$workdir/Module.symvers"
  	done
  }
  
-+# gcc_only / clang_only <reason>
-+gcc_only()
-+{
-+	case "$($CC --version 2>/dev/null | head -1)" in
-+	*[Gg][Cc][Cc]*)	return 0 ;;
-+	esac
-+	declared_skip "gcc only${1:+: $1}"
-+}
-+
-+clang_only()
-+{
-+	case "$($CC --version 2>/dev/null | head -1)" in
-+	*clang*)	return 0 ;;
-+	esac
-+	declared_skip "clang only${1:+: $1}"
-+}
-+
- # build_pair <fixture.c> [cflags...]
- build_pair()
- {
-@@ -178,9 +225,9 @@ build_pair()
- 	[ -f "$fixture" ] || fail "missing fixture $fixture"
+@@ -481,12 +514,87 @@ out_relocs()   { $READELF -r -W "$workdir/out.o" 2>/dev/null; }
+ out_symbols()  { $READELF -s -W "$workdir/out.o" 2>/dev/null; }
+ diff_log()     { cat "$workdir/diff.log"; }
  
- 	$CC $FIXTURE_CFLAGS "$@" -o "$workdir/orig.o" "$fixture" 2>"$workdir/cc.log" ||
--		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
- 	$CC $FIXTURE_CFLAGS "$@" -DPATCHED -o "$workdir/patched.o" "$fixture" 2>"$workdir/cc.log" ||
--		skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
-+		probe_skip "fixture does not build here: $(tail -1 "$workdir/cc.log")"
++# out_strings <section>
++#
++# The strings in one section of the output, for the names livepatch matches on.
++out_strings() { $READELF -p "$1" "$workdir/out.o" 2>/dev/null; }
++
++# Checks on the input objects, to run before klp diff.  The two forms differ in
++# what an absent construct means:
++#
++#   require_*  the compiler cannot produce it here	-> skip
++#   assert_*   the fixture is supposed to produce it	-> fail
++
++in_sections() { $READELF -S -W "$workdir/$1" 2>/dev/null; }
++in_symbols()  { $READELF -s -W "$workdir/$1" 2>/dev/null; }
++in_relocs()   { $READELF -r -W "$workdir/$1" 2>/dev/null; }
++
++# count_input_symbols <object> <name>
++#
++# How many object symbols of exactly that name the input has.  Deliberately not
++# a grep: readelf lists section symbols too, and a newer binutils prints their
++# name -- ".data.<name>" -- where an older one leaves the column blank.  A dot
++# is not a word character, so "grep -w <name>" counts that line as well, and
++# the same object gives a different answer depending on which readelf reads it.
++count_input_symbols()
++{
++	in_symbols "$1" | awk -v n="$2" '$4 == "OBJECT" && $8 == n' | wc -l
++}
++
++# re_quote <string>
++#
++# A string as a literal basic regular expression.  Nearly every name these
++# assertions match on contains a dot -- .text.target, .klp.rela.vmlinux -- and
++# an unescaped dot matches any character, so an assertion for one section can be
++# satisfied by a different one whose name merely lines up.
++re_quote() { printf '%s' "$1" | sed 's|[].[^$*\\/]|\\&|g'; }
++
++has_input_section() { in_sections "$1" | grep -q "[[:space:]]$(re_quote "$2")[[:space:]]"; }
++has_input_symbol()  { in_symbols "$1" | awk -v n="$2" '$NF == n' | grep -q .; }
++
++assert_input_section()
++{
++	local obj
++
++	for obj in "$orig_obj" "$patched_obj"; do
++		has_input_section "$obj" "$1" ||
++			fail "fixture produced no section '$1' in $obj"
++	done
++}
++
++assert_input_symbol()
++{
++	local obj
++
++	for obj in "$orig_obj" "$patched_obj"; do
++		has_input_symbol "$obj" "$1" ||
++			fail "fixture produced no symbol '$1' in $obj"
++	done
++}
++
++require_input_section()
++{
++	local obj
++
++	for obj in "$orig_obj" "$patched_obj"; do
++		has_input_section "$obj" "$1" ||
++			probe_skip "compiler produced no section '$1' here"
++	done
++}
++
+ assert_section()
+ {
+-	out_sections | grep -q "[[:space:]]$1[[:space:]]" ||
++	out_sections | grep -q "[[:space:]]$(re_quote "$1")[[:space:]]" ||
+ 		fail "expected section '$1' in output"
  }
  
- # run_diff [expected exit status]
-@@ -226,16 +273,20 @@ partial_link()
- 
- # find_thinlto_toolchain
- #
--# Set $THIN_CC and $THIN_LD to a clang and lld from the same LLVM release.  A
-+# Set $THIN_LD to an lld from the same LLVM release as $CC (or THIN_CC).  A
- # mismatched pair fails with "Invalid summary version", which reads like a
- # broken test rather than a broken environment.
-+#
-+# ThinLTO is clang-only; callers must use clang_only before calling this.
-+# Only $CC (or an explicit THIN_CC override) is consulted -- the harness does
-+# not search for a second compiler beside a gcc $CC.
- find_thinlto_toolchain()
- {
--	local cc ld ver
-+	local cc ver ld
- 
--	for cc in "${THIN_CC:-}" "$CC" clang; do
-+	for cc in "${THIN_CC:-}" "$CC"; do
- 		[ -n "$cc" ] || continue
--		command -v "${cc%% *}" >/dev/null 2>&1 || continue
-+		command -v "${cc%% *}" >/dev/null 2>&1 || return 1
- 
- 		ver=$($cc -dumpversion 2>/dev/null | cut -d. -f1)
- 
-diff --git a/tools/objtool/tests/run-tests.sh b/tools/objtool/tests/run-tests.sh
-index 48728a98d995..6b937fc7f5bd 100755
---- a/tools/objtool/tests/run-tests.sh
-+++ b/tools/objtool/tests/run-tests.sh
-@@ -8,13 +8,51 @@
- # apply here is not run rather than reporting a skip; what was left out is
- # reported once, as a comment, so differing coverage is still visible.
- #
-+# A run covers one compiler and one architecture; CI runs the combinations.
- # The harness checks the environment once up front and fails the run if the
- # suite cannot execute, rather than letting every test skip and exit 0.
- 
- set -u
- 
-+# Determinism: the order test-*.sh expands in, and how grep's character ranges
-+# and sort's collation behave inside the tests, are all locale-dependent.  A
-+# suite whose results depend on the invoking shell's locale is a suite whose
-+# failures cannot be reproduced.
-+export LC_ALL=C
-+
-+usage()
++assert_no_section()
 +{
-+	cat <<EOF
-+usage: $(basename "$0") [test...]
-+
-+Run the objtool klp tests for this architecture: everything in generic/, plus
-+everything in the directory named for it.  With no arguments, runs all of them.
-+A test may be named with or without its "test-" prefix and ".sh" suffix, and is
-+looked for in both directories.
-+
-+Environment:
-+    OBJTOOL       objtool binary to test (default ../objtool)
-+    CC            compiler used to build fixtures (default gcc)
-+    ARCH          architecture the tests are for (default: uname -m)
-+
-+A test which needs something of its own says so in its skip message.
-+EOF
-+	exit "${1:-0}"
++	out_sections | grep -q "[[:space:]]$(re_quote "$1")[[:space:]]" &&
++		fail "unexpected section '$1' in output"
++	return 0
 +}
 +
- cd "$(dirname "$0")" || exit 1
+ assert_patched()
+ {
+ 	assert_section ".text.$1"
+@@ -494,7 +602,255 @@ assert_patched()
  
-+while [ $# -gt 0 ]; do
-+	case "$1" in
-+	-h|--help)	usage ;;
-+	--)		shift; break ;;
-+	-*)		echo "unknown option: $1" >&2; usage 1 ;;
-+	*)		break ;;
+ assert_not_patched()
+ {
+-	out_sections | grep -q "[[:space:]].text.$1[[:space:]]" &&
++	out_sections | grep -q "[[:space:]]$(re_quote ".text.$1")[[:space:]]" &&
+ 		fail "function '$1' should not have been cloned"
+ 	return 0
+ }
++
++# section_relocs <section>
++#
++# The relocations against one section.  readelf prints every relocation section
++# in turn, so a test asking about ".smp_locks" has to cut its block out of the
++# listing first.
++section_relocs()
++{
++	local sec="${1//./\\.}"
++
++	out_relocs | awk "/rela$sec'/,/^\$/"
++}
++
++assert_reloc_sym()
++{
++	section_relocs "$1" | awk -v n="$2" '$5 == n' | grep -q . ||
++		fail "expected a relocation to '$2' in '$1'"
++}
++
++assert_no_reloc_sym()
++{
++	section_relocs "$1" | awk -v n="$2" '$5 == n' | grep -q . &&
++		fail "unexpected relocation to '$2' in '$1'"
++	return 0
++}
++
++# assert_reloc_count <section> <count>
++#
++# Counts relocation entries, not header or blank lines: whether a special
++# section entry was extracted once, twice or not at all is usually the whole
++# question.
++#
++# A count of zero is ambiguous on its own -- a section with no relocations and
++# no section at all both read as zero -- so require the section to exist.  A
++# test expecting nothing there wants assert_no_section.
++assert_reloc_count()
++{
++	local n
++
++	assert_section "$1"
++
++	n="$(section_relocs "$1" | grep -cE '^[0-9a-f]{8,}')"
++	[ "$n" = "$2" ] ||
++		fail "expected $2 relocations in '$1', found $n"
++}
++
++# assert_klp_sym <symbol> [object]
++#
++# A klp symbol is named .klp.sym.<object>.<symbol>,<sympos>.  The object
++# defaults to any, since most tests care that the reference was converted at
++# all rather than which object it resolved against.
++assert_klp_sym()
++{
++	out_symbols | grep -q "\.klp\.sym\.${2:-[^.]*}\.$(re_quote "$1")," ||
++		fail "expected klp symbol for '$1'"
++}
++
++# assert_klp_sympos <symbol> <sympos>
++#
++# The number after the comma in .klp.sym.<object>.<symbol>,<sympos> says which
++# of several same-named symbols livepatch should resolve to, counting from 1;
++# 0 means the name is unique and no disambiguation is needed.  Resolving to the
++# wrong one is not a load failure, it is a patch quietly wired to the wrong
++# object.
++assert_klp_sympos()
++{
++	out_symbols | grep -qE "\.klp\.sym\.[^.]+\.$(re_quote "$1"),$2([[:space:]]|\$)" ||
++		fail "expected klp symbol for '$1' with sympos $2, found:$(
++			out_symbols | grep -o "\.klp\.sym\.[^.]*\.$(re_quote "$1"),[0-9]*" |
++			sort -u | tr '\n' ' ')"
++}
++
++assert_no_klp_sym()
++{
++	out_symbols | grep -q "\.klp\.sym\.${2:-[^.]*}\.$(re_quote "$1")," &&
++		fail "unexpected klp symbol for '$1'"
++	return 0
++}
++
++assert_tombstone()
++{
++	out_symbols | grep -qE "\.klp\.tombstone\.$(re_quote "$1")([[:space:]]|\$)" ||
++		fail "expected a tombstone for '$1'"
++}
++
++assert_symbol()
++{
++	out_symbols | awk -v n="$1" '$NF == n' | grep -q . ||
++		fail "expected symbol '$1' in output"
++}
++
++assert_no_symbol()
++{
++	out_symbols | awk -v n="$1" '$NF == n' | grep -q . &&
++		fail "unexpected symbol '$1' in output"
++	return 0
++}
++
++# assert_diff_log <regex>
++#
++# klp diff's combined output, for tests asserting on a diagnostic.  Error
++# messages are part of the interface when the whole point is that a construct
++# gets rejected, and a rejection for the wrong reason is not a pass.
++assert_diff_log()
++{
++	diff_log | grep -qE -- "$1" ||
++		fail "expected '$1' in klp diff output: $(tail -2 "$workdir/diff.log")"
++}
++
++# checksum_of <object> <symbol>
++#
++# The checksum "klp checksum" recorded for one symbol, as a hex string.
++#
++# .discard.sym_checksum is an array of { u64 addr; u64 checksum; }, where addr
++# is the target of a relocation naming the symbol.  Nothing in the section
++# itself says which symbol an entry belongs to, so the relocation is what
++# locates the entry; the checksum is the eight bytes after it.
++# Callers use this in a command substitution, where fail() would only exit the
++# subshell and the test would carry on with an empty checksum.  So this returns
++# non-zero and prints nothing, and the assertions below check for that.  For
++# the same reason it does not run run_checksum() itself: that one does call
++# fail(), and from in here the message would be captured as the checksum
++# rather than ending the test.  The caller runs it first.
++checksum_of()
++{
++	local obj="$workdir/$1" sym="$2" off
++
++	off="$($READELF -rW "$obj" 2>/dev/null |
++	       awk -v s="$sym" '/rela\.discard\.sym_checksum/,/^$/ {
++			if ($5 == s) { print $1; exit }
++	       }')"
++
++	[ -n "$off" ] || return 1
++
++	$OBJCOPY -O binary --only-section=.discard.sym_checksum \
++		"$obj" "$workdir/checksums.bin" 2>/dev/null || return 1
++
++	dd if="$workdir/checksums.bin" bs=1 skip=$((16#$off + 8)) count=8 \
++		status=none | od -An -tx1 | tr -d ' \n'
++}
++
++# assert_checksum_differs <symbol> / assert_checksum_matches <symbol>
++#
++# Compare what klp checksum recorded for a symbol in the original against the
++# patched object.  This is what decides whether klp diff treats a function as
++# changed, so a test asserting only that the right functions were cloned cannot
++# tell a correct checksum from one which happens to differ.
++checksum_pair()
++{
++	run_checksum
++
++	orig_checksum="$(checksum_of "$orig_obj" "$1")"
++	patched_checksum="$(checksum_of "$patched_obj" "$1")"
++
++	[ -n "$orig_checksum" ] ||
++		fail "no checksum recorded for '$1' in $orig_obj"
++	[ -n "$patched_checksum" ] ||
++		fail "no checksum recorded for '$1' in $patched_obj"
++}
++
++assert_checksum_differs()
++{
++	checksum_pair "$1"
++
++	[ "$orig_checksum" != "$patched_checksum" ] ||
++		fail "checksum for '$1' unchanged at $orig_checksum, expected it to differ"
++}
++
++assert_checksum_matches()
++{
++	checksum_pair "$1"
++
++	[ "$orig_checksum" = "$patched_checksum" ] ||
++		fail "checksum for '$1' changed from $orig_checksum to" \
++		     "$patched_checksum, expected no change"
++}
++
++# run_post_link [expected exit status]
++#
++# klp post-link runs last in a livepatch build, converting the intermediate
++# __klp_relocs.* sections into the .klp.rela.* form the kernel consumes.  It
++# needs nothing but an object containing those sections, which is what klp diff
++# produces, so it runs on out.o here rather than on a built module.  Rewrites
++# out.o in place, so the out_* helpers show the result afterwards.
++run_post_link()
++{
++	local expect="${1:-0}" rc=0
++
++	"$OBJTOOL" klp post-link "$workdir/out.o" \
++		> "$workdir/post-link.log" 2>&1 || rc=$?
++
++	[ "$rc" = "$expect" ] ||
++		fail "klp post-link exited $rc, expected $expect:" \
++		     "$(tail -2 "$workdir/post-link.log")"
++}
++
++# The flags readelf prints for a section, or nothing when it has none.  The
++# leading "[nn]" index is stripped first so the columns can be counted.
++section_flags()
++{
++	out_sections | sed 's/^ *\[[ 0-9]*\] *//' |
++		awk -v s="$1" '$1 == s && $7 ~ /^[A-Za-z]+$/ { print $7 }'
++}
++
++# assert_section_flag <section> <letter>
++#
++# SHF_RELA_LIVEPATCH is OS-specific, so readelf renders it as "o".  A klp rela
++# section which lost it is an ordinary rela section, which the linker may apply
++# and the livepatch code will not.
++assert_section_flag()
++{
++	local flags; flags="$(section_flags "$1")"
++
++	[ -n "$flags" ] ||
++		fail "section '$1' has no flags, expected '$2'"
++	case "$flags" in
++	*"$2"*)	;;
++	*)	fail "section '$1' has flags '$flags', expected '$2'" ;;
 +	esac
-+done
++}
 +
-+echo "TAP version 13"
++# assert_klp_rela <object> <section>
++#
++# post-link names the converted sections .klp.rela.<object>.<section>, one per
++# base section.  Also checks SHF_RELA_LIVEPATCH, since the name alone is not
++# what makes the kernel process it.
++assert_klp_rela()
++{
++	local name=".klp.rela.$1.$2"
 +
- # Sourcing the harness runs its preflight, which decides which architecture
- # this run is for -- so the test list cannot be built before it has, and the
- # tests inherit the answers rather than working them out again.
-@@ -23,31 +61,99 @@ cd "$(dirname "$0")" || exit 1
- dirs=( generic )
- [ -d "$KLP_TEST_ARCH" ] && dirs+=( "$KLP_TEST_ARCH" )
- 
--tests=()
--for d in "${dirs[@]}"; do
--	for t in "$d"/test-*.sh; do
--		[ -f "$t" ] && tests+=( "$t" )
-+if [ $# -gt 0 ]; then
-+	tests=()
-+	for arg in "$@"; do
-+		name="test-${arg#test-}"; name="${name%.sh}.sh"
-+		found=
-+		for d in "${dirs[@]}"; do
-+			[ -f "$d/$name" ] || continue
-+			[ -x "$d/$name" ] ||
-+				{ echo "not executable: $d/$name" >&2; exit 1; }
-+			tests+=( "$d/$name" ); found=y
-+		done
-+		[ -n "$found" ] ||
-+			{ echo "no such test for $KLP_TEST_ARCH: $arg" >&2; exit 1; }
- 	done
--done
--[ "${#tests[@]}" -gt 0 ] || { echo "1..0 # SKIP no tests found"; exit 0; }
--
--# Tests for another architecture are absent from this run entirely.  Say how
--# many, so a run which covers less than the tree holds does not look like one
--# that covers all of it.
--for d in */; do
--	d="${d%/}"
--	case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
--	n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
--	[ "$n" -gt 0 ] || continue
--	echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
--	     "(this run is $KLP_TEST_ARCH)"
--done
-+else
-+	tests=()
-+	for d in "${dirs[@]}"; do
-+		for t in "$d"/test-*.sh; do
-+			[ -f "$t" ] && tests+=( "$t" )
-+		done
-+	done
-+	[ "${#tests[@]}" -gt 0 ] ||
-+		{ echo "1..0 # SKIP no tests found"; exit 0; }
++	out_sections | grep -q "[[:space:]]$(re_quote "$name")[[:space:]]" ||
++		fail "expected section '$name' in output"
 +
-+	# Tests for another architecture are absent from this run entirely.  Say
-+	# how many, so a run which covers less than the tree holds does not look
-+	# like one that covers all of it.
-+	for d in */; do
-+		d="${d%/}"
-+		case "$d" in generic|"$KLP_TEST_ARCH") continue ;; esac
-+		n=$(ls "$d"/test-*.sh 2>/dev/null | wc -l)
-+		[ "$n" -gt 0 ] || continue
-+		echo "# not run: $n test$( [ "$n" = 1 ] || echo s ) in $d/" \
-+		     "(this run is $KLP_TEST_ARCH)"
-+	done
-+fi
- 
- echo "1..${#tests[@]}"
- 
--rc=0
-+pass=0 fail=0 static_skip=0 probe_skip=0 xfail=0 xpass=0
++	assert_section_flag "$name" o
++}
 +
- for t in "${tests[@]}"; do
--	./"$t" || rc=1
-+	out="$(./"$t" 2>&1)"
-+	rc=$?
-+
-+	# A test prints one result line, but it is not necessarily the only
-+	# thing it prints: objtool warns on stderr, and the runner captures
-+	# that.  Classify the result line itself rather than the whole of the
-+	# output, or a stray line ahead of it makes every pattern below miss and
-+	# the exit status decide -- which would count an expected failure, which
-+	# exits 0, as a pass.
-+	result="$(printf '%s\n' "$out" | grep -E '^(ok|not ok)' | tail -1)"
-+	rest="$(printf '%s\n' "$out" | grep -Ev '^(ok|not ok)')"
-+
-+	# Classify from the result line, not the exit status: a skip and a pass
-+	# both exit 0, and telling them apart is the point of counting.
-+	#
-+	# The two skip kinds differ in what they promise.  A static skip was
-+	# declared before the test ran ("clang does not do this"), so it is
-+	# expected indefinitely.  A probe skip means the construct did not turn
-+	# up this time, which is weaker and worth watching: one that becomes
-+	# permanent is a fixture that quietly stopped testing anything.
-+	case "$result" in
-+	*"# SKIP (declared)"*)	static_skip=$((static_skip + 1)) ;;
-+	*"# SKIP (probe)"*)	probe_skip=$((probe_skip + 1)) ;;
-+	*"# SKIP"*)
-+		# An undeclared skip: the test gave up for a reason it never
-+		# said it might.  That is a hole, not an expected outcome.
-+		#
-+		# Replace the line rather than adding one.  Every test owes the
-+		# plan exactly one result, and a consumer counting them is
-+		# entitled to say so when the totals disagree.
-+		rest="$rest${rest:+$'\n'}was: $result"
-+		result="not ok - $(basename "$t" .sh): undeclared skip"
-+		result="$result (use gcc_only/clang_only or require_input_*)"
-+		fail=$((fail + 1)) ;;
-+	"not ok"*"# TODO"*)	xfail=$((xfail + 1)) ;;
-+	"ok"*"# TODO"*)		xpass=$((xpass + 1)) ;;
-+	"not ok"*)		fail=$((fail + 1)) ;;
-+	"ok"*)			pass=$((pass + 1)) ;;
-+	*)
-+		# No result line at all: the test died before reporting.
-+		rest="$rest${rest:+$'\n'}exited $rc without a result line"
-+		result="not ok - $(basename "$t" .sh): no TAP result"
-+		fail=$((fail + 1)) ;;
-+	esac
-+
-+	echo "$result"
-+	[ -n "$rest" ] && printf '%s\n' "$rest" | sed 's/^[^#]/# &/'
-+
- done
- 
--exit $rc
-+echo "# pass:$pass fail:$fail static-skip:$static_skip" \
-+     "probe-skip:$probe_skip xfail:$xfail xpass:$xpass"
-+
-+[ "$fail" = 0 ] && [ "$xpass" = 0 ]
++# assert_livepatch_sym <symbol>
++#
++# Symbols a klp relocation resolves against live in SHN_LIVEPATCH, which
++# readelf prints as "OS [0xff20]" -- llvm-readelf without the space, so match
++# either.  The kernel resolves these itself at patch load; anything else is a
++# symbol the module loader will try, and fail, to resolve normally.
++assert_livepatch_sym()
++{
++	out_symbols | grep -E 'OS ?\[0xff20\]' |
++		grep -qE "\.klp\.sym\.[^.]+\.$(re_quote "$1")," ||
++		fail "expected a klp symbol for '$1' in SHN_LIVEPATCH"
++}
 -- 
 2.53.0-Meta
 
