@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A73534E1C83
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAD14BF959
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584372; cv=none; b=ZDMEPA08+anexe0HkGzDyZOlTEnirg+PALWV0LThGcgu3csFpMp+HqBWsZs2jMMnrIlGpFvY3ywFqq4r9sycu1s5lpChfioWiheqJxrvdNPIJVKnUTGC8tLkS1a5Cbqo1iAZggtY8lLV3XKS56cxapsQxVthci5QtvbPcPS7i78=
+	t=1789584383; cv=none; b=TlFGgEK2jbxvYATqbjKx+avbF62I+nMSU5zwPSb/mXMSva3HaD/ddrmQ4pwRzj4eYJa0oBWyncmEpIDyDRgqkAuci/LgHzyS4uHXZ5fd5Kh+m9LEs9lMCeEBbZtwkKBg8qmladAg9wXXD+j881V7SFX+y//Vx1Lc8OWHfQKOXlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584372; c=relaxed/simple;
-	bh=YDSwqqP7cXkrMf+53oUyzV+9tY4sCHuw8jELBcCPP5s=;
+	s=arc-20240116; t=1789584383; c=relaxed/simple;
+	bh=IP7e9FcbX55T/jRBonIPtoSYHnzTLhfTTz8STlXPLh8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MzLFqi541d7xQr3kiyRMinVmi2Pvk2ndruE5zuD0C79oiDhIhEVpMUyJ3NzbMKwXTi7RZi4jF2VUgwYzJVVLHBrORgrlFNTE0nH8YpzR4iK3L5GCEItAi5a13rjod4t+2gYa1X3L/ZpEIjinmWfmrZLOcuMdJjR6ZiV5bLFaXEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cw57m75C; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=MopkBQNyu3jxosd2zKo4yXiG+2wAFdBP1NW3Y8b8O265IG230iuNA4kQlx7OC+nEyzkTk01ejMcH0GCQNgtvon6SjbJNTiH2zzSb0uHVfeki+ZKgGUhHLAnaYBMMeijz7me0EB7NDWsWjwpI5JHeL01O5lvLzypDvLxPAE2BqiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/HEZvDb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cw57m75C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B3F91F00893;
-	Wed, 16 Sep 2026 18:45:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/HEZvDb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE39E1F0089D;
+	Wed, 16 Sep 2026 18:46:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584353;
-	bh=DbTItdY5Cxv0po+qgOuXN912tWUbBKAw8xnWKx1/m5Q=;
+	s=k20260515; t=1789584367;
+	bh=ZIuWUZEijWUhO0fjif13Drt09FOQvDpI7lK1fLk3mho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cw57m75CWwKKbTlU2c7t2IBaR9Vq1Ahcs9fA/UAEzCAeskVKEoSpecWLPd7UbTKwA
-	 DOCcuyTydiSL8q4Rh6Q+yySIm87w2ujzU1jRBUZMwZIMyO2laqj/FoHq1zC8pfHjKr
-	 oKijNvQP7xVP0O0bn/xEmcYaJUdUiwWzcwOjmzso66jOYng81GnFNrEr3DaZNQInEq
-	 CQdYQ9OWegqKqvP7fhwTODY6HzFIP/IcGwRuuy+gAH8dGDeHKlrQlgooL30r5o8iQB
-	 uTCYBsj9nN8jIWiQ/I7OcgNwifCXzyaRd/JZi8NCbYsgm1EQhk3Yqnw0FtsdYMo3oP
-	 HNpstBkBJHiTQ==
+	b=F/HEZvDb0p80PADAuXeeGBEuqEUHePuE5Aj2ePonbntelb1x2uwJwNISeLaNPdRhz
+	 DrWFUuZb1Gfs/1Qb21yDLxB6cOMOx1mqnJ9LVvQZMw/wI1YYuRWf0xc4i/U0biJx7v
+	 6iEzDbrkMrdeGEFGQjAIzIaD+68jDemJ0+vmERfU7we6onYd16ks5yW1IOoIhPhMd9
+	 ebODd9K/c42scFHR+ROB5XLKJIN1QsUt0J/4Zs250Gu4NShuY+CwuaqVmchnSingFT
+	 YPWpIZ/W21bDlINI4XxSEAd0lZoVV55uBLsJvNVPtbUT1gDfLXDbmt7KDnbejtmmXQ
+	 OWHWX7Q0OdOaA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 24/58] objtool/klp: Add test for correlation across ThinLTO name mangling
-Date: Wed, 16 Sep 2026 11:43:17 -0700
-Message-ID: <20260916184351.2720310-25-song@kernel.org>
+Subject: [PATCH v5 27/58] objtool/klp: Add klp diff and post-link regression tests
+Date: Wed, 16 Sep 2026 11:43:20 -0700
+Message-ID: <20260916184351.2720310-28-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,138 +51,280 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Puranjay Mohan <puranjay@kernel.org>
+Five tests covering behaviour the harness could reach but nothing
+exercised.  Each was verified to fail against the code it guards, by
+reverting the fix or sabotaging the exact line; where a first attempt
+passed against broken code, the fixture was wrong and was rebuilt.
 
-ThinLTO promotes the file-local symbols an imported function touches,
-renaming them name.llvm.<hash>.  The hash is content derived, so it changes
-whenever the module does:
+  post-link                    first coverage of the subcommand at all
+  local-vs-export              local symbols must not match exports
+  symvers-parse-error          Module.symvers parse error line numbers
+  checksum-debug               the --debug-checksum format klp-build reads
+  function-removal             the "no correlation" path
 
-  original: counter.llvm.13663304415433785070
-  patched:  counter.llvm.10543383937958011340
+local-vs-export tests the behavior of commit 86a697572c62 ("objtool/klp:
+Don't match local symbols against exports"), and symvers-parse-error that
+of commit 51c1de134863 ("objtool/klp: Fix line numbers in Module.symvers
+parse errors").
 
-Correlating the two objects therefore requires demangling the suffix;
-matching raw names would see two unrelated symbols and treat the variable
-as new.
-
-The resulting klp relocation also has to name the original symbol, since
-that is the one in the running kernel's kallsyms.  Naming the patched
-build's symbol produces a relocation which can never be resolved.
-
-ThinLTO is a clang feature, so the test declares itself clang-only.  It
-also needs an lld from the same LLVM release as $CC; a mismatched pair
-fails with "Invalid summary version", which reads like a broken test rather
-than a broken environment, so probe for a working lld and skip if there is
-none.
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/thinlto_local.c    | 39 +++++++++++++++
- .../tests/generic/test-thinlto-local.sh       | 48 +++++++++++++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/thinlto_local.c
- create mode 100755 tools/objtool/tests/generic/test-thinlto-local.sh
+ .../tests/generic/fixtures/function_removal.c | 25 ++++++++++
+ .../tests/generic/test-checksum-debug.sh      | 49 +++++++++++++++++++
+ .../tests/generic/test-function-removal.sh    | 34 +++++++++++++
+ .../tests/generic/test-local-vs-export.sh     | 32 ++++++++++++
+ tools/objtool/tests/generic/test-post-link.sh | 42 ++++++++++++++++
+ .../tests/generic/test-symvers-parse-error.sh | 23 +++++++++
+ 6 files changed, 205 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/function_removal.c
+ create mode 100755 tools/objtool/tests/generic/test-checksum-debug.sh
+ create mode 100755 tools/objtool/tests/generic/test-function-removal.sh
+ create mode 100755 tools/objtool/tests/generic/test-local-vs-export.sh
+ create mode 100755 tools/objtool/tests/generic/test-post-link.sh
+ create mode 100755 tools/objtool/tests/generic/test-symvers-parse-error.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/thinlto_local.c b/tools/objtool/tests/generic/fixtures/thinlto_local.c
+diff --git a/tools/objtool/tests/generic/fixtures/function_removal.c b/tools/objtool/tests/generic/fixtures/function_removal.c
 new file mode 100644
-index 000000000000..fe9f9e6bf44f
+index 000000000000..d65ff604c2c5
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/thinlto_local.c
-@@ -0,0 +1,39 @@
++++ b/tools/objtool/tests/generic/fixtures/function_removal.c
+@@ -0,0 +1,25 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Two translation units (TU_B selects the second) linked with ThinLTO.
-+ * Importing bump() promotes the file-local counter, renaming it
-+ * counter.llvm.<hash>.  The hash is content derived, so it differs between the
-+ * original and patched builds.
++ * A function the patch deletes, along with its only caller's use of it.  The
++ * original has a symbol which the patched object simply does not, so there is
++ * nothing to correlate it against.
 + */
-+
-+#ifdef TU_B
-+
-+extern int bump(void);
-+
-+int other_entry(void)
-+{
-+	return bump() + bump();
-+}
-+
-+#else
 +
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
 +
-+static int counter;
-+
-+int bump(void)
++#ifndef PATCHED
++int going_away(int x)
 +{
-+	return ++counter;
++	return x + 7;
 +}
++#endif
 +
-+int target(void)
++int caller(int x)
 +{
 +#ifdef PATCHED
-+	return counter + 1;
++	return x + 1;
 +#else
-+	return counter;
++	return going_away(x);
 +#endif
 +}
-+
-+#endif
-diff --git a/tools/objtool/tests/generic/test-thinlto-local.sh b/tools/objtool/tests/generic/test-thinlto-local.sh
+diff --git a/tools/objtool/tests/generic/test-checksum-debug.sh b/tools/objtool/tests/generic/test-checksum-debug.sh
 new file mode 100755
-index 000000000000..a266263676ed
+index 000000000000..78856b191636
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-thinlto-local.sh
-@@ -0,0 +1,48 @@
++++ b/tools/objtool/tests/generic/test-checksum-debug.sh
+@@ -0,0 +1,49 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# Correlating ThinLTO-promoted locals requires demangling the .llvm.<hash>
-+# suffix, and the resulting klp relocation must name the original symbol: that
-+# is the one in the running kernel's kallsyms.
++# "klp checksum --debug-checksum" prints a per-instruction checksum stream,
++# and klp-build -f (--show-first-changed) parses it to report where a function
++# first differs between the original and patched builds.
++#
++# It is a debugging aid, so nothing fails when it breaks: klp-build greps the
++# stream, and an unmatched grep just yields no output, which reads as "no
++# instruction changed".  That is exactly how the format drifted out from under
++# it once already.  Pin the shape klp-build depends on:
++#
++#   DEBUG: <object>: checksum: <func>(): <sym>+0x<offset> <16 hex digits>
++#
++# and that --dry-run leaves the object alone, since klp-build runs this against
++# objects it is going to checksum again for real.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
-+clang_only "ThinLTO requires clang"
++build_pair basic.c
 +
-+find_thinlto_toolchain ||
-+	probe_skip "no matching clang/lld pair for a ThinLTO link; set THIN_LD to one"
++before="$(md5sum < "$workdir/orig.o")"
 +
-+build_thinlto()		# $1 output object, $2 extra flags
-+{
-+	$THIN_CC -flto=thin -O2 -ffunction-sections -fdata-sections $2 \
-+		-c "$FIXTURES_DIR/thinlto_local.c" -o "$workdir/tu_a.o" 2>/dev/null || return 1
-+	$THIN_CC -flto=thin -O2 -ffunction-sections -fdata-sections $2 -DTU_B \
-+		-c "$FIXTURES_DIR/thinlto_local.c" -o "$workdir/tu_b.o" 2>/dev/null || return 1
-+	"$THIN_LD" -r "$workdir/tu_a.o" "$workdir/tu_b.o" -o "$1" 2>/dev/null || return 1
-+}
++"$OBJTOOL" klp checksum --dry-run --debug-checksum=changed \
++	"$workdir/orig.o" > "$workdir/debug.log" 2>&1 ||
++	fail "klp checksum --debug-checksum failed"
 +
-+build_thinlto "$workdir/orig.o" "" ||
-+	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
-+build_thinlto "$workdir/patched.o" -DPATCHED ||
-+	probe_skip "ThinLTO build failed ($THIN_CC, $THIN_LD)"
++# --dry-run has to mean it: klp-build checksums these objects again afterwards,
++# and "already has .discard.sym_checksum, skipping" would lose the real run.
++[ "$(md5sum < "$workdir/orig.o")" = "$before" ] ||
++	fail "--dry-run modified the object"
++has_input_section orig.o .discard.sym_checksum &&
++	fail "--dry-run created .discard.sym_checksum"
 +
-+orig_sym="$(in_symbols orig.o    | grep -o 'counter\.llvm\.[0-9]*' | head -1)"
-+new_sym="$( in_symbols patched.o | grep -o 'counter\.llvm\.[0-9]*' | head -1)"
++grep -qE '^DEBUG: .*: checksum: changed\(\): [^ ]+\+0x[0-9a-f]+ [0-9a-f]{16}$' \
++	"$workdir/debug.log" ||
++	fail "unexpected --debug-checksum format: $(head -1 "$workdir/debug.log")"
 +
-+[ -n "$orig_sym" ] && [ -n "$new_sym" ] ||
-+	probe_skip "$THIN_CC did not promote the local symbol"
++# This is the pattern klp-build greps with.  Keep it working verbatim.
++grep -qE "^DEBUG: .*checksum: changed\(\): " "$workdir/debug.log" ||
++	fail "klp-build's --show-first-changed pattern no longer matches"
 +
-+# Equal hashes would make plain name matching work, testing nothing.
-+[ "$orig_sym" != "$new_sym" ] ||
-+	probe_skip "$THIN_CC gave the same ThinLTO hash for both builds"
++# Only the requested function, or klp-build attributes instructions to the
++# wrong one.
++grep -qE 'checksum: untouched\(\)' "$workdir/debug.log" &&
++	fail "--debug-checksum=changed also dumped untouched()"
++
++pass "--debug-checksum format is the one klp-build -f parses"
+diff --git a/tools/objtool/tests/generic/test-function-removal.sh b/tools/objtool/tests/generic/test-function-removal.sh
+new file mode 100755
+index 000000000000..df76e81e3936
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-function-removal.sh
+@@ -0,0 +1,34 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# A patch which deletes a function leaves a symbol in the original with no
++# counterpart in the patched object.  klp diff cannot correlate it, and must
++# say so and carry on: livepatching cannot remove code from a running kernel,
++# so what matters is that the surviving caller is patched and the deleted
++# function is not dragged into the patch module.
++#
++# Cloning it would be worse than useless -- dead code in the patch, plus
++# whatever it references, resolved against a kernel where it may not exist.
++
++. "$(dirname "$0")/../lib.sh"
++
++setup
++build_pair function_removal.c
++
++# One-sided by construction: present in the original, gone from the patched.
++has_input_symbol orig.o going_away ||
++	fail "fixture has no going_away in the original"
++has_input_symbol patched.o going_away &&
++	fail "fixture still has going_away in the patched object"
 +
 +run_diff
-+assert_patched target
 +
-+out_symbols | grep -q "\.klp\.sym\.vmlinux\.$orig_sym," ||
-+	fail "expected a klp relocation naming $orig_sym"
-+out_symbols | grep -q "\.klp\.sym\.vmlinux\.$new_sym," &&
-+	fail "klp relocation names $new_sym, which the running kernel does not have"
++assert_diff_log 'no correlation: going_away'
 +
-+pass "ThinLTO-mangled local correlated across differing hashes ($THIN_CC, $THIN_LD)"
++# The caller changed, so it is patched ...
++assert_patched caller
++# ... and the deleted function comes along in no form at all.
++assert_not_patched going_away
++assert_no_symbol going_away
++
++pass "deleted function reported as uncorrelated and left out of the patch"
+diff --git a/tools/objtool/tests/generic/test-local-vs-export.sh b/tools/objtool/tests/generic/test-local-vs-export.sh
+new file mode 100755
+index 000000000000..5b91101dadd6
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-local-vs-export.sh
+@@ -0,0 +1,32 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# find_export() matched on symbol name alone, so a static function or variable
++# sharing a name with an export was mistaken for a reference to that export.
++# For a vmlinux export that means no klp relocation at all: the normal
++# relocation left behind is resolved by the module loader to the vmlinux
++# symbol, and the patched code quietly reads and writes the wrong object.
++#
++# Exports are always global, so a local symbol is never one.
++
++. "$(dirname "$0")/../lib.sh"
++
++setup
++build_pair static_local.c
++
++# The static the fixture uses.  Compilers mangle statics variously -- gcc says
++# counter.0, clang says target.counter -- so find what this one produced rather
++# than assuming a shape.
++local_sym="$(in_symbols orig.o |
++	awk '$4 == "OBJECT" && $5 == "LOCAL" && $8 ~ /counter/ { print $8; exit }')"
++[ -n "$local_sym" ] ||
++	fail "fixture produced no local 'counter' symbol"
++
++# Contrive the collision: something else exports that same name.
++export_syms "$local_sym" counter
++run_diff
++
++# Still treated as the local it is, not as the export.
++assert_klp_sym "$local_sym" vmlinux
++
++pass "local symbol not mistaken for an export of the same name"
+diff --git a/tools/objtool/tests/generic/test-post-link.sh b/tools/objtool/tests/generic/test-post-link.sh
+new file mode 100755
+index 000000000000..a6d40ae1b18d
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-post-link.sh
+@@ -0,0 +1,42 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# klp post-link converts the intermediate __klp_relocs.* sections into the
++# .klp.rela.* form the kernel applies at patch load.  Getting this wrong is
++# invisible at build time: the module links and loads, and the relocations are
++# simply never applied.
++
++. "$(dirname "$0")/../lib.sh"
++
++setup
++build_pair static_local.c
++
++# An unexported symbol is what produces a klp relocation in the first place.
++# The static local is renamed by the compiler -- counter.0 with gcc -- so the
++# fixture's premise is that some local of that shape exists, not that a symbol
++# called "counter" does.  Find it first; everything below names it.
++local_sym="$(in_symbols orig.o |
++	     awk '$4 == "OBJECT" && $5 == "LOCAL" && $8 ~ /counter/ { print $8; exit }')"
++[ -n "$local_sym" ] || fail "fixture produced no local 'counter' symbol"
++
++run_diff
++assert_section __klp_relocs.vmlinux
++
++# Nothing has converted them yet.
++assert_no_section ".klp.rela.vmlinux..text.target"
++
++# The original relocation is neutralised by pointing it at a tombstone, which
++# is what stops the module loader resolving it behind livepatch's back.
++#
++# Compilers mangle a static local differently -- gcc says counter.0, clang
++# target.counter -- so find what this one produced rather than assuming.
++assert_tombstone "$local_sym"
++
++run_post_link
++
++# One .klp.rela section per base section, carrying SHF_RELA_LIVEPATCH, against
++# a symbol in SHN_LIVEPATCH for the kernel to resolve.
++assert_klp_rela vmlinux .text.target
++assert_livepatch_sym "$local_sym"
++
++pass "klp relocations converted to .klp.rela with SHN_LIVEPATCH symbols"
+diff --git a/tools/objtool/tests/generic/test-symvers-parse-error.sh b/tools/objtool/tests/generic/test-symvers-parse-error.sh
+new file mode 100755
+index 000000000000..d597f28e5617
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-symvers-parse-error.sh
+@@ -0,0 +1,23 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# A malformed Module.symvers has to be reported against the line it is on.
++# Module.symvers has tens of thousands of lines and is generated, so a wrong
++# line number sends whoever has to fix it to the wrong place, and "line 1" is
++# wrong in a way that looks plausible.
++
++. "$(dirname "$0")/../lib.sh"
++
++setup
++build_pair basic.c
++
++# Three well-formed lines, then one with no tabs at all.
++export_syms a b c
++echo 'this line has no fields' >> "$workdir/Module.symvers"
++
++run_diff 255
++
++assert_diff_log 'malformed Module.symvers'
++assert_diff_log 'at line 4'
++
++pass "malformed Module.symvers reported against the offending line"
 -- 
 2.53.0-Meta
 
