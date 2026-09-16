@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5233DBD65
-	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BCD64BF944
+	for <live-patching@vger.kernel.org>; Wed, 16 Sep 2026 18:46:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584432; cv=none; b=KofUOVi4fsj3UKp2mWkOkxn0P0Xoq89pyI0X5NDbbzlV+vxH/R/Mhrdj5Acjq7GyUC67iGPRPd2Nq140t1MszW87sVgxxqK67b1KWbA4XBl+ZLn67WvK4BjbZ6CP0+HGn1OGrZtGyhSMtIW/OYFzaZlouBocrvtl/WQcdigVfRo=
+	t=1789584442; cv=none; b=c8FewoEFiAYkBmXi6VmcoL/nJgTG0zsTxl8hym8rtuK9Fqq+YmPzBLnugLjcOKZMuEjGrPQ/UZw5KoSghzVsGTNuBxW11aSZW8YJOmFiDpVK1vPGOzk14+AZ7Q1tw2u3Sh4nEJs1l5xnVekO9+OthKpi5AkZVepY8kF8MrRWMJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584432; c=relaxed/simple;
-	bh=3iVoK4BkPE7Ao2mIIlFXdexW1442xptVOxNVtYYEQ+8=;
+	s=arc-20240116; t=1789584442; c=relaxed/simple;
+	bh=x23WLfRz/WNl+R8iPHplQ5d4l3VeD68nBcNw7LYT7M4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rbh1BdhrEg5tXxQ30xMXVp/c6oik2C5+vCQE2WYl3t8PXnoaZ7o+nCGwPncxAYl+FBS4lJMndrhnb/cwnEnLmy39SoC7uQk6S2IWkm0+WlRa07CR7yl6OdvSxUtWgYalO0Hs/p2i/zz0JYyDuv/7uuYNt1c11Puw57NnyKuzBBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4Z/7iM1; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=u9v8VclhdBhDkpnnirCp9yho+YR/NdJfpk+5ikyiY4LaLOc6gD5JDuwWwXPr2DBhEliJNSWSMf2lIJtySWv2BgcfoNOECGslHvK0iVUbZgfjZEToFPUtlNbHseaQoPiqahX0dCj9w6CaoOuaWlcDm4OEF26snemIm35JQz5yo4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rt9w3PgZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4Z/7iM1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBED01F00898;
-	Wed, 16 Sep 2026 18:46:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rt9w3PgZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB2A1F000FF;
+	Wed, 16 Sep 2026 18:46:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789584415;
-	bh=qDD8qst+lNvXm1mMrcNe9/GCFXs/oxrzCZsX6CQt3qQ=;
+	s=k20260515; t=1789584411;
+	bh=aIGNw+u2EyDNP535o9X8wnUBsBv3duJFuIjIcLTg34k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=f4Z/7iM1H/PB8RuMOXNbKS77YlevMwAuehKXk99K7siw7rCR7tOp7ALMzTEweeqtS
-	 pc6DZLvMFen7/bLuWxsGBpbSmom8FcceMlBSJOqRtC4HscHqWeDrBxOL3mMzbopi4Q
-	 W+/lkQI4rSvRcAnkknwBivQkFdFglKElbLEaKtvcmWi9qlP5tdjJS4gP2uSn5fgIYV
-	 aO0iAIc843YLmiczQ0BynOOGzY8ReZ8l91BZoOTbCqjPjTEon83j6gMwOdQxjozpIB
-	 7PJazF9jVDXN8AWRdvPBEz4mbsxpQVPSD8QRmjj5AlnX3KGT/cOnEqgVa5NDd+wMcg
-	 4A5XfTwqnAL+Q==
+	b=Rt9w3PgZJtZ/4y9xrQjBPUNlPSf1FojHDM5/TsItXMwlyxrF2yGsOQxlQCENp4ZGI
+	 Y3uP6JoF7M+PNzSv18EkJWrvay5pTB3y2ZK4Z//KpJURWlC1kY9rRChev6vHWmcZqj
+	 4v4620TO0yITmxXTKunBgGpf8r+RBpGIutfWRWsNbennCyjku9518+kIKHw4c/QCOZ
+	 22r4eodOmX2P/ji/yuJVqgyLDSEjEaeU0YG48/oe7J3+zY+VW3bZMDoStuau01TqSS
+	 QV8OszHT29rEme6J91ulRQxx22S7bAggFgry0DbTxOi7aetKAbEVW4U9SMHXJ3je2z
+	 E7rUnKrgpQ2hw==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: jpoimboe@kernel.org,
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	puranjay@kernel.org,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v5 37/58] objtool/klp: Add test for sympos in module objects
-Date: Wed, 16 Sep 2026 11:43:30 -0700
-Message-ID: <20260916184351.2720310-38-song@kernel.org>
+Subject: [PATCH v5 36/58] objtool/klp: Add test for position-independent checksums
+Date: Wed, 16 Sep 2026 11:43:29 -0700
+Message-ID: <20260916184351.2720310-37-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916184351.2720310-1-song@kernel.org>
 References: <20260916184351.2720310-1-song@kernel.org>
@@ -51,120 +51,135 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-klp-sympos.c had no coverage at all.  sympos disambiguates same-named
-symbols for livepatch, counting from 1, with 0 meaning the name is unique.
-Resolving to the wrong one is not a load failure -- it is a patch quietly
-wired to the wrong object.
+A function that only moves has not changed, and its checksum must not move
+with it.  Otherwise every patch reports as changed everything that shifted
+because something ahead of it grew.
 
-Covers the module path, where the position is a count in symbol table order
-and klp diff can work it out from the object alone.
+The fixture is built with -fno-function-sections, overriding the harness
+default: with per-function sections every function sits at offset 0 of its
+own section and nothing ever moves, so the test would prove nothing.  It
+also calls across to another function rather than looping within itself --
+a loop branch keeps the same displacement wherever the function goes, so it
+is not position-dependent to begin with.
+
+This tests the behavior of commit cca84cb12908 ("objtool/klp: Fix
+position-dependent checksums for non-relocated jumps/calls").
 
 Assisted-by: Claude:claude-opus-4
 Based-on-test-by: Joe Lawrence <joe.lawrence@redhat.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../tests/generic/fixtures/sympos_dup.c       | 32 ++++++++++++
- tools/objtool/tests/generic/test-sympos.sh    | 51 +++++++++++++++++++
- 2 files changed, 83 insertions(+)
- create mode 100644 tools/objtool/tests/generic/fixtures/sympos_dup.c
- create mode 100755 tools/objtool/tests/generic/test-sympos.sh
+ .../generic/fixtures/checksum_position.c      | 42 ++++++++++++++++
+ .../tests/generic/test-checksum-position.sh   | 50 +++++++++++++++++++
+ 2 files changed, 92 insertions(+)
+ create mode 100644 tools/objtool/tests/generic/fixtures/checksum_position.c
+ create mode 100755 tools/objtool/tests/generic/test-checksum-position.sh
 
-diff --git a/tools/objtool/tests/generic/fixtures/sympos_dup.c b/tools/objtool/tests/generic/fixtures/sympos_dup.c
+diff --git a/tools/objtool/tests/generic/fixtures/checksum_position.c b/tools/objtool/tests/generic/fixtures/checksum_position.c
 new file mode 100644
-index 000000000000..7eded9b12cfc
+index 000000000000..4320bc220592
 --- /dev/null
-+++ b/tools/objtool/tests/generic/fixtures/sympos_dup.c
-@@ -0,0 +1,32 @@
++++ b/tools/objtool/tests/generic/fixtures/checksum_position.c
+@@ -0,0 +1,42 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A static whose name recurs in every translation unit that includes it.
-+ * Compiled once for a single-copy object and twice, partially linked, for one
-+ * with duplicates -- which is the only case where sympos is non-zero.
++ * A function whose position in the section changes between the two builds,
++ * without the function itself changing.
 + *
-+ * FUNC_NAME keeps the referencing functions distinct so both get patched.
-+ * Only the first copy carries .modinfo; two would be a second thing to
-+ * disambiguate and is not what this fixture is about.
++ * target() calls callee() twice, and a call within the same section needs no
++ * relocation: the displacement is in the instruction.  It is that displacement
++ * which moves, and hashing those bytes makes the checksum move with it.  Both
++ * must therefore share a section, which is why the test passes
++ * -fno-function-sections.
++ *
++ * What has to change is the distance between the two, and PATCHED changes it
++ * by aligning them rather than by inserting a function between them.  Where a
++ * compiler puts an added function is its own business: gcc emits these in
++ * source order, so a function written between callee() and target() separates
++ * them, but clang emits target() immediately before callee() whatever the
++ * source says, and an added function lands ahead of both.  That moves target()
++ * without moving it relative to callee(), the displacement comes out identical
++ * in both builds, and the test passes without having asked anything.
++ *
++ * Alignment moves the functions apart on both, and moves neither function's
++ * own instructions -- which is exactly the distinction under test.
 + */
 +
-+#ifndef FUNC_NAME
-+#define FUNC_NAME use_a
++#ifdef PATCHED
++#define MOVED	__attribute__((aligned(64)))
++#else
++#define MOVED
 +#endif
 +
-+#ifndef NO_MODINFO
 +static const char __modinfo[]
 +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+#endif
 +
-+/* volatile so it survives as an STT_OBJECT rather than being folded away */
-+static volatile int dup_counter = 1;
-+
-+int FUNC_NAME(int x)
++__attribute__((noinline)) MOVED static int callee(int x)
 +{
-+	dup_counter += x;
-+#ifdef PATCHED
-+	return dup_counter + 1;
-+#else
-+	return dup_counter;
-+#endif
++	return x * 5 + 1;
 +}
-diff --git a/tools/objtool/tests/generic/test-sympos.sh b/tools/objtool/tests/generic/test-sympos.sh
++
++__attribute__((noinline)) MOVED int target(int x)
++{
++	return callee(x) + callee(x + 1);
++}
+diff --git a/tools/objtool/tests/generic/test-checksum-position.sh b/tools/objtool/tests/generic/test-checksum-position.sh
 new file mode 100755
-index 000000000000..b71d4930a22a
+index 000000000000..d05e28014e1e
 --- /dev/null
-+++ b/tools/objtool/tests/generic/test-sympos.sh
-@@ -0,0 +1,51 @@
++++ b/tools/objtool/tests/generic/test-checksum-position.sh
+@@ -0,0 +1,50 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +#
-+# sympos is what livepatch uses to tell duplicate symbol names apart in the
-+# patched object: which "dup_counter" of several the relocation means.  Get it
-+# wrong and the patch resolves to the wrong object at load time, silently.
++# A function's checksum must not depend on where the function sits.
 +#
-+# klp_find_sympos() reports 0 when a name is unique and a 1-based position when
-+# it is not, so both need checking -- always reporting a position, or never,
-+# each looks right in one of the two cases.
++# A jump or call without a relocation encodes its target as an offset from the
++# instruction.  Hashing those bytes makes the checksum change whenever anything
++# ahead of the function changes size -- so an unrelated edit elsewhere in the
++# file reports this function as changed too, and the patch grows to include it
++# and everything it references.  Nothing fails; the livepatch is just larger and
++# riskier than the patch it came from.
 +#
-+# This is the module path, counting symbol table order.  vmlinux is reordered
-+# by the final link and goes through .klp.symid instead; that needs a linked
-+# vmlinux next to vmlinux.o and is not covered here.
++# Here the "patch" adds a function ahead of target() and changes nothing else.
 +
 +. "$(dirname "$0")/../lib.sh"
 +
 +setup
 +
-+# One copy: the name is unique, so there is nothing to disambiguate.
-+build_one sympos_dup.c orig.o    -DFUNC_NAME=use_a
-+build_one sympos_dup.c patched.o -DFUNC_NAME=use_a -DPATCHED
-+run_diff
++# -fno-function-sections, or each function is at offset 0 of its own section
++# and target() never moves.
++build_pair checksum_position.c -fno-function-sections
 +
-+assert_klp_sympos dup_counter 0
++assert_input_symbol target
 +
-+# Two copies: positions, in symbol table order.
-+for p in "" "-DPATCHED"; do
-+	# shellcheck disable=SC2086
-+	build_one sympos_dup.c "a$p.o" -DFUNC_NAME=use_a $p
-+	# shellcheck disable=SC2086
-+	build_one sympos_dup.c "b$p.o" -DFUNC_NAME=use_b -DNO_MODINFO $p
-+done
-+partial_link "$workdir/orig.o"    "$workdir/a.o"         "$workdir/b.o" ||
-+	probe_skip "partial link unavailable"
-+partial_link "$workdir/patched.o" "$workdir/a-DPATCHED.o" "$workdir/b-DPATCHED.o" ||
-+	probe_skip "partial link unavailable"
++# The fixture is only meaningful if target() actually moved.
++# What has to change is the displacement target's calls encode, and that is
++# the distance to callee() -- not target's own offset.  A compiler which put
++# the added function ahead of both would move target and leave the distance
++# alone, and then the bytes are identical and the checksum matches for the
++# uninteresting reason.  Ask about the distance.
++sym_off()   # $1 object, $2 symbol
++{
++	in_symbols "$1" | awk -v n="$2" '$NF == n { print $2; exit }'
++}
 +
-+# Without duplicates in the input there is nothing for sympos to number.
-+[ "$(count_input_symbols orig.o dup_counter)" = 2 ] ||
-+	fail "fixture did not produce two dup_counter symbols"
++orig_t="$(sym_off orig.o target)";    orig_c="$(sym_off orig.o callee)"
++new_t="$(sym_off patched.o target)";  new_c="$(sym_off patched.o callee)"
 +
-+run_diff
++[ -n "$orig_t" ] && [ -n "$orig_c" ] && [ -n "$new_t" ] && [ -n "$new_c" ] ||
++	fail "target or callee missing from one of the objects"
 +
-+assert_klp_sympos dup_counter 1
-+assert_klp_sympos dup_counter 2
-+# ... and nothing still claiming the name is unique
-+out_symbols | grep -qE '\.klp\.sym\.[^.]+\.dup_counter,0([[:space:]]|$)' &&
-+	fail "sympos 0 emitted for a duplicated symbol"
++orig_gap=$(( 16#$orig_t - 16#$orig_c ))
++new_gap=$((  16#$new_t  - 16#$new_c ))
++[ "$orig_gap" != "$new_gap" ] ||
++	probe_skip "this compiler moved target() and callee() together;" \
++		   "the call displacement did not change"
 +
-+pass "sympos numbers duplicate symbols and stays 0 for unique ones"
++assert_checksum_matches target
++
++pass "checksum unchanged when the function only moves"
 -- 
 2.53.0-Meta
 
