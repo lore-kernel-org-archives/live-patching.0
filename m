@@ -1,158 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 119CB3A5E7A;
-	Fri, 18 Sep 2026 22:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E20384CD6;
+	Fri, 18 Sep 2026 22:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789772069; cv=none; b=Dcd9l87puotwhY+9P2Mbjliq91qWBTY1zMONcGJXg3PhJNp2XsVDizKWSD7N4RL+IioMoc59gt4Fl2T818GxqYutdYjId7zf1GfB8uaarIs2aY9xkRFUrLUiCNVlKBanMSgUfQeSU+S7qrDsLXNMKXEZL9m2ykq9sKt54QtJqh8=
+	t=1789772300; cv=none; b=eK8fzNmZLrQezMZW6Eo+cEB/EfYU9zG/byLN7ZTtfbktgDHjdPU91WsJGzVHOjDttTZwLwi9PQ1Pu8oiVmbf6+e6Lp++dzOfPsc4LuUMdc79YfagyDQ4mEXZQZNH6UX8D5ZpYZNpxuRH5Xr1I3keSZGAkOuczZ0j2EtGEBtyZgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789772069; c=relaxed/simple;
-	bh=EFQoZ1YJOxUFdZTi/EN55HoqVCoXnrrmVXHcH8dW4uQ=;
+	s=arc-20240116; t=1789772300; c=relaxed/simple;
+	bh=mNkTUn67zmGzc/jGWEYrIXWl3lwX0tuYcA2bZyAI2VA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VlQvA+UVSz2eGoEGE4EuPG7WNTJOpEwQtuX0CSVfn2aWGMyYre18FeijuC7hhNwARappLbd28YA3lLrDsWcyliXSpsOBBeD1Sg9D5ozmTzYgfynwBvkRr0wPBgCOUrNBSHU+r2oWbs91tdfV2W1bvYxdC/7dy6afEX6hk80Y42Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bgew5+Rg; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HRYje9RBX6RMdcuT5SBOflvQ9ZFVUQT3lCmehTo/yNT/uBJLf8oxplc28csP1bbpzkdgRPq9sbEXt1UTqXBjvhnfQ98h1jbOTTvGk5JbyhZOAMtHRBybQPHHyCjLZ7Sd22Ek3NahDxpZyCE7lEkwroeR6Oy1c/o8hgOf3AymlGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYyWHMS4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgew5+Rg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8797A1F000FF;
-	Fri, 18 Sep 2026 22:54:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYyWHMS4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5840A1F000FF;
+	Fri, 18 Sep 2026 22:58:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789772067;
-	bh=g5kG3DdFAuRrj+kffHzyPbVSqMeTdYOBvtJ0HQxgK7o=;
+	s=k20260515; t=1789772299;
+	bh=sHXwsGr1uavLjHSu6rlc+2w5RT2dJPcmThYuznQz0y0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bgew5+Rgb+UWitV4Hpgqvv2f7CVv1I7jzUspzMSxcBarpkU9haLIDoGIkKqwRD75W
-	 ejatLmoDymX2kjeIT8yB6huJB6p4XPh722j8c+kOZ1ZaeLISwRqRPzBL1D1aAX5ed4
-	 MkNg3UM73TAEOd1Uan0r2dlf3eElhwpxbsqRkshxzhmGizGon3AIEK7zgg1D2ut2EV
-	 BBk3TPfBmQW+y2kHWK/5wCEiHRG1Lqw6so204L8k+rmC0ULIwKFgwfR4XJj5zLeCpr
-	 uQtOkbni4NCU77xE+foNyCT9RfyMaYhC1X4zvUJrDnx8a5A2SkVIA0jILbKvo2wqNr
-	 ddYgQ7824ceIQ==
+	b=fYyWHMS47LQnb+FfECXaQNJ/Y8oIM4F8d+0+1oA7LXEA+oMxpN020GMzYA0JRd3J2
+	 zw8re8HCCQoTjcPrZ9LIxCFSpvhvJpJrz9eHS8KmAfr6WttP+BZwID657VRPR62OHA
+	 CyWnSchK96yhS6XinnVAEht+F6qbQSFBES4X8cTWbSsryYVskzVOKlyFyUGTHLg7Of
+	 X29J2CnW9jfdiYWzwkWLtgRp96dr86CzLfu2SeOQXfwSAqWynLK1gt76IowceucSn7
+	 EsTX6e2H4WwA3qVKJ2CbcchbihJXcqAlX5bD4hXHJRSzQ/G2ZT/De8s4scKmXgnr3T
+	 qKbhadLqYloHA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 05/11] arm64/module, sframe: Add sframe support for
- modules
+Subject: Re: [PATCH v7 10/11] arm64, crypto/lib: Annotate leaf functions
+ with CFI info
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jens Remus" <jremus@linux.ibm.com>, "Peter Zijlstra" <peterz@infradead.org>, "Jiri
- Kosina" <jikos@kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>, "Indu
- Bhagat" <ibhagatgnu@gmail.com>, "Dylan Hatch" <dylanbhatch@google.com>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Weinan
- Liu" <wnliu@google.com>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Mark
- Rutland" <mark.rutland@arm.com>, "Will Deacon" <will@kernel.org>
-Cc: "Prasanna Kumar T S M" <ptsm@linux.microsoft.com>, "Puranjay Mohan" <puranjay@kernel.org>, joe.lawrence@redhat.com, linux-arm-kernel@lists.infradead.org, "Randy
- Dunlap" <rdunlap@infradead.org>, "Mostafa Saleh" <smostafa@google.com>, "Song
- Liu" <song@kernel.org>, linux-kernel@vger.kernel.org, live-patching@vger.kernel.org, linux-toolchains@vger.kernel.org, "Herbert
- Xu" <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
-In-Reply-To: <20260918224157.1471085-6-dylanbhatch@google.com>
+To: "Peter Zijlstra" <peterz@infradead.org>, "Roman Gushchin" <roman.gushchin@linux.dev>, "Indu
+ Bhagat" <ibhagatgnu@gmail.com>, "Dylan Hatch" <dylanbhatch@google.com>, "Jens
+ Remus" <jremus@linux.ibm.com>, "Catalin Marinas" <catalin.marinas@arm.com>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Jiri Kosina" <jikos@kernel.org>, "Weinan
+ Liu" <wnliu@google.com>, "Mark Rutland" <mark.rutland@arm.com>, "Josh
+ Poimboeuf" <jpoimboe@kernel.org>, "Will Deacon" <will@kernel.org>
+Cc: "Mostafa Saleh" <smostafa@google.com>, "Herbert Xu" <herbert@gondor.apana.org.au>, "David
+ S. Miller" <davem@davemloft.net>, linux-toolchains@vger.kernel.org, live-patching@vger.kernel.org, joe.lawrence@redhat.com, "Prasanna
+ Kumar T S M" <ptsm@linux.microsoft.com>, "Puranjay Mohan" <puranjay@kernel.org>, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Song Liu" <song@kernel.org>
+In-Reply-To: <20260918224157.1471085-11-dylanbhatch@google.com>
 References: <20260918224157.1471085-1-dylanbhatch@google.com>
- <20260918224157.1471085-6-dylanbhatch@google.com>
+ <20260918224157.1471085-11-dylanbhatch@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 22:54:26 +0000
-Message-Id: <20260918225426.8797A1F000FF@smtp.kernel.org>
+Date: Fri, 18 Sep 2026 22:58:16 +0000
+Message-Id: <20260918225817.5840A1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] sframe: UAF and lockdep warning due to missing RCU lock around mod=
-ule lookup
-- [Medium] sframe: architecture abstraction violation in generic module code
+- [Medium] arm64: CFI start directive placed before function alignment corr=
+upts DWARF FDE bounds
 --
 
-commit d8442279cd580755fb98f0f72b910fcd83585a23
+commit 498fccd9732a9f4edcb2b385432263d6681de459
 Author: Dylan Hatch <dylanbhatch@google.com>
 
-arm64/module, sframe: Add sframe support for modules
+arm64, crypto/lib: Annotate leaf functions with CFI info
 
-This commit adds SFrame support for kernel modules on ARM64 by extending
-the architecture-specific module structure. It parses the .sframe section
-from incoming modules during load time and registers it for stack unwinding.
+This commit adds simple CFI annotations to assembly leaf functions so that
+the link register can be recovered by the unwinder. It introduces the
+SYM_LEAF_FUNC_START macro family for these annotations.
 
-> diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/mod=
-ule.h
-> index fb9b88eebeb15..07f309c51eee6 100644
-> --- a/arch/arm64/include/asm/module.h
-> +++ b/arch/arm64/include/asm/module.h
-[ ... ]
-> @@ -17,6 +18,11 @@ struct mod_arch_specific {
->  	struct mod_plt_sec	core;
->  	struct mod_plt_sec	init;
+> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/li=
+nkage.h
+> index d1f7a16729d25..c4377e6ba0a67 100644
+> --- a/arch/arm64/include/asm/linkage.h
+> +++ b/arch/arm64/include/asm/linkage.h
+> @@ -47,4 +53,27 @@
 > =20
-> +#ifdef CONFIG_HAVE_UNWIND_KERNEL_SFRAME
-> +	struct sframe_section sframe_sec;
-> +	bool sframe_init;
-> +#endif
-> +
-
-[Severity: Medium]
-Will this break cross-architecture builds if other architectures attempt to
-adopt SFrame?
-
-By placing these generically named fields into the ARM64-specific
-mod_arch_specific struct, generic unwinder code in kernel/unwind/sframe.c
-is now tightly coupled to an architecture-private layout.
-
-Should these generic module extensions reside directly in struct module
-(in include/linux/module.h) under the appropriate config guards instead?
-
-[ ... ]
-> diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-> index 9aac703f7ce6e..503d4a2beb50e 100644
-> --- a/kernel/unwind/sframe.c
-> +++ b/kernel/unwind/sframe.c
-[ ... ]
-> @@ -405,12 +409,43 @@ static __always_inline int __sframe_find(struct sfr=
-ame_section *sec,
->  	return __find_fre(sec, &fde, ip, frame);
->  }
+>  #define __bss_pgtbl __section(".bss..pgtbl") __aligned(PAGE_SIZE)
 > =20
-> +#ifdef CONFIG_MODULES
-> +
-> +static __always_inline int __sframe_find_module(unsigned long ip,
-> +						struct unwind_frame *frame)
-> +{
-> +	struct module *mod;
-> +
-> +	mod =3D __module_text_address(ip);
-
-[Severity: High]
-Does this code introduce a use-after-free and a lockdep warning?
-
-Stack unwinding can be initiated from preemptible contexts, but
-__module_text_address() requires preemption to be disabled or the RCU read
-lock to be held. If a module is concurrently unloaded via sys_delete_module=
-()
-immediately after __module_text_address() returns, the returned pointer
-becomes dangling.
-
-The subsequent call to __sframe_find() would then dereference pointers with=
-in
-the freed memory. Should this lookup and data access be wrapped in
-guard(rcu)(); or an rcu_read_lock() / rcu_read_unlock() block?
-
-> +	if (!mod || !READ_ONCE(mod->arch.sframe_init))
-> +		return -EINVAL;
-> +
-> +	return  __sframe_find(&mod->arch.sframe_sec, ip, frame);
+> +/*
+> + * SYM_[TYPED_]LEAF_FUNC_[START|END] macros add CFI minimal CFI directiv=
+es
+> + * allowing .sframe data to be generated for functions which do not modi=
+fy the
+> + * LR (x30). Unwind data will not be correct if these macros are used on
+> + * non-leaf functions, as additional CFI directives would be necessary i=
+n such
+> + * cases.
+> + */
+> +#define SYM_LEAF_FUNC_START(name)			\
+> +	.cfi_startproc ;				\
+> +	SYM_FUNC_START(name)
 
 [Severity: Medium]
-Does this generic lookup code directly reach into the arch-specific
-abstraction? This creates a tight coupling between the generic module unwin=
-der
-and the ARM64-specific layout.
+Will placing .cfi_startproc before SYM_FUNC_START() cause the DWARF FDE bou=
+nds
+to include alignment padding bytes?
 
-[ ... ]
-> +void sframe_module_init(struct module *mod, void *sframe, size_t sframe_=
-size)
-> +{
-> +	struct sframe_section *sec =3D &mod->arch.sframe_sec;
+Since SYM_FUNC_START() emits the .balign directive for the function,
+placing .cfi_startproc before it captures this padding. This can misalign
+the FDE start address relative to the function symbol, which could confuse
+stack unwinders like the sframe unwinder.
+
+Should the .cfi_startproc directive be emitted after the alignment within
+SYM_FUNC_START() completes?
+
+> +
+> +#define SYM_LEAF_FUNC_END(name)				\
+> +	.cfi_endproc ;					\
+> +	SYM_FUNC_END(name)
+> +
+> +#define SYM_LEAF_FUNC_START_LOCAL(name)			\
+> +	.cfi_startproc ;				\
+> +	SYM_FUNC_START_LOCAL(name)
 
 [Severity: Medium]
-Is it safe for this generic initialization code to assume the presence of
-the sframe_sec field in the architecture-private mod_arch_specific structur=
-e?
+Does the same alignment issue apply to SYM_LEAF_FUNC_START_LOCAL()? The
+.cfi_startproc directive is emitted before SYM_FUNC_START_LOCAL(), which
+also handles function alignment.
+
+> +
+> +#define SYM_TYPED_LEAF_FUNC_START(name)			\
+> +	.cfi_startproc ;				\
+> +	SYM_TYPED_FUNC_START(name)
+
+[Severity: Medium]
+Could this also lead to misaligned FDE start addresses for typed leaf
+functions, since .cfi_startproc is placed before SYM_TYPED_FUNC_START()
+alignment?
+
+> +
+>  #endif
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918224157.1471=
-085-1-dylanbhatch@google.com?part=3D5
+085-1-dylanbhatch@google.com?part=3D10
