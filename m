@@ -1,151 +1,209 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66313A6B76;
-	Fri, 18 Sep 2026 14:07:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3718819BC8
+	for <live-patching@vger.kernel.org>; Fri, 18 Sep 2026 22:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789740436; cv=none; b=G9W5VPFr/K9gZ3oeAPu0tjmx30+p+5c3j41Siy3B5TiMl9k/JBoqKJMEAfwKpndBqy3jZSZaiAfhTG3qSXdy79APqJ7W9IuPVL0a3+fb485PuOwicjP1aYXHhLxm8UP/KCxXd/Ii6ET9Zf9TlA+Z6TChIyKbMF1b/TxXl1KPXQ4=
+	t=1789771324; cv=none; b=f5Xf7NvJSqSO3r1Re7H7EErVgqkktrvPsZ7JzPHYxf/+FuzF8/E981E6CbbHGPvpXI8BzJfoZ/wcwItivw4VlJ7CO/m6o75ACul77pqVwlXY2w6Kg1sds/NQHvC3QOw8AEqtofsC/w/X8GAndujCFgTwx6U/iavKpqtWac/LAY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789740436; c=relaxed/simple;
-	bh=7ftfJ35NGlRXJzVZ3pfVfIxNnDIyUOA04LAEOup48KM=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=lyV5Rz3cfgDmMgUTyUPWQWOOl4GRCrorlb7AB+P8VLa+hkEpJcaAxqbu+SJWedKnmKRT+4UCQzxMzuLk8AdrjVNXcLhx9E3zvGgDD1AiSuOjbYWFPaLhMwwsgkUPx5Tv4anz4MaLYGjSrTLudk8bKUflkQB7C/2q+B/6x9H2fKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Z6uGXoXX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hc2/miI0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xc+fcn7B; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=lqlVyVKy; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1789771324; c=relaxed/simple;
+	bh=6LVtrMOuuO2127zXFYV2WHm33zThJFCTa/68qA+HNNY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QgZYvd5n1DiT0nIJnO+NQT0NBO/C6wyFCYbm1hr3NYsukpAXSgW4OG+sxH5VIjczlnW+WUUMrBwv7yVFn6aYKYuDpj67kKvjbk6E6OAzXADM/1IuVLVTUi9RYEgPVsUsZAWqO4reh35xCk+burAjt5zeFdySIlAq8oW9O/xa4UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dT7cW2ne; arc=none smtp.client-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Z6uGXoXX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hc2/miI0";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xc+fcn7B";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="lqlVyVKy"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:2b::1244])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 352641F7A1;
-	Fri, 18 Sep 2026 14:07:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789740428; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E69d7nhGV5QZI0C8RE6mUZJ93wzlQ4dx8b560Z5NLek=;
-	b=Z6uGXoXXeigPWrlTfa1V+dRnomIq0bN2wedF2n6xruwZwerYvCQNhGN+Tx1dylZ+Cs8JqW
-	t3cep0K0B+5Yg1Se6skMjLXXIKlGTiM2M8+9vF6SHNquWjmgYJXd5iqiKdBPit1n4PsK5j
-	kkIbDNmFweo1aFEWCOCdIk5OdBpOCZ4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789740428;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E69d7nhGV5QZI0C8RE6mUZJ93wzlQ4dx8b560Z5NLek=;
-	b=hc2/miI0yyYP+4v2GHdSXDzM3+YKhRiYflcBtKIUqpVkyupPx2bLX6GBgC4Oa5smcviz7J
-	vl6zcy4+g05VmWCg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=xc+fcn7B;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=lqlVyVKy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789740424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E69d7nhGV5QZI0C8RE6mUZJ93wzlQ4dx8b560Z5NLek=;
-	b=xc+fcn7B9bC96iGhinpSJy9LFw20m6bAxN7EU8HoFnjwY7II141mC7Nz8qI9jpAHbv5LTb
-	6GtP2WCTBJMqBDLJBi/RGyrO8PCDqnN/9iUxwwH8Fxyf4TXuU9iRz0bL77SD+Ou1s7R/5H
-	H7obmvxN40dW732YVLYiuYk/BE2N4FY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789740424;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E69d7nhGV5QZI0C8RE6mUZJ93wzlQ4dx8b560Z5NLek=;
-	b=lqlVyVKyZOA2yqxLEAp0t7isVhTqn342NlzL+x5QlquR7bKRKikCvObN2wV72Ozr1xC7t0
-	jVw/d9Wa3jGzePAQ==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dT7cW2ne"
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2ccb687f82eso17527295ad.3
+        for <live-patching@vger.kernel.org>; Fri, 18 Sep 2026 15:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789771322; x=1790376122; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WYajfqS3KjHTY5xifMFwHc/tZdyyd455ED9TO4wHoQI=;
+        b=dT7cW2nerixgm5W1JIeQTtqzhdi76nejzcAdVYtXsqiI5w461dWhe0Cghw0GfPzAOj
+         zjTgQPePnF6palpLKJx+2VycSpc1wes0sSYZspV2HbA0BOnLH9pkSYGyOA6t/w6QfNCX
+         q0x015pGhHn46+7ii9YtvQAVxZ8356D/uvsbaVoYb6eOnZzxIT+AXC1S19xr597V/kZw
+         J7Omw7cooF3VTlLmCHa+xDzmoASwYM1+OLtU0lUSCptWo53ZjS1HIaLjHHB4NFwvRUGg
+         ljAYp5wEd7HDJhx60e4QwFJ3pxoDZajTfoSXW14Rza18dKDe7/bU6MjHOx33931A7squ
+         sdMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789771322; x=1790376122;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WYajfqS3KjHTY5xifMFwHc/tZdyyd455ED9TO4wHoQI=;
+        b=E6IpxgVKc+fKcJavbXWskTOkpry3Up8m6lecZ34q2YuaSzkOR9ZyIKKZ413fiVaGV7
+         eG9+49RJzOioVp+AoieWHn1AizmI1bDe3WEIND+M9jkJS62+UIkKBNlKu9yb5J1cpbEf
+         pLS4bWzxraa+ssFoQ4i6ZpP7AH+lVKzZhsk03DyEVY4PrGC+YqR7xtxRD0agJHLhTKGt
+         2ym6O5S4zZx/GvlPCbS5I6T8cSFApJ7OSmv0HiTXmBdTFy88MUYjvRmnHb7IAJr9bxNo
+         E0TsJ/8YNBT5zqgoSxRZKfQ47badfxX1M3ouFUwjha7Pf+cAB5abWLc/DXP24whw1OJ4
+         kNXw==
+X-Forwarded-Encrypted: i=1; AKwUvBy6veRARMIMsSF/EB0LQt9w9uJCI+yfafPIl9snifNXjZZG0TmiCx7v0l9dJg3nDNcuFt0mmxqUAA9WZM/I@vger.kernel.org
+X-Gm-Message-State: AFuF++n8X7Dtwa/ln157rlZVB5F55/nBsOk0RyFncwdJ8MG0CY7CGgZa
+	L0iDCPom02QwawpcO6QDE4XYoPvY533sPzqDm7Gb15Sk40UE9Gg6NjmZlHEL4WQjuvbYN+hHA79
+	AlGL0JBVyLbPuKDAmqHwq3jRXVg==
+X-Received: from plmn11.prod.google.com ([2002:a17:903:188b:b0:2dd:b876:a4c8])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:ecd2:b0:2db:8406:db91 with SMTP id d9443c01a7336-2ddb1adf368mr77650485ad.10.1789771322382;
+ Fri, 18 Sep 2026 15:42:02 -0700 (PDT)
+Date: Fri, 18 Sep 2026 22:41:46 +0000
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v4 5/5] livepatch: Clean up klp_init_object_loaded()
- when fails
-From: Miroslav Benes <mbenes@suse.cz>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Harry Hsu <x90613@gmail.com>, jpoimboe@kernel.org, mbenes@suse.cz, 
- joe.lawrence@redhat.com, jikos@kernel.org, live-patching@vger.kernel.org, 
- shuah@kernel.org, song@kernel.org, linux-kernel@vger.kernel.org, 
- sashiko-bot@kernel.org
-In-Reply-To: <20260908120325.299649-6-pmladek@suse.com>
-References: <20260908120325.299649-1-pmladek@suse.com>
- <20260908120325.299649-6-pmladek@suse.com>
-Date: Fri, 18 Sep 2026 16:07:02 +0200
-Message-Id: <178974042237.131521.4110571603714459657.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=621; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=7ftfJ35NGlRXJzVZ3pfVfIxNnDIyUOA04LAEOup48KM=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhqy1rh1OtTGuNoZmvK/FGH2mCXOt3C9xbdukwOuvlkQke
- K/Xuna0k9GfhYGRg8FSTJHl9V5nOcMpuQaa1e/uwgxiZQKZIi3SwAAELAx8uYl5pUY6Rnqm2oZ6
- hkCGjhEDF6cATPV/bfa/ogFvQwv+3756v4g50NFcoN2o8MCXb+wv7BfPZvmXvy5zSt0Evvo5Ksb
- XC8RVz+0N7114p/yGf9I0kwMCXHkHHk1yaF8V+jin8Gd8U9MbryjOKe8tX056YnzifPOxk+eSXu
- /6tufp7iqWfTo+Bodus/x227s9bOK1XKbdfUqvfNNa76pvltt6yz7A7c970Zuh5ezyt3VqvfQ/7
- aruYf94wOZWvP+v4uPF9ToJgkWb3kvI/JV/3HJFQDzJdJ603eNHrPriJgzSHY+8zld+/a8s+f3t
- 1hm1E9XaYn99+8QkKhw+pemj/4J/J/vEOwMcFsTEiXZeXvh65mmNw6senf2c+OGwhgrHwtqgkGd
- 5ge99AA==
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spam-Level: ***************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: add header
-X-Rspamd-Queue-Id: 352641F7A1
-X-Spamd-Result: default: False [15.25 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[99.99%];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	NEURAL_SPAM_SHORT(0.86)[0.287];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	DIRECT_TO_MX(0.00)[b4 0.17-dev];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,suse.cz,redhat.com,vger.kernel.org];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:2b::1244:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:dkim,suse.cz:email]
-X-Spamd-Bar: +++++++++++++++
-X-Spam-Flag: YES
-X-Spam-Score: 15.25
-X-Spam: Yes
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
+Message-ID: <20260918224157.1471085-1-dylanbhatch@google.com>
+Subject: [PATCH v7 00/11] unwind, arm64: add sframe unwinder for kernel
+From: Dylan Hatch <dylanbhatch@google.com>
+To: Roman Gushchin <roman.gushchin@linux.dev>, Weinan Liu <wnliu@google.com>, 
+	Will Deacon <will@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Indu Bhagat <ibhagatgnu@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Jiri Kosina <jikos@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Jens Remus <jremus@linux.ibm.com>
+Cc: Dylan Hatch <dylanbhatch@google.com>, Prasanna Kumar T S M <ptsm@linux.microsoft.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Song Liu <song@kernel.org>, joe.lawrence@redhat.com, 
+	linux-toolchains@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Randy Dunlap <rdunlap@infradead.org>, Mostafa Saleh <smostafa@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 08 Sep 2026 14:03:25 +0200, Petr Mladek <pmladek@suse.com> wrote:
-> When loading a module, klp_module_coming() updates all enabled patches.
-> If an error occurs, klp_cleanup_module_patches_limited() cleans up fully
-> processed patches, but skips the patch that failed midway.
-> 
-> The current code is a bit messy. The changes done by
-> klp_init_object_loaded() should get cleared by klp_free_object_loaded().
-> But this function also clears obj->mod which is set by
-> klp_module_coming(). And relocations are cleared separately.
-> 
-> [...]
+Implement a generic kernel sframe-based [1] unwinder. The main goal is
+to improve reliable stacktrace on arm64 by unwinding across exception
+boundaries.
 
-Acked-by: Miroslav Benes <mbenes@suse.cz>
+On x86, the ORC unwinder provides reliable stacktrace through similar
+methodology, but arm64 lacks the necessary support from objtool to
+create ORC unwind tables.
+
+Currently, there is a sframe unwinder proposed for userspace [2], along
+with an RFC for an .eh_frame unwinder [5]. This patch series implements
+a similar SFrame lookup library to [2], but with many simplifications to
+account for the fact that user access is not necessary. The intent here
+is to continue to leave the door open for common usage of definitions
+and algorithms between kernel and user unwind in the future, while at
+the same time keeping these patches strictly constrained the minimal set
+of features necessary for arm64 kernel unwind.
+
+Unlike past versions of this series, these patches apply directly to
+v7.3-rc3 rather than depending upon [2]. To make this possible, I've
+adopted a number of patches from [2] with significant squashes and
+changes made in order to coherently suit the kernel unwind use case.
+I've done my best to maintain appropriate authorship on these changes,
+and have added 'Co-developed-by' trailers to attribute shared authorship
+as accurately as possible. Please let me know if you see any
+discrepencies in my work here.
+
+Currently, only GNU Binutils support sframe. This series relies on the
+Sframe V3 format, which is supported in binutils 2.46.
+
+This full series is available on github: [4].
+
+Ref:
+[1]: https://sourceware.org/binutils/docs/sframe-spec.html
+[2]: https://lore.kernel.org/all/20260505121718.3572346-1-jremus@linux.ibm.com/
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/log/?h=sframe/core
+[4]: https://github.com/dylanbhatch/linux/tree/sframe-v7
+[5]: https://lore.kernel.org/all/20260821195259.2688377-1-jremus@linux.ibm.com/
+
+Summary of changes since v6:
+ - Drop SFRAME_REG_SP / SFRAME_REG_FP definitions.
+ - (sashiko) Add -fasynchronous-unwind-tables so CFI directives are
+   emitted by the compiler even when debug options are not set.
+ - Discard .eh_frame sections when CONFIG_UNWIND_TABLES is not set.
+ - Repurpose kernel/unwind/sframe* exclusively for in-kernel .sframe.
+ - Drop user-acces wrapper usages for direct memory access.
+ - Simplify struct sframe_section for only in-kernel use case.
+ - (sashiko) use get_unaligned() when reading packed .sframe contents.
+ - Drop support for flexible FDEs, as this isn't needed for arm64.
+ - Simplify sframe IP validation for only in-kernel use case.
+ - Simplify debug printing for only in-kernel .sframe sections.
+ - (sashiko) fix CONFIG_MODULES=n build.
+ - (sashiko) Fix non-leaf CFI annotions in arch/arm64/crypto/.
+ - Simplify FP and RA recovery logic.
+ - Simplify arch_stack_walk_reliable() code path, dropping unnecessary
+   structs and dead code.
+
+Dylan Hatch (6):
+  arm64, unwind: build kernel with sframe V3 info
+  arm64/module, sframe: Add sframe support for modules
+  arm64/sframe: Validate IP addresses
+  sframe: Add debug helpers with object name
+  arm64, crypto/lib: Annotate leaf functions with CFI info
+  unwind: arm64: Use sframe to unwind interrupt frames
+
+Jens Remus (1):
+  sframe: Separate reading of FRE from reading of FRE data words
+
+Josh Poimboeuf (3):
+  arm64/sframe: Read vmlinux .sframe header
+  sframe: Add support for reading vmlinux .sframe contents
+  sframe: Add .sframe validation option
+
+Weinan Liu (1):
+  arm64: entry: add unwind info for call_on_irq_stack()
+
+ MAINTAINERS                            |   4 +-
+ Makefile                               |   8 +
+ arch/Kconfig                           |  49 ++
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/Makefile                    |   2 +-
+ arch/arm64/crypto/aes-ce-ccm-core.S    |  12 +-
+ arch/arm64/crypto/aes-neonbs-core.S    |  16 +-
+ arch/arm64/crypto/ghash-ce-core.S      |  12 +-
+ arch/arm64/crypto/sm4-ce-ccm-core.S    |  16 +-
+ arch/arm64/crypto/sm4-ce-cipher-core.S |   4 +-
+ arch/arm64/crypto/sm4-ce-core.S        |  44 +-
+ arch/arm64/crypto/sm4-ce-gcm-core.S    |  16 +-
+ arch/arm64/crypto/sm4-neon-core.S      |  12 +-
+ arch/arm64/include/asm/linkage.h       |  29 ++
+ arch/arm64/include/asm/module.h        |   6 +
+ arch/arm64/include/asm/module.lds.h    |   2 +
+ arch/arm64/include/asm/sections.h      |   1 +
+ arch/arm64/include/asm/unwind_sframe.h |  32 ++
+ arch/arm64/kernel/entry.S              |  14 +
+ arch/arm64/kernel/module.c             |   5 +
+ arch/arm64/kernel/setup.c              |   2 +
+ arch/arm64/kernel/stacktrace.c         | 186 ++++++-
+ arch/arm64/kernel/vdso/Makefile        |   2 +-
+ arch/arm64/kernel/vmlinux.lds.S        |  14 +
+ arch/arm64/lib/clear_page.S            |   4 +-
+ arch/arm64/lib/clear_user.S            |   4 +-
+ arch/arm64/lib/copy_from_user.S        |   4 +-
+ arch/arm64/lib/copy_page.S             |   4 +-
+ arch/arm64/lib/copy_to_user.S          |   4 +-
+ arch/arm64/lib/memchr.S                |   4 +-
+ arch/arm64/lib/memcmp.S                |   4 +-
+ arch/arm64/lib/memcpy.S                |   8 +-
+ arch/arm64/lib/memset.S                |   8 +-
+ arch/arm64/lib/mte.S                   |  28 +-
+ arch/arm64/lib/strchr.S                |   4 +-
+ arch/arm64/lib/strcmp.S                |   4 +-
+ arch/arm64/lib/strlen.S                |   4 +-
+ arch/arm64/lib/strncmp.S               |   4 +-
+ arch/arm64/lib/strnlen.S               |   4 +-
+ arch/arm64/lib/tishift.S               |  12 +-
+ include/asm-generic/sections.h         |   4 +
+ include/asm-generic/vmlinux.lds.h      |  15 +
+ include/linux/sframe.h                 |  41 ++
+ include/linux/unwind_types.h           |  34 ++
+ kernel/unwind/Makefile                 |   3 +-
+ kernel/unwind/sframe.c                 | 692 +++++++++++++++++++++++++
+ kernel/unwind/sframe.h                 |  79 +++
+ kernel/unwind/sframe_debug.h           |  34 ++
+ 48 files changed, 1361 insertions(+), 134 deletions(-)
+ create mode 100644 arch/arm64/include/asm/unwind_sframe.h
+ create mode 100644 include/linux/sframe.h
+ create mode 100644 include/linux/unwind_types.h
+ create mode 100644 kernel/unwind/sframe.c
+ create mode 100644 kernel/unwind/sframe.h
+ create mode 100644 kernel/unwind/sframe_debug.h
 
 -- 
-Miroslav
+2.55.0.1082.g2b9226bbc0-goog
 
