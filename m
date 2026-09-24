@@ -1,162 +1,120 @@
-Received: from mta0.migadu.com (out-158.mta0.migadu.com [91.218.175.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2FB44065E
-	for <live-patching@vger.kernel.org>; Thu, 24 Sep 2026 22:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102D0472F9B;
+	Thu, 24 Sep 2026 23:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790289490; cv=none; b=f0UlvwA9w0qrB2KP/G1bFSYD4KxVlfJr1jHoPjfmgTQplH0tB4xrx4xs3HgRS6FN5md1ua/6SMsZ47avY+T5oA7N1FGtoOu7TfYPId6qKtHuITdk2qfE4Z83A7EolSrRUYuk4EAFpAGvHf8jahChR4haKozgJ21fbCF+ThkuVew=
+	t=1790292327; cv=none; b=eeL84LAhCBwsAHRUtmyZ29Li2jrzzdeGiyZ0kkXtHAFoMFku/0fP6v6ioCYWMcXN6NRuu2jRB7CvfjtXBT4R42HfK1uK0LbbKADiyDJU7znhtYscTGtQb9UymVhqSgLTRyOwTb3pZc2riS1Nk99zBx9vHHmj4dGP0UG5M9L70EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790289490; c=relaxed/simple;
-	bh=vil181D960QvjzpQda7p1iELcQx+1UUMUXoKj0Sxk4U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kSaHkxIGClivJ3O+D68VOTojM8wkY+o7t3sBM5s/cjz8o0MfKiBj1TntbQymWMEK1etrZfPIrINqHW1f9+qRu9LCZtIEXlwuBpj8NQyZWBn2VIZVTkf14SKoruDefZTPLEVExBXTUNQvKQYrjbJKXtGR4zHLQy1KmwBAyoI+plU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kfhNpjwN; arc=none smtp.client-ip=91.218.175.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790292327; c=relaxed/simple;
+	bh=4ofZeZsPS10nkCfHIRsXboOLeOhyBF/VHKJZ7Rw5NG8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Dm1QHlq2Fw8ytwhZuLBo6VIv2bsFQaqYlD2r0OnfUQ/PxlZiP08JV85wlxLXy+8I9P8BbwXrQ4nhVizVnPrjDz5qqQ4lp6SCUMZ+VlTk4CURY7N5ng/wTBv3/F08ErJoFe84LK4CJVgV9D8SI3o5y1Jd+kqaCVmLROz7Cs/zl7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lP9j5O93; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kfhNpjwN"
-X-Envelope-To: live-patching@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vil181D960QvjzpQda7p1iELcQx+1UUMUXoKj0Sxk4U=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790289486; v=1; x=1790894286;
- b=kfhNpjwNZnN1jdo2y4Mf+IT97SRfjT4PX5j0UpZrUdK/jQ3roq7fo2R0TSSYzqmERGiES12h
- 4TC8e9xCQw/uE9uPeL+7DxJyMdDPFn94wK8nRiwnd6uN7p1lXhZxXgKWhbZpfmaJ4CWhXRkC7Ca
- zSwV6sBZwkV34eU0CWfvRhkk=
-X-Envelope-To: live-patching@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f8d638709f166d64;
-	Thu, 24 Sep 2026 22:38:05 +0000
-X-Mizu-Trace-ID: f8d638709f166d64
-X-Migadu-Flow: FLOW_OUT
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Date: Thu, 24 Sep 2026 22:35:53 +0000
-Subject: [PATCH v2 9/9] arm64: ftrace: Allow CALL_OPS on kCFI kernels built
- with Rust
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lP9j5O93"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0CA1F000FF;
+	Thu, 24 Sep 2026 23:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790292322;
+	bh=oiSH4uRWisdHYTr3/mGtD/pllD4YffCL5fwheMZHNIU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lP9j5O93+YowN/Tcd7aIj5PvNSSnjX2SiIj7OhnDjJ1Clynyctsv0jkIS280PDVb0
+	 XiAsKgY55sUL7a6XBMdJZydf5QD8nVZ1qRChXLtuxB65oXWXkMKA/TlJWODHoG98Rt
+	 orVge3h5wawvidyXkV7NkWdLz955zq+Jw+814n4xTANjgtDJ7VGwEFLKePz0T3etNv
+	 sgAK9QcHRPSzYAqSDYnbKMYjJuOeVicOzQnxU0hhR/vTSLGKLxNfcTm4AqX0kpFOmh
+	 zPAaknpUuEFBeGyV0GY/4mytOiSG9uYhbaADU89v+k8KzcehYbGezTF8Ltc4C6j+xL
+	 luNqp+Y5jrelQ==
+Content-Type: multipart/mixed; boundary="===============0374088084302990559=="
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <e3ab0833252a329c1ede5118136e151249ea328127785dafddd328066f8d782c@mail.kernel.org>
+In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-9-587865b6d991@linux.dev>
+References: <20260924-b4-arm64-callops-kcfi-v2-9-587865b6d991@linux.dev>
+Subject: Re: [PATCH v2 9/9] arm64: ftrace: Allow CALL_OPS on kCFI kernels built with Rust
+From: bot+bpf-ci@kernel.org
+To: jose.fernandez@linux.dev,rostedt@goodmis.org,mhiramat@kernel.org,mark.rutland@arm.com,mathieu.desnoyers@efficios.com,nathan@kernel.org,nsc@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,catalin.marinas@arm.com,will@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,puranjay@kernel.org,xukuohai@huaweicloud.com,ardb@kernel.org,ilias.apalodimas@linaro.org,ojeda@kernel.org,boqun@kernel.org,gary@garyguo.net,bjorn3_gh@protonmail.com,lossin@kernel.org,a.hindborg@kernel.org,aliceryhl@google.com,tmgross@umich.edu,dakr@kernel.org,daniel.almeida@collabora.com,tamird@kernel.org,acourbot@nvidia.com,work@onurozkan.dev,samitolvanen@google.com,kees@kernel.org
+Cc: leon.hwang@linux.dev,ihor.solodrai@linux.dev,jpoimboe@kernel.org,live-patching@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-kbuild@vger.kernel.org,llvm@lists.linux.dev,linux-arm-kernel@lists.infradead.org,bpf@vger.kernel.org,linux-efi@vger.kernel.org,rust-for-linux@vger.kernel.org,ben@cressey.dev,florent.revest@linux.dev,jose.fernandez@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 24 Sep 2026 23:25:15 +0000 (UTC)
+
+--===============0374088084302990559==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260924-b4-arm64-callops-kcfi-v2-9-587865b6d991@linux.dev>
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
-In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
- Ard Biesheuvel <ardb@kernel.org>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>
-Cc: Leon Hwang <leon.hwang@linux.dev>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- Ben Cressey <ben@cressey.dev>, 
- "Florent Revest (Anthropic)" <florent.revest@linux.dev>, 
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-X-Mailer: b4 0.15.2
 
-Pass -Zpatchable-function-entry=M,M,.discard.patchable_function_entries
-to rustc when CFI and CALL_OPS are both enabled, so Rust functions get
-the same prefix NOPs as C functions. The section argument needs
-Rust 1.98 [1]. Probe for it, and let ARM64_CFI_PERMITS_CALL_OPS
-accept RUST=y when the probe passes.
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index afa566e0fa86..cad2bdf3456f 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -282,11 +282,16 @@ config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+>  	# https://github.com/llvm/llvm-project/pull/131230
+>  	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
+>
+> +config RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+> +	# The section argument needs Rust 1.98.0 or later:
+> +	# https://github.com/rust-lang/rust/pull/157445
+> +	def_bool $(rustc-option,-Zpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
+> +
+>  config ARM64_CFI_PERMITS_CALL_OPS
+>  	def_bool y
+>  	depends on CFI
+>  	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+> -	depends on !RUST
+> +	depends on !RUST || RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
+>
+>  config ARM64_FUNCTION_PREFIX_NOPS
+>  	int
+> diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+> index 653c1ed6ef38..b23430e2b856 100644
+> --- a/arch/arm64/Makefile
+> +++ b/arch/arm64/Makefile
+> @@ -152,6 +152,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
+>  			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
+>      KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
+>      export CFI_PREFIX_CFLAGS
+> +    # Rust functions are not patched by ftrace, but they are called indirectly
+> +    # from C and make indirect calls themselves, so they need the same prefix.
+> +    KBUILD_RUSTFLAGS += -Zpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries
+>    endif
+>  else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
+>    KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+> diff --git a/rust/Makefile b/rust/Makefile
+> index da1a7409d984..b402ab768f72 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -511,7 +511,12 @@ endif
+>  # prototypes for functions like `memcpy` -- if this flag is not passed,
+>  # `bindgen`-generated prototypes use `c_ulong` or `c_uint` depending on
+>  # architecture instead of generating `usize`.
+> -bindgen_c_flags_final = $(bindgen_c_flags_lto) -fno-builtin -D__BINDGEN__
+> +#
+> +# Do not pass -fpatchable-function-entry to bindgen: its libclang may not
+> +# support the section argument (Clang >= 21), and removing the flag does not
+> +# change the ABI.
+> +bindgen_c_flags_final = $(filter-out -fpatchable-function-entry=%, \
+> +	$(bindgen_c_flags_lto)) -fno-builtin -D__BINDGEN__
+                            ^^^^
 
-[1] https://github.com/rust-lang/rust/pull/157445
+This isn't a bug, but could the commit message mention that bindgen's C
+flags now drop -fpatchable-function-entry on all architectures, not just
+arm64 with CFI?
 
-Suggested-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
-Assisted-by: LLM
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+The change applies whenever any architecture passes -fpatchable-function-entry
+in CFLAGS (x86 CALL_PADDING, riscv, powerpc, loongarch, parisc, and arm64
+ftrace). The reason for filtering it out (bindgen's libclang may be older
+than the kernel's Clang and may reject the section argument) is documented
+in the code comment, but the commit message only describes the arm64 kCFI
+pieces.
+
+
 ---
- arch/arm64/Kconfig  | 7 ++++++-
- arch/arm64/Makefile | 3 +++
- rust/Makefile       | 7 ++++++-
- 3 files changed, 15 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index afa566e0fa86c..cad2bdf3456ff 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -282,11 +282,16 @@ config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 	# https://github.com/llvm/llvm-project/pull/131230
- 	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
- 
-+config RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
-+	# The section argument needs Rust 1.98.0 or later:
-+	# https://github.com/rust-lang/rust/pull/157445
-+	def_bool $(rustc-option,-Zpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
-+
- config ARM64_CFI_PERMITS_CALL_OPS
- 	def_bool y
- 	depends on CFI
- 	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
--	depends on !RUST
-+	depends on !RUST || RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 
- config ARM64_FUNCTION_PREFIX_NOPS
- 	int
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 653c1ed6ef38f..b23430e2b8567 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -152,6 +152,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
- 			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
-     KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
-     export CFI_PREFIX_CFLAGS
-+    # Rust functions are not patched by ftrace, but they are called indirectly
-+    # from C and make indirect calls themselves, so they need the same prefix.
-+    KBUILD_RUSTFLAGS += -Zpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries
-   endif
- else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-diff --git a/rust/Makefile b/rust/Makefile
-index da1a7409d9845..b402ab768f729 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -511,7 +511,12 @@ endif
- # prototypes for functions like `memcpy` -- if this flag is not passed,
- # `bindgen`-generated prototypes use `c_ulong` or `c_uint` depending on
- # architecture instead of generating `usize`.
--bindgen_c_flags_final = $(bindgen_c_flags_lto) -fno-builtin -D__BINDGEN__
-+#
-+# Do not pass -fpatchable-function-entry to bindgen: its libclang may not
-+# support the section argument (Clang >= 21), and removing the flag does not
-+# change the ABI.
-+bindgen_c_flags_final = $(filter-out -fpatchable-function-entry=%, \
-+	$(bindgen_c_flags_lto)) -fno-builtin -D__BINDGEN__
- 
- # `--rust-target` points to our minimum supported Rust version.
- quiet_cmd_bindgen = BINDGEN $@
-
--- 
-2.52.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36069841267
+--===============0374088084302990559==--
