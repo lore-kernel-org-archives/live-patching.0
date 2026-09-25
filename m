@@ -1,121 +1,144 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0394646D2B1
-	for <live-patching@vger.kernel.org>; Fri, 25 Sep 2026 07:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CA442D77B
+	for <live-patching@vger.kernel.org>; Fri, 25 Sep 2026 08:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790322578; cv=none; b=c5rw3NrRuI8A7J7zmS/2r/v8gAiUf+pH+TPDmDG8+f3circoIoRNyNWGja3Ve6MEX+PQ3dfmzEdHu9F2G9/j0Nb9onAXf3nKjuEMZDm0QCWqozrSUfEEFeBPsvDG/Z1cAzGf0B+KLYHAOjalbjtfC5LcSLSsiPyG0/7GI9V1xsI=
+	t=1790326488; cv=none; b=l1iQVEPoxY6RkejMZge2Xc+aNvXCLN2MElxdEgkToOJLR1SQgy1KbRGwod4/RYDbtX7b09dqDWgkye2GFKYq9OMw6RPmo31ir2cuaSbVkIsTTQD7rkjAgE0p/9A6D6KGB73kWkFFVyKd2IO0w0VR07U8E8gZ/4GhvYa0b89zrk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790322578; c=relaxed/simple;
-	bh=OTBaz7Yhpkf0KZ6fy/eutPd13N6qBoXZG+DHLOKiIjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8UOfxVZY87U2c1j6/Or04qpQmaKcQQRDH5vrwVLM0EOWf0bpS5B/54eMIBjV0MuGfVajCaWdci6lz40j8axz/SlNpciFL+hzKYLEkR9lDP72U3RYPABFVlJKHY6ch3qo/w+/mAWzHUODUwVnITYV14LSwBBUyg0eNzxA9o1nQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Lh150y7X; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1790326488; c=relaxed/simple;
+	bh=RcMJbkbN4OBce4JQu0d+OIqaQ2+rUM1tpdoevOduKQI=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=cDj+7FhnQedJROzgMG4bNRo7b3eQX+1sg3d1ZMgvGaNcgUMmgipuPxhfQLEZIF2ZyR3pGftsy5d0dCquBAAta0/BHLyEv0bPxIfjfr7aUSUYUdmT4tqg9dJsupgFwUl9OA5Uud5ri4GUB7SFgLc6nu83JdOH4XYHavGU4iNsOto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=C6Ik3sKt; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=W1nI2z/E; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CIMTu46g; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=EDXsz4K5; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Lh150y7X"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485933b2522so474831f8f.0
-        for <live-patching@vger.kernel.org>; Fri, 25 Sep 2026 00:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1790322575; x=1790927375; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CY695p5MCNOWHql0mn2kyFYA9B9N04eTw362AzsTaBI=;
-        b=Lh150y7XTpel5V/zl3TWLtTm/DT6r7tMTARUsqARof73Rzcm1k8WXUsjY5RPdBeN4A
-         VBEth0uxT4kCEhC+/Nsu+S34hbmkhc++jG+20ibSLpMTmz/VR490jVika9SqnwAfdfpA
-         LZ9dCZvtbjHX2pbf62QZ44eUQHjioVgqYU2lDFhV21CadTpgYqeQmhD2mbnIanY2LhAf
-         tdWje8d0SL5DZwxF3tUFb5Slhxn5c2QffL/k2oR/u2Ln7Tt04LQQkSnl9IRxiX5MdbsX
-         NPZxRKNPP2seS/VT3sSNauluriflAnL38TyqoFA982ArvGU9L1WrBpmxMQsW0Xf90gEH
-         wjTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790322575; x=1790927375;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CY695p5MCNOWHql0mn2kyFYA9B9N04eTw362AzsTaBI=;
-        b=xlGvWcKjWBXLERUZrkNYo9Fh1Bd2UQxrOacAG498uFRV3n4VRjtphz8xxG9khC20iA
-         jNCMjHK6o1bTmSY+u2BYxbnR5BlLTj74sZLxp+zV4rTSuAdJcRXA9sx7NMxgDdUPEt6q
-         8275qZL7hGf1vf0sRgVN0n8utjH1z3VRDeYFQswDd2KM1NtwBADoKDTRETM5JuGy30ON
-         uVUpbymqtgANbdiV8N2JysWEGiQ9MBoBgcpAUwPWGeexZSjTfZz3e+8+QAaGxObpEpX0
-         0ltyY3H7UZmBZuH/I5APRVMmorF22vad10mhF8E18k7F2cL8ujVK2g97J4AMIJ+mBZ55
-         Rbqg==
-X-Forwarded-Encrypted: i=1; AKwUvBzFz5Y4SoyPaTGEC3CzBx2cXowMGgCeh0pwHgtLhxGuD0TBlNift04CekpmsHGjUsuVeQLMA59VAX6W2dSq@vger.kernel.org
-X-Gm-Message-State: AFuF++mPcwKc8EkcieN24hMh4p+UjkQ+vlhsLuurnMYvrpcqHXbIO6gp
-	RWFReNhMPYN8VzJHArHYBd6FQ8UwUlJBVRUevsdJFLirDKzO1JbbeN7Vgk2MzToNF34=
-X-Gm-Gg: AYBFou32u/yZ0aMACGe2xseQxmciu8UvS41fR6CAkXw1k1XPdVQml6/cNfRyltWOHLV
-	kiKCWIVpyvpQKp+Od0ncW1EsVZOCW4de9ZgNnfYKhYP8dwH0e3STR6MmGge5d14cG++yCJoP1ZR
-	3cddPEqE5FB4+2ZIe3nqKJBTmLyv99Mr9R8PqVJAI1QM49VCyq5oMvJJavgtvMhw8HqUPVkHT9F
-	oXPmS2Hngi4Uv2heNyQhxrV5tzBllB78108m7385139c8mFwBDxuooUhkk7xiQvUfp97oML0ZPO
-	q0ZyuFQaU98Krid2ZkHXqI0umwNT1xtzkQ/HS+aQDFB7aGt61vnCmRmFT6QB7VX/r9jD52cIDD+
-	MqtVVwzAWzaWleqApYDp+pB7MVgHfc4rp82AbCq5+wD4XY7VaO0AX8bdWm8uVD9cYVhobsKlAME
-	/QmaeNVsgLTEGkGnnrJFPKPZrtzqnLZGrf0nQBdVxQN0C2P1T+JL4HBztrgOihS/z8JsnrJsOZ
-X-Received: by 2002:a5d:5e0f:0:b0:488:76f5:ca0 with SMTP id ffacd0b85a97d-48876f50d6amr3541810f8f.39.1790322575127;
-        Fri, 25 Sep 2026 00:49:35 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a744fb5sm4608860f8f.33.2026.09.25.00.49.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 00:49:34 -0700 (PDT)
-Date: Fri, 25 Sep 2026 09:49:32 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Song Liu <song@kernel.org>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jpoimboe@kernel.org,
-	jikos@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH v9 0/9] livepatch: Add support for scoped atomic replace
-Message-ID: <arYnjJxU_JecIrZq@pathway.suse.cz>
-References: <20260913024228.72317-1-laoar.shao@gmail.com>
- <CAPhsuW5+j8ff0h1ty-vOiAWUnUOcJ0UQhUqvJRVSMrVH9WqbZA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="C6Ik3sKt";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="W1nI2z/E";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CIMTu46g";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="EDXsz4K5"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out1.suse.de (Postfix) with ESMTP id 4607121B82;
+	Fri, 25 Sep 2026 08:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790326478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6fPyBdOdOfvpg0S5pk8LvXmZZHOz7d9yhl/6yxU2ip8=;
+	b=C6Ik3sKtA30zI0/7na5GniwKev2nm7G5w4fVvjF3LLYsUQ1ZSsf9ypPqmm3dDVEI5krCy4
+	r6yjtv/CpJdWxmLcs9u/PTWI9F1onLJUj1TN9/pMbbiqibhFEtFUV8g9+XOhziXpMycEnB
+	RIwkERF4+ByVH+UXjZ5NHBuhR7n16ec=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790326478;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6fPyBdOdOfvpg0S5pk8LvXmZZHOz7d9yhl/6yxU2ip8=;
+	b=W1nI2z/EbXJQZ8Fyw7XY7qCf99hLVDEaj1vl1VJEHlaHXeXz0bgEQpvdgzlIXoDohDdEve
+	98JRRfD8v7owr8Bg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=CIMTu46g;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=EDXsz4K5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1790326474; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6fPyBdOdOfvpg0S5pk8LvXmZZHOz7d9yhl/6yxU2ip8=;
+	b=CIMTu46gHenbl70HXVzOKFT/d0TqFSJLjaDE2Sc7hcxpuAQcAkAoLrpLh3l1sejCt75jTh
+	Lno0Rzc1jewnjJyqiWb9A59qZTkGqZRfcFpcKsXgzEYF1ormnJf5EDcCLYum6V7dGFRojT
+	05FVBnpWeKBCLhomDapLvUC6BgVtTdo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1790326474;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6fPyBdOdOfvpg0S5pk8LvXmZZHOz7d9yhl/6yxU2ip8=;
+	b=EDXsz4K5V2OIvcrN0Fv3tnvUQKSpcy9qZYSiorr3giXOg+U0i0HnenPL6u+IUalzhVsbVt
+	4lZ13zSyhzZmcUDg==
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5+j8ff0h1ty-vOiAWUnUOcJ0UQhUqvJRVSMrVH9WqbZA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v9 1/9] selftests/livepatch: Clarify test module file
+ names
+From: Miroslav Benes <mbenes@suse.cz>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
+ joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
+In-Reply-To: <20260913024228.72317-2-laoar.shao@gmail.com>
+References: <20260913024228.72317-1-laoar.shao@gmail.com>
+ <20260913024228.72317-2-laoar.shao@gmail.com>
+Date: Fri, 25 Sep 2026 10:54:32 +0200
+Message-Id: <179032647206.68715.5136041049939809999.b4-review@b4>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=249; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=RcMJbkbN4OBce4JQu0d+OIqaQ2+rUM1tpdoevOduKQI=;
+ b=owEBiQF2/pANAwAIAYF9a9xEqxssAcsmYgBqtjbJl/wjJ9kaPa7UvLiT/uUKrjed7vjiiODIf
+ 57sdvFJmf2JAU8EAAEIADkWIQTrvUMeMZRtMCl77t2BfWvcRKsbLAUCarY2yRsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQgX1r3ESrGywkWAf/QgV8JJE/AKs6bkhWk4BC39Qsh0NihxK
+ I9NE2CyfQzf35yexASH9tGRgVg5aiJRXsFoFaEldcb8iixn90fTxSaZ9ClPrSm2eYgB+1vB79En
+ Gr5tJKN+wgOY2n0w+53BdvIJVVJ2SitDyoK5lPuuIS3NrxEEJ+/k3591Y/GvYtq9oGai7qehJj9
+ Mt8k6jS4YSwERAmNmjuGVDuSf3lfLFfXOzWCrpnPUTJ41lEO5HIo2fhMMisK9sbG6wJ0ykwVBV+
+ ydSIl8lUVFpyckc3bMM9BHvRpaDwphAgtiek/aIknLkr2ovpIeypf0h46vhaieL1sVmt4JP1EPx
+ cia7mILq42w==
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spamd-Bar: ++++++++++++++++
+X-Rspamd-Queue-Id: 4607121B82
+X-Rspamd-Action: add header
+X-Spam-Flag: YES
+X-Spam-Score: 16.66
+X-Spam-Level: ****************
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [16.66 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-2.98)[99.92%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ONCE_RECEIVED(1.20)[];
+	NEURAL_SPAM_SHORT(0.75)[0.252];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	GREYLIST(0.00)[pass,body];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	DIRECT_TO_MX(0.00)[b4 0.17-dev];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TAGGED_RCPT(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email]
+X-Spam: Yes
 
-On Thu 2026-09-24 13:56:32, Song Liu wrote:
-> Hi folks,
-> 
-> Do we have pending comments/changes for this set? If not, can we land this
-> soon, so that it can go upstream in the upcoming merge window?
+On Sun, 13 Sep 2026 10:42:20 +0800, Yafang Shao <laoar.shao@gmail.com> wrote:
+> Rename the test module files to be more descriptive of what they
+> actually test, as suggested by Petr.
 
-I still have to review this last version. It is getting on top
-of my TODO list but...
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-Anyway, my main concern is breaking the backward compatibility.
-I assumed that we would discuss this during the micro conference
-at Plumbers first.
+-- 
+Miroslav
 
-Best Regards,
-Petr
-
-> Thanks,
-> Song
-> 
-> On Sat, Sep 12, 2026 at 7:43 PM Yafang Shao <laoar.shao@gmail.com> wrote:
-> >
-> > Atomic replacement is currently all-or-nothing: a livepatch with
-> > "replace" set either atomically replaces all previously installed
-> > livepatches, or - with "replace" disabled - it replaces none. There
-> > is no way to atomically replace only a selected set of livepatches
-> > while keeping the rest running untouched.
-> >
-> > We previously proposed a BPF+livepatch method to enable rapid
-> > experimentation with new kernel features without interrupting production
-> > workloads:
-> >
-> >   https://lore.kernel.org/live-patching/20260402092607.96430-1-laoar.shao@gmail.com/
-> >
-> > In the resulting discussion, Song and Petr suggested that it should be
-> > possible to selectively replace or skip individual livepatches.
-> >
-> > This patchset introduces a more flexible model using two new fields in
-> > struct klp_patch:
-> [...]
