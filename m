@@ -1,114 +1,89 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mta1.migadu.com (out-253.mta1.migadu.com [95.215.58.253])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA76936D9E7
-	for <live-patching@vger.kernel.org>; Sat, 26 Sep 2026 05:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556CE3D2FFB
+	for <live-patching@vger.kernel.org>; Sun, 27 Sep 2026 14:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.253
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790401945; cv=none; b=uwWGF/PkN9zxPpZbbnxrkZfm8Wa3bdaWqH2qYKM2nd1vJV5k9P1QgTyrFPWIwXOSnb6otbztfvydfL9ln2m6WtUQ2ulEYy/iR/1LarhMw4pnzyvpqJ++zd1K9fvJnkNcSRpUMZXA4INEaP4DIjWxIMsdLlzjxz+7b1xZwio5cDg=
+	t=1790517955; cv=none; b=cuKR3c160jxmKlTa7jBu6EusqDXjWrIadU7Bz2pVH5wlHX2tqlE3GFAeC4805KM0uuUIsDlCqlRffFpVGJkpszxQz5HESaXy2z7KmKFxzkRewR0fcS+DT/qzVeN0OxqQGkExr1IPPVGYBKkSVnd2pjC5V+Z6mIu4WxNGLCv5Gt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790401945; c=relaxed/simple;
-	bh=PD5T1mJ4TC0TVm1RxQrbom3pNxxAP8R2ctFS1nTpdeU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pjh9fBVxEBlfa01cWb8rXToATcH6aV2IuEB9H0rXC3YN/+bepI7SRKsGLlFHLdmbiU9tVvrw5MMHiRJS51tGqLzxsdShZJ1ewnatVnLsMwddGldy8RY7X2mJXfHdAP/3CYF0cP0mv837qippujzh9sq0xW7hjKwOjJbz9Ighclg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iRWN6Zaw; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790517955; c=relaxed/simple;
+	bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nK29h+fPMS94UHzeghRv6bxGQ0MUQ3fv0/vwJ8HkRnAldgtuxxi5BCLtrsMd4fFRlQiKap7poLFZbMfPc+/a6Iv9tKxHk7cld0PGxwavrgZLz1KvKPRJ2wK3jJKksp2oF5sxJgT008bTUtJIcR4OpaijK+00IVeqoBsO+mUiOHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I+25hmf7; arc=none smtp.client-ip=95.215.58.253
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iRWN6Zaw"
-Received: by mail-pj2-f43.google.com with SMTP id d9443c01a7336-2db1ca069c8so7183885ad.3
-        for <live-patching@vger.kernel.org>; Fri, 25 Sep 2026 22:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790401943; x=1791006743; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RvQqqAbnkRm22RnnlVacu/Ubqr6ZGt7BcP9/MOCk8r0=;
-        b=iRWN6Zaw1TKvCSNgFw/yDddR2Is6z5pzRvRbq6ItStYXj+q/ZYrPdpbN1sxTFSWMHC
-         IVrDy20+/CoPVOcOTFjfQhCef0fgwyp07p8tEyCPIfR/NydM9EnRqUB/UKqL2f5BkNhE
-         qFjjvm84z9LY8xM4EJQnLGJo5AVRTQZ3P+TKLt9R9U2Z9ysaHOveygo+vlyRh56ER4xN
-         6wSj55UDfqFlQ3MEIyIMY7JjYofvZ9IIgoKAM+6yy+rrZtBTaygNocI6ycMs/hcHtAzZ
-         0lFPNJowUtfhceeZ53pqEWt1xWerQX/EoTdptmrBrFY7J0WSkd6YP1DkoLMnmzZ4NSEU
-         S6FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790401943; x=1791006743;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RvQqqAbnkRm22RnnlVacu/Ubqr6ZGt7BcP9/MOCk8r0=;
-        b=WFyqf9hO8A3I7QbIF6XjhNNJf6Xc/5GeuNjdHKwgAMxxblYvfbYWEhrASE12km8Ost
-         vU1z+mrDMsXI3UtSI8Y7pjOf0uj/3kXkyqp1sgCyTK54CExfX1O4w+f4laMmGRAVid08
-         jYb3vBVTVmsvQTHXDp7T5Tq9/0LJnmErTaF8AzL8+YuZdqm9NAT8FORLl/rbeYUQilSY
-         To+HUDOXTfFHPC8+drfvtFRm8fvhOqwchAylfdsMhSFBXvsn2u+xP0DHMAUnva0qkma4
-         mzUEbs6EDID3K3D/TKoUyuBEDrZHAvvw3547+IP/l9LeZboClTnA2dUIfsOqOoxEmcm5
-         9QlQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz8uMYl+9pzw+VThn2K7KAoh3guV1BM8pJwMLITYkrs5Sc+3ayohD1FwCc63+sSv95fL+CBCU0Si83STjNB@vger.kernel.org
-X-Gm-Message-State: AFuF++lTcy6lN1IcrsmYToENXyhS/4X4+CNGxv3U1bN66AWpZCO3Nspa
-	aJs16HCD9gXV3IFbgq4Cd55Um3HwAm6nnclpuLeIRS+1h60lHPSnTa7C
-X-Gm-Gg: AYBFou3h1uMmS46VhEy/4iVEDhM2YWuS/YKVHe7+Ib1ISUBh0+jJS58/zSNlKk51Ejy
-	XRL1vwcKs2pKF2+x+ro3nJjkl6cmuv+cOIUttTLGwKdwW3JURN+0Qz5McMQEz0t+e2RnNzK6MaI
-	xmz84fhIMlK2kW6U5tqGWUe2hJT6EckoeS/Q1foiW6MacZ7LdMb3/NWTF1mcdpO8eFsN7JzVn6V
-	1wOG5Ye2K18jrbk3hY/MzPV8OLnj66Z1Efy4Wn+ueNubzNXW/J903Pxedj+ZhDE27EPR0OE3reS
-	CLqRtJaye6oSqR9/Y688Jb0/EY7HGdyQ8oJ/mb2rAAOw0nLta1ixYvwtuz0Xl89JnL23vaDYSQA
-	vcVAmi45OvHnvBeoSgR0CUA3ZMbILUagICXngVWbvYYfBl++BM7Ea96n+RA5SRRJhj7ANYdVuL6
-	plPtWI7EnzMMDQuPdDAdS4fZB169g607WqB2Xd5EYHSvE1GpkWId+kS27c/Mpnf+f6KuBKROIMB
-	li/fYFj4CSPADAiprx9rfI1l2OVlxfyfuvlnufRTUWKeCFe9APAulVm4b5rRPKP8qCK/IPSF0nU
-	a9H0pL9jMxYQMumLOBEFVMooN1qxUCSOUtQcrJuapJVMv9+5JZIh2/EbBUQ=
-X-Received: by 2002:a17:902:c40b:b0:2df:84e0:902f with SMTP id d9443c01a7336-2df84e098a5mr51534895ad.9.1790401943012;
-        Fri, 25 Sep 2026 22:52:23 -0700 (PDT)
-Received: from spider.bream-herring.ts.net ([103.6.151.236])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df9142969esm19107415ad.45.2026.09.25.22.52.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2026 22:52:22 -0700 (PDT)
-From: Matthias Goergens <matthias.goergens@gmail.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>,
-	live-patching@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: name the livepatching for-next branch
-Date: Sat, 26 Sep 2026 13:52:19 +0800
-Message-ID: <20260926055219.3678061-1-matthias.goergens@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I+25hmf7"
+X-Envelope-To: live-patching@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790517951; v=1; x=1791122751;
+ b=I+25hmf7Jpd7fmPqfAQFwOEkFyDI7/b8FMmpHIvxAV9hIwJb5PKtxmb7OAe7aPrCjvQ3F3WA
+ yWzz9S4rsdVvcU23pU37cwNopLGsaX3gbCF0GDQ1tzxiJ5FHmNe1X9AHcDREQ4UZ3hj6THwA893
+ ISmDZ24aVgzqJIUH8Srx7o0U=
+X-Envelope-To: live-patching@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 9e0e383a7683fddd;
+	Sun, 27 Sep 2026 14:05:50 +0000
+X-Mizu-Trace-ID: 9e0e383a7683fddd
+X-Migadu-Flow: FLOW_OUT
+Date: Sun, 27 Sep 2026 14:05:38 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Bill Wendling <morbo@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+Subject: Re: [PATCH v2 6/9] arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
+ for the type hash offset
+Message-ID: <arkimpxRmauCfcn8@linux.dev>
+References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
+ <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
+ <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
 
-The T: entry for LIVE PATCHING names livepatching/livepatching without a
-branch.  The repository's HEAD points to branch master, which mainline
-already contains.  linux-next merges the for-next branch of this
-repository (Next/Trees).  Name that branch in the entry.
+On Fri, Sep 25, 2026 at 12:17 PM Bill Wendling wrote:
+> > +       return 4 + 4 * CONFIG_ARM64_FUNCTION_PREFIX_NOPS;
+>
+> *drive by review* Could you explain the two fours in this equation
+> with a comment? (Feel free to ignore this if it's obvious to
+> developers.)
 
-Signed-off-by: Matthias Goergens <matthias.goergens@gmail.com>
----
-This is part of a cleanup of all T: entries whose repository HEAD is
-not where development happens: one patch per repository, sent in small
-batches.  The plan is at [1], and why it goes out in batches at [2].
+The first is the type hash and the second is the size of a NOP. For v3
+I'll spell the second one out and add a comment for the first.
 
-[1] https://lore.kernel.org/all/20260924033200.3615554-1-matthias.goergens@gmail.com/
-[2] https://lore.kernel.org/all/20260924101844.2403008-1-matthias.goergens@gmail.com/
+	/* The 4-byte type hash sits before the prefix NOPs. */
+	return 4 + CONFIG_ARM64_FUNCTION_PREFIX_NOPS * AARCH64_INSN_SIZE;
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 140eafcbbd78..e603835e4744 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15160,7 +15160,7 @@ M:	Petr Mladek <pmladek@suse.com>
- R:	Joe Lawrence <joe.lawrence@redhat.com>
- L:	live-patching@vger.kernel.org
- S:	Maintained
--T:	git git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git for-next
- F:	Documentation/ABI/testing/sysfs-kernel-livepatch
- F:	Documentation/livepatch/
- F:	arch/powerpc/include/asm/livepatch.h
-
-base-commit: 62f4c998b297cf233997a2b4cd6fc2d2df0319c9
--- 
-2.55.0
-
+- Jose
