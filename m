@@ -1,154 +1,172 @@
-Received: from mail-yx2-f39.google.com (mail-yx2-f39.google.com [74.125.224.167])
+Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F4D3AF66D
-	for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 09:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790673969; cv=pass; b=t/5C9+0HnkJ8JOr2WEgH73IeJ0jVeG8vhIc3kUnqU5KC70bx7Zzzke0AopNzUBgx0hCtWBmOc2lEIvk5pj0Yu28AZuxpekbW1LZKvuDsK4vHwazyr5QiAInfTdNZ0AQbRpmUFAiwdX5902AxMjO+OHOWrfQLSDs/vCNjohrRe3s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790673969; c=relaxed/simple;
-	bh=hhfR1MyODAyUV5Awjq/lZCqePiX0iSLORwDn20vFErQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yf7dxubo5tlfp+/MJlEaRgHtkf5H1Z2vOub4Jh1lbPfe3nrbXK7VrzFrRye7iqsirYg4QnJImZ2v8mzsUehuJXMyYrQWq1zXDNWXZaqt7A02uiGuKDl4X/0dxGtQw2Cf7vqg5Vn+1jC/KkeNtsqAT/ce/8UadLUJ9C6cZBYt3ds=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HvBWd+5d; arc=pass smtp.client-ip=74.125.224.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895D84FE2D8
+	for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 10:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790676015; cv=none; b=IYDT3zLKGjiCgLllXtYrKbMDtS8M9otG0T1s5MFb9HFlkS4OZQUfxQcj3+XsbZlf2+FBapclAB+CNVpIm6yI4N/uWqa/ty+b6TvyTZB13UV6w01yRQgve7JGcHPEcIDkhk/Wf6fjfLEDFTESFP8dcd2vF3ixokZ9ZWsF9LW58No=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790676015; c=relaxed/simple;
+	bh=nW2BpZfMFPJe+aNQAl50PTVcOHGXLoiRKZhhr8y1y+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gteb5t8JM+aM/b47Lu/b6hTnE7f0z6b4RIqVaxxSB48hK6C1FvZcW52us5vULJmlYZDX86AYJ/B/8l5u2p+HJEcn9z0gIWtet+VWxfrgVSSl8V6yp/UCPQUGlYp0u9liSoYu42qeSeFV5Gdbs0reOgWHA1Pkd0MWa1fBra99fiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=czAYU6TD; arc=none smtp.client-ip=74.125.225.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvBWd+5d"
-Received: by mail-yx2-f39.google.com with SMTP id 956f58d0204a3-6755aad8a98so904159d50.1
-        for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 02:26:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790673963; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Gwmyp4hckRx3nRMtBd/TaC+FZVN7o6+7NWdxBmG+cur1hLG6rOM9lorRG5sAJzwqtB
-         W1nQr+dbXIa9uVlKJNhT/ZRCyp7oPWop5cMK0HUiXnnndjk2K7cY0wx/5WRW1gu0BvLw
-         Ch1IibmXrQJsZIR2YsSJQbC8pWJZTApqC3zVUv6svQhyJ9EtWCI9ZoozFbMNZgm9n0KB
-         ccJxaoNQicL6nhwvUopye4MdYvgD/Fo3w3NA0SpSaKhNoHyvdmVoaY/cdPViptnaNfAV
-         ztD7lh6mWrHU3JCL3kU4DNv5uF/94hlXrAlv3BI14msb8CzoNT31SLWLTBYONm9JgJ69
-         f8Mg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XPVNkmQlazxoieuu/szGHezCZqG+i5ehvurv5jY/qZA=;
-        fh=PR2NFP90qmUpmIzJUfOx5xCQRwirAPRMMClV8ojU3js=;
-        b=iGEr94zDJsgDUo4sEQjatjwZGiWHNiLmNQz86S3p47nPjbdUKuPX0gh/GvT/QEf+9C
-         kQyP5l6vjuDwjy5lwgt+uptmekpMMX6LpzADzSBQX4hhhEAyBaOaWRsexxhTDnYGyiJD
-         aOF9/BFV4QipJUUWp706D67tN8vM/31dKyD75qB9Te9ISZjNvyCk/e0XffdV2YKlXR4Y
-         3+7R2pSo7p8MAd715XLZeN+N9f3b9dFs9yoIebyNkdMHOday66mXrR130q5DsDYp5zIX
-         NRViNsnMwYJr8irtGw1WKPbQAAIJaft4fz7ev7yO6vEgZdCYVjNPgoJiHf9lNF/E0Q41
-         +4KA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="czAYU6TD"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49ce364488dso2234895e9.0
+        for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 03:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790673963; x=1791278763; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=suse.com; s=google; t=1790676003; x=1791280803; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=XPVNkmQlazxoieuu/szGHezCZqG+i5ehvurv5jY/qZA=;
-        b=HvBWd+5dkhl5f1sEkb1XANrl00LkXDp4il1eJ0H0NwYF/ZlsUvU+7iETkSK1KoDh1E
-         lQUeoaqKPktHG6gqnqcA4iyJbwVmBY8vPF3Tw8AzgMpn/5p3AEDzC+Y6TuUPYS6kPAWz
-         XvGK2YSz3K+iBne4xHA3ugC65A8xHvAgaSx369QdogmVOvE14lF1fwvL42ceBlgtlDyF
-         ONEqKn1lV4Uvtb7DMMo0bMxcWT+dDXhNfpVqhW1FOnSUn9ye0fmqkweymrBdLNbPALlf
-         UjXYlX+TVKHGqqMi2FfrFpyLkZhKuE79Hx+HUUWjfDn9ERMusXFlm9iFCTwOZ4AhQ6W1
-         y+tg==
+        bh=t0YyI8T0uXaAdN/WX1SYDvqqDpfpjOyIiMHz8pNiIDc=;
+        b=czAYU6TDs/qJpUEvcimzBjaxgvwROLjK4nR/VKetr20qgtaU081Xl4ZARCZdYI5Yyi
+         7hIdrkEmun9CrNQWgNpboFQeenC8U2N+8WK4k5Dl4/Qi2zbuCiMnALioo5UM2cEeO1pI
+         UCGwq/bdT2c9wCpBQyMlNUEDcm/3HznisXRItGBY1PEc98tCpPKU79isBWbQnIcNcCBB
+         j+G1uUtjSaDPhOtUF3nHq6OrXLg9uFPQjMCxF+6am+Agi/2CBvSgZgP2/YGnIixxFMcg
+         pIypha3+sSTgCcDIVxN14EM9MBzsTWn85bD0VqoGNWcPhU7s+zaADPo9niyqjWoI16vI
+         cZ3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790673963; x=1791278763;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790676003; x=1791280803;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XPVNkmQlazxoieuu/szGHezCZqG+i5ehvurv5jY/qZA=;
-        b=MrGRtCG8YVhZpBiwT4N0Wi0Ee3DIkvyAmv8qZgO07m7jiz5m9MZL9Q1hTeYCg9BBEY
-         aSQmTGRyUqVSE4PggqKdYo+8SAPCp0pQzGdDGXCZ2vYPnaZJdhBJgmPfmKya6uKMy6yi
-         eghgmbnclpS6UVHutGjXfsjJetkCtAaEEYkI+YQk0glJeuQGUw/2zEMnY9a3CrGd4ouG
-         8im2kwDRhMvTnurnUmt+P8pI+9xhE+KsWS/Y1tu4ZhjjRuTlbd1GIw4Bo/XbVBmFd4vF
-         7MhCc2i+vowIEdQYUpxe+ZmGt0hrRGez8gSv3qXIZKz1o8FHxP467xZVmSuQ/cRzGPCx
-         Bs/g==
-X-Forwarded-Encrypted: i=1; AKwUvBzZn/1rdG3mlzY4W4nPd7v8JGIJI7LIobNtOGyolXGK5ToY+owBr3/rC3WcfJu2mGNwRJ2DNzgzPiO67N1F@vger.kernel.org
-X-Gm-Message-State: AFq9FYKemi7HeIYZzsFHQvYgYU6YhijsFQleWTsUhdR6jHBmoLVhzZAV
-	O/cu/vrocIcyCxP2TJ+pTaiCQRNNiR/SnzPng6n5nAhdg/bhAzcQNsObZZ0qJa9c9nGpuRtJVWz
-	cqLnpV7/4VOOp+WFpkEZTZtnWrCCvSkk=
-X-Gm-Gg: AYBFou0roNOvF4Bqm92DoK76axJAf+jPbUO6k2H51NOQcrT1E1YGUB3wKZG7uXLFJ/v
-	u0qg+Ev6Z6xbOg0nRIF1dQrgneoBid1BaEERvawmoWpLaFDhEcJIfpLH2j/dZWoJOA3LKOEaUT+
-	W76pcs0c5aI6AdGzqivAgw1oA+CIsMKt8EPlM8OVXpJZjMrMK0tEDtWK27173Bh9XdDjxudYRIg
-	LYTgctN7hK9imOYg+c3okk6+mrGhGtDvCthKrWmes4obzEqctmtUG9N9Jrq97GupgfuhqPIlH0w
-	tjrR/b4v6A8tmlL7PnwGtOI7dXoGncwFcmXjpPeTb6s+CHx0soZGvxm/IPtd0b/Y2HKwHIMQKFS
-	9arvCDTT6jBaqBJYm0SOO
-X-Received: by 2002:a05:690e:1488:b0:671:c5e:6d5 with SMTP id
- 956f58d0204a3-675402599d3mr3526028d50.4.1790673962997; Tue, 29 Sep 2026
- 02:26:02 -0700 (PDT)
+        bh=t0YyI8T0uXaAdN/WX1SYDvqqDpfpjOyIiMHz8pNiIDc=;
+        b=i6rD1e5la18GrtYMgKikwM7XkHLEV7ce4YHco5rHE31sJmU1IW+CjUhYJw+TDDOroX
+         49MBymaRcbIA78eoVvG2IOQPS6Oxh+6wqsaa0HRJT/+GA2MYFBnDqfZxa992eQLPv3pz
+         d38sQIv0n/Juhsn9woq31wI6+FBv8JQK4u/0SlpO3xAxgi+2rGVyFrMp7zvR9vSzADTt
+         0IUqvBE51BvEEHei/kbWZMj6+mvATkTNZxwYwxQg6irYLSyTIaTLYtCF6z53i005C7l7
+         YjrrIaV1KrxKEnHLv7LQnGR+CXBFpqDAoU7h1yIjMh81ONewGhoUvWeLLxe1/EXxSGE1
+         k+BQ==
+X-Forwarded-Encrypted: i=1; AKwUvByXN8UQDaD7N4SnFLhqfsn0J2Meemi4AJz4l4MOudr7fsmhJyCIK3XHFV+w+R0hQk8GAeYAIfwrdxMYlsa2@vger.kernel.org
+X-Gm-Message-State: AFuF++lF8k4fTEaB47g6VBsVl/HFkmg49iW96gsbUhvsYJPQZieAZaOx
+	ue4KOW0COmhkp6EgVpif8hGutVulH6KuOqIXHjqD3vn4+0xeD1Z4d7JgWrOydV0o2io=
+X-Gm-Gg: AYBFou3I5oBtd6C9RE8iiXN9nislM5GvX70QFAKHt4m3TlFdWU5m0xXebGoi7PpIQI4
+	G/KtPzpXIjuBpi1uJJmAqt19kaF0TOWm+mbtfg+Rdd/CIxbWMzUyqIxdOcAr1pu3BcoqdHDbFk4
+	LIY5tAtsXpujgdYs3rJzDsWS87G0V0orRrxaGuVu5PNK21Ax5s3EloBdRQwm6dd4hJ7ke2TD1js
+	9f6aWesfVLRJVzPh9bRRmlqreunU/uXbUdfMT99G+QGm72A1LnHeYdE20ism3ltgTG1Gj9cLjgq
+	iHdlNHF+21hD1WIxSd97p0yi1WoaVKGi77KG0Mth1S928ElYz5GdxOF6ZNJHTwKua5+cZiyOPr3
+	Tr/JbtelOf1iilO0OISMsnLitsVYFlqq9Ce4FIDD37eNP1/y2u05YKfYDs1prFdFuxzW5LvZx3R
+	YtL6602s/r4Zw0qnRl5/zjFIrsUSXTTyUdAOMSAzLs1n647kCir4aJLwPKmz4XNSj75QYGfuD1B
+	ZT4nK5r8IzRGmz8OiF2A79Wdw==
+X-Received: by 2002:a05:600c:470d:b0:4a0:34a:588c with SMTP id 5b1f17b1804b1-4a00d778efemr28813305e9.14.1790676003381;
+        Tue, 29 Sep 2026 03:00:03 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cf4598esm69391025e9.0.2026.09.29.03.00.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 03:00:02 -0700 (PDT)
+Date: Tue, 29 Sep 2026 12:00:00 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Jim Cromie <jim.cromie@gmail.com>, Lorenzo Stoakes <ljs@kernel.org>,
+	Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
+	Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH v6 0/3] kallsyms: Accelerate symbol name lookups by ~7x
+Message-ID: <aruMIFRPBEVX_j0N@pathway.suse.cz>
+References: <20260926-ksyms-tune-v6-0-236620c65e98@gmail.com>
+ <20260926133859.c8232c439184dfa17472b020@linux-foundation.org>
+ <20260927065728.7f159234@pumpkin>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260913024228.72317-1-laoar.shao@gmail.com> <20260913024228.72317-3-laoar.shao@gmail.com>
- <179032647206.68715.855492643431181079.b4-review@b4> <CALOAHbBQyCNyvWtv3r+7mgScGuiZunfDq-+CJgKYGVyZDxcB3g@mail.gmail.com>
- <alpine.LSU.2.21.2609291040330.18161@pobox.suse.cz>
-In-Reply-To: <alpine.LSU.2.21.2609291040330.18161@pobox.suse.cz>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 29 Sep 2026 17:25:25 +0800
-X-Gm-Features: AclHuK-Mh2jxZDIOZqG4QPgIwcJb_xHY-dnEFWzFuPyzDZ4dY-7Dr0emHkarQkY
-Message-ID: <CALOAHbCJ56wfkZaTzYg1VgtkHyN9v02XAMX10-rJVtw8XKrVtQ@mail.gmail.com>
-Subject: Re: [PATCH v9 2/9] selftests/livepatch: Adapt atomic replace tests to provides/obsoletes
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Song Liu <song@kernel.org>, jpoimboe@kernel.org, jikos@kernel.org, 
-	pmladek@suse.com, joe.lawrence@redhat.com, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260927065728.7f159234@pumpkin>
 
-On Tue, Sep 29, 2026 at 4:43=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wro=
-te:
->
-> > > >  # check_result() - verify dmesg output
-> > > >  #    TODO - better filter, out of order msgs, etc?
-> > > >  function check_result {
-> > > > @@ -365,6 +374,27 @@ function does_sysfs_exist() {
-> > > >       [[ -f "$SYSFS_KLP_DIR/$mod/$attr" ]]
-> > > >  }
-> > > >
-> > > > +# detect_provides_attr() - detect whether the running kernel suppo=
-rts the
-> > > > +# livepatch "provides" attribute and set HAS_PROVIDES_ATTR accordi=
-ngly.
-> > > > +# The provides/obsoletes based tests are only run when HAS_PROVIDE=
-S_ATTR
-> > > > +# is set.
-> > > > +function detect_provides_attr() {
-> > > > +     HAS_PROVIDES_ATTR=3D0
-> > > > +
-> > > > +     if [[ -r /proc/config.gz ]] &&
-> > > > +        zgrep -q "CONFIG_KLP_HAS_PROVIDES=3Dy" /proc/config.gz 2>/=
-dev/null; then
-> > > > +             HAS_PROVIDES_ATTR=3D1
-> > > > +             return 0
-> > > > +     fi
-> > > > +
-> > > > +     load_lp test_klp_cmdline_lp
-> > > > +     if does_sysfs_exist test_klp_cmdline_lp "provides"; then
-> > > > +             HAS_PROVIDES_ATTR=3D1
-> > > > +     fi
-> > > > +     disable_lp test_klp_cmdline_lp
-> > > > +     unload_lp test_klp_cmdline_lp
-> > > > +}
-> > >
-> > > Why is there does_sysfs_exist() fallback? I mean, we use that current=
-ly
-> > > for exactly this purpose. My understanding is that
-> > > CONFIG_KLP_HAS_PROVIDES is also used elsewhere in the code so using i=
-t
-> > > here makes some sense, but do we need both?
-> >
-> > CONFIG_IKCONFIG_PROC may not be enabled, so if /proc/config.gz doesn't
-> > exist, we must fall back to an alternative one.
->
-> Ok. Let's keep it like that because it is definitely cheaper than loading
-> and unloading a module. Could you add a comment just before
-> does_sysfs_exist() fallback about CONFIG_IKCONFIG_PROC, please?
+On Sun 2026-09-27 06:57:28, David Laight wrote:
+> On Sat, 26 Sep 2026 13:38:59 -0700
+> Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+> > On Sat, 26 Sep 2026 13:40:11 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+> > 
+> > > As measured by kernel/kallsyms_selftest across ~184k symbols,
+> > > kallsyms_lookup_names() binary search takes ~6.1 us per lookup due to
+> > > two inner-loop costs:  
+> > 
+> > We don't have a kallsyms maintainer afaik.  Petr is pretty active in
+> > there so let's give him a hopeful cc.
 
-I will update it.
+I am not sure if I could find time to look at the code deeper anytime
+soon. I put it on my TODO list but I do not promise anything...
 
---=20
-Regards
-Yafang
+Anyway, the kallsyms search speed might be interesting for tracing,
+livepatching, bpf, and maybe module loader. AFAIK, Geert used to
+interested into the kernel size. Adding them into Cc...
+
+Best Regards,
+Petr
+
+> > > 0. Candidate symbols are fully decompressed into a 512-byte stack buffer
+> > >    before calling strcmp(), even though non-matching steps could choose on the
+> > >    first differing character (0..N-1).
+> > > 
+> > > 1. Probes scan sequentially from 256:1 markers in kallsyms_names[],
+> > >    decoding an average of 127.5 symbols per probe (~2,170 hops across a
+> > >    17-step search).
+> > > 
+> > > This 3-patch series addresses both:
+> > > 
+> > > 0. Patch 1 introduces kallsyms_strcmp_symbol() to compare ASCII queries
+> > >    against compressed tokens on the fly, bailing out on first mismatch.
+> > >    Drops the 512-byte stack buffer and saves ~530 ns.
+> > > 
+> > > 1. Patch 2 increases marker density from 256:1 to 16:1, cutting average
+> > >    scan distance from 127.5 to 7.5 hops and dropping lookup latency from
+> > >    6,102 ns to 866 ns for +42.2 KiB of .rodata.
+> > > 
+> > > 2. Patch 3 inlines and unrolls get_symbol_seq() 24-bit reconstruction.
+> > > 
+> > > Results (kernel/kallsyms_selftest across ~184k symbols):
+> > > - Baseline (256:1):  6,102 ns
+> > > - Patch 1 (strcmp):  5,572 ns (-530 ns)
+> > > - Patch 2 (16:1):      866 ns (7.0x faster)
+> > > - Memory: +42.2 KiB .rodata, 0 bytes dynamic RAM  
+> > 
+> > Can you better explain the tradeoffs here?  Increased memory use?  If
+> > so how much?  Is any change in build time expected?
+> 
+> I've had a thought of a scheme that should give most of the ~19x
+> improvement of the original patch without increasing the data size and
+> with only a small increase in code size.
+> The downside is a slight slow down for sequential access.
+> 
+> The thing to do is replace the 24bit 'symbol number' in the 'sorted by name'
+> list with the offset of the beginning of the name.
+> (For very large kernels it may need to be 32bit.)
+> The binary search for the symbol name then doesn't need a linear scan
+> and also loses one level of indirection.
+> You then need to do another binary search over the 'offset of every 256th
+> entry' table, followed by a linear search to find the correct address.
+> 
+> For sequential access there is a reasonable chance the next symbol is in
+> the same 256 symbol block (in address order), that can be quickly checked.
+> 
+> I got the code to run in userspace yesterday (with a real kernel symbol
+> table), I might look at some changes later today.
+> 
+> David
+> 
+> > 
+> > 
+> > What isn't addressed in here (afaict) is "who cares".  Is there some
+> > workload which is kallsyms-intensive?
+> > 
+> > This info really should be right in the first para of the [0/N], and in
+> > detail.  What benefit does this work offer to our users?  Use cases,
+> > example scenarios, etc.
+> > 
+> > Apologies if I missed this in earlier discussions, but if it was in the
+> > [0/N] this wouldn't matter!
