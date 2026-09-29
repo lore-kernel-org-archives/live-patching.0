@@ -1,152 +1,108 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from akranes.kaiser.cx (akranes.kaiser.cx [152.53.16.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1788320A14
-	for <live-patching@vger.kernel.org>; Mon, 28 Sep 2026 03:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790565076; cv=pass; b=VHy+kxj7VTtUdi5imzHQTs4seV9C9PxRNFfWb9NHZOXPsGmfskBkA1XvuddDpFqZxLDt1CUNsWSI4XBqdgSNI7S+cI26wobqOCpu4nHsj/p1GR5eCP4OSJODvioBvwZqFM0FI6i9cW3KpSdXulDJ/OoFys8un0meKDJfqEqdzys=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790565076; c=relaxed/simple;
-	bh=9obpQrbNmc5gSC6Qdog2mNAqN+2q2wxs4ZCFYq/wssI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rei9QuNg05TGy/uRL/vzXwsIl8UtcrU96xsSsqGJeuEfHs0mNM/5D8/Z/T6b5ZJ7IFq5k4IKZGu8aWB3IZRWYsYsduCp/9h5RznMvl1xMEBzuMbJzwhgzs0PP80Z8jBNIHzfMrpYgeHWVzftdS6Fj8unVHG/a1zYVG9A7PRrfs4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bXUynqM1; arc=pass smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bXUynqM1"
-Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4ab201ecso2220358d50.2
-        for <live-patching@vger.kernel.org>; Sun, 27 Sep 2026 20:11:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790565073; cv=none;
-        d=google.com; s=arc-20260327;
-        b=BbGTnB9zkjAhHrI4luPuIcCdWf+J7RKCiF60cKhxM9VgPCI98GceBB2F8qxn8MqGUT
-         VLXpRVlhQFMRdqz7kIwS6+JRk2/02t7WXho97Bsg4HvIu3zaSg4f8vdNyFGhxTSXyV1O
-         P5gF+WQ7T3yhSU8pu570OWmW5i/lKIoTm/8jPRNcMIxImYA0Mjbht7ZSgooEDIP7galS
-         bSfx8ZSKkxYYzdE4doRrgm7fhw9gBw3JBsK1bm8v36I986T4EWNlwd2KRoEqgTICjjmZ
-         HyDJ53fiFKMNtBmmE/vvcI0NvrIC+BJwMjaAmzAEjB/ot8DowUAbI8oFsvuendqiEtxM
-         ki/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PAHRmDW7jtxEPeP2M/FFNm79Q6RbakqkSiEZEAa0RSI=;
-        fh=cDeoGbOlAw6BR6T4dIyvwyvjrCNMJ24ow2/6rDdKBm4=;
-        b=aDBn5B786dKtLyG02+c9qe62/2BZeZvVYZ6UMifLcL3vWvAhIrxqhyY/6z6k6lz/jd
-         AOorgTY59nhs5ez1q5Rv8JJOV9UfrGOpgAnuIrACVozSYPbnL5rnjSNQmr76TKyB62mE
-         3yQjPf1Dcb3eXOp8pMO813jzWxl3wxy0YwY37emXkpvEb7shMtot3jWWLsX9czvzeBR0
-         pHXHRmSRZEULu507iapMrWzs/yxbnJ4j0WYEjdwfcDbBkEkBnXbFbDFUk0bMY7WxaXW1
-         5sVBZ47flGpLFY9WhE1ncbRuDec44VW4AuYiZqXGVwfLR6ZiPABfnQriP7k3h4M2e9Dx
-         9cew==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790565073; x=1791169873; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PAHRmDW7jtxEPeP2M/FFNm79Q6RbakqkSiEZEAa0RSI=;
-        b=bXUynqM1iiiaR7O4QS+Ynt0CKOcHNlpymQmg+41cm9T8KPyaun1U8isVVvjBZFxblz
-         cKGKrbGLxfKmG5k6qml1jm2oWOXsrNnzyvDp5JwKRMoDx7vDpNPXDhe/xFuiQzTZO+R9
-         OkB+TzKSo+8v4uWS9OlgFDJFyoR5XOYqMC8QbicW5x8z+X6pcQngZWFB6Tu+LaQ47UaK
-         XQt4i9IoPbE3GSyc/G71x57Pf5U28K2Qacb/lzJ00PFk8hieU1T1WHwogiXauBJHlgnJ
-         BxksD+fNMAFVmWzEDVf9HT6tWWnswf+h+lyrN+MbqKD45uS5MFvjGdPOjEbXzDv4Qcvj
-         Xj5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790565073; x=1791169873;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PAHRmDW7jtxEPeP2M/FFNm79Q6RbakqkSiEZEAa0RSI=;
-        b=JWNzhXpI+3x3l6fgzEh4BKntjmBrw5Og7O0Kj9KzdVBIcEUIERlW9ActiyKS46/tn1
-         f9bI91GWP6Sqq22Tm3B+gubBIgCMHONiEVQ4GNev4JbyoO4ZQ7hib8Wm58po6UIOdSPX
-         mXO7mwoTFWfUud7wTTkTIAa7EQWk5iqo0d0YtmUR2Cf6ygfKJmzKFHSyLVWM23u1j0LX
-         ee9Ov/SbMK74xa2kGicflZDQi4O4Zci7W8d0CZpT2GF+pgY4uutbz5Rrfu1cpHetJ1P+
-         8F47+chBO4kdFRCnap4kbn8PmRIDcibc5Q4AEuWs6I/rG/drGHocYQMwUG/McXqsKilv
-         3RDg==
-X-Forwarded-Encrypted: i=1; AKwUvBxw637C2+QNjLI4d3/sDqSaUtErt23s/RIdyhpjSo5T8Ocg1yoioQmpra0tRIYROFr0Ni1NLIC0xCN7ztrP@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQvqy7ePhWomypz7xTuKHa/5Crjc+c759+eACCCdm/XPsv7NhW
-	df+F3lxzrVGSP2vYfxsaO7S9MSPpvq+ZcJXJDAak+YW0QeA8fS9u2r6A77Z23gPHZzaaO+KwX51
-	Fbv17gc8PfA8OOS8KQE0nwCN4duVnQoatRPXnUDo=
-X-Gm-Gg: AYBFou3a6YFc+KS/vnajmQ74nGPgq/gsQPVIHuwpAXdCZMyCJ22bJC/CudgjvVzzy85
-	omF/wLT3+HF7RmZZa0wknDyXvV0d7q22X1fFi+Bua/p3cQk6PL3A44SuDIluTvo1+6onvqN6Z3u
-	Gdr/piyOMVBce61pdJYHmg3PEsKvY0MwUmNjA4a5ct56f84msuWBx8D1KgvMNSXpEfrtld+N7Ci
-	L3XzeKiR9ndTvULtLzuNsCT1k4ELhojl0yOFcCoYCUCIZQqJJgd0sIrp38ZLdtXPa8R9GKY+XQw
-	1vCSGiINdUbISN+n8YJaUjFXvRq9jS9PjNqvv2w2km8kXSzA8JCo0wNBnc+AXtrtsRbFLJIdbZA
-	rgBu7hd0mEw==
-X-Received: by 2002:a05:690e:128a:b0:672:d16b:a500 with SMTP id
- 956f58d0204a3-672ee65b460mr5073286d50.71.1790565073584; Sun, 27 Sep 2026
- 20:11:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBCE3AA50B;
+	Tue, 29 Sep 2026 08:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=152.53.16.207
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790669591; cv=none; b=ZLzOjqZ+lQREzTKnuN9+jrGM+ZzizjkIw1ZozQM1w1vkC6Jty4nNLT5eca6wJyh9TZYkmD/tOTnUURUEQq+KahSzF7Zdd193TExMt5DQwkFEJjv4Qd9PyUhthq7JKKBHfdYpYotDlEtEOAXttY06Fh5sGP2OND1aZSbsEC/1/+s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790669591; c=relaxed/simple;
+	bh=v8DQUlsclNkmugEM/JKprg85AKOfY+LbK3ZR6vv+I9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aa0rK9LaUn51jv7GQ2CyUzTOHvxjU0UYmenH4JH2PKyNiYZ6bX43cTDCy21HfVeoaEi+ol/x2g9C0fQWhz1QANS6RVYQNVS+Y6bIM39E/2/jvxsv9B9JA2GwDp0taulCeiArUQAGSXLitGhkcyD8PEQ7aAhgtL97fezYVCKd9Zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx; spf=pass smtp.mailfrom=kaiser.cx; arc=none smtp.client-ip=152.53.16.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kaiser.cx
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kaiser.cx
+Received: from martin by akranes.kaiser.cx with local (Exim 4.98.2)
+	(envelope-from <martin@akranes.kaiser.cx>)
+	id 1xBSG5-00000002hMb-0XNg;
+	Tue, 29 Sep 2026 09:28:13 +0200
+Date: Tue, 29 Sep 2026 09:28:13 +0200
+From: Martin Kaiser <martin@kaiser.cx>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, linux-riscv@lists.infradead.org, oleg@redhat.com,
+	rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+	peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+	namhyung@kernel.org, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	james.clark@linaro.org, jpoimboe@kernel.org, jikos@kernel.org,
+	mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+	shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 0/7] riscv: Add reliable stack unwinding for livepatch
+Message-ID: <artojcJftbMIgPrj@akranes.kaiser.cx>
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260913024228.72317-1-laoar.shao@gmail.com> <20260913024228.72317-8-laoar.shao@gmail.com>
- <179034105515.68715.14204526729868200872.b4-review@b4>
-In-Reply-To: <179034105515.68715.14204526729868200872.b4-review@b4>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Mon, 28 Sep 2026 11:10:35 +0800
-X-Gm-Features: AclHuK8ovWDRFOkCrJ7OeMbIRClzoQS7aGC_TwYwHYiycO31D8-C_U2hCzkb-hE
-Message-ID: <CALOAHbCTOLfA1nqPsX3h-vZagS98yPJD8zMUa3HnPGxXwafOOw@mail.gmail.com>
-Subject: Re: [PATCH v9 7/9] selftests/livepatch: Add provides/obsoletes test scenarios
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
-	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+Sender: "Martin Kaiser,,," <martin@akranes.kaiser.cx>
 
-On Fri, Sep 25, 2026 at 8:57=E2=80=AFPM Miroslav Benes <mbenes@suse.cz> wro=
-te:
->
-> > [ ... 175 lines skipped ... ]
-> > +# - load two livepatches with different provides ids that modify
-> > +#   different functions and verify that they coexist
-> > +# - in particular, verify that provides=3D0 does NOT replace a patch
-> > +#   with a different provides id
-> > +# - unload both livepatches
-> > +
-> > +start_test "provides 0 coexists with provides 1"
-> > +
-> > +load_lp $MOD_CMDLINE provides=3D0
-> > +load_lp $MOD_MEMINFO provides=3D1
-> > +
-> > +disable_lp $MOD_CMDLINE
-> > +unload_lp $MOD_CMDLINE
-> > +disable_lp $MOD_MEMINFO
-> > +unload_lp $MOD_MEMINFO
-> > +
-> > +check_result "% insmod test_modules/$MOD_CMDLINE.ko provides=3D0
-> > +livepatch: enabling patch '$MOD_CMDLINE'
-> > +livepatch: '$MOD_CMDLINE': initializing patching transition
-> > +livepatch: '$MOD_CMDLINE': starting patching transition
-> > +livepatch: '$MOD_CMDLINE': completing patching transition
-> > +livepatch: '$MOD_CMDLINE': patching complete
-> > +% insmod test_modules/$MOD_MEMINFO.ko provides=3D1
-> > +livepatch: enabling patch '$MOD_MEMINFO'
-> > +livepatch: '$MOD_MEMINFO': initializing patching transition
-> > +livepatch: '$MOD_MEMINFO': starting patching transition
-> > +livepatch: '$MOD_MEMINFO': completing patching transition
-> > +livepatch: '$MOD_MEMINFO': patching complete
-> > +% echo 0 > $SYSFS_KLP_DIR/$MOD_CMDLINE/enabled
-> > +livepatch: '$MOD_CMDLINE': initializing unpatching transition
-> > +livepatch: '$MOD_CMDLINE': starting unpatching transition
-> > +livepatch: '$MOD_CMDLINE': completing unpatching transition
-> > +livepatch: '$MOD_CMDLINE': unpatching complete
-> > +% rmmod $MOD_CMDLINE
-> > +% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO/enabled
-> > +livepatch: '$MOD_MEMINFO': initializing unpatching transition
-> > +livepatch: '$MOD_MEMINFO': starting unpatching transition
-> > +livepatch: '$MOD_MEMINFO': completing unpatching transition
-> > +livepatch: '$MOD_MEMINFO': unpatching complete
-> > +% rmmod $MOD_MEMINFO"
->
-> The verification step is missing. The following unloading steps kind of
-> verify it but it is not the same.
+Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
 
-I will update it.
+> Hi,
 
---=20
-Regards
-Yafang
+> This is v6 of the RISC-V reliable stack unwinding series for livepatch.
+> Wang Han has left our team, so I am taking over this series from now on.
+
+> The series adds explicit frame-record metadata, preserves the frame
+> pointer through dynamic ftrace, and replaces the open-coded stack walker
+> with a conservative frame-pointer based unwinder. It then enables the
+> RISC-V livepatch capability and adds the syscall-wrapper selftest prefix.
+
+> Changes since v5:
+> * Rebase onto the current riscv/for-next; no functional changes.
+> * Fold in the tags collected from the v5 thread:
+>   - Reviewed-by: Shuai Xue on 2/7, 3/7, 4/7 and 6/7
+>   - Acked-by: Miroslav Benes on 7/7
+> * Add my sign-off as the new sender.
+
+> Since the patches are otherwise identical to v5, the v5 validation
+> results still apply. For reference, from the v5 cover letter:
+> * Built Linux 7.2.0-rc6 with riscv64-unknown-linux-gnu-gcc 15.2.0
+>   and binutils 2.46.
+> * Standard livepatch configuration built successfully, including
+>   Image, vmlinux, modules, compile_commands.json and GDB scripts.
+> * CONFIG_IRQ_STACKS=n variant linked successfully with GCC.
+> * QEMU 8.2.2, 1 CPU: livepatch selftests PASS: 7, SKIP: 1,
+>   FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+> * QEMU 8.2.2, 4 CPUs: livepatch selftests PASS: 7, SKIP: 1,
+>   FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+> * No BUG, WARNING, Oops, panic, unreliable stack or Call Trace found
+>   by the validation log scans. Expected negative livepatch errors are
+>   part of the selftests.
+
+> v5 was posted in early August and has been quiet since then. I would
+> appreciate it if the series could be considered for the upcoming merge
+> window. Happy to address any remaining feedback.
+
+> Base:
+> riscv/for-next 77ae27fd98f3 ("Merge tag 'printk-for-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux")
+
+> Previous versions:
+> v5: https://lore.kernel.org/r/20260804103626.2803112-1-wanghan@linux.alibaba.com
+> v4 RESEND: https://lore.kernel.org/r/20260629072713.3273743-1-wanghan@linux.alibaba.com
+> v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+> v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+> v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
+
+> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
+
+Thanks for these patches.
+
+I tried them on a standard rv64 qemu and on a rv64 cheri system
+(cheri-linux.org). The latter needed some minor tweaks, but in
+both cases, I could get livepatch to work.
+
+Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+Tested-by: Martin Kaiser <martin@kaiser.cx>
