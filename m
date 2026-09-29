@@ -1,123 +1,137 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4411249AA22
-	for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 08:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AA14E80C3
+	for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 09:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790671477; cv=none; b=SEHfhbK+EWUThhB4dvVsBWCfbDD58w1h0g63AWJ3/doKwgOBs8DnXHpALQfkiyAM61QGXNugvlRY1ZFPxh0HuGkAoHBeMpi/xfNgypezDnd43+yzaqKfelcx6NzqsxfUKVIPxcfW2dal8vsGI7joQyB4eqFzJC5FO47wDt9bw40=
+	t=1790672870; cv=none; b=AIxqhexWtS2J5lIufFRkebdsP/3ZjVSJr1R8edsadYLinqek9qatDLlve7zE1G/fdlhrsLcNCVf97L6PYkcApWrJnBSNWtRm4J9dZNVp6LQIhgXVp5cN90jD8l2BSACl3bKVSp2z4c9yypLT0Sxfmvtistip/9QBuCwr3nI6jE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790671477; c=relaxed/simple;
-	bh=r1rmW3BGdxuAqDizQTvmX/aG/5tdKTFKtlQEpmki4Rk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=jeRj8d4x1WHyIl59rAt+ItCcZ2D9hzDRHgc9H5E5KgQBaB24093SmTZ4S+oEil9DoUDCpkh2KTnAMdqvvxh1PFbuV0ZRrvMelODBCHxeTuLH3xJ8SPz6GHzhcbrDaOcY6W57u6tgaZ9Q/zcS7wZlwjn+Wd84kslbmrhkuNefPug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vt/BqqA7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HEgr2ZmH; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=zZ9TG7re; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=zFGhNWbx; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1790672870; c=relaxed/simple;
+	bh=fuapPkbLOBMrqBTo4RxlKl1AVJyeaxbGH+EbRQmteos=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZAKarBCwx250OWyCSImj016iAgFs0Dj80GLI9RXGddvts+YpUcY81uqapo4es20ZAmWvU7R0MRWEOiw1JMQm5xSM+xDa6vPXJpP7j1VlHnzkM2QMzqtJBJFrtg89iUx0dLhukR0W9mKBGe+yvQBwaA0NIqCuplnzMeUQfuIIyB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HM9+8Jg7; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vt/BqqA7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HEgr2ZmH";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="zZ9TG7re";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="zFGhNWbx"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 1E71121BC7;
-	Tue, 29 Sep 2026 08:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1790671459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zBsGBgtLpZxg00hajyAlVW9wSjyH1HhiESiRGF8dm8=;
-	b=vt/BqqA7pNduDonYfXs0GzDGUWl75YCkqYWMIeUkzIqlh562tsbNHZNu3w5yFWMZqNd6At
-	ullbVQZ/jYM5QtB+Ti7X6gSvyP73KrykEaBB3GEonGnktu1flH+sAXolh0Jvo4LwqOGa7f
-	iATsipnTNtQrU4CMlSFB6mpHt0HLG9U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1790671459;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zBsGBgtLpZxg00hajyAlVW9wSjyH1HhiESiRGF8dm8=;
-	b=HEgr2ZmH/APPHYLHYS12KASTk8AtIuBxE/qTS3HIyxLpO2S8efoDtgj+cpYKbfU/UGjYkL
-	vsYimH7vZAfssCDg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1790671455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zBsGBgtLpZxg00hajyAlVW9wSjyH1HhiESiRGF8dm8=;
-	b=zZ9TG7relmWfHsQ3/cjB9Rqtczy3xhwJEN6kP3XBgW/JEJzjSWUAe8XEKeM5Ab7lCVIOlk
-	EZm17XJO0vrbta0msmIgF5+VAJzboe0yKze1FWGxRutKDduxdIFoAHo34e02UpFXw7c/yc
-	jKYZXb9WNx1kt5MX2ngtiFNh2EzFKcY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1790671455;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zBsGBgtLpZxg00hajyAlVW9wSjyH1HhiESiRGF8dm8=;
-	b=zFGhNWbxeTDUBxcVO5Ft5QF2ZvNv4mG1BXTmg8hb+lt+B7nPBtPKTfIE0BBdXYOB5Rw25l
-	nws0Q2PnlfJQGgCQ==
-Date: Tue, 29 Sep 2026 10:44:15 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Yafang Shao <laoar.shao@gmail.com>
-cc: jpoimboe@kernel.org, jikos@kernel.org, pmladek@suse.com, 
-    joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH v9 5/9] livepatch: Implement provides and obsoletes for
- scoped atomic replace
-In-Reply-To: <CALOAHbAnQ-g_NSEWWj5dzpJsMuxibQ3ROqkrR1FeX1aPd=xEcw@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2609291043430.18161@pobox.suse.cz>
-References: <20260913024228.72317-1-laoar.shao@gmail.com> <20260913024228.72317-6-laoar.shao@gmail.com> <179033754033.68715.11352947492609559639.b4-review@b4> <CALOAHbAnQ-g_NSEWWj5dzpJsMuxibQ3ROqkrR1FeX1aPd=xEcw@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HM9+8Jg7"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6350f91so2281793f8f.1
+        for <live-patching@vger.kernel.org>; Tue, 29 Sep 2026 02:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1790672849; x=1791277649; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WD5VyUREBeTWgWCvq7/SOd23MfZ7f7O+PL4C3K7mFuI=;
+        b=HM9+8Jg7rg8UfB/waqWoK7+a30i6OmiaHb0OZkR2EvVBXRTu0k5kK9HJAA6jWv5vsh
+         3TK8uga+JByYJIYzKRf3YYlEOzlw44v9TpJFS8Jqslkdb3Ur6h6qi/uM+wHduIWkJjtm
+         S/3SA5VLR/gZn0UqGW0luGyWY8MqY03XNuMCmQknEuQ8+eh8iJB3xYagQpXtosqHph/z
+         Sewzl3NsWLS0vtjVhdhtH/ebjd40whjPHt+vt+4ZzOhj2bgjn6Trh4IOL2prry6BNp4Y
+         xHHX5TiPfW6PnhKEUz33wdQ6ab3XYSaOKBrpRTV0f5/u7y2jAmgKy2aLbH7KZ9y+3WBd
+         VsOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790672849; x=1791277649;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WD5VyUREBeTWgWCvq7/SOd23MfZ7f7O+PL4C3K7mFuI=;
+        b=iFaCVO81HepxVrrBAnRS5D0z1cSVxfn1sfjGxHDaw53K+Z1zW5H2zi17lIvKbUOEt0
+         zIlVqtM8K5IdqI654LFBoMsjTx+cP3iDVbHDHbQkF093z9J/6dZMTlMclGAvldmyxRF2
+         p+lNdnAuc+3X2o/OOp5sm4n+TslxfOL3G6Coyw22qvXU59uh4je2Xh4vET58ACMq7EvE
+         N03ar1QZnLR7wFRBAGNe2fUOPKKBdd51v6qgicspx3xmCqK//yHRcWtUiPd+r41e+2nn
+         2BGcj5Osxt076JRkllvVL+9CyMBJC0QnZF1+4et5ls0i+VxXDq0gZslO0UD2ccSHIdNg
+         CTAA==
+X-Forwarded-Encrypted: i=1; AKwUvBz2+aggQnzx1wQ+o9lpaoHrfR1Nh5Ng7lUja+VqVSCllycLpXnpBwsJrK1LclevdEwbWs3jmTk2H6bJ7p+5@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ4QmvMnQ568R4nEi287q3cCfP0kF9oy9SusPAuhWNuGe2tmX2A
+	nUpZWImUF3YmVpoPakrLmNg2DGNiWm21ht/WW26zKTop3vRWoA2Hs9QxWQw2HjuMm929bAp6jr2
+	b+nhY/b8=
+X-Gm-Gg: AYBFou1uIGoQq1WK1VEjrlVs4RWodaCJlVuFXCirN9jzDWzy5iPQcXCLIBs4J8gSoZ9
+	7R4IGigOsjry5NLPJdpBp1imESdkOLXCTuePxTftURFNNp9fKPzuEMue1x67Ug/NovAuusJVrSd
+	5zMkGIHEbu9iE2Nx2Sg+/TzwO556C7mhPsV4XyXdBg18q6UkiIjQsI8DsY+hnqzeizc9dYqhq6M
+	aTObbGH0bBuNj/8sMkL4gvYUDSN1pzgzh/7gt2kHavTDVI5YVdWLHaBCnWzfknrp8uyqPfQLZCG
+	JyBSO0hix7Mj4sL9fzmj/HzuPNMsEm4y9aborUFpeHzsnYfiV8I0DElu2jGOUEixF8xu4Qd23nV
+	7dccNiDPl2Twxrz7VQ4f39Qjka8q6Cg7sJ1GTQkFjnHL1CAEBLRC6U8sQSh3pPZndXgHnLLWfLN
+	wsVULSbJt33uIwjejTWCb1voz477emK99XVAoYb0LoFrCQtgIWX35QRycdu8Y8juLUkQjHHpzxI
+	A248nbU21SiQqk=
+X-Received: by 2002:a5d:5889:0:b0:48a:f3dd:6979 with SMTP id ffacd0b85a97d-48af3dd6b6emr2109376f8f.19.1790672849252;
+        Tue, 29 Sep 2026 02:07:29 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48af4f88b37sm2756615f8f.5.2026.09.29.02.07.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2026 02:07:28 -0700 (PDT)
+Date: Tue, 29 Sep 2026 11:07:25 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Matthias Goergens <matthias.goergens@gmail.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: name the livepatching for-next branch
+Message-ID: <art_zcXuSXahklz3@pathway.suse.cz>
+References: <20260926055219.3678061-1-matthias.goergens@gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid]
-X-Spam-Score: -1.80
-X-Spam-Level: 
-X-Spam-Flag: NO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260926055219.3678061-1-matthias.goergens@gmail.com>
 
-> > > @@ -496,10 +496,10 @@ void klp_try_complete_transition(void)
-> > >        * klp_complete_transition() but it is called also
-> > >        * from klp_cancel_transition().
-> > >        */
-> > > -     if (!patch->enabled)
-> > > -             klp_free_patch_async(patch);
-> > > -     else if (patch->replace)
-> > > +     if (patch->enabled)
-> > >               klp_free_replaced_patches_async(patch);
-> > > +     else
-> > > +             klp_free_patch_async(patch);
-> > >  }
-> >
-> > A total nit but just s/else if/else/ would also be fine here, no?
+On Sat 2026-09-26 13:52:19, Matthias Goergens wrote:
+> The T: entry for LIVE PATCHING names livepatching/livepatching without a
+> branch.  The repository's HEAD points to branch master, which mainline
+> already contains.  linux-next merges the for-next branch of this
+> repository (Next/Trees).  Name that branch in the entry.
 > 
-> In v7, Petr suggested inverting the logic instead to improve readability [0].
+> Signed-off-by: Matthias Goergens <matthias.goergens@gmail.com>
+> ---
+> This is part of a cleanup of all T: entries whose repository HEAD is
+> not where development happens: one patch per repository, sent in small
+> batches.  The plan is at [1], and why it goes out in batches at [2].
 > 
-> [0]. https://lore.kernel.org/all/apfSMN5a9PTxTTsW@pathway.suse.cz/
+> [1] https://lore.kernel.org/all/20260924033200.3615554-1-matthias.goergens@gmail.com/
+> [2] https://lore.kernel.org/all/20260924101844.2403008-1-matthias.goergens@gmail.com/
 
-Fair enough.
+It seems that the motivation is that "master" is outdated in various
+projects.
 
-Miroslav
+But I maintain livepatching/livepatching.git the following way:
+
+  + "master" branch points to the last merge commit in Linus tree.
+
+  + "linux-next" is based on "master" plus there are merged the "for-X-Y/*"
+    development branches for the next merge window.
+
+As a result, "master" and "linux-next" differ only by the few patches
+which are in the queue for the next release. I believe that most
+people actually sent patches based on the "master" branch because
+they work with the Linus tree.
+
+Note that livepatching is a pretty slowly moving subsystem.
+
+By other worse, I believe that "master" is more appropriate for
+livepatching.git.
+
+Best Regards,
+Petr
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 140eafcbbd78..e603835e4744 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15160,7 +15160,7 @@ M:	Petr Mladek <pmladek@suse.com>
+>  R:	Joe Lawrence <joe.lawrence@redhat.com>
+>  L:	live-patching@vger.kernel.org
+>  S:	Maintained
+> -T:	git git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/livepatching/livepatching.git for-next
+>  F:	Documentation/ABI/testing/sysfs-kernel-livepatch
+>  F:	Documentation/livepatch/
+>  F:	arch/powerpc/include/asm/livepatch.h
+> 
+> base-commit: 62f4c998b297cf233997a2b4cd6fc2d2df0319c9
+
