@@ -1,236 +1,129 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C86B3BD22E
-	for <live-patching@vger.kernel.org>; Sun,  4 Oct 2026 15:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791128830; cv=pass; b=L1EGAIzEsgr27erq4Ssol+yAM6ELNc85jw6h0W8PKWyLbNwnZFaILfxAow5EnEcX9Dz8PpXn8O1zM95Q40os9pjzabaWqV3gbkWoS2VV6bQVX9JhOpYd2qqlQAjlMogjlwFnI/ZLTrSYKd/2GOKMEyTaVAh6SVzAg38NpiCRbH0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791128830; c=relaxed/simple;
-	bh=JNlEqjhxDsXWcHoR5Q8vdud4pkFeeOU23CXWBtyaiDE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y3GBySeMtMhbPmn1/HLFzrriorRw+Ao6PCD7ujkwXEwijOxGLXyB5q68ukpeYSisvnifdT4DbbRWEYenZo6gwU32FJ4/j7U1dybr7iYRCIvUYPdzcKK3PJ7o4XlcX7FRsOVDN9fy1y6Uky2xc0dVtcCTF6A+e7spCOyHsavG02k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/OaD8Eu; arc=pass smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58138399CF0
+	for <live-patching@vger.kernel.org>; Tue,  6 Oct 2026 07:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791270614; cv=none; b=kGgW21nUsx25PsYBNArUpS1nvMHse4uzXysEp9DVOCQA9fF/92gdyhIhwEVyNpksAS0E4zKFY3uRbSseFudA6vmC4KgB/0TbuCFuaqeneEiy3RtIdOJJfgbIt/lRpKWw1UdxfuxakpjHXra9PONf+dDNP5qH485KxEyWWfmvBDM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791270614; c=relaxed/simple;
+	bh=vYnjVhDtloIxAbFfle/bKGhDoZZixZpgT5vIEhRJ8Js=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OJ6qxXOQdEWEMrhxoy+RLCVoN+8UFhBdbM3SuQJWo7sVeETeQgLgXBpOxBCCdRwLlTP2aj8O2H4xhqzdXUk3ENhuA3VO8Lj/qLCqfVWlF+73eM9rqNgwkkt49KaeleXiQws0CG3Q592LIgslPlVfidZcb+2oYCcjUVto4M3Pu94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCqm7Kk9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/OaD8Eu"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-67583c777abso508195d50.1
-        for <live-patching@vger.kernel.org>; Sun, 04 Oct 2026 08:47:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791128825; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NkVKqYdsuFmju5bTZ6jf81x2LeUNDYORib+dAuyln2TbJlnLXrblZpwsl9hunkgLOw
-         k5ouC2rT3EY7NHgjq2QdRyYjNnCmuqFFQcw9HzM4exj0NS4ZjK99B1gTX8e3PZLnPLQ/
-         9+d6Bu8Y+WDa0omgHgB4Y5YxN/kE46nCy/Ig74xIe2uW9jn4cUQmcHuxt9clamm2wVZ9
-         Vaj5aJfJ+70jDJmBfUct6uP3qWredft0Pz84x0C9EA9LRJ6/XjsTb8Aoi5np4iFn0Psm
-         6fO2tfohJdUAtMVqlvlA9mOrSy4eyDfmRU/OKBiomyDZsiy6qBBshr0tTjEVXxxo1tlo
-         OXYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gP2+RRsLUnvdjs7OeYNNKND2sG4XSdNxOWydZ8R2nOk=;
-        fh=vJHyv6u9+l3m2IPETee9hmxIE0SCdplUYdNYOGAP8cY=;
-        b=D5mNLeISZFDiF6+iwwXGFQnHtBN6fIqBHAqmLUk3BIJS3yKdIhRbL00h611LImypvW
-         JKkZzLDm0ggiaxk1Tu+1cEZ+WeoVQR4e2gs0bk9MMNSvQM4tGPX1yHx65dIkAOP/e/43
-         Sl0TH1n/38iLlWAQevwwZYtLgOj/5NIWdIPu/w6RnGr7rfFNqPLPVNlQp5uIM7wItsSI
-         yoDQFCzSUFFJ7soD9RVeQG0ITDbrzfNCFlNxco2zwuY8P+ejox4C3LJwdMY7s3Gl06Yy
-         62mTLhQ0DFTTJwx3zype9ZKc00PQClCH2pFgw1/ebzGMu5MlgR54HWFfeTyg7IJQqM9S
-         tQsg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791128825; x=1791733625; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gP2+RRsLUnvdjs7OeYNNKND2sG4XSdNxOWydZ8R2nOk=;
-        b=K/OaD8EuO7sjq4uyOPYnXQMI1demoQRBRzkXKJhYh8w92uqySXZjIRrMVcajJQrk8+
-         d85ui4jn2BFsv+pZPxVUcbLmsZnz/0pjrAC3qMcQbGiv03lgOSH3IkQLfRtYSsRdYok2
-         Rvjt75MF2ounrSKomD5YiBv9jL9xzgrTjn6vz9D3dnv0SbdX0CjAeFmQmKUGn5CH7VYR
-         RpEJCWX/ncIghQTjLdZgR/LdVukLg2v/YvB9b/ZIcKDWJ++UKdxtVg8bms7Oo3R02IYO
-         1KqUsswjQ2jb6guVzeRP6CqxYB74MoiGyYrrxdA4AALNJ5Gs8Qn67oYJXHOFMg/ffAEX
-         pu+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791128825; x=1791733625;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gP2+RRsLUnvdjs7OeYNNKND2sG4XSdNxOWydZ8R2nOk=;
-        b=eWSFpX1oEAODg6j/81NRuUH8aimHW3Okf9tCqusy12NM3AFSHM8dAQL3LzwasY9SBr
-         RgWDExTJ5fRObOHNu5ZRrZ2h7fcuJVhH80TdKYOAlxRo4Noa+dKQzE0M6jZ0Zypau67x
-         cVZMriM5SZE9GQaOhKW+6VBORLE6bB+ydChZxxQRFnewchQRVmB5aacdVYy/pkNSQWDG
-         kY8Gd/xZUHEU5AxMIgXnjb90YtMYcIzN83dERAaBnVaKKj1HHsyfhjhdLx65cXDCAI5B
-         rtutIKQlSqTPb5pdWAC3oVAGX0ZfR18OzpYII4b1Vc6ox+sachFDifbkIIY4OiBM2X8h
-         4AdQ==
-X-Forwarded-Encrypted: i=1; AKwUvByJKEmPip/VqP5lZn0oDdYXk1YeoPljoaNuyLtwiogGEhMrS9gZ6ql+Soif8uFwVSy/RxFcuz8Ye5XPKZ1n@vger.kernel.org
-X-Gm-Message-State: AFq9FYIXI9ytPAUOzSGLS2pgWUF2DBY2Y+UEe14ROAVp/P2lJDq8jjOL
-	dAcQn9gYHp+C2AlVn2ZnPncPlir/lD5PAu0gTXtCsHAFqUt0nhSzOQYlyknOLcGVIrJs/SJHKKz
-	BGXZlmp1lgOuQS0ESn+GNbtNH3Gw8PKw=
-X-Gm-Gg: AYBFou0lVkp5LOqec2RqPE0wbAqFKQOP6KNSGm5rmMVAVNNBNkyEAJjcjlcyvUvr3P1
-	AFKXh+6UR6luLFW6YvIOg/CSqKTN4cpheU/OX5OSBmQA++/GqUpycUIYhZrpC23uhFiE7UBtH1J
-	3BATwA2suMc8nVdypSYxDyhojjJ13SwDt4LskfrEEkusDbRRvnOqVxneakbAkx6LAzvrdvHZLlK
-	bUeMlDN7ZlG/dD1s6gRQZg7VZOReLUxUfPrj52OanO3UvF1WvbvC+0icI2DWQzlHw9xVhnRH/EF
-	JhyQJnApE/1OELC8lQ7oAJz91FtkmlLE4X7vK7rARZGF8AauIt2TS5sZLq/rCKaK5kn7w7VhMzz
-	At7brbrbAm0U=
-X-Received: by 2002:a05:690e:418e:b0:677:bacc:ef24 with SMTP id
- 956f58d0204a3-677baccf67amr1652890d50.18.1791128825512; Sun, 04 Oct 2026
- 08:47:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCqm7Kk9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29E21F00893;
+	Tue,  6 Oct 2026 07:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791270613;
+	bh=H2B4pFhh9Up5TZm+g+LPAgTBWRk9cOPjvt7oge8zZsc=;
+	h=From:To:Cc:Subject:Date;
+	b=KCqm7Kk9RcZgAN2cQic6nW9mRYY3VmFcjb+FuD63YtcGBlsfKLzZQJthQCveR58gp
+	 7psIXUBJQ83+7n43k9TVDn0Te0Xi/+cvtn8oJuZmiXrK4nTqMuMRssv/aQeD7hBmJn
+	 FrDDVEHCHEmMHRudL14oC5SnUlUBbg0DRFCveyerkr3JeHh8Mxrj/bJQPB63XW6xO9
+	 kvA2uKoRL30q1t+iiTHgic2VVLkHOj7PKu56zVd6eACjEm1ieq8g7bdpZFXYrnnvC9
+	 Q9yeonrv+eD4r+n/dooMXmxEj6hxPPCG9xQQiFHdd+EBDZ+4fc7EwcfvvuvECUDYSt
+	 RH1Q6R/pmUjjQ==
+From: Song Liu <song@kernel.org>
+To: live-patching@vger.kernel.org
+Cc: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH] objtool/klp: Fix detection of static keys defined in other files
+Date: Tue,  6 Oct 2026 00:10:03 -0700
+Message-ID: <20261006071003.291679-1-song@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260930030323.14396-1-laoar.shao@gmail.com> <20260930030323.14396-6-laoar.shao@gmail.com>
- <ar_kouwlAGcnnUYQ@pathway.suse.cz>
-In-Reply-To: <ar_kouwlAGcnnUYQ@pathway.suse.cz>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 4 Oct 2026 23:46:29 +0800
-X-Gm-Features: AclHuK8BrHZ8dfs7OY4W3hWHFFcoc5L4q7wuPW3bqlyONlnqHuIzG9ULvjC783Y
-Message-ID: <CALOAHbCHwJ2htPOoako_EqNg-bQF=4NLNqVGAnzsAi2uitMdeQ@mail.gmail.com>
-Subject: Re: [PATCH v10 5/9] livepatch: Implement provides and obsoletes for
- scoped atomic replace
-To: Petr Mladek <pmladek@suse.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 3, 2026 at 1:06=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
-:
->
-> On Wed 2026-09-30 11:03:19, Yafang Shao wrote:
-> > The current bool replace flag is too coarse: it is either all or
-> > nothing. A livepatch with .replace=3Dtrue replaces ALL existing
-> > livepatches, which is safe but inflexible. There is no way to have
-> > multiple independent livepatch sets coexist on the same system.
-> >
-> > Replace it with a more flexible model using two new fields in
-> > struct klp_patch:
-> >
-> > - provides: an unsigned int id identifying the changes made by
-> >   the related livepatch. Where the changes are a set
-> >   of modified objects, functions, and used callbacks,
-> >   shadow variable ids, and state ids.
-> >
-> > - obsoletes: an optional array of unsigned int ids specifying
-> >   additional provides ids to be replaced. This allows a new patch
-> >   to explicitly obsolete patches from different scopes.
-> >
-> > A new livepatch atomically replaces any existing livepatch that
-> > meets any of the following conditions:
-> > 1. It has the same provides id as the new patch,
-> > 2. Its provides id is listed in the new patch's obsoletes list, or
-> > 3. The new patch's provides id is listed in its obsoletes list
-> >    (the obsoletes relationship is symmetric).
-> >
-> > The obsoletes relationship is symmetric: two livepatches that
-> > obsolete each other are mutually exclusive. Loading either one
-> > atomically removes the other, so they can never be enabled at the
-> > same time. This allows swapping between two independently prepared
-> > livepatches that cover the same scope, in either direction.
->
-> Honestly, I am confused by the 3rd rule and by the last paragraph.
-> It is not compatible with my understanding of the provides/obsoletes
-> semantic.
+validate_special_section_klp_reloc() finds the key of a __jump_table or
+.static_call_sites entry by looking for a reloc to an STT_OBJECT symbol.
+But a key is STT_OBJECT only in the object file which defines it.  In
+any other object file it is an undefined symbol, which is STT_NOTYPE,
+and the check misses it.  For example, with tracepoint keys:
 
-Correct. In package management semantics, Obsoletes is not a symmetric
-relationship.
+  Patched file            Tracepoint          Key defined in       Type
+  ----------------------  ------------------  -------------------  ------
+  vmlinux:
+  kernel/sched/core.c     sched_switch        same file            OBJECT
+  kernel/sched/fair.c     sched_stat_runtime  kernel/sched/core.c  NOTYPE
+  kvm.ko:
+  arch/x86/kvm/x86.c      kvm_msr             same file            OBJECT
+  arch/x86/kvm/lapic.c    kvm_apic_ipi        arch/x86/kvm/x86.c   NOTYPE
+  cachefiles.ko:
+  fs/cachefiles/io.c      netfs_sreq          vmlinux              NOTYPE
+  kvm-intel.ko:
+  arch/x86/kvm/vmx/vmx.c  kvm_exit            kvm.ko               NOTYPE
 
->
-> In my mental model, the provides and obsoletes define which
-> way is supported. Let me show an example, let's have:
->
->  Livepatch A:
->    + provides: 1
->    + obsoletes:
->
->  Livepatch B:
->    + provides: 2
->    + obsoletes: 1
->
->  Livepatch C:
->    + provides: 3
->    + obsoletes: 1,2
->
->  Livepatch D:
->    + provides: 2
->    + obsoletes: 1,3
->
-> How is this supposed to work, please?
->
-> In my mental model:
->
->   Livepatch A:
->      + can be replaced by B, C, or D because they all obsolete 1
->      + can _not_ replace B, C, D because A does not obsolete 2 and/or 3.
->
->   Livepatch B:
->     + can be replaced by C because C obsoletes both 1 and 2
->     + can be replaced by D beause D provides 2 and obsoletes 1
->     + can't replace C or D because B neither provides not obsoletes 3.
->
->   Livepatch C:
->     + can be replaced by D because D provides and obsoletes
->        all ids which are proviced and obsoleted by D
->
->     + can replace D from the same reasons.
->
->
-> OK, I understand that it might be practical to allow replacing
-> the patches just because they are "conflicting". As a kind
-> of revert/downgrade.
+Missing a key in vmlinux is harmless, as the check accepts vmlinux keys
+anyway.  Their entries are cloned with a normal reloc to the key if
+vmlinux exports it to all modules, as for netfs_sreq, and with a klp
+reloc otherwise, which the module loader applies before it initializes
+the livepatch module's static branches and static calls.
 
-Right. This will let us easily roll back the buggy livepatch and
-reinstall the old one as part of the rollout.
+But a livepatch can't use a key defined in a module, so klp-diff has to
+disable such tracepoints, as it does for kvm_msr above.  For keys
+defined in another file of the same module, as for kvm_apic_ipi, or in
+another module, as for kvm_exit, it instead clones the entries with klp
+relocs for their keys.
 
->
-> It might help to rename "obsoletes" to "conflicts". And just
-> say that the livepatch replaces livepatch with the same id
-> in provides and also all conflicting patches.
->
-> But then I see another problem. We have three types of conflicts:
->
->   1. same id in provides/obsoletes/conflicts
->   2. same livepatches function
->   3. same livepatch state id
->
-> It is weird that we would silently replace livepatches with 1st
-> type conflict. But we would refuse to load the livepatch with
-> the 2nd and/or 3rd type conflict.
->
-> Note that the inconsistent handling of conflicts exists in
-> this patch even when the array is called "obsoletes". My proposal
-> to rename it to "conflicts" just helped me to see this
-> inconsistence.
->
-> Any option/idea? Yet another naming?
+The resulting patch module crashes the kernel on load.  The livepatch
+module's static calls and static branches get initialized while their key
+fields still wait for the klp relocs.  The static call init rewrites the
+call instruction, so applying its klp reloc fails:
 
-Perhaps it could use a better name, but I'm not good at naming things ;)
+  module: x86/modules: Invalid relocation target, existing value is nonzero for sec 66, idx 16, type 4, loc ffffffffa04021f3, val ffffffffffffe0f5
 
->
-> One more thing, the commit message does not describe that
-> the livepatches might conflict when livepatching the same
-> function or using the same state id. It is important part
-> of the semantic and must be documented.
+and static_call_del_module() then dereferences the bogus key while
+cleaning up after the failed init:
 
-Sure. I will update it.
+  BUG: unable to handle page fault for address: ffffffffa2373994
+  RIP: 0010:static_call_del_module+0x38/0x80
+  Call Trace:
+   static_call_module_notify+0x42/0x1a0
+   notifier_call_chain+0x5f/0xd0
+   blocking_notifier_call_chain+0x41/0x60
+   do_init_module+0x23d/0x2a0
 
->
-> Best Regards,
-> Petr
->
-> PS: I am sorry but I won't be able to finish the review before
->     the Plumbers conference. But I am happy that I have found
->     the above problem. We could discuss it at the conference
->     and come up with some sane naming and semantic.
+Also treat undefined symbols as keys.  The other relocs of these entries
+refer to code in the patched object, which is always defined.
 
-I can't be there in person, but I believe we'll come up with a
-sensible name or semantic. I'll hold off until we reach a final
-conclusion.
+Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ tools/objtool/klp-diff.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---=20
-Regards
-Yafang
+diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+index 34da55e45609..cbc475d79156 100644
+--- a/tools/objtool/klp-diff.c
++++ b/tools/objtool/klp-diff.c
+@@ -1862,8 +1862,13 @@ static int validate_special_section_klp_reloc(struct elfs *e, struct symbol *sym
+ 		if (convert_reloc_sym(e->patched, reloc))
+ 			continue;
+ 
+-		/* Static branch/call keys are always STT_OBJECT */
+-		if (reloc->sym->type != STT_OBJECT) {
++		/*
++		 * Static branch/call keys are STT_OBJECT if they're defined
++		 * in this object file.  Keys defined in another file, whether
++		 * in vmlinux, the same module or another module, are undefined
++		 * symbols, which are STT_NOTYPE.
++		 */
++		if (reloc->sym->type != STT_OBJECT && !is_undef_sym(reloc->sym)) {
+ 
+ 			/* Save code location which can be printed below */
+ 			if (reloc->sym->type == STT_FUNC && !code_sym) {
+-- 
+2.53.0-Meta
+
