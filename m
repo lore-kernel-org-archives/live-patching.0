@@ -1,56 +1,56 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7272B493D37
-	for <live-patching@vger.kernel.org>; Wed,  7 Oct 2026 11:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C1048D879
+	for <live-patching@vger.kernel.org>; Wed,  7 Oct 2026 11:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791373450; cv=none; b=WU6TzAmVWT8vMdbd0fyuDdWnUrTECiAKH5bUMITksG21yxorfs43RnmJqzgpKoWAqJqEF3eiaWYvki7GJVSgmvK4ylydaBQrylBT8x0R/YVxMPh5MHNHVYawyeeZ3GYr3xydoNXM8yBscQ1u/smfPaCJVvTl9BHfZoFJaN06oPM=
+	t=1791373451; cv=none; b=ac9lM1zI4YskKOcYXkRDHwrS65MHYMGmKqxZGfIhCwIRtFzLmSoRSyovxswnsa376MhJOBu1K6nGEZ75fTHc17bSkGwhr7ani8qxtxXwl9Oy7B/kDPkz02MJufbfcLqOZ9u1Cx2htruSnqJknHq7oCTbGD83NLalm053CumhhtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791373450; c=relaxed/simple;
-	bh=ECs1j/WilFqBSVcJj3zBPuMPJXRyGn6FnzstqC7lKp8=;
+	s=arc-20240116; t=1791373451; c=relaxed/simple;
+	bh=AymkOFYhpuoaYlczb6jgOItl+WSRrFMCpchS7hx5hZE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XdEleIIlOpeXo895JRK6g+d8FHsMpoblxn2xqzRSTDRSxLvEpampPGwSXEedeNfu5gxKoKc2D0c8NItuWxijuNDmfOF1yXtQX/Pa4OWcrfzGLkdUMXV/JL//Xj7J34TeoBEVmvBEAcQUnsPDyrDJBm3OqFhrtLNKL4+N7y7d2K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qxFZNLT6; arc=none smtp.client-ip=209.85.215.198
+	 To:Cc:Content-Type; b=m5mTg7MVdGZHlUMh5L6MenoeypBya/bfA0NB4Y5E1JW2CXzL/oT0sgrxZOP2Xw1yBLF/7Si0tsRjCiVUMkj/ltHgEMSAtUO7h73Z6A8tXgrLGK4+OkdMKStCBYxgu0rdtB9W8Au4aAUl9MqDDvbuJQ//ffQN8Xl3SeXoaxVxuwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iTN9AwN+; arc=none smtp.client-ip=209.85.214.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qxFZNLT6"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc1b6f65dacso2494696a12.1
-        for <live-patching@vger.kernel.org>; Wed, 07 Oct 2026 04:43:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iTN9AwN+"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2df8484f12cso41379095ad.3
+        for <live-patching@vger.kernel.org>; Wed, 07 Oct 2026 04:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791373435; x=1791978235; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791373437; x=1791978237; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=N0/74qP1zUPw49XwhZiSOI/DchmHGSPag2WK4nHiIiQ=;
-        b=qxFZNLT63HNZbsQCOesn011UbSwPJhLbPuW+Tu15D4L+Hy/Mv45qskhSkicchXgX9u
-         dbwnHHwJ4BhuKQDaXxocqTJ1vMVHQKtgzwKlVPz1iYho51hrybGnWtPpJXItr/9zPIQB
-         WnMFdh2bmRaR2G7iZ53wFM0LVxR4oEQPQf+3lRhdz3UY8fap8FLh/PRJj99Al4fDyH2S
-         samLcd8CmO1bu4rtTvMhMUZP6ew04ttVKNS2hI9JnOBOS0bUfiYYVgEWtRM3o/XQuiBU
-         ojOxSJXY4UgRgZlr4djYXItdjnCGEVGCm3UsVr3WTonT9sVnthEWBE254wnjh1o9WAj0
-         Fsmg==
+        bh=fgc8jaasabhbUwfJLQvrAFQRGkLXxRtpOJ5ukzG0TY4=;
+        b=iTN9AwN+M0FYprp9JToqDwwZTjUWBYLpcMPDNMczEgjLCwydKX+QKcBjKx7IFcSWI2
+         5QQAzdJaJcYFeTbr01EJrOS8ufrrO+uPhD62RkoT/ZSNBQwCdzuPgC7eHt3uehgRl473
+         ZBNSTNmXoyBWMQeQeekjfsNluDiOynEXnzVKSMUvzVAYZnI5DOu4GUXedUGeK/RvrhoO
+         TOQ52tlDwST9dNaAAUmyrq9gEyba5uBBJIL2nux40ppkIRFQg1xvrFQQiqreylcnLEr0
+         j2yBUEgpURt8Y1gqZDZVaxbpb1H2brdNtRyjaLxtgorXNp/phl7z/myJUA9NKZdKfrId
+         1P0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791373435; x=1791978235;
+        d=1e100.net; s=20260707; t=1791373437; x=1791978237;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=N0/74qP1zUPw49XwhZiSOI/DchmHGSPag2WK4nHiIiQ=;
-        b=Ztl6TcePAyEvdkpAOPy/6JmQTVCBrLVuMitzb04fGasLZ960TrErmHQ19ntZ1z72P3
-         0SunnCX1cxuDaarbNqfv5HMN96WRT1uOT0l/9OziLW+/SSvs1J/5vqxGovJYAfSRvPHO
-         lwVP2hgPPnvOpWWA6t7sELQ0pc/32K5B2dophiLD5cdESW5M0iNshNHgugptNIQ91vEy
-         TNEuq1N+I/3uwtSdKQqFJXEOzK/WSjTVhMgLjJYE64MeNZlbAv1W7CkXvDt1CtLs6me8
-         ZF2IPaoh64ZgfXJfMh7L5oz9Jfh75LY63SnB0+HqzByS2IIDcEnL20yilhP/AUDqtFT5
-         Bouw==
-X-Forwarded-Encrypted: i=1; AKwUvBwDF0FgOW9RGkgHYRms6JOCj8tw77sO60SnchIdt6dzM+vM/StHx+a1uWn5c4FZmHE/tN1ifUW4WeEZYkyh@vger.kernel.org
-X-Gm-Message-State: AFuF++mVgA5CtR4s5o3XibIUhz6pVFJd1Mq8cpYcQrOhjCka/OfGOYL9
-	2hX8QPk/SmE4/WWwIgmPyjdrpD9EFieM4T4+MJ+YfhTdKSQdu7lNNO8ldnpAKELr0dYesgZMSFB
-	0L3EldalOa4HeQA6u1IHAen766w==
-X-Received: from pfcg21.prod.google.com ([2002:a05:6a00:23d5:b0:890:4202:a41d])
+        bh=fgc8jaasabhbUwfJLQvrAFQRGkLXxRtpOJ5ukzG0TY4=;
+        b=ZEQp4KSieLNnNZqO+8teLvnHYeGh0bPxH/LFrx7QkgxFl62xPY8xbrFWyiMGUr40u/
+         6mdpST+FKRYQkN327n4HRJfsBgBIHDtOlpf7NAFBBsgJeGkgJr1U5U9krDd0YS0HiC7m
+         njDM3w+JzH9MMmEGmdr2YKmHhW0nMS2+km0DnOx9AYw5TiKKfVdNmZKhtUtJ5Ojf7+Oz
+         3LBKJYgXn3KeCmxzG5oAfnYHUrBrr6fAGPKvWsubusK3gyvaWWuGkuE2mGdxCtRJt3Ri
+         OLfOeYK1NBES7fYFsDkkxzGs9KfLBtrdDnsMUrlC+MmH9wxMtNvXxOdSU3w3xLhSk77a
+         7N9w==
+X-Forwarded-Encrypted: i=1; AKwUvBykuWs9HxjfyacR/ohsZTN8ZTicaVqlxsw1cbUHKS0o7WIax+UeR1zP7Yoar+xi0QVFL6PKc6x+o6Ms+Wrz@vger.kernel.org
+X-Gm-Message-State: AFq9FYIpaB6WsYRwAQXQrfqG8rOd2Yb/49lseYfHd1PbU+ZbDbAlpQWb
+	ULis0+46zU9CWZU2h8vt26K8hN0i0j9tPhC4lCiVY2XSBW4ndcrHG0t/SlzU58kdh0wCsy5n/Ws
+	LTQkFkwKVeywdXB0HjmuSClzpQw==
+X-Received: from ploh5.prod.google.com ([2002:a17:902:f705:b0:2e6:14d:bd91])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:3995:b0:3e0:b937:8849 with SMTP id adf61e73a8af0-3e13403b4e6mr1538070637.29.1791373435257;
- Wed, 07 Oct 2026 04:43:55 -0700 (PDT)
-Date: Wed,  7 Oct 2026 11:43:29 +0000
+ 2002:a17:903:4b24:b0:2dd:c0ff:e72e with SMTP id d9443c01a7336-2e60054be54mr15589775ad.64.1791373437250;
+ Wed, 07 Oct 2026 04:43:57 -0700 (PDT)
+Date: Wed,  7 Oct 2026 11:43:30 +0000
 In-Reply-To: <20261007114335.440322-1-dylanbhatch@google.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20261007114335.440322-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.360.g66cac248cb-goog
-Message-ID: <20261007114335.440322-6-dylanbhatch@google.com>
-Subject: [PATCH v8 05/11] module, sframe: Add sframe support for modules
+Message-ID: <20261007114335.440322-7-dylanbhatch@google.com>
+Subject: [PATCH v8 06/11] arm64/sframe: Validate IP addresses
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Roman Gushchin <roman.gushchin@linux.dev>, Weinan Liu <wnliu@google.com>, 
 	Will Deacon <will@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
@@ -77,343 +77,168 @@ Cc: Dylan Hatch <dylanbhatch@google.com>, Prasanna Kumar T S M <ptsm@linux.micro
 	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 
-Add sframe table to struct module and support sframe PC lookups when an
-.sframe section can be found on incoming modules. SFRAME_F_FDE_SORTED is
-not set for module .sframe, so FDEs are sorted right after the sframe
-header is read.
+Validate the given IP and computed function start address against the
+known vmlinux and module text address ranges.
 
-Co-developed-by: Weinan Liu <wnliu@google.com>
-Signed-off-by: Weinan Liu <wnliu@google.com>
+This requires arch-specific validation for vmlinux. This is because
+arm64 keeps .exit.text (normally discarded) and .rodata.text, both of
+both of which lie outside the bounds of .text and .init.text. Note that
+.rodata.text contains code that is never executed by the kernel mapping,
+but for which the toolchain nonetheless generates sframe data, and needs
+to be considered valid at lookup time.
+
 Suggested-by: Jens Remus <jremus@linux.ibm.com>
-Reviewed-by: Jens Remus <jremus@linux.ibm.com>
 Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
 
 ---
 
 Changes since v7:
-- (sashiko) Move .sframe module init and sframe section fields to arch
-  generic code.
-- (sashiko) Make sframe_find() noinstr.
-- (sashiko) Add preempt_notrace and instrumentation to
-  __sframe_module_find() code path.
+ - (sashiko) Use __always_inline for IP validation helper.
 ---
- arch/arm64/include/asm/module.h |   1 +
- include/linux/module.h          |   5 ++
- include/linux/sframe.h          |   9 +++
- kernel/module/main.c            |  21 ++++++
- kernel/unwind/Makefile          |   4 --
- kernel/unwind/sframe.c          | 118 ++++++++++++++++++++++++++++++--
- 6 files changed, 149 insertions(+), 9 deletions(-)
+ arch/arm64/include/asm/sections.h      |  1 +
+ arch/arm64/include/asm/unwind_sframe.h | 32 +++++++++++++++++++
+ arch/arm64/kernel/vmlinux.lds.S        |  2 ++
+ kernel/unwind/sframe.c                 | 43 +++++++++++++++++++++++++-
+ 4 files changed, 77 insertions(+), 1 deletion(-)
+ create mode 100644 arch/arm64/include/asm/unwind_sframe.h
 
-diff --git a/arch/arm64/include/asm/module.h b/arch/arm64/include/asm/module.h
-index fb9b88eebeb15..51a8891c24e88 100644
---- a/arch/arm64/include/asm/module.h
-+++ b/arch/arm64/include/asm/module.h
-@@ -6,6 +6,7 @@
- #define __ASM_MODULE_H
+diff --git a/arch/arm64/include/asm/sections.h b/arch/arm64/include/asm/sections.h
+index 51b0d594239eb..5edb4304f661e 100644
+--- a/arch/arm64/include/asm/sections.h
++++ b/arch/arm64/include/asm/sections.h
+@@ -23,6 +23,7 @@ extern char __irqentry_text_start[], __irqentry_text_end[];
+ extern char __mmuoff_data_start[], __mmuoff_data_end[];
+ extern char __entry_tramp_text_start[], __entry_tramp_text_end[];
+ extern char __relocate_new_kernel_start[], __relocate_new_kernel_end[];
++extern char _srodatatext[], _erodatatext[];
  
- #include <asm-generic/module.h>
+ static inline size_t entry_tramp_text_size(void)
+ {
+diff --git a/arch/arm64/include/asm/unwind_sframe.h b/arch/arm64/include/asm/unwind_sframe.h
+new file mode 100644
+index 0000000000000..1b45d328c746f
+--- /dev/null
++++ b/arch/arm64/include/asm/unwind_sframe.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_ARM64_UNWIND_SFRAME_H
++#define _ASM_ARM64_UNWIND_SFRAME_H
++
++#include <linux/module.h>
 +#include <linux/sframe.h>
- 
- struct mod_plt_sec {
- 	int			plt_shndx;
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 96cc98568eea5..6b3f3d3cb3e8d 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -26,6 +26,7 @@
- #include <linux/rbtree_latch.h>
- #include <linux/error-injection.h>
- #include <linux/tracepoint-defs.h>
-+#include <linux/sframe.h>
- #include <linux/srcu.h>
- #include <linux/static_call_types.h>
- #include <linux/dynamic_debug.h>
-@@ -577,6 +578,10 @@ struct module {
- #ifdef CONFIG_DYNAMIC_DEBUG_CORE
- 	struct _ddebug_info dyndbg_info;
- #endif
-+#ifdef CONFIG_HAVE_UNWIND_KERNEL_SFRAME
-+	struct sframe_section sframe_sec;
-+	bool sframe_init;
-+#endif
- } ____cacheline_aligned __randomize_layout;
- #ifndef MODULE_ARCH_INIT
- #define MODULE_ARCH_INIT {}
-diff --git a/include/linux/sframe.h b/include/linux/sframe.h
-index c1fe8ac7df7b3..1aa3e07725f4d 100644
---- a/include/linux/sframe.h
-+++ b/include/linux/sframe.h
-@@ -2,9 +2,12 @@
- #ifndef _LINUX_SFRAME_H
- #define _LINUX_SFRAME_H
- 
-+#include <linux/elf.h>
- #include <linux/init.h>
- #include <linux/unwind_types.h>
- 
-+#include <asm-generic/module.h>
++#include <asm/sections.h>
 +
- #ifdef CONFIG_UNWIND_SFRAME_LOOKUP
- 
- struct sframe_section {
-@@ -15,6 +18,7 @@ struct sframe_section {
- 	unsigned long	fres_start;
- 	unsigned long	fres_end;
- 	unsigned int	num_fdes;
-+	bool		fdes_sorted;
- 
- 	signed char	ra_off;
- 	signed char	fp_off;
-@@ -23,12 +27,17 @@ struct sframe_section {
- extern struct sframe_section kernel_sfsec __ro_after_init;
- 
- void __init init_sframe_table(void);
-+void sframe_module_init(struct module *mod, void *addr, unsigned int size);
-+
- extern int sframe_find(unsigned long ip, struct unwind_frame *frame);
- 
- #else /* !CONFIG_UNWIND_SFRAME_LOOKUP */
- 
- static inline void __init init_sframe_table(void) {}
-+static inline void sframe_module_init(struct module *mod, void *addr, unsigned int size) {}
-+
- static inline int sframe_find(unsigned long ip, struct unwind_frame *frame) { return -EINVAL; }
-+
- #endif /* CONFIG_UNWIND_SFRAME_LOOKUP */
- 
- #endif /* _LINUX_SFRAME_H */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c1b34dc1e89ac..8a4542b7e4a70 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -7,6 +7,7 @@
- 
- #define INCLUDE_VERMAGIC
- 
-+#include <linux/elf.h>
- #include <linux/export.h>
- #include <linux/extable.h>
- #include <linux/moduleloader.h>
-@@ -3008,6 +3009,23 @@ static void module_deallocate(struct module *mod, struct load_info *info)
- 	free_mod_mem(mod);
- }
- 
-+#ifdef CONFIG_HAVE_UNWIND_KERNEL_SFRAME
-+
-+static void setup_sframe(struct module *mod, const struct load_info *info)
++static __always_inline bool sframe_is_kernel_ip_valid(unsigned long ip)
 +{
-+	unsigned int sframe_size;
-+	void *sframe = section_objs(info, ".sframe", 1, &sframe_size);
++	if (__is_kernel_text(ip) || is_kernel_inittext(ip))
++		return true;
 +
-+	if (sframe)
-+		sframe_module_init(mod, sframe, sframe_size);
++	/* .exit.text is retained in vmlinux on arm64. */
++	if (ip >= (unsigned long)__exittext_begin &&
++	    ip < (unsigned long)__exittext_end)
++		return true;
++
++	/*
++	 * .rodata.text is never executed from the kernel mapping, but it still
++	 * has sframe data.
++	 */
++	if (ip >= (unsigned long)_srodatatext &&
++	    ip < (unsigned long)_erodatatext)
++		return true;
++
++	return false;
 +}
 +
-+#else
++#define sframe_is_kernel_ip_valid sframe_is_kernel_ip_valid
 +
-+static void setup_sframe(struct module *mod, const struct load_info *info) {}
-+
-+#endif
-+
- int __weak module_finalize(const Elf_Ehdr *hdr,
- 			   const Elf_Shdr *sechdrs,
- 			   struct module *me)
-@@ -3027,6 +3045,9 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	/* Setup kallsyms-specific fields. */
- 	add_kallsyms(mod, info);
++#endif /* _ASM_ARM64_UNWIND_SFRAME_H */
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index eb1f54829503c..82fd20ccb7c43 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -237,12 +237,14 @@ SECTIONS
  
-+	/* Initialize sframe metadata. */
-+	setup_sframe(mod, info);
-+
- 	/* Arch-specific module finalizing. */
- 	return module_finalize(info->hdr, info->sechdrs, mod);
- }
-diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
-index c5d953e48fe82..13254e6a7bb6d 100644
---- a/kernel/unwind/Makefile
-+++ b/kernel/unwind/Makefile
-@@ -1,8 +1,4 @@
-  obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
+ 	/* code sections that are never executed via the kernel mapping */
+ 	.rodata.text : {
++		_srodatatext = .;
+ 		TRAMP_TEXT
+ 		HIBERNATE_TEXT
+ 		KEXEC_TEXT
+ 		IDMAP_TEXT
+ 		. = ALIGN(PAGE_SIZE);
+ 	}
++	_erodatatext = .;
  
-  KCOV_INSTRUMENT_sframe.o	:= n
-- KASAN_SANITIZE_sframe.o	:= n
-- KCSAN_SANITIZE_sframe.o	:= n
--
-- CFLAGS_REMOVE_sframe.o = $(CC_FLAGS_FTRACE)
-  obj-$(CONFIG_UNWIND_SFRAME_LOOKUP)	+= sframe.o
+ 	idmap_pg_dir = .;
+ 	. += PAGE_SIZE;
 diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
-index ec81110a36796..33883408581da 100644
+index 33883408581da..c95fcb63e7eaf 100644
 --- a/kernel/unwind/sframe.c
 +++ b/kernel/unwind/sframe.c
-@@ -6,8 +6,10 @@
- #define pr_fmt(fmt)	"sframe: " fmt
+@@ -44,6 +44,45 @@ struct sframe_fre_internal {
+ 	unsigned char	dw_size;
+ };
  
- #include <linux/mm.h>
-+#include <linux/rcupdate.h>
- #include <linux/string_helpers.h>
- #include <linux/sframe.h>
-+#include <linux/sort.h>
- #include <linux/unaligned.h>
- #include <linux/unwind_types.h>
- #include <linux/kallsyms.h>
-@@ -95,6 +97,9 @@ static __always_inline int __find_fde(struct sframe_section *sec,
- 	struct sframe_fde_v3 *first, *low, *high, *found = NULL;
- 	int ret;
- 
-+	if (!sec->fdes_sorted)
-+		return -EINVAL;
++#ifndef sframe_is_kernel_ip_valid
 +
- 	first = (void *)sec->fdes_start;
- 	low = first;
- 	high = first + sec->num_fdes - 1;
-@@ -406,12 +411,53 @@ static __always_inline int __sframe_find(struct sframe_section *sec,
- 	return __find_fre(sec, &fde, ip, frame);
- }
- 
--notrace int sframe_find(unsigned long ip, struct unwind_frame *frame)
++static __always_inline bool sframe_is_kernel_ip_valid(unsigned long ip)
++{
++	return __is_kernel_text(ip) || is_kernel_inittext(ip);
++}
++
++#endif
++
 +#ifdef CONFIG_MODULES
 +
-+static __always_inline int __sframe_find_module(unsigned long ip,
-+						struct unwind_frame *frame)
++static __always_inline bool sframe_is_sec_module_ip_valid(struct sframe_section *sec,
++							  unsigned long ip)
 +{
-+	struct module *mod;
-+	int ret;
++	struct module *mod = container_of(sec, struct module, sframe_sec);
 +
-+	if (!rcu_is_watching())
-+		return -EINVAL;
-+
-+	instrumentation_begin();
-+	scoped_guard(preempt_notrace) {
-+		mod = __module_text_address(ip);
-+		if (mod && smp_load_acquire(&mod->sframe_init))
-+			ret = __sframe_find(&mod->sframe_sec, ip, frame);
-+		else
-+			ret = -EINVAL;
-+	}
-+	instrumentation_end();
-+
-+	return ret;
++	return within_module_mem_type(ip, mod, MOD_TEXT) ||
++		within_module_mem_type(ip, mod, MOD_INIT_TEXT);
 +}
 +
 +#else
 +
-+static __always_inline int __sframe_find_module(unsigned long ip,
-+						struct unwind_frame *frame)
++static __always_inline bool sframe_is_sec_module_ip_valid(struct sframe_section *sec,
++							  unsigned long ip)
 +{
-+	return -EINVAL;
++	return false;
 +}
 +
 +#endif
 +
-+noinstr int sframe_find(unsigned long ip, struct unwind_frame *frame)
++static __always_inline bool is_sec_ip_valid(struct sframe_section *sec,
++					    unsigned long ip)
++{
++	if (sec == &kernel_sfsec)
++		return sframe_is_kernel_ip_valid(ip);
++
++	return sframe_is_sec_module_ip_valid(sec, ip);
++}
++
+ static __always_inline unsigned char fre_type_to_size(unsigned char fre_type)
  {
--	if (!frame || !sframe_init)
-+	if (!frame)
+ 	if (fre_type > 2)
+@@ -70,6 +109,8 @@ static __always_inline int __read_fde(struct sframe_section *sec,
+ 	_fde = (struct sframe_fde_v3 *)fde_addr;
+ 
+ 	func_addr = fde_addr + _fde->func_start_off;
++	if (!is_sec_ip_valid(sec, func_addr))
++		return -EINVAL;
+ 
+ 	fda_addr = sec->fres_start + _fde->fres_off;
+ 	if (fda_addr + sizeof(struct sframe_fda_v3) > sec->fres_end ||
+@@ -450,7 +491,7 @@ noinstr int sframe_find(unsigned long ip, struct unwind_frame *frame)
+ 	if (!frame)
  		return -EINVAL;
  
--	return  __sframe_find(&kernel_sfsec, ip, frame);
-+	if (__is_kernel_text(ip) || is_kernel_inittext(ip)) {
-+		if (!sframe_init)
-+			return -EINVAL;
-+
-+		return __sframe_find(&kernel_sfsec, ip, frame);
-+	}
-+
-+	return  __sframe_find_module(ip, frame);
- }
- NOKPROBE_SYMBOL(sframe_find);
+-	if (__is_kernel_text(ip) || is_kernel_inittext(ip)) {
++	if (sframe_is_kernel_ip_valid(ip)) {
+ 		if (!sframe_init)
+ 			return -EINVAL;
  
-@@ -431,7 +477,6 @@ static int sframe_read_header(struct sframe_section *sec)
- 
- 	if (shdr->preamble.magic != SFRAME_MAGIC ||
- 	    shdr->preamble.version != SFRAME_VERSION_3 ||
--	    !(shdr->preamble.flags & SFRAME_F_FDE_SORTED) ||
- 	    !(shdr->preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
- 	    shdr->auxhdr_len) {
- 		pr_debug("bad/unsupported sframe header\n");
-@@ -455,6 +500,7 @@ static int sframe_read_header(struct sframe_section *sec)
- 		return -EINVAL;
- 	}
- 
-+	sec->fdes_sorted	= shdr->preamble.flags & SFRAME_F_FDE_SORTED;
- 	sec->num_fdes		= num_fdes;
- 	sec->fdes_start		= fdes_start;
- 	sec->fres_start		= fres_start;
-@@ -471,10 +517,72 @@ void __init init_sframe_table(void)
- 	kernel_sfsec.sframe_start	= (unsigned long)__start_sframe;
- 	kernel_sfsec.sframe_end		= (unsigned long)__end_sframe;
- 
--	if (sframe_read_header(&kernel_sfsec)) {
-+	if (sframe_read_header(&kernel_sfsec) || !kernel_sfsec.fdes_sorted) {
- 		pr_warn("invalid vmlinux SFrame header\n");
- 		return;
- 	}
- 
- 	sframe_init = true;
- }
-+
-+#ifdef CONFIG_MODULES
-+
-+static int sframe_sort_cmp_fde(const void *a, const void *b)
-+{
-+	const struct sframe_fde_v3 *fde_a = a, *fde_b = b;
-+	unsigned long func_start_a, func_start_b;
-+
-+	func_start_a = (unsigned long)fde_a + fde_a->func_start_off;
-+	func_start_b = (unsigned long)fde_b + fde_b->func_start_off;
-+
-+	return cmp_int(func_start_a, func_start_b);
-+}
-+
-+static void sframe_sort_swap_fde(void *a, void *b, int size)
-+{
-+	struct sframe_fde_v3 *fde_a = a, *fde_b = b;
-+	struct sframe_fde_v3 temp;
-+	long delta;
-+
-+	/* Swap potentially unaligned FDE */
-+	memcpy(&temp, fde_a, sizeof(struct sframe_fde_v3));
-+	memcpy(fde_a, fde_b, sizeof(struct sframe_fde_v3));
-+	memcpy(fde_b, &temp, sizeof(struct sframe_fde_v3));
-+
-+	/* Adjust FDE function start offset from FDE */
-+	delta = (long)((unsigned long)fde_b - (unsigned long)fde_a);
-+	fde_a->func_start_off += delta;
-+	fde_b->func_start_off -= delta;
-+}
-+
-+static void sframe_sort_fdes(struct sframe_section *sec)
-+{
-+	void *fdes = (void *)sec->fdes_start;
-+	size_t num_fdes = sec->num_fdes;
-+
-+	if (sec->fdes_sorted)
-+		return;
-+
-+	sort(fdes, num_fdes, sizeof(struct sframe_fde_v3),
-+	     sframe_sort_cmp_fde, sframe_sort_swap_fde);
-+	sec->fdes_sorted = true;
-+}
-+
-+void sframe_module_init(struct module *mod, void *addr, unsigned int size)
-+{
-+	struct sframe_section *sec = &mod->sframe_sec;
-+
-+	sec->sframe_start = (unsigned long)addr;
-+	sec->sframe_end   = (unsigned long)addr + size;
-+
-+	if (sframe_read_header(sec)) {
-+		pr_warn("invalid SFrame header in module %s\n", mod->name);
-+		return;
-+	}
-+	sframe_sort_fdes(sec);
-+
-+	/* Ensure SFrame is initialized when sframe_find() happens */
-+	smp_store_release(&mod->sframe_init, true);
-+}
-+
-+#endif
 -- 
 2.56.0.360.g66cac248cb-goog
 
