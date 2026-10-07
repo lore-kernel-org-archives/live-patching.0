@@ -1,129 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58138399CF0
-	for <live-patching@vger.kernel.org>; Tue,  6 Oct 2026 07:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1A047FB13
+	for <live-patching@vger.kernel.org>; Wed,  7 Oct 2026 11:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791270614; cv=none; b=kGgW21nUsx25PsYBNArUpS1nvMHse4uzXysEp9DVOCQA9fF/92gdyhIhwEVyNpksAS0E4zKFY3uRbSseFudA6vmC4KgB/0TbuCFuaqeneEiy3RtIdOJJfgbIt/lRpKWw1UdxfuxakpjHXra9PONf+dDNP5qH485KxEyWWfmvBDM=
+	t=1791373439; cv=none; b=RojWERxAwwnj0RXI+UIBNQsjUXYGr52iT7ldXzA5l7equia+eAsPs82+YdqcjyBWIlpewgO/O/rqw4Q41LrWprDi/dZmeahSJAz21ZYOvBrY3pAZqdS11ZCW4OMeYb4O8IXtm8gP1jGj2+vxLBH9jZ9GoKNNWZw8Yjr+0WwNhBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791270614; c=relaxed/simple;
-	bh=vYnjVhDtloIxAbFfle/bKGhDoZZixZpgT5vIEhRJ8Js=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OJ6qxXOQdEWEMrhxoy+RLCVoN+8UFhBdbM3SuQJWo7sVeETeQgLgXBpOxBCCdRwLlTP2aj8O2H4xhqzdXUk3ENhuA3VO8Lj/qLCqfVWlF+73eM9rqNgwkkt49KaeleXiQws0CG3Q592LIgslPlVfidZcb+2oYCcjUVto4M3Pu94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KCqm7Kk9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791373439; c=relaxed/simple;
+	bh=h7fiiHcyiS6S0OXbymL+71ZgyVWlFy32BZDXtbBulJ4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=HYIzk7x1EWAJS4uwoANwUZfPeUBK+lvo9U0p6dKd0JtJIuiaWDi2AWSZ8mgWnWkV0JZ4E9WGPg1qpAh6qpWV3LxllT9bbn5lENby2TUJyA23Tus5qhRMDg7E8HW178XFvv7fFL2Olv9ipe7SqYOvaXTWSwhP//lD4Nrnieu3EHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MHDgLW8z; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KCqm7Kk9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29E21F00893;
-	Tue,  6 Oct 2026 07:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791270613;
-	bh=H2B4pFhh9Up5TZm+g+LPAgTBWRk9cOPjvt7oge8zZsc=;
-	h=From:To:Cc:Subject:Date;
-	b=KCqm7Kk9RcZgAN2cQic6nW9mRYY3VmFcjb+FuD63YtcGBlsfKLzZQJthQCveR58gp
-	 7psIXUBJQ83+7n43k9TVDn0Te0Xi/+cvtn8oJuZmiXrK4nTqMuMRssv/aQeD7hBmJn
-	 FrDDVEHCHEmMHRudL14oC5SnUlUBbg0DRFCveyerkr3JeHh8Mxrj/bJQPB63XW6xO9
-	 kvA2uKoRL30q1t+iiTHgic2VVLkHOj7PKu56zVd6eACjEm1ieq8g7bdpZFXYrnnvC9
-	 Q9yeonrv+eD4r+n/dooMXmxEj6hxPPCG9xQQiFHdd+EBDZ+4fc7EwcfvvuvECUDYSt
-	 RH1Q6R/pmUjjQ==
-From: Song Liu <song@kernel.org>
-To: live-patching@vger.kernel.org
-Cc: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	Song Liu <song@kernel.org>
-Subject: [PATCH] objtool/klp: Fix detection of static keys defined in other files
-Date: Tue,  6 Oct 2026 00:10:03 -0700
-Message-ID: <20261006071003.291679-1-song@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MHDgLW8z"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2e594a90232so48845275ad.2
+        for <live-patching@vger.kernel.org>; Wed, 07 Oct 2026 04:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791373424; x=1791978224; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3BiabrC81I6q/hu88iG0Po7W2aHkc1H1GfO6iXoWDeM=;
+        b=MHDgLW8zEacrgf98vPyjYFP7B/0zwj97rMMTrHI19NfNnvF3FmrWFkUrJhLnjZu9kk
+         Mo6wiVXxQGBEcxzc4COtOWLvFVw9gGPD7OWkqRyYFT26mLAwWqd7qDCbu5PpxBL9SMPU
+         MENnUA7cvMmpvzbYoSvwltGFCb/KBCqWAPGSL7heHvGklGSwRM/hlYa1yj1LusOny5fb
+         mFwfVYjRvvo/kRbMRtqU6+rAo1Z8ixZm6AyYhAoELsMS0ZwgNP5JqpkEviI1BYExwH6I
+         fEeGxeAJfZcC/68gIi7yQhzyhdQQT0UgH+C9pWZmz8n2AK4KGGeIbcPpzcxGsMdDj4EQ
+         XsRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791373424; x=1791978224;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3BiabrC81I6q/hu88iG0Po7W2aHkc1H1GfO6iXoWDeM=;
+        b=QIudadcz6iBBTPH18AwZNnlaQXGzA8Jc13onwyRZpaueWxB1RH1f4YBhC19R21RfGi
+         C8yrhgoggFHf1pODgNyG33HjIksgmjuUQ8a7cqossrMSEqEn5qK2EiksI6bTCOXML+3c
+         PAZbJNRaASYmosTEclqneKhvHC1TykoCoig7ZuyvuKB1qVUiq2tQo3Av+gtVHKFMc/eP
+         /MCR9JCvNNuNZDBLhMcZI46Xct7OtgNmnHLr9h+jrGGGF51nTe8tHgPNtd7nuawv48zE
+         73f7TkH80B0lnkaH2pCrRmz2NzUlGVh9eDYredX6ou7Ay876fCQzurqBxy6jkRdy8IW9
+         y/7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzUNyeJNBVGN1O7V6wi1at/9Njt0s/ZRKuhUSJ/WwyqPDd6jIMMYyaZ6UV3XKpUXa8Mx4fH9772T8kTkzHr@vger.kernel.org
+X-Gm-Message-State: AFq9FYIk75Lq0gyiP4yyHFOsA0SRTEt85UYm6pC5KX7ZzB8ZiLuJKpef
+	5SIy/CeFrEMsrGliXcI5KooCQys1pM+3og8SpzXfxCWr6c4O3CdZo85L1SDuLAmWfs+hjR1Cryw
+	ilo3eEWzTXEf08c1A57k3PYjvEA==
+X-Received: from plnq15.prod.google.com ([2002:a17:902:f78f:b0:2e2:d223:8126])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:ce07:b0:2dd:c100:9433 with SMTP id d9443c01a7336-2e600548a4bmr18840995ad.49.1791373424109;
+ Wed, 07 Oct 2026 04:43:44 -0700 (PDT)
+Date: Wed,  7 Oct 2026 11:43:24 +0000
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.360.g66cac248cb-goog
+Message-ID: <20261007114335.440322-1-dylanbhatch@google.com>
+Subject: [PATCH v8 00/11] unwind, arm64: add sframe unwinder for kernel
+From: Dylan Hatch <dylanbhatch@google.com>
+To: Roman Gushchin <roman.gushchin@linux.dev>, Weinan Liu <wnliu@google.com>, 
+	Will Deacon <will@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Indu Bhagat <ibhagatgnu@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Jiri Kosina <jikos@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Jens Remus <jremus@linux.ibm.com>
+Cc: Dylan Hatch <dylanbhatch@google.com>, Prasanna Kumar T S M <ptsm@linux.microsoft.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Song Liu <song@kernel.org>, joe.lawrence@redhat.com, 
+	linux-toolchains@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Randy Dunlap <rdunlap@infradead.org>, Mostafa Saleh <smostafa@google.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 
-validate_special_section_klp_reloc() finds the key of a __jump_table or
-.static_call_sites entry by looking for a reloc to an STT_OBJECT symbol.
-But a key is STT_OBJECT only in the object file which defines it.  In
-any other object file it is an undefined symbol, which is STT_NOTYPE,
-and the check misses it.  For example, with tracepoint keys:
+Implement a generic kernel sframe-based [1] unwinder. The main goal is
+to improve reliable stacktrace on arm64 by unwinding across exception
+boundaries.
 
-  Patched file            Tracepoint          Key defined in       Type
-  ----------------------  ------------------  -------------------  ------
-  vmlinux:
-  kernel/sched/core.c     sched_switch        same file            OBJECT
-  kernel/sched/fair.c     sched_stat_runtime  kernel/sched/core.c  NOTYPE
-  kvm.ko:
-  arch/x86/kvm/x86.c      kvm_msr             same file            OBJECT
-  arch/x86/kvm/lapic.c    kvm_apic_ipi        arch/x86/kvm/x86.c   NOTYPE
-  cachefiles.ko:
-  fs/cachefiles/io.c      netfs_sreq          vmlinux              NOTYPE
-  kvm-intel.ko:
-  arch/x86/kvm/vmx/vmx.c  kvm_exit            kvm.ko               NOTYPE
+On x86, the ORC unwinder provides reliable stacktrace through similar
+methodology, but arm64 lacks the necessary support from objtool to
+create ORC unwind tables.
 
-Missing a key in vmlinux is harmless, as the check accepts vmlinux keys
-anyway.  Their entries are cloned with a normal reloc to the key if
-vmlinux exports it to all modules, as for netfs_sreq, and with a klp
-reloc otherwise, which the module loader applies before it initializes
-the livepatch module's static branches and static calls.
+Currently, there is a sframe unwinder proposed for userspace [2], along
+with an RFC for an .eh_frame unwinder [5]. This patch series implements
+a similar SFrame lookup library to [2], but with many simplifications to
+account for the fact that user access is not necessary. The intent here
+is to continue to leave the door open for common usage of definitions
+and algorithms between kernel and user unwind in the future, while at
+the same time keeping these patches strictly constrained the minimal set
+of features necessary for arm64 kernel unwind.
 
-But a livepatch can't use a key defined in a module, so klp-diff has to
-disable such tracepoints, as it does for kvm_msr above.  For keys
-defined in another file of the same module, as for kvm_apic_ipi, or in
-another module, as for kvm_exit, it instead clones the entries with klp
-relocs for their keys.
+Unlike past versions of this series, these patches apply directly to
+v7.3-rc3 rather than depending upon [2]. To make this possible, I've
+adopted a number of patches from [2] with significant squashes and
+changes made in order to coherently suit the kernel unwind use case.
+I've done my best to maintain appropriate authorship on these changes,
+and have added 'Co-developed-by' trailers to attribute shared authorship
+as accurately as possible. Please let me know if you see any
+discrepencies in my work here.
 
-The resulting patch module crashes the kernel on load.  The livepatch
-module's static calls and static branches get initialized while their key
-fields still wait for the klp relocs.  The static call init rewrites the
-call instruction, so applying its klp reloc fails:
+Currently, only GNU Binutils support sframe. This series relies on the
+Sframe V3 format, which is supported in binutils 2.46.
 
-  module: x86/modules: Invalid relocation target, existing value is nonzero for sec 66, idx 16, type 4, loc ffffffffa04021f3, val ffffffffffffe0f5
+This full series is available on github: [4].
 
-and static_call_del_module() then dereferences the bogus key while
-cleaning up after the failed init:
+Ref:
+[1]: https://sourceware.org/binutils/docs/sframe-spec.html
+[2]: https://lore.kernel.org/all/20260505121718.3572346-1-jremus@linux.ibm.com/
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git/log/?h=sframe/core
+[4]: https://github.com/dylanbhatch/linux/tree/sframe-v7
+[5]: https://lore.kernel.org/all/20260821195259.2688377-1-jremus@linux.ibm.com/
 
-  BUG: unable to handle page fault for address: ffffffffa2373994
-  RIP: 0010:static_call_del_module+0x38/0x80
-  Call Trace:
-   static_call_module_notify+0x42/0x1a0
-   notifier_call_chain+0x5f/0xd0
-   blocking_notifier_call_chain+0x41/0x60
-   do_init_module+0x23d/0x2a0
-
-Also treat undefined symbols as keys.  The other relocs of these entries
-refer to code in the patched object, which is always defined.
-
-Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Song Liu <song@kernel.org>
 ---
- tools/objtool/klp-diff.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 34da55e45609..cbc475d79156 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1862,8 +1862,13 @@ static int validate_special_section_klp_reloc(struct elfs *e, struct symbol *sym
- 		if (convert_reloc_sym(e->patched, reloc))
- 			continue;
- 
--		/* Static branch/call keys are always STT_OBJECT */
--		if (reloc->sym->type != STT_OBJECT) {
-+		/*
-+		 * Static branch/call keys are STT_OBJECT if they're defined
-+		 * in this object file.  Keys defined in another file, whether
-+		 * in vmlinux, the same module or another module, are undefined
-+		 * symbols, which are STT_NOTYPE.
-+		 */
-+		if (reloc->sym->type != STT_OBJECT && !is_undef_sym(reloc->sym)) {
- 
- 			/* Save code location which can be printed below */
- 			if (reloc->sym->type == STT_FUNC && !code_sym) {
+Summary of changes since v7:
+ - (sashiko): Put .cfi_startproc right after SYM_START to account for
+   potential alignment bytes ahead of the actual function symbol.
+ - (sashiko) Use __always_inline for IP validation helper.
+ - (sashiko) Move .sframe module init and sframe section fields to arch
+   generic code.
+ - (sashiko) Make sframe_find() noinstr.
+ - (sashiko) Add preempt_notrace and instrumentation to
+   __sframe_module_find() code path.
+ - (sashiko) Block tracing and kprobe on the sframe_find code path.
+ - (shashiko) remove KCOV, KCSAN, and KASAN instrumentation from
+   sframe.o (copying over ORC's shoulder).
+
+Dylan Hatch (6):
+  arm64, unwind: build kernel with sframe V3 info
+  module, sframe: Add sframe support for modules
+  arm64/sframe: Validate IP addresses
+  sframe: Add debug helpers with object name
+  arm64, crypto/lib: Annotate leaf functions with CFI info
+  unwind: arm64: Use sframe to unwind interrupt frames
+
+Jens Remus (1):
+  sframe: Separate reading of FRE from reading of FRE data words
+
+Josh Poimboeuf (3):
+  arm64/sframe: Read vmlinux .sframe header
+  sframe: Add support for reading vmlinux .sframe contents
+  sframe: Add .sframe validation option
+
+Weinan Liu (1):
+  arm64: entry: add unwind info for call_on_irq_stack()
+
+ MAINTAINERS                            |   4 +-
+ Makefile                               |   8 +
+ arch/Kconfig                           |  49 ++
+ arch/arm64/Kconfig                     |   1 +
+ arch/arm64/Makefile                    |   2 +-
+ arch/arm64/crypto/aes-ce-ccm-core.S    |  12 +-
+ arch/arm64/crypto/aes-neonbs-core.S    |  16 +-
+ arch/arm64/crypto/ghash-ce-core.S      |  12 +-
+ arch/arm64/crypto/sm4-ce-ccm-core.S    |  16 +-
+ arch/arm64/crypto/sm4-ce-cipher-core.S |   4 +-
+ arch/arm64/crypto/sm4-ce-core.S        |  44 +-
+ arch/arm64/crypto/sm4-ce-gcm-core.S    |  16 +-
+ arch/arm64/crypto/sm4-neon-core.S      |  12 +-
+ arch/arm64/include/asm/linkage.h       |  32 ++
+ arch/arm64/include/asm/module.h        |   1 +
+ arch/arm64/include/asm/module.lds.h    |   2 +
+ arch/arm64/include/asm/sections.h      |   1 +
+ arch/arm64/include/asm/unwind_sframe.h |  32 ++
+ arch/arm64/kernel/entry.S              |  14 +
+ arch/arm64/kernel/setup.c              |   2 +
+ arch/arm64/kernel/stacktrace.c         | 184 ++++++-
+ arch/arm64/kernel/vdso/Makefile        |   2 +-
+ arch/arm64/kernel/vmlinux.lds.S        |  14 +
+ arch/arm64/lib/clear_page.S            |   4 +-
+ arch/arm64/lib/clear_user.S            |   4 +-
+ arch/arm64/lib/copy_from_user.S        |   4 +-
+ arch/arm64/lib/copy_page.S             |   4 +-
+ arch/arm64/lib/copy_to_user.S          |   4 +-
+ arch/arm64/lib/memchr.S                |   4 +-
+ arch/arm64/lib/memcmp.S                |   4 +-
+ arch/arm64/lib/memcpy.S                |   8 +-
+ arch/arm64/lib/memset.S                |   8 +-
+ arch/arm64/lib/mte.S                   |  28 +-
+ arch/arm64/lib/strchr.S                |   4 +-
+ arch/arm64/lib/strcmp.S                |   4 +-
+ arch/arm64/lib/strlen.S                |   4 +-
+ arch/arm64/lib/strncmp.S               |   4 +-
+ arch/arm64/lib/strnlen.S               |   4 +-
+ arch/arm64/lib/tishift.S               |  12 +-
+ include/asm-generic/sections.h         |   4 +
+ include/asm-generic/vmlinux.lds.h      |  15 +
+ include/linux/module.h                 |   5 +
+ include/linux/sframe.h                 |  43 ++
+ include/linux/unwind_types.h           |  34 ++
+ kernel/module/main.c                   |  21 +
+ kernel/unwind/Makefile                 |   5 +-
+ kernel/unwind/sframe.c                 | 710 +++++++++++++++++++++++++
+ kernel/unwind/sframe.h                 |  79 +++
+ kernel/unwind/sframe_debug.h           |  34 ++
+ 49 files changed, 1401 insertions(+), 133 deletions(-)
+ create mode 100644 arch/arm64/include/asm/unwind_sframe.h
+ create mode 100644 include/linux/sframe.h
+ create mode 100644 include/linux/unwind_types.h
+ create mode 100644 kernel/unwind/sframe.c
+ create mode 100644 kernel/unwind/sframe.h
+ create mode 100644 kernel/unwind/sframe_debug.h
+
 -- 
-2.53.0-Meta
+2.56.0.360.g66cac248cb-goog
 
