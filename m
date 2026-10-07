@@ -1,56 +1,56 @@
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A3A48F828
-	for <live-patching@vger.kernel.org>; Wed,  7 Oct 2026 11:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610773890E3
+	for <live-patching@vger.kernel.org>; Wed,  7 Oct 2026 11:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791373442; cv=none; b=HVSs2ZJHw02c8swuV2W74k9VMyl/uS3QUhdItWNw5hytG5Nd1FzntZvwRY0HQ8JueeIU8GkEQUzEW1jxOZuq0bOs0AJgbxmhEU4aZZKZ0Sydnu8VwfthtrEs71e6QKPfrUC9tAa3DPFZWtIejeuiCbloR8occG/yQzB9tIOWu0k=
+	t=1791373444; cv=none; b=KcvPpnjtRltAX5ElfIVuNys1KLytW6G0BZHtW4bR8ggzKau21e8PIZVv1D9KcW16doxEMlVxlStaBsZ6XhJnl34SlsWr+WtHr+Gq/9KImzREkgIm3CUJzudR4LgKfEgnw6RIoyR6iDjHyotpUyprD8/lQkGI3Ot/c0S7qRjQVRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791373442; c=relaxed/simple;
-	bh=rZcO9leuAkIUTCKbPF7FZsWfsm1B9RBvpWkWDnREB8A=;
+	s=arc-20240116; t=1791373444; c=relaxed/simple;
+	bh=EPeeFDfr4o2AentVgVv0xy5a8aIPixkVtOhapcuhFVo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=eSWp867Hcetmo7MLYgzEpCr/LJnB70aQ90Chjw931Dl0U6g+fOnpzScqge6rMtrhNnucx9PT8YTuFTzXex3laRvyULpgnOvK4mbEWptXZtCo2/LD9+CvRcBwYLbIuq5vODsn4LfaSFA1+CyFw3dnCoVnJmftwwe+eqItmEHkn0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dMPXuaF+; arc=none smtp.client-ip=209.85.214.200
+	 To:Cc:Content-Type; b=FPJ9vJ6u/c6JCgPS30VWEtwITD6lWQc2vuHjcvf09UHqyA19KrmaHziid/O6lg098PM/VNvHnBJG2sHSo5wlHk1CrS8qvm2AtL1yA257w9fJyve9qkWAUUYhmYgvDc9/0aPyfMkMLD8o80DpE9OJ55hY8n2MUviXE9ocbkArZMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ktkqrJ4X; arc=none smtp.client-ip=209.85.210.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dMPXuaF+"
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2e2e7425601so19044065ad.0
-        for <live-patching@vger.kernel.org>; Wed, 07 Oct 2026 04:43:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ktkqrJ4X"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8883dcc671eso2975116b3a.0
+        for <live-patching@vger.kernel.org>; Wed, 07 Oct 2026 04:43:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791373427; x=1791978227; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1791373429; x=1791978229; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HbXOOT9nl+uysOcJBeZgbpa3FnxAvhWN1MIEa8mVsQA=;
-        b=dMPXuaF+UoEPaXeeugWaG5/QJslm0spztP1OQGRcDxU3gg3uunOEN1868WzgUPP87g
-         ZQFsm2sA6NXhhxboHm1FPWjombJhO5dZu6Y/fLLefX103kMzzsu1jZRpj3meuzzwaFEI
-         z6OKVlIY9Y5V1mPL6IRum826UCtxQxeoIAPgu/eW8tvCMz3hxcJSXhqS6SD/BJ1risCH
-         O9o407R8cHhnstKbXJZRrGc7juGnofGxdl8r0mLyc1rSVJ2ivtZNjUs936Zy/+qex3Wv
-         AUzdE1Wz2O1fudfhQuucRIQT6wEH52oTASlYYQScmVU4KF3J5iHVTYE9gGZxI34pO81J
-         BNhQ==
+        bh=SK2vB3bamyZR/EztfyKDwVCAIo9m6zAn5sAJ8nDYq84=;
+        b=ktkqrJ4XNP7G55KTJhNHaBKtmBOxMNCjdgAdn74GA5xtH8ERTqrYAoEvn8e69g0ZzF
+         MTOo42Pv9pfeCzBp+A6LZtBC7gQVWVaAmFqWmk8N90m+1IvV/xkyzMvX+llixIvzbV3s
+         CMUNuuZQD3h6EiXabONoEX6mXk4Z2Rqj3TuoV+xbzQNLNNVK90Lat903BqQlNxAAHx0S
+         1qGC+gI/kTTQ8pmVAshkT3+EFWLDdCASf3cpKN2o1CeSy2ulz0BFFOXiCZbUFS85fA2A
+         eS1bVppvPGv484Y4PmF+tva7t9I5bBYKq/2AsSn3Rtv0aW1M7Y2CqGLvry8UdPm5j6g5
+         vNwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791373427; x=1791978227;
+        d=1e100.net; s=20260707; t=1791373429; x=1791978229;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HbXOOT9nl+uysOcJBeZgbpa3FnxAvhWN1MIEa8mVsQA=;
-        b=vqVLr4TN6HIomDGXD6xfgYqqvZjCXExXOWxPWxyJZwxP/PZ9RcRZ0UDkDX1cpqsaoP
-         8gYqHxnv44Ax+51MbMeaZuqW3EmOBti0noqrlIRv1JzMeVpLj5LFz3XpCHUW5h6+2Rt6
-         mNoNTfsDC9AeVv3XeDumM2IlIESgtt5UVE2+ftUxpauAx/Obg09fI9tK77LpjF988oiy
-         BaZc2oNFx2U1nquxo0S7l9uZ4OGYdV7SNiiff/u/UF4Et5YO00SvYe9GKKG+RFbgJ0q4
-         U7DdOCXe8QGrWPtaxpJnXobVkUdE361CwaW1MT7RWxMgtKLhCpnJGV5ThAyOfqchmcb/
-         Rnhg==
-X-Forwarded-Encrypted: i=1; AKwUvBw2SOUzpE44Y5W3N2iWNYQ3Az2hNVXANul9raY42GKnWUx7hvJfSXYYusJemZ/Cfvqz7i+n7acXeFOojNQc@vger.kernel.org
-X-Gm-Message-State: AFq9FYJYsmW37Pkew+PD2Z1pIuEN9A6BV/k9TWmlEM+2D16uocNlajiP
-	fKAxrncAWhvjcWS6qUV9RMBvkfsaTuay+rFjmPnW949PER5rfHGfNSFUhHOKnwcJYLgBvGS/rs7
-	FphOuoi26cHwVT/PDdM0JVMlwrw==
-X-Received: from plbjb20.prod.google.com ([2002:a17:903:2594:b0:2e2:f517:75b])
+        bh=SK2vB3bamyZR/EztfyKDwVCAIo9m6zAn5sAJ8nDYq84=;
+        b=WBKrVy/cc7qb97z1tzI/QGQ7TkGKaqijo5PPW62zU0syLUuvt3k2CBuE/YN6bK1LnC
+         CFUuKWlapVDRbyshAq/Nxc66r7CHhH+TIwPG5+QlP1eILjhwWLQq1yAk1WNHP5gaM783
+         Ge6vvVzoIE6xTIs7yZE6PERgJEHKMoNCme+qOJgs1jwchDiylSA1Tmp+UauhU3y+GFzI
+         SuyCha6JpU231fbsqktoRB31YJXsn4AZV1tfWalzzxcFzjAlss99Z6WOu9tcHHCXnLru
+         tEBdQvbZp/iwxrCfSPTt9AmbHNx7FIHmEceQw1ddTmzn++0ySfKQhh9cgh2QkQDvL6Ve
+         fDzg==
+X-Forwarded-Encrypted: i=1; AKwUvBwTTdAsPvXFVXQCEMDW3EKw0Ohpimx57ZLwxCxoSTxboVR3CHMMAR5CQ7kTKF6A6TdtG6X5NImLeSZfBOod@vger.kernel.org
+X-Gm-Message-State: AFuF++mlHsIKdv9EvegBg+uxNz34A5OMsLiV0MIkA4uQmeotowWSNL3D
+	ReVn++6+qaIJxRY78iRd1vr311OXFowrjNINHjQIWgVyPKu3Csthq/mdemiu88b6E5dl+SZcNsy
+	lDNw1cgUw5EGd+OnYmI1SQMjOgw==
+X-Received: from pfei1.prod.google.com ([2002:a05:6a00:c041:b0:888:2e48:6a84])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:ced1:b0:2e2:c94f:25f7 with SMTP id d9443c01a7336-2e5c4f13ec9mr34857265ad.5.1791373426997;
- Wed, 07 Oct 2026 04:43:46 -0700 (PDT)
-Date: Wed,  7 Oct 2026 11:43:25 +0000
+ 2002:a05:6a21:3418:b0:3e0:c5f5:6266 with SMTP id adf61e73a8af0-3e134121856mr1644659637.59.1791373429053;
+ Wed, 07 Oct 2026 04:43:49 -0700 (PDT)
+Date: Wed,  7 Oct 2026 11:43:26 +0000
 In-Reply-To: <20261007114335.440322-1-dylanbhatch@google.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20261007114335.440322-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.360.g66cac248cb-goog
-Message-ID: <20261007114335.440322-2-dylanbhatch@google.com>
-Subject: [PATCH v8 01/11] arm64, unwind: build kernel with sframe V3 info
+Message-ID: <20261007114335.440322-3-dylanbhatch@google.com>
+Subject: [PATCH v8 02/11] arm64/sframe: Read vmlinux .sframe header
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Roman Gushchin <roman.gushchin@linux.dev>, Weinan Liu <wnliu@google.com>, 
 	Will Deacon <will@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
@@ -77,256 +77,297 @@ Cc: Dylan Hatch <dylanbhatch@google.com>, Prasanna Kumar T S M <ptsm@linux.micro
 	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 
-To generate a .sframe section, build with -Wa,--gsframe-3 flags. Also,
-add unwind-table options to ensure the necessary CFI directives are
-emitted by the compiler, but discard .eh_frame unless
-CONFIG_UNWIND_TABLES is explicitly enabled.
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-This will be used for in-kernel reliable stacktrace in
-cases where the frame pointer alone is insufficient.
+In preparation for unwinding kernel space stacks with sframe, add basic
+sframe compile infrastructure and support for reading the .sframe
+section header. Add init_sframe_table() to read the vmlinux .sframe
+header at boot.
 
-Currently, the sframe format only supports arm64, x86_64 and s390x
-architectures.
+[ Jens Remus: Add support for SFrame V3.  Add support for PC-relative
+FDE function start offset.  Cleanup includes and indentation. ]
 
-Co-developed-by: Weinan Liu <wnliu@google.com>
-Signed-off-by: Weinan Liu <wnliu@google.com>
-Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-Reviewed-by: Jens Remus <jremus@linux.ibm.com>
+[ Dylan Hatch: Repurpose patch for arm64 vmlinux. ]
+
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Indu Bhagat <ibhagatgnu@gmail.com>
+Co-developed-by: Jens Remus <jremus@linux.ibm.com>
+Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+Co-developed-by: Dylan Hatch <dylanbhatch@google.com>
 Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+
 ---
- MAINTAINERS                         |  3 ++-
- Makefile                            |  8 ++++++++
- arch/Kconfig                        | 31 +++++++++++++++++++++++++++++
- arch/arm64/Kconfig                  |  1 +
- arch/arm64/Makefile                 |  2 +-
- arch/arm64/include/asm/module.lds.h |  2 ++
- arch/arm64/kernel/vdso/Makefile     |  2 +-
- arch/arm64/kernel/vmlinux.lds.S     | 12 +++++++++++
- include/asm-generic/sections.h      |  4 ++++
- include/asm-generic/vmlinux.lds.h   | 15 ++++++++++++++
- 10 files changed, 77 insertions(+), 3 deletions(-)
+
+Changes since v7:
+ - (shashiko) remove KCOV, KCSAN, and KASAN instrumentation from
+   sframe.o (copying over ORC's shoulder).
+---
+ MAINTAINERS               |  1 +
+ arch/arm64/kernel/setup.c |  2 +
+ include/linux/sframe.h    | 32 ++++++++++++++++
+ kernel/unwind/Makefile    |  9 ++++-
+ kernel/unwind/sframe.c    | 80 +++++++++++++++++++++++++++++++++++++++
+ kernel/unwind/sframe.h    | 78 ++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 201 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/sframe.h
+ create mode 100644 kernel/unwind/sframe.c
+ create mode 100644 kernel/unwind/sframe.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 65e8a4b5c90b1..36d7ee1f6ea5e 100644
+index 36d7ee1f6ea5e..d2b62b26f5e94 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -28537,10 +28537,11 @@ F:	Documentation/driver-api/uio-howto.rst
- F:	drivers/uio/
- F:	include/linux/uio_driver.h
- 
--USERSPACE STACK UNWINDING
-+STACK UNWINDING
- M:	Josh Poimboeuf <jpoimboe@kernel.org>
+@@ -28542,6 +28542,7 @@ M:	Josh Poimboeuf <jpoimboe@kernel.org>
  M:	Steven Rostedt <rostedt@goodmis.org>
  S:	Maintained
-+F:	arch/*/include/asm/unwind_sframe.h
+ F:	arch/*/include/asm/unwind_sframe.h
++F:	include/linux/sframe.h
  F:	include/linux/unwind*.h
  F:	kernel/unwind/
  
-diff --git a/Makefile b/Makefile
-index 7c855e6fe5448..5c2ca98a86786 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1197,6 +1197,14 @@ CFLAGS_GCOV	+= $(call try-run,\
- endif
- export CFLAGS_GCOV
+diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
+index 29c6100f0c50b..84983df605ed5 100644
+--- a/arch/arm64/kernel/setup.c
++++ b/arch/arm64/kernel/setup.c
+@@ -32,6 +32,7 @@
+ #include <linux/sched/task.h>
+ #include <linux/scs.h>
+ #include <linux/mm.h>
++#include <linux/sframe.h>
  
-+# build with sframe table
-+ifdef CONFIG_HAVE_UNWIND_KERNEL_SFRAME
-+CC_FLAGS_SFRAME := -Wa,--gsframe-3
-+KBUILD_CFLAGS	+= $(CC_FLAGS_SFRAME)
-+KBUILD_AFLAGS	+= $(CC_FLAGS_SFRAME)
-+export CC_FLAGS_SFRAME
-+endif
-+
- # change __FILE__ to the relative path to the source directory
- ifdef building_out_of_srctree
- KBUILD_CPPFLAGS += -fmacro-prefix-map=$(srcroot)/=
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 45c6577723623..cc59a5da80915 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -507,6 +507,37 @@ config HAVE_UNWIND_USER_FP
- 	bool
- 	select UNWIND_USER
- 
-+config AS_SFRAME
-+	bool
-+
-+config AS_SFRAME3
-+	def_bool $(as-instr,.cfi_startproc\n.cfi_endproc,-Wa$(comma)--gsframe-3)
-+	select AS_SFRAME
-+
-+config UNWIND_SFRAME_LOOKUP
-+	bool
-+
-+config ARCH_SUPPORTS_UNWIND_KERNEL_SFRAME
-+	bool
-+	help
-+	  An architecture can select this if it enables the SFrame (Simple
-+	  Frame) unwinder for unwinding kernel stack traces. It uses an unwind
-+	  table that is directly generated by the toolchain based on DWARF CFI
-+	  information.
-+
-+config HAVE_UNWIND_KERNEL_SFRAME
-+	bool "Sframe unwinder"
-+	depends on AS_SFRAME3
-+	depends on 64BIT
-+	depends on ARCH_SUPPORTS_UNWIND_KERNEL_SFRAME
-+	select UNWIND_SFRAME_LOOKUP
-+	help
-+	  This option enables the SFrame (Simple Frame) unwinder for unwinding
-+	  kernel stack traces. It uses an unwind table that is directly
-+	  generated by the toolchain based on DWARF CFI information. In
-+	  practice, this can provide more reliable stacktrace results than
-+	  unwinding with frame pointers alone.
-+
- config HAVE_PERF_REGS
- 	bool
- 	help
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index cab741a695f52..b438d04044486 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -87,6 +87,7 @@ config ARM64
- 	select ARCH_SUPPORTS_SCHED_SMT
- 	select ARCH_SUPPORTS_SCHED_CLUSTER
- 	select ARCH_SUPPORTS_SCHED_MC
-+	select ARCH_SUPPORTS_UNWIND_KERNEL_SFRAME
- 	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
- 	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
- 	select ARCH_WANT_DEFAULT_BPF_JIT
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 6b005c8fef706..ae1c23579ad2f 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -55,7 +55,7 @@ KBUILD_CFLAGS	+= $(call cc-option,-mabi=lp64)
- KBUILD_AFLAGS	+= $(call cc-option,-mabi=lp64)
- 
- # Avoid generating .eh_frame* sections.
--ifneq ($(CONFIG_UNWIND_TABLES),y)
-+ifeq ($(filter y, $(CONFIG_UNWIND_TABLES) $(CONFIG_HAVE_UNWIND_KERNEL_SFRAME)),)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
- KBUILD_AFLAGS	+= -fno-asynchronous-unwind-tables -fno-unwind-tables
- KBUILD_RUSTFLAGS += -Cforce-unwind-tables=n
-diff --git a/arch/arm64/include/asm/module.lds.h b/arch/arm64/include/asm/module.lds.h
-index 603f92a8a73ed..034cb635e8bcc 100644
---- a/arch/arm64/include/asm/module.lds.h
-+++ b/arch/arm64/include/asm/module.lds.h
-@@ -10,5 +10,7 @@ SECTIONS {
- 	 * put it into the .init allocation.
- 	 */
- 	.init.eh_frame 0 : { *(.eh_frame) }
-+#elif defined(CONFIG_HAVE_UNWIND_KERNEL_SFRAME)
-+	/DISCARD/ : { *(.eh_frame) }
- #endif
+ #include <asm/acpi.h>
+ #include <asm/fixmap.h>
+@@ -373,6 +374,7 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
+ 			"This indicates a broken bootloader or old kernel\n",
+ 			boot_args[1], boot_args[2], boot_args[3]);
+ 	}
++	init_sframe_table();
  }
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index f6619e1cb2ce7..f6d1f59fb11c3 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -38,7 +38,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
- 			$(RANDSTRUCT_CFLAGS) $(KSTACK_ERASE_CFLAGS) \
- 			$(GCC_PLUGINS_CFLAGS) \
--			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
-+			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(CC_FLAGS_SFRAME) \
- 			-Wmissing-prototypes -Wmissing-declarations
  
- CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables $(CONFIG_CC_OPT_INLINE_MEMSET)
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index af1d720209764..eb1f54829503c 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -145,14 +145,25 @@ jiffies = jiffies_64;
- #endif
- 
- #ifdef CONFIG_UNWIND_TABLES
+ static inline bool cpu_can_disable(unsigned int cpu)
+diff --git a/include/linux/sframe.h b/include/linux/sframe.h
+new file mode 100644
+index 0000000000000..54e5cb76cb92c
+--- /dev/null
++++ b/include/linux/sframe.h
+@@ -0,0 +1,32 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_SFRAME_H
++#define _LINUX_SFRAME_H
 +
- #define UNWIND_DATA_SECTIONS				\
- 	.eh_frame : {					\
- 		__pi___eh_frame_start = .;		\
- 		*(.eh_frame)				\
- 		__pi___eh_frame_end = .;		\
- 	}
-+#define SFRAME_DISCARDS
++#include <linux/init.h>
 +
-+#elif defined(CONFIG_HAVE_UNWIND_KERNEL_SFRAME)
++#ifdef CONFIG_UNWIND_SFRAME_LOOKUP
 +
-+#define UNWIND_DATA_SECTIONS
-+#define SFRAME_DISCARDS *(.eh_frame)
++struct sframe_section {
++	unsigned long	sframe_start;
++	unsigned long	sframe_end;
 +
- #else
++	unsigned long	fdes_start;
++	unsigned long	fres_start;
++	unsigned long	fres_end;
++	unsigned int	num_fdes;
 +
- #define UNWIND_DATA_SECTIONS
-+#define SFRAME_DISCARDS
++	signed char	ra_off;
++	signed char	fp_off;
++};
 +
- #endif
- 
- /*
-@@ -184,6 +195,7 @@ SECTIONS
- 		*(.interp .dynamic)
- 		*(.dynsym .dynstr .hash .gnu.hash)
- 		*(.ARM.attributes)
-+		SFRAME_DISCARDS
- 	}
- 
- 	. = KIMAGE_VADDR;
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index 0755bc39b0d80..336d27011a580 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -31,6 +31,7 @@
-  *	__irqentry_text_start, __irqentry_text_end
-  *	__softirqentry_text_start, __softirqentry_text_end
-  *	__start_opd, __end_opd
-+ *	__start_sframe, __end_sframe
-  */
- extern char _text[], _stext[], _etext[];
- extern char _data[], _sdata[], _edata[];
-@@ -53,6 +54,9 @@ extern char __ctors_start[], __ctors_end[];
- /* Start and end of .opd section - used for function descriptors. */
- extern char __start_opd[], __end_opd[];
- 
-+/* Start and end of .sframe section - used for stack unwinding. */
-+extern char __start_sframe[], __end_sframe[];
++extern struct sframe_section kernel_sfsec __ro_after_init;
 +
- /* Start and end of instrumentation protected text section */
- extern char __noinstr_text_start[], __noinstr_text_end[];
- 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2988aa12f664..278f5764d990d 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -491,6 +491,8 @@
- 		*(.rodata1)						\
- 	}								\
- 									\
-+	SFRAME								\
-+									\
- 	/* PCI quirks */						\
- 	.pci_fixup        : AT(ADDR(.pci_fixup) - LOAD_OFFSET) {	\
- 		BOUNDED_SECTION_PRE_LABEL(.pci_fixup_early,  _pci_fixups_early,  __start, __end) \
-@@ -912,6 +914,19 @@
- #define TRACEDATA
- #endif
- 
-+#ifdef CONFIG_HAVE_UNWIND_KERNEL_SFRAME
-+#define SFRAME							\
-+	/* sframe */						\
-+	.sframe : AT(ADDR(.sframe) - LOAD_OFFSET) {		\
-+		__start_sframe = .;			\
-+		KEEP(*(.sframe))				\
-+		KEEP(*(.init.sframe))				\
-+		__end_sframe = .;			\
++void __init init_sframe_table(void);
++
++#else /* !CONFIG_UNWIND_SFRAME_LOOKUP */
++
++static inline void __init init_sframe_table(void) {}
++
++#endif /* CONFIG_UNWIND_SFRAME_LOOKUP */
++
++#endif /* _LINUX_SFRAME_H */
+diff --git a/kernel/unwind/Makefile b/kernel/unwind/Makefile
+index eae37bea54fdb..c5d953e48fe82 100644
+--- a/kernel/unwind/Makefile
++++ b/kernel/unwind/Makefile
+@@ -1 +1,8 @@
+- obj-$(CONFIG_UNWIND_USER)	+= user.o deferred.o
++ obj-$(CONFIG_UNWIND_USER)		+= user.o deferred.o
++
++ KCOV_INSTRUMENT_sframe.o	:= n
++ KASAN_SANITIZE_sframe.o	:= n
++ KCSAN_SANITIZE_sframe.o	:= n
++
++ CFLAGS_REMOVE_sframe.o = $(CC_FLAGS_FTRACE)
++ obj-$(CONFIG_UNWIND_SFRAME_LOOKUP)	+= sframe.o
+diff --git a/kernel/unwind/sframe.c b/kernel/unwind/sframe.c
+new file mode 100644
+index 0000000000000..d43a3b2367fca
+--- /dev/null
++++ b/kernel/unwind/sframe.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Kernel sframe access functions
++ */
++
++#define pr_fmt(fmt)	"sframe: " fmt
++
++#include <linux/mm.h>
++#include <linux/string_helpers.h>
++#include <linux/sframe.h>
++#include <asm/sections.h>
++
++#include "sframe.h"
++
++static bool sframe_init __ro_after_init;
++struct sframe_section kernel_sfsec __ro_after_init;
++
++static int sframe_read_header(struct sframe_section *sec)
++{
++	unsigned long header_end, fdes_start, fdes_end, fres_start, fres_end;
++	struct sframe_header *shdr;
++	unsigned int num_fdes;
++
++	header_end = sec->sframe_start + sizeof(struct sframe_header);
++	if (header_end >= sec->sframe_end) {
++		pr_debug("header struct doesn't fit in section\n");
++		return -EINVAL;
 +	}
-+#else
-+#define SFRAME
-+#endif
 +
- #ifdef CONFIG_PRINTK_INDEX
- #define PRINTK_INDEX							\
- 	.printk_index : AT(ADDR(.printk_index) - LOAD_OFFSET) {		\
++	shdr = (struct sframe_header *)sec->sframe_start;
++
++	if (shdr->preamble.magic != SFRAME_MAGIC ||
++	    shdr->preamble.version != SFRAME_VERSION_3 ||
++	    !(shdr->preamble.flags & SFRAME_F_FDE_SORTED) ||
++	    !(shdr->preamble.flags & SFRAME_F_FDE_FUNC_START_PCREL) ||
++	    shdr->auxhdr_len) {
++		pr_debug("bad/unsupported sframe header\n");
++		return -EINVAL;
++	}
++
++	if (!shdr->num_fdes || !shdr->num_fres) {
++		pr_debug("no fde/fre entries\n");
++		return -EINVAL;
++	}
++
++	num_fdes   = shdr->num_fdes;
++	fdes_start = header_end + shdr->fdes_off;
++	fdes_end   = fdes_start + (num_fdes * sizeof(struct sframe_fde_v3));
++
++	fres_start = header_end + shdr->fres_off;
++	fres_end   = fres_start + shdr->fre_len;
++
++	if (fres_start < fdes_end || fres_end > sec->sframe_end || fres_end < sec->sframe_start) {
++		pr_debug("inconsistent fde/fre offsets\n");
++		return -EINVAL;
++	}
++
++	sec->num_fdes		= num_fdes;
++	sec->fdes_start		= fdes_start;
++	sec->fres_start		= fres_start;
++	sec->fres_end		= fres_end;
++
++	sec->ra_off		= shdr->cfa_fixed_ra_offset;
++	sec->fp_off		= shdr->cfa_fixed_fp_offset;
++
++	return 0;
++}
++
++void __init init_sframe_table(void)
++{
++	kernel_sfsec.sframe_start	= (unsigned long)__start_sframe;
++	kernel_sfsec.sframe_end		= (unsigned long)__end_sframe;
++
++	if (sframe_read_header(&kernel_sfsec)) {
++		pr_warn("invalid vmlinux SFrame header\n");
++		return;
++	}
++
++	sframe_init = true;
++}
+diff --git a/kernel/unwind/sframe.h b/kernel/unwind/sframe.h
+new file mode 100644
+index 0000000000000..bf895107c2070
+--- /dev/null
++++ b/kernel/unwind/sframe.h
+@@ -0,0 +1,78 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * From https://www.sourceware.org/binutils/docs/sframe-spec.html
++ */
++#ifndef _SFRAME_H
++#define _SFRAME_H
++
++#include <linux/types.h>
++
++#define SFRAME_VERSION_1			1
++#define SFRAME_VERSION_2			2
++#define SFRAME_VERSION_3			3
++#define SFRAME_MAGIC				0xdee2
++
++#define SFRAME_F_FDE_SORTED			0x1
++#define SFRAME_F_FRAME_POINTER			0x2
++#define SFRAME_F_FDE_FUNC_START_PCREL		0x4
++
++#define SFRAME_ABI_AARCH64_ENDIAN_BIG		1
++#define SFRAME_ABI_AARCH64_ENDIAN_LITTLE	2
++#define SFRAME_ABI_AMD64_ENDIAN_LITTLE		3
++
++struct sframe_preamble {
++	u16	magic;
++	u8	version;
++	u8	flags;
++} __packed;
++
++struct sframe_header {
++	struct sframe_preamble preamble;
++	u8	abi_arch;
++	s8	cfa_fixed_fp_offset;
++	s8	cfa_fixed_ra_offset;
++	u8	auxhdr_len;
++	u32	num_fdes;
++	u32	num_fres;
++	u32	fre_len;
++	u32	fdes_off;
++	u32	fres_off;
++} __packed;
++
++struct sframe_fde_v3 {
++	s64	func_start_off;
++	u32	func_size;
++	u32	fres_off;
++} __packed;
++
++struct sframe_fda_v3 {
++	u16	fres_num;
++	u8	info;
++	u8	info2;
++	u8	rep_size;
++} __packed;
++
++#define SFRAME_FDE_PCTYPE_INC			0
++#define SFRAME_FDE_PCTYPE_MASK			1
++
++#define SFRAME_AARCH64_PAUTH_KEY_A		0
++#define SFRAME_AARCH64_PAUTH_KEY_B		1
++
++#define SFRAME_V3_FDE_FRE_TYPE(info)		((info) & 0xf)
++#define SFRAME_V3_FDE_PCTYPE(info)		(((info) >> 4) & 0x1)
++#define SFRAME_V3_AARCH64_FDE_PAUTH_KEY(info)	(((info) >> 5) & 0x1)
++
++#define SFRAME_FDE_TYPE_DEFAULT			0
++
++#define SFRAME_V3_FDE_TYPE_MASK			0x1f
++#define SFRAME_V3_FDE_TYPE(info2)		((info2) & SFRAME_V3_FDE_TYPE_MASK)
++
++#define SFRAME_BASE_REG_FP			0
++#define SFRAME_BASE_REG_SP			1
++
++#define SFRAME_V3_FRE_CFA_BASE_REG_ID(info)		((info) & 0x1)
++#define SFRAME_V3_FRE_DATAWORD_COUNT(info)		(((info) >> 1) & 0xf)
++#define SFRAME_V3_FRE_DATAWORD_SIZE(info)		(((info) >> 5) & 0x3)
++#define SFRAME_V3_AARCH64_FRE_MANGLED_RA_P(info)	(((info) >> 7) & 0x1)
++
++#endif /* _SFRAME_H */
 -- 
 2.56.0.360.g66cac248cb-goog
 
