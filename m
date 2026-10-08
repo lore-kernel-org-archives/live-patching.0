@@ -1,63 +1,63 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6562A494819
-	for <live-patching@vger.kernel.org>; Thu,  8 Oct 2026 09:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BC449505D
+	for <live-patching@vger.kernel.org>; Thu,  8 Oct 2026 09:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791453573; cv=none; b=lbmN1WtHG5c8H52QgZyHO9BsCidT6ymzpqX3UfMX7C4rtg7naALSRexVOzxHfVR9Qtvjrx8FYn9aeU+tVDxNAEz3Yt/0CLqkev8Io+X6xxf8ppSFHZrswCiV8akI1TE7aQDUMDCuHAfQJDvjNLf1pwO6RuKnMaQrlLzS/Sh0KTM=
+	t=1791453576; cv=none; b=p+ysTKpfxFps2A9XtxL3lfguugGST82Z5Za7/NiapqNu1Rywotargb8S104VCMQXaH7w9oNzqEqBo2JIopZ1NgO10Ip7jG36m5gmHfct+AwSfNnr4gTZFdq+UG1+TzAK+n+T+880kQ75UKAVq6x3h6UpKXlV04IUFBYayjWUh0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791453573; c=relaxed/simple;
-	bh=J/nABUsAUffsgJ2bg75yJh97qdGiX04b3hTSUSKn/y8=;
+	s=arc-20240116; t=1791453576; c=relaxed/simple;
+	bh=TTmm/JiwM7rex0JkiB1ropg5AYtieGpfIx6c4EeIo+8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TjTO7zdtkoXVW5ulS1Bu5mvqrvaXN4t1NMTHnKPaxnm6r/K054UutTk379bpWTz+cypz2zTBBu+szRB4gYvZjtMr06dxI/tvD7Y7PBTdnjQIA4ypfLzNpOCVk3Ts63PZujFRbtCTeIMlg+jEhFea/gTYml1Qa+2Mev5gv6R7dmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJc+iHOJ; arc=none smtp.client-ip=209.85.216.49
+	 MIME-Version; b=Q3eq/ZDsSujs6ox9UO7LDWduwER7Rd8aYUqbP9jrp21PY+5pgqx+9NCgERmvxqGR7I7JDIo6v59xIbY0b6h0zmmmqRRhbJU21JR5s0m5o0ePpQUV7OsoWfJIvKej6byNQAabN2iDRgpPC1J7fVbPQw9qGL2mCMQU0YcZImzhWlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEkKd59r; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJc+iHOJ"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3a8adb68d8bso1235885a91.1
-        for <live-patching@vger.kernel.org>; Thu, 08 Oct 2026 02:59:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEkKd59r"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso2051464a91.0
+        for <live-patching@vger.kernel.org>; Thu, 08 Oct 2026 02:59:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791453561; x=1792058361; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791453567; x=1792058367; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=29WAxgrm80vcWqZ/fapUYVz0x0d94pFhtyFWqW+O8+g=;
-        b=VJc+iHOJis2ljbPOeeC3c7xJKJ9V17BNEgozjwyYwA9R1f9bIA28bedsM5U0uwfxT+
-         M9I2bOAbW4V4m3rUVmDnR2LFPefuysCiIjXisQlALVIdCgH4Dbp1J2wwlvlHE976Yfac
-         d0zdQ2ppqKeiuXhYC9kK8Py2PHTo4OcSsKfDuMTZ38ycYbg6Bkgmc0IWjjnKNpe2oZX5
-         OBTkN0qSq7PfKABe6VyrprzWO9G35WInHVWmhSwpMEDTmHJeBLKZ2rGMqBgisog66Npf
-         C2jorUrU8g/phrbB4PGGQ2i0UiUkv+Y5LDvJIiRlYMFBgR32RFdL9/Pgg3V0zXuLwdK8
-         2/DQ==
+        bh=OlPgHKy4wplHuzogabgKJQHpma7ybFczSL9aCnuSDNg=;
+        b=pEkKd59rM8GwTAnqZaJ5nGoe2UHVfQlqK7144ULFlZwBbF4mSw3EzDPBikhz1hMhcr
+         YSO6d3okudZ9UZQrX6e2/tokUvqniaI1dGTNAT5ldwIU+8nm099l5hwC2Wpo89XwdEVm
+         Rtqu5+J2Dohtj3q4iLB5JrIFLdS0v/NKYMzlSUhM9jU+QVjezm+o/q3Jwmu1vgqXD9aD
+         0selyD+aXtICmj9awErkNqLX4Xr2dvmPC46COyH5HRj8Yz6RGyISRiHMtXjntnxXqjnN
+         HEA+EtO0XfKFmDkUqCa/yT3nt+RtA/8TPFvXdxKSGEPa0oc5Iy/HVkJB49vCRncYrugh
+         Og9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791453561; x=1792058361;
+        d=1e100.net; s=20260707; t=1791453567; x=1792058367;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=29WAxgrm80vcWqZ/fapUYVz0x0d94pFhtyFWqW+O8+g=;
-        b=ZnqvcBjdnh89uBtKyKROOIDGCQdB9cSJhMD8rzmYrjIeOBJE7gkjabEwI4XM81j8+R
-         M7+vuo7UPwlhIJUHXU7aA8TbgkC+PErn8wjDtHRZdBR2imd10pLBbb3vfHqSE/2wuYYk
-         bC2ICnmE3WPFsuZT1+zbtvwpaFlFm0P6I5gg6HMFod7a8N7dD2jm60aTTiYwpKT67zO3
-         m3jKBfi2kPWdrwtwkn1tp5aEugSLgKgBdwYlNKHe+Nv38dfjHDPcEb4v6pbvGqv54gTX
-         m8Vk/SuWHKEwhETSVQ+fgFhUpEykD7n1RS1yxupDq0VqVJYImi5xFB3dcBU7d4NA+ozk
-         un/w==
-X-Gm-Message-State: AFq9FYLVrcHGWyzR+0MTU+xuZpMSMCB6YJwA5mT0Uv3BvRGFqnsRRM+H
-	uj5y1z+3nZpsDCeZj2/ymcR3kF3gApus5beP457lo5tHU5eSvUWUIH90
-X-Gm-Gg: AYBFou2lZJe1SfdX9sH+H1yG9VuvuZRbsJM5BR88ShOLN7B1rqxElcS3XOXT4T68AHL
-	LnU/wlyIG0GKBxzcPkLl1+Lr6UmvvLGQWsF9qBAHsnAO++w2+zFpEOWDG30pL2M7KwaEwcMzvz2
-	uSWbhm/bGhsqTlP3xlnG/XXVXM5LSd1yqFF5ngUOzVba7CjG9GZ70pRkJGzguuAyG5GJ2WhY8Ap
-	h8rLl1DPFQZaQkp3Bt52IqsrjapPDHc7pUhs1t6dppY5t4wHm7YnfyJSlS88cHkZjeuDSoSTeYm
-	oPo0ZwYFhvbVLU3cucSBxbpiJ23bNuHH2ZAMkQPDIxNnnUZMYLECqvt4Vf+osnbptQsudSOCjd+
-	zMrCpIbCwBg97FC3QT78gCuqHBVPRA+KrEGLoufjoKc6+Y7YtJ6F8mYoGQfbjdl+yEOCJrHe/Nt
-	6iwi0RX8lD8L91S9EMVYKFxL09cTAFWxc9bVo9psOfNScKwDrlOczuodpFQyYAEzRfPW3yfL8UX
-	FiiMjH7z9ExnoeuT5jb5oyP5oRJyZJKmPTHSGY4/AfC2IEVYmMg9fx3
-X-Received: by 2002:a17:90b:4a89:b0:3a4:f6b0:7de with SMTP id 98e67ed59e1d1-3a8a08515acmr4473982a91.22.1791453561343;
-        Thu, 08 Oct 2026 02:59:21 -0700 (PDT)
+        bh=OlPgHKy4wplHuzogabgKJQHpma7ybFczSL9aCnuSDNg=;
+        b=1uUKUJNiHmkwcLS0Smw7AznctDtg/HH0SmXrlz5MUkSxPOFYG0EdzDlD2kiN25jqyx
+         +YQv3fo5uG9cu/TFb78dURB5AY5kCr87rhjdezKPaNyosny0yYbE/cccWt3RWHCNz3OW
+         n1ZM6i8HsRSpt+b7xaU3QvOTJVXTZhgZq2vw0gr+VIgsqALd0a2q3KyIXqwJHX87K8Vt
+         Gj0psOfgEpxWYdbbCEz+e4HtGkiywPQ5g9Yo8VDFyS0EH22t/e8T2uPagLcxsUfvVs3s
+         r1WFPbQBI4yMKJingdlShMVolQfEfEMNmOH8jB11OyCiWCQ/RrnHUaLiOodv9/lLruNQ
+         ckHw==
+X-Gm-Message-State: AFq9FYKB1r9+lF2ltjoSkMESW4BKyZzcfBQJRuitvhICDLIj7evFJGji
+	i7l+vOixRQEh6oS/s/MbQye2HBAWUFb6HigB0CemgpiwLZHsiQqxDlo5
+X-Gm-Gg: AYBFou0BfVxDOjEvHFIZCjeO4KpxpID5hfmEfw/KKIwpBWd/xnG0D+Zut8bbUupsIur
+	N75Xja9WSvYHmT+h8Z4g9XDW0Y5A5t+H/yQ7ORqM21R+if12dyzkIZYvhfu1rUiV4202WU3eWpg
+	VW6RmVgOAU46+2Y6291WnbkTVVc4aKXTR2cZrT9sFL4vlXFUbZR5tRhg088nRr0i0Ubt7JBObIt
+	hoEoeatnTHu+nkzmzpj4rYm/Mxuwtj77qOIP/5YUBaQEsrRgI0pUVFoYPC0QhClyjr7BCLsorKz
+	c4D0BV9jwdeOM+m2eGQZNNsFXOwm0BKFrwggervg3OJpO/XD39OTPnTgBFGDlplsQmnH9ZQ8ddv
+	Vdbc8G4CtQtGhpzGXSIrfVl7mTw4wf6nW+sPByEDFZsJbQpanqNpJpngEuBYqA2nhG4RNZHFcXJ
+	lcVLeCX/+7oAK++4mJl4LkIhCgOBBPTSBJfPIiW81MhawXPVB2iGwV+BMk6hKhDc/8h3rMyr6pi
+	sIJ7ZJYG4bXyxQfcpSZY/xlLgrvFnAvPehaXNZgI8aTUq1X8ehEmbs22fE8HKK1RVM=
+X-Received: by 2002:a17:90b:5102:b0:3ab:f38:2b3c with SMTP id 98e67ed59e1d1-3ab0f385291mr458671a91.28.1791453566932;
+        Thu, 08 Oct 2026 02:59:26 -0700 (PDT)
 Received: from yafangs-Air ([240e:46c:2100:3ace:b801:9432:769f:ff9d])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a9ff7ff13esm3422790a91.7.2026.10.08.02.59.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a9ff7ff13esm3422790a91.7.2026.10.08.02.59.21
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Oct 2026 02:59:21 -0700 (PDT)
+        Thu, 08 Oct 2026 02:59:26 -0700 (PDT)
 From: Yafang Shao <laoar.shao@gmail.com>
 To: jpoimboe@kernel.org,
 	jikos@kernel.org,
@@ -68,9 +68,9 @@ To: jpoimboe@kernel.org,
 Cc: live-patching@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v11 8/9] selftests/livepatch: Add state test for provides/obsoletes
-Date: Thu,  8 Oct 2026 17:58:29 +0800
-Message-ID: <20261008095830.26308-9-laoar.shao@gmail.com>
+Subject: [PATCH v11 9/9] selftests/livepatch: Add function test for provides/obsoletes
+Date: Thu,  8 Oct 2026 17:58:30 +0800
+Message-ID: <20261008095830.26308-10-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20261008095830.26308-1-laoar.shao@gmail.com>
 References: <20261008095830.26308-1-laoar.shao@gmail.com>
@@ -82,490 +82,249 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Livepatches with different provides ids must not share the same state
-id, unless the second livepatch replaces the first one via obsoletes.
+Livepatches with different provides ids must not modify the same
+function, unless they share the same provides id or the second
+livepatch obsoletes the first one.
 
-Add provides/obsoletes module parameters to test_klp_state and
-test_klp_state2, and cover both cases: reusing a state id across
-different provides ids is rejected, while it is allowed when the new
-livepatch obsoletes the old one.
+Add test scenarios that verify this rule on the combination of
+patched functions and provides ids.
+
+These tests are skipped on kernels that still support the legacy
+"replace" attribute.
 
 Suggested-by: Petr Mladek <pmladek@suse.com>
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- .../livepatch/test-provides-obsoletes.sh      | 239 ++++++++++++++++++
- .../livepatch/test_modules/test_klp_state.c   |  36 ++-
- .../livepatch/test_modules/test_klp_state2.c  |  44 +++-
- 3 files changed, 303 insertions(+), 16 deletions(-)
+ .../livepatch/test-provides-obsoletes.sh      | 188 ++++++++++++++++++
+ .../selftests/livepatch/test_modules/Makefile |   1 +
+ .../test_modules/test_klp_meminfo_lp2.c       |   2 +
+ 3 files changed, 191 insertions(+)
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
 
 diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-index 78a644f6ec56..b92188fcf45f 100755
+index b92188fcf45f..fce421a45fdb 100755
 --- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
 +++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-@@ -6,6 +6,8 @@
+@@ -5,6 +5,7 @@
+ . $(dirname $0)/functions.sh
  
  MOD_MEMINFO=test_klp_meminfo_lp
++MOD_MEMINFO2=test_klp_meminfo_lp2
  MOD_CMDLINE=test_klp_cmdline_lp
-+MOD_STATE=test_klp_state
-+MOD_STATE2=test_klp_state2
- 
- setup_config
- detect_provides_attr
-@@ -226,4 +228,241 @@ livepatch: '$MOD_MEMINFO': completing unpatching transition
- livepatch: '$MOD_MEMINFO': unpatching complete
- % rmmod $MOD_MEMINFO"
+ MOD_STATE=test_klp_state
+ MOD_STATE2=test_klp_state2
+@@ -465,4 +466,191 @@ $MOD_STATE: free_loglevel_state: freeing space for the stored console_loglevel
+ livepatch: '$MOD_STATE': unpatching complete
+ % rmmod $MOD_STATE"
  
 +
-+# - load a livepatch with provides=1 that registers state ID 1
-+# - try to load another livepatch with provides=1 that reuses the same
-+#   state ID. The second one will replace the first one.
-+# - disable and unload the remaining livepatch
++# - load two livepatches that modify the same function
++#   (meminfo_proc_show), both with provides=1. The second livepatch
++#   replaces the first one because of the same provides id, even
++#   though they share the patched function.
++# - verify that the first livepatch is gone from sysfs (replaced)
++#   and that the second one is enabled
++# - unload the replacing livepatch, then the replaced one
 +
-+start_test "same state, same provides"
++start_test "same function, replaced by provides"
 +
-+load_lp $MOD_STATE state=1 provides=1
-+load_lp $MOD_STATE2 state=1 provides=1
++load_lp $MOD_MEMINFO provides=1
 +
-+disable_lp $MOD_STATE2
-+unload_lp $MOD_STATE2
-+unload_lp $MOD_STATE
++grep 'live patched' /proc/meminfo > /dev/kmsg
 +
-+check_result "% insmod test_modules/$MOD_STATE.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE'
-+livepatch: '$MOD_STATE': initializing patching transition
-+$MOD_STATE: pre_patch_callback: vmlinux
-+$MOD_STATE: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE': starting patching transition
-+livepatch: '$MOD_STATE': completing patching transition
-+$MOD_STATE: post_patch_callback: vmlinux
-+$MOD_STATE: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE': patching complete
-+% insmod test_modules/$MOD_STATE2.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE2'
-+livepatch: '$MOD_STATE2': initializing patching transition
-+$MOD_STATE2: pre_patch_callback: vmlinux
-+$MOD_STATE2: allocate_loglevel_state: space to store console_loglevel already allocated
-+livepatch: '$MOD_STATE2': starting patching transition
-+livepatch: '$MOD_STATE2': completing patching transition
-+$MOD_STATE2: post_patch_callback: vmlinux
-+$MOD_STATE2: fix_console_loglevel: taking over the console_loglevel change
-+livepatch: '$MOD_STATE2': patching complete
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE2/enabled
-+livepatch: '$MOD_STATE2': initializing unpatching transition
-+$MOD_STATE2: pre_unpatch_callback: vmlinux
-+$MOD_STATE2: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE2': starting unpatching transition
-+livepatch: '$MOD_STATE2': completing unpatching transition
-+$MOD_STATE2: post_unpatch_callback: vmlinux
-+$MOD_STATE2: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE2': unpatching complete
-+% rmmod $MOD_STATE2
-+% rmmod $MOD_STATE"
++load_lp $MOD_MEMINFO2 provides=1
 +
++loop_until '[[ ! -e "$SYSFS_KLP_DIR/$MOD_MEMINFO" ]]' ||
++	die "failed to replace $MOD_MEMINFO"
 +
-+# - load a livepatch with provides=1 that registers state ID 1
-+# - try to load another livepatch with provides=2 that reuses the same
-+#   state ID. The second one must be rejected because livepatches with
-+#   different provides ids must not share the same state id.
-+# - disable and unload the remaining livepatch
++grep 'live patched' /proc/meminfo > /dev/kmsg
 +
-+start_test "same state, misc provides"
++check_sysfs_value "$MOD_MEMINFO2" "provides" "1"
 +
-+load_lp $MOD_STATE state=1 provides=1
-+load_failing_mod $MOD_STATE2 state=1 provides=2
++disable_lp $MOD_MEMINFO2
++unload_lp $MOD_MEMINFO2
 +
-+disable_lp $MOD_STATE
-+unload_lp $MOD_STATE
++grep 'live patched' /proc/meminfo > /dev/kmsg
 +
-+check_result "% insmod test_modules/$MOD_STATE.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE'
-+livepatch: '$MOD_STATE': initializing patching transition
-+$MOD_STATE: pre_patch_callback: vmlinux
-+$MOD_STATE: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE': starting patching transition
-+livepatch: '$MOD_STATE': completing patching transition
-+$MOD_STATE: post_patch_callback: vmlinux
-+$MOD_STATE: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE': patching complete
-+% insmod test_modules/$MOD_STATE2.ko state=1 provides=2
-+livepatch: Livepatch patch ($MOD_STATE2) is not compatible with the already installed livepatches.
-+insmod: ERROR: could not insert module test_modules/$MOD_STATE2.ko: Invalid parameters
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE/enabled
-+livepatch: '$MOD_STATE': initializing unpatching transition
-+$MOD_STATE: pre_unpatch_callback: vmlinux
-+$MOD_STATE: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE': starting unpatching transition
-+livepatch: '$MOD_STATE': completing unpatching transition
-+$MOD_STATE: post_unpatch_callback: vmlinux
-+$MOD_STATE: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE': unpatching complete
-+% rmmod $MOD_STATE"
++unload_lp $MOD_MEMINFO
++
++check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
++livepatch: enabling patch '$MOD_MEMINFO'
++livepatch: '$MOD_MEMINFO': initializing patching transition
++livepatch: '$MOD_MEMINFO': starting patching transition
++livepatch: '$MOD_MEMINFO': completing patching transition
++livepatch: '$MOD_MEMINFO': patching complete
++$MOD_MEMINFO: this has been live patched
++% insmod test_modules/$MOD_MEMINFO2.ko provides=1
++livepatch: enabling patch '$MOD_MEMINFO2'
++livepatch: '$MOD_MEMINFO2': initializing patching transition
++livepatch: '$MOD_MEMINFO2': starting patching transition
++livepatch: '$MOD_MEMINFO2': completing patching transition
++livepatch: '$MOD_MEMINFO2': patching complete
++$MOD_MEMINFO2: this has been live patched
++% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO2/enabled
++livepatch: '$MOD_MEMINFO2': initializing unpatching transition
++livepatch: '$MOD_MEMINFO2': starting unpatching transition
++livepatch: '$MOD_MEMINFO2': completing unpatching transition
++livepatch: '$MOD_MEMINFO2': unpatching complete
++% rmmod $MOD_MEMINFO2
++% rmmod $MOD_MEMINFO"
 +
 +
-+# Take over system state change by a patch that obsoletes the old one.
-+# Although the provides IDs are different, the second patch's obsoletes
-+# list includes the first patch's provides ID, so it can replace the
-+# first patch and reuse the same state ID.
++# - load a livepatch that modifies meminfo_proc_show with provides=1,
++#   then try to load another livepatch that modifies the same
++#   function with a different provides id (provides=2).
++# - since the provides ids differ, the second livepatch would not
++#   replace the first one; the same function can not be handled by
++#   two different provides groups in parallel, so the load must fail.
++# - unload the first livepatch
 +
-+start_test "same states, replaced by obsoletes"
++start_test "same function, can't be loaded in parallel"
 +
-+load_lp $MOD_STATE state=1 provides=1
-+load_lp $MOD_STATE2 state=1 provides=2 obsoletes=1
-+unload_lp $MOD_STATE
-+disable_lp $MOD_STATE2
-+unload_lp $MOD_STATE2
++load_lp $MOD_MEMINFO provides=1
++load_failing_mod $MOD_MEMINFO2 provides=2
 +
-+check_result "% insmod test_modules/$MOD_STATE.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE'
-+livepatch: '$MOD_STATE': initializing patching transition
-+$MOD_STATE: pre_patch_callback: vmlinux
-+$MOD_STATE: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE': starting patching transition
-+livepatch: '$MOD_STATE': completing patching transition
-+$MOD_STATE: post_patch_callback: vmlinux
-+$MOD_STATE: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE': patching complete
-+% insmod test_modules/$MOD_STATE2.ko state=1 provides=2 obsoletes=1
-+livepatch: enabling patch '$MOD_STATE2'
-+livepatch: '$MOD_STATE2': initializing patching transition
-+$MOD_STATE2: pre_patch_callback: vmlinux
-+$MOD_STATE2: allocate_loglevel_state: space to store console_loglevel already allocated
-+livepatch: '$MOD_STATE2': starting patching transition
-+livepatch: '$MOD_STATE2': completing patching transition
-+$MOD_STATE2: post_patch_callback: vmlinux
-+$MOD_STATE2: fix_console_loglevel: taking over the console_loglevel change
-+livepatch: '$MOD_STATE2': patching complete
-+% rmmod $MOD_STATE
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE2/enabled
-+livepatch: '$MOD_STATE2': initializing unpatching transition
-+$MOD_STATE2: pre_unpatch_callback: vmlinux
-+$MOD_STATE2: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE2': starting unpatching transition
-+livepatch: '$MOD_STATE2': completing unpatching transition
-+$MOD_STATE2: post_unpatch_callback: vmlinux
-+$MOD_STATE2: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE2': unpatching complete
-+% rmmod $MOD_STATE2"
++disable_lp $MOD_MEMINFO
++unload_lp $MOD_MEMINFO
++
++check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
++livepatch: enabling patch '$MOD_MEMINFO'
++livepatch: '$MOD_MEMINFO': initializing patching transition
++livepatch: '$MOD_MEMINFO': starting patching transition
++livepatch: '$MOD_MEMINFO': completing patching transition
++livepatch: '$MOD_MEMINFO': patching complete
++% insmod test_modules/$MOD_MEMINFO2.ko provides=2
++livepatch: Livepatch patch ($MOD_MEMINFO2) is not compatible with the already installed livepatches.
++insmod: ERROR: could not insert module test_modules/$MOD_MEMINFO2.ko: Invalid parameters
++% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO/enabled
++livepatch: '$MOD_MEMINFO': initializing unpatching transition
++livepatch: '$MOD_MEMINFO': starting unpatching transition
++livepatch: '$MOD_MEMINFO': completing unpatching transition
++livepatch: '$MOD_MEMINFO': unpatching complete
++% rmmod $MOD_MEMINFO"
 +
 +
-+# - load a livepatch that modifies system state (state=1) with
-+#   provides=1, then another livepatch with the same provides id=1 that declares
-+#   a different system state (state=2)
-+# - the second livepatch would replace the first one due to the same
-+#   provides id, but it does not handle the system state modified by
-+#   the first one, therefore it is rejected as incompatible and the
-+#   insmod must fail.
-+# - verify the first livepatch is still alive, then disable and
-+#   unload it.
++# - load a livepatch that modifies meminfo_proc_show with provides=1,
++#   then another livepatch with provides=1 that modifies a different
++#   function (cmdline_proc_show). The second one replaces the first
++#   one because of the same provides id.
++# - since the patched functions differ, the replacement does not need
++#   to restore the old function body; the transition only switches
++#   the ftrace nops, i.e. the atomic replace (nops) path.
++# - after the replacement /proc/meminfo is no longer patched, while
++#   /proc/cmdline is patched
++# - unload the replacing livepatch, then the replaced one
 +
-+start_test "misc states, same provides"
-+load_lp $MOD_STATE state=1 provides=1
-+load_failing_mod $MOD_STATE2 state=2 provides=1
++start_test "different functions, atomic replace works (nops)"
 +
-+disable_lp $MOD_STATE
-+unload_lp $MOD_STATE
++load_lp $MOD_MEMINFO provides=1
 +
-+check_result "% insmod test_modules/$MOD_STATE.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE'
-+livepatch: '$MOD_STATE': initializing patching transition
-+$MOD_STATE: pre_patch_callback: vmlinux
-+$MOD_STATE: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE': starting patching transition
-+livepatch: '$MOD_STATE': completing patching transition
-+$MOD_STATE: post_patch_callback: vmlinux
-+$MOD_STATE: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE': patching complete
-+% insmod test_modules/$MOD_STATE2.ko state=2 provides=1
-+livepatch: Livepatch patch ($MOD_STATE2) is not compatible with the already installed livepatches.
-+insmod: ERROR: could not insert module test_modules/$MOD_STATE2.ko: Invalid parameters
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE/enabled
-+livepatch: '$MOD_STATE': initializing unpatching transition
-+$MOD_STATE: pre_unpatch_callback: vmlinux
-+$MOD_STATE: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE': starting unpatching transition
-+livepatch: '$MOD_STATE': completing unpatching transition
-+$MOD_STATE: post_unpatch_callback: vmlinux
-+$MOD_STATE: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE': unpatching complete
-+% rmmod $MOD_STATE"
++grep 'live patched' /proc/meminfo > /dev/kmsg
++
++load_lp $MOD_CMDLINE provides=1
++
++grep 'live patched' /proc/meminfo > /dev/kmsg
++grep 'live patched' /proc/cmdline > /dev/kmsg
++
++disable_lp $MOD_CMDLINE
++unload_lp $MOD_CMDLINE
++unload_lp $MOD_MEMINFO
++
++check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
++livepatch: enabling patch '$MOD_MEMINFO'
++livepatch: '$MOD_MEMINFO': initializing patching transition
++livepatch: '$MOD_MEMINFO': starting patching transition
++livepatch: '$MOD_MEMINFO': completing patching transition
++livepatch: '$MOD_MEMINFO': patching complete
++$MOD_MEMINFO: this has been live patched
++% insmod test_modules/$MOD_CMDLINE.ko provides=1
++livepatch: enabling patch '$MOD_CMDLINE'
++livepatch: '$MOD_CMDLINE': initializing patching transition
++livepatch: '$MOD_CMDLINE': starting patching transition
++livepatch: '$MOD_CMDLINE': completing patching transition
++livepatch: '$MOD_CMDLINE': patching complete
++$MOD_CMDLINE: this has been live patched
++% echo 0 > $SYSFS_KLP_DIR/$MOD_CMDLINE/enabled
++livepatch: '$MOD_CMDLINE': initializing unpatching transition
++livepatch: '$MOD_CMDLINE': starting unpatching transition
++livepatch: '$MOD_CMDLINE': completing unpatching transition
++livepatch: '$MOD_CMDLINE': unpatching complete
++% rmmod $MOD_CMDLINE
++% rmmod $MOD_MEMINFO"
 +
 +
-+# - load two livepatches with different provides ids (provides=1 and
-+#   provides=2) that modify different system states (state=1 and
-+#   state=2). Neither of them replaces the other, because their
-+#   provides ids differ (and the obsoletes lists are empty), so they
-+#   can coexist.
-+# - verify the provides sysfs value of both livepatches
++# - load two livepatches with different provides ids (1 and 2) that
++#   modify different functions (meminfo_proc_show and
++#   cmdline_proc_show). Neither of them replaces the other, so both
++#   livepatches must coexist.
++# - verify that both /proc/meminfo and /proc/cmdline are patched
 +# - disable and unload both livepatches
 +
-+start_test "misc states, misc provides"
++start_test "different functions, install in parallel"
 +
-+load_lp $MOD_STATE state=1 provides=1
-+load_lp $MOD_STATE2 state=2 provides=2
++load_lp $MOD_MEMINFO provides=1
 +
-+check_sysfs_value "$MOD_STATE" "provides" "1"
-+check_sysfs_value "$MOD_STATE2" "provides" "2"
++grep 'live patched' /proc/meminfo > /dev/kmsg
 +
-+disable_lp $MOD_STATE2
-+unload_lp $MOD_STATE2
-+disable_lp $MOD_STATE
-+unload_lp $MOD_STATE
++load_lp $MOD_CMDLINE provides=2
 +
-+check_result "% insmod test_modules/$MOD_STATE.ko state=1 provides=1
-+livepatch: enabling patch '$MOD_STATE'
-+livepatch: '$MOD_STATE': initializing patching transition
-+$MOD_STATE: pre_patch_callback: vmlinux
-+$MOD_STATE: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE': starting patching transition
-+livepatch: '$MOD_STATE': completing patching transition
-+$MOD_STATE: post_patch_callback: vmlinux
-+$MOD_STATE: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE': patching complete
-+% insmod test_modules/$MOD_STATE2.ko state=2 provides=2
-+livepatch: enabling patch '$MOD_STATE2'
-+livepatch: '$MOD_STATE2': initializing patching transition
-+$MOD_STATE2: pre_patch_callback: vmlinux
-+$MOD_STATE2: allocate_loglevel_state: allocating space to store console_loglevel
-+livepatch: '$MOD_STATE2': starting patching transition
-+livepatch: '$MOD_STATE2': completing patching transition
-+$MOD_STATE2: post_patch_callback: vmlinux
-+$MOD_STATE2: fix_console_loglevel: fixing console_loglevel
-+livepatch: '$MOD_STATE2': patching complete
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE2/enabled
-+livepatch: '$MOD_STATE2': initializing unpatching transition
-+$MOD_STATE2: pre_unpatch_callback: vmlinux
-+$MOD_STATE2: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE2': starting unpatching transition
-+livepatch: '$MOD_STATE2': completing unpatching transition
-+$MOD_STATE2: post_unpatch_callback: vmlinux
-+$MOD_STATE2: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE2': unpatching complete
-+% rmmod $MOD_STATE2
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_STATE/enabled
-+livepatch: '$MOD_STATE': initializing unpatching transition
-+$MOD_STATE: pre_unpatch_callback: vmlinux
-+$MOD_STATE: restore_console_loglevel: restoring console_loglevel
-+livepatch: '$MOD_STATE': starting unpatching transition
-+livepatch: '$MOD_STATE': completing unpatching transition
-+$MOD_STATE: post_unpatch_callback: vmlinux
-+$MOD_STATE: free_loglevel_state: freeing space for the stored console_loglevel
-+livepatch: '$MOD_STATE': unpatching complete
-+% rmmod $MOD_STATE"
++grep 'live patched' /proc/meminfo > /dev/kmsg
++grep 'live patched' /proc/cmdline > /dev/kmsg
++
++disable_lp $MOD_MEMINFO
++unload_lp $MOD_MEMINFO
++disable_lp $MOD_CMDLINE
++unload_lp $MOD_CMDLINE
++
++check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
++livepatch: enabling patch '$MOD_MEMINFO'
++livepatch: '$MOD_MEMINFO': initializing patching transition
++livepatch: '$MOD_MEMINFO': starting patching transition
++livepatch: '$MOD_MEMINFO': completing patching transition
++livepatch: '$MOD_MEMINFO': patching complete
++$MOD_MEMINFO: this has been live patched
++% insmod test_modules/$MOD_CMDLINE.ko provides=2
++livepatch: enabling patch '$MOD_CMDLINE'
++livepatch: '$MOD_CMDLINE': initializing patching transition
++livepatch: '$MOD_CMDLINE': starting patching transition
++livepatch: '$MOD_CMDLINE': completing patching transition
++livepatch: '$MOD_CMDLINE': patching complete
++$MOD_MEMINFO: this has been live patched
++$MOD_CMDLINE: this has been live patched
++% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO/enabled
++livepatch: '$MOD_MEMINFO': initializing unpatching transition
++livepatch: '$MOD_MEMINFO': starting unpatching transition
++livepatch: '$MOD_MEMINFO': completing unpatching transition
++livepatch: '$MOD_MEMINFO': unpatching complete
++% rmmod $MOD_MEMINFO
++% echo 0 > $SYSFS_KLP_DIR/$MOD_CMDLINE/enabled
++livepatch: '$MOD_CMDLINE': initializing unpatching transition
++livepatch: '$MOD_CMDLINE': starting unpatching transition
++livepatch: '$MOD_CMDLINE': completing unpatching transition
++livepatch: '$MOD_CMDLINE': unpatching complete
++% rmmod $MOD_CMDLINE"
 +
  exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-index f53eead9d55b..3511cf081fef 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
-@@ -9,10 +9,25 @@
- #include <linux/printk.h>
- #include <linux/livepatch.h>
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+index 732e0003930b..0c17754997d2 100644
+--- a/tools/testing/selftests/livepatch/test_modules/Makefile
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -2,6 +2,7 @@ TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
+ KDIR ?= /lib/modules/$(shell uname -r)/build
  
--#define CONSOLE_LOGLEVEL_STATE 1
- /* Version 1 does not support migration. */
- #define CONSOLE_LOGLEVEL_STATE_VERSION 1
- 
-+static unsigned int state = 1;
-+module_param(state, uint, 0444);
-+MODULE_PARM_DESC(state, "console loglevel state (default=1)");
-+
-+#ifdef CONFIG_KLP_HAS_PROVIDES
-+static unsigned int provides;
-+module_param(provides, uint, 0444);
-+MODULE_PARM_DESC(provides, "provides id (default=0)");
-+
-+#define KLP_MAX_OBSOLETES 16
-+static unsigned int obsoletes[KLP_MAX_OBSOLETES];
-+static int nr_obsoletes;
-+module_param_array(obsoletes, uint, &nr_obsoletes, 0444);
-+MODULE_PARM_DESC(obsoletes, "obsoletes provides ids");
-+#endif
-+
- static const char *const module_state[] = {
- 	[MODULE_STATE_LIVE]	= "[MODULE_STATE_LIVE] Normal state",
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
-@@ -35,7 +50,7 @@ static int allocate_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return -EINVAL;
- 
-@@ -52,7 +67,7 @@ static void fix_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -65,7 +80,7 @@ static void restore_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -77,7 +92,7 @@ static void free_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -133,7 +148,6 @@ static struct klp_object objs[] = {
- 
- static struct klp_state states[] = {
- 	{
--		.id = CONSOLE_LOGLEVEL_STATE,
- 		.version = CONSOLE_LOGLEVEL_STATE_VERSION,
- 	}, { }
- };
-@@ -151,6 +165,16 @@ static struct klp_patch patch = {
- 
- static int test_klp_callbacks_demo_init(void)
- {
-+#ifdef CONFIG_KLP_HAS_PROVIDES
-+	patch.provides = provides;
-+	if (nr_obsoletes > 0) {
-+		patch.obsoletes = obsoletes;
-+		patch.nr_obsoletes = nr_obsoletes;
-+	}
-+#else
-+	patch.replace = true;
-+#endif
-+	states[0].id = state;
- 	return klp_enable_patch(&patch);
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-index 5f07fe1be2b9..aeb911b87d37 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
-@@ -9,10 +9,25 @@
- #include <linux/printk.h>
- #include <linux/livepatch.h>
- 
--#define CONSOLE_LOGLEVEL_STATE 1
- /* Version 2 supports migration. */
- #define CONSOLE_LOGLEVEL_STATE_VERSION 2
- 
-+static unsigned int state = 1;
-+module_param(state, uint, 0444);
-+MODULE_PARM_DESC(state, "console loglevel state (default=1)");
-+
-+#ifdef CONFIG_KLP_HAS_PROVIDES
-+static unsigned int provides;
-+module_param(provides, uint, 0444);
-+MODULE_PARM_DESC(provides, "provides id (default=0)");
-+
-+#define KLP_MAX_OBSOLETES 16
-+static unsigned int obsoletes[KLP_MAX_OBSOLETES];
-+static int nr_obsoletes;
-+module_param_array(obsoletes, uint, &nr_obsoletes, 0444);
-+MODULE_PARM_DESC(obsoletes, "obsoletes provides ids");
-+#endif
-+
- static const char *const module_state[] = {
- 	[MODULE_STATE_LIVE]	= "[MODULE_STATE_LIVE] Normal state",
- 	[MODULE_STATE_COMING]	= "[MODULE_STATE_COMING] Full formed, running module_init",
-@@ -35,14 +50,14 @@ static int allocate_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state, *prev_loglevel_state;
- 
--	prev_loglevel_state = klp_get_prev_state(CONSOLE_LOGLEVEL_STATE);
-+	prev_loglevel_state = klp_get_prev_state(state);
- 	if (prev_loglevel_state) {
- 		pr_info("%s: space to store console_loglevel already allocated\n",
- 		__func__);
- 		return 0;
- 	}
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return -EINVAL;
- 
-@@ -59,11 +74,11 @@ static void fix_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state, *prev_loglevel_state;
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
--	prev_loglevel_state = klp_get_prev_state(CONSOLE_LOGLEVEL_STATE);
-+	prev_loglevel_state = klp_get_prev_state(state);
- 	if (prev_loglevel_state) {
- 		pr_info("%s: taking over the console_loglevel change\n",
- 		__func__);
-@@ -80,14 +95,14 @@ static void restore_console_loglevel(void)
- {
- 	struct klp_state *loglevel_state, *prev_loglevel_state;
- 
--	prev_loglevel_state = klp_get_prev_state(CONSOLE_LOGLEVEL_STATE);
-+	prev_loglevel_state = klp_get_prev_state(state);
- 	if (prev_loglevel_state) {
- 		pr_info("%s: passing the console_loglevel change back to the old livepatch\n",
- 		__func__);
- 		return;
- 	}
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -99,14 +114,14 @@ static void free_loglevel_state(void)
- {
- 	struct klp_state *loglevel_state, *prev_loglevel_state;
- 
--	prev_loglevel_state = klp_get_prev_state(CONSOLE_LOGLEVEL_STATE);
-+	prev_loglevel_state = klp_get_prev_state(state);
- 	if (prev_loglevel_state) {
- 		pr_info("%s: keeping space to store console_loglevel\n",
- 		__func__);
- 		return;
- 	}
- 
--	loglevel_state = klp_get_state(&patch, CONSOLE_LOGLEVEL_STATE);
-+	loglevel_state = klp_get_state(&patch, state);
- 	if (!loglevel_state)
- 		return;
- 
-@@ -162,7 +177,6 @@ static struct klp_object objs[] = {
- 
- static struct klp_state states[] = {
- 	{
--		.id = CONSOLE_LOGLEVEL_STATE,
- 		.version = CONSOLE_LOGLEVEL_STATE_VERSION,
- 	}, { }
- };
-@@ -180,6 +194,16 @@ static struct klp_patch patch = {
- 
- static int test_klp_callbacks_demo_init(void)
- {
-+#ifdef CONFIG_KLP_HAS_PROVIDES
-+	patch.provides = provides;
-+	if (nr_obsoletes > 0) {
-+		patch.obsoletes = obsoletes;
-+		patch.nr_obsoletes = nr_obsoletes;
-+	}
-+#else
-+	patch.replace = true;
-+#endif
-+	states[0].id = state;
- 	return klp_enable_patch(&patch);
- }
- 
+ obj-m += test_klp_meminfo_lp.o \
++	test_klp_meminfo_lp2.o \
+ 	test_klp_callbacks_busy.o \
+ 	test_klp_callbacks_demo.o \
+ 	test_klp_callbacks_demo2.o \
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
+new file mode 100644
+index 000000000000..2b93c969b7ba
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
+@@ -0,0 +1,2 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "test_klp_meminfo_lp.c"
 -- 
 2.52.0
 
