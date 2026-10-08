@@ -1,377 +1,155 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0731A6807
-	for <live-patching@vger.kernel.org>; Thu,  8 Oct 2026 11:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791457496; cv=pass; b=HTsNPtx8KfrddoJvZWZP0k2IDUpVzjWDKrarp2Uu316YrK405z54mU0S9v091Fmw0rhyF2Gy2STWoP30OuE70LVJXD60dsjPvCRYkyW0APVorrZHPPL9mZ0KCL4uy11ajedJRErShwbUiOvstCZA6XR9WSrFzgzV6xa7P1l9xfA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791457496; c=relaxed/simple;
-	bh=RLIGvvX/O6DWb0/MvfXlelkAYEWJ0MDsulwHdTk0atc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K8zKRCr1BMkxI+SMF+VLXzl7DsD4zqs+xGWTJNevQQTK9DEmIOXm4eiGKtxoZ3UnLDB6jEjsUeamkMjcBMYSv6qNrWgVgK9Iw6e9/mQUQIfDbJuyrI7nbtDH9L8gsXgP7mZKUh1qQfhKsvXdl7GFVygNd0bWx+4DaDXEzb8w9zs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fXUd8M17; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27216443C34;
+	Thu,  8 Oct 2026 11:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791460071; cv=none; b=k8Pv6uw8ifoqIIEJOzIoYgmmo5AopaSZYlzJSP2DAeO3Y+1XTmRfwplCc/Vn62+vuNRpvsDy7IqOLput02xyvIdEa/5SixvVPXmzbp/82zx2ebMgztGqOd9iAbyawjgE2LotRQ8lf2FpS84LQeNbAqEGC7BdjCTt9eSqyXGy1fk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791460071; c=relaxed/simple;
+	bh=OUNZ/VZ8OrrRrCTA8+5HB6ElWjtVTJ5aPjr31lVAvcA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u7BN8Ue3ZXfPAHP4kAHtQcl4N/6zfCbhw4zCycXWzPHWApjOG+sEJhKCJ5LvuXIJBDTuzHuUaciMi8jDubHuanlxDZEJvBcArVt/UUTigE6Mldg1LQJYlMQ5NKKoTrQBS+8ucrYm1J1g7kZL/k3F1mU/4WNfpI/N1wAUFm/GwT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=d9SfD7/i; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fXUd8M17"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-677cc343120so5021336d50.0
-        for <live-patching@vger.kernel.org>; Thu, 08 Oct 2026 04:04:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791457493; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XFN1QwvKkQN8YbsejQqM9KEjVabKwgdZd5jR1DRZbHwq9ayfH5sSocmNJ28c0kBXkF
-         gAbmZxzf7wwJ8rbGfKsX+KuITwRZTEzjWYKrruf2GWkaIeIek3Vt/5LNHJAHKbcCSKhM
-         YmQyXKASrVRN/7CfVohl6iyCxL8hFDusS95vb8mpBhfchTV6R995HkBmozx1XiHyrHjt
-         +AO5pVkFxjSmSpA70FJjLK/sr6rLDw3b03jRfsK6eRxLpHjUpccL02atUplwN92Lp5qi
-         g4gL/0DTO49Dzdwyf5W4lWAKlEI8hPqe8id98DyFhQ2LuNDzBhv3wYahArqT6VvQ7REX
-         9/kQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=47GJUdOpTDvnrmPAnVoQ8dCLEg1gEaIf0wyqZeZeyrA=;
-        fh=YcWUHK2zjzpbMLjDikzRiaYOsLDmZW1zM/OlrTRHVSA=;
-        b=nCBrFKWdgrkNUNwXXubbx5o67V+JxjM14+RjUkp3rOXbLPGNbA8JL7P8z3mOxubuy4
-         eT5hdv4PjwEMPKNztvMtV/cYleBlxGh3C7BB6Mc3y52lEvRAN9x7zyvaBHpR5ZfHdBln
-         byTihvyxfH9jEDtvNsex/v4ata5hfbS8ln4BqEf5hyDUPTKN18bXNiZiMiBtRZ7fvYfA
-         yvjIx9wjY9wxEv5JyYCLBwkFSlEIV/kHd9KsH/8I7hGybqdG4mioxEj9rmVFfuMSJ156
-         oi6npX4cA/84CFKQfaz4ViXOY24JTK8YXn7i3WIipB6zuvEV4TVFSb+tmFyPGFL6jViG
-         6L7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791457493; x=1792062293; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=47GJUdOpTDvnrmPAnVoQ8dCLEg1gEaIf0wyqZeZeyrA=;
-        b=fXUd8M17O6WfRZDvaApK/IxXmGUKivTWxnTQtk5DrfJo2NkIaQ0ClBf6miHYUD8GlX
-         wW3wjDHlgmDeaF7PSSI0cF9fc4yJHEoIJQyqYbqEvMz+G7grjJZD6ItdG6scTG8AXOO1
-         42OMGEH7ZBp0dRV/JNnCrEaA+8sqGb5fD05FtJ3bwyputL6ylUVkDs98MERAPeHGdSLY
-         d4FFmc1lOMpjXUNR2VJP23g8/6S4WsKzcZ6riESSs90YhNe0iGfK/wwavdY2gVuHxEwp
-         qZL/z0hjnwSKCcECwqQc14XEfHwuy73C0jURi8EN3Wv57ATjvk4wRjuoioTKO0nkgHaL
-         LTig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791457493; x=1792062293;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=47GJUdOpTDvnrmPAnVoQ8dCLEg1gEaIf0wyqZeZeyrA=;
-        b=M//EHAboTGSo4/29pXrTc3JGjGdB0MfxoOrRo/RF9ceFjWf6bPfSFtCSnFcwnRAl7s
-         PfN5mXwWICCvmJzFM0ggvrKxwlkVnVWSBPy74D466kxgNBNlqMgH685aX6a2uWz6oLC0
-         o6gKH8aJFnVjr0yppOn/xLBBpRECFo3dYA4jk8TsGUenj7Va1J952KPmOswU0DPg7dAc
-         LCoQB76TPAR6MFrXThWKzJtfvlQmxjYCwqKF9V0eAR0d/QHXu2rB4lcxQCAry0hENIw8
-         hDQDdrNHjg93GAS+7ye27JEBNRTvT8LPxeJfcpN3wOWbdJfJ/GdJg7ajWPNoitKEdYR4
-         s7UA==
-X-Forwarded-Encrypted: i=1; AKwUvBwI+cI58KwMZUM4mUMOlQ6OHNP4N5V5jjVVY+FqGDBM37qL3aQEiDFsfOpdlfQl6PUdfmVHQnGmmxtnnuSR@vger.kernel.org
-X-Gm-Message-State: AFq9FYLps5vKlt8PAkd/R58imgvj7HicFJFy9MyEIwU5NCB0rf1EV2NC
-	nVALVf8gVG4Z/is92SaHXDc/JUmh7EOQrft6wtd4NSQ4dCy/zHr3nfrAx+Qq/wHMUbA9yCy//3C
-	KE4UujuRDf0tVCT6JDct8PxjiArUU8B8=
-X-Gm-Gg: AYBFou1QTugVu3dcYt8hKy17VbNQ2KDMardEYZ9STIboz26J6PXxU5gDFpnNWNw1s+b
-	7oystwFYqtj+aBZuVIRD29cDrw3sqtP4sLux5sIdh1H2uCDOH07JOVVwoT9ozBQ6wjfH/l3qNSs
-	nHwBmZaYhUYgX2zybZ4T+z6pa8x/L5waDVuEf+bvkO7HqEf1AYnYZMXG31cY/DRYd3FVsUyHAgB
-	B5bhs8W51Fqv+MwHN8jHcNr8YGiKHocbTNg5d/31alE8zpqSySTnunL/jwDn0IEXVffymy/CJAP
-	12dHjJF70hq/Otd9PotLFOWt//h/edXnNd6bQkQBE5+lIz7kJulg8PvS8eodQ7c7VPXt8E14pPe
-	PZVt+FeU/yGcuzjiRWrXl
-X-Received: by 2002:a05:690e:134f:b0:677:cff5:52ac with SMTP id
- 956f58d0204a3-6790a49a41amr3133024d50.73.1791457491970; Thu, 08 Oct 2026
- 04:04:51 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="d9SfD7/i"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791460059; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=2uRUiMGM/3kM5oFgvWkstit41ISjJ8dKFkmnjBOgzTY=;
+	b=d9SfD7/i3F8/7mhWPtNs4PbENsPzHePZ1tusqOfNzF5OEb5MFFoyDHTotZ1yhdHWLAPcOqQcJ7vrppp+F7wUyLx6J0Kmq+NKypSW6hYOV3xee4wMei9wClqocofEV3QaqZCjRJjxL3enc1nYpJX9r9cQ+T9pDtH57kKkJMPiO58=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XCP.Q2W_1791459729;
+Received: from 30.246.161.100(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCP.Q2W_1791459729 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 08 Oct 2026 19:42:10 +0800
+Message-ID: <fbdb7b4c-0f80-41b0-b6d8-a4501ff3e820@linux.alibaba.com>
+Date: Thu, 8 Oct 2026 19:42:08 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260930030323.14396-1-laoar.shao@gmail.com> <20260930030323.14396-6-laoar.shao@gmail.com>
- <ar_kouwlAGcnnUYQ@pathway.suse.cz> <CALOAHbCHwJ2htPOoako_EqNg-bQF=4NLNqVGAnzsAi2uitMdeQ@mail.gmail.com>
- <asdwx-BENZy6dajG@pathway.suse.cz>
-In-Reply-To: <asdwx-BENZy6dajG@pathway.suse.cz>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Thu, 8 Oct 2026 19:04:15 +0800
-X-Gm-Features: AclHuK_mUG6NrIGmcaoKDsjmRN3oWtTglg6FkbrhnC7fP6lNcu-kIXjY8xD6ro8
-Message-ID: <CALOAHbC3p30s8sQwd5OO6DLqQ+5qvpFyyRWb2p05mmMabO7E6g@mail.gmail.com>
-Subject: Re: [PATCH v10 5/9] livepatch: Implement provides and obsoletes for
- scoped atomic replace
-To: Petr Mladek <pmladek@suse.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, song@kernel.org, live-patching@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/7] riscv: Add reliable stack unwinding for livepatch
+To: Martin Kaiser <martin@kaiser.cx>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>
+Cc: pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+ <artojcJftbMIgPrj@akranes.kaiser.cx>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <artojcJftbMIgPrj@akranes.kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 8, 2026 at 6:30=E2=80=AFPM Petr Mladek <pmladek@suse.com> wrote=
-:
->
-> On Sun 2026-10-04 23:46:29, Yafang Shao wrote:
-> > On Sat, Oct 3, 2026 at 1:06=E2=80=AFAM Petr Mladek <pmladek@suse.com> w=
-rote:
-> > >
-> > > On Wed 2026-09-30 11:03:19, Yafang Shao wrote:
-> > > > The current bool replace flag is too coarse: it is either all or
-> > > > nothing. A livepatch with .replace=3Dtrue replaces ALL existing
-> > > > livepatches, which is safe but inflexible. There is no way to have
-> > > > multiple independent livepatch sets coexist on the same system.
-> > > >
-> > > > Replace it with a more flexible model using two new fields in
-> > > > struct klp_patch:
-> > > >
-> > > > - provides: an unsigned int id identifying the changes made by
-> > > >   the related livepatch. Where the changes are a set
-> > > >   of modified objects, functions, and used callbacks,
-> > > >   shadow variable ids, and state ids.
-> > > >
-> > > > - obsoletes: an optional array of unsigned int ids specifying
-> > > >   additional provides ids to be replaced. This allows a new patch
-> > > >   to explicitly obsolete patches from different scopes.
-> > > >
-> > > > A new livepatch atomically replaces any existing livepatch that
-> > > > meets any of the following conditions:
-> > > > 1. It has the same provides id as the new patch,
-> > > > 2. Its provides id is listed in the new patch's obsoletes list, or
-> > > > 3. The new patch's provides id is listed in its obsoletes list
-> > > >    (the obsoletes relationship is symmetric).
-> > > >
-> > > > The obsoletes relationship is symmetric: two livepatches that
-> > > > obsolete each other are mutually exclusive. Loading either one
-> > > > atomically removes the other, so they can never be enabled at the
-> > > > same time. This allows swapping between two independently prepared
-> > > > livepatches that cover the same scope, in either direction.
-> > >
-> > > Honestly, I am confused by the 3rd rule and by the last paragraph.
-> > > It is not compatible with my understanding of the provides/obsoletes
-> > > semantic.
-> >
-> > Correct. In package management semantics, Obsoletes is not a symmetric
-> > relationship.
-> >
-> > >
-> > > In my mental model, the provides and obsoletes define which
-> > > way is supported. Let me show an example, let's have:
-> > >
-> > >  Livepatch A:
-> > >    + provides: 1
-> > >    + obsoletes:
-> > >
-> > >  Livepatch B:
-> > >    + provides: 2
-> > >    + obsoletes: 1
-> > >
-> > >  Livepatch C:
-> > >    + provides: 3
-> > >    + obsoletes: 1,2
-> > >
-> > >  Livepatch D:
-> > >    + provides: 2
-> > >    + obsoletes: 1,3
-> > >
-> > > How is this supposed to work, please?
-> > >
-> > > In my mental model:
-> > >
-> > >   Livepatch A:
-> > >      + can be replaced by B, C, or D because they all obsolete 1
-> > >      + can _not_ replace B, C, D because A does not obsolete 2 and/or=
- 3.
-> > >
-> > >   Livepatch B:
-> > >     + can be replaced by C because C obsoletes both 1 and 2
-> > >     + can be replaced by D beause D provides 2 and obsoletes 1
-> > >     + can't replace C or D because B neither provides not obsoletes 3=
-.
-> > >
-> > >   Livepatch C:
-> > >     + can be replaced by D because D provides and obsoletes
-> > >        all ids which are proviced and obsoleted by D
-> > >
-> > >     + can replace D from the same reasons.
-> > >
-> > >
-> > > OK, I understand that it might be practical to allow replacing
-> > > the patches just because they are "conflicting". As a kind
-> > > of revert/downgrade.
-> >
-> > Right. This will let us easily roll back the buggy livepatch and
-> > reinstall the old one as part of the rollout.
-> >
-> > >
-> > > It might help to rename "obsoletes" to "conflicts". And just
-> > > say that the livepatch replaces livepatch with the same id
-> > > in provides and also all conflicting patches.
-> > >
-> > > But then I see another problem. We have three types of conflicts:
-> > >
-> > >   1. same id in provides/obsoletes/conflicts
-> > >   2. same livepatches function
-> > >   3. same livepatch state id
-> > >
-> > > It is weird that we would silently replace livepatches with 1st
-> > > type conflict. But we would refuse to load the livepatch with
-> > > the 2nd and/or 3rd type conflict.
-> > >
-> > > Note that the inconsistent handling of conflicts exists in
-> > > this patch even when the array is called "obsoletes". My proposal
-> > > to rename it to "conflicts" just helped me to see this
-> > > inconsistence.
-> > >
-> > > Any option/idea? Yet another naming?
-> >
-> > Perhaps it could use a better name, but I'm not good at naming things ;=
-)
-> >
-> > >
-> > > One more thing, the commit message does not describe that
-> > > the livepatches might conflict when livepatching the same
-> > > function or using the same state id. It is important part
-> > > of the semantic and must be documented.
-> >
-> > Sure. I will update it.
-> >
-> > >
-> > > Best Regards,
-> > > Petr
-> > >
-> > > PS: I am sorry but I won't be able to finish the review before
-> > >     the Plumbers conference. But I am happy that I have found
-> > >     the above problem. We could discuss it at the conference
-> > >     and come up with some sane naming and semantic.
-> >
-> > I can't be there in person, but I believe we'll come up with a
-> > sensible name or semantic. I'll hold off until we reach a final
-> > conclusion.
->
-> I am not sure if you saw the video from the the conference.
 
-Song has shared the results with me offline. Thank you all so much!
 
-> It looked like we were going to nack this feature because
-> installing more livepatches on the system was considered
-> too dangerous.
->
-> In particular, it allows using livepatches provided by different
-> teams/vendors. It is almost impossible to prevent incompatible
-> changes and breaking the system. The check preventing livepatching
-> the same function or using the same state IDs is just the best
-> effort but it still allows many hidden incompatibilities.
->
-> We should rather discourage people installing more livepatches
-> in parallel.
->
-> Anyway, we had a follow-up discussion and agreed to accept this
-> feature in the end. We already allow to install more livepatches
-> in parallel. So this patchset is not adding any new danger.
-> Instead, it reduces the danger a bit without complicating the
-> code too much.
->
-> Also we understand that there might be some use cases for this
-> feature. And it might be safe when used carefully.
->
->
-> We also discussed the semantic of the obsolete field and we
-> would like to it simple. The livepatch with a provides ID should
-> replace a livepatch with another provides ID _only_ when the other
-> ID is mentioned in obsoletes.
->
-> By other words, please remove the symmetry and "support" for
-> a rollback. The symmetry causes some confusion as explained
-> before. I would summarize it by two reasons:
->
->    + In the packaging world, the "obsoletes" behavior is not
->      symmetric.
->
->    + The symmetric behavior adds a "conflict" semantic. But
->      this particular conflict is handled another way than
->      the other conflicts (livepatches functions, state IDs).
->      I mean replacing an already enabled livepatch vs.
->      rejecting the new one.
->
-> In addition, we do not support the rollback in all situations,
-> for example, let's have:
->
-> Livepatch A:
->   + provides: 1
->   + obsoletes:
->
-> Livepatch B:
->   + provides: 2
->   + obsoletes:
->
-> Livepatch C:
->   + provides: 3
->   + obsoletes: 1,2
->
-> The meaning is:
->
->   + A and B are independent livepatches.
->   + C adds some dependency and has to replace both A and B.
->
-> Here a proper rollback from C to A+B would require loading both
-> A and B livepatches synchronously. It would require adding
-> special support into the module loader and the livepatch core code.
-> We do not want to add this complexity. Especially, because
-> the parallel installation of livepatches is considered a bad
-> practice.
->
-> A partial workaround might be to allow changing "obsoletes" via
-> a livepatch module parameter. It would allow to do the
-> rollback in 2 steps:
->
->    modprobe obsoletes=3D3 livepatch_A
->    modprobe livepatch_B
->
-> It is still not an atomic rollback. But it is better than
-> without the parameter which would require 3 steps:
->
->    echo 0 > /sys/kernel/livepatch/livepatch_C/enabled
->    modprobe livepatch_A
->    modprobe livepatch_B
->
->
+On 9/29/26 3:28 PM, Martin Kaiser wrote:
+> Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
+> 
+>> Hi,
+> 
+>> This is v6 of the RISC-V reliable stack unwinding series for livepatch.
+>> Wang Han has left our team, so I am taking over this series from now on.
+> 
+>> The series adds explicit frame-record metadata, preserves the frame
+>> pointer through dynamic ftrace, and replaces the open-coded stack walker
+>> with a conservative frame-pointer based unwinder. It then enables the
+>> RISC-V livepatch capability and adds the syscall-wrapper selftest prefix.
+> 
+>> Changes since v5:
+>> * Rebase onto the current riscv/for-next; no functional changes.
+>> * Fold in the tags collected from the v5 thread:
+>>    - Reviewed-by: Shuai Xue on 2/7, 3/7, 4/7 and 6/7
+>>    - Acked-by: Miroslav Benes on 7/7
+>> * Add my sign-off as the new sender.
+> 
+>> Since the patches are otherwise identical to v5, the v5 validation
+>> results still apply. For reference, from the v5 cover letter:
+>> * Built Linux 7.2.0-rc6 with riscv64-unknown-linux-gnu-gcc 15.2.0
+>>    and binutils 2.46.
+>> * Standard livepatch configuration built successfully, including
+>>    Image, vmlinux, modules, compile_commands.json and GDB scripts.
+>> * CONFIG_IRQ_STACKS=n variant linked successfully with GCC.
+>> * QEMU 8.2.2, 1 CPU: livepatch selftests PASS: 7, SKIP: 1,
+>>    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+>> * QEMU 8.2.2, 4 CPUs: livepatch selftests PASS: 7, SKIP: 1,
+>>    FAIL: 0; ftrace function graph 3 passed, 0 failed, 3 unsupported.
+>> * No BUG, WARNING, Oops, panic, unreliable stack or Call Trace found
+>>    by the validation log scans. Expected negative livepatch errors are
+>>    part of the selftests.
+> 
+>> v5 was posted in early August and has been quiet since then. I would
+>> appreciate it if the series could be considered for the upcoming merge
+>> window. Happy to address any remaining feedback.
+> 
+>> Base:
+>> riscv/for-next 77ae27fd98f3 ("Merge tag 'printk-for-7.3' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux")
+> 
+>> Previous versions:
+>> v5: https://lore.kernel.org/r/20260804103626.2803112-1-wanghan@linux.alibaba.com
+>> v4 RESEND: https://lore.kernel.org/r/20260629072713.3273743-1-wanghan@linux.alibaba.com
+>> v3: https://lore.kernel.org/r/cover.194d76e3a15b.v3.riscv-livepatch.wanghan@linux.alibaba.com
+>> v2: https://lore.kernel.org/r/20260528082310.1994388-1-wanghan@linux.alibaba.com
+>> v1: https://lore.kernel.org/r/20260527123530.2593918-1-wanghan@linux.alibaba.com
+> 
+>> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
+> 
+> Thanks for these patches.
+> 
+> I tried them on a standard rv64 qemu and on a rv64 cheri system
+> (cheri-linux.org). The latter needed some minor tweaks, but in
+> both cases, I could get livepatch to work.
+> 
+> Reviewed-by: Martin Kaiser <martin@kaiser.cx>
+> Tested-by: Martin Kaiser <martin@kaiser.cx>
 
-Thank you for the review! I had actually sent v11 before your email
-arrived =E2=80=94 you can find it here:
 
-https://lore.kernel.org/live-patching/20261008095830.26308-1-laoar.shao@gma=
-il.com/
+Hi Martin,
 
-Regarding your summary:
+Thank you very much for testing the series and for the tags!
 
->
-> Summary:
->
-> We are open to accept this feature but please:
->
->     + Remove the symmetric handling of obsolete flag.
+It is great to hear that livepatch works both on a standard rv64 QEMU
+and on the rv64 CHERI system. Could you share what the minor tweaks
+for CHERI were? If any of them are generic -- for example frame-record
+size/alignment or pointer-width assumptions in the unwinder -- it may
+be worth folding them into this series, so the cheri-linux tree has
+less to carry downstream. If they are purely CHERI-specific, a pointer
+to your tree would still be a useful reference.
 
-Done in v11.
++Palmer, Paul, gentle ping on this series.
 
->
->     + Properly document, in both the commit message and
->       documentation, when the livepatches will be replaced
->       and when they will conflict.
+It has been under review since late May (v1 on May 27, now in its sixth
+revision) and the tags collected so far are:
 
-Done in v11.
+   * Acked-by: Miroslav Benes <mbenes@suse.cz>             (7/7, livepatch)
+   * Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com> (7/7)
+   * Reviewed-by: Martin Kaiser <martin@kaiser.cx>         (whole series)
+   * Tested-by: Martin Kaiser <martin@kaiser.cx>           (whole series,
+     rv64 QEMU and rv64 CHERI, livepatch working on both)
+   * Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>   (2/7, 3/7, 4/7, 6/7)
 
->
->     + Document the pitfalls with the rollback.
+v6 still applies cleanly onto the current riscv/for-next
+(52318cf0fa6e). If it helps, I can send a v7 that folds in Martin's
+Reviewed-by/Tested-by tags.
 
-Not yet addressed =E2=80=94 I'll cover this in the next revision.
+Could the series be considered for the upcoming 7.4 merge window?
 
->
->     + Add a warning that installing more livepatches in parallel
->       is dangerous, especially when they are provided by different
->       teams or vendors. The built-in checks of possible conflicts
->       do not prevent potential incompatibilities and breakages.
+Thanks,
+Shuai Xue
 
-Not yet addressed =E2=80=94 planned for the next revision as well.
 
->
->
-> Heh, I hope that I got it right.
-
-If you have a chance, could you take a look at v11 and let me know if
-there's anything else I should address?
-Thanks again for your time and guidance!
-
---=20
-Regards
-Yafang
