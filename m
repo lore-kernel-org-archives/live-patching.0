@@ -1,330 +1,325 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BC449505D
-	for <live-patching@vger.kernel.org>; Thu,  8 Oct 2026 09:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2AE49364C
+	for <live-patching@vger.kernel.org>; Thu,  8 Oct 2026 10:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791453576; cv=none; b=p+ysTKpfxFps2A9XtxL3lfguugGST82Z5Za7/NiapqNu1Rywotargb8S104VCMQXaH7w9oNzqEqBo2JIopZ1NgO10Ip7jG36m5gmHfct+AwSfNnr4gTZFdq+UG1+TzAK+n+T+880kQ75UKAVq6x3h6UpKXlV04IUFBYayjWUh0A=
+	t=1791455439; cv=none; b=nJs6O10SdhsN6Cu3FDHR5jCQlV0uZR6/z5T1xKDIbK9vjk/KhdhpRh0UfoS7LtbacarwlFJucgheI+T6mjqXo87Uv8e+PrH9rXqobvt0yXeNoAwtHVK1ySawqYwaIepT41bAb7mcNBQLuxF4J2HQTyGBZ5/S2qcyT6cZkxpbvO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791453576; c=relaxed/simple;
-	bh=TTmm/JiwM7rex0JkiB1ropg5AYtieGpfIx6c4EeIo+8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q3eq/ZDsSujs6ox9UO7LDWduwER7Rd8aYUqbP9jrp21PY+5pgqx+9NCgERmvxqGR7I7JDIo6v59xIbY0b6h0zmmmqRRhbJU21JR5s0m5o0ePpQUV7OsoWfJIvKej6byNQAabN2iDRgpPC1J7fVbPQw9qGL2mCMQU0YcZImzhWlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pEkKd59r; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791455439; c=relaxed/simple;
+	bh=/H2LwDDtOX/EmUnvbwXJyMI/Z8Hsm619lX2ibqh/FMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BtMlmo35+d6yfwpbdnZmq+D6lFjdkD0/PEliUApPGbxktQuPdDErpBNyexgS990PM5yZpqeJe6jiD9zwyUcj+bLX7z2JX8g2QUzmdV+C5mUuTWI6fC3HYimIsybfpywnwFHnX4+4sVVZS94nEK3SfpoYe3iYH7xJ7ySq6RNMEr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=GuJSO2xq; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pEkKd59r"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3a4cdc9025bso2051464a91.0
-        for <live-patching@vger.kernel.org>; Thu, 08 Oct 2026 02:59:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="GuJSO2xq"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a171b677d2so20280905e9.0
+        for <live-patching@vger.kernel.org>; Thu, 08 Oct 2026 03:30:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791453567; x=1792058367; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OlPgHKy4wplHuzogabgKJQHpma7ybFczSL9aCnuSDNg=;
-        b=pEkKd59rM8GwTAnqZaJ5nGoe2UHVfQlqK7144ULFlZwBbF4mSw3EzDPBikhz1hMhcr
-         YSO6d3okudZ9UZQrX6e2/tokUvqniaI1dGTNAT5ldwIU+8nm099l5hwC2Wpo89XwdEVm
-         Rtqu5+J2Dohtj3q4iLB5JrIFLdS0v/NKYMzlSUhM9jU+QVjezm+o/q3Jwmu1vgqXD9aD
-         0selyD+aXtICmj9awErkNqLX4Xr2dvmPC46COyH5HRj8Yz6RGyISRiHMtXjntnxXqjnN
-         HEA+EtO0XfKFmDkUqCa/yT3nt+RtA/8TPFvXdxKSGEPa0oc5Iy/HVkJB49vCRncYrugh
-         Og9w==
+        d=suse.com; s=google; t=1791455435; x=1792060235; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=JvAFFhqw5GLuICDIcnRG7fS1nPF0i45hBH9T+Umii+g=;
+        b=GuJSO2xqNs5YcNQ9Buh5ZlK6mVudozbIyq5Mrz63wghV85sJGZ8mCcl1cNdkVfBUOJ
+         jSlfXGUhUvkR61SSAvibK0IbUkyUAfX92b1x4hT+kYEMggnLVjIGVDOX2KTqf5iFsfyF
+         2NrnGxKf53EyLKjOs2Hd2+w9wADp6oSIlyKx77g2htHZ64Hpnxd9FUhNUa+SfqbqOAN0
+         SqPptgAE2xf/KSSG6PqQCoTGuIDm7rvvJtTwPB+yw1PlKvUeV5PcxwcbUGNP3F0tLvSM
+         Q/aToviKAS68sF9Ft6tgQkQdbTNl1NOx6htYHdVcz29pDcBPEuqXLTkkhFfcJHY/XDm9
+         80FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791453567; x=1792058367;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OlPgHKy4wplHuzogabgKJQHpma7ybFczSL9aCnuSDNg=;
-        b=1uUKUJNiHmkwcLS0Smw7AznctDtg/HH0SmXrlz5MUkSxPOFYG0EdzDlD2kiN25jqyx
-         +YQv3fo5uG9cu/TFb78dURB5AY5kCr87rhjdezKPaNyosny0yYbE/cccWt3RWHCNz3OW
-         n1ZM6i8HsRSpt+b7xaU3QvOTJVXTZhgZq2vw0gr+VIgsqALd0a2q3KyIXqwJHX87K8Vt
-         Gj0psOfgEpxWYdbbCEz+e4HtGkiywPQ5g9Yo8VDFyS0EH22t/e8T2uPagLcxsUfvVs3s
-         r1WFPbQBI4yMKJingdlShMVolQfEfEMNmOH8jB11OyCiWCQ/RrnHUaLiOodv9/lLruNQ
-         ckHw==
-X-Gm-Message-State: AFq9FYKB1r9+lF2ltjoSkMESW4BKyZzcfBQJRuitvhICDLIj7evFJGji
-	i7l+vOixRQEh6oS/s/MbQye2HBAWUFb6HigB0CemgpiwLZHsiQqxDlo5
-X-Gm-Gg: AYBFou0BfVxDOjEvHFIZCjeO4KpxpID5hfmEfw/KKIwpBWd/xnG0D+Zut8bbUupsIur
-	N75Xja9WSvYHmT+h8Z4g9XDW0Y5A5t+H/yQ7ORqM21R+if12dyzkIZYvhfu1rUiV4202WU3eWpg
-	VW6RmVgOAU46+2Y6291WnbkTVVc4aKXTR2cZrT9sFL4vlXFUbZR5tRhg088nRr0i0Ubt7JBObIt
-	hoEoeatnTHu+nkzmzpj4rYm/Mxuwtj77qOIP/5YUBaQEsrRgI0pUVFoYPC0QhClyjr7BCLsorKz
-	c4D0BV9jwdeOM+m2eGQZNNsFXOwm0BKFrwggervg3OJpO/XD39OTPnTgBFGDlplsQmnH9ZQ8ddv
-	Vdbc8G4CtQtGhpzGXSIrfVl7mTw4wf6nW+sPByEDFZsJbQpanqNpJpngEuBYqA2nhG4RNZHFcXJ
-	lcVLeCX/+7oAK++4mJl4LkIhCgOBBPTSBJfPIiW81MhawXPVB2iGwV+BMk6hKhDc/8h3rMyr6pi
-	sIJ7ZJYG4bXyxQfcpSZY/xlLgrvFnAvPehaXNZgI8aTUq1X8ehEmbs22fE8HKK1RVM=
-X-Received: by 2002:a17:90b:5102:b0:3ab:f38:2b3c with SMTP id 98e67ed59e1d1-3ab0f385291mr458671a91.28.1791453566932;
-        Thu, 08 Oct 2026 02:59:26 -0700 (PDT)
-Received: from yafangs-Air ([240e:46c:2100:3ace:b801:9432:769f:ff9d])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a9ff7ff13esm3422790a91.7.2026.10.08.02.59.21
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Oct 2026 02:59:26 -0700 (PDT)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	song@kernel.org
-Cc: live-patching@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH v11 9/9] selftests/livepatch: Add function test for provides/obsoletes
-Date: Thu,  8 Oct 2026 17:58:30 +0800
-Message-ID: <20261008095830.26308-10-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261008095830.26308-1-laoar.shao@gmail.com>
-References: <20261008095830.26308-1-laoar.shao@gmail.com>
+        d=1e100.net; s=20260707; t=1791455435; x=1792060235;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=JvAFFhqw5GLuICDIcnRG7fS1nPF0i45hBH9T+Umii+g=;
+        b=itRFJUeuJugKdhnrTdP2DiCwc5ixht1XV38ADjLCa1+WZrocDhLDixBFnqBJOZqp8D
+         WSIPQjHfBLoBNrC757SiYKUkpS1zRW0wNj5n1g9jklp6J/YvS4O6znzYfrURMkK8kymD
+         nSBuAYJEYgC4vUX9g31w7f1+DdvF6cJM4dAY7cwK25QRkW00McyYCp1LFy+W+q7cbGx6
+         mrfTw1l/hL4cNmGiZ6qqW4YhDx8KEE39RoGXZdKsdDKKySZuSMqaxIo0R/DpIJy1MYZi
+         wdTL2b2RnzqgkJUhpU1g4qFMYRvnjluLMxf/7HL7ookB2nZq4lbEIscvdyaR9bzPzB7O
+         6Gtw==
+X-Forwarded-Encrypted: i=1; AKwUvBxAdPexI1onAQpdEgj/m8ec3zZyIqK4PmDOdgJaV7+X9xicpIOAIUk41GOH8DPWgROlJZ3AIkaCzX0T/VBr@vger.kernel.org
+X-Gm-Message-State: AFuF++nle+CUr5B3QzrgmxjfTAZTjsoSk0WY6H7uL4DAHlg+iyYf7f1F
+	GicDhAuwZw3KZb/wZndBYwJlfErfUVUGEo6eJ9zOV5rilL//1WnT72hfvwQeg0YJWhw=
+X-Gm-Gg: AYBFou2MxZLfbBiC/rUPgp9w/TVydE+EWyfSIzT/zoSPivReEYxf/WfLGVudAL8UQEr
+	S9ZHx3N4kzsrUkMSSRJ10xSQA54h64TPnPUnRQDhiDq9EVIAPe7E/5kEXRKEL4w35MX68Q+q4W8
+	135otUtwyTJaqiLx3Sg3j/+Ba5LtO/buswHRJ45c6GDC6x3W9pskEHnXI9Td5hQmyBjoLREKWzB
+	P0dk0PNHeIIcxd2PuhKT+FKAt/bvQgCJOVgIVVCY4OLIJWW4tJzyHaHb0JlN5xUwR3owwjw0/Od
+	5zqK1AwbWKOi1UPnKV+b1bpUBdSn6uhkLHr2AB9H9vPHb+d4XicuHIt0gN+AHqRqmdSH2u0pM7X
+	GMuFmOfLehck5SLIXnpc05u0DJuh8bF+jhpU68VOdIOgg4WDsAkZvyX5val7MOexxLK3t+mCwj/
+	hFENLwn2yYev1ct3Nz6ozypkRA59xO8xv9d8CCWv4YAkJM2Lbtz6cGoR4z9AM7LM3fbA09IgxJ
+X-Received: by 2002:a05:600c:3f0b:b0:4a1:6f78:8419 with SMTP id 5b1f17b1804b1-4a18007e381mr86048665e9.0.1791455435163;
+        Thu, 08 Oct 2026 03:30:35 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1843dfb3bsm67008095e9.13.2026.10.08.03.30.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 03:30:33 -0700 (PDT)
+Date: Thu, 8 Oct 2026 12:30:31 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, song@kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v10 5/9] livepatch: Implement provides and obsoletes for
+ scoped atomic replace
+Message-ID: <asdwx-BENZy6dajG@pathway.suse.cz>
+References: <20260930030323.14396-1-laoar.shao@gmail.com>
+ <20260930030323.14396-6-laoar.shao@gmail.com>
+ <ar_kouwlAGcnnUYQ@pathway.suse.cz>
+ <CALOAHbCHwJ2htPOoako_EqNg-bQF=4NLNqVGAnzsAi2uitMdeQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbCHwJ2htPOoako_EqNg-bQF=4NLNqVGAnzsAi2uitMdeQ@mail.gmail.com>
 
-Livepatches with different provides ids must not modify the same
-function, unless they share the same provides id or the second
-livepatch obsoletes the first one.
+On Sun 2026-10-04 23:46:29, Yafang Shao wrote:
+> On Sat, Oct 3, 2026 at 1:06 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > On Wed 2026-09-30 11:03:19, Yafang Shao wrote:
+> > > The current bool replace flag is too coarse: it is either all or
+> > > nothing. A livepatch with .replace=true replaces ALL existing
+> > > livepatches, which is safe but inflexible. There is no way to have
+> > > multiple independent livepatch sets coexist on the same system.
+> > >
+> > > Replace it with a more flexible model using two new fields in
+> > > struct klp_patch:
+> > >
+> > > - provides: an unsigned int id identifying the changes made by
+> > >   the related livepatch. Where the changes are a set
+> > >   of modified objects, functions, and used callbacks,
+> > >   shadow variable ids, and state ids.
+> > >
+> > > - obsoletes: an optional array of unsigned int ids specifying
+> > >   additional provides ids to be replaced. This allows a new patch
+> > >   to explicitly obsolete patches from different scopes.
+> > >
+> > > A new livepatch atomically replaces any existing livepatch that
+> > > meets any of the following conditions:
+> > > 1. It has the same provides id as the new patch,
+> > > 2. Its provides id is listed in the new patch's obsoletes list, or
+> > > 3. The new patch's provides id is listed in its obsoletes list
+> > >    (the obsoletes relationship is symmetric).
+> > >
+> > > The obsoletes relationship is symmetric: two livepatches that
+> > > obsolete each other are mutually exclusive. Loading either one
+> > > atomically removes the other, so they can never be enabled at the
+> > > same time. This allows swapping between two independently prepared
+> > > livepatches that cover the same scope, in either direction.
+> >
+> > Honestly, I am confused by the 3rd rule and by the last paragraph.
+> > It is not compatible with my understanding of the provides/obsoletes
+> > semantic.
+> 
+> Correct. In package management semantics, Obsoletes is not a symmetric
+> relationship.
+> 
+> >
+> > In my mental model, the provides and obsoletes define which
+> > way is supported. Let me show an example, let's have:
+> >
+> >  Livepatch A:
+> >    + provides: 1
+> >    + obsoletes:
+> >
+> >  Livepatch B:
+> >    + provides: 2
+> >    + obsoletes: 1
+> >
+> >  Livepatch C:
+> >    + provides: 3
+> >    + obsoletes: 1,2
+> >
+> >  Livepatch D:
+> >    + provides: 2
+> >    + obsoletes: 1,3
+> >
+> > How is this supposed to work, please?
+> >
+> > In my mental model:
+> >
+> >   Livepatch A:
+> >      + can be replaced by B, C, or D because they all obsolete 1
+> >      + can _not_ replace B, C, D because A does not obsolete 2 and/or 3.
+> >
+> >   Livepatch B:
+> >     + can be replaced by C because C obsoletes both 1 and 2
+> >     + can be replaced by D beause D provides 2 and obsoletes 1
+> >     + can't replace C or D because B neither provides not obsoletes 3.
+> >
+> >   Livepatch C:
+> >     + can be replaced by D because D provides and obsoletes
+> >        all ids which are proviced and obsoleted by D
+> >
+> >     + can replace D from the same reasons.
+> >
+> >
+> > OK, I understand that it might be practical to allow replacing
+> > the patches just because they are "conflicting". As a kind
+> > of revert/downgrade.
+> 
+> Right. This will let us easily roll back the buggy livepatch and
+> reinstall the old one as part of the rollout.
+> 
+> >
+> > It might help to rename "obsoletes" to "conflicts". And just
+> > say that the livepatch replaces livepatch with the same id
+> > in provides and also all conflicting patches.
+> >
+> > But then I see another problem. We have three types of conflicts:
+> >
+> >   1. same id in provides/obsoletes/conflicts
+> >   2. same livepatches function
+> >   3. same livepatch state id
+> >
+> > It is weird that we would silently replace livepatches with 1st
+> > type conflict. But we would refuse to load the livepatch with
+> > the 2nd and/or 3rd type conflict.
+> >
+> > Note that the inconsistent handling of conflicts exists in
+> > this patch even when the array is called "obsoletes". My proposal
+> > to rename it to "conflicts" just helped me to see this
+> > inconsistence.
+> >
+> > Any option/idea? Yet another naming?
+> 
+> Perhaps it could use a better name, but I'm not good at naming things ;)
+> 
+> >
+> > One more thing, the commit message does not describe that
+> > the livepatches might conflict when livepatching the same
+> > function or using the same state id. It is important part
+> > of the semantic and must be documented.
+> 
+> Sure. I will update it.
+> 
+> >
+> > Best Regards,
+> > Petr
+> >
+> > PS: I am sorry but I won't be able to finish the review before
+> >     the Plumbers conference. But I am happy that I have found
+> >     the above problem. We could discuss it at the conference
+> >     and come up with some sane naming and semantic.
+> 
+> I can't be there in person, but I believe we'll come up with a
+> sensible name or semantic. I'll hold off until we reach a final
+> conclusion.
 
-Add test scenarios that verify this rule on the combination of
-patched functions and provides ids.
+I am not sure if you saw the video from the the conference.
+It looked like we were going to nack this feature because
+installing more livepatches on the system was considered
+too dangerous.
 
-These tests are skipped on kernels that still support the legacy
-"replace" attribute.
+In particular, it allows using livepatches provided by different
+teams/vendors. It is almost impossible to prevent incompatible
+changes and breaking the system. The check preventing livepatching
+the same function or using the same state IDs is just the best
+effort but it still allows many hidden incompatibilities.
 
-Suggested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- .../livepatch/test-provides-obsoletes.sh      | 188 ++++++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |   1 +
- .../test_modules/test_klp_meminfo_lp2.c       |   2 +
- 3 files changed, 191 insertions(+)
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
+We should rather discourage people installing more livepatches
+in parallel.
 
-diff --git a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-index b92188fcf45f..fce421a45fdb 100755
---- a/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-+++ b/tools/testing/selftests/livepatch/test-provides-obsoletes.sh
-@@ -5,6 +5,7 @@
- . $(dirname $0)/functions.sh
- 
- MOD_MEMINFO=test_klp_meminfo_lp
-+MOD_MEMINFO2=test_klp_meminfo_lp2
- MOD_CMDLINE=test_klp_cmdline_lp
- MOD_STATE=test_klp_state
- MOD_STATE2=test_klp_state2
-@@ -465,4 +466,191 @@ $MOD_STATE: free_loglevel_state: freeing space for the stored console_loglevel
- livepatch: '$MOD_STATE': unpatching complete
- % rmmod $MOD_STATE"
- 
-+
-+# - load two livepatches that modify the same function
-+#   (meminfo_proc_show), both with provides=1. The second livepatch
-+#   replaces the first one because of the same provides id, even
-+#   though they share the patched function.
-+# - verify that the first livepatch is gone from sysfs (replaced)
-+#   and that the second one is enabled
-+# - unload the replacing livepatch, then the replaced one
-+
-+start_test "same function, replaced by provides"
-+
-+load_lp $MOD_MEMINFO provides=1
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+
-+load_lp $MOD_MEMINFO2 provides=1
-+
-+loop_until '[[ ! -e "$SYSFS_KLP_DIR/$MOD_MEMINFO" ]]' ||
-+	die "failed to replace $MOD_MEMINFO"
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+
-+check_sysfs_value "$MOD_MEMINFO2" "provides" "1"
-+
-+disable_lp $MOD_MEMINFO2
-+unload_lp $MOD_MEMINFO2
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+
-+unload_lp $MOD_MEMINFO
-+
-+check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
-+livepatch: enabling patch '$MOD_MEMINFO'
-+livepatch: '$MOD_MEMINFO': initializing patching transition
-+livepatch: '$MOD_MEMINFO': starting patching transition
-+livepatch: '$MOD_MEMINFO': completing patching transition
-+livepatch: '$MOD_MEMINFO': patching complete
-+$MOD_MEMINFO: this has been live patched
-+% insmod test_modules/$MOD_MEMINFO2.ko provides=1
-+livepatch: enabling patch '$MOD_MEMINFO2'
-+livepatch: '$MOD_MEMINFO2': initializing patching transition
-+livepatch: '$MOD_MEMINFO2': starting patching transition
-+livepatch: '$MOD_MEMINFO2': completing patching transition
-+livepatch: '$MOD_MEMINFO2': patching complete
-+$MOD_MEMINFO2: this has been live patched
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO2/enabled
-+livepatch: '$MOD_MEMINFO2': initializing unpatching transition
-+livepatch: '$MOD_MEMINFO2': starting unpatching transition
-+livepatch: '$MOD_MEMINFO2': completing unpatching transition
-+livepatch: '$MOD_MEMINFO2': unpatching complete
-+% rmmod $MOD_MEMINFO2
-+% rmmod $MOD_MEMINFO"
-+
-+
-+# - load a livepatch that modifies meminfo_proc_show with provides=1,
-+#   then try to load another livepatch that modifies the same
-+#   function with a different provides id (provides=2).
-+# - since the provides ids differ, the second livepatch would not
-+#   replace the first one; the same function can not be handled by
-+#   two different provides groups in parallel, so the load must fail.
-+# - unload the first livepatch
-+
-+start_test "same function, can't be loaded in parallel"
-+
-+load_lp $MOD_MEMINFO provides=1
-+load_failing_mod $MOD_MEMINFO2 provides=2
-+
-+disable_lp $MOD_MEMINFO
-+unload_lp $MOD_MEMINFO
-+
-+check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
-+livepatch: enabling patch '$MOD_MEMINFO'
-+livepatch: '$MOD_MEMINFO': initializing patching transition
-+livepatch: '$MOD_MEMINFO': starting patching transition
-+livepatch: '$MOD_MEMINFO': completing patching transition
-+livepatch: '$MOD_MEMINFO': patching complete
-+% insmod test_modules/$MOD_MEMINFO2.ko provides=2
-+livepatch: Livepatch patch ($MOD_MEMINFO2) is not compatible with the already installed livepatches.
-+insmod: ERROR: could not insert module test_modules/$MOD_MEMINFO2.ko: Invalid parameters
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO/enabled
-+livepatch: '$MOD_MEMINFO': initializing unpatching transition
-+livepatch: '$MOD_MEMINFO': starting unpatching transition
-+livepatch: '$MOD_MEMINFO': completing unpatching transition
-+livepatch: '$MOD_MEMINFO': unpatching complete
-+% rmmod $MOD_MEMINFO"
-+
-+
-+# - load a livepatch that modifies meminfo_proc_show with provides=1,
-+#   then another livepatch with provides=1 that modifies a different
-+#   function (cmdline_proc_show). The second one replaces the first
-+#   one because of the same provides id.
-+# - since the patched functions differ, the replacement does not need
-+#   to restore the old function body; the transition only switches
-+#   the ftrace nops, i.e. the atomic replace (nops) path.
-+# - after the replacement /proc/meminfo is no longer patched, while
-+#   /proc/cmdline is patched
-+# - unload the replacing livepatch, then the replaced one
-+
-+start_test "different functions, atomic replace works (nops)"
-+
-+load_lp $MOD_MEMINFO provides=1
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+
-+load_lp $MOD_CMDLINE provides=1
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+grep 'live patched' /proc/cmdline > /dev/kmsg
-+
-+disable_lp $MOD_CMDLINE
-+unload_lp $MOD_CMDLINE
-+unload_lp $MOD_MEMINFO
-+
-+check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
-+livepatch: enabling patch '$MOD_MEMINFO'
-+livepatch: '$MOD_MEMINFO': initializing patching transition
-+livepatch: '$MOD_MEMINFO': starting patching transition
-+livepatch: '$MOD_MEMINFO': completing patching transition
-+livepatch: '$MOD_MEMINFO': patching complete
-+$MOD_MEMINFO: this has been live patched
-+% insmod test_modules/$MOD_CMDLINE.ko provides=1
-+livepatch: enabling patch '$MOD_CMDLINE'
-+livepatch: '$MOD_CMDLINE': initializing patching transition
-+livepatch: '$MOD_CMDLINE': starting patching transition
-+livepatch: '$MOD_CMDLINE': completing patching transition
-+livepatch: '$MOD_CMDLINE': patching complete
-+$MOD_CMDLINE: this has been live patched
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_CMDLINE/enabled
-+livepatch: '$MOD_CMDLINE': initializing unpatching transition
-+livepatch: '$MOD_CMDLINE': starting unpatching transition
-+livepatch: '$MOD_CMDLINE': completing unpatching transition
-+livepatch: '$MOD_CMDLINE': unpatching complete
-+% rmmod $MOD_CMDLINE
-+% rmmod $MOD_MEMINFO"
-+
-+
-+# - load two livepatches with different provides ids (1 and 2) that
-+#   modify different functions (meminfo_proc_show and
-+#   cmdline_proc_show). Neither of them replaces the other, so both
-+#   livepatches must coexist.
-+# - verify that both /proc/meminfo and /proc/cmdline are patched
-+# - disable and unload both livepatches
-+
-+start_test "different functions, install in parallel"
-+
-+load_lp $MOD_MEMINFO provides=1
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+
-+load_lp $MOD_CMDLINE provides=2
-+
-+grep 'live patched' /proc/meminfo > /dev/kmsg
-+grep 'live patched' /proc/cmdline > /dev/kmsg
-+
-+disable_lp $MOD_MEMINFO
-+unload_lp $MOD_MEMINFO
-+disable_lp $MOD_CMDLINE
-+unload_lp $MOD_CMDLINE
-+
-+check_result "% insmod test_modules/$MOD_MEMINFO.ko provides=1
-+livepatch: enabling patch '$MOD_MEMINFO'
-+livepatch: '$MOD_MEMINFO': initializing patching transition
-+livepatch: '$MOD_MEMINFO': starting patching transition
-+livepatch: '$MOD_MEMINFO': completing patching transition
-+livepatch: '$MOD_MEMINFO': patching complete
-+$MOD_MEMINFO: this has been live patched
-+% insmod test_modules/$MOD_CMDLINE.ko provides=2
-+livepatch: enabling patch '$MOD_CMDLINE'
-+livepatch: '$MOD_CMDLINE': initializing patching transition
-+livepatch: '$MOD_CMDLINE': starting patching transition
-+livepatch: '$MOD_CMDLINE': completing patching transition
-+livepatch: '$MOD_CMDLINE': patching complete
-+$MOD_MEMINFO: this has been live patched
-+$MOD_CMDLINE: this has been live patched
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_MEMINFO/enabled
-+livepatch: '$MOD_MEMINFO': initializing unpatching transition
-+livepatch: '$MOD_MEMINFO': starting unpatching transition
-+livepatch: '$MOD_MEMINFO': completing unpatching transition
-+livepatch: '$MOD_MEMINFO': unpatching complete
-+% rmmod $MOD_MEMINFO
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_CMDLINE/enabled
-+livepatch: '$MOD_CMDLINE': initializing unpatching transition
-+livepatch: '$MOD_CMDLINE': starting unpatching transition
-+livepatch: '$MOD_CMDLINE': completing unpatching transition
-+livepatch: '$MOD_CMDLINE': unpatching complete
-+% rmmod $MOD_CMDLINE"
-+
- exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index 732e0003930b..0c17754997d2 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -2,6 +2,7 @@ TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
- KDIR ?= /lib/modules/$(shell uname -r)/build
- 
- obj-m += test_klp_meminfo_lp.o \
-+	test_klp_meminfo_lp2.o \
- 	test_klp_callbacks_busy.o \
- 	test_klp_callbacks_demo.o \
- 	test_klp_callbacks_demo2.o \
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
-new file mode 100644
-index 000000000000..2b93c969b7ba
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_meminfo_lp2.c
-@@ -0,0 +1,2 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "test_klp_meminfo_lp.c"
--- 
-2.52.0
+Anyway, we had a follow-up discussion and agreed to accept this
+feature in the end. We already allow to install more livepatches
+in parallel. So this patchset is not adding any new danger.
+Instead, it reduces the danger a bit without complicating the
+code too much.
 
+Also we understand that there might be some use cases for this
+feature. And it might be safe when used carefully.
+
+
+We also discussed the semantic of the obsolete field and we
+would like to it simple. The livepatch with a provides ID should
+replace a livepatch with another provides ID _only_ when the other
+ID is mentioned in obsoletes.
+
+By other words, please remove the symmetry and "support" for
+a rollback. The symmetry causes some confusion as explained
+before. I would summarize it by two reasons:
+
+   + In the packaging world, the "obsoletes" behavior is not
+     symmetric.
+
+   + The symmetric behavior adds a "conflict" semantic. But
+     this particular conflict is handled another way than
+     the other conflicts (livepatches functions, state IDs).
+     I mean replacing an already enabled livepatch vs.
+     rejecting the new one.
+
+In addition, we do not support the rollback in all situations,
+for example, let's have:
+
+Livepatch A:
+  + provides: 1
+  + obsoletes:
+
+Livepatch B:
+  + provides: 2
+  + obsoletes:
+
+Livepatch C:
+  + provides: 3
+  + obsoletes: 1,2
+
+The meaning is:
+
+  + A and B are independent livepatches.
+  + C adds some dependency and has to replace both A and B.
+
+Here a proper rollback from C to A+B would require loading both
+A and B livepatches synchronously. It would require adding
+special support into the module loader and the livepatch core code.
+We do not want to add this complexity. Especially, because
+the parallel installation of livepatches is considered a bad
+practice.
+
+A partial workaround might be to allow changing "obsoletes" via
+a livepatch module parameter. It would allow to do the
+rollback in 2 steps:
+
+   modprobe obsoletes=3 livepatch_A
+   modprobe livepatch_B
+
+It is still not an atomic rollback. But it is better than
+without the parameter which would require 3 steps:
+
+   echo 0 > /sys/kernel/livepatch/livepatch_C/enabled
+   modprobe livepatch_A
+   modprobe livepatch_B
+
+
+
+Summary:
+
+We are open to accept this feature but please:
+
+    + Remove the symmetric handling of obsolete flag.
+
+    + Properly document, in both the commit message and
+      documentation, when the livepatches will be replaced
+      and when they will conflict.
+
+    + Document the pitfalls with the rollback.
+
+    + Add a warning that installing more livepatches in parallel
+      is dangerous, especially when they are provided by different
+      teams or vendors. The built-in checks of possible conflicts
+      do not prevent potential incompatibilities and breakages.
+
+
+Heh, I hope that I got it right.
+
+Best Regards,
+Petr
