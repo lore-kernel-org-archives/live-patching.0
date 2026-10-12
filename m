@@ -1,70 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F44C36194B
-	for <live-patching@vger.kernel.org>; Sun, 11 Oct 2026 18:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DFF1DB95E
+	for <live-patching@vger.kernel.org>; Mon, 12 Oct 2026 06:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791745109; cv=none; b=tmJ/w53lGm/LUWgg81aV7WQEgtWXN8g7uNdI3UxsqKQCfgdz6jtxXlZP9ayfOQ0KkPoK8G39inHeUsa8BzB9QxVaS0kCKmfStuWpd34daD6Rxz7QU7i7MpjKJkHCMmnpJvvkUgvqpcF/c8l56YeB/oRPEi+3vfoh50HnEEJZkEE=
+	t=1791787609; cv=none; b=XIkcoIFDTLPvg0SLRD08mBwOFg9G8q8Q3i74YsS8rrFFFLJpNuXxkya8BoimBnk+t1BMzlrgXxc/fX2DUeIWuyENk5S//eHANOTl/0p7SLBHx89U+LBsLG4FoN6WkcSM/nvCUK1HNoBO6WABh2hZYU85BcXj5AT8nm66KMyDM00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791745109; c=relaxed/simple;
-	bh=AqDSNOwmcHl4cR31yxAgWr2XCJN7ydUtB1mAbLpL3ss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RAN4zpMZpN70vK6nH0Q/6uOcAAjdrzcvc18qBHBQnyQloYhIRHjxt0kWG3vQhB5daUkinHEoxHn5gzYNXT6bC92/080/jNLULAT2qguZzens1D58jy3d9RU0XrtuZQ4DfIlk/LTDe8gWP0zcFOnAbGB0DrEtBEn1Z0V38a/AVvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWmLxPg0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791787609; c=relaxed/simple;
+	bh=SbWZvZ6Aq73/GG9Aa9a1Ai9xALssZMKffG8SzMOqxXE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=r5p85Pp+2b3s9o4v1hzJIFya44wVn1cdDfyouIylV5XHEZh4k0eTjYAAWnSB21TL7vpuqxnROQvyg8Msj4i45q2Alc3Y5MGX7oU0ULPDhKDcLjR0qDwxYxg19KmWbQqWBiQ4diXVKhqN1aqQ8llEygtd5AvtcX8OyYJ3bHOrRNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2EH9aZ+G; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=DYS0C4ii; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=3UP1Ixyw; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=BrT10HYJ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWmLxPg0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19A91F0089B
-	for <live-patching@vger.kernel.org>; Sun, 11 Oct 2026 18:58:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791745107;
-	bh=xJ21hrWJH9axY4jAzpc++zD1/Jz3sz4ZEQgfOFJFd5w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=FWmLxPg0Sr0huqO+WuYp3hVb5eIzu7US8qJVtA0hzyasPJ4LVY+Xy8h9Ed5gHeH6T
-	 a7uFAYW864Xyfybmqj0x13FWu/d1ZvUyNIKphyI0xcRog/1l5AcMSKpvEc0XJUcr30
-	 tAfYotnDH2R6sgOvHdkK1Xl4hBpSPelFDl9y7YTqIqgfPllDYdAIyP4Kq/478pd11A
-	 WBYdvtb54h1G546vclTbY/iNPTtrR0HhtEbedF00V6D9MV54N8kBnsWRMrZQ6uUm3J
-	 HVywmoKnRuLNumKnjK2lPBQH0u2Y/AV9SS0zGKt0sWp77ML4c8XwogOVAbGxoblXcG
-	 14NaNMV4kWaVA==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93e6eb77f0bso132116585a.3
-        for <live-patching@vger.kernel.org>; Sun, 11 Oct 2026 11:58:27 -0700 (PDT)
-X-Gm-Message-State: AFq9FYJVIMiIUbdikI5clrsAJeTtKBDiD0J/WAbEmXn4mhtcGn53FIj3
-	8tFUtnG/hfAh2qnDzyhzZua2u9W2kvVTUVJVc8OQeEVcn/6+/GMHYSZXQrgSrTbbE4zElUMSHCh
-	l8eU+lW1nG8fXKZHnD4sHLACopQ2QOzQ=
-X-Received: by 2002:a05:620a:46ac:b0:93a:11a4:223c with SMTP id
- af79cd13be357-93ebd0c6dcfmr1205596485a.9.1791745107243; Sun, 11 Oct 2026
- 11:58:27 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2EH9aZ+G";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="DYS0C4ii";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="3UP1Ixyw";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="BrT10HYJ"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D29A321E6D;
+	Mon, 12 Oct 2026 06:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1791787605; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uAusn+iItgi+5fTV7ozXmXzAMj7nWO6jvIZLaEHqvcg=;
+	b=2EH9aZ+GSB4zCOAo066+dQbGOG6kGh1bbzVWUzcCfJFSP1sOpnF+38z0WFXk/0E1GdzfJV
+	bqTlMDT0heZuuY1S+aPxn3hij9bjVnKoB7DtaPMokGRhxELKfq3CGdvW6oEXtWEn8jOwk2
+	gM+MbCdsw9tULRjXp9qMwT6B1gfqXXQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1791787605;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uAusn+iItgi+5fTV7ozXmXzAMj7nWO6jvIZLaEHqvcg=;
+	b=DYS0C4ii4o9rEfOd2l+NcgsyM0loi+VblfJj1tlJuLYuqxvuvtKEJ9B1aTSQMIbDc2jCye
+	PIEgsswTqy+aNqBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1791787604; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uAusn+iItgi+5fTV7ozXmXzAMj7nWO6jvIZLaEHqvcg=;
+	b=3UP1IxywRBiRYfqyUYby81bJ9TVEcB/kKj3XrPfgzmOCO3oG8J4Qypa+poyrNskPO8XPRr
+	YBcsHuaW+L5mmgsrxIxa6BBexXILCpEA4hZ8T6QYa8t1HG/fqR29QhIHdJXDF6ZeJPuybO
+	1iLdK9f1bM84fp6vQxYWm9EuO4fFPQk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1791787604;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uAusn+iItgi+5fTV7ozXmXzAMj7nWO6jvIZLaEHqvcg=;
+	b=BrT10HYJik8jMEBJlS1LCUDJioMa+OaG35D0EwGKd8PhzyxlH1dEeuhSj0Y0Gx307iVGgT
+	1KcBIpTDp8GvMzDA==
+Date: Mon, 12 Oct 2026 08:46:44 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Jiri Kosina <jikos@kernel.org>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Petr Mladek <pmladek@suse.com>, 
+    Joe Lawrence <joe.lawrence@redhat.com>, live-patching@vger.kernel.org
+Subject: Re: [PATCH] livepatch: remove myself from MAINTAINERS
+In-Reply-To: <6pq4rr41-0p23-2oq5-o750-0259410q9680@xreary.bet>
+Message-ID: <alpine.LSU.2.21.2610120846240.27149@pobox.suse.cz>
+References: <6pq4rr41-0p23-2oq5-o750-0259410q9680@xreary.bet>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <55b68f507686cadfcb1fa4f8524ae042c7657be8.1791664234.git.jpoimboe@kernel.org>
-In-Reply-To: <55b68f507686cadfcb1fa4f8524ae042c7657be8.1791664234.git.jpoimboe@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Sun, 11 Oct 2026 19:58:14 +0100
-X-Gmail-Original-Message-ID: <CAPhsuW5V-VEf3WUAo4LiLMNdXdiWJ0o9zeLx9aTasQfh2LK2LQ@mail.gmail.com>
-X-Gm-Features: AclHuK-26tgjgTPgu-Qekfg2JGvHW8bPLOcwCrFPyxDypmNmI5Dx7Q9i19_Z47E
-Message-ID: <CAPhsuW5V-VEf3WUAo4LiLMNdXdiWJ0o9zeLx9aTasQfh2LK2LQ@mail.gmail.com>
-Subject: Re: [PATCH] livepatch: Add Joe and Song as maintainers
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.cz:email]
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-On Sat, Oct 10, 2026 at 9:32=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> Joe and Song have both been key contributors to livepatch for several
-> years.  They have graciously agreed to become maintainers; add them.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+On Thu, 8 Oct 2026, Jiri Kosina wrote:
 
-Thanks Josh!
+> From: Jiri Kosina <jkosina@suse.com>
+> 
+> As discussed at LPC 2026 with Josh -- I am not an active kernel 
+> livepatching maintainer any more, so let's properly reflect that.
+> 
+> Signed-off-by: Jiri Kosina <jkosina@suse.com>
 
-It is a great honor!
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 
-Acked-by: Song Liu <song@kernel.org>
+M
