@@ -1,167 +1,178 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65A2C2D5408;
-	Wed, 14 Oct 2026 12:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C71B4E36D2;
+	Wed, 14 Oct 2026 13:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791980634; cv=none; b=cET7gQNQf5GwsrHb/Y27B/wyDCyAuUCOZgSVzMjF5xUGMdqMiHuJiaTIlo/Fw5hODLOd75XelOnlMeKhWb/CPGpQT0RPgL8ilfpsDMJqRYmGnaaTYov/JvqJYktIGSCXBw4V9YxBvu0gG2OUE10D5vNqj2DOypsyz84+UcK45kk=
+	t=1791983408; cv=none; b=YMvs8yI8hHBnqcLgtNemHYr687qAAnnBXCE3nrmJ2Ttb/mliC5NtA/9H4gYSzrz8o89RiPDNGvR4Gw/7dP82qkjkM7BwLtKs991ggGFvs7lXYDIjsIURpmaIjtCESsJJ2rorTLRVRqnVrbSU62pci5ybVDQJ93DTegahvsskVIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791980634; c=relaxed/simple;
-	bh=fWWWl9GFsKVb/WhJpZ1G8nhPsaAr1YtFHAJ1glTSLcc=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=PPGP0QqgDTaeoRFSJUyUjkiNoegVqoxtBlAxrIiL9HSBokUKu1V3AfCi6g780Uf05xDskY7hr5qq0oCbnU/0PMIfTAn8qWrFivPExnlPUk7uLyzynNPyZ12T3mLqfEmNjCVR1AX15+B0Orve5K/vtx5bgcDzp95wsuZkb1k2a28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=F+pkQ7Yk; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=GKvSmFgU; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ROuytJdE; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=p69yRgF9; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1791983408; c=relaxed/simple;
+	bh=Cvx4lOh9Q81VjksKJoawg6eN+66LrK3LWXSnIiPRD38=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mOdGlcoLFuyVbwq5M110eaWIStqs5jkRPl0CHLsa397UtSyhfBxuLt9RUNeXMuXhZzPKtI++jbHr3by4HQRqXEhaXSYPO9hYRGz+ZzXzzLuLhXNRlw4RaYyPTz8Gk4l1E5GVPCMQGJaDmE93a9jIy0lhgP3N1HroDRYWgpvnJ6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=iSixPOae; arc=none smtp.client-ip=115.124.30.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="F+pkQ7Yk";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="GKvSmFgU";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ROuytJdE";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="p69yRgF9"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0DB9C2204A;
-	Wed, 14 Oct 2026 12:23:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1791980631; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JX3WUeuPvBjFgfcR029LBr9vD/jVzdyphvy8NIseFJc=;
-	b=F+pkQ7Yk7E30VT0xzJM/HgzpyE6Lw7mIJYDI0cgtggefBb30Ho2d/5nhOqL43RCV10r7vg
-	zLgHRd2+hUJnPRGf/5twJRS8rwCjRo99NJKbA5WTms3hL5JoXbpE3qYEXHzl355bf6x80E
-	7Q+ebU6nNHHjJKPlIb2DxGfNrjpOCso=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1791980631;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JX3WUeuPvBjFgfcR029LBr9vD/jVzdyphvy8NIseFJc=;
-	b=GKvSmFgUnwTMbKW0WqARkWdt56oPISCDE+JBa2gVWetLOf9jVKpRF15BwI7gOc7IHwaIa+
-	KBqE5WAsIjztYkDA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1791980630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JX3WUeuPvBjFgfcR029LBr9vD/jVzdyphvy8NIseFJc=;
-	b=ROuytJdEld7hyu6Ud7hrSeqX3+n+wjn9XgzfM2LAcrXWE9lOqBI97xUF4gspRfDv3e0vp+
-	3I60Jc7GJvP0vMjGdVz/6K2J/OBubtGgOneC69E5s6HF2eOT0RdRvTW1JtzwPzOo5oGiyg
-	WsgkAe8HJB/6J1ilQid7DEHoa3/8ggo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1791980630;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JX3WUeuPvBjFgfcR029LBr9vD/jVzdyphvy8NIseFJc=;
-	b=p69yRgF9+HewfuOvee6IODsPWStzQB84EsWkle20i5iG+DY3q3ZOnQVVgoS3tSCaE4xL3X
-	+EyGjnq8+eRhViCA==
-Date: Wed, 14 Oct 2026 14:23:50 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Andrea Parri <parri.andrea@gmail.com>
-cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
-    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-    Song Liu <song@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-    live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    stable@vger.kernel.org, petr.pavlu@suse.com
-Subject: Re: [PATCH] livepatch: Fix races between stack check and module
- load/unload
-In-Reply-To: <20261012140546.154730-1-parri.andrea@gmail.com>
-Message-ID: <alpine.LSU.2.21.2610141410370.16733@pobox.suse.cz>
-References: <20261012140546.154730-1-parri.andrea@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="iSixPOae"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1791983396; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=NfvwyHiH13gScZyLRyJ1bRdwmOqWUvSNVK5u+We9JrM=;
+	b=iSixPOaemVe3z3Yi4IgI0ylhSBaW79McGva8sjz5K2ApcHgRTgDtuhXpB9Pta0nH4gdMfEdgYrK0ROzbeSUBjsvyPoyA1vALDg+D0pzXhM5kq2d+3dE2/kJ2rT+FmiGOk7gnSofyXnoUJv/XeCEKRFXhZGTr/y2muvJ88akLbCY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0XCp3Qsf_1791983391;
+Received: from 30.246.161.148(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XCp3Qsf_1791983391 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 14 Oct 2026 21:09:54 +0800
+Message-ID: <3bd83dc6-1206-4af2-bfcf-5894b1029907@linux.alibaba.com>
+Date: Wed, 14 Oct 2026 21:09:51 +0800
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_ZERO(0.00)[0];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo]
-X-Spam-Score: -2.80
-X-Spam-Level: 
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/7] riscv: stacktrace: switch to frame-pointer based
+ unwinder
+To: Martin Kaiser <martin@kaiser.cx>
+Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-riscv@lists.infradead.org, oleg@redhat.com, rostedt@goodmis.org,
+ mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org,
+ mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+ alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
+ adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org, mpdesouza@suse.com, oliver.yang@linux.alibaba.com,
+ zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
+ <20260914092648.51254-6-xueshuai@linux.alibaba.com>
+ <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <as6SEF4v6wt5GmVD@nb282.user.codasip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Andrea,
 
-Cc+ Petr Pavlu (you can find the whole thread at 
-https://lore.kernel.org/live-patching/20261012150758.207983-1-parri.andrea@gmail.com/T/#t)
 
-On Mon, 12 Oct 2026, Andrea Parri wrote:
-
-> Unloading a patched module while a livepatch transition is in progress
-> can crash the kernel in klp_find_ops(), called from the scheduler.
-> KCSAN reports
+On 10/14/26 4:18 AM, Martin Kaiser wrote:
+> Thus wrote Shuai Xue (xueshuai@linux.alibaba.com):
 > 
->   BUG: KCSAN: data-race in klp_find_ops / klp_unpatch_func
+>> From: Wang Han <wanghan@linux.alibaba.com>
 > 
->   write (marked) to 0xffff9094c09ece10 of 8 bytes by task 381 on cpu 2:
->    klp_unpatch_func+0x1bd/0x280
->    klp_unpatch_object+0x6a/0x90
->    klp_cleanup_module_patches_limited.cold+0x4a/0xd4
->    klp_module_going+0x54/0x80
->    __do_sys_delete_module+0x247/0x380
->    __x64_sys_delete_module+0x39/0x50
->    ...
+>> Replace the open-coded frame-pointer walker in arch_stack_walk() with a
+>> robust kunwind state machine, modelled on arch/arm64/kernel/stacktrace.c
+>> and retargeted to the RISC-V {fp, ra} frame record convention. The new
+>> walker tracks stack bounds, consumes frame records monotonically,
+>> understands the metadata pt_regs records added in the previous frame
+>> record metadata patch, and recovers return addresses replaced by
+>> function graph tracing and kretprobes.
 > 
->   read to 0xffff9094c09ece10 of 8 bytes by task 146 on cpu 1:
->    klp_find_ops+0x55/0x90
->    klp_check_and_switch_task+0x228/0x320
->    klp_try_switch_task+0xb4/0xc0
->    __klp_sched_try_switch+0x9a/0xb0
->    __schedule+0x60a/0x1450
->    schedule+0x3b/0x100
->    schedule_timeout+0xc0/0x160
->    ra_target_a_loop+0x97/0xa0 [klp_race_target_a]
->    ...
+>> This commit introduces arch_stack_walk_reliable() but does not yet
+>> select HAVE_RELIABLE_STACKTRACE; that is done in a follow-up Kconfig
+>> patch so this commit can be reviewed and bisected as a pure unwinder
+>> replacement. Until that Kconfig change lands, livepatch is not yet
+>> enabled and arch_stack_walk_reliable() has no in-tree caller.
 > 
-> followed by
+>> Three related callers are updated to keep the same frame-record
+>> assumptions everywhere:
 > 
->   Oops: general protection fault, probably for non-canonical address
->   0xdead000000000110: 0000 [#2] SMP NOPTI
->   RIP: 0010:klp_find_ops+0x55/0x90
->    ...
->    klp_check_and_switch_task+0x228/0x320
->    klp_try_switch_task+0xb4/0xc0
->    __klp_sched_try_switch+0x9a/0xb0
->    __schedule+0x60a/0x1450
+>>    * Function graph tracing: the old RISC-V unwinder matched function
+>>      graph return-stack entries by the saved return-address slot. That
+>>      was consistent with the static mcount path, but not with the dynamic
+>>      ftrace path where the parent slot is ftrace_regs::ra. Use the
+>>      architectural frame pointer as the function graph return-address
+>>      cookie, matching the kunwind walker.
+> 
+>>    * Perf callchains: route kernel callchain collection through
+>>      arch_stack_walk() so perf sees the same frame-pointer unwind
+>>      behaviour as dump_stack() and the upcoming livepatch path.
+> 
+>>    * dump_backtrace() / __get_wchan() / show_stack(): these now go
+>>      through arch_stack_walk(); the explicit "Call Trace:" header is
+>>      moved into dump_backtrace() to preserve the original output.
+> 
+>> The non-frame-pointer fallback walker is kept untouched for
+>> !CONFIG_FRAME_POINTER builds.
+> 
+>> Assisted-by: Qoder:Qwen-3.8-MAX-Preview
+>> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
+>>   arch/riscv/kernel/ftrace.c         |   6 +-
+>>   arch/riscv/kernel/perf_callchain.c |   2 +-
+>>   arch/riscv/kernel/stacktrace.c     | 561 ++++++++++++++++++++++++-----
+>>   3 files changed, 473 insertions(+), 96 deletions(-)
+> 
+>> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+>> index be8b685144174..0facd824c911d 100644
+>> --- a/arch/riscv/kernel/ftrace.c
+>> +++ b/arch/riscv/kernel/ftrace.c
+>> @@ -245,7 +245,8 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+>>   	 */
+>>   	old = *parent;
+> 
+>> -	if (!function_graph_enter(old, self_addr, frame_pointer, parent))
+>> +	if (!function_graph_enter(old, self_addr, frame_pointer,
+>> +				  (void *)frame_pointer))
+>>   		*parent = return_hooker;
+>>   }
+> 
+>> @@ -267,7 +268,8 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>>   	 */
+>>   	old = *parent;
+> 
+>> -	if (!function_graph_enter_regs(old, ip, frame_pointer, parent, fregs))
+>> +	if (!function_graph_enter_regs(old, ip, frame_pointer,
+>> +				       (void *)frame_pointer, fregs))
+>>   		*parent = return_hooker;
+>>   }
+> 
+> 
+> Are these two changes fixing a bug in the current code (that is independent
+> from the rest of this patch)?
+> 
+> Without your changes, function_graph_enter_regs writes a struct ftrace_ret_stack
+> with retp == the saved ra.
+> 
+> And the only place where retp is fetched and checked is
+> 
+> function_get_true_parent_ip
+>     ftrace_graph_ret_addr(..., (uintptr_t *)ftrace_regs_get_stack_pointer(fregs));
+> 
+> The stored retp is checked against the stack pointer.
+> 
+> Your changes store fp instead of ra, this seems the right thing to do. (And
+> it's in line with other archs.)
+> 
+> Should those two changes be in a separate patch (that can be backported to
+> stable kernels)?
 
-Interesting. So to sum it up... you load a live patch which contains a fix 
-for a module and while the transition is on, you remove the module and it 
-crashes (btw, I do not think that those traces are necessary here. More 
-btw, it would be nice to have a human readable changelog instead of what 
-looks like AI generated description of the patch itself).
+Hi, Martin,
 
-How did you find the issue? Is it a real problem in production?
+Thanks for the sharp question.
 
-I wonder whether we could just decline delete_module() in this case and 
-return -EBUSY. It should be a rare operation anyway. Alternatively we 
-could increase refcounts of all patched modules during a transition and 
-decrease them after. Petr P., what do you think?
+You are right that the stored cookie is broken. What
+ftrace_graph_func() passes as retp is &arch_ftrace_regs(fregs)->ra,
+i.e. the slot inside the transient ftrace trampoline frame, which is
+popped as soon as the callback returns. That has been the case since
+35e61e8827ee8 ("riscv: ftrace: Make function graph use ftrace
+directly") introduced ftrace_graph_func() in v6.8. (The code was
+copied from arm64's ftrace_graph_func(), but arm64 passes
+(void *)frame_pointer there - see 41705c4262aac for the current
+shape.)
 
-I am not saying we should not do the RCU protection but it feels like a 
-can of worms a bit so if there is an easier way...
+Since distro kernels only ever use the dynamic path, the net effect
+is that the shadow stack is never consulted during unwinding:
+whenever the function graph tracer is running, dump_stack(), perf
+callchains and __get_wchan() report return_to_handler instead of the
+real caller.
 
-Regards
-Miroslav
+I will split these two changes into a separate patch and cc stable.
+
+Thanks.
+Shuai
