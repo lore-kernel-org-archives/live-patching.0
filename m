@@ -1,180 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDB8485954;
-	Wed, 14 Oct 2026 20:01:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA1E282F2A
+	for <live-patching@vger.kernel.org>; Wed, 14 Oct 2026 20:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792008118; cv=none; b=bs6ERRKs0t/65gbmOKuOGCQ4d3OUXKASDQMdKSjCp1HyQ6W6PoE2NnpQOLvZ1pxkHK2H+cWE/H6jPWXex2i4JmJbur0anzYofcrMFwxg7oZEW7HDViqSlnaVR9Pf79ialdhM7izoxa2UbtdleAXIUFLkTRjPKsHTRyoMF7HzNVQ=
+	t=1792008749; cv=none; b=b3CLpRK0Byswb+2SJaLOnvzjOoQFUy8lAgDzUXh/c7I5FQ1j26fVTMEqzLFz+h3AuX6Q4BvanFXqUrRwzi3RagfscWNIGlLmiCgvIq1fe/4ubhn4q3VeHlK8SWjkLIjqz+Y1DJUXvHGL6+NXm5Ic+EfbRduG1v8STboWzmunHpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792008118; c=relaxed/simple;
-	bh=pTizOKZw6Ad5FfhICeRJrMYPRcWK4OlQ4o37q2skKpQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YHtpwlVln3qTdaMXOtQHNwnRRWIMJ9who6hZ4JvLUDu6G2EUrtTuKJES8Ktpzo4uS44UnShOioUKfoLksHzPeeCrZBKkwqjfROG/pNE1uCsB/s2RZBvssUN9rvARdgiy3IunrixeRbX41BxWaxf2Mhg7/7b30Pc4uVNnIewpe9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vf61j90Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792008749; c=relaxed/simple;
+	bh=nnNOyF8IhdFdNTFUqeCilz/kS6tNuGT7Ts7Zno9sVrs=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=F502OCqXRm3cekAGbJVv2kc1ySdpvbWLDhtM8wViM8j9QvC0jIDDfhxxDxEc+JN20rCA5Gu535Xl2qDCqakO5Es33m6VDbLaUuDWUZSI44d6ZcbpKtyEepiXh7d+rS3RhcqFNlp9D6ap313iKxTMwxhE+fGXSiqOwB6FYd0OSYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8906H7G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vf61j90Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE421F000C4;
-	Wed, 14 Oct 2026 20:01:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8906H7G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1AB1F000C4;
+	Wed, 14 Oct 2026 20:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792008117;
-	bh=LCObJpsEaN7y1DV7WmatB7bqNMyYbeBB8aYv44DDfRc=;
-	h=From:To:Cc:Subject:Date;
-	b=Vf61j90ZWWADxCqnmoYkC9pDbeAioj6wT0FZVG5yqJrvvSZ57qQG8ntu5Cn74U4a5
-	 uFB9VibSFV/br1tdIbbiDOMK4U1O6EOVQCnSR22yA7dzrwf6H6ayNXAcGX2rHAqDAJ
-	 nw60+M48BeM/lZlpsrXYzBQ5oN0PLR+izeSlUhXRDh9FU5xM5rD1Rh6AWE/WoXUbgr
-	 pR07gsK/0zEFbDKkSFKbuLAO/uKMw/zsYGiKWbrf/7foSL+NW/7JZ8w2eBkBQK6+sr
-	 ZhE+oiF2F7nNGYhQXmhipLo64QeyLVzN3iZDJ84ioygTH1aGuy4fdQSLiLZu7KXg09
-	 x/fY7T3XNUEkQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/livepatch: build test modules against the selected kernel
-Date: Wed, 14 Oct 2026 16:01:54 -0400
-Message-ID: <20261014200154.1365200-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	s=k20260515; t=1792008748;
+	bh=y9KRkvsqazAjXgLbas7lI0KrqPKqMZDC6l2V8KweZcg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=k8906H7GUCEdrvirGAlp6VFSyal8QVz3j4WQ/Gu+wXxzh34wyI/G2eC7PntrqIsaj
+	 9SRYAMYO/WTiFH15MxUifgfc8nwaNaPNA5hkTdKFPIAr0eN4DG9s5L4WYHQoWSYUm4
+	 QE+zYotPs14ufgIk9zqgrl6VJQ5E9GHYvm8tilbLEE4XA/U2pvafvAyynO7Z5QmloK
+	 x3SxPE8piE6zKqxrKVRJ6OeRvDqoS+DndCtRwmq81lahHe1vO5azq392MvOshiGe9C
+	 ISteuYnZ9yfiTpHkQOUqwIfkpnlpT/au+K/pos/Sqon4z+VuQp8xOruAxWJMbODpBz
+	 nodmqK4kCsmhw==
+Message-ID: <sashiko-outbox-171842@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] selftests/livepatch: build test modules against the
+ selected kernel
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sasha Levin" <sashal@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Miroslav
+ Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
+Cc: "Song Liu" <song@kernel.org>, "Marcos Paulo de Souza" <mpdesouza@suse.com>, "Eva
+ Kurchatova" <eva.kurchatova@virtuozzo.com>, "Yafang Shao" <laoar.shao@gmail.com>, "Shuah
+ Khan" <shuah@kernel.org>, live-patching@vger.kernel.org
+In-Reply-To: <20261014200154.1365200-1-sashal@kernel.org>
+References: <20261014200154.1365200-1-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 14 Oct 2026 20:12:26 +0000
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The livepatch test modules are built against /lib/modules/$(uname -r)/build
-unless KDIR is set, and they are built unconditionally. This has three
-problems:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] kbuild: target-specific MAKEOVERRIDES assignment is ignored by G=
+NU Make
+- [Medium] selftests: livepatch: tests falsely skip on target machines with=
+out KDIR
+--
 
-- When the selftests are built for a kernel in an output directory
-  (make O=...), the modules are still built against the running host
-  kernel, or fail when the host has no build directory.
+commit 52a5776aaff15a8419816c34023de1b05a2d6d7f
+Author: Sasha Levin <sashal@kernel.org>
 
-- The top-level selftests Makefile passes O to every suite, and the
-  test_modules Makefile hands it on to the kernel build. Even an empty
-  O= on the command line overrides the KBUILD_OUTPUT set by the
-  Makefile of a kernel build directory, so the build fails against
-  output directories and distribution headers such as Debian's:
-  "make -C tools/testing/selftests TARGETS=livepatch" builds no
-  modules at all.
+selftests/livepatch: build test modules against the selected kernel
 
-- A kernel configured without CONFIG_LIVEPATCH cannot build the
-  modules, although the installed scripts would correctly skip.
+This commit attempts to fix building livepatch test modules against an outp=
+ut
+directory by selecting KDIR from O or KBUILD_OUTPUT. It also aims to stop
+forwarding O and KBUILD_OUTPUT to the kernel sub-make so that the build wor=
+ks
+correctly against distribution headers or output directories.
 
-Select KDIR from O or KBUILD_OUTPUT when it is a prepared kernel build
-directory containing Module.symvers, then from the source tree when the
-kernel was built in place, and otherwise from the running kernel. An
-explicit KDIR still takes precedence. Pass KDIR to test_modules as an
-absolute path and stop forwarding O and KBUILD_OUTPUT to the kernel
-build, including when the selftests are built through the kernel's
-kselftest targets, since KDIR already names the output directory.
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testi=
+ng/selftests/livepatch/functions.sh
+> index 429fce1f31431..8b26b70f92d8c 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -150,6 +150,7 @@ function cleanup() {
+>  #		 the ftrace_enabled sysctl.
+>  function setup_config() {
+>  	is_root
+> +	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
+>  	has_kdir
+>  	push_config
 
-Read CONFIG_LIVEPATCH from the selected .config and skip the modules
-only when the configuration is readable and the option is not enabled.
-A KDIR without a readable configuration still attempts the build, so
-that a directory that is not a prepared kernel tree fails the build
-instead of silently producing an installation without modules. A KDIR
-that does not exist keeps being skipped, as before.
-Always clean test_modules, and have the scripts report a skip after the
-root check when the running kernel does not provide livepatch.
+[Severity: Medium]
+Is the call to has_kdir inside setup_config still appropriate here?
 
-Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/livepatch/Makefile    | 27 +++++++++++++++++++
- .../testing/selftests/livepatch/functions.sh  |  1 +
- .../selftests/livepatch/test_modules/Makefile |  6 +++--
- 3 files changed, 32 insertions(+), 2 deletions(-)
+When running tests via the kselftest_install workflow on a target system
+without a kernel build tree, has_kdir fails and unconditionally skips the
+tests. This causes the tests to falsely skip on installed target machines,
+even if the test modules were already successfully compiled and are availab=
+le
+to load.
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index a080eb54a215d..855bbad241235 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -1,7 +1,25 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+ifndef KDIR
-+LIVEPATCH_OBJTREE := $(firstword $(O) $(KBUILD_OUTPUT))
-+ifneq ($(and $(LIVEPATCH_OBJTREE),$(wildcard $(LIVEPATCH_OBJTREE)/Module.symvers)),)
-+KDIR := $(LIVEPATCH_OBJTREE)
-+else ifneq ($(wildcard ../../../../Module.symvers),)
-+KDIR := ../../../..
-+else
-+KDIR := /lib/modules/$(shell uname -r)/build
-+endif
-+endif
-+override KDIR := $(abspath $(KDIR))
-+export KDIR
-+
-+LIVEPATCH_CONFIG := $(shell if [ -r "$(KDIR)/.config" ]; then \
-+	grep -qx 'CONFIG_LIVEPATCH=y' "$(KDIR)/.config" && echo y || echo n; fi)
-+
- TEST_GEN_FILES := test_klp-call_getpid
-+ifneq ($(LIVEPATCH_CONFIG),n)
- TEST_GEN_MODS_DIR := test_modules
-+endif
- TEST_PROGS_EXTENDED := functions.sh
- TEST_PROGS := \
- 	test-livepatch.sh \
-@@ -16,3 +34,12 @@ TEST_PROGS := \
- TEST_FILES := settings
- 
- include ../lib.mk
-+
-+ifeq ($(LIVEPATCH_CONFIG),n)
-+clean: clean_livepatch_mods
-+
-+clean_livepatch_mods:
-+	$(Q)$(MAKE) -C test_modules clean
-+
-+.PHONY: clean_livepatch_mods
-+endif
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 429fce1f31431..8b26b70f92d8c 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -150,6 +150,7 @@ function cleanup() {
- #		 the ftrace_enabled sysctl.
- function setup_config() {
- 	is_root
-+	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
- 	has_kdir
- 	push_config
- 	set_dynamic_debug
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index a13d398585dcb..1fbeaac9c2b2c 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -16,14 +16,16 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state3.o \
- 	test_klp_syscall.o
- 
-+modules clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
-+
- # Ensure that KDIR exists, otherwise skip the compilation
- modules:
- ifneq ("$(wildcard $(KDIR))", "")
--	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-+	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
- endif
- 
- # Ensure that KDIR exists, otherwise skip the clean target
- clean:
- ifneq ("$(wildcard $(KDIR))", "")
--	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
-+	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
- endif
+> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/to=
+ols/testing/selftests/livepatch/test_modules/Makefile
+> index a13d398585dcb..1fbeaac9c2b2c 100644
+> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
+> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+> @@ -16,14 +16,16 @@ obj-m +=3D test_klp_atomic_replace.o \
+>  	test_klp_state3.o \
+>  	test_klp_syscall.o
+> =20
+> +modules clean: MAKEOVERRIDES :=3D $(filter-out O=3D% KBUILD_OUTPUT=3D%,$=
+(MAKEOVERRIDES))
 
-base-commit: 4eb2586bd40db27d77cc5b724ca9386ed0c71d53
--- 
-2.53.0
+[Severity: Medium]
+Will this target-specific assignment of MAKEOVERRIDES be ignored by GNU Mak=
+e?
 
+GNU Make does not support target-specific assignments for special variables
+like MAKEOVERRIDES and MAKEFLAGS. As a result, the global O=3D and
+KBUILD_OUTPUT=3D overrides will still be passed to the sub-make via MAKEFLA=
+GS.
+
+Could this leak the un-filtered variables to Kbuild and cause the build to
+fail against output directories when make O=3D... is used, defeating the pu=
+rpose
+of the patch?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261014200154.1365=
+200-1-sashal@kernel.org?part=3D1
