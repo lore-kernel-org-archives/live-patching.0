@@ -1,176 +1,180 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA0E5437FA
-	for <live-patching@vger.kernel.org>; Wed, 14 Oct 2026 14:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDB8485954;
+	Wed, 14 Oct 2026 20:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791988209; cv=none; b=Vhy+9THI1KPVGf7zE9ifXc2W1TLctsuA811YS2Rk/TGxwUqKfrWHwgc11f4kVo+vD0X9RnZNx4QOFBFXA7OvsATJQ8GW9OXLn7LmQmobINQR6cjX770Pfxd+0Hm7e2vqjLHIj6KOIWJUt2/I95VSFPAV1frH4OSFhyUZReEHoWo=
+	t=1792008118; cv=none; b=bs6ERRKs0t/65gbmOKuOGCQ4d3OUXKASDQMdKSjCp1HyQ6W6PoE2NnpQOLvZ1pxkHK2H+cWE/H6jPWXex2i4JmJbur0anzYofcrMFwxg7oZEW7HDViqSlnaVR9Pf79ialdhM7izoxa2UbtdleAXIUFLkTRjPKsHTRyoMF7HzNVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791988209; c=relaxed/simple;
-	bh=TZu1ogCR9/Yc9VSUls35zP5sygIEbTMRDEQIXAAp7gQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SE21CKSy8vzCzupbzgKlqE4x5UwEK/EOqXjxN1hS6diGTiMZQpyKBsKsCJh4jpJnh5Q+4qekX1yRjwG340GCq5NSmifG1vILBQV5V4f6Jti1/GMQw/TSj9g9X4VPQQzqlmgV8hTPQFRUNEAHHGOr3bG97SzFkjzamk33xs9LTGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UV7I4xQF; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1792008118; c=relaxed/simple;
+	bh=pTizOKZw6Ad5FfhICeRJrMYPRcWK4OlQ4o37q2skKpQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YHtpwlVln3qTdaMXOtQHNwnRRWIMJ9who6hZ4JvLUDu6G2EUrtTuKJES8Ktpzo4uS44UnShOioUKfoLksHzPeeCrZBKkwqjfROG/pNE1uCsB/s2RZBvssUN9rvARdgiy3IunrixeRbX41BxWaxf2Mhg7/7b30Pc4uVNnIewpe9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vf61j90Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UV7I4xQF"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a16c1608faso55149535e9.0
-        for <live-patching@vger.kernel.org>; Wed, 14 Oct 2026 07:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1791988206; x=1792593006; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=EAgEB1RSVFBt/ZrZLJNRHgb7cf1jvPPzS0HkEoz7fIY=;
-        b=UV7I4xQFWgOoskqVx51R4eYMvbNTN8J3uZ2X/CuIba++0BprEAYRdJtnmV0SfqQHl2
-         gS+qz81H+w9rLqubSgnpNvbj5Wm9ebj0AQhui+QGGGlzsYDxEr0KaBUKFMe+0A9NMWqM
-         otN43hCEwRaxfN20gFV/FQPOG0FbSFb8tFXNRCigB7sPBVxG7wxCA+87lAlioqxy7ipk
-         q9nsaXKVTeNCys8a3yCj3oytt/MZYtuf4qo43BST69Etaf4Alq1RXbyftNNlZSyKTkUe
-         wsE+Y1cCJ9jU1sCwj7GCOYHooNgSzhk3rn2nF6NrJwZOpgCP6NY5TvHCqauhu/wK8NSw
-         ob6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791988206; x=1792593006;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EAgEB1RSVFBt/ZrZLJNRHgb7cf1jvPPzS0HkEoz7fIY=;
-        b=NOlx8EtdeHwzHqwgsZC2233FVVikd/6xqlO70ynXJEpplpmY5CTzHATOk1M4vcTnTY
-         KZyrxFl1usVF8hY9bDxXtJw0fzWl4hUTf9MtjqPf2IQtUdUaDMtREt9qYh1vzFwI90hW
-         cKrqZDfGGDUCSQrpvQl4gsoRxh8Qpu+xKHGvRJWsyQCH4MeIUrRjb2qqUhvhTXXODUqe
-         unBjvixvmPXzMVoKQ+lZiT3J8Q1TfWjtL4pn3i2aiHfTpW5Gj/bhUKpdj38KoOSC8O3u
-         gJiFy83kSY3xCgEP8KLRgkqxPEQyi5cRR49GJou4/HmZHRecurtpZ919Z8+IrfhRdAzX
-         wAAQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxu2xDGvceFkv5mKfaD5605D+v41s14dz42BWxuvVXhMZFRguXhpD8fd3E7AJbXJLzfbih57Ytdt0TcKnua@vger.kernel.org
-X-Gm-Message-State: AFq9FYJ8+ONmLTDdBikCWU3Tiv5bOLYzn3xrBNWhDDhG5OVANk+YUVIj
-	dYB7LcT9qdcHwqgXxcXPFFoTXUgZfiHKr6NQX2iX1bXKmRgavutBrYq1Nf1XvMPi4kM=
-X-Gm-Gg: AYBFou1NLsyyFZ4eCryLIzdEZor26nNMUNG2yoeA7DGTASHd7++KSgMJEaF08Timnqz
-	latZxPHic0D9n4Zm2QFVzxjoskwA4pHjcnRqfKvnu/QuFVw8Ou9agirgbUdJfVVCO3NAeeDjKfm
-	9sRuRCKptuJlmRjL/NS1Y4hIqu+2q7dgIvY5yGMh5M7uNzSL6WC4H/qP51WZbKv8L07Z2yUEeRe
-	sSemDLmwrCb8YQN2TwkmjnL/ZFIKsd2bUUA6aG0Rp/TAV9lOfjMTFeaYa0DGUfFtUyY0YFrTnwd
-	KetqFRzsJT10Mk7f+hA5RIiaQmGT/9QL2AZRW2lQKz+N0V0+eBFvZLeuf/zeKwQkEXu8BVyfP/X
-	kn+Czn6/db4tRuXSu+53CkUZ/shcW8TKgfc0CpBN1Orr5lTS78raXoMfyabfyNIPZdyQhg9LWAX
-	x8O8BCbwe8so5g2QdnPooWXBa/Ob/pIwaZA7ImQoRNV+cg7Q/UdOUurfnLA+skM4/ksvimrVdli
-	g==
-X-Received: by 2002:a05:600c:46ca:b0:4a1:7a1e:6910 with SMTP id 5b1f17b1804b1-4a18e48363amr323662825e9.4.1791988206222;
-        Wed, 14 Oct 2026 07:30:06 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bcf11edfsm4818345e9.3.2026.10.14.07.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 07:30:05 -0700 (PDT)
-Date: Wed, 14 Oct 2026 16:30:03 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Andrea Parri <parri.andrea@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, petr.pavlu@suse.com
-Subject: Re: [PATCH] livepatch: Fix races between stack check and module
- load/unload
-Message-ID: <as-R64i6eT-8FpJt@pathway.suse.cz>
-References: <20261012140546.154730-1-parri.andrea@gmail.com>
- <alpine.LSU.2.21.2610141410370.16733@pobox.suse.cz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vf61j90Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE421F000C4;
+	Wed, 14 Oct 2026 20:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792008117;
+	bh=LCObJpsEaN7y1DV7WmatB7bqNMyYbeBB8aYv44DDfRc=;
+	h=From:To:Cc:Subject:Date;
+	b=Vf61j90ZWWADxCqnmoYkC9pDbeAioj6wT0FZVG5yqJrvvSZ57qQG8ntu5Cn74U4a5
+	 uFB9VibSFV/br1tdIbbiDOMK4U1O6EOVQCnSR22yA7dzrwf6H6ayNXAcGX2rHAqDAJ
+	 nw60+M48BeM/lZlpsrXYzBQ5oN0PLR+izeSlUhXRDh9FU5xM5rD1Rh6AWE/WoXUbgr
+	 pR07gsK/0zEFbDKkSFKbuLAO/uKMw/zsYGiKWbrf/7foSL+NW/7JZ8w2eBkBQK6+sr
+	 ZhE+oiF2F7nNGYhQXmhipLo64QeyLVzN3iZDJ84ioygTH1aGuy4fdQSLiLZu7KXg09
+	 x/fY7T3XNUEkQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/livepatch: build test modules against the selected kernel
+Date: Wed, 14 Oct 2026 16:01:54 -0400
+Message-ID: <20261014200154.1365200-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2610141410370.16733@pobox.suse.cz>
+Content-Transfer-Encoding: 8bit
 
-On Wed 2026-10-14 14:23:50, Miroslav Benes wrote:
-> Hi Andrea,
-> 
-> Cc+ Petr Pavlu (you can find the whole thread at 
-> https://lore.kernel.org/live-patching/20261012150758.207983-1-parri.andrea@gmail.com/T/#t)
-> 
-> On Mon, 12 Oct 2026, Andrea Parri wrote:
-> 
-> > Unloading a patched module while a livepatch transition is in progress
-> > can crash the kernel in klp_find_ops(), called from the scheduler.
-> > KCSAN reports
-> > 
-> >   BUG: KCSAN: data-race in klp_find_ops / klp_unpatch_func
-> > 
-> >   write (marked) to 0xffff9094c09ece10 of 8 bytes by task 381 on cpu 2:
-> >    klp_unpatch_func+0x1bd/0x280
-> >    klp_unpatch_object+0x6a/0x90
-> >    klp_cleanup_module_patches_limited.cold+0x4a/0xd4
-> >    klp_module_going+0x54/0x80
-> >    __do_sys_delete_module+0x247/0x380
-> >    __x64_sys_delete_module+0x39/0x50
-> >    ...
-> > 
-> >   read to 0xffff9094c09ece10 of 8 bytes by task 146 on cpu 1:
-> >    klp_find_ops+0x55/0x90
-> >    klp_check_and_switch_task+0x228/0x320
-> >    klp_try_switch_task+0xb4/0xc0
-> >    __klp_sched_try_switch+0x9a/0xb0
-> >    __schedule+0x60a/0x1450
-> >    schedule+0x3b/0x100
-> >    schedule_timeout+0xc0/0x160
-> >    ra_target_a_loop+0x97/0xa0 [klp_race_target_a]> >    ...
-> > 
-> > followed by
-> > 
-> >   Oops: general protection fault, probably for non-canonical address
-> >   0xdead000000000110: 0000 [#2] SMP NOPTI
-> >   RIP: 0010:klp_find_ops+0x55/0x90
-> >    ...
-> >    klp_check_and_switch_task+0x228/0x320
-> >    klp_try_switch_task+0xb4/0xc0
-> >    __klp_sched_try_switch+0x9a/0xb0
-> >    __schedule+0x60a/0x1450
-> 
-> Interesting. So to sum it up... you load a live patch which contains a fix 
-> for a module and while the transition is on, you remove the module and it 
-> crashes (btw, I do not think that those traces are necessary here. More 
-> btw, it would be nice to have a human readable changelog instead of what 
-> looks like AI generated description of the patch itself).
-> 
-> How did you find the issue? Is it a real problem in production?
-> 
-> I wonder whether we could just decline delete_module() in this case and 
-> return -EBUSY. It should be a rare operation anyway. Alternatively we 
-> could increase refcounts of all patched modules during a transition and 
-> decrease them after. Petr P., what do you think?
-> 
-> I am not saying we should not do the RCU protection but it feels like a 
-> can of worms a bit so if there is an easier way...
+The livepatch test modules are built against /lib/modules/$(uname -r)/build
+unless KDIR is set, and they are built unconditionally. This has three
+problems:
 
-I agree that it is a can of worms. This patch is not super complicated.
-It seems that it can't break anything. The bigger problem is whether
-it solves all possible racy accesses. And how to prevent regressions
-in the future.
+- When the selftests are built for a kernel in an output directory
+  (make O=...), the modules are still built against the running host
+  kernel, or fail when the host has no build directory.
 
-Preventing the module unload during a livepatch transition might
-be one solution. But I am afraid that people might want a better solution
-sooner or later because the transition might never finish, ...
+- The top-level selftests Makefile passes O to every suite, and the
+  test_modules Makefile hands it on to the kernel build. Even an empty
+  O= on the command line overrides the KBUILD_OUTPUT set by the
+  Makefile of a kernel build directory, so the build fails against
+  output directories and distribution headers such as Debian's:
+  "make -C tools/testing/selftests TARGETS=livepatch" builds no
+  modules at all.
 
-I wonder if we could use some more strict locking for the two
-operations, e.g. (raw_)spin_lock. And then use
+- A kernel configured without CONFIG_LIVEPATCH cannot build the
+  modules, although the installed scripts would correctly skip.
 
-		if (!raw_spin_trylock(&klp_unpatch_object_lock))
-			return -EBUSY;
+Select KDIR from O or KBUILD_OUTPUT when it is a prepared kernel build
+directory containing Module.symvers, then from the source tree when the
+kernel was built in place, and otherwise from the running kernel. An
+explicit KDIR still takes precedence. Pass KDIR to test_modules as an
+absolute path and stop forwarding O and KBUILD_OUTPUT to the kernel
+build, including when the selftests are built through the kernel's
+kselftest targets, since KDIR already names the output directory.
 
-in klp_check_stack(). Plus take the lock in __klp_unpatch_object().
+Read CONFIG_LIVEPATCH from the selected .config and skip the modules
+only when the configuration is readable and the option is not enabled.
+A KDIR without a readable configuration still attempts the build, so
+that a directory that is not a prepared kernel tree fails the build
+instead of silently producing an installation without modules. A KDIR
+that does not exist keeps being skipped, as before.
+Always clean test_modules, and have the scripts report a skip after the
+root check when the running kernel does not provide livepatch.
 
-Hmm, we could not take the spin_lock around klp_patch_object()
-because it does allocations and might be running for a long time
-when there are many patches objects. But this might be avoided by the
-smp_store_release(&obj->patched, true) trick.
+Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/livepatch/Makefile    | 27 +++++++++++++++++++
+ .../testing/selftests/livepatch/functions.sh  |  1 +
+ .../selftests/livepatch/test_modules/Makefile |  6 +++--
+ 3 files changed, 32 insertions(+), 2 deletions(-)
 
-It still might be conceptually easier than making all the
-accesses RCU-safe.
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index a080eb54a215d..855bbad241235 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -1,7 +1,25 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++ifndef KDIR
++LIVEPATCH_OBJTREE := $(firstword $(O) $(KBUILD_OUTPUT))
++ifneq ($(and $(LIVEPATCH_OBJTREE),$(wildcard $(LIVEPATCH_OBJTREE)/Module.symvers)),)
++KDIR := $(LIVEPATCH_OBJTREE)
++else ifneq ($(wildcard ../../../../Module.symvers),)
++KDIR := ../../../..
++else
++KDIR := /lib/modules/$(shell uname -r)/build
++endif
++endif
++override KDIR := $(abspath $(KDIR))
++export KDIR
++
++LIVEPATCH_CONFIG := $(shell if [ -r "$(KDIR)/.config" ]; then \
++	grep -qx 'CONFIG_LIVEPATCH=y' "$(KDIR)/.config" && echo y || echo n; fi)
++
+ TEST_GEN_FILES := test_klp-call_getpid
++ifneq ($(LIVEPATCH_CONFIG),n)
+ TEST_GEN_MODS_DIR := test_modules
++endif
+ TEST_PROGS_EXTENDED := functions.sh
+ TEST_PROGS := \
+ 	test-livepatch.sh \
+@@ -16,3 +34,12 @@ TEST_PROGS := \
+ TEST_FILES := settings
+ 
+ include ../lib.mk
++
++ifeq ($(LIVEPATCH_CONFIG),n)
++clean: clean_livepatch_mods
++
++clean_livepatch_mods:
++	$(Q)$(MAKE) -C test_modules clean
++
++.PHONY: clean_livepatch_mods
++endif
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 429fce1f31431..8b26b70f92d8c 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -150,6 +150,7 @@ function cleanup() {
+ #		 the ftrace_enabled sysctl.
+ function setup_config() {
+ 	is_root
++	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
+ 	has_kdir
+ 	push_config
+ 	set_dynamic_debug
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+index a13d398585dcb..1fbeaac9c2b2c 100644
+--- a/tools/testing/selftests/livepatch/test_modules/Makefile
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -16,14 +16,16 @@ obj-m += test_klp_atomic_replace.o \
+ 	test_klp_state3.o \
+ 	test_klp_syscall.o
+ 
++modules clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
++
+ # Ensure that KDIR exists, otherwise skip the compilation
+ modules:
+ ifneq ("$(wildcard $(KDIR))", "")
+-	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
++	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+ endif
+ 
+ # Ensure that KDIR exists, otherwise skip the clean target
+ clean:
+ ifneq ("$(wildcard $(KDIR))", "")
+-	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
++	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+ endif
 
-What do you think, please?
+base-commit: 4eb2586bd40db27d77cc5b724ca9386ed0c71d53
+-- 
+2.53.0
 
-Best Regards,
-Petr
