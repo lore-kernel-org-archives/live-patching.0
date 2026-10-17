@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCE8296BC8;
-	Sat, 17 Oct 2026 00:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049F9233134;
+	Sat, 17 Oct 2026 00:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792196709; cv=none; b=rdbnABjETL7n2rkRwpM6Slxhjtk1ATA3IJcj4FhIeWHXOmyM5YkFdn1i2TNUme3NFP2qpIzxwbM7LK5C2ymvMCOnDhiyVWQGfz2fEOCqsLt1u9BLHt6cdK+r87Q35Cqi3wPwOD1kTn7Yotk7FB+n/7OgvPcz83RgNCeW0UdcQAI=
+	t=1792196715; cv=none; b=MU7Ja58miAuUJ+jFjVQbp3yp62x39xMS5dKgaMHEiUNYzznO9cow+Nig/cdLIubEnfeJiaLUKLkUUb7eHNnArdfQ6Y+tzc57SQAjqVuDkVQEA+i2JNlnYlxQRhZI3DHsa1P6C5FO1F3AxzhoM1eWj0uQ2xcEV4M/2mW/2dYZKI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792196709; c=relaxed/simple;
-	bh=9EcA0MekQM6eRQ4EuyiukT8mX0cy/cGyiF7DhHfTuEk=;
+	s=arc-20240116; t=1792196715; c=relaxed/simple;
+	bh=nVpQk0RHnorNtCP7UZGHz3tt8kTJIxkooyQ0chzD5Kg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mHTLCUmxIUzzLQdFohI7PL0Xv/JKwlISwR1LChMFrbzrO0drjTEayTFVHHJm5chILbY2nfcvFsMqZl/nwftQy7Vj+y6L6r0BN2IQTdnOmE5S1sSLRJuIvMKGr+B1c1c7dJkfICDCZZm22ykQG1BlieUOb0dVk2xjz6EvuXCpap4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hqWctNEi; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=t6WgCMVljnvQEME+yYpW3HuvvwYwAd2BOP7hLn4tUGIZuPKUg2xIq+RhgDC4IMIhI3WBTgIoZqmCaJf4yh6BKLuRAITXrCahELmmvsHJ+7Givtox7nG6enbVaWQeCXQV2Hl4xjP4uKHcTWGrEXLg32699R6tuesit9gxfy/4/Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dv26hW6y; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqWctNEi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 507051F000C5;
-	Sat, 17 Oct 2026 00:25:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dv26hW6y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A761F000C4;
+	Sat, 17 Oct 2026 00:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792196708;
-	bh=ssz5xw3Qju+nD43pV2EZtDWdZuhKRwuNrVtfrRQNabE=;
+	s=k20260515; t=1792196713;
+	bh=TEaM/FVJMo/NhxbPb0GgoFoqcHyO9snHz04EZ6xiZv0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hqWctNEiKy6Nkthd5GuUjZNutHk6p9dDfFdsN1++NM4b8K+M3xx6iVsJpVy3x/3w/
-	 q2Hqihjb3OIWNzZnH4kvMu9hJXCdHZQ8klJH1lW9C5/jCtFgwQZzAAMtJYrl8piZPE
-	 qErHOG2jp7kGBSIIEq+mSt7yJHf9GON+PMkXFOWlsBfjuuDyIxur8XzzOHlu2BPWsX
-	 Z4aqmavUo94LjPj8wTaAPxYY+BtFrHUHgIukhxJ+J7G6gmD2PNDJ0DZDaWAxo8SH/1
-	 xjq58fYVxVxres22Qn1wYL5fkZS4Soo/dZhayYbpvGeNg4lHuEPM5IjmUxxX4f9kkV
-	 TDwHKI08UxdcA==
+	b=dv26hW6yPeO6rHMGhYUAfBbaSafCcBKKyMjGhVS3YVhomPlGQNQFHVaR48LcO44sM
+	 zxnpWt9uupEpjgzbG2c7KxCge1fJrs0kvl0PB5eaZBc2FusKnrsPvsUjX7KFQVb4qN
+	 cWAbT2TUwCUZ4QPDOKxt73SNnpjrugey1j5WUdo61I5u/FPY4f6NglEie06Bp9bmdt
+	 /ZiH1rpr4E7AByhm62Pzm1YW+ubpsHSdAiuWMU6yrWnB+/kvd73Lj4EDMedNTBy/PP
+	 T2AKm1HeSJ4GPN3OAzWnuv2vd6lZUi7iSDs4OgEuq8WlHPZ4Na/euyksYkboNJIIC8
+	 h08jre2UPljaQ==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -37,9 +37,9 @@ Cc: jpoimboe@kernel.org,
 	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>
-Subject: [PATCH 04/11] selftests/livepatch: Test klp-build with dependent patches
-Date: Fri, 16 Oct 2026 17:24:34 -0700
-Message-ID: <20261017002441.716615-5-song@kernel.org>
+Subject: [PATCH 05/11] selftests/livepatch: Test klp-build with patches to different functions
+Date: Fri, 16 Oct 2026 17:24:35 -0700
+Message-ID: <20261017002441.716615-6-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261017002441.716615-1-song@kernel.org>
 References: <20261017002441.716615-1-song@kernel.org>
@@ -51,39 +51,39 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test where the second patch changes lines added by the first, so
-it only applies on top of it.  klp-build has to combine the two into a
-single patch against the original source, rather than fixing each one
-against the original source on its own.
+Add a test where two patches change different functions of the same
+file, and the second also changes a header.  The patches are combined
+into one patch per file, and the #line directives use line numbers from
+the original file, even for the function the first patch moved down.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../livepatch/test_klp_build/Makefile         |  3 +-
- .../test_klp_build/test-dependent-patches.sh  | 72 +++++++++++++++++++
- 2 files changed, 74 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-dependent-patches.sh
+ .../livepatch/test_klp_build/Makefile         |   3 +-
+ .../test-independent-patches.sh               | 124 ++++++++++++++++++
+ 2 files changed, 126 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
 
 diff --git a/tools/testing/selftests/livepatch/test_klp_build/Makefile b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-index 6ebcecc828a1..405545c72303 100644
+index 405545c72303..536b27767435 100644
 --- a/tools/testing/selftests/livepatch/test_klp_build/Makefile
 +++ b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
+@@ -2,7 +2,8 @@
  
  TEST_PROGS := \
--	test-basic.sh
-+	test-basic.sh \
-+	test-dependent-patches.sh
+ 	test-basic.sh \
+-	test-dependent-patches.sh
++	test-dependent-patches.sh \
++	test-independent-patches.sh
  
  TEST_PROGS_EXTENDED := functions.sh
  
-diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-dependent-patches.sh b/tools/testing/selftests/livepatch/test_klp_build/test-dependent-patches.sh
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh b/tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
 new file mode 100755
-index 000000000000..75b957ac002c
+index 000000000000..f38bad21584b
 --- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_klp_build/test-dependent-patches.sh
-@@ -0,0 +1,72 @@
++++ b/tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
+@@ -0,0 +1,124 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
@@ -103,12 +103,30 @@ index 000000000000..75b957ac002c
 +{
 +	return __LINE__;
 +}
++
++int baz(int x)
++{
++	if (x > 100)
++		return 100;
++	return x;
++}
 +EOT
 +
-+# - a patch which changes lines added by an earlier patch doesn't apply to the
-+#   original source on its own, but the combined patch does
++add_file include/linux/foo.h <<'EOT'
++#ifndef _LINUX_FOO_H
++#define _LINUX_FOO_H
 +
-+start_test "patch which depends on an earlier one"
++int foo(int x);
++int bar(void);
++
++#endif
++EOT
++
++# - patches to different parts of a file are combined into one patch, with
++#   #line numbers from the original file even where an earlier patch moved
++#   the lines down
++
++start_test "patches to different functions of a file"
 +
 +add_patch 0001-foo.patch <<'EOT'
 +--- a/drivers/foo/foo.c
@@ -124,22 +142,33 @@ index 000000000000..75b957ac002c
 + }
 +EOT
 +
-+add_patch 0002-foo-again.patch <<'EOT'
++add_patch 0002-baz.patch <<'EOT'
 +--- a/drivers/foo/foo.c
 ++++ b/drivers/foo/foo.c
-+@@ -1,8 +1,8 @@
-+ int foo(int x)
++@@ -14,7 +14,7 @@ int bar(void)
++
++ int baz(int x)
 + {
-+ 	if (!x)
-+-		return 0;
-++		return 1;
-+ 	if (x < 0)
-+ 		return -1;
++-	if (x > 100)
++-		return 100;
+++	if (x > FOO_MAX)
+++		return FOO_MAX;
 + 	return x;
 + }
++--- a/include/linux/foo.h
+++++ b/include/linux/foo.h
++@@ -1,6 +1,8 @@
++ #ifndef _LINUX_FOO_H
++ #define _LINUX_FOO_H
++
+++#define FOO_MAX 100
+++
++ int foo(int x);
++ int bar(void);
++
 +EOT
 +
-+run_klp_build 0001-foo.patch 0002-foo-again.patch
++run_klp_build 0001-foo.patch 0002-baz.patch
 +
 +expect_patch <<'EOT'
 +--- a/drivers/foo/foo.c
@@ -148,11 +177,34 @@ index 000000000000..75b957ac002c
 + int foo(int x)
 + {
 ++	if (!x)
-++		return 1;
+++		return 0;
 ++#line 3
 + 	if (x < 0)
 + 		return -1;
 + 	return x;
++@@ -12,7 +15,8 @@ int bar(void)
++
++ int baz(int x)
++ {
++-	if (x > 100)
++-		return 100;
+++	if (x > FOO_MAX)
+++		return FOO_MAX;
+++#line 17
++ 	return x;
++ }
++--- a/include/linux/foo.h
+++++ b/include/linux/foo.h
++@@ -1,6 +1,9 @@
++ #ifndef _LINUX_FOO_H
++ #define _LINUX_FOO_H
++
+++#define FOO_MAX 100
+++
+++#line 4
++ int foo(int x);
++ int bar(void);
++
 +EOT
 +
 +exit 0
