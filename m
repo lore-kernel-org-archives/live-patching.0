@@ -1,209 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3702DEA75;
-	Sat, 17 Oct 2026 00:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DDF2EA480
+	for <live-patching@vger.kernel.org>; Sat, 17 Oct 2026 00:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792196746; cv=none; b=UkTumb731n9OFboi+5zOiwpaTrUr2rEyKqIalPQ3dB/squoekRWmTao/yp6zLhYxn6Y60kj0WP9chD78pFFc2kKKg8dQjXKaWFBwiEBPGMB0ELy3wzgUYlbwFB4DxCChnVe5sJmv2xHKOeJHj1kKPO/Js0oxurFcFAjTyPTtnLQ=
+	t=1792197016; cv=none; b=XdrNKIg947NPWoAaYhdn5EOBMXIZokZ8a9SdOYr7KwT9o6zAdeCSTWxBsLac1IOiBybD5ywpXB6x93YyZ5lBb3SFkUX+xB+JTQuZJaRpIpBcU4fcCVDPbuEkCRL012FhAAbThmvnnr8CvOrO26Yb9hp+o5wdKbCX+n2W2W1cH0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792196746; c=relaxed/simple;
-	bh=7OkCEfMUgIP/r05qDway2PJS1oUkU4xQlnFG7n6veDQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F9vHzyKZ4UyrFpYOLCFupS+DytqfYhk00FB7OyFPt8wqoRy359I6urtbArYpGHYH2HqU8gXcwuChiL9lu3I6a9zcIbf8/3HRbzNHTC48OD9g3gAgZRqihcDaJozjWKerNunC8cxm2sf1cO6i6tSGewC0Tongu9ZTSF/CFU3/sJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WelF/W7r; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1792197016; c=relaxed/simple;
+	bh=aSU09TteO1I2mIJBcOE+b6s/N5VMKfvri4C8YY/Iqfo=;
+	h=Message-ID:From:Subject:To:Cc:In-Reply-To:References:Content-Type:
+	 Date; b=pYJOMQV8oflyg7IfF1l80uW0CLRVt99JgH6V/tN+I5pi0s2dQLU3CFNbaXlmD15A2bJF1J+VvTzIM4/cQVEpSVX3k5jkgmiUsEpa5p6ARYsXepHxsvrW2kCR24NB7EEvVeav9mcugBfvvnYYB7N8N3u6UODjiCi9PfVNUeze0O8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dv9vziG9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WelF/W7r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A171F000C4;
-	Sat, 17 Oct 2026 00:25:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dv9vziG9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B911F000C4;
+	Sat, 17 Oct 2026 00:30:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792196745;
-	bh=sGOQhpgQqfc3hEom0zrrJ8milYtvPTtrw/6NfeHnfXA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WelF/W7rF/CGq/puWy1WjNVH6XewFRM72m5Oit2ZhE4ODcEgCEuRB6V6yqRhZlZrt
-	 pMUaO0x80DJrtxPugFqn1MJVPfq5bhmoUTkRa56igJoesimx2kOe0340J4z6Z5gb1O
-	 9opsZixXksKjdquT7YH2rXM8siO8DRmEstaDOcZhUIGXYmW9LY3AGoqqjAmCJ055dF
-	 ygPfe4vqAVPxGq4wpZtW9DAH7jaUMRap8+4sYlJQaoXST/q4no3IZFeXUq5LZDf1Ry
-	 YyhStRPtVToPoHWlQblfi0k9xXI6MPygpDu5oHvHbHiyJWM+QXnkUbGUppiZ+OrMDW
-	 370Hp5yLqT8IA==
-From: Song Liu <song@kernel.org>
-To: live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Liu <song@kernel.org>
-Subject: [PATCH 11/11] selftests/livepatch: Test klp-build with patches which need offset or fuzz
-Date: Fri, 16 Oct 2026 17:24:41 -0700
-Message-ID: <20261017002441.716615-12-song@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261017002441.716615-1-song@kernel.org>
+	s=k20260515; t=1792197014;
+	bh=cPElS7OS4PJfCC7ex/nCn9n4pTlmbSAlLAHtbrzT6eE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Dv9vziG9Ac9/grVyYbPUFeUFHZzc4oaweWwumOTkidBqp8/UrNoqKHqF41AB9OPWn
+	 2hTpwpjyh2Ev41grY0WYleo8a7fnvGI6geVT8y88hNrmEQe3w5cwuAu9z9FxNdt8r0
+	 lR+93d5Z04dml5Ge+gaDqAdMc7Gw28e8v0aDnmi2/D/HVO/yN94NVGAn0Nx9QNUWlC
+	 fEMahlUhjJfIML98pyUry/WLQXfoMhx0KpwArs5qzW9hDrM7y5Vj/vPQtDtCFbiGNe
+	 V8lLPPRc67aI0LYoGXOUrvmDIZpm+jUEdcNhZpttNlD9h9ygxoqd5j3j7XXUv0fojL
+	 1rpXHBwD89oLg==
+Message-ID: <sashiko-outbox-175075@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 04/11] selftests/livepatch: Test klp-build with
+ dependent patches
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Song Liu" <song@kernel.org>, live-patching@vger.kernel.org
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, shuah@kernel.org
+In-Reply-To: <20261017002441.716615-5-song@kernel.org>
 References: <20261017002441.716615-1-song@kernel.org>
+ <20261017002441.716615-5-song@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 17 Oct 2026 00:30:13 +0000
 Precedence: bulk
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-klp-build accepts patches which apply with an offset or fuzz, and warns
-about them.  Add a test that both are accepted with a warning, and that
-the fixed patch has the line numbers and context of the real source, so
-the #line directives refer to the right lines.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] selftests/livepatch: test-dependent-patches.sh duplicates test-basi=
+c.sh setup
+--
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Song Liu <song@kernel.org>
----
- .../livepatch/test_klp_build/Makefile         |   3 +-
- .../test_klp_build/test-offset-and-fuzz.sh    | 120 ++++++++++++++++++
- 2 files changed, 122 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
+commit fc2a73d39b4eb0e68d2bd9630878b28c5feeaab1
+Author: Song Liu <song@kernel.org>
 
-diff --git a/tools/testing/selftests/livepatch/test_klp_build/Makefile b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-index 2513105b3e1c..a62ae5340fa4 100644
---- a/tools/testing/selftests/livepatch/test_klp_build/Makefile
-+++ b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-@@ -8,7 +8,8 @@ TEST_PROGS := \
- 	test-new-and-deleted-files.sh \
- 	test-line-directives.sh \
- 	test-unsupported-files.sh \
--	test-patch-not-applying.sh
-+	test-patch-not-applying.sh \
-+	test-offset-and-fuzz.sh
- 
- TEST_PROGS_EXTENDED := functions.sh
- 
-diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh b/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
-new file mode 100755
-index 000000000000..413b39b83431
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
-@@ -0,0 +1,120 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+. "$(dirname "$0")/functions.sh"
-+
-+# expect_warning(msg) - check that klp-build warned, and drop the warning so
-+# expect_patch() doesn't complain about it
-+#	msg - the warning, without the "warning: klp-build: " prefix
-+function expect_warning() {
-+	local line="warning: klp-build: $1"
-+
-+	grep -qxF "$line" "$WORK_DIR/stderr" ||
-+		not_ok "klp-build didn't warn \"$1\":" "$WORK_DIR/stderr"
-+
-+	grep -vxF "$line" "$WORK_DIR/stderr" > "$WORK_DIR/stderr.rest"
-+	mv "$WORK_DIR/stderr.rest" "$WORK_DIR/stderr"
-+}
-+
-+setup_tree
-+
-+add_file drivers/foo/foo.c <<'EOT'
-+int foo(int x)
-+{
-+	if (x < 0)
-+		return -1;
-+	return x;
-+}
-+
-+int bar(void)
-+{
-+	return __LINE__;
-+}
-+
-+int baz(int x)
-+{
-+	if (x > 100)
-+		return 100;
-+	return x;
-+}
-+EOT
-+
-+# - a patch made against a source with fewer lines applies at an offset, and
-+#   the fixed patch has the real line numbers
-+
-+start_test "patch with an offset"
-+
-+add_patch 0001-offset.patch <<'EOT'
-+--- a/drivers/foo/foo.c
-++++ b/drivers/foo/foo.c
-+@@ -9,7 +9,7 @@
-+
-+ int baz(int x)
-+ {
-+-	if (x > 100)
-+-		return 100;
-++	if (x > 1000)
-++		return 1000;
-+ 	return x;
-+ }
-+EOT
-+
-+run_klp_build 0001-offset.patch
-+
-+expect_warning "$PATCH_DIR/0001-offset.patch applied with fuzz"
-+expect_patch <<'EOT'
-+--- a/drivers/foo/foo.c
-++++ b/drivers/foo/foo.c
-+@@ -12,7 +12,8 @@ int bar(void)
-+
-+ int baz(int x)
-+ {
-+-	if (x > 100)
-+-		return 100;
-++	if (x > 1000)
-++		return 1000;
-++#line 17
-+ 	return x;
-+ }
-+EOT
-+
-+# - a patch whose context differs from the source applies with fuzz, and the
-+#   fixed patch has the real context
-+
-+start_test "patch with fuzz"
-+
-+add_patch 0001-fuzz.patch <<'EOT'
-+--- a/drivers/foo/foo.c
-++++ b/drivers/foo/foo.c
-+@@ -12,7 +12,7 @@
-+ /* clamp x */
-+ int baz(int x)
-+ {
-+-	if (x > 100)
-+-		return 100;
-++	if (x > 1000)
-++		return 1000;
-+ 	return x;
-+ }
-+EOT
-+
-+run_klp_build 0001-fuzz.patch
-+
-+expect_warning "$PATCH_DIR/0001-fuzz.patch applied with fuzz"
-+expect_patch <<'EOT'
-+--- a/drivers/foo/foo.c
-++++ b/drivers/foo/foo.c
-+@@ -12,7 +12,8 @@ int bar(void)
-+
-+ int baz(int x)
-+ {
-+-	if (x > 100)
-+-		return 100;
-++	if (x > 1000)
-++		return 1000;
-++#line 17
-+ 	return x;
-+ }
-+EOT
-+
-+exit 0
--- 
-2.53.0-Meta
+selftests/livepatch: Test klp-build with dependent patches
 
+This commit adds a new selftest script, test-dependent-patches.sh, to test
+klp-build when a second patch modifies lines added by an earlier patch.
+
+> diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-depend=
+ent-patches.sh b/tools/testing/selftests/livepatch/test_klp_build/test-depe=
+ndent-patches.sh
+> new file mode 100755
+> index 0000000000000..75b957ac002c0
+> --- /dev/null
+> +++ b/tools/testing/selftests/livepatch/test_klp_build/test-dependent-pat=
+ches.sh
+> @@ -0,0 +1,72 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +. "$(dirname "$0")/functions.sh"
+> +
+> +setup_tree
+> +
+> +add_file drivers/foo/foo.c <<'EOT'
+> +int foo(int x)
+> +{
+> +	if (x < 0)
+> +		return -1;
+> +	return x;
+> +}
+> +
+> +int bar(void)
+> +{
+> +	return __LINE__;
+> +}
+> +EOT
+> +
+> +# - a patch which changes lines added by an earlier patch doesn't apply =
+to the
+> +#   original source on its own, but the combined patch does
+> +
+> +start_test "patch which depends on an earlier one"
+> +
+> +add_patch 0001-foo.patch <<'EOT'
+> +--- a/drivers/foo/foo.c
+> ++++ b/drivers/foo/foo.c
+> +@@ -1,6 +1,8 @@
+> + int foo(int x)
+> + {
+> ++	if (!x)
+> ++		return 0;
+> + 	if (x < 0)
+> + 		return -1;
+> + 	return x;
+> + }
+> +EOT
+
+[Severity: Low]
+In tools/testing/selftests/livepatch/test_klp_build/test-basic.sh, the
+script already calls setup_tree, creates the identical drivers/foo/foo.c
+via add_file, and defines the identical 0001-foo.patch via add_patch.
+
+Since run_klp_build() in functions.sh leaves $TREE unmodified between
+invocations and supports running multiple start_test cases sequentially in
+a single script, should this dependent-patch test case be added to
+test-basic.sh instead of duplicating the setup in a new standalone
+test-dependent-patches.sh file?
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261017002441.7166=
+15-1-song@kernel.org?part=3D4
