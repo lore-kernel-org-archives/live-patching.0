@@ -1,94 +1,59 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.6
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792481251;
-	b=z0ct+vp38a1cswQNS3xKGqb4dA2xN1BAi4aikCz45yr+kRXs2816dcz1e7qTp5fJ8vMW
-	 o0pmGymEYTNMNnVqkD0PMC9ZHBVioIP2L9cFGRdjE/ZQ9P6yIgB5l3IKUvLWCIfKqBlMu
-	 FMhjU1p7WDQkSFRk8qkCTeKFf5lVz3DXZPeaRyhKy/QONnlvYmXq6DM1WbyskoIJUDp5w
-	 2UYVwpc9B0gI7ejYOu8GcmcjVW1rT2jtOoDfU915XOE6qgIuP7dWQ6kpPw7IkjMBE9cdq
-	 93EG0asfMwk+nG5HLFIyMgW9zCpHzio8GCfotaKLQAVyzuEK+EoISRZV7vkR9U6BsJQ==
+	t=1792531425;
+	b=R8DIY74mUtxUGCUSAA6y90URiUiEX5l0eVPVOWjfFjbuJUyg+G2WJxc6i7nzkgmUoLAc
+	 5qsT8Yvcjvx9HnuhAeLPoaWsbIqzkeWAy6Hgm/DYSbvPRNU4uniGDQrZBuX9OQBP5P4Rb
+	 cubJlj5JPFYO75tl9Tl3xfDbGZq8W1zr3Q+OMEQmwmN8B8yjcwNFq1rTmU1sMCHLPHHpH
+	 fyY90P7uYdeC+IeZDk+3Xx6qXG8CJmh+aFby9b38xYTdmBRzwxFbYMm+eMXocRQFEtvdF
+	 Psc9MdWRNYjAPMLZMrtGVASBKsQx0kIicSnErdYrOrFsX3w0B7hawbXDq2Qq6tiCroQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792481251;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=0zrJsy6+pFWfHViBKa8dcpiN0fO/uxJvY/CktxDW/j0=;
-	b=1FA5icifjOb3c1tO7Hkm+bLbwCoF76TiPFUCHMJt58xRWskD6fDnlQbpCdM3dRLd13VP
-	 yDdB4sE2Hef0KkvOJp3rDAe5A0MCms5H4S1Cg7mwMb+WamdB6Gfz6Kz48qa/G91hPmUXL
-	 WwkmlUnj7bapwKFIxUewj/Bdtm5le2ZGF2JNYWIhJf3cu6l5+TvUt5WaE3ILEmhUzUDjV
-	 rPL/u0aS9uutYKuppjVfFAdXIuZoWdUq0hXGbaXbff/WhmgIavyQgZDpmX8pvDwHJlhQu
-	 u3nCZEZK1m6CdpNpKfHwGEpkuu7V+nei3vO+WQ9PbJwIg284ioc28qbMoGM9nPWibWg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792531425;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=Roe4BMBeedZNSI4l8eJ0dPrl1wLnKmzYGDF5Bf3TQRM=;
+	b=ALfmRXZujSwOyvPah6Us/Ym9ZguvqshRmBV/DNQsAyqGvc0x7tyW8p70ybPBAI+dkJIC
+	 VKG3ld3KXAGSXXe+9DiLl+WIGHoqlue23PxDDVvu6xJJCt0B2jJFPJ8SRNt2yd418IWbH
+	 61qoVmtEtlKJ3RrzILNS2GkNbOQFBb57Jh7TpEeGL1iULH41frd6EiezhPrylaXt1pgtV
+	 8YgHbYHsMak6R9FFx0L5F4G8wbuWdYeKs1Xaohte+Wgw7qTIWMcMa6TcsDdfZftsnOcVV
+	 wdKrNZez7g2+szNFW0vHlz6SjLsOV/tN1xH6SoD1oB5gdIsx7OVhP455jp/59kjBIfQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CAdKwYDi;
-	arc=none smtp.remote-ip=74.125.229.6
-Received: from mail-dy2-f6.google.com (mail-dy2-f6.google.com [74.125.229.6])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="V/BzBwap";
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07963606A320
-	for <live-patching@vger.kernel.org>; Tue, 20 Oct 2026 07:27:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 07963606A320
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1234C606A326;
+	Tue, 20 Oct 2026 21:23:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=CAdKwYDi
-Received: by mail-dy2-f6.google.com with SMTP id 5a478bee46e88-3537dfdcabaso4669075eec.1
-        for <live-patching@vger.kernel.org>; Tue, 20 Oct 2026 00:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792481249; x=1793086049; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0zrJsy6+pFWfHViBKa8dcpiN0fO/uxJvY/CktxDW/j0=;
-        b=CAdKwYDieH/mM+qs+HVjyvwmt4OrcxXllqKFOPPXkDeVV4qNhYTyqJMJcrQwaev7If
-         BetT3yLcc5xRJCWCUInP5oLzcBjzH8t5mFlSvZbJipgfZfevw1yK9xuYiHZ8YtlGccz3
-         VBJwK4la/A4r5uVjf+8/PO/LBlgWmKFMUn0j1kY7WHtiXbrG0gzyW4yH+8JFrfaN4pep
-         fI/GRuIW9ieXiPv/elFHUYZucl3lun3Bp+5Tlb1SpF9KXmjHSNqhZteX5MvuGrTF1igI
-         B1s27oEw6ht+c5uE3iBQoiur1u6G999iY7nN4Bnk2/6z08lgKZ6iVJ2G9+4dxJrQLTAL
-         bsvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792481249; x=1793086049;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0zrJsy6+pFWfHViBKa8dcpiN0fO/uxJvY/CktxDW/j0=;
-        b=z8MKjA2psxMkgCCF8lsgYWuBJ2+Fly1LAhLUYURnO4AMy5J0XrNnfd6RUbpuuXOfpm
-         S5bpewxSU2stKkVIPV2wMBF+LHJ82Vvn+z7pzGLwEt5umoBcMoYphM0z1D8u2dEWgaJq
-         bUoYYOt0aqn+zIR5Zqy41p9jHotTIgD1o8MG3OVd0C/4UPusi1ooo5+wocWVeHI9xVH6
-         L5XRWvE7W68KTjpEmtUYAMF5I49IFVRMb8+Ge8U1oRc0jKegfndbAKnQpPP+puN2gU2R
-         Uc5AhmfyF3ufTSa79NsF0PB98YnYarx0KQHpN8Xi20P1L+XogSgV7e/xyqEqlUUTCeUC
-         h4Lw==
-X-Forwarded-Encrypted: i=1; AKwUvByvbbc7njqsmbeP6V88eR+cLV+xt/KNV/dHf8m1n+HXSdZxm1Syzoy1TrngFum6+EnUdcRjpDE46aYS5ht7@vger.kernel.org
-X-Gm-Message-State: AFq9FYJnEGDzJMLvikjRSfD7dL1GEvW5zaVXCwSqS7oznfxOIPA+P7Tt
-	vmQMin+a9+egwg/9Lc9EKOUEIyLAOphgCr8wOrOVrh8gPL4DWX9nB87Z
-X-Gm-Gg: AYBFou1uYEoqVfDnCMzSIPlPWTqA9x0O4wt+pFnGPd5bIi9CiBiSO5/oNV1Ujb151HW
-	XAcVZDhIA9mdEGBr2+31ooJfPJwGEo5TsLZV60lf4j0NrvYTEHHds9cBUvdPXUdqfsIOh8a2CTM
-	fNVyaXRdJPgUbsy6h6+4euaoODEaPTrb6YBTyrwkhIBAj4Frb7hK+JkLV/OggNVrVDQknitKqdj
-	Ljs7S45cN3CWLpXWU6ZIB2ptpp7qBE8Ie81tw9Jp4GBmm3jgYTXEDuIxeJhRV4rwEek+EIjqA/Y
-	JQrSLhl+D/vDRl7/2wP+EEtjIfeHboI6VBquI9RqQMh4uPSleALZEE2FdggsJQGvkQ7gPOgu7Nk
-	FcwT8zWNUAGL3N6VKcfPrHj0HH6bFD1IeQj0OBFr80ZOq7+RMu2sOcVxp/17ojo/hy5eyH6SK5p
-	FrGahXNtTuCXDn8ZO5OAmfgwO8hl8CcnuphLVlfkxSNp2LnhAdfFyV0ddwf9oLuj7Kgvk+Dvrfv
-	umsM4NogO6sSoWpICPMRqVbBqwYYHwGpnl+
-X-Received: by 2002:a05:693c:8244:b0:366:8efb:bab9 with SMTP id 5a478bee46e88-3668efbc174mr439554eec.11.1792481249125;
-        Tue, 20 Oct 2026 00:27:29 -0700 (PDT)
-Received: from localhost.localdomain ([98.148.34.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-360819bc569sm37090220eec.11.2026.10.20.00.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 00:27:28 -0700 (PDT)
-From: Hungyu Lin <dennylin0707@gmail.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Song Liu <song@kernel.org>,
-	live-patching@vger.kernel.org,
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=V/BzBwap
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0394F1F000CA;
+	Tue, 20 Oct 2026 21:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792531424;
+	bh=Roe4BMBeedZNSI4l8eJ0dPrl1wLnKmzYGDF5Bf3TQRM=;
+	h=From:To:Cc:Subject:Date;
+	b=V/BzBwapxKGVKBCAdo6Qkjv+RI8S7suahbqbpA5pzIq8ewxw+V3hlt1JvZ0i0tc2G
+	 aRhRAkkMAjV+szWZleiO8rBlE/gio6kJ5aOwjhTYjeG67FdFXbXfpKaClytxqQWCUy
+	 NzVLKD748Oj3hDe/OFXjFnQd3K2IlPtD1LNtq1G8LTWpBnGrZqRS/XU7xrizAWrS5n
+	 h4aTvq8bPHHJfXtT/zBRR4txEhSyyJfCS3R4wwX2bpddgvlpo9wk1bqjbDDaCjRBae
+	 G9ln47XMqW43huss8YBLD1BQubEhF+Q0qpHDWC6X6JsnRntQJKrYxz7d04SrUxmHg7
+	 eBhtslznEndHA==
+From: Song Liu <song@kernel.org>
+To: live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
-	Hungyu Lin <dennylin0707@gmail.com>
-Subject: [PATCH] klp-build: Use kzalloc_objs() for object and function arrays
-Date: Tue, 20 Oct 2026 07:27:12 +0000
-Message-ID: <20261020072712.12633-1-dennylin0707@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	Song Liu <song@kernel.org>
+Subject: [PATCH] klp-build: Reuse the target kernel randstruct seed
+Date: Tue, 20 Oct 2026 14:23:41 -0700
+Message-ID: <20261020212341.706367-1-song@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -100,39 +65,168 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Allocate the object and function arrays with kzalloc_objs() so their
-element sizes are derived from the destination types and multiplication
-overflow is handled by the allocation helper.
+CONFIG_RANDSTRUCT randomizes struct layouts based on a seed which kbuild
+generates from /dev/urandom.  A livepatch has to observe the same layouts
+as the kernel it is loaded into, but klp-build runs 'make clean', after
+which kbuild generates a new seed, and the resulting module can't be
+loaded:
 
-Keep the extra zeroed entry used to terminate each array. The default
-allocation flags remain GFP_KERNEL.
+  module livepatch_foo: .gnu.linkonce.this_module
+  section size must match the kernel's built struct module size at run time
 
-Signed-off-by: Hungyu Lin <dennylin0707@gmail.com>
+struct module had grown 64 bytes of padding relative to the running
+kernel (0x540 vs 0x500).  Every other randomized struct the patch touches
+would be read at the wrong offsets too, so this is not just a loader nit.
+
+Reuse the seed of the kernel being patched, taken from --randstruct-seed
+or from scripts/basic/randstruct.seed in the tree, and refuse to build
+when CONFIG_RANDSTRUCT is on and no valid seed is available.  A wrong
+module is worse than no module.
+
+Pin scripts/gen-randstruct-seed.sh rather than the generated seed file:
+clean_kernel() removes scripts/basic/.randstruct.seed.cmd, so kbuild's
+if_changed finds no saved command and regenerates the seed no matter what
+the file already holds.  The generator is stashed, so it is restored on
+exit like scripts/setlocalversion.
+
+Read the seed before set_kernelversion(), but pin the generator after it.
+set_kernelversion() runs 'make listnewconfig' and 'make syncconfig', which
+build scripts/basic as well, so after a 'make clean' they would replace
+the seed before the default seed file is read.  But if the generator is
+already modified when 'make kernelrelease' runs, setlocalversion appends
+"-dirty" to the kernel release and the module's vermagic no longer
+matches the target kernel.
+
+The Clang and GCC plugin implementations both derive their layouts only
+from scripts/basic/randstruct.seed, so pinning the seed covers
+CONFIG_GCC_PLUGIN_RANDSTRUCT too.  Drop the check that rejected it.  The
+plugin requires a 64 character seed, which is what gen-randstruct-seed.sh
+writes, so validate exactly that format.
+
+An explicit option is needed rather than deriving the path from
+uname -r, because the build host is usually not running the kernel being
+patched.
+
+Signed-off-by: Song Liu <song@kernel.org>
 ---
- scripts/livepatch/init.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/livepatch/klp-build | 61 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 56 insertions(+), 5 deletions(-)
 
-diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-index f14d8c8fb35f..908676d6d07d 100644
---- a/scripts/livepatch/init.c
-+++ b/scripts/livepatch/init.c
-@@ -34,7 +34,7 @@ static int __init livepatch_mod_init(void)
- 		goto err;
- 	}
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index b52a8489d9f6..fd336f685a84 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -19,7 +19,7 @@ set -o nounset
+ # This helps keep execution in pipes so pipefail+ERR trap can catch errors.
+ shopt -s lastpipe
  
--	objs = kzalloc(sizeof(struct klp_object) * (nr_objs + 1),  GFP_KERNEL);
-+	objs = kzalloc_objs(*objs, nr_objs + 1);
- 	if (!objs) {
- 		ret = -ENOMEM;
- 		goto err_free_patch;
-@@ -47,7 +47,7 @@ static int __init livepatch_mod_init(void)
- 		struct klp_func *funcs = objs[i].funcs;
- 		struct klp_object *obj = objs + i;
+-unset DEBUG_CLONE DIFF_CHECKSUM SKIP_CLEANUP VERBOSE XTRACE
++unset DEBUG_CLONE DIFF_CHECKSUM RANDSTRUCT_SEED RANDSTRUCT_SEED_FILE SKIP_CLEANUP VERBOSE XTRACE
  
--		funcs = kzalloc(sizeof(struct klp_func) * (nr_funcs + 1), GFP_KERNEL);
-+		funcs = kzalloc_objs(*funcs, nr_funcs + 1);
- 		if (!funcs) {
- 			ret = -ENOMEM;
- 			for (int j = 0; j < i; j++)
+ REPLACE=1
+ SHORT_CIRCUIT=0
+@@ -133,6 +133,8 @@ Options:
+    -j, --jobs=<jobs>		Build jobs to run simultaneously [default: $JOBS]
+    -o, --output=<file.ko>	Output file [default: livepatch-<patch-name>.ko]
+        --no-replace		Disable livepatch atomic replace
++       --randstruct-seed=<file>	Randstruct seed of the target kernel
++                                [default: scripts/basic/randstruct.seed]
+    -v, --verbose		Pass V=1 to kernel/module builds
+ 
+ Advanced Options:
+@@ -160,7 +162,7 @@ process_args() {
+ 	local patch
+ 
+ 	short="hfj:o:vdS:T"
+-	long="help,show-first-changed,jobs:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
++	long="help,show-first-changed,jobs:,output:,no-replace,randstruct-seed:,verbose,debug,short-circuit:,keep-tmp"
+ 
+ 	args=$(getopt --options "$short" --longoptions "$long" -- "$@") || {
+ 		echo; usage; exit
+@@ -193,6 +195,11 @@ process_args() {
+ 				REPLACE=0
+ 				shift
+ 				;;
++			--randstruct-seed)
++				[[ -r "$2" ]] || die "can't read randstruct seed file '$2'"
++				RANDSTRUCT_SEED_FILE="$2"
++				shift 2
++				;;
+ 			-v | --verbose)
+ 				VERBOSE=1
+ 				shift
+@@ -268,9 +275,6 @@ validate_config() {
+ 	[[ -v CONFIG_GCC_PLUGIN_LATENT_ENTROPY ]] &&	\
+ 		die "kernel option 'CONFIG_GCC_PLUGIN_LATENT_ENTROPY' not supported"
+ 
+-	[[ -v CONFIG_GCC_PLUGIN_RANDSTRUCT ]] &&	\
+-		die "kernel option 'CONFIG_GCC_PLUGIN_RANDSTRUCT' not supported"
+-
+ 	[[ -v CONFIG_LD_DEAD_CODE_DATA_ELIMINATION ]] &&		\
+ 		die "kernel option 'CONFIG_LD_DEAD_CODE_DATA_ELIMINATION' not supported"
+ 
+@@ -328,6 +332,51 @@ set_kernelversion() {
+ 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
+ }
+ 
++# CONFIG_RANDSTRUCT randomizes struct layouts based on a seed which kbuild
++# generates from /dev/urandom.  A livepatch has to observe the same layouts as
++# the kernel it gets loaded into, so reuse that kernel's seed.  Otherwise the
++# module loader rejects the module ("...this_module section size must match
++# the kernel's built struct module size at run time"), and any randomized
++# struct the patch touches would be accessed at the wrong offsets.
++#
++# This must run before set_kernelversion(), whose 'make syncconfig' also
++# builds scripts/basic.  After a 'make clean' that would replace the seed
++# before the default seed file gets read.
++read_randstruct_seed() {
++	local seed_file
++
++	[[ -v CONFIG_RANDSTRUCT ]] || return 0
++
++	if [[ -v RANDSTRUCT_SEED_FILE ]]; then
++		seed_file="$RANDSTRUCT_SEED_FILE"
++	else
++		seed_file="$PWD/scripts/basic/randstruct.seed"
++		[[ -r "$seed_file" ]] ||				\
++			die "CONFIG_RANDSTRUCT is enabled but there's no $seed_file; pass --randstruct-seed with the seed used to build the kernel"
++	fi
++
++	RANDSTRUCT_SEED="$(< "$seed_file")"
++	[[ "$RANDSTRUCT_SEED" =~ ^[0-9a-f]{64}$ ]] ||			\
++		die "malformed randstruct seed in $seed_file"
++}
++
++# Pin the generator rather than the seed file: clean_kernel() removes
++# scripts/basic/.randstruct.seed.cmd, so if_changed sees no saved command and
++# regenerates the seed no matter what the file already holds.
++#
++# This must run after set_kernelversion(), otherwise setlocalversion sees the
++# modified generator and appends "-dirty" to the kernel release.
++set_randstruct_seed() {
++	local gen="$PWD/scripts/gen-randstruct-seed.sh"
++
++	[[ -v RANDSTRUCT_SEED ]] || return 0
++
++	stash_file "$gen"
++	sed -i "s|^SEED=.*|SEED=$RANDSTRUCT_SEED|" "$gen"
++	command grep -q "^SEED=$RANDSTRUCT_SEED$" "$gen" ||		\
++		die "failed to pin randstruct seed"
++}
++
+ get_patch_input_files() {
+ 	local patch="$1"
+ 
+@@ -464,7 +513,9 @@ do_init() {
+ 
+ 	validate_config
+ 	set_module_name
++	read_randstruct_seed
+ 	set_kernelversion
++	set_randstruct_seed
+ }
+ 
+ # Refresh the patch hunk headers, specifically the line numbers and counts.
+-- 
+2.53.0-Meta
 
-base-commit: f663062d717eac2c01f77eaf321fa630528e672d
