@@ -1,94 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792684746;
-	b=1X4Kw+/y5szxMA8tB6TL4StuCAyL2oN8QYeZOWn5Z2bfcMIQj4SUUjHw+bBfNarwi05W
-	 /g+g/ALSa8ziGvj6rDCZ9rRmagLnkPRpufb/GltiO6MfFu962SQyCCjha0RWgMyzxK18k
-	 YdgzbXz1S5XYZ1Rb1pYjO19LYxF/TRZQtyQZRtt5tgVUyqMqqxQjsUrkG4hWzvtw75aLJ
-	 56zeEzf2tFm2w/GBnm1JP0XQQZhAcpSenrm81VlJtTZ4BPIF6OWOS+yaPLtoy1esM2Wd9
-	 af61n6VAcZhRLqqImFXMT9b/z+/3pjFrDzNSKWNkoynXCMohjElI8Wjgcx9PD3SbCdA==
+	t=1792684972;
+	b=BA8oPHxwLti5bR1H26rCYVtOEysXRA8jFKN5NF7nsEdQOypvcrFcR+R528iFFIS9n1k9
+	 BqknUaBPuzezxM1d0Y/Y2irSsubgE5TPvSq4mnD/sOmwphn0RtFFhdeBoqqpHgsDeAKS5
+	 fi9vbrGhwnjt9Uu61wcbs63tqArtDNF5W6Bb0fNAiIftzNvIFjpz/1YWxIUMCeKdsIsHt
+	 5RdJVda6wHpPlWZUa0s0eC8RTIpCuN3hnEO+CDHEuQviMjj4CCrghtQM0A34BZbRa0nTK
+	 2KtQd6YMDyoPw5cuzRogLEMlagWjqICLJL8nK5ewnMmeacX9UERqEkmI5s1J/QarWGA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792684746;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
-	b=mEXOElBACsbJn+D/mWS8iEe+u7TXi36oVkPMaCLf3FSZyrqqbQpqYQ6u9zfdKr5Dztv/
-	 +XVaYEVguNitSS2A5UG1YyDwZT5zn+vsKNvfarojE1dI5zi+mOlvzELnMjzmkjoORQLn5
-	 FaBCzUMHsoZOp0SJa/WankIZkScT+ADlI3OCYdLtyJShDssLOeCYvuzR5sYQZ8T15Kl9W
-	 wYp5r55fHpOoBdQKamD5STEO7+4Ifs0HTmdo/bouQID3VJJxbJ7/qS74rglWGNFIMJrJ4
-	 9/bo2O/nmvYgEAc80HpzZO18Kra4DtTrVEw5TsK2DGRM0UqK3N4cRMkBY8WgocT4prA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792684972;
+	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
+	 X-Mimecast-MFC-AGG-ID:Received:Received:Date:From:To:Cc:Subject:
+	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
+	 In-Reply-To:X-Scanned-By;
+	bh=DKv58Efgci3z6wOk+CcOOnuJnHbP4dkIuHX7WooisXE=;
+	b=bTaOMvSlMiM78o14OYjuTRYvkMKCTlRfSa3zy1+WHQLYjFk42iN/+Hnnwk7+3hbP6l5d
+	 1Ls07qz30II6QqDLXj0w0tBJvX+QVjTeAkWCvhYRnYVIYCXf3rFmveEMCpbmBISAhkMTL
+	 5G5FP5oEF6u/SpTptnjB2oZ82hlxkW0HWernjiF6Q3qfTMSUOWPa4q+pFSoiK+68/lfsx
+	 ygi8uy2YRAA2b8sbX6JCnEbbTXX4kcTPzYC6X12ZRJcXw+Ow6L4mqAg2dSWoNqnnUJfch
+	 Azmx0emHMIoAfo1aYpp28jlcubqHG8PMp0hjUqHzvmCz1nc4sIlR9CKkudei9NnfX5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JJC4QT1V;
-	arc=none smtp.remote-ip=209.85.221.41
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=redhat.com;
+	spf=pass smtp.mailfrom=redhat.com;
+	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OUKdrccZ;
+	arc=none smtp.remote-ip=170.10.133.124
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17C7606A319
-	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 15:59:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F17C7606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3468D606A32A
+	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 16:02:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3468D606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JJC4QT1V
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48441a2ba1bso1443134f8f.1
-        for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 08:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792684744; x=1793289544; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
-        b=JJC4QT1VvXgNultHyqSKvnobr6eTYW4AU8Ex9RwneghXYoL3nr1NZHc+xLJv+Or+bu
-         DE2mQSiJW4/DI0vGrLd9fTgFz19/+BGdfG5qjlhYExc7/ID/7+Y/mDvySh2iE5ZaUtDl
-         eHXqu9Y400IiojnvUk68Y9iIJkEyZvatgxq6277s92bdcZUJCnjBvRT8ND1Ly2hzO5/c
-         ajThllCmMIU5g13Ts9chRAuG/3BVUfFQ/WYfSf9S41/VhY1y3UHLmLoNR2lyue38+yiT
-         As5Jm1Uw/p66BargJCphl8qrUvPzNYQhph7z3l0HoRemKvdgqZbRuTs+WRBopcblT1nB
-         YHPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792684744; x=1793289544;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
-        b=XCYfhl5SC16Wx96xcq46HP9dytn0lRMkjG8ZDmRjq6oXItzeZEIuJDtON2jLQlmnCB
-         HLTpaByOapJ4qzvnCYNx1zPqL40psaHmj67YvzPCkrNZXwrykoYMNCQkQL4hlbVw6sB9
-         d07obHWes/I9r4b+/BlSxvs2hKH+bjvaM6Pf3FU+i89xYbrAg//eMXzWczBCLGztas4Z
-         utNl6gTzm89d84albv0EzgiGXzNN1F0ZWqTlohBIcoUoo+KbZd6OB3XdYqfLj1pLMdyj
-         8Yw3Ou+TJ+CZ7rXnXcPoKdo+3qvuI+/O6bptI6qTMrQQ0MLuAmnk0vkleun8S5UHXH6g
-         BqIw==
-X-Forwarded-Encrypted: i=1; AKwUvBzGfPv0qzuAMfJIdJU4AVp1tD75uXtRHXMcXwX+BUVl6xH56tXrT/gIS5twuEXyogChjEnrS+nhY92SmdUD@vger.kernel.org
-X-Gm-Message-State: AFq9FYIaK8NNlxtU89nb2iSUPwn5IAyxJT5ZVk68rhDUpVh+G37EBgfF
-	yVXT0FbvODMJq8uxjitcX2es6rvtpVXoUbwDDnHx/+j6LfvQXWVPdN0whTVCAORchbY=
-X-Gm-Gg: AYBFou1OUV2FrJznKk997k0ot3I94rJvLzPg2yW10/B2X4eqniw+3NMwn+2w4XgviA0
-	OiR1AO6xZa8sHC/k3PJEpxrgg8xQdPP5x25bcjGBdk0Udn9WcBGHoaglKRf/BzisiyKzKxFFHjy
-	Q0YwRpm0s07X5VLWFxjZ3mqg/3ZiQy8Cb+chJ8CSdtCrkx6C/dWyKfHaKh2Sep7pQHUkbgg2px2
-	nBKHBmh8P1btUJ+4Sx53rC9yGk4AQe/eh+RwuxqPoqKeOruV5JqaeplgfE35QonNQGUc7rhfqxY
-	TqqkG+/f1cvWkv/m2WetVpK6dexGWFp/1mEv64N6re4aCaAQhD7l3sUtNemG3kd3TihGNUDtPD7
-	9pbkjcmHansqT7+xrfDRmuUqbbJ0hdCGv8HZ6VJ7OTJf8d779wBD7cxkejvr5KhPkeqqpWEjxhx
-	nDKkmxPnH3hBOu50PrtvUUE+oaxgStQzNvAEwJokrHGRZ8XxtFTD4XPpYPKQ3Zn6dvW/0CWWG6P
-	DQEi9gdlpr4nAf5GXEXHKhUmtjbCfS+JbpZXDc0TCto2Y4c0224eheNMRG9csbisshBMrcb
-X-Received: by 2002:adf:efd2:0:b0:48a:efed:ac97 with SMTP id ffacd0b85a97d-48e264f06c6mr8640591f8f.33.1792684744491;
-        Thu, 22 Oct 2026 08:59:04 -0700 (PDT)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2581eedesm12033197f8f.14.2026.10.22.08.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 08:59:04 -0700 (PDT)
-Date: Thu, 22 Oct 2026 17:59:02 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, song@kernel.org,
-	live-patching@vger.kernel.org
-Subject: Re: [PATCH v12 9/9] selftests/livepatch: Add function test for
- provides/obsoletes
-Message-ID: <atoyxoxWSVqZvHUE@pathway.suse.cz>
-References: <20261016053708.47089-1-laoar.shao@gmail.com>
- <20261016053708.47089-10-laoar.shao@gmail.com>
+	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=OUKdrccZ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1792684971;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DKv58Efgci3z6wOk+CcOOnuJnHbP4dkIuHX7WooisXE=;
+	b=OUKdrccZiECkhJEw2PuHx5DmMbS1jkKQvga6MY6kuOLHtL6/90ppWWnC29XGVEB90LN1Ve
+	grDtf8GE4zQ02v/qmQFMhbPvTSQXY3uBFXiE/4NIfIMUFRB3SFL4m7H1tsscgiELdBa+2I
+	fKPLvh5uv6WMvf4Nv1ErIYIrhsr326U=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-458-S2zDwerpNNy-uraKnYXqLA-1; Thu,
+ 22 Oct 2026 12:02:47 -0400
+X-MC-Unique: S2zDwerpNNy-uraKnYXqLA-1
+X-Mimecast-MFC-AGG-ID: S2zDwerpNNy-uraKnYXqLA_1792684966
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1552518011ED;
+	Thu, 22 Oct 2026 16:02:46 +0000 (UTC)
+Received: from redhat.com (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DFE471800444;
+	Thu, 22 Oct 2026 16:02:44 +0000 (UTC)
+Date: Thu, 22 Oct 2026 12:02:42 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH 3/3] objtool/klp: Add test for changed functions without
+ an ftrace call site
+Message-ID: <atozok6_aRetCLq2@redhat.com>
+References: <20261022122544.125305-1-puranjay@kernel.org>
+ <20261022122544.125305-4-puranjay@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -100,26 +81,191 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261016053708.47089-10-laoar.shao@gmail.com>
+In-Reply-To: <20261022122544.125305-4-puranjay@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Fri 2026-10-16 13:37:08, Yafang Shao wrote:
-> Livepatches with different provides ids must not modify the same
-> function, unless they share the same provides id or the second
-> livepatch obsoletes the first one.
+On Thu, Oct 22, 2026 at 05:25:38AM -0700, Puranjay Mohan wrote:
+> Test that klp diff rejects a changed function without an ftrace call
+> site, both a notrace one and an inline one emitted out of line, and
+> reports each of them.  Also test that a fully inlined function and an
+> ordinary function can still be patched.
 > 
-> Add test scenarios that verify this rule on the combination of
-> patched functions and provides ids.
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
+>  .../tests/x86/fixtures/notrace_target.c       | 71 ++++++++++++++++++
+>  .../objtool/tests/x86/test-notrace-target.sh  | 74 +++++++++++++++++++
+>  2 files changed, 145 insertions(+)
+>  create mode 100644 tools/objtool/tests/x86/fixtures/notrace_target.c
+>  create mode 100755 tools/objtool/tests/x86/test-notrace-target.sh
 > 
-> These tests are skipped on kernels that still support the legacy
-> "replace" attribute.
+> diff --git a/tools/objtool/tests/x86/fixtures/notrace_target.c b/tools/objtool/tests/x86/fixtures/notrace_target.c
+> new file mode 100644
+> index 0000000000000..64da58c872b8a
+> --- /dev/null
+> +++ b/tools/objtool/tests/x86/fixtures/notrace_target.c
+> @@ -0,0 +1,71 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* PATCH_<name> changes <name> in the patched build. */
+> +#define notrace __attribute__((__no_instrument_function__))
+> +
+> +static const char __modinfo[]
+> +	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
+> +
+> +#ifndef PATCHED
+> +#undef PATCH_OUTLINED
+> +#undef PATCH_NOTRACE
+> +#undef PATCH_INLINED
+> +#undef PATCH_TRACED
+> +#endif
+> +
+> +#ifdef PATCH_OUTLINED
+> +#define OUTLINED_K 2
+> +#else
+> +#define OUTLINED_K 1
+> +#endif
+> +
+> +#ifdef PATCH_NOTRACE
+> +#define NOTRACE_K 2
+> +#else
+> +#define NOTRACE_K 1
+> +#endif
+> +
+> +#ifdef PATCH_INLINED
+> +#define INLINED_K 2
+> +#else
+> +#define INLINED_K 1
+> +#endif
+> +
+> +#ifdef PATCH_TRACED
+> +#define TRACED_K 2
+> +#else
+> +#define TRACED_K 1
+> +#endif
+> +
+> +int sink;
+> +
+> +/* Address taken, so emitted out of line. */
+> +static inline notrace int outlined(int x)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < x; i++)
+> +		sink += i * OUTLINED_K;
+> +	return sink;
+> +}
+> +
+> +int (*outlined_ptr)(int) = outlined;
+> +
+> +notrace int notrace_fn(int x)
+> +{
+> +	return x * 3 + NOTRACE_K;
+> +}
+> +
+> +static inline int inlined(int x)
+> +{
+> +	return x + INLINED_K;
+> +}
+> +
+> +int inlined_user(int x)
+> +{
+> +	return inlined(x) * 5;
+> +}
+> +
+> +int traced(int x)
+> +{
+> +	return x * 7 + TRACED_K;
+> +}
+> diff --git a/tools/objtool/tests/x86/test-notrace-target.sh b/tools/objtool/tests/x86/test-notrace-target.sh
+> new file mode 100755
+> index 0000000000000..09414ae65fc2c
+> --- /dev/null
+> +++ b/tools/objtool/tests/x86/test-notrace-target.sh
+> @@ -0,0 +1,74 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# A changed function without an ftrace call site can't be livepatched:
+> +# klp_enable_patch() fails with "failed to find location for function".
+> +# klp diff must reject it instead.
+> +
+> +. "$(dirname "$0")/../lib.sh"
+> +
+> +# mcount_entry <function>: orig.o has an __mcount_loc entry for it.
+> +mcount_entry()
+> +{
+> +	in_relocs "$orig_obj" | awk '/rela__mcount_loc/,/^$/' |
+> +		awk -v f="$1" '$5 == f || $5 == ".text." f' | grep -q .
+> +}
+> +
+> +# check <expected exit status> <-DPATCH_... flags>
+> +check()
+> +{
+> +	local expect="$1"; shift
+> +
+> +	setup
+> +	build_pair notrace_target.c "$@"
+> +
+> +	assert_input_symbol outlined
+> +	assert_input_symbol notrace_fn
+> +	has_input_symbol "$orig_obj" inlined &&
+> +		fail "inlined() was emitted out of line; the fixture tests nothing"
+> +	mcount_entry traced ||
+> +		fail "no __mcount_loc entry for traced(); the fixture tests nothing"
+> +	mcount_entry inlined_user ||
+> +		fail "no __mcount_loc entry for inlined_user(); the fixture tests nothing"
+> +	mcount_entry outlined &&
+> +		fail "outlined() has a __mcount_loc entry; it should be notrace"
+> +	mcount_entry notrace_fn &&
+> +		fail "notrace_fn() has a __mcount_loc entry; it should be notrace"
+> +
+> +	run_diff "$expect"
+> +}
+> +
+> +rejected()
+> +{
+> +	local n
+> +
+> +	n="$(diff_log | grep -c "error: objtool: $1: no ftrace call site, can't patch")"
+> +	[ "$n" = 1 ] ||
+> +		fail "expected '$1' rejected once, found $n: $(diff_log | tail -2)"
+> +}
+> +
+> +check 255 -DPATCH_OUTLINED
+> +rejected outlined
+> +cleanup
+> +
+> +check 255 -DPATCH_NOTRACE
+> +rejected notrace_fn
+> +cleanup
+> +
+> +check 255 -DPATCH_OUTLINED -DPATCH_NOTRACE
+> +rejected outlined
+> +rejected notrace_fn
+> +cleanup
+> +
+> +# Fully inlined: the traceable caller gets patched.
+> +check 0 -DPATCH_INLINED
+> +assert_patched inlined_user
+> +assert_not_patched traced
+> +cleanup
+> +
+> +check 0 -DPATCH_TRACED
+> +assert_patched traced
+> +assert_not_patched inlined_user
+> +cleanup
+> +
+> +pass "changed function without an ftrace call site rejected"
+> -- 
+> 2.53.0-Meta
 > 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> 
 
-Looks good to me and passes the selftests:
+Thanks for finding and fixing this bug!  By coincidence, I was debugging
+this very problem yesterday (wondering why I couldn't load a patch that
+modified an un-patchable function).
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-Best Regards,
-Petr
+--
+Joe
+
