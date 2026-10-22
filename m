@@ -1,75 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.41
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792684559;
-	b=TGOL1FHE2L/A7UM2ZH9RNbsgPfg3neKIapIPczyKrlii2V9Rb0hJmU0obu50wDU/zHfT
-	 Oddkb3Uh+skLYZOSUF7nJC4La6ZleTS6cUcg8pDCxU+pIsk0Ts5UGM6I3a8o+NfyrqKsA
-	 2cwohfZ92L7O1i1i/oUSMQ2cBGEmTwmJE/J5LpzMJ9p+B1bxhnjWfXPjR+ihX/91lWbGS
-	 uOUxKZXt2BTNRriatyklo5aD0DRljU0fFRStsBBYfmO5GqksnWYXQO+RPOToTkwLM8J9m
-	 AWqtNuPLePcC6/vMkB1ytLSjIuQXJxPEACXnBuEa9datRixX/NSfoZ+grITXdSiUe+Q==
+	t=1792684746;
+	b=1X4Kw+/y5szxMA8tB6TL4StuCAyL2oN8QYeZOWn5Z2bfcMIQj4SUUjHw+bBfNarwi05W
+	 /g+g/ALSa8ziGvj6rDCZ9rRmagLnkPRpufb/GltiO6MfFu962SQyCCjha0RWgMyzxK18k
+	 YdgzbXz1S5XYZ1Rb1pYjO19LYxF/TRZQtyQZRtt5tgVUyqMqqxQjsUrkG4hWzvtw75aLJ
+	 56zeEzf2tFm2w/GBnm1JP0XQQZhAcpSenrm81VlJtTZ4BPIF6OWOS+yaPLtoy1esM2Wd9
+	 af61n6VAcZhRLqqImFXMT9b/z+/3pjFrDzNSKWNkoynXCMohjElI8Wjgcx9PD3SbCdA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792684559;
-	h=DMARC-Filter:DKIM-Signature:Received:X-MC-Unique:
-	 X-Mimecast-MFC-AGG-ID:Received:Received:Date:From:To:Cc:Subject:
-	 Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
-	 In-Reply-To:X-Scanned-By;
-	bh=/RmLVwEuB/hNcjUButO87bnfXf8Al3OUHG8uGSv+Vag=;
-	b=DoV9We2bSL/maP84tiRpxeUSEuJ0H8t2zAxB0KmOcuDgHyVFe527nhM4feZWfbGQqWTl
-	 7iRe88JviRXHhiaFkNbxxFVrVH7TPtQQRTlAi18/urpyuX0t4nw+P/xWwUkFEOu35pmSl
-	 l8Mkz1/PlRTehxjNv4M1C7N91/99ZnejEdzPtUW1UOPTzv4d39D4VgelVCy1nOO1lt/cR
-	 XBKumQ7TI9Wfev6TI19XpauX3zHmoxBhJ3o3IOdQvyVWtNMWcZRxCSOoIVTDyL+nEp0N5
-	 grslZuINyPw8TyzMkkxVcq14njdrO0VoRLgOXGziVW/DFVicebkYuIfSTYZn+X/aXLg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792684746;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
+	b=mEXOElBACsbJn+D/mWS8iEe+u7TXi36oVkPMaCLf3FSZyrqqbQpqYQ6u9zfdKr5Dztv/
+	 +XVaYEVguNitSS2A5UG1YyDwZT5zn+vsKNvfarojE1dI5zi+mOlvzELnMjzmkjoORQLn5
+	 FaBCzUMHsoZOp0SJa/WankIZkScT+ADlI3OCYdLtyJShDssLOeCYvuzR5sYQZ8T15Kl9W
+	 wYp5r55fHpOoBdQKamD5STEO7+4Ifs0HTmdo/bouQID3VJJxbJ7/qS74rglWGNFIMJrJ4
+	 9/bo2O/nmvYgEAc80HpzZO18Kra4DtTrVEw5TsK2DGRM0UqK3N4cRMkBY8WgocT4prA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=redhat.com;
-	spf=pass smtp.mailfrom=redhat.com;
-	dkim=pass header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=N0Jmhplk;
-	arc=none smtp.remote-ip=170.10.133.124
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JJC4QT1V;
+	arc=none smtp.remote-ip=209.85.221.41
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8580606A31E
-	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 15:55:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8580606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17C7606A319
+	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 15:59:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F17C7606A319
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=redhat.com header.i=@redhat.com header.a=rsa-sha256 header.s=mimecast20190719 header.b=N0Jmhplk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1792684557;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/RmLVwEuB/hNcjUButO87bnfXf8Al3OUHG8uGSv+Vag=;
-	b=N0JmhplkJzcTJwIjp350xxdhy9kbHVeT+xjyda8y7mVPiUkaJA0wWt1q7VDG8xq/RwTijz
-	bE7VxqEY4ePnx3ADp/laB3MzLbMhLvn4pPzcrGJQWmc/QA2xJHAzadEZ1nJhm1WT0T4qSE
-	BSbSMRP7etf2Hr6NwbWdJ1HVG6JMgL8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-148-m9Z_yb2yPriAIq95ILZlaA-1; Thu,
- 22 Oct 2026 11:55:52 -0400
-X-MC-Unique: m9Z_yb2yPriAIq95ILZlaA-1
-X-Mimecast-MFC-AGG-ID: m9Z_yb2yPriAIq95ILZlaA_1792684551
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A54518007ED;
-	Thu, 22 Oct 2026 15:55:51 +0000 (UTC)
-Received: from redhat.com (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C5F230000E7;
-	Thu, 22 Oct 2026 15:55:50 +0000 (UTC)
-Date: Thu, 22 Oct 2026 11:55:48 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: live-patching@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 2/3] objtool/klp: Reject changed functions without an
- ftrace call site
-Message-ID: <atoyBMUFX98mr-Uw@redhat.com>
-References: <20261022122544.125305-1-puranjay@kernel.org>
- <20261022122544.125305-3-puranjay@kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=JJC4QT1V
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48441a2ba1bso1443134f8f.1
+        for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 08:59:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1792684744; x=1793289544; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
+        b=JJC4QT1VvXgNultHyqSKvnobr6eTYW4AU8Ex9RwneghXYoL3nr1NZHc+xLJv+Or+bu
+         DE2mQSiJW4/DI0vGrLd9fTgFz19/+BGdfG5qjlhYExc7/ID/7+Y/mDvySh2iE5ZaUtDl
+         eHXqu9Y400IiojnvUk68Y9iIJkEyZvatgxq6277s92bdcZUJCnjBvRT8ND1Ly2hzO5/c
+         ajThllCmMIU5g13Ts9chRAuG/3BVUfFQ/WYfSf9S41/VhY1y3UHLmLoNR2lyue38+yiT
+         As5Jm1Uw/p66BargJCphl8qrUvPzNYQhph7z3l0HoRemKvdgqZbRuTs+WRBopcblT1nB
+         YHPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792684744; x=1793289544;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hZMUDK8b1yvClCIF9+OTNq91IdHD+Okctj94fvLS0gk=;
+        b=XCYfhl5SC16Wx96xcq46HP9dytn0lRMkjG8ZDmRjq6oXItzeZEIuJDtON2jLQlmnCB
+         HLTpaByOapJ4qzvnCYNx1zPqL40psaHmj67YvzPCkrNZXwrykoYMNCQkQL4hlbVw6sB9
+         d07obHWes/I9r4b+/BlSxvs2hKH+bjvaM6Pf3FU+i89xYbrAg//eMXzWczBCLGztas4Z
+         utNl6gTzm89d84albv0EzgiGXzNN1F0ZWqTlohBIcoUoo+KbZd6OB3XdYqfLj1pLMdyj
+         8Yw3Ou+TJ+CZ7rXnXcPoKdo+3qvuI+/O6bptI6qTMrQQ0MLuAmnk0vkleun8S5UHXH6g
+         BqIw==
+X-Forwarded-Encrypted: i=1; AKwUvBzGfPv0qzuAMfJIdJU4AVp1tD75uXtRHXMcXwX+BUVl6xH56tXrT/gIS5twuEXyogChjEnrS+nhY92SmdUD@vger.kernel.org
+X-Gm-Message-State: AFq9FYIaK8NNlxtU89nb2iSUPwn5IAyxJT5ZVk68rhDUpVh+G37EBgfF
+	yVXT0FbvODMJq8uxjitcX2es6rvtpVXoUbwDDnHx/+j6LfvQXWVPdN0whTVCAORchbY=
+X-Gm-Gg: AYBFou1OUV2FrJznKk997k0ot3I94rJvLzPg2yW10/B2X4eqniw+3NMwn+2w4XgviA0
+	OiR1AO6xZa8sHC/k3PJEpxrgg8xQdPP5x25bcjGBdk0Udn9WcBGHoaglKRf/BzisiyKzKxFFHjy
+	Q0YwRpm0s07X5VLWFxjZ3mqg/3ZiQy8Cb+chJ8CSdtCrkx6C/dWyKfHaKh2Sep7pQHUkbgg2px2
+	nBKHBmh8P1btUJ+4Sx53rC9yGk4AQe/eh+RwuxqPoqKeOruV5JqaeplgfE35QonNQGUc7rhfqxY
+	TqqkG+/f1cvWkv/m2WetVpK6dexGWFp/1mEv64N6re4aCaAQhD7l3sUtNemG3kd3TihGNUDtPD7
+	9pbkjcmHansqT7+xrfDRmuUqbbJ0hdCGv8HZ6VJ7OTJf8d779wBD7cxkejvr5KhPkeqqpWEjxhx
+	nDKkmxPnH3hBOu50PrtvUUE+oaxgStQzNvAEwJokrHGRZ8XxtFTD4XPpYPKQ3Zn6dvW/0CWWG6P
+	DQEi9gdlpr4nAf5GXEXHKhUmtjbCfS+JbpZXDc0TCto2Y4c0224eheNMRG9csbisshBMrcb
+X-Received: by 2002:adf:efd2:0:b0:48a:efed:ac97 with SMTP id ffacd0b85a97d-48e264f06c6mr8640591f8f.33.1792684744491;
+        Thu, 22 Oct 2026 08:59:04 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e2581eedesm12033197f8f.14.2026.10.22.08.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2026 08:59:04 -0700 (PDT)
+Date: Thu, 22 Oct 2026 17:59:02 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, song@kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v12 9/9] selftests/livepatch: Add function test for
+ provides/obsoletes
+Message-ID: <atoyxoxWSVqZvHUE@pathway.suse.cz>
+References: <20261016053708.47089-1-laoar.shao@gmail.com>
+ <20261016053708.47089-10-laoar.shao@gmail.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -81,116 +100,26 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261022122544.125305-3-puranjay@kernel.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20261016053708.47089-10-laoar.shao@gmail.com>
 
-On Thu, Oct 22, 2026 at 05:25:37AM -0700, Puranjay Mohan wrote:
-> Livepatch redirects a function through its ftrace call site.  If a
-> changed function doesn't have one, klp-build succeeds but the patch
-> module fails to load:
+On Fri 2026-10-16 13:37:08, Yafang Shao wrote:
+> Livepatches with different provides ids must not modify the same
+> function, unless they share the same provides id or the second
+> livepatch obsoletes the first one.
 > 
->   livepatch: failed to find location for function 'nsproxy_free'
->   livepatch: failed to patch object 'vmlinux'
->   livepatch: failed to enable patch 'livepatch_nsproxy'
+> Add test scenarios that verify this rule on the combination of
+> patched functions and provides ids.
 > 
-> This is easy to hit because the kernel's 'inline' implies notrace, so
-> any inline function which the compiler emits out of line can't be
-> patched.
+> These tests are skipped on kernels that still support the legacy
+> "replace" attribute.
 > 
-> Make klp diff fail for any changed function which has no __mcount_loc
-> entry in the original object.
-> 
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->  tools/objtool/include/objtool/elf.h |  1 +
->  tools/objtool/klp-diff.c            | 47 +++++++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
-> 
-> diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-> index a82517a76a0f6..f7e6a652ee788 100644
-> --- a/tools/objtool/include/objtool/elf.h
-> +++ b/tools/objtool/include/objtool/elf.h
-> @@ -98,6 +98,7 @@ struct symbol {
->  	u8 klp		     : 1;
->  	u8 dont_correlate    : 1;
->  	u8 fake		     : 1;
-> +	u8 traceable	     : 1;
->  	struct list_head pv_target;
->  	struct reloc *relocs;
->  	struct section *group_sec;
-> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-> index 34da55e456097..f8659950ec9a9 100644
-> --- a/tools/objtool/klp-diff.c
-> +++ b/tools/objtool/klp-diff.c
-> @@ -1098,6 +1098,50 @@ static int mark_changed_functions(struct elfs *e)
->  	return !changed ? 1 : 0;
->  }
->  
-> +/*
-> + * Like ftrace_location(), accept an ftrace call site anywhere in the function.
-> + */
-> +static void mark_traceable_functions(struct elf *elf)
-> +{
-> +	struct section *sec;
-> +	struct reloc *reloc;
-> +
-> +	sec = find_section_by_name(elf, "__mcount_loc");
-> +	if (!sec || !sec->rsec)
-> +		return;
-> +
-> +	for_each_reloc(sec->rsec, reloc) {
-> +		struct symbol *func;
-> +
-> +		func = find_func_containing(reloc->sym->sec,
-> +					    reloc->sym->offset + reloc_addend(reloc));
-> +		if (func)
-> +			func->traceable = 1;
-> +	}
-> +}
-> +
-> +/*
-> + * Livepatch redirects functions through their ftrace call sites, so a function
-> + * without one can't be patched.
-> + */
-> +static int validate_traceable_functions(struct elfs *e)
-> +{
-> +	struct symbol *patched_sym;
-> +	bool error = false;
-> +
-> +	mark_traceable_functions(e->orig);
-> +
-> +	for_each_sym(e->patched, patched_sym) {
-> +		if (!patched_sym->changed || patched_sym->twin->traceable)
-> +			continue;
-> +
-> +		ERROR("%s: no ftrace call site, can't patch", patched_sym->twin->name);
-> +		error = true;
-> +	}
-> +
-> +	return error ? -1 : 0;
-> +}
-> +
->  static int clone_included_functions(struct elfs *e)
->  {
->  	struct symbol *patched_sym;
-> @@ -2260,6 +2304,9 @@ int cmd_klp_diff(int argc, const char **argv)
->  	if (ret > 0)
->  		return 0;
->  
-> +	if (validate_traceable_functions(&e))
-> +		return -1;
-> +
->  	e.out = elf_create_file(&e.orig->ehdr, argv[2]);
->  	if (!e.out)
->  		return -1;
-> -- 
-> 2.53.0-Meta
-> 
->
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 
- 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+Looks good to me and passes the selftests:
 
---
-Joe
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
 
+Best Regards,
+Petr
