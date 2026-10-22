@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792671969;
-	b=U2iK3uf6c0qZnmRoXJMBF8wGb7zgW6Zjx2DXv4pxuzzmrVKCQ2073/yJw5xY0jX7RYNs
-	 MaKPhHRfmcmzLxChbsdKzH5OjyusOShCHAhEMeY2a+sOY01EhmbqnuAo0brW4UiDA1oZ2
-	 p4AZydebmK+ogN+ypvSw8SzDEJLgKQfL5U6sGNkiXPKS84/+eniF7eoA/z50vQm2tGSs8
-	 7A0Esc43xRaMaepIMA7eK0FDCUhdEH/Iv4gvMGUembUh9ZunkAxaJuy3Q064hVblew2hE
-	 vdxxXD+7cGFQFYWTqofUHNHW9oQCTrG4DqPM7PC8s9gzBGwtBsyCAghOXQ/KM+F/Hww==
+	t=1792671974;
+	b=lOxNxoFIJQ7r7OsF1+upUyDArLJG0asch5AIYAPPiiVH/W6b8Yqp2UQtMWE9d5rgPgZU
+	 mZMETaaZcHEpzdiIQ5qYo1lDWKxgo7N7oHIOHjYqF/rIsMusczAtCVD3WsDYolcd6E/nr
+	 wdH8XOn9VshuXqw5HpD1mOO7pMljiNOSmEsyJwY0N6RyAei2rSqTz5jimC2KCHbWSQJW5
+	 +nabGPVfXlPr3VxRSlP1IE0ITgXnYw8QxyAPczhd/SMqtxSBpIysdXH55w4uUOV7UGTtb
+	 l5d3knPsW9pJlxIq8VhCcb5komJamTKFs/6BO/y7UQXRlgl/5Ybx5jdth8KiC6NFVLA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792671969;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792671974;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=FJ3iljMkCkcUr6G7DlUi0VEVk8Cw4mQkULvl1SvpDms=;
-	b=mXaiZlE+QbjUe4ggTs7/+yIWmF4iU6/twN3iUrcV7dkJeJxmcyXdtgDndaGtCOySyfnt
-	 FVCElPYICoOwaSWyZ8xgn2u5Blk7883IcxXxkpQVIC2oiYODLMidVXFN91pU7gJe37nMb
-	 9utKUKEGb6pblAvbppX5C6aaFTNxTYwviSu2D8G5XgmrhBdvEg32a+/zfSsBwI2HjLWj/
-	 Ckp2xmxOPmPQdf+h5w1S8uM2BXZAx9mzp1AI8dMN2yPgR+pLTr6TkZTIDLy7GO8pGJsxr
-	 k/i3qguT6puTJWWC3BvTTARC4QQ6QZ5OWg3C0j763E4Z9FHmcVcs48ASvEkABBpSYjQ==
+	bh=C0RBRHINdtoCfece3AFtkMvUp1Mn5kNaK/a9CuQxvSQ=;
+	b=CWBFlUMi1ycKnl2VCXdXQzDHYAKpAfvlol0HtrJFj/3Rj2gLyt6Eow5GsSc8IEDiILla
+	 5NNBzQ3U/Uzy+IgjhjC6uPqJNGqUK4KXXUEsWTv8bfh0VTwNLR0QdgfdtSH7SX76iKBRl
+	 9XoM+9UGtBlt88Otc03hDH5bPnQNvwL+Tg2mVBfb+ZDRAiucnQpFI6X58FR/wyYAfpl/w
+	 wBjaepCmwSD+TGeqaCD4o1OPZXd3/CHOHJaOJxaw+H3i3s0NWn9jLefqOZG9Jp0UyYoQM
+	 ZM/mE2LRkut+d5L2znHi8lalCuewNQU2iSPkh2q0RmiV5XhK+OHWfJkjKl2DLvDizug==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="RO/bLDyy";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DsRZxf0G;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2BE606A31B
-	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 12:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A1A606A31A
+	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 12:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=RO/bLDyy
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39A01F000C1;
-	Thu, 22 Oct 2026 12:26:08 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DsRZxf0G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363F41F000C2;
+	Thu, 22 Oct 2026 12:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792671969;
-	bh=FJ3iljMkCkcUr6G7DlUi0VEVk8Cw4mQkULvl1SvpDms=;
+	s=k20260515; t=1792671973;
+	bh=C0RBRHINdtoCfece3AFtkMvUp1Mn5kNaK/a9CuQxvSQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=RO/bLDyygOtIaLZTQpDrmW8j2oyw0oblIoTkomoIZaRkXAMYjg1vgcrmfv/10mVFe
-	 n6JlFyrs0/b6mOVIf1W3Hf6CqhLXjFKCZ3KyGQdbupMJG/2tCh+efcBkiRw88oddPH
-	 oNro2L6R/RxUz8ZSVgqqGlriqO9cR+ZjrfLDRyG4gou/d5wbbEPITyERXwOWZTW7Gb
-	 dg1ot1FBAwj8wdzBkZ6tJ3L7cjC9Uj0H4YH0SATFuHe3B+o6hSZu25EgYd7SmqNYxI
-	 3l2VdSB6W6/k2+E7DESLZS4h391NEnEnGdIyPpB79Jb1/vUp5R4lwgw+MnyxS84l9g
-	 d4XBouyiIC26w==
+	b=DsRZxf0GmLiof/lrWP7QV0xTXuS2RMAJKyYRvoktqqSjx5m/JjjmRhWNkdf0HfP1R
+	 l5nhNtG0EZl3H/gew7hs33l/nWpBFEtnNOD57LmWWMXOm9ipQ7+gleetMQeFoU6r+H
+	 KIl9xfBWx00c1zQtNfRLLTCiNJAWhHkCX1DhrhEnYovXwY+Jbljq3OfAueft6gvthO
+	 anA+AXpDCrZvnyq5XBnuwkppRlWw8JvfitM2VYBWE59a63OGnoV8GrtWJyOY3tiT+R
+	 NRGnxyah2aGPizn6IzLmGRSLPlhYyk3v3AM3QUhZzRilKfH+ZNsXDUwaavw+y9sArk
+	 iAiRHPL8RNhFw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: live-patching@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -47,9 +47,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Song Liu <song@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
 	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: [PATCH 2/3] objtool/klp: Reject changed functions without an ftrace call site
-Date: Thu, 22 Oct 2026 05:25:37 -0700
-Message-ID: <20261022122544.125305-3-puranjay@kernel.org>
+Subject: [PATCH 3/3] objtool/klp: Add test for changed functions without an ftrace call site
+Date: Thu, 22 Oct 2026 05:25:38 -0700
+Message-ID: <20261022122544.125305-4-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261022122544.125305-1-puranjay@kernel.org>
 References: <20261022122544.125305-1-puranjay@kernel.org>
@@ -64,104 +64,176 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Livepatch redirects a function through its ftrace call site.  If a
-changed function doesn't have one, klp-build succeeds but the patch
-module fails to load:
-
-  livepatch: failed to find location for function 'nsproxy_free'
-  livepatch: failed to patch object 'vmlinux'
-  livepatch: failed to enable patch 'livepatch_nsproxy'
-
-This is easy to hit because the kernel's 'inline' implies notrace, so
-any inline function which the compiler emits out of line can't be
-patched.
-
-Make klp diff fail for any changed function which has no __mcount_loc
-entry in the original object.
+Test that klp diff rejects a changed function without an ftrace call
+site, both a notrace one and an inline one emitted out of line, and
+reports each of them.  Also test that a fully inlined function and an
+ordinary function can still be patched.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- tools/objtool/include/objtool/elf.h |  1 +
- tools/objtool/klp-diff.c            | 47 +++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
+ .../tests/x86/fixtures/notrace_target.c       | 71 ++++++++++++++++++
+ .../objtool/tests/x86/test-notrace-target.sh  | 74 +++++++++++++++++++
+ 2 files changed, 145 insertions(+)
+ create mode 100644 tools/objtool/tests/x86/fixtures/notrace_target.c
+ create mode 100755 tools/objtool/tests/x86/test-notrace-target.sh
 
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index a82517a76a0f6..f7e6a652ee788 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -98,6 +98,7 @@ struct symbol {
- 	u8 klp		     : 1;
- 	u8 dont_correlate    : 1;
- 	u8 fake		     : 1;
-+	u8 traceable	     : 1;
- 	struct list_head pv_target;
- 	struct reloc *relocs;
- 	struct section *group_sec;
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 34da55e456097..f8659950ec9a9 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1098,6 +1098,50 @@ static int mark_changed_functions(struct elfs *e)
- 	return !changed ? 1 : 0;
- }
- 
-+/*
-+ * Like ftrace_location(), accept an ftrace call site anywhere in the function.
-+ */
-+static void mark_traceable_functions(struct elf *elf)
+diff --git a/tools/objtool/tests/x86/fixtures/notrace_target.c b/tools/objtool/tests/x86/fixtures/notrace_target.c
+new file mode 100644
+index 0000000000000..64da58c872b8a
+--- /dev/null
++++ b/tools/objtool/tests/x86/fixtures/notrace_target.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
++/* PATCH_<name> changes <name> in the patched build. */
++#define notrace __attribute__((__no_instrument_function__))
++
++static const char __modinfo[]
++	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
++
++#ifndef PATCHED
++#undef PATCH_OUTLINED
++#undef PATCH_NOTRACE
++#undef PATCH_INLINED
++#undef PATCH_TRACED
++#endif
++
++#ifdef PATCH_OUTLINED
++#define OUTLINED_K 2
++#else
++#define OUTLINED_K 1
++#endif
++
++#ifdef PATCH_NOTRACE
++#define NOTRACE_K 2
++#else
++#define NOTRACE_K 1
++#endif
++
++#ifdef PATCH_INLINED
++#define INLINED_K 2
++#else
++#define INLINED_K 1
++#endif
++
++#ifdef PATCH_TRACED
++#define TRACED_K 2
++#else
++#define TRACED_K 1
++#endif
++
++int sink;
++
++/* Address taken, so emitted out of line. */
++static inline notrace int outlined(int x)
 +{
-+	struct section *sec;
-+	struct reloc *reloc;
++	int i;
 +
-+	sec = find_section_by_name(elf, "__mcount_loc");
-+	if (!sec || !sec->rsec)
-+		return;
-+
-+	for_each_reloc(sec->rsec, reloc) {
-+		struct symbol *func;
-+
-+		func = find_func_containing(reloc->sym->sec,
-+					    reloc->sym->offset + reloc_addend(reloc));
-+		if (func)
-+			func->traceable = 1;
-+	}
++	for (i = 0; i < x; i++)
++		sink += i * OUTLINED_K;
++	return sink;
 +}
 +
-+/*
-+ * Livepatch redirects functions through their ftrace call sites, so a function
-+ * without one can't be patched.
-+ */
-+static int validate_traceable_functions(struct elfs *e)
++int (*outlined_ptr)(int) = outlined;
++
++notrace int notrace_fn(int x)
 +{
-+	struct symbol *patched_sym;
-+	bool error = false;
-+
-+	mark_traceable_functions(e->orig);
-+
-+	for_each_sym(e->patched, patched_sym) {
-+		if (!patched_sym->changed || patched_sym->twin->traceable)
-+			continue;
-+
-+		ERROR("%s: no ftrace call site, can't patch", patched_sym->twin->name);
-+		error = true;
-+	}
-+
-+	return error ? -1 : 0;
++	return x * 3 + NOTRACE_K;
 +}
 +
- static int clone_included_functions(struct elfs *e)
- {
- 	struct symbol *patched_sym;
-@@ -2260,6 +2304,9 @@ int cmd_klp_diff(int argc, const char **argv)
- 	if (ret > 0)
- 		return 0;
- 
-+	if (validate_traceable_functions(&e))
-+		return -1;
++static inline int inlined(int x)
++{
++	return x + INLINED_K;
++}
 +
- 	e.out = elf_create_file(&e.orig->ehdr, argv[2]);
- 	if (!e.out)
- 		return -1;
++int inlined_user(int x)
++{
++	return inlined(x) * 5;
++}
++
++int traced(int x)
++{
++	return x * 7 + TRACED_K;
++}
+diff --git a/tools/objtool/tests/x86/test-notrace-target.sh b/tools/objtool/tests/x86/test-notrace-target.sh
+new file mode 100755
+index 0000000000000..09414ae65fc2c
+--- /dev/null
++++ b/tools/objtool/tests/x86/test-notrace-target.sh
+@@ -0,0 +1,74 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# A changed function without an ftrace call site can't be livepatched:
++# klp_enable_patch() fails with "failed to find location for function".
++# klp diff must reject it instead.
++
++. "$(dirname "$0")/../lib.sh"
++
++# mcount_entry <function>: orig.o has an __mcount_loc entry for it.
++mcount_entry()
++{
++	in_relocs "$orig_obj" | awk '/rela__mcount_loc/,/^$/' |
++		awk -v f="$1" '$5 == f || $5 == ".text." f' | grep -q .
++}
++
++# check <expected exit status> <-DPATCH_... flags>
++check()
++{
++	local expect="$1"; shift
++
++	setup
++	build_pair notrace_target.c "$@"
++
++	assert_input_symbol outlined
++	assert_input_symbol notrace_fn
++	has_input_symbol "$orig_obj" inlined &&
++		fail "inlined() was emitted out of line; the fixture tests nothing"
++	mcount_entry traced ||
++		fail "no __mcount_loc entry for traced(); the fixture tests nothing"
++	mcount_entry inlined_user ||
++		fail "no __mcount_loc entry for inlined_user(); the fixture tests nothing"
++	mcount_entry outlined &&
++		fail "outlined() has a __mcount_loc entry; it should be notrace"
++	mcount_entry notrace_fn &&
++		fail "notrace_fn() has a __mcount_loc entry; it should be notrace"
++
++	run_diff "$expect"
++}
++
++rejected()
++{
++	local n
++
++	n="$(diff_log | grep -c "error: objtool: $1: no ftrace call site, can't patch")"
++	[ "$n" = 1 ] ||
++		fail "expected '$1' rejected once, found $n: $(diff_log | tail -2)"
++}
++
++check 255 -DPATCH_OUTLINED
++rejected outlined
++cleanup
++
++check 255 -DPATCH_NOTRACE
++rejected notrace_fn
++cleanup
++
++check 255 -DPATCH_OUTLINED -DPATCH_NOTRACE
++rejected outlined
++rejected notrace_fn
++cleanup
++
++# Fully inlined: the traceable caller gets patched.
++check 0 -DPATCH_INLINED
++assert_patched inlined_user
++assert_not_patched traced
++cleanup
++
++check 0 -DPATCH_TRACED
++assert_patched traced
++assert_not_patched inlined_user
++cleanup
++
++pass "changed function without an ftrace call site rejected"
 -- 
 2.53.0-Meta
 
