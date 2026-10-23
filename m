@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792717889;
-	b=BgnSjBN5JfChe1fKsWTmZgwljZnhnEa9NAmnlN3+44K71KCXgg+Jbe5SJ3WmQxpbDUAH
-	 zyBFIdwZ9yiybsRQDwB56TObBsafP4nO0ITOdEXMIuxwng/z/3q66LFuF9Sj7ZWh9mWlU
-	 C+f/likTjg45T9/i9Hv08jkcWrTvsdcQ6yE9ndW3CskdH1SjJG8tXB+twxXOoIW94E0/t
-	 TsyKsn7+hfmW2sLeQc+nKcxvfM5jy/lIiYz+KpyCSp1g6xN0WQl3GfHvVM1/2L01kOeDv
-	 /akLsZrL6wZvN3JzwCnTxzzAW4ofofdDSb8D3yYk2z5KooNTqtUnS4A8PWhVDAgBuaw==
+	t=1792717899;
+	b=vQ5tQnBXODqtKXcN6+fuC8NsxVbMCsyv3wSidheVtVzqGkXmuy17UTscOaT8y08GhP8M
+	 jk7aqn7fdXsQqSc7betTW5JyDb0upWXiQHjZYrhVm23QS1jX6oycddUnfrrf0QLZ+6TC+
+	 nvEmNqv+xN4y1LizpP5E/vjRPs8qezEZ1lLO6Sx6c9wk+y471VTmtKvv1zkQ2Hoqfj18m
+	 8wWRTCA1PDpXxxFA8gURxWnnYAvUJQ1K2ThrZDvSwFU0z+t1O+Bo0DUFZXDBuYJ+MAIEc
+	 v1OSJcRkNxXKG4sLetp4Ao02+rSyQ4bcFFYPb8ILbvyv4FWootmZQgEXWKFcRrXQ53w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792717889;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792717899;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=9j9PMKAhVmuF3WUst5Dq3lx6px9ZUYXp2mfZuhiEjno=;
-	b=aRRItRGobQbYrFgEjBd9VjoGLOTAjJ0P/RuJh46ND2F7+fB2xhn2r+aDmSDFFd0Av+kQ
-	 9rNRpV7UWaUEp8DXq8PSW08qdJo3eg2qKedg92ReQnwCQg5G4c2Jj1OZ8hs2/VcSbaHPH
-	 CTtKJJrGTrjHQXM3laZkgdOtY2Ing3FdMDDbBEdDZ3sNhwpBLmRxSMCKMSbxgKe2cJiz1
-	 OoowDBru9OgU0zWInyrQdufWfR+HfMCfEulkXUN2X8vTpEIzYNUuLLMiOgwHVdoV0BW8d
-	 wSS+xsv6lcL8a0OIrEmKtBP4mrQ6jg7tknAdok7XhiYiCeHjOiqUIgsEG04umeWHwBg==
+	bh=tAB/PqyAB03MK42AfnxBxy/J6Gi92VHh4GhJDpFJkA4=;
+	b=XYGvvrbsQlAtaPL025RQqotAgAT9ELFOiUeowSilDIFZs7Zi54uxaAe00V9yWy64P7CE
+	 1ZbCaigJ+FuOEo7i5X4J9ZtYI3sQwweBXIysRiOv6iHbwqi/+GzCF7psnHqqtbFAODVxN
+	 OjTPDMdUUsO6wdvXLe0i3aQUZ5SGrqoFIIZeYgNWURjJWnXABIBgrmdIzeYgyP1St9G9C
+	 UDL/a/d9kILFkg9Yolg6Nv9OCelPSF08Q3o+6EKiZTHyr7kediu6VuYkmJuuE9XOrNb21
+	 R9qDNUB28m/2gy396B+sydOKQBokSH6ojlr+8SPHrFvBRwMJzswXWXIw2sOY+793+Sg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBrZVCXF;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FIv6nzFl;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C686B606A31B;
-	Fri, 23 Oct 2026 01:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07252606A332;
+	Fri, 23 Oct 2026 01:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=GBrZVCXF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5338B1F01825;
-	Fri, 23 Oct 2026 01:11:27 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=FIv6nzFl
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25691F01825;
+	Fri, 23 Oct 2026 01:11:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792717888;
-	bh=9j9PMKAhVmuF3WUst5Dq3lx6px9ZUYXp2mfZuhiEjno=;
+	s=k20260515; t=1792717898;
+	bh=tAB/PqyAB03MK42AfnxBxy/J6Gi92VHh4GhJDpFJkA4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GBrZVCXF38vX0ZSmriiXVEH/ikriA2oF/J0Nl7h6Gv6TXJgL3qIm5IjtGMC4NOjB7
-	 T9RF/VohpUokd3PPVyj9oE7y3gDxaqJQzVEe9OKpTh6Cv/tFx/sCeZHCP2/x4rEvtf
-	 Lsh0/GUuZpuzxXDKW34YwE/0WOBXhWRmUudDuHu24Ih79SKKXGf71R75e8kLfFgnx9
-	 NHHRoDntbL5jHZVeJ4BVOF03CYcsW8XMtuRrGkD8oHUbZsZdSTG56ATvqVy/RfTtDn
-	 mK833leAFRXMGEN2yXlpi1OVlo5JU71Wj+tZY493jliETcuFRk2JHUZdLoLk9n4PVU
-	 3V9RtViB5XeZA==
+	b=FIv6nzFl2MOintYM8ykrR9yRoVRfHfZR0bZ4XHZEV5DSxniIjsVWuQ+adbXU5gm3d
+	 J31SfC6VhH/AcTqedOjilPA2s+biTLe8TPcqO/6SK0hZn+ywpbYRoSFWELtWWwTjLs
+	 nYpJbl7Y39+UiYAAV633WGipgksYlxj83k0YghEFGOwTE6f27RcZfOwC9c7Tq2HUlR
+	 oC+LzGmjAnCLtTOdLQM8nuKDHC4GKNlutyEc21Lz5dR91cWOeSbMtuGFi/ekHFPye8
+	 skEjyfR7SEwPDbpNyu4h1c+XEtUMYCtlL31ePCM0ZQPdov/RfKKNweKWvNwRhjJfNh
+	 sa0Wed6DY9I+w==
 From: Song Liu <song@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: rostedt@goodmis.org,
 	mark.rutland@arm.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 06/16] u64_stats: Mark the update helpers used by BPF notrace
-Date: Thu, 22 Oct 2026 18:10:39 -0700
-Message-ID: <20261023011049.1164625-7-song@kernel.org>
+Subject: [PATCH v2 08/16] srcu: Mark the fast notrace read-side helpers notrace
+Date: Thu, 22 Oct 2026 18:10:41 -0700
+Message-ID: <20261023011049.1164625-9-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261023011049.1164625-1-song@kernel.org>
 References: <20261023011049.1164625-1-song@kernel.org>
@@ -65,129 +65,85 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_prog_inc_misses_counter() is notrace because it runs when a BPF
-program was not run due to recursion. If it could call traced code, an
-fentry program attached to that code would recurse forever. It calls
-u64_stats_update_begin_irqsave(), u64_stats_inc() and
-u64_stats_update_end_irqrestore(). The BPF trampoline calls
-u64_stats_add() and u64_stats_inc() from __update_prog_stats() in the
-same way. These are plain inline helpers, so an out-of-line copy is
-untraced only because inline implies notrace.
+srcu_read_lock_fast_notrace() and srcu_read_unlock_fast_notrace() are
+used by tracepoints, and their comments say they cannot be traced. They
+are plain inline functions, as are srcu_check_read_flavor() and the
+Tiny SRCU versions of __srcu_read_lock_fast() and
+__srcu_read_unlock_fast() that they call. An out-of-line copy of any of
+them is untraced only because inline implies notrace.
 
-Mark these helpers, and the __u64_stats_*() helpers they call, notrace
-explicitly. No functional change.
+Mark them notrace explicitly, as srcu_read_lock_notrace() and the Tree
+SRCU __srcu_read_lock_fast() and __srcu_read_unlock_fast() already are.
+No functional change.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- include/linux/u64_stats_sync.h | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ include/linux/srcu.h     | 8 +++++---
+ include/linux/srcutiny.h | 5 +++--
+ include/linux/srcutree.h | 2 +-
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/u64_stats_sync.h b/include/linux/u64_stats_sync.h
-index f47cf4d78ad7..06e5bffd0287 100644
---- a/include/linux/u64_stats_sync.h
-+++ b/include/linux/u64_stats_sync.h
-@@ -92,7 +92,7 @@ static inline void u64_stats_set(u64_stats_t *p, u64 val)
- 	local64_set(&p->v, val);
- }
- 
--static inline void u64_stats_add(u64_stats_t *p, unsigned long val)
-+static inline void notrace u64_stats_add(u64_stats_t *p, unsigned long val)
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index bce8cac45474..1ed3fc50b77f 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -377,7 +377,8 @@ static inline struct srcu_ctr __percpu *srcu_read_lock_fast_updown(struct srcu_s
+  * Used by tracing, cannot be traced and cannot call lockdep.
+  * See srcu_read_lock_fast() for more information.
+  */
+-static inline struct srcu_ctr __percpu *srcu_read_lock_fast_notrace(struct srcu_struct *ssp)
++static inline struct srcu_ctr __percpu notrace *
++srcu_read_lock_fast_notrace(struct srcu_struct *ssp)
+ 	__acquires_shared(ssp)
  {
- 	local64_add(val, &p->v);
- }
-@@ -102,16 +102,16 @@ static inline void u64_stats_sub(u64_stats_t *p, s64 val)
- 	local64_sub(val, &p->v);
- }
- 
--static inline void u64_stats_inc(u64_stats_t *p)
-+static inline void notrace u64_stats_inc(u64_stats_t *p)
+ 	struct srcu_ctr __percpu *retval;
+@@ -524,8 +525,9 @@ srcu_read_unlock_fast_updown(struct srcu_struct *ssp, struct srcu_ctr __percpu *
+  * Used by tracing, cannot be traced and cannot call lockdep.
+  * See srcu_read_unlock_fast() for more information.
+  */
+-static inline void srcu_read_unlock_fast_notrace(struct srcu_struct *ssp,
+-						 struct srcu_ctr __percpu *scp) __releases_shared(ssp)
++static inline void notrace
++srcu_read_unlock_fast_notrace(struct srcu_struct *ssp,
++			      struct srcu_ctr __percpu *scp) __releases_shared(ssp)
  {
- 	local64_inc(&p->v);
+ 	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_FAST);
+ 	__srcu_read_unlock_fast(ssp, scp);
+diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+index 905b629e8fa3..fdb988d41167 100644
+--- a/include/linux/srcutiny.h
++++ b/include/linux/srcutiny.h
+@@ -101,13 +101,14 @@ static inline struct srcu_ctr __percpu *__srcu_ctr_to_ptr(struct srcu_struct *ss
+ 	return (struct srcu_ctr __percpu *)(intptr_t)idx;
  }
  
- static inline void u64_stats_init(struct u64_stats_sync *syncp) { }
--static inline void __u64_stats_update_begin(struct u64_stats_sync *syncp) { }
--static inline void __u64_stats_update_end(struct u64_stats_sync *syncp) { }
--static inline unsigned long __u64_stats_irqsave(void) { return 0; }
--static inline void __u64_stats_irqrestore(unsigned long flags) { }
-+static inline void notrace __u64_stats_update_begin(struct u64_stats_sync *syncp) { }
-+static inline void notrace __u64_stats_update_end(struct u64_stats_sync *syncp) { }
-+static inline unsigned long notrace __u64_stats_irqsave(void) { return 0; }
-+static inline void notrace __u64_stats_irqrestore(unsigned long flags) { }
- static inline unsigned int __u64_stats_fetch_begin(const struct u64_stats_sync *syncp)
+-static inline struct srcu_ctr __percpu *__srcu_read_lock_fast(struct srcu_struct *ssp)
++static inline struct srcu_ctr __percpu notrace *__srcu_read_lock_fast(struct srcu_struct *ssp)
+ 	__acquires_shared(ssp)
  {
- 	return 0;
-@@ -145,7 +145,7 @@ static inline void u64_stats_set(u64_stats_t *p, u64 val)
- 	p->v = val;
+ 	return __srcu_ctr_to_ptr(ssp, __srcu_read_lock(ssp));
  }
  
--static inline void u64_stats_add(u64_stats_t *p, unsigned long val)
-+static inline void notrace u64_stats_add(u64_stats_t *p, unsigned long val)
+-static inline void __srcu_read_unlock_fast(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
++static inline void notrace
++__srcu_read_unlock_fast(struct srcu_struct *ssp, struct srcu_ctr __percpu *scp)
+ 	__releases_shared(ssp)
  {
- 	p->v += val;
- }
-@@ -155,7 +155,7 @@ static inline void u64_stats_sub(u64_stats_t *p, s64 val)
- 	p->v -= val;
- }
+ 	__srcu_read_unlock(ssp, __srcu_ptr_to_ctr(ssp, scp));
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index fd1a9270cb9a..8328218a34fa 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -368,7 +368,7 @@ __srcu_read_unlock_fast_updown(struct srcu_struct *ssp, struct srcu_ctr __percpu
+ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor);
  
--static inline void u64_stats_inc(u64_stats_t *p)
-+static inline void notrace u64_stats_inc(u64_stats_t *p)
+ // Record SRCU-reader usage type only for CONFIG_PROVE_RCU=y kernels.
+-static inline void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
++static inline void notrace srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
  {
- 	p->v++;
- }
-@@ -166,19 +166,19 @@ static inline void u64_stats_inc(u64_stats_t *p)
- 		seqcount_init(&__s->seq);		\
- 	} while (0)
- 
--static inline void __u64_stats_update_begin(struct u64_stats_sync *syncp)
-+static inline void notrace __u64_stats_update_begin(struct u64_stats_sync *syncp)
- {
- 	preempt_disable_nested();
- 	write_seqcount_begin(&syncp->seq);
- }
- 
--static inline void __u64_stats_update_end(struct u64_stats_sync *syncp)
-+static inline void notrace __u64_stats_update_end(struct u64_stats_sync *syncp)
- {
- 	write_seqcount_end(&syncp->seq);
- 	preempt_enable_nested();
- }
- 
--static inline unsigned long __u64_stats_irqsave(void)
-+static inline unsigned long notrace __u64_stats_irqsave(void)
- {
- 	unsigned long flags;
- 
-@@ -186,7 +186,7 @@ static inline unsigned long __u64_stats_irqsave(void)
- 	return flags;
- }
- 
--static inline void __u64_stats_irqrestore(unsigned long flags)
-+static inline void notrace __u64_stats_irqrestore(unsigned long flags)
- {
- 	local_irq_restore(flags);
- }
-@@ -213,7 +213,7 @@ static inline void u64_stats_update_end(struct u64_stats_sync *syncp)
- 	__u64_stats_update_end(syncp);
- }
- 
--static inline unsigned long u64_stats_update_begin_irqsave(struct u64_stats_sync *syncp)
-+static inline unsigned long notrace u64_stats_update_begin_irqsave(struct u64_stats_sync *syncp)
- {
- 	unsigned long flags = __u64_stats_irqsave();
- 
-@@ -221,8 +221,8 @@ static inline unsigned long u64_stats_update_begin_irqsave(struct u64_stats_sync
- 	return flags;
- }
- 
--static inline void u64_stats_update_end_irqrestore(struct u64_stats_sync *syncp,
--						   unsigned long flags)
-+static inline void notrace u64_stats_update_end_irqrestore(struct u64_stats_sync *syncp,
-+							   unsigned long flags)
- {
- 	__u64_stats_update_end(syncp);
- 	__u64_stats_irqrestore(flags);
+ 	if (IS_ENABLED(CONFIG_PROVE_RCU))
+ 		__srcu_check_read_flavor(ssp, read_flavor);
 -- 
 2.53.0-Meta
 
