@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792717925;
-	b=trhmd34PlIvmLmt5qARYvPU3RalrxXtBMMtaWllqUuMatKPA/Q1QaxJe0vaQ7K5WIjjw
-	 lWOq3+m1BiaMri0+0LP88nRE+JBuRbVqgdULnMJYmb1iTGddolz/kfbGOEhqYCYS//sYf
-	 VXof0gfVoVv1/UsiqeZm4sWpRZshrwUMSyk4gVL/uESq+PGuwmSPpuej4hnXUKDWjVM14
-	 DCb1LCCVOxlcwugXr2QlYzFbtGPtOdyYrYY/hp/VDWIW4cuiMRj9zazFS8qoy8pQ+DDty
-	 amppZqCk70i7o3+uUwubnz/478ZCXHuo27vooYWlBw2FL0LvBr36aUOviuh1s5dcohQ==
+	t=1792717930;
+	b=d7t202l3ExwDyPp81ivSSIRtz6TTA2PaHA/pI2M7a4qcoUuSSQ3JBXsswKKLHiWVhE4y
+	 cE3lDMDFp0QsHJh4SSvf/HJJlE76dA2mklFlcQGW7RH41zglknwE16Onubg2pc+kh/znX
+	 WO8Fp6L78lzATDLRMZQo40f3q96/+4atgeUQ+Pb+Wn/36On2+TY3n24ln0d7fT5eCe/AH
+	 nCumNzeJMuzF4OMUyTbWeaEsiO/s7mBvgq/RBELGpaVjBgHAZ46wqOm/GiATTM9haoGDB
+	 jnnHS8hxgTnJgnd0br9DTJdrEp9kTMGY2DNSsWL6mfbQ76TtKGO6tLxPeN8B1PQ+0fg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792717925;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792717930;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=0zP+sgWhu1l68weL6bGSxiO1Qiej1KLZ/vMCG+x7e1A=;
-	b=4yB4lh+byKnjGMjTooOVZOAq/+L7BEhd5YiJOlK3qFFK4ChcuOcQzKBS+X5cKfsSLd1G
-	 N2FN/q5qGPhTqL5YSN5QGiWsvOvNRp3yWL9OB+cmls9LbNc5Up9hJaeFjoOFIUGVKJg7+
-	 woNS8bxuPDBm+u22Sghczawt2yA9jObHw4u0yK/HTpKR1B/Jkl2UxSZrHCnqvC4E55Me/
-	 vtXxUC8r0gk+9nkqs6g2SJJGYLTlDnUrF94fOGIqjLDNOaf27rDhnhoDS99FAITDZH54q
-	 DvQD/zQCitJ1foA6Jja5iXZANqQULX/GNB3/+MAp4AumPr/pZF6ygvlt+LnuHLOaqQA==
+	bh=D3Pa9aFO7tWcwYOYyS34rsIKfLX+mbRsSMLshhBFNxI=;
+	b=tQCDkMuqmnqvKDi+nKuvtg9iP2IpPgQPU3bsx/HlvT0+kQb+DFqDNSU49qGveW+eoKZ6
+	 5F4R/aa3lEY7ibFEZDhPV7yB6lsIq4I0kAY3fwXEmNSfe9Aoc5WflTy8SrszTNggUEmTy
+	 6CDyCZ/d+om41/oTYEU1J5Zw9TvaFMl7gqocIua/sFNUIJBp4L83UBtqD+AqhDQsoAB2e
+	 zDRtgSfkf4kpeBRRV4rgH6jDDwYuL9C+MZ/AV8fKohVkLl+ARgKtVSooBWMaDzVky2HXZ
+	 tFMmXYmM/DJ8a6vwIFneiDGCu4xUJ0j6BGskn2No/w8JxfiwDBwpmzGsmbT5L2sA1fQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lfBQX7Hx;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hemMtbkZ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14557606A31F;
-	Fri, 23 Oct 2026 01:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9E0606A319;
+	Fri, 23 Oct 2026 01:12:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lfBQX7Hx
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D982F1F01825;
-	Fri, 23 Oct 2026 01:12:03 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hemMtbkZ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 099971F01825;
+	Fri, 23 Oct 2026 01:12:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792717924;
-	bh=0zP+sgWhu1l68weL6bGSxiO1Qiej1KLZ/vMCG+x7e1A=;
+	s=k20260515; t=1792717930;
+	bh=D3Pa9aFO7tWcwYOYyS34rsIKfLX+mbRsSMLshhBFNxI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lfBQX7Hxzd8gTNOlC3cDsrTlp746gXcAysf+aigjJcflBKKNjktm/M4VhYsFmFOIa
-	 3IX2420V4qFfbjQIugDG+dAXai/gkxcobZuAL+sGY4pwmA8lqBklNT1ohh0NfyuJec
-	 lbERcu3Hv2W/KVLGRMrRbzjczMWlZbO3+VJ1qrJfd/QmQ07AJzaRNgpJbAMPh7hWj3
-	 7lWuMwBSkGl2PT2d8Z+/WJAEo4HJY41a0TjlOmitdVi3ka6FT0YVLmGkiNRvEMGLwE
-	 zAroGJYiurVAFl4zeKwiHCm9nSZIYx0pN0P7E08nueHCGt2kTgavL18vc0n5czSq9T
-	 tOKmWJNFpEkSg==
+	b=hemMtbkZKcekpiVpC2V678tQn1YEXRGODa3Awp89/0tA1m8JwCmFcEqmQ0wi+Qo7R
+	 gp5ZkZDypweuZhnkKfF5ZkR0vgqEl5B3xWtktKsMe9FDL9yNB1pTQwFXF/HMFpHpvc
+	 ioYPupL47NsYlkkmHb2cy2Lv887qSg8AOSSPmbgRpzvDxczGHnqdy+iXbEuIAYbBNf
+	 IcMHHEmAD0NReMAQNE43sgXXJpbJq4w6OV3Z26R21zvXOodicjlUYox99zEkWoD7z3
+	 iAV9DBDvorXupBGwHaxS8zjaO7uH6Yb+a/fC5wCDiUhB1W1zKZrGcf7hX1ES5asfQV
+	 IaysGUcQQB+Ag==
 From: Song Liu <song@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: rostedt@goodmis.org,
 	mark.rutland@arm.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 13/16] ktime: Mark ktime_to_ns() notrace
-Date: Thu, 22 Oct 2026 18:10:46 -0700
-Message-ID: <20261023011049.1164625-14-song@kernel.org>
+Subject: [PATCH v2 14/16] kallsyms: Mark the kernel text address checks notrace
+Date: Thu, 22 Oct 2026 18:10:47 -0700
+Message-ID: <20261023011049.1164625-15-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261023011049.1164625-1-song@kernel.org>
 References: <20261023011049.1164625-1-song@kernel.org>
@@ -65,33 +65,58 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The NMI safe accessors used as trace clocks, such as
-ktime_get_mono_fast_ns() and ktime_get_boot_fast_ns(), are notrace and
-call ktime_to_ns(). ktime_to_ns() is a plain inline function, so an
-out-of-line copy is untraced only because inline implies notrace, and
-tracing it would recurse through the trace clock.
+Commit c0d80ddab899 ("kernel/extable.c: mark core_kernel_text notrace")
+made core_kernel_text() notrace, because the MIPS function graph tracer
+calls it and tracing it recursed without bound. core_kernel_text()
+calls is_kernel_text() and is_kernel_inittext(), and is_kernel_text()
+calls __is_kernel_text(). These are plain inline functions, so an
+out-of-line copy of any of them is untraced only because inline implies
+notrace.
 
-Mark it notrace explicitly. No functional change.
+Mark them notrace explicitly. No functional change.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- include/linux/ktime.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/asm-generic/sections.h | 4 ++--
+ include/linux/kallsyms.h       | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/ktime.h b/include/linux/ktime.h
-index f247e564602f..ed56774f68ea 100644
---- a/include/linux/ktime.h
-+++ b/include/linux/ktime.h
-@@ -75,7 +75,7 @@ static inline ktime_t timespec64_to_ktime(struct timespec64 ts)
- #define ktime_to_timespec64(kt)		ns_to_timespec64((kt))
- 
- /* Convert ktime_t to nanoseconds */
--static inline s64 ktime_to_ns(const ktime_t kt)
-+static inline s64 notrace ktime_to_ns(const ktime_t kt)
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+index 0755bc39b0d8..d478ddc02316 100644
+--- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -193,7 +193,7 @@ static inline bool is_kernel_ro_after_init(unsigned long addr)
+  *
+  * Returns: true if the address is located in .init.text, false otherwise.
+  */
+-static inline bool is_kernel_inittext(unsigned long addr)
++static inline bool notrace is_kernel_inittext(unsigned long addr)
  {
- 	return kt;
- }
+ 	return addr >= (unsigned long)_sinittext &&
+ 	       addr < (unsigned long)_einittext;
+@@ -208,7 +208,7 @@ static inline bool is_kernel_inittext(unsigned long addr)
+  * Returns: true if the address is located in .text, false otherwise.
+  * Note: an internal helper, only check the range of _stext to _etext.
+  */
+-static inline bool __is_kernel_text(unsigned long addr)
++static inline bool notrace __is_kernel_text(unsigned long addr)
+ {
+ 	return addr >= (unsigned long)_stext &&
+ 	       addr < (unsigned long)_etext;
+diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+index d5dd54c53ace..93c830b35aeb 100644
+--- a/include/linux/kallsyms.h
++++ b/include/linux/kallsyms.h
+@@ -24,7 +24,7 @@
+ struct cred;
+ struct module;
+ 
+-static inline int is_kernel_text(unsigned long addr)
++static inline int notrace is_kernel_text(unsigned long addr)
+ {
+ 	if (__is_kernel_text(addr))
+ 		return 1;
 -- 
 2.53.0-Meta
 
