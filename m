@@ -1,58 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792689414;
-	b=EMSA1N4SX1iIXQk7iizh/RKZ9o2hRB3HvIyAs4gvzhyvtFsRnP7yKR2TATLVAH0xAPxL
-	 y42QuQ6Tdz70E4LJDe9A0GTT7UPwCmZBXGXeRxUdJ+Hn4Ozsxt4RuUhnKJnJl0E7Agl46
-	 /hjyR5PTW7rPk5OaB1HszFGfaGYf9aSKaBHd+BNuC6t/TLGPYWqx15gPyLiylLiJqW7Hk
-	 y/5L/ZXoZibZwr81gnwSHFJ2B86M7pdioHI4xQWRpc7rUaV0tm9b5jX67Xzv9H6y4npfG
-	 bgfVYqCNHtD3bdkPYYnVOQNpuofVQoSUGBOyAcfIafy0+2OmF7UGc3jKEGmVnf9WR6A==
+	t=1792717857;
+	b=0GZShyzBlwLOlHBkWahGWxuKCORvUbtyun0ySs5MvOJo6ZvBDvH6GRXsjgUM2eX4PTwO
+	 Atkv26tGjN/bCbTiKXmvEScC0pVjMHgEmVIlZC6xASJ78iEilhmsCKBu+g+qh5JtQsoPo
+	 c4aARzUP+ZODSunnyamD9cOj8JIP4W4V3jlg2wIFEhxcCcx2EmED6+OIDq1P8Wg0oc2d6
+	 rpa1ov8dmf8rZdt8R9g52Ik9GRBvkotqmDJ3YFAgyidAfc0iAOaAjSsJO7RfzE7p4omaQ
+	 bqn1joFISjj4rUCi7xS5UN4aCveby8eEzRQxlh+QOPtdhWaUVFBAvmv74ac31rVs48A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792689414;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792717857;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=cnWci/2f59bYhEh7jU+/jcqd9PHjbuJH1JyDNZxKMVI=;
-	b=WnvANAxdndN/XBvVzoBmLKjnc0S9eCloJa3JfF4xlYstl3aV+2W+O5ubmYKHlM8ZT94Y
-	 59uvA4YGitYf3xQH6+t0zjn4fF1pwPMi82XljR922RD38n7BFfW3kEN7Q7OmgL7vPBxb3
-	 dZhv/eo2/u+ePaBLt0xurNskK1c9fDmk/Ws1Et3Xu2iwjJ7VEFzFpymk7PWOD4hBTP7TX
-	 +6SPQZDl0mMHxtjnLOZs6hBqb9egXQJB790iXRamaseCsYfQ0SuVQ7WSLCvLl1whcs4nx
-	 B9+F7e0iZ0GA+1ztKBKj/9Hh4pHCGJe+6RYiKd1ZmMTQ/t/KT3EsWOPGVfjPuqf4NJA==
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=9KeoOiqmTZGtbiXX1Hkpwmoz/WoX+jVuLLnxsZlOErE=;
+	b=QNLcGXnuzII6bybnRLpBr5XDK3NqnHuENTF3ko56azVhos6JLFQ/sBdxZI0HWNUyvsAJ
+	 G21esRvbh8bbU7qx47ZravbuqOiRJNkb1S8zp9kE1sgsyFmq/kBPEe2ToSsZeKjSw3Uxo
+	 pfPoXwnPTsodUD1YAeRN61H6QShdmp8SMFCKYw2eKEtoIAXBO0Ru4ykAJocTl7zOVpVHH
+	 3IoWICrlaz2TVlvYv9Qs6WPlCtsAPYRabMRJFu7V4vl9MAIDnSGmLBkVB9q70oSKz+pkO
+	 7d2BHbPiP7kzHi5LWpaH7aeYKz2UqMmAYSD6mszVwrNDt9HkBD6xHzTa/+X+SVwALEQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QAl+xShV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DoEmLuuI;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DB5606A31D
-	for <live-patching@vger.kernel.org>; Thu, 22 Oct 2026 17:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47C30606A31F;
+	Fri, 23 Oct 2026 01:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=QAl+xShV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75BC1F01825;
-	Thu, 22 Oct 2026 17:16:52 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DoEmLuuI
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC5FA1F01825;
+	Fri, 23 Oct 2026 01:10:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792689412;
-	bh=cnWci/2f59bYhEh7jU+/jcqd9PHjbuJH1JyDNZxKMVI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=QAl+xShVd5Rlr7Yc2uld7izngzwZVGwF0nxDW1Gno3WwYXWEVMwfbjWwp50dtlomL
-	 vyuc1aiwJpafjxdumJsocU3j1S2YRvZaK0FzqItS0xxOWcpF9DCgG7ssiVPFWY+g8U
-	 1pXY+buGSxWMQz+FAuQoFuX0zgXpmysCBPhk1hYfWurjvnL4wkUsHJTpt1JzAOQnF2
-	 gKUS1pywW+37RjhL146e17iSn1i6rnXbHR37gFORknDJz3QJjaDE+nl19Mi1iQsWue
-	 lV7+7KYehc1NgkIrwDXSuzzQF+bwnAAzFffyRMlC086iIXCv51d8j7fONULOer7hPh
-	 msq2XZrJeiTJw==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: live-patching@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Song Liu <song@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: [PATCH v2 3/3] objtool/klp: Add test for changed functions without an ftrace call site
-Date: Thu, 22 Oct 2026 10:16:36 -0700
-Message-ID: <20261022171637.3298443-4-puranjay@kernel.org>
+	s=k20260515; t=1792717856;
+	bh=9KeoOiqmTZGtbiXX1Hkpwmoz/WoX+jVuLLnxsZlOErE=;
+	h=From:To:Cc:Subject:Date;
+	b=DoEmLuuIC26qPeMq5vOSLROyAZ37mmeGTSXs5j8zyz8vQ3sYNKPm2xd7hlFxI73VH
+	 llYdCG6wtPiY07fQjtxMgoRyh3ljcaRyuwjjbML4tG3UHJjcNMYh6pcNQMD2q+DhZV
+	 TKXZXI5dqLSs6Xxwi6MAcv/9KRrwCgxLvOwsXZLaQR0pRK8UZs0nh8JJv7ztUO0k6Z
+	 A4dKv1g3SWjxA+WgSWXGcJFrSopR989c0FcJiukWUYOEvwR8J1Z4mtqrh0mxJrUhW1
+	 Py8WdKHrmmTTwFnG/4Rz3xiTJCeWJ12aG2q4e2d8JHIsPlCdOVVP6Q78NkjFbszfNO
+	 OiKhdNUq/0ifQ==
+From: Song Liu <song@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org
+Cc: rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mark.rutland@arm.com,
+	kernel-team@meta.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v2 00/16] Move notrace from inline to __always_inline
+Date: Thu, 22 Oct 2026 18:10:33 -0700
+Message-ID: <20261023011049.1164625-1-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261022171637.3298443-1-puranjay@kernel.org>
-References: <20261022171637.3298443-1-puranjay@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -64,177 +63,118 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Test that klp diff rejects a changed function without an ftrace call
-site, both a notrace one and an inline one emitted out of line, and
-reports each of them.  Also test that a fully inlined function and an
-ordinary function can still be patched.
+Since commit 45959ee7aa64 ("ftrace: Do not function trace inlined
+functions"), every function marked inline is also notrace. When the
+compiler does not inline such a function, the out-of-line copy cannot
+be traced with ftrace, cannot be a BPF fentry/fexit target, and cannot
+be livepatched. This series moves notrace from inline to
+__always_inline, so these copies become traceable. __always_inline
+functions, which are mostly low-level helpers, stay untraced.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- .../tests/x86/fixtures/notrace_target.c       | 71 ++++++++++++++++++
- .../objtool/tests/x86/test-notrace-target.sh  | 74 +++++++++++++++++++
- 2 files changed, 145 insertions(+)
- create mode 100644 tools/objtool/tests/x86/fixtures/notrace_target.c
- create mode 100755 tools/objtool/tests/x86/test-notrace-target.sh
+v1 [1] removed notrace from inline in one patch. Sashiko's review
+showed that some code relies on inline implying notrace, and Steven
+suggested keeping notrace on __always_inline and annotating the rest.
+Patches 1-15 add notrace explicitly to the inline helpers that need it.
+While inline still implies notrace, they do not change the generated
+code: on x86_64 with gcc 11.5, vmlinux .text is byte-identical with and
+without them.
 
-diff --git a/tools/objtool/tests/x86/fixtures/notrace_target.c b/tools/objtool/tests/x86/fixtures/notrace_target.c
-new file mode 100644
-index 0000000000000..64da58c872b8a
---- /dev/null
-+++ b/tools/objtool/tests/x86/fixtures/notrace_target.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* PATCH_<name> changes <name> in the patched build. */
-+#define notrace __attribute__((__no_instrument_function__))
-+
-+static const char __modinfo[]
-+	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
-+
-+#ifndef PATCHED
-+#undef PATCH_OUTLINED
-+#undef PATCH_NOTRACE
-+#undef PATCH_INLINED
-+#undef PATCH_TRACED
-+#endif
-+
-+#ifdef PATCH_OUTLINED
-+#define OUTLINED_K 2
-+#else
-+#define OUTLINED_K 1
-+#endif
-+
-+#ifdef PATCH_NOTRACE
-+#define NOTRACE_K 2
-+#else
-+#define NOTRACE_K 1
-+#endif
-+
-+#ifdef PATCH_INLINED
-+#define INLINED_K 2
-+#else
-+#define INLINED_K 1
-+#endif
-+
-+#ifdef PATCH_TRACED
-+#define TRACED_K 2
-+#else
-+#define TRACED_K 1
-+#endif
-+
-+int sink;
-+
-+/* Address taken, so emitted out of line. */
-+static inline notrace int outlined(int x)
-+{
-+	int i;
-+
-+	for (i = 0; i < x; i++)
-+		sink += i * OUTLINED_K;
-+	return sink;
-+}
-+
-+int (*outlined_ptr)(int) = outlined;
-+
-+notrace int notrace_fn(int x)
-+{
-+	return x * 3 + NOTRACE_K;
-+}
-+
-+static inline int inlined(int x)
-+{
-+	return x + INLINED_K;
-+}
-+
-+int inlined_user(int x)
-+{
-+	return inlined(x) * 5;
-+}
-+
-+int traced(int x)
-+{
-+	return x * 7 + TRACED_K;
-+}
-diff --git a/tools/objtool/tests/x86/test-notrace-target.sh b/tools/objtool/tests/x86/test-notrace-target.sh
-new file mode 100755
-index 0000000000000..09414ae65fc2c
---- /dev/null
-+++ b/tools/objtool/tests/x86/test-notrace-target.sh
-@@ -0,0 +1,74 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# A changed function without an ftrace call site can't be livepatched:
-+# klp_enable_patch() fails with "failed to find location for function".
-+# klp diff must reject it instead.
-+
-+. "$(dirname "$0")/../lib.sh"
-+
-+# mcount_entry <function>: orig.o has an __mcount_loc entry for it.
-+mcount_entry()
-+{
-+	in_relocs "$orig_obj" | awk '/rela__mcount_loc/,/^$/' |
-+		awk -v f="$1" '$5 == f || $5 == ".text." f' | grep -q .
-+}
-+
-+# check <expected exit status> <-DPATCH_... flags>
-+check()
-+{
-+	local expect="$1"; shift
-+
-+	setup
-+	build_pair notrace_target.c "$@"
-+
-+	assert_input_symbol outlined
-+	assert_input_symbol notrace_fn
-+	has_input_symbol "$orig_obj" inlined &&
-+		fail "inlined() was emitted out of line; the fixture tests nothing"
-+	mcount_entry traced ||
-+		fail "no __mcount_loc entry for traced(); the fixture tests nothing"
-+	mcount_entry inlined_user ||
-+		fail "no __mcount_loc entry for inlined_user(); the fixture tests nothing"
-+	mcount_entry outlined &&
-+		fail "outlined() has a __mcount_loc entry; it should be notrace"
-+	mcount_entry notrace_fn &&
-+		fail "notrace_fn() has a __mcount_loc entry; it should be notrace"
-+
-+	run_diff "$expect"
-+}
-+
-+rejected()
-+{
-+	local n
-+
-+	n="$(diff_log | grep -c "error: objtool: $1: no ftrace call site, can't patch")"
-+	[ "$n" = 1 ] ||
-+		fail "expected '$1' rejected once, found $n: $(diff_log | tail -2)"
-+}
-+
-+check 255 -DPATCH_OUTLINED
-+rejected outlined
-+cleanup
-+
-+check 255 -DPATCH_NOTRACE
-+rejected notrace_fn
-+cleanup
-+
-+check 255 -DPATCH_OUTLINED -DPATCH_NOTRACE
-+rejected outlined
-+rejected notrace_fn
-+cleanup
-+
-+# Fully inlined: the traceable caller gets patched.
-+check 0 -DPATCH_INLINED
-+assert_patched inlined_user
-+assert_not_patched traced
-+cleanup
-+
-+check 0 -DPATCH_TRACED
-+assert_patched traced
-+assert_not_patched inlined_user
-+cleanup
-+
-+pass "changed function without an ftrace call site rejected"
--- 
+ - 1-2: x86 paravirt native helpers, and the helpers used by resume and
+   kexec.
+ - 3-6: helpers used by bpf_spin_lock, the BPF trampoline and
+   bpf_mem_alloc, where an fentry program on one of them could
+   deadlock, recurse without bound or corrupt the free lists.
+ - 7-8: tracepoint and SRCU helpers used by tracing.
+ - 9-12: helpers used by ftrace recursion protection: the accessors
+   behind preempt_count() and current on arm64, powerpc, csky, mips and
+   sh, the Tiny RCU rcu_is_watching(), and the tracing_gen_ctx helpers.
+ - 13-15: helpers called by notrace code in the trace clocks,
+   core_kernel_text() and the nofault accessors.
+
+To find these, I compared x86_64 builds with and without patch 16, and
+listed the functions that become traceable and are called from code
+without an fentry call (notrace, noinstr, or built without -pg),
+including calls through pv_ops. To also cover helpers that gcc happens
+to inline today, I repeated this with -fno-inline. The changes for
+other architectures and Tiny RCU come from reading the code that ftrace
+recursion protection uses.
+
+On an x86_64 config with CONFIG_PARAVIRT_XXL and gcc 11.5, the series
+makes 678 more functions traceable, and none become untraceable. In
+QEMU, with ftrace filtered to native_load_idt(), a kernel with v1 dies
+on resume from S3, as Sashiko predicted. With this series, S3
+suspend/resume, CPU hotplug and hibernation test mode pass with ftrace
+on all native_* functions, and repeated kexec passes with ftrace on all
+functions. The series also builds for i386, and for arm64 and powerpc
+with clang.
+
+Changes v1 => v2:
+ - Keep notrace on __always_inline. (Steven Rostedt)
+ - Add patches 1-15 to mark notrace the helpers that relied on inline
+   implying notrace.
+ - Rework the commit message of the last patch.
+
+v1: https://lore.kernel.org/all/20261021222255.3124940-1-song@kernel.org/
+
+Song Liu (16):
+  x86/paravirt: Mark native pv_ops helpers notrace
+  x86: Mark CPU state helpers used by resume and kexec notrace
+  bpf: Mark bpf_spin_lock helpers notrace
+  bpf: Mark the BPF trampoline helpers notrace
+  bpf: Mark the bpf_mem_alloc fast path helpers notrace
+  u64_stats: Mark the update helpers used by BPF notrace
+  tracepoint: Mark __do_trace_##name() notrace
+  srcu: Mark the fast notrace read-side helpers notrace
+  arm64: Mark the preempt count helpers notrace
+  powerpc, csky, mips, sh: Mark the accessors behind current notrace
+  rcu: Mark the Tiny RCU rcu_is_watching() notrace
+  tracing: Mark the tracing_gen_ctx helpers notrace
+  ktime: Mark ktime_to_ns() notrace
+  kallsyms: Mark the kernel text address checks notrace
+  uaccess: Mark pagefault_disable() and pagefault_enable() notrace
+  compiler_types: Move notrace from inline to __always_inline
+
+ arch/arm64/include/asm/preempt.h         | 12 +++++-----
+ arch/csky/include/asm/thread_info.h      |  2 +-
+ arch/mips/include/asm/thread_info.h      |  2 +-
+ arch/powerpc/include/asm/current.h       |  2 +-
+ arch/sh/include/asm/thread_info.h        |  2 +-
+ arch/x86/include/asm/cpuid/api.h         |  4 ++--
+ arch/x86/include/asm/desc.h              | 17 +++++++-------
+ arch/x86/include/asm/gsseg.h             |  4 ++--
+ arch/x86/include/asm/io.h                |  2 +-
+ arch/x86/include/asm/io_bitmap.h         |  2 +-
+ arch/x86/include/asm/local.h             |  8 +++----
+ arch/x86/include/asm/msr.h               |  8 +++----
+ arch/x86/include/asm/paravirt-spinlock.h |  2 +-
+ arch/x86/include/asm/paravirt.h          | 20 ++++++++--------
+ arch/x86/include/asm/pgalloc.h           |  2 +-
+ arch/x86/include/asm/pgtable_64.h        | 10 ++++----
+ arch/x86/include/asm/processor.h         |  2 +-
+ arch/x86/include/asm/segment.h           |  4 ++--
+ arch/x86/include/asm/special_insns.h     |  8 +++----
+ include/asm-generic/sections.h           |  4 ++--
+ include/linux/bpf.h                      |  8 +++----
+ include/linux/compiler_attributes.h      |  6 ++++-
+ include/linux/compiler_types.h           |  3 +--
+ include/linux/kallsyms.h                 |  2 +-
+ include/linux/ktime.h                    |  2 +-
+ include/linux/llist.h                    | 16 ++++++-------
+ include/linux/percpu-refcount.h          | 12 +++++-----
+ include/linux/pgtable.h                  | 12 +++++-----
+ include/linux/rcupdate.h                 | 14 +++++------
+ include/linux/rcupdate_trace.h           |  4 ++--
+ include/linux/rcutiny.h                  |  2 +-
+ include/linux/sched.h                    |  8 +++----
+ include/linux/srcu.h                     | 10 ++++----
+ include/linux/srcutiny.h                 |  5 ++--
+ include/linux/srcutree.h                 |  2 +-
+ include/linux/trace_events.h             |  6 ++---
+ include/linux/tracepoint.h               |  4 ++--
+ include/linux/u64_stats_sync.h           | 30 ++++++++++++------------
+ include/linux/uaccess.h                  |  4 ++--
+ kernel/bpf/helpers.c                     | 12 +++++-----
+ 40 files changed, 143 insertions(+), 136 deletions(-)
+
+--
 2.53.0-Meta
-
