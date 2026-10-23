@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792717920;
-	b=ouwWutvHd+yv1qFrC8IIBRCw8UaRx1bnJI0OwrfGF7GpoV/urDUHtZ1X+iTjSglqXG89
-	 o3fararsRPOX1HkwOXreO6UCueEN9qQkCdjjOBtcHGlpxH42iKeIafh2dwhsgq7/EkFG2
-	 WLre7Lk8CmcktD/rJd+xrPJQK3JwrfNsZ6VjR9Y3SocexvtN83W+EtsHNniujUgDnN8l2
-	 YGMsBIEn9LXTTszb/ADk2lAWoLmJIbKPzDvP2HYuUdJy68pkcqXlHZZ5pMqAfdtVc1gr8
-	 mg1YtGu727Ai0GljvvCU28NReD2PLDtOALtoZAp8tqY+mokRBx5hcGLhyueMZV8NX/g==
+	t=1792717925;
+	b=trhmd34PlIvmLmt5qARYvPU3RalrxXtBMMtaWllqUuMatKPA/Q1QaxJe0vaQ7K5WIjjw
+	 lWOq3+m1BiaMri0+0LP88nRE+JBuRbVqgdULnMJYmb1iTGddolz/kfbGOEhqYCYS//sYf
+	 VXof0gfVoVv1/UsiqeZm4sWpRZshrwUMSyk4gVL/uESq+PGuwmSPpuej4hnXUKDWjVM14
+	 DCb1LCCVOxlcwugXr2QlYzFbtGPtOdyYrYY/hp/VDWIW4cuiMRj9zazFS8qoy8pQ+DDty
+	 amppZqCk70i7o3+uUwubnz/478ZCXHuo27vooYWlBw2FL0LvBr36aUOviuh1s5dcohQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792717920;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792717925;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=EKRYaK8re9OY8Bm+GKzTSXXhwSwpYRu0gQKt0HR+FfM=;
-	b=fsFdFpU525X4ElJ2NCeWlhYVQSoQ35vfOR/W0U5ldMg2Gy4DrfVnCbDyxfw6bIRlHrSV
-	 PmyXsgjGLPBPgwgONX7Eq9wl5cZu/IauAawPz+/f99AZrPO5LURHmNsolm3fmENnat2ST
-	 IE5uIrS1kzYgQVHCWuyFDqBQrZAcgFBtzgrHyr3gNQghPZiWsJiE4ZtGNsfe01DI0H4Gf
-	 a4aZ6uzKKa9jL2K1Wl8RykGRy0XqRg/ijbfHNSvxJasI+BUOf9dPd+Jhr2Llz+K1MazlU
-	 TP18XoG5hQr2epfXXt7sjNxGo4BrlamHu9Q0xFJ/cKIZi2AoBHSoWG2qTTJqgQrCAPA==
+	bh=0zP+sgWhu1l68weL6bGSxiO1Qiej1KLZ/vMCG+x7e1A=;
+	b=4yB4lh+byKnjGMjTooOVZOAq/+L7BEhd5YiJOlK3qFFK4ChcuOcQzKBS+X5cKfsSLd1G
+	 N2FN/q5qGPhTqL5YSN5QGiWsvOvNRp3yWL9OB+cmls9LbNc5Up9hJaeFjoOFIUGVKJg7+
+	 woNS8bxuPDBm+u22Sghczawt2yA9jObHw4u0yK/HTpKR1B/Jkl2UxSZrHCnqvC4E55Me/
+	 vtXxUC8r0gk+9nkqs6g2SJJGYLTlDnUrF94fOGIqjLDNOaf27rDhnhoDS99FAITDZH54q
+	 DvQD/zQCitJ1foA6Jja5iXZANqQULX/GNB3/+MAp4AumPr/pZF6ygvlt+LnuHLOaqQA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DkQQqUi5;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lfBQX7Hx;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B11606A31F;
-	Fri, 23 Oct 2026 01:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14557606A31F;
+	Fri, 23 Oct 2026 01:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DkQQqUi5
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B871D1F01828;
-	Fri, 23 Oct 2026 01:11:58 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=lfBQX7Hx
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D982F1F01825;
+	Fri, 23 Oct 2026 01:12:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792717919;
-	bh=EKRYaK8re9OY8Bm+GKzTSXXhwSwpYRu0gQKt0HR+FfM=;
+	s=k20260515; t=1792717924;
+	bh=0zP+sgWhu1l68weL6bGSxiO1Qiej1KLZ/vMCG+x7e1A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DkQQqUi5VG4GX9NRDow1QtVulOvO2SpECtn9RMG6Oa/v/zTnQ2us7UOvaiW7TJjUo
-	 2QmDAQ1jdSkkWKJF68QdShmqGk/h9DDB+L+ckp/fwy8CMzgCUsT52I7aX/wd5cveGY
-	 gbaJRaOJbnKlz2CQj+qvbd7mXn1eqyfn7IV1g9FUg5eB/5RX8TdvoMXeE0sGI2G0Ik
-	 kk0b7yCotaeBlriiR98PTtOAS5cJ6L9ErByCQwL7u8qmHick3T0HCSMNvCNhhnLjNW
-	 2UeAo7A9KYr8THte/b2Y6gQw/2x+Oy7iRDTj07u8fCS4tNKBY0MX2JFyxf5LYZaYhZ
-	 b9IL1IpmKMjFg==
+	b=lfBQX7Hxzd8gTNOlC3cDsrTlp746gXcAysf+aigjJcflBKKNjktm/M4VhYsFmFOIa
+	 3IX2420V4qFfbjQIugDG+dAXai/gkxcobZuAL+sGY4pwmA8lqBklNT1ohh0NfyuJec
+	 lbERcu3Hv2W/KVLGRMrRbzjczMWlZbO3+VJ1qrJfd/QmQ07AJzaRNgpJbAMPh7hWj3
+	 7lWuMwBSkGl2PT2d8Z+/WJAEo4HJY41a0TjlOmitdVi3ka6FT0YVLmGkiNRvEMGLwE
+	 zAroGJYiurVAFl4zeKwiHCm9nSZIYx0pN0P7E08nueHCGt2kTgavL18vc0n5czSq9T
+	 tOKmWJNFpEkSg==
 From: Song Liu <song@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -48,9 +48,9 @@ Cc: rostedt@goodmis.org,
 	mark.rutland@arm.com,
 	kernel-team@meta.com,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 12/16] tracing: Mark the tracing_gen_ctx helpers notrace
-Date: Thu, 22 Oct 2026 18:10:45 -0700
-Message-ID: <20261023011049.1164625-13-song@kernel.org>
+Subject: [PATCH v2 13/16] ktime: Mark ktime_to_ns() notrace
+Date: Thu, 22 Oct 2026 18:10:46 -0700
+Message-ID: <20261023011049.1164625-14-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261023011049.1164625-1-song@kernel.org>
 References: <20261023011049.1164625-1-song@kernel.org>
@@ -65,50 +65,33 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tracing_gen_ctx(), tracing_gen_ctx_flags() and tracing_gen_ctx_dec()
-are called by ftrace callbacks before they take any recursion
-protection, for example function_test_events_call() in
-kernel/trace/trace_events.c, which is built with -pg when
-CONFIG_FUNCTION_SELF_TRACING=y. They are plain inline functions, so an
-out-of-line copy is untraced only because inline implies notrace.
+The NMI safe accessors used as trace clocks, such as
+ktime_get_mono_fast_ns() and ktime_get_boot_fast_ns(), are notrace and
+call ktime_to_ns(). ktime_to_ns() is a plain inline function, so an
+out-of-line copy is untraced only because inline implies notrace, and
+tracing it would recurse through the trace clock.
 
-Mark them notrace explicitly. No functional change.
+Mark it notrace explicitly. No functional change.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- include/linux/trace_events.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/ktime.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 5cbd09c8be8d..15990e23a662 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -197,13 +197,13 @@ enum trace_flag_type {
- 	TRACE_FLAG_BH_OFF		= 0x80,
- };
+diff --git a/include/linux/ktime.h b/include/linux/ktime.h
+index f247e564602f..ed56774f68ea 100644
+--- a/include/linux/ktime.h
++++ b/include/linux/ktime.h
+@@ -75,7 +75,7 @@ static inline ktime_t timespec64_to_ktime(struct timespec64 ts)
+ #define ktime_to_timespec64(kt)		ns_to_timespec64((kt))
  
--static inline unsigned int tracing_gen_ctx_flags(unsigned long irqflags)
-+static inline unsigned int notrace tracing_gen_ctx_flags(unsigned long irqflags)
+ /* Convert ktime_t to nanoseconds */
+-static inline s64 ktime_to_ns(const ktime_t kt)
++static inline s64 notrace ktime_to_ns(const ktime_t kt)
  {
- 	unsigned int irq_status = irqs_disabled_flags(irqflags) ?
- 		TRACE_FLAG_IRQS_OFF : 0;
- 	return tracing_gen_ctx_irq_test(irq_status);
+ 	return kt;
  }
--static inline unsigned int tracing_gen_ctx(void)
-+static inline unsigned int notrace tracing_gen_ctx(void)
- {
- 	unsigned long irqflags;
- 
-@@ -211,7 +211,7 @@ static inline unsigned int tracing_gen_ctx(void)
- 	return tracing_gen_ctx_flags(irqflags);
- }
- 
--static inline unsigned int tracing_gen_ctx_dec(void)
-+static inline unsigned int notrace tracing_gen_ctx_dec(void)
- {
- 	unsigned int trace_ctx;
- 
 -- 
 2.53.0-Meta
 
