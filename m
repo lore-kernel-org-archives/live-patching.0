@@ -1,54 +1,54 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793065438;
-	b=IGStIOd4dygU1xI5BKGOVVlTc/dMxcUayag1/u6UB3XWHgg2lLSp3bOVnZKpLlhvvjia
-	 DGp/bkYXBIXlK3icZjUkm5nbYW2pYvdVlcq571FiMV9WO1BS53YR5MXjn67ahE1Q16dl3
-	 yLnuy878fH4NQw6NMTFwVuzeRPqtZdMp90vcZlBTgWvU9A6k7Kmr1UkxNAr9gkVPsHscX
-	 e2iEmbITpANLjR0jgOFu78uSEyLajiP/G287vlYF1QeNF5C5sXVdNYk3GjDUhreUGyTBV
-	 5/ysKjRk6FHOU8Nmjh3+KRF4X7mYlqL9fHzN6oky6+gYIEFZhsuLPuLRTJZyqRBac+A==
+	t=1793067748;
+	b=mvYT8eFHcyye8z6mfEppoCAuiaNM6dWRAtqdBO/mznBxM5h6pL9d+NmMiAIpqXlAjvZP
+	 kGiF5VYe7lLu3kcmMK8RVx0vA498u6HXFI7dQ73h0/W7wdOyWKDJ2ZjuOzBcFjQQf2DVQ
+	 0RawdsDPz0tcPJSsFfkWbeUjI3azyw7s3HMxjwjhyUvC5IbnL5ZpFV8AR22E0bwaIHadu
+	 lGc7knJABZfhtwGCQb9tB2iGyA2NoR/gkffPaun2sOGJyZeBQJYvUkYavph/DXj7IqHJX
+	 KMOr+JLSbbtDDA6k7lCGbCMfT0guC47MqW9EKZatayBLkHst2a312n92xhOauvewNcQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793065438;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793067748;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=gHMFMQXqzSRs+VRK4YQTy0GUfL3/Ra2rTOLetkxT53M=;
-	b=xFG0IO8/aMOvzomzD8Tz2JjnxRrLgjJGnb+AO5aCzAwAlPNwQI9m3G9mEo6XdqHODfJD
-	 u63lxH7SgZUdoD5aE8DYvUdvIK3WBj+o6nvw2RbFOdCjzRU7VXoihkljHRsPBrEsSCtHT
-	 5hPP/OzUpblt0m38apU6CRJtqnLkJaZOOOAlY6xPHfDUO2qjjbgzbK+mvt43h2f2P2lA8
-	 OYKOT5YgSPqDnyR/AhTXkutfuw+q/1YIBYR2bPtoSlfTYgdf6e6fKmkdfZ3JM+4V0AdXQ
-	 /oRApnuUAFbSUnRmf3+D/5MUIVHjwwnDIQUZd3NyJUqoztLOat+FLoQYrYcOx9//WcQ==
+	bh=54+eeI7JG7svROI7vWxsG3h9jsfit6e7W5UKf/RnHwg=;
+	b=Aocgf82fAEyeJzC7e7p1Aj6fiYW4/sIiLKvzyskA2iplajJu5KZpnvRI67MZuugxdeu+
+	 oXco7YyN1onPthG51S+0bHPMPDh1jBmwr9oHizTaeu9/KlLRcKRVSEoSQJP5JoWi+E4Fg
+	 SvQNDT6aICGqvVrIwpgfAJ1GLD3mcnZDCvv9KHjaGZ4SMC0KGhvoY9/Y+CCywhCfqf+3n
+	 3LM/1b4WF8Y1TUpM2g+9EpNM0tWZOs/CSV8nla/WrCJGg1pVGm8QUUkRSHkfVncDv1tfy
+	 MPv2ysK6Y8/wxhJse6J6wMtVNHQ1qXabYKv9yptAKt8LhFGRqKGQkZ0vhAaGlONwGbw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YB8yyDsL;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ya6rScKB;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AA2606A31A;
-	Tue, 27 Oct 2026 01:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D62606A31B;
+	Tue, 27 Oct 2026 02:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YB8yyDsL
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F98A1F01825;
-	Tue, 27 Oct 2026 01:43:57 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Ya6rScKB
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D844F1F01825;
+	Tue, 27 Oct 2026 02:22:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793065437;
-	bh=gHMFMQXqzSRs+VRK4YQTy0GUfL3/Ra2rTOLetkxT53M=;
+	s=k20260515; t=1793067747;
+	bh=54+eeI7JG7svROI7vWxsG3h9jsfit6e7W5UKf/RnHwg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YB8yyDsLnTgfsOVoQUdsnaLRK0e8kBmgoY085E9r81q6y14pLrOBY1TlyFz2ZtoOn
-	 u6XMqz2RvobprAGcA9DxXP/yTKdXv8ptbAGKbLqn3OYqmyB5hm/5LjtbYQeZJvBy+s
-	 8eZiXI7O1zOr+qimBcduRSNYxDZrWkAChFZUKssuAS6Bxmw0W/MjvB1Y6OH6gqC3GV
-	 IdD1m01xxoEMs59Rq1IkQltYQid0C4qGYY2klaCvD+hNQlRHyuvtBdUsVYWTjLQx7a
-	 VsIUe+B3ogH903z8uAr+AgrfI1PPB3UWhcAitLgNbRJ356Gh05B+4/0615/Ou1wmDb
-	 YEYEXSK+ZMXIg==
-Date: Mon, 26 Oct 2026 18:43:55 -0700
+	b=Ya6rScKB18t0P84kk/AWpYtURSATktpjypcDTMw3OMX/VOOYuhGU5d7NDlQ+ZDPbk
+	 9Uq9A1+tgFaPKg5vA9kqglsZ4aXLwbQQZu9M+vfXAmdw+M6JnZRUr3pwhsB11NDxwJ
+	 IZ9KL/1uTAiKAT0px3nDmTm4ktBoFxwOpncRoyPcecGDDnns8ZYQfEMfoLvgQlPNzY
+	 fMjtGqfeLUbAY8s5VX48BKFNRDDSTAeh5dWPUgy6IZnYYqCRIjjfxcQL9xsV6R43Op
+	 aXQabpT8a/zB40Vcgot7BHHfv3CnEGWdOUX8LiifcGUDK0t9y18IRFN14P5DPlIhs9
+	 lnGTzj1OyMdOA==
+Date: Mon, 26 Oct 2026 19:22:25 -0700
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Song Liu <song@kernel.org>
 Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
 	shuah@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/11] klp-build: Fix dependent patches in a series
-Message-ID: <at_1V3XcGM_D1bY1@jpoimboe>
+Subject: Re: [PATCH 02/11] klp-build: Add --patch-only option
+Message-ID: <auAGCNUz9BChLpaX@jpoimboe>
 References: <20261017002441.716615-1-song@kernel.org>
- <20261017002441.716615-2-song@kernel.org>
+ <20261017002441.716615-3-song@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -60,167 +60,46 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261017002441.716615-2-song@kernel.org>
+In-Reply-To: <20261017002441.716615-3-song@kernel.org>
 
-On Fri, Oct 16, 2026 at 05:24:31PM -0700, Song Liu wrote:
-> fix_patches() refreshes each patch on its own against the original
-> source: it applies the patch, copies the patched files, and reverts it.
-> If a later patch in the series depends on an earlier one, it doesn't
-> apply to the original source, and klp-build fails even though
-> validate_patches(), which applies the patches in order, accepted the
-> series:
-> 
->   $ ./scripts/livepatch/klp-build 0001-dummy.patch 0002-Revert-dummy.patch
->   Validating patch(es)
->   Building original kernel
->   Copying original object files
->   Fixing patch(es)
->   Reversed (or previously applied) patch detected!  Assume -R? [n]
->   Apply anyway? [n]
->   1 out of 1 hunk ignored
->   error: klp-build: .../klp-tmp/tmp.patch did not apply
+On Fri, Oct 16, 2026 at 05:24:32PM -0700, Song Liu wrote:
+> klp-build fixes the input patches before building the patched kernel:
+> it combines them into a single patch against the original source and
+> adds #line directives, so that unchanged functions further down a
+> patched file keep their __LINE__ values.  This only happens after the
+> original kernel has been built, so seeing the result, or testing this
+> step, takes a full kernel build and --keep-tmp.
 
-The patch fixing step should probably be done earlier, during the patch
-validating step, so any such errors get rooted out before the build.
-That would simplify things and unify the apply/revert cycles.  (can be a
-separate followup patch)
+Not sure how this last sentence is relevant, either way klp-build will
+run to completion (or failure)?
+
+Also the above feels like a strawman, I think the real justification for
+this is the selftests?
 
 > +++ b/scripts/livepatch/klp-build
-> @@ -467,60 +467,75 @@ do_init() {
->  	set_kernelversion
->  }
+> @@ -19,7 +19,7 @@ set -o nounset
+>  # This helps keep execution in pipes so pipefail+ERR trap can catch errors.
+>  shopt -s lastpipe
 >  
-> -# Refresh the patch hunk headers, specifically the line numbers and counts.
-> -refresh_patch() {
-> -	local patch="$1"
-> +# Combine the patches into a single patch against the original source, with
-> +# refreshed hunk headers.  The patches may depend on each other, so they can't
-> +# be refreshed individually.
+> -unset DEBUG_CLONE DIFF_CHECKSUM SKIP_CLEANUP VERBOSE XTRACE
+> +unset DEBUG_CLONE DIFF_CHECKSUM PATCH_ONLY SKIP_CLEANUP VERBOSE XTRACE
+>  
+>  REPLACE=1
+>  SHORT_CIRCUIT=0
+> @@ -137,6 +137,7 @@ Options:
+>  
+>  Advanced Options:
+>     -d, --debug			Show symbol/reloc cloning decisions
+> +       --patch-only		Print the fixed patch(es) and exit without building
 
-It's probably no longer accurate to describe this as refreshing things
-since it's now creating a new patch?
+This is basically bolting a test hook onto klp-build.
 
-> +combine_patches() {
-> +	local outfile="$1"
->  	local tmpdir="$PATCH_TMP_DIR"
-> -	local input_files=()
-> -	local output_files=()
-> +	local files=()
-> +	local patch
-> +	local file
->  
->  	rm -rf "$tmpdir"
-> -	mkdir -p "$tmpdir/a"
-> -	mkdir -p "$tmpdir/b"
-> +	mkdir -p "$tmpdir"
->  
-> -	# Get all source files affected by the patch
-> -	get_patch_input_files "$patch" | mapfile -t input_files
-> -	get_patch_output_files "$patch" | mapfile -t output_files
+What if we move the patch validating/fixing into a self-contained
+klp-prepare-patch script?  There might be a small amount of duplication
+for some of the patch handling but that would hopefully be minimal.
 
-Now that these helpers are only called by get_patch_files(), can they
-be folded into it and simplified with a single grep for '^(---|\+\+\+) '?
-
-> +	# Get all source files affected by the patches
-> +	for patch in "${PATCHES[@]}"; do
-> +		get_patch_files "$patch"
-> +	done | sort -u | mapfile -t files
->  
-> -	# Copy orig source files to 'a'
-> -	echo "${input_files[@]}" | xargs cp --parents --target-directory="$tmpdir/a"
-> +	# Copy orig source files to $tmpdir
-> +	for file in "${files[@]}"; do
-> +		if [[ -e "$file" ]]; then
-> +			cp --parents "$file" "$tmpdir"
-> +		fi
-> +	done
->  
-> -	# Copy patched source files to 'b'
-> -	apply_patch "$patch" "--silent"
-> -	echo "${output_files[@]}" | xargs cp --parents --target-directory="$tmpdir/b"
-> -	revert_patch "$patch"
-> +	# Diff the orig source files against the patched ones in place to make a
-> +	# clean patch.  Use /dev/null for created and deleted files.
-> +	: > "$outfile"
-> +	apply_patches "--silent"
-> +	for file in "${files[@]}"; do
-> +		local old="$tmpdir/$file"
-> +		local new="$file"
-> +		local old_label="a/$file"
-> +		local new_label="b/$file"
-> +		local status=0
-> +
-> +		if [[ ! -e "$old" ]]; then
-> +			old=/dev/null
-> +			old_label=/dev/null
-> +		fi
-> +		if [[ ! -e "$new" ]]; then
-> +			new=/dev/null
-> +			new_label=/dev/null
-> +		fi
->  
-> -	# Diff 'a' and 'b' to make a clean patch
-> -	( cd "$tmpdir" && diff -Nupr a b > "$patch" ) || true
-> +		diff -up --label "$old_label" --label "$new_label" "$old" "$new" >> "$outfile" || status=$?
-> +		if (( status > 1 )); then
-> +			die "diff failed for $file"
-> +		fi
-> +	done
-> +	revert_patches
->  }
->  
-> -# Copy the patches to a temporary directory, fix their lines so as not to
-> -# affect the __LINE__ macro for otherwise unchanged functions further down the
-> -# file, and update $PATCHES to point to the fixed patches.
-> +# Combine the patches into a single patch, fix its lines so as not to affect
-> +# the __LINE__ macro for otherwise unchanged functions further down the file,
-> +# and update $PATCHES to point to the fixed patch.
->  fix_patches() {
-
-This no longer fixes the patches, probably a function rename is
-warranted?
-
-> -	local idx
-> -	local i
-> +	local tmp_patch="$TMP_DIR/tmp.patch"
-> +	local new_patch="$TMP_DIR/fixed.patch"
->  
->  	rm -f "$TMP_DIR"/*.patch
->  
-> -	idx=0001
-> -	for i in "${!PATCHES[@]}"; do
-> -		local old_patch="${PATCHES[$i]}"
-> -		local tmp_patch="$TMP_DIR/tmp.patch"
-> -		local patch="${PATCHES[$i]}"
-> -		local new_patch
-> -
-> -		new_patch="$TMP_DIR/$idx-fixed-$(basename "$patch")"
-> +	combine_patches "$tmp_patch"
-> +	[[ ! -s "$tmp_patch" ]] && die "no changes detected"
->  
-> -		cp -f "$old_patch" "$tmp_patch"
-> -		refresh_patch "$tmp_patch"
-> -		"$FIX_PATCH_LINES" "$tmp_patch" | recountdiff > "$new_patch"
-> +	"$FIX_PATCH_LINES" "$tmp_patch" | recountdiff > "$new_patch"
-> +	PATCHES=("$new_patch")
->  
-> -		PATCHES[i]="$new_patch"
-> -
-> -		rm -f "$tmp_patch"
-> -		idx=$(printf "%04d" $(( 10#$idx + 1 )))
-> -	done
-
-It's confusing that from here on out, PATCHES becomes a single-element
-array (yet its users treat it like it might have multiple entries).
-
-It should probably be a separate variable (COMBINED_PATCH?), with its
-users simplified.  And e.g., the "Fixing patch(es)" status message can
-be changed.  "Processing patch(es)"?
-
-> +	rm -f "$tmp_patch"
-
-I think this doesn't need to be removed here, it shows an intermediate
-state which could be useful for debugging.
+Then the selftests can run it directly and klp-build doesn't need the
+new option and the PATCH_ONLY special casing.
 
 -- 
 Josh
