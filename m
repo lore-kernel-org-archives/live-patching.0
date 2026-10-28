@@ -1,96 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793110863;
-	b=yM8ISeC2XHEzPMvD55IlY33iRWvQRUsuyjwuRIOW+8flK2e4skgksOJ973j/I0jTp6/l
-	 y6DxgUWchsnyfWdScSQHofcSxGQSCSLsj2oxHLrBV7/si1aJabnrg7b4cKbIeskuYSohj
-	 dMq7Mg58Ubt5u1Pr9AIdcsaHhU45wCaP/lwBQnmIGxtTpWe0C1nKv5ieeqieox23EWx4U
-	 12u6Z21BNEN5vlKx5VO1RClvLRaJpf7r3aO3EeyBlOSNJu2WKjvMpGcEBTUMTv/J66UDJ
-	 QIjCXbUTzuSEWBa59fjpPcQfy6hUD0zk2eYiItw2+GiwMg4E7WMroK4ipX7prAaQs/g==
+	t=1793206015;
+	b=kNSQ7WV6qN0K3E2lDiFoIy6WQW/6DptMnp0zOMvcNfNsaENrIrstskCalt8WZSgsU8W/
+	 BE84XFd24z9AoUyyfddZl8U3al4Ta+iSUcszApZA5PB+qZya1NU7FmtISA+unuRsiWV6Q
+	 UQ6iWCTU3Waqqo0QTePSpWgeD+lG1s5GHce5rqeLtJOE6B5fyLOmW1xIf8gs+F8jEdpxN
+	 VxKWe7a22FoAWg60DAjLTWo9p7/1xRpZFEoeSu7sZYnqwR29UAvNG2GaCg1Ls4FxyBuvn
+	 0qzm9d4ud9+b/9kuRoYdzq2hNauG0nRvZfmwv9OGlAI6FLC+MFVttGUFM5N86bn6GiA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793110863;
-	h=DMARC-Filter:Received:DKIM-Signature:DKIM-Signature:DKIM-Signature:
-	 DKIM-Signature:Date:From:To:cc:Subject:In-Reply-To:Message-ID:
-	 References:User-Agent:MIME-Version:Content-Type:X-Spam-Flag:
-	 X-Spam-Level:X-Spamd-Result:X-Spam-Score;
-	bh=7MRFlfglY18Sfq4QDfCp6xCGJ/z2x+F9BdM4vLB1Vfg=;
-	b=DNY3SJi9KZSx2GwOhtCn+S3zlbbC812yABzPG5vAqjY61VFl48xR5rZzab08dYDQaIWJ
-	 GsdqIVb8iYhenLYvZx3Lk/23+x9pPC1aMpV7B8kYB+rqEdcp67+iYSSfSOROUmphgZPdx
-	 g5KJuNvnESrdvcJ8fg8r2CojWMTYPv5T/TQMw8YnZ3mxYZPOIN9gkEYal6/QeXOMeuiEl
-	 u1a0iynXwXYJ+Bih7r8wfdQxlGHoZSOBgIFX9ttIN0i9TEkfLjGvf5zRtlCdNWqTh9oNg
-	 9LN0JZUvg7+D5ALncFA12/1JZ37VHxdMvyly4wP5w+w7pxJy1PSEJhTzFuUhzY/Pijw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206015;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=g09dqGgfkECLzBz+aB2tJ6NeeH7OBTuBnp9ZDOSrA+g=;
+	b=Z2H9rX0qBttiTfx0Uou4SXKqge0p8IMMkIsLhjXz3xcpjGShsxCq3pdnghQ+Ol6WyJTX
+	 VKQt/RLV+ryYcmsj9m91YC1lXOSxvQDkEkjtLyUM+2TiTyEaVgOOIzUOzzykAroi0vYGO
+	 rWU42XtexSHjjlxWshRrVRiTaztg5ROqRWTE+c7nb8mpD/SaRY/Y5j+iIBx4eeTy6+H2I
+	 K/PoTp6k4357dD1xQuUxDjQje5/X7HUcSo0HGJGnheCK1LcvERpXoPdn1MEYlon191OYI
+	 EMpAtrUe1G9vxS1Cnz/QoDunqyld0zqVlW1MZZy+TS0NG3swVgErH14LHQohp1kfPxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=suse.cz;
-	spf=pass smtp.mailfrom=suse.cz;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=R83fktgJ;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="SgQ9/m9J";
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=R83fktgJ;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b="SgQ9/m9J";
-	arc=none smtp.remote-ip=195.135.223.130
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kfw5lTIe;
+	arc=none smtp.remote-ip=209.85.216.44
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34958606A31B;
-	Tue, 27 Oct 2026 14:21:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34958606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2202606A31C
+	for <live-patching@vger.kernel.org>; Wed, 28 Oct 2026 16:46:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2202606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=R83fktgJ;
-	dkim=pass header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=SgQ9/m9J;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.a=rsa-sha256 header.s=susede2_rsa header.b=R83fktgJ;
-	dkim=neutral header.d=suse.cz header.i=@suse.cz header.a=ed25519-sha256 header.s=susede2_ed25519 header.b=SgQ9/m9J
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 570DD21FB9;
-	Tue, 27 Oct 2026 14:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793110861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7MRFlfglY18Sfq4QDfCp6xCGJ/z2x+F9BdM4vLB1Vfg=;
-	b=R83fktgJ6X7S11Vzj7rk2vi4bi8CoRT3qP8iPs0v3ApzEWSnhFbM7Bfeh7bzZjfT23ZIvr
-	VProb1JxcHzVjy7cwRoRL3c2VDMnK4NmOZYWFSJ6+JhecLxsMfgDuaRsQg1mbKDhRgx639
-	hRVFY7tU1cfdrwuT3GQGvLe5srEAm88=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793110861;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7MRFlfglY18Sfq4QDfCp6xCGJ/z2x+F9BdM4vLB1Vfg=;
-	b=SgQ9/m9JXSPi+iOKG4I+msyN7dBt+dikpHz9nNcAZRddfEVKB9mbfp84NZ1SyuaFN+eSEF
-	vF0Abct5NLCx3eCw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1793110861; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7MRFlfglY18Sfq4QDfCp6xCGJ/z2x+F9BdM4vLB1Vfg=;
-	b=R83fktgJ6X7S11Vzj7rk2vi4bi8CoRT3qP8iPs0v3ApzEWSnhFbM7Bfeh7bzZjfT23ZIvr
-	VProb1JxcHzVjy7cwRoRL3c2VDMnK4NmOZYWFSJ6+JhecLxsMfgDuaRsQg1mbKDhRgx639
-	hRVFY7tU1cfdrwuT3GQGvLe5srEAm88=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1793110861;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7MRFlfglY18Sfq4QDfCp6xCGJ/z2x+F9BdM4vLB1Vfg=;
-	b=SgQ9/m9JXSPi+iOKG4I+msyN7dBt+dikpHz9nNcAZRddfEVKB9mbfp84NZ1SyuaFN+eSEF
-	vF0Abct5NLCx3eCw==
-Date: Tue, 27 Oct 2026 15:21:01 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Petr Mladek <pmladek@suse.com>
-cc: Harry Hsu <x90613@gmail.com>, jpoimboe@kernel.org, joe.lawrence@redhat.com, 
-    jikos@kernel.org, live-patching@vger.kernel.org, shuah@kernel.org, 
-    song@kernel.org, linux-kernel@vger.kernel.org, sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 4/5] livepatch: Clear relocations when klp_apply_object_relocs()
- fails
-In-Reply-To: <att3oHvCpVDjDt-h@pathway.suse.cz>
-Message-ID: <alpine.LSU.2.21.2610271520030.28401@pobox.suse.cz>
-References: <20260908120325.299649-1-pmladek@suse.com> <20260908120325.299649-5-pmladek@suse.com> <alpine.LSU.2.21.2609181554590.21788@pobox.suse.cz> <att3oHvCpVDjDt-h@pathway.suse.cz>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Kfw5lTIe
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3ad41b47541so1034624a91.1
+        for <live-patching@vger.kernel.org>; Wed, 28 Oct 2026 09:46:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793206014; x=1793810814; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=g09dqGgfkECLzBz+aB2tJ6NeeH7OBTuBnp9ZDOSrA+g=;
+        b=Kfw5lTIeK0b+pOQ6UeoU3otNbG/F+hJLBbHJEngSvUZJX2T+MxRia790fWsYRjO+gu
+         zctBZmF6vri7AvKN6vl25fZ88lMKL7xNhzGmKT5vzAphBDKRfVmSdyXMt2boyd+sNC+B
+         Y1eJ5ALziL3Ty0kZRoBFzS4YX6Y4PuZhr4o2RfgzX2saVF4UCTFpQvJusL3w0/JWqHaf
+         ih2ZAjpf2pjMmCimMqDGyF+XyRi/GjPmTkkK4NbKvltpVB3SR+/ronU3UaaWcfwCqTx+
+         UocDFBZjP3PAzqQgzwwW0MdCOLVUhWoTHd6LJWzNZ2Wyqulal0tkpXusZpW5jqqLYHQQ
+         Ylcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793206014; x=1793810814;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=g09dqGgfkECLzBz+aB2tJ6NeeH7OBTuBnp9ZDOSrA+g=;
+        b=UGHxud0BWdZAhC6fGIrYi0DrPtIbNIwVQhYMBiTFVqGWc7aP+3jAUd2YrYtjOwpXyn
+         k12FJFijtgmdwjYWLE3Jp/Ez+dLGQFmMPH9bPkePhRot9f8l3rY1kxBD3xKmX8vqHPNu
+         Nj9LapkFK4+GzfCgcuyAjXGq78WtV1wZeJhTncAwQBQGCKnDS6v0/5+OkEW5NDKZzrm1
+         mrpeI5NnsTGVUI3+681Q/kliRqXiP8FUZBkiVlpcPeXmYjGWbdxuwtXHsl5ZTFzXEOnp
+         0oto0xdgkhKak0S7QAaGGnbJi2cYLlwkXB+9lxA9thR5SriNaD7Kgh/rQzLvBxTRht6D
+         R4fA==
+X-Forwarded-Encrypted: i=1; AKwUvBwtm9xwtxne+mE3lPbF31ZnJcy04F8T8Bes5237b39L/LMomWThNIcvaKYvgNj1/8CFs0NlOCazJdACzq9B@vger.kernel.org
+X-Gm-Message-State: AFq9FYKDNN3gKkQuPcNy9oKvBy8pfjGvmmgxOJ7KMtm8lafeuJzxBwrc
+	x9WTSWsTivZKTjE0U06WaIzQbtGZL8ueT7F2Xc6FKRwVoKa6AmR9TIBL
+X-Gm-Gg: AYBFou3M3iKOPon55NOKnt2sh22tLYFDi6hFpiPxeiww13NaexR5U9u5OvUl/AzecO0
+	s1SLiHVkIsmRwDZNYXpfk9QIyI6CyMqpVaFie6g/uX0Iy/J9koagSmOzcbtGGu0roe7E9c9YTxC
+	w8r7eGtJY4IXx8D+mUB1O93BwSB5RwUcJvVGPmCkao+++tCYtMNHsUUAxNO/jOi7KPeEKVIQ0bO
+	M5SeRDQeIep44crW0Vc40lWHc9VND2CvRIa4Op7s0sAEop519WjuP7ynoABMHkZO46wnw29LX9p
+	MVB1Vf1LHN2KRvIwomu0+lFYQdNKdBX5UCeC7wNQcdHP7xiXY2H8YzR9IoOQXCoaszCqgd8fesT
+	XBb4IQrTXwsyWDSxCFgsZ1vBB8oZyL9QeAoqm6b57GOCq3LQEnQN3MNZB4WC6wH8Cbp7OoUEyal
+	G2OQfvDB6eTthcyvmevxi4TqqHGahhgd7Q1c8FzBgBycYxt3nINierz81FVeVPnGuDFXQMFA+Bz
+	dVWCNJ7BjaX3V9adpv6jzFFyM671rJFsx1CEN2pha6rdIRK5cJK3bNKIoYbTnA1qwl2OwMwj7ye
+	QmOiNkyuLH1LMBCLIKTfiJpM6jouC+VqLZ4dwIWa9/Hlo7/6/Jx7jX3UL770UoLxNxOc8te8pdE
+	fpsWLf1V8H/hqZ9MdE9ac+tvqRcRigX8/lhENPvSNGs3xaPU55g==
+X-Received: by 2002:a17:90b:5348:b0:3ac:8446:c1b5 with SMTP id 98e67ed59e1d1-3ae58228c0bmr2122376a91.31.1793206013689;
+        Wed, 28 Oct 2026 09:46:53 -0700 (PDT)
+Received: from lima-arm64-dev.hitronhub.home (180-176-144-38.dynamic.kbronet.com.tw. [180.176.144.38])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ae5797f6aasm2083346a91.2.2026.10.28.09.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2026 09:46:53 -0700 (PDT)
+From: Harry Hsu <x90613@gmail.com>
+To: pmladek@suse.com,
+	jpoimboe@kernel.org,
+	mbenes@suse.cz,
+	joe.lawrence@redhat.com
+Cc: jikos@kernel.org,
+	live-patching@vger.kernel.org,
+	shuah@kernel.org,
+	song@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] livepatch: Fail object initialization on duplicate patched function
+Date: Thu, 29 Oct 2026 00:46:49 +0800
+Message-ID: <20261028164649.337479-1-x90613@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <att7GJXA7hK7Ic64@pathway.suse.cz>
+References: <att7GJXA7hK7Ic64@pathway.suse.cz>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -100,87 +104,109 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spamd-Result: default: False [-13.30 / 50.00];
-	SUSE_INTERNAL_BYPASS(-9.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,redhat.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Score: -13.30
+Content-Transfer-Encoding: 8bit
 
-On Fri, 23 Oct 2026, Petr Mladek wrote:
+On Fri 2026-10-23, Petr Mladek wrote:
+> I wonder how to move forward with this patchset. There seems to be
+> three unresolved problems:
+>
+>   1. How to handle aliased functions when replacing two livepatches
+>      with aliased symbols, aka two NOPs on the same stack [1].
+>
+>      My take: I would fix this later on top of scoped atomic replace.
+>               The aliased symbols should conflict.
+>   2. Fix the low-level __write_relocate_add() to clean its own
+>      mess on failure.
+>
+>      My take: I would fix this a follow up patch.
+>
+>   3. Better describe the purpose of klp_write_object_relocs_limited().
+>      Or clean its own mess a better way (code duplication)?
+>
+>      My take:  This requires v5.
 
-> On Fri 2026-09-18 15:59:59, Miroslav Benes wrote:
-> > On Tue, 8 Sep 2026, Petr Mladek wrote:
-> > 
-> > > When a module is loaded, klp_module_coming() updates all enabled
-> > > livepatches. If an error occurs, it delegates cleanup to
-> > > klp_cleanup_module_patches_limited(). However, this cleanup loop skips
-> > > the partially updated patch, leaving any changes made prior to failure
-> > > unreverted.
-> > > 
-> > > One unhandled failure path occurs inside klp_apply_object_relocs(). On
-> > > architectures like x86_64, apply_relocate_add() performs a verification
-> > > step using memcmp() to check that memory contains the expected relocated
-> > > or zeroed value. If relocations left behind by a failed patch are not
-> > > cleared, subsequent patch operations or reloads can fail this validation.
-> > > 
-> > > Introduce klp_write_object_relocs_limited() to unwind and clear only the
-> > > relocations that were successfully applied before klp_write_object_relocs()
-> > > encountered an error.
-> > > 
-> > > There is no need to clear relocations for other objects in the failing
-> > > patch because klp_module_coming() operates strictly on the specific
-> > > module being loaded.
-> > 
-> > Hm, I spent some quite time on that and I am not sure if I deciphered 
-> > everything correctly.
-> > 
-> > It seems to me that all error handling in those paths you are mentioning 
-> > above is correct and the only problematic thing is that 
-> > klp_apply_object_relocs() in klp_init_object_loaded() returns ret 
-> > immediately which leaves partially applied relocations in case of an 
-> > error. Following calls in klp_init_object_loaded() go through err: label 
-> > where klp_free_object_loaded() is called which should be fine.
-> > 
-> > Is it correct?
-> > 
-> > Wouldn't be better to be somehow consistent and clean up right in the 
-> > error path of klp_apply_object_relocs() call in klp_init_object_loaded() 
-> > similarly to what is already there. After all we want to clean the object.
-> 
-> In fact, this is exactly what klp_write_object_relocs_limited() does.
-> The new _limited() variant of the function is used just in two
-> locations:
-> 
->    1. It implements the original klp_write_object_relocs() where
->       it is called "unlimited".
-> 
->    2. It is used recursively in its own error path.
-> 
-> I did this trick to avoid code duplication in the error path.
-> 
-> I agree that is is not obvious. I should mention it in the commit
-> message. And probably even add a comment into the code.
-> 
-> Or would you prefer another solution, please?
+For 1, I have a proposal to create only one NOP in the first place,
+as in your solution 1 from the earlier mail.
 
-I will admit that I do not understand what I meant back then. Your 
-solution seems correct to me now.
 
-Miroslav
+Recap: The problem
+-----------
+
+Take two livepatches that are already loaded:
+  A patches __do_sys_fork
+  B patches __x64_sys_fork        (same address as __do_sys_fork)
+
+and an atomic replace livepatch C that patches neither of them.
+klp_add_nops() finds the functions by name and sympos only, so C
+inherits two NOPs. Both resolve to the same address and end up on
+the same ops->func_stack: [A, B, nop1, nop2]. When the transition
+is reverted, the stack goes from nop2 to nop1 instead of back to B.
+
+
+Proposal
+--------
+
+klp_add_nops() runs from klp_init_patch() before klp_init_object(),
+so the new NOPs have no address yet. But func->old_func of the old
+livepatches is already resolved when their object is loaded. So the
+address can be used as a hint when the NOPs are created:
+
+  1. Copy the already resolved address of the old function into the
+     new NOP (func->old_func) as an address hint.
+  2. Do not create another NOP when a NOP with the same address
+     already exists in the object.
+
+The hint is overwritten by klp_find_object_symbol() in
+klp_init_object_loaded() with the same value. It is cleared again by
+klp_free_object_loaded(), so it never outlives the loaded object.
+
+A sketch of the change in kernel/livepatch/core.c:
+
++/*
++ * Return true when @obj already has a nop whose address hint is @addr.
++ * The hint is only set when the livepatched object was already loaded.
++ */
++static bool klp_nop_exists_at(struct klp_object *obj, void *addr)
++{
++	struct klp_func *func;
++
++	if (!addr)
++		return false;
++
++	klp_for_each_func(obj, func) {
++		if (func->nop && func->old_func == addr)
++			return true;
++	}
++
++	return false;
++}
++
+ static int klp_add_object_nops(struct klp_patch *patch,
+ 			       struct klp_object *old_obj)
+ {
+@@
+ 	klp_for_each_func(old_obj, old_func) {
+ 		func = klp_find_func(obj, old_func);
+ 		if (func)
+ 			continue;
+
++		/*
++		 * Aliased symbols resolve to the same address. A single nop
++		 * is enough. More nops on the same ops->func_stack would
++		 * break reverting the transition.
++		 */
++		if (klp_nop_exists_at(obj, old_func->old_func))
++			continue;
++
+ 		func = klp_alloc_func_nop(old_func, obj);
+ 		if (!func)
+ 			return -ENOMEM;
++
++		/* Address hint for klp_nop_exists_at(). */
++		func->old_func = old_func->old_func;
+ 	}
+
+That's only one way I can come up with :D
+
+Best Regards,
+Harry
