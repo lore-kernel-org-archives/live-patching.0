@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793223946;
-	b=1JxopRyaHKp39ark2UbODralVB4WTgsFmVgJ2lmWCLYe/TBk87T3fSKZSokvp03Twss0
-	 UEbKhRwVnkOavo7LLaPr4EY7yTqoDw+ECoD6V9zcYTcxVedIPXojksGXoWMIYbPjPrHDR
-	 nUgX29eqftHqfr0R1+g4UGKgozlDUW9NPPhu3JPqLBvOK8zbtChd76h7+JRmvxs3ZF8aH
-	 4pUNgWRx0YPX0UI1ROLO0+7W7OMvWwN4Clhie0er+kmGMfrLbViKlZOOKn98o+4R8c9h+
-	 NFP2sggrtzBlKn2y4lYmrXG95hR8IyfNQtC0/E7MuMbIs3fOW8qVg3uk+ARJnbT2nRg==
+	t=1793223960;
+	b=fKgNREwUmzbNxEQJwbXrbyFRY64coNRfXgfLnLFHzIaFP2xI+opVDFAc2cZvFJe8FQEI
+	 qdHnXf5T6v6IL5tEzGES5qVdUEDo8qjRSKW+AAhr56OutrNv6XhkRIIyj7QeDA4XU4zqb
+	 DSPCZgBTQ8Qq8+lZWseljB8W5zxPj3O3gJ02JlNCFcI9+r4N+/8066vSfql2sYG+MfONZ
+	 uskQWexHWaEkeAWq+DfxQZI31xJ7UJUyCdovZOSci7wAm5/clJ1s4AO53/xEOvLTzSyMS
+	 8RlP2KnEykXXL8PtRHNUlSrsCwY0/0eT/5lBqOYbNHd1+0nZw7JdjJLP8NmMaTfq0YQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793223946;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793223960;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=6GToEjftXbxvyrbPZoYZfrJVlzg5mD3U4+9lqA0Do0c=;
-	b=QIdvi6ap0UhG/vY0dvnxXglw+EXgagJ9C+oM8EKUFkoijI+8AdpaMh+SGiWU4c7WCfaq
-	 XpQRegQcYkbJ1/lQiMTlTDjLR/oGLZkZdBugONvh/KGCdejkPeyVj9BeLXX3t68xlXvPi
-	 yLN/9YLHOZym8A8ZzcX6+bYIsdCDAjhPla843cLpdNz+zR+M+IubMUiMsvAZ+AS6ksYrw
-	 w6D4Ph5i5YsQy6IHHVqeicN+Br1XNcN1xOZ1yVkkul1zNqwcPX3U17jvIl15veVeEzYY8
-	 H4lo8dC5d9grVFxgszNtG8LM8i+MqeORWCsPaimUmAz/W6097PX4e/WUTYNbUfntZLw==
+	bh=6WIKm2UQ+gWvUhkMk0IplQX8MHIXp+L6Inmg8PGoga8=;
+	b=ARFF+PcVwscGfhh8Z5YsoHNnpuq/j8GKxtgrazI3v5b/5o03+DJcLHiA/5XoP4Cc7fba
+	 p0wBrwn4Bq394+rGm6vjsllLuhivBe1dPM9YUBXKPqVDmFHd15tOsO8K4VRRVlQGs3xkC
+	 cISZW86pkqFqVwtmVS7EzIhJLXYUPNSbAs53nX/7bcunY6fMf9jmYQ+p1yIZ1WxAkz9EP
+	 LQ/2/8cDumXulWHR+MUkry4U8zpbPniIEN8Okp45P/AZeE1Kg3+NizMLdc9VoUXrrqv4p
+	 3382151Dm6cH/AXo3kHx9b8+cTxkCEtD5Yl8sDNVxkrJk65TwCouL2y61b0LOframDQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lx7AVlUf;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jeNKakq3;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48371606A325;
-	Wed, 28 Oct 2026 21:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D34606A339;
+	Wed, 28 Oct 2026 21:46:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Lx7AVlUf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D76811F031E3;
-	Wed, 28 Oct 2026 21:45:44 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=jeNKakq3
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 363691F031E3;
+	Wed, 28 Oct 2026 21:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793223945;
-	bh=6GToEjftXbxvyrbPZoYZfrJVlzg5mD3U4+9lqA0Do0c=;
+	s=k20260515; t=1793223960;
+	bh=6WIKm2UQ+gWvUhkMk0IplQX8MHIXp+L6Inmg8PGoga8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Lx7AVlUf2b9Q5c9PyAu33KTSSv3xFhnoeq7ak2PrGw62pOshq+V1k6WY6i0KPhJHs
-	 ZgYHYmZw6KydqDPi9uZFdKIjYzsmW8/Sg22PQH4/rqeYLe+k6H+jJ40zQyLRZ9YeDz
-	 YQzDxYPSA3uHHGxQUnmfPUJE0GTfgCUJzbVz+hCDt+LSQNoAdrd9go6mhtffz+ESUW
-	 RplwfMbH+8wDWIshWR7/qKM0HbQjIxQIjMLTGpjpM5XSNwOpEUODN9SvjZ2lXY6b0+
-	 BhKtQ+bvgZuSW8m3QNqrVq5dHnk69WOkU/84eFQtE6T9jwMHlyBH6dWhMshG4109vY
-	 F2W6IA7A08A1w==
+	b=jeNKakq3tUTUxzMMk1q+ddwL8ddn92K4ewHL0RnqvrrfzSGR4hQtqatbNHW0wSnre
+	 zMx3PdEd+hu2yTnerLBMbwLUbcUWDlmAtMqxLDk/pMw4Z/wIhS7QXhFKHcJCOYHJUu
+	 QnT308nhPDNtVj+LaZq0FebUA9H6lLqMedYa+414UM+ls4U7UZMIoO35OXzEyQvAux
+	 ++xx4CqEsW64dOWEaKWP91HRT7PW6efRczyhy/RWIIRrTCveKm5L4DRbB05FQdx9mz
+	 W5e2jLQVDItVbrMgt53ftNb55qQfpN7VibWo7huK1cefDO/DiFfdT3X6ll/97bvVOu
+	 3NkHAhd4mhdRA==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -50,9 +50,9 @@ Cc: jpoimboe@kernel.org,
 	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 01/12] klp-build: Fix dependent patches in a series
-Date: Wed, 28 Oct 2026 14:45:23 -0700
-Message-ID: <20261028214534.1919398-2-song@kernel.org>
+Subject: [PATCH v2 04/12] selftests/livepatch: Add tests for klp-prepare-patch
+Date: Wed, 28 Oct 2026 14:45:26 -0700
+Message-ID: <20261028214534.1919398-5-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261028214534.1919398-1-song@kernel.org>
 References: <20261028214534.1919398-1-song@kernel.org>
@@ -67,222 +67,397 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-fix_patches() refreshes each patch on its own against the original
-source: it applies the patch, copies the patched files, and reverts it.
-If a later patch in the series depends on an earlier one, it doesn't
-apply to the original source, and klp-build fails even though
-validate_patches(), which applies the patches in order, accepted the
-series:
+Before building the patched kernel, klp-build runs klp-prepare-patch to
+combine the patches it is given into a single patch and add #line
+directives to it.  Mistakes there break the build, or make klp-build
+include functions which didn't change.
 
-  $ ./scripts/livepatch/klp-build 0001-dummy.patch 0002-Revert-dummy.patch
-  Validating patch(es)
-  Building original kernel
-  Copying original object files
-  Fixing patch(es)
-  Reversed (or previously applied) patch detected!  Assume -R? [n]
-  Apply anyway? [n]
-  1 out of 1 hunk ignored
-  error: klp-build: .../klp-tmp/tmp.patch did not apply
+Add a kselftest target, livepatch/test_klp_build, which runs
+klp-prepare-patch on patches to a small source tree and checks the patch
+it prints.  Nothing is compiled, so the tests don't need a configured
+kernel, root, or the livepatch test modules.
 
-Refreshing each patch on top of the previous ones wouldn't work either.
-fix-patch-lines adds #line directives to each fixed patch, so the next
-patch's context wouldn't match.  The #line numbers in later patches
-would also refer to the intermediate source rather than the original
-source, which defeats the purpose of preserving __LINE__.
+Each test creates its source files and patches from heredocs, so it is
+self-contained.  functions.sh provides:
 
-Instead, apply all the patches in order and diff the result against the
-original source to get a single combined patch, then run fix-patch-lines
-on that.  If the patches have no net effect, fail with "no changes
-detected" instead of building the patched kernel for nothing.
+- setup_tree() creates a scratch source tree and a patch directory
+- add_file() and add_patch() fill them
+- run_klp_prepare_patch() runs klp-prepare-patch from the top of the
+  tree and checks that it left the tree as it found it
+- expect_patch() checks that klp-prepare-patch succeeded without
+  warnings and printed the expected patch.  Only what the patch changes
+  is compared: trailing whitespace is ignored, so blank context lines
+  can be written as empty lines, and so are "diff" lines and timestamps,
+  which depend on how the patch was generated.
 
-The combined patch gets its own variable, $COMBINED_PATCH, instead of
-replacing the patches in $PATCHES, and fix_patches() becomes
-process_patches(), as it no longer fixes the patches it is given.  The
-intermediate patch without #line directives is left in klp-tmp for
-debugging.  get_patch_files() is now the only user of
-get_patch_input_files() and get_patch_output_files(), so fold them into
-it.
+Installed tests don't have the source tree, so klp-prepare-patch and
+fix-patch-lines are installed next to them.  The tests skip if gawk,
+recountdiff or GNU patch is missing.
 
-Fixes: 24ebfcd65a87 ("livepatch/klp-build: Introduce klp-build script for generating livepatch modules")
+kselftest prints several lines for every test.  For running the tests
+by hand, add run-tests.sh and a "tests" make target, which print one
+line per test case, the details of any failure, and the totals.
+
+Start with a test of a single patch, which gets a #line directive after
+the lines it adds.
+
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- scripts/livepatch/klp-build | 121 +++++++++++++++++-------------------
- 1 file changed, 57 insertions(+), 64 deletions(-)
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/livepatch/README      |  16 +++
+ .../livepatch/test_klp_build/Makefile         |  19 +++
+ .../livepatch/test_klp_build/functions.sh     | 135 ++++++++++++++++++
+ .../livepatch/test_klp_build/run-tests.sh     |  68 +++++++++
+ .../livepatch/test_klp_build/test-basic.sh    |  57 ++++++++
+ 6 files changed, 296 insertions(+)
+ create mode 100644 tools/testing/selftests/livepatch/test_klp_build/Makefile
+ create mode 100644 tools/testing/selftests/livepatch/test_klp_build/functions.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index b52a8489d9f6..a0bfc40093f9 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -47,6 +47,7 @@ KMOD_DIR="$TMP_DIR/5-kmod"
- STASH_DIR="$TMP_DIR/stash"
- TIMESTAMP="$TMP_DIR/timestamp"
- PATCH_TMP_DIR="$TMP_DIR/tmp"
-+COMBINED_PATCH="$TMP_DIR/combined.patch"
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 2d960626750e..30d46cb71cbb 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -64,6 +64,7 @@ TARGETS += kvm
+ TARGETS += landlock
+ TARGETS += lib
+ TARGETS += livepatch
++TARGETS += livepatch/test_klp_build
+ TARGETS += liveupdate
+ TARGETS += lkdtm
+ TARGETS += lsm
+diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+index d2035dd64a2b..b8727d72469e 100644
+--- a/tools/testing/selftests/livepatch/README
++++ b/tools/testing/selftests/livepatch/README
+@@ -44,6 +44,22 @@ or
+   % make kselftest TARGETS=livepatch
  
- KLP_DIFF_LOG="$DIFF_DIR/diff.log"
  
-@@ -328,33 +329,16 @@ set_kernelversion() {
- 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
- }
- 
--get_patch_input_files() {
--	local patch="$1"
--
--	grep0 -E '^--- ' "$patch"				\
--		| grep0 -v -e '/dev/null' -e '1969-12-31' -e '1970-01-01' \
--		| gawk '{print $2}'				\
--		| sed 's|^[^/]*/||'				\
--		| sort -u
--}
--
--get_patch_output_files() {
-+get_patch_files() {
- 	local patch="$1"
- 
--	grep0 -E '^\+\+\+ ' "$patch"				\
-+	grep0 -E '^(---|\+\+\+) ' "$patch"				\
- 		| grep0 -v -e '/dev/null' -e '1969-12-31' -e '1970-01-01' \
- 		| gawk '{print $2}'				\
- 		| sed 's|^[^/]*/||'				\
- 		| sort -u
- }
- 
--get_patch_files() {
--	local patch="$1"
--
--	{ get_patch_input_files "$patch"; get_patch_output_files "$patch"; } \
--		| sort -u
--}
--
- check_unsupported_patches() {
- 	local patch
- 
-@@ -467,60 +451,69 @@ do_init() {
- 	set_kernelversion
- }
- 
--# Refresh the patch hunk headers, specifically the line numbers and counts.
--refresh_patch() {
--	local patch="$1"
-+# Combine the patches into a single patch against the original source.  The
-+# patches may depend on each other, so they can't be diffed individually.
-+combine_patches() {
-+	local outfile="$1"
- 	local tmpdir="$PATCH_TMP_DIR"
--	local input_files=()
--	local output_files=()
-+	local files=()
-+	local patch
-+	local file
- 
- 	rm -rf "$tmpdir"
--	mkdir -p "$tmpdir/a"
--	mkdir -p "$tmpdir/b"
-+	mkdir -p "$tmpdir"
- 
--	# Get all source files affected by the patch
--	get_patch_input_files "$patch" | mapfile -t input_files
--	get_patch_output_files "$patch" | mapfile -t output_files
-+	# Get all source files affected by the patches
-+	for patch in "${PATCHES[@]}"; do
-+		get_patch_files "$patch"
-+	done | sort -u | mapfile -t files
- 
--	# Copy orig source files to 'a'
--	echo "${input_files[@]}" | xargs cp --parents --target-directory="$tmpdir/a"
-+	# Copy orig source files to $tmpdir
-+	for file in "${files[@]}"; do
-+		if [[ -e "$file" ]]; then
-+			cp --parents "$file" "$tmpdir"
-+		fi
-+	done
- 
--	# Copy patched source files to 'b'
--	apply_patch "$patch" "--silent"
--	echo "${output_files[@]}" | xargs cp --parents --target-directory="$tmpdir/b"
--	revert_patch "$patch"
-+	# Diff the orig source files against the patched ones in place to make a
-+	# clean patch.  Use /dev/null for created and deleted files.
-+	: > "$outfile"
-+	apply_patches "--silent"
-+	for file in "${files[@]}"; do
-+		local old="$tmpdir/$file"
-+		local new="$file"
-+		local old_label="a/$file"
-+		local new_label="b/$file"
-+		local status=0
++klp-build tests
++---------------
 +
-+		if [[ ! -e "$old" ]]; then
-+			old=/dev/null
-+			old_label=/dev/null
-+		fi
-+		if [[ ! -e "$new" ]]; then
-+			new=/dev/null
-+			new_label=/dev/null
-+		fi
++The test_klp_build directory holds tests for klp-prepare-patch, which
++scripts/livepatch/klp-build uses to prepare the patches it is given.  They
++don't build a kernel or load any modules, so they don't need root, and they
++are a kselftest target of their own:
++
++  % make -C tools/testing/selftests TARGETS=livepatch/test_klp_build run_tests
++
++For one line of output per test case, which is easier to read when running
++them by hand:
++
++  % make -C tools/testing/selftests/livepatch/test_klp_build tests
++
++
+ Adding tests
+ ------------
  
--	# Diff 'a' and 'b' to make a clean patch
--	( cd "$tmpdir" && diff -Nupr a b > "$patch" ) || true
-+		diff -up --label "$old_label" --label "$new_label" "$old" "$new" \
-+			>> "$outfile" || status=$?
-+		if (( status > 1 )); then
-+			die "diff failed for $file"
-+		fi
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/Makefile b/tools/testing/selftests/livepatch/test_klp_build/Makefile
+new file mode 100644
+index 000000000000..71ae793b0595
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_klp_build/Makefile
+@@ -0,0 +1,19 @@
++# SPDX-License-Identifier: GPL-2.0
++
++TEST_PROGS := \
++	test-basic.sh
++
++TEST_PROGS_EXTENDED := functions.sh
++
++# Installed tests run without the source tree, so install the scripts too
++TEST_FILES := \
++	../../../../../scripts/livepatch/klp-prepare-patch \
++	../../../../../scripts/livepatch/fix-patch-lines
++
++include ../../lib.mk
++
++# Run the tests by hand, with one line of output per test case
++tests:
++	@./run-tests.sh $(TEST_PROGS)
++
++.PHONY: tests
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/functions.sh b/tools/testing/selftests/livepatch/test_klp_build/functions.sh
+new file mode 100644
+index 000000000000..6b2f30d72f99
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_klp_build/functions.sh
+@@ -0,0 +1,135 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Shell functions for the klp-build tests.
++#
++# Each test creates a small source tree, adds some patches, runs
++# klp-prepare-patch on them and checks the patch it prints.  Nothing gets
++# compiled, so the source files don't need to build.
++
++export LC_ALL=C
++
++# Kselftest framework requirement - SKIP code is 4
++ksft_skip=4
++
++# skip(msg) - testing can't proceed
++#	msg - explanation
++function skip() {
++	echo "SKIP: $1" >&2
++	exit $ksft_skip
++}
++
++# die(msg) - game over, man
++#	msg - dying words
++function die() {
++	echo "ERROR: $1" >&2
++	exit 1
++}
++
++TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
++
++# Installed tests have copies of the scripts next to them
++if [[ -x "$TEST_DIR/klp-prepare-patch" ]]; then
++	SCRIPT_DIR="$TEST_DIR"
++else
++	SCRIPT_DIR="$TEST_DIR/../../../../../scripts/livepatch"
++fi
++[[ -x "$SCRIPT_DIR/klp-prepare-patch" ]] || skip "klp-prepare-patch not found"
++
++for cmd in gawk recountdiff; do
++	command -v "$cmd" > /dev/null || skip "$cmd not found"
++done
++patch --version 2> /dev/null | grep -q "GNU patch" || skip "GNU patch not found"
++
++# setup_tree() - create an empty source tree for klp-prepare-patch to run in
++#
++# Patches are kept outside the tree.
++function setup_tree() {
++	WORK_DIR="$(mktemp -d)" || die "mktemp failed"
++	trap 'rm -rf "$WORK_DIR"' EXIT
++
++	TREE="$WORK_DIR/tree"
++	PATCH_DIR="$WORK_DIR/patches"
++
++	mkdir -p "$TREE" "$PATCH_DIR"
++}
++
++# add_file(path) - add a source file read from stdin to the tree
++#	path - path of the file, relative to the top of the tree
++function add_file() {
++	mkdir -p "$TREE/$(dirname "$1")"
++	cat > "$TREE/$1"
++}
++
++# add_patch(name) - add a patch read from stdin
++#	name - file name of the patch
++function add_patch() {
++	cat > "$PATCH_DIR/$1"
++}
++
++# start_test(name) - start a test
++#	name - what the test checks
++function start_test() {
++	echo -n "TEST: $1 ... "
++}
++
++# not_ok(msg, [file]) - report a failed test and exit
++#	msg - what went wrong
++#	file - details to show
++function not_ok() {
++	echo -e "not ok\n"
++	echo "$1"
++	[[ $# -gt 1 ]] && cat "$2"
++	echo
++	die "klp-build kselftest(s) failed"
++}
++
++# run_klp_prepare_patch(patch...) - run klp-prepare-patch from the top of the
++# tree, and check that it leaves the tree as it found it
++#	patch - name of a patch added with add_patch()
++function run_klp_prepare_patch() {
++	local patches=()
++	local patch
++
++	for patch in "$@"; do
++		patches+=("$PATCH_DIR/$patch")
 +	done
-+	revert_patches
- }
- 
--# Copy the patches to a temporary directory, fix their lines so as not to
-+# Combine the patches into $COMBINED_PATCH, and fix its lines so as not to
- # affect the __LINE__ macro for otherwise unchanged functions further down the
--# file, and update $PATCHES to point to the fixed patches.
--fix_patches() {
--	local idx
--	local i
--
--	rm -f "$TMP_DIR"/*.patch
--
--	idx=0001
--	for i in "${!PATCHES[@]}"; do
--		local old_patch="${PATCHES[$i]}"
--		local tmp_patch="$TMP_DIR/tmp.patch"
--		local patch="${PATCHES[$i]}"
--		local new_patch
-+# file.
-+process_patches() {
-+	local tmp_patch="$TMP_DIR/tmp.patch"
- 
--		new_patch="$TMP_DIR/$idx-fixed-$(basename "$patch")"
-+	combine_patches "$tmp_patch"
-+	[[ ! -s "$tmp_patch" ]] && die "no changes detected"
- 
--		cp -f "$old_patch" "$tmp_patch"
--		refresh_patch "$tmp_patch"
--		"$FIX_PATCH_LINES" "$tmp_patch" | recountdiff > "$new_patch"
--
--		PATCHES[i]="$new_patch"
--
--		rm -f "$tmp_patch"
--		idx=$(printf "%04d" $(( 10#$idx + 1 )))
--	done
-+	"$FIX_PATCH_LINES" "$tmp_patch" | recountdiff > "$COMBINED_PATCH"
- }
- 
- clean_kernel() {
-@@ -909,9 +902,9 @@ if (( SHORT_CIRCUIT <= 1 )); then
- fi
- 
- if (( SHORT_CIRCUIT <= 2 )); then
--	status "Fixing patch(es)"
--	fix_patches
--	apply_patches "--silent"
-+	status "Processing patch(es)"
-+	process_patches
-+	apply_patch "$COMBINED_PATCH" "--silent"
- 	status "Building patched kernel"
- 	build_kernel "patched"
- 	revert_patches
++
++	rm -rf "$WORK_DIR/orig"
++	cp -a "$TREE" "$WORK_DIR/orig"
++
++	STATUS=0
++	(cd "$TREE" && "$SCRIPT_DIR/klp-prepare-patch" "${patches[@]}") \
++		> "$WORK_DIR/stdout" 2> "$WORK_DIR/stderr" || STATUS=$?
++
++	diff -ru "$WORK_DIR/orig" "$TREE" > "$WORK_DIR/tree.diff" ||
++		not_ok "klp-prepare-patch left the source tree modified:" "$WORK_DIR/tree.diff"
++}
++
++# expect_patch() - check that klp-prepare-patch succeeded without warnings, and
++# printed the patch read from stdin
++#
++# Only what the patch changes is compared.  Trailing whitespace is ignored, so
++# blank context lines can be written as empty lines, and so are "diff" lines
++# and timestamps.  A file diffed against an epoch timestamp counts as
++# /dev/null.
++function expect_patch() {
++	local expected="$WORK_DIR/expected"
++	local result="$WORK_DIR/result"
++	local normalize=(sed -E
++		-e '/^diff /d'
++		-e 's/^(---|\+\+\+) [^\t]*\t(1969-12-31|1970-01-01) .*/\1 \/dev\/null/'
++		-e 's/^((---|\+\+\+) [^\t]*)\t.*/\1/'
++		-e 's/[[:space:]]*$//')
++
++	[[ $STATUS -eq 0 ]] || not_ok "klp-prepare-patch failed:" "$WORK_DIR/stderr"
++	[[ -s "$WORK_DIR/stderr" ]] && not_ok "klp-prepare-patch warned:" "$WORK_DIR/stderr"
++
++	"${normalize[@]}" > "$expected"
++	"${normalize[@]}" "$WORK_DIR/stdout" > "$result"
++
++	diff -u --label expected --label result "$expected" "$result" > "$WORK_DIR/result.diff" ||
++		not_ok "unexpected patch:" "$WORK_DIR/result.diff"
++
++	echo "ok"
++}
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/run-tests.sh b/tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
+new file mode 100755
+index 000000000000..d67770006d7f
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
+@@ -0,0 +1,68 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Run the klp-build tests with less output than "make run_tests": one line
++# per test case, the details of any failure, and the totals.
++#
++# Usage: run-tests.sh [test-*.sh...]
++
++cd "$(dirname "$0")" || exit 1
++
++tests=("$@")
++[[ ${#tests[@]} -eq 0 ]] && tests=(test-*.sh)
++
++pass=0
++fail=0
++skip=0
++
++echo "TAP version 13"
++
++for test in "${tests[@]}"; do
++	name="${test%.sh}"
++	failed=0
++	cases=0
++	status=0
++
++	out="$(./"$test" 2>&1)" || status=$?
++
++	if [[ $status -eq 4 ]]; then
++		echo "ok - $name # SKIP $(sed -n 's/^SKIP: //p' <<< "$out")"
++		skip=$((skip + 1))
++		continue
++	fi
++
++	while IFS= read -r line; do
++		case "$line" in
++		"TEST: "*" ... ok")
++			line="${line#TEST: }"
++			echo "ok - $name: ${line% ... ok}"
++			pass=$((pass + 1))
++			cases=$((cases + 1))
++			;;
++		"TEST: "*" ... not ok")
++			line="${line#TEST: }"
++			echo "not ok - $name: ${line% ... not ok}"
++			failed=1
++			cases=$((cases + 1))
++			;;
++		"ERROR: klp-build kselftest(s) failed" | "")
++			;;
++		*)
++			[[ $failed -eq 1 ]] && echo "#   $line"
++			;;
++		esac
++	done <<< "$out"
++
++	if [[ $failed -eq 0 && ( $status -ne 0 || $cases -eq 0 ) ]]; then
++		echo "not ok - $name: exited with status $status after $cases test case(s)"
++		sed 's/^/#   /' <<< "$out"
++		failed=1
++	fi
++
++	fail=$((fail + failed))
++done
++
++echo "1..$((pass + fail + skip))"
++echo "# pass:$pass fail:$fail skip:$skip"
++
++[[ $fail -eq 0 ]]
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-basic.sh b/tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
+new file mode 100755
+index 000000000000..127d678a07ce
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
+@@ -0,0 +1,57 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(dirname "$0")/functions.sh"
++
++setup_tree
++
++add_file drivers/foo/foo.c <<'EOT'
++int foo(int x)
++{
++	if (x < 0)
++		return -1;
++	return x;
++}
++
++int bar(void)
++{
++	return __LINE__;
++}
++EOT
++
++# - a patch which adds lines to foo() gets a #line directive after them, so
++#   bar() still sees its original __LINE__
++
++start_test "single patch"
++
++add_patch 0001-foo.patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -1,6 +1,8 @@
++ int foo(int x)
++ {
+++	if (!x)
+++		return 0;
++ 	if (x < 0)
++ 		return -1;
++ 	return x;
++ }
++EOT
++
++run_klp_prepare_patch 0001-foo.patch
++
++expect_patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -1,5 +1,8 @@
++ int foo(int x)
++ {
+++	if (!x)
+++		return 0;
+++#line 3
++ 	if (x < 0)
++ 		return -1;
++ 	return x;
++EOT
++
++exit 0
 -- 
 2.53.0-Meta
 
