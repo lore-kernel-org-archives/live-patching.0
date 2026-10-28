@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793223990;
-	b=D4qy6xnDXy8YfBEcXq6Na3JeOW61HLxSfWMrpmugeV/sXmRrVvG0/M2tH0/Mj6VTs+UM
-	 XooUR2E3qGhvuUvG+bfwP44gUXTUTeev5HRZjEmCALtnMVfAoyKRwjHX6Xy0y4q7PN9p4
-	 xO1G3M8tzFoIZje+abCcESYG/ZOD6Te6Lji7BBWR/7nM+DgtC8fBgw/wNcNiS6xMyB1JD
-	 FgRWfBURYn9vDCWTSrirSJTVKxAwyNdzoGbc+UuYWrSI4PNYolI/fh5el0LpKaOz+iiBf
-	 qeeSUPKxp/36q8RgSPjcudVPYxrpAc/RntuE+AMOj9mg0MEyGCp6LlZHlyBIXbzB1Hw==
+	t=1793223999;
+	b=fYgiO8ZgkSW6DQXbvVgWJPC8R4eUz/yxpPzu4kQ1JE7ywLQXD7gsr5mtOYa8aCEfcUh3
+	 iIfXyE5Wl+nfqgvct2qawwN7DTIEWXIH6Y2nJXSbHHEyYD6bd2CnWoccWcWi6xe/QEou7
+	 p1bA38oHsxqk7NjI4v4deIXmyZ/sq/aG8b7JZhD0oZWpJTrdndJQWTwAcGvj90nPnYR2o
+	 NjH/YIOD5whsYgon5xXf3iCfYz1PwhdW9fkArgsup8P8e9BlGYrZro2FNnq7qmPGUVl1M
+	 EnEUVdlS1ncN9MW243Xkq3iNrMi+Duq/0R9KsCsAjCleJIOSAhpmocJtKQs2KbJeVaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793223990;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793223999;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=g/N0NwzCaJe53Lw2dzpkptXRKLdnJI9dMetTrPjUKaU=;
-	b=RysQhs2knTBdPaWc3Fr1XfxaQOEH+XK5KJGtTAPJZ1dCQcuCwT4PKi0Bow0Ilw1NJOdo
-	 uoUCQoUBmoSwKfwMXllxFhfT7jHlGziZfUxU9haxI+KE/NHCHwpDR2Q6Uj9PA0Nwpapbu
-	 KUMJ/+YeanYhqY6nUaobf/Kc3Jw074QqlwGtEnIc1NsK2oEfOUZWlebx3NHEQB2O3b8QN
-	 Na+QHwK3DQGRVW5INWNNjEArtybD06OiwQ7Bqu7NXq/i9jc/PJwKe3QAuFPpw376Qqaye
-	 6rfeAQEN3y8wLRqz4FwUXP6v4Gjm3lXrAUnVdlUEVYHyiEyMahYwatjgtshSr89vZDw==
+	bh=xIFg3wYgKas7rIK7kZFC/3/Xo/xwC7llGHW0bIG23s0=;
+	b=tRTP7fgedJgYO8CX1hsKn7DafQLXUVfRRBrgNZZbE2Tth6EfEd6gzSYcPCw77UbFqFFt
+	 DUGPcMSvG9BLm+7TxkhPyoU0UUQXoketGMH/QDw50+TetNDoBMwCGa7gRaaURC1cykF2A
+	 6xJoDHqpryYnsPdVyW7rtgzeUswJwHu7onGNC9flvjqpG8g1H8VNahtxI0ogGhQrs0j7g
+	 FpvvtAxCjLa6qskwKWrL5+QIesKj/ED+3WormdTcya8GDt27YAe18nxwm1HWzboLWTizQ
+	 3YFBs6umoPl7s/dZi70AMOvfqCYXA5D9J1apNc8GNQZTwvwB/2ojJE2TV89VPgfPVyA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hsPhCg9i;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgdtJzNH;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DE2606A31A;
-	Wed, 28 Oct 2026 21:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDCA606A31A;
+	Wed, 28 Oct 2026 21:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hsPhCg9i
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC861F01401;
-	Wed, 28 Oct 2026 21:46:28 +0000 (UTC)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=DgdtJzNH
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F481F01401;
+	Wed, 28 Oct 2026 21:46:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793223989;
-	bh=g/N0NwzCaJe53Lw2dzpkptXRKLdnJI9dMetTrPjUKaU=;
+	s=k20260515; t=1793223999;
+	bh=xIFg3wYgKas7rIK7kZFC/3/Xo/xwC7llGHW0bIG23s0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=hsPhCg9ikOlKN/YcrnHsmis5CtAzx07yNMG+g0PViIWZHiviFvw4KeqY3CK54BzaA
-	 dK6eN9+H+jK+CLg40ANnBUws9tnu8/maQVugDPPoAXXhdlK123FkgZ07NPqUJFnpAG
-	 sY5OvnBDTUfpWfT5TFeIsFpVRfpNeGTeL4bDBcuKDpPiBkk1sMw6buY5bs8GErzADZ
-	 1Bh09VszppGgOOa77/XmGOChS5mb3GZGKnGWsW1mBezZyDsVwQSeHZzbiciwSVa8+B
-	 Qdq0cxku996n6wdysSDb9ySlXTttaScivzC8XtueERdEfNm9FF9VOu5vM78fKZLeoR
-	 FuK3W6PgrALKQ==
+	b=DgdtJzNHIcmcwaRBToZVAnnjhboSxO2QRjJ7t3jJniv6RtdjlyXVvGQFJa3pN3vis
+	 o6Iqz9ODXSUol77IY0hV8zdiwMNJ8XXSIgZxjRsAokTUQNfuY07TwPt87p2HazXFfq
+	 vQS/+KQM/dJrtQavAvdMjYL13W4mPUstMsm8VkWhh6y8yRY7nPBa17jTrTqH1XMhC+
+	 J+cAK0+y7q7whd552abwBk1gVEwrH91pKfafDoUA2nFJCYNVEq18LB9E9k16o0Nv3O
+	 arZWHOiH+d2QmATNepyz9PhpXrF+Ntjasr8oYrUohL89fO4Zq7369z0r6ByJqKv+Ed
+	 rpPvntxcR6Zfg==
 From: Song Liu <song@kernel.org>
 To: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -50,9 +50,9 @@ Cc: jpoimboe@kernel.org,
 	shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	Song Liu <song@kernel.org>
-Subject: [PATCH v2 10/12] selftests/livepatch: Test klp-prepare-patch with unsupported files
-Date: Wed, 28 Oct 2026 14:45:32 -0700
-Message-ID: <20261028214534.1919398-11-song@kernel.org>
+Subject: [PATCH v2 12/12] selftests/livepatch: Test klp-prepare-patch with offset and fuzz
+Date: Wed, 28 Oct 2026 14:45:34 -0700
+Message-ID: <20261028214534.1919398-13-song@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261028214534.1919398-1-song@kernel.org>
 References: <20261028214534.1919398-1-song@kernel.org>
@@ -67,66 +67,157 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test that klp-prepare-patch rejects patches to lib/, the vDSO,
-real mode code and assembly files, which klp-build can't build a
-livepatch for.
+klp-prepare-patch accepts patches which apply with an offset or fuzz,
+and warns about them.  Add a test that both are accepted with a
+warning, and that the combined patch has the line numbers and context of
+the real source, so the #line directives refer to the right lines.
 
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- .../livepatch/test_klp_build/Makefile         |  3 +-
- .../test_klp_build/test-unsupported-files.sh  | 30 +++++++++++++++++++
- 2 files changed, 32 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
+ .../livepatch/test_klp_build/Makefile         |   3 +-
+ .../test_klp_build/test-offset-and-fuzz.sh    | 120 ++++++++++++++++++
+ 2 files changed, 122 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
 
 diff --git a/tools/testing/selftests/livepatch/test_klp_build/Makefile b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-index 902a62bfca86..02feb1ad52d0 100644
+index 3650de4d6975..0daeea7a7db1 100644
 --- a/tools/testing/selftests/livepatch/test_klp_build/Makefile
 +++ b/tools/testing/selftests/livepatch/test_klp_build/Makefile
-@@ -5,7 +5,8 @@ TEST_PROGS := \
- 	test-independent-patches.sh \
- 	test-cancelling-patches.sh \
+@@ -7,7 +7,8 @@ TEST_PROGS := \
  	test-new-and-deleted-files.sh \
--	test-line-directives.sh
-+	test-line-directives.sh \
-+	test-unsupported-files.sh
+ 	test-line-directives.sh \
+ 	test-unsupported-files.sh \
+-	test-patch-not-applying.sh
++	test-patch-not-applying.sh \
++	test-offset-and-fuzz.sh
  
  TEST_PROGS_EXTENDED := functions.sh
  
-diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh b/tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
+diff --git a/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh b/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
 new file mode 100755
-index 000000000000..eb360923ecb1
+index 000000000000..8e36d5aa026f
 --- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
-@@ -0,0 +1,30 @@
++++ b/tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
+@@ -0,0 +1,120 @@
 +#!/bin/bash
 +# SPDX-License-Identifier: GPL-2.0
 +
 +. "$(dirname "$0")/functions.sh"
 +
++# expect_warning(msg) - check that klp-prepare-patch warned, and drop the
++# warning so expect_patch() doesn't complain about it
++#	msg - the warning, without the "warning: klp-prepare-patch: " prefix
++function expect_warning() {
++	local line="warning: klp-prepare-patch: $1"
++
++	grep -qxF "$line" "$WORK_DIR/stderr" ||
++		not_ok "klp-prepare-patch didn't warn \"$1\":" "$WORK_DIR/stderr"
++
++	grep -vxF "$line" "$WORK_DIR/stderr" > "$WORK_DIR/stderr.rest"
++	mv "$WORK_DIR/stderr.rest" "$WORK_DIR/stderr"
++}
++
 +setup_tree
 +
-+# - patches to lib/, the vDSO, real mode code and assembly are rejected
++add_file drivers/foo/foo.c <<'EOT'
++int foo(int x)
++{
++	if (x < 0)
++		return -1;
++	return x;
++}
 +
-+for file in lib/string.c \
-+	    arch/x86/entry/vdso/vma.c \
-+	    arch/x86/realmode/rm/video-mode.c \
-+	    arch/x86/kernel/head_64.S; do
++int bar(void)
++{
++	return __LINE__;
++}
 +
-+	start_test "patch to $file"
-+
-+	add_patch unsupported.patch <<EOT
-+--- a/$file
-++++ b/$file
-+@@ -1 +1 @@
-+-int x;
-++int y;
++int baz(int x)
++{
++	if (x > 100)
++		return 100;
++	return x;
++}
 +EOT
 +
-+	run_klp_prepare_patch unsupported.patch
++# - a patch made against a source with fewer lines applies at an offset, and
++#   the combined patch has the real line numbers
 +
-+	expect_error "$PATCH_DIR/unsupported.patch: unsupported patch to $file"
-+done
++start_test "patch with an offset"
++
++add_patch 0001-offset.patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -9,7 +9,7 @@
++
++ int baz(int x)
++ {
++-	if (x > 100)
++-		return 100;
+++	if (x > 1000)
+++		return 1000;
++ 	return x;
++ }
++EOT
++
++run_klp_prepare_patch 0001-offset.patch
++
++expect_warning "$PATCH_DIR/0001-offset.patch applied with fuzz"
++expect_patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -12,7 +12,8 @@ int bar(void)
++
++ int baz(int x)
++ {
++-	if (x > 100)
++-		return 100;
+++	if (x > 1000)
+++		return 1000;
+++#line 17
++ 	return x;
++ }
++EOT
++
++# - a patch whose context differs from the source applies with fuzz, and the
++#   combined patch has the real context
++
++start_test "patch with fuzz"
++
++add_patch 0001-fuzz.patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -12,7 +12,7 @@
++ /* clamp x */
++ int baz(int x)
++ {
++-	if (x > 100)
++-		return 100;
+++	if (x > 1000)
+++		return 1000;
++ 	return x;
++ }
++EOT
++
++run_klp_prepare_patch 0001-fuzz.patch
++
++expect_warning "$PATCH_DIR/0001-fuzz.patch applied with fuzz"
++expect_patch <<'EOT'
++--- a/drivers/foo/foo.c
+++++ b/drivers/foo/foo.c
++@@ -12,7 +12,8 @@ int bar(void)
++
++ int baz(int x)
++ {
++-	if (x > 100)
++-		return 100;
+++	if (x > 1000)
+++		return 1000;
+++#line 17
++ 	return x;
++ }
++EOT
 +
 +exit 0
 -- 
