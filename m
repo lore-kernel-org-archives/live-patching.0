@@ -1,59 +1,52 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793236130;
-	b=ErUCNwJi6Wxh76wiJ8IqW0Z774WEAAeJRHAfOTlDp972PRVOrixIN7zsbLqZUZiOiQ2F
-	 FvbwRcqFDVxKlihIWdLqpbksoIbFfWmSm1IhXJHvmlDh5ssn6DlS+fqECvIsM+FMKnAih
-	 r6GXIHZs/JO5t5GkgQcBPbCHZuwnWYZ+uHcCkhQUtMWIzkVyL9YPX+j2lHURapBm/CUcy
-	 ZIbq+8CSsCgh8fC/14sMaL383WnBxyRn6obvqQzVgXWSck/GQrt0UulOnOuQI6BmsaYIa
-	 FoyR8aQxrWWkiTYed+DZem/JRuzq9b7iYrgT6TomWlLT6Oy1MIqM8C+gY4Ybk2gxH1g==
+	t=1793295670;
+	b=eUG4/QL1+m6Z09DE8CFQA9z6hFDI2gn+3g83ws/AbkN98pj3GD9utBx7twscni7kj2jg
+	 zZkFNaf5lO+bDrrm+OqkVztulLOtIuHmiDRRVfg1L3DsGmUrlNGawpOvgFzTjexWvS8Vp
+	 c5mDzG5vltocb9mXRJfUjVBS/q2zXnwJl1QjRgk5jyCCwufjwKKY/Rlk1NrKIZs5zC5bg
+	 9Slg6jSjlvW4zx9khzSHm0qUgpAFPaW675QOxZfaMIj151elbtUeSgwN6vU8oyJxwnKiP
+	 55J3/+MoSICQ/PFMj8kkGXjWd11zFEXq9fSb69xPK7vhilDvcr03gOiw8fc8AZSpqjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793236130;
-	h=DMARC-Filter:Received:Received:Date:From:To:Cc:Subject:Message-ID:
-	 In-Reply-To:References:X-Mailer:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Stat-Signature:X-Rspamd-Server:
-	 X-Rspamd-Queue-Id:X-Spam-Status:X-Session-Marker:X-Session-ID:
-	 DKIM-Signature:X-HE-Tag:X-HE-Meta;
-	bh=5dUAdbD583w0cxZdPyqG0/8OuDFEv0NHP0fbuKgWWMk=;
-	b=OB2FUYfVFtPBSg1s2n2OzeEg8h9UzXAIG1llafS/jAetRSiSjEfCZwVdtIqc62nlqSGy
-	 dtTakHIpIqUAuYtsrJj19NH9mybyympRrQ6fbjJG2ywnFJbZtu9kKb1FPC9LCb/yCC1CG
-	 f6XtCwjLA11U/geyFmNVlKjdw4p1YnOBFriTxeam4LK4Z0PQtIaxlZHv/hVNRrqF//6Kd
-	 AJ+ZJ9GPDMrrMnv+xzLNPywCu+EMfio2ehNFS43H/e7dkFeTd5Z3o+spdj96A79qBRRFg
-	 gVozADpHlI7lcsXvtm3SSL/7Eny9Y6prrTQO4XxQ3kMptolw69IqDMLEkO4OplkJPkw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793295670;
+	h=Received:DKIM-Signature:Received:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:X-Received:MIME-Version:References:In-Reply-To:
+	 From:Date:X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:
+	 Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=w4MDwkoXI1zATkJgHvVo1zXWArUgOESYKVJ2mYTk7qI=;
+	b=N4mDAhjddjLLh5EOZKQ4wKkSxs8YJYesOKqRCLf6Uu0EOFNW6Z52LjymZmfxee3Q/wMP
+	 ikEhC6T5VAtIPgUVvOJnAOIGh0fHVYgTZIOqu7Lia/otLNBzuDAVAvk/notzwQBLzgvzH
+	 NeLvP1zUHyjKYnXeS9z6m+kEv94N64NDLvjfrFlnl87sq5Ei88VaGspWmOV0iE+0BNXh+
+	 Rvxg/AmWwuLq+O95SeFfMpYSKl1AWuE71Y0CY1saJfeUtVfaOFX8ySU5tIs3EX9TRM5Gv
+	 LOY4h/fJmHJmrV+aXIbeTjhlbI9SbDoNWY9NvavP7/f2pOwCreeDdZD7feTU7OyRaIQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=goodmis.org;
-	spf=pass smtp.mailfrom=goodmis.org;
-	dkim=pass header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=m4tvVkIj;
-	arc=none smtp.remote-ip=216.40.44.11
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68A1606A31C;
-	Thu, 29 Oct 2026 01:08:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B68A1606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=goodmis.org header.i=@goodmis.org header.a=rsa-sha256 header.s=dkim1 header.b=m4tvVkIj
-Received: from omf02.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 0979D1201F7;
-	Thu, 29 Oct 2026 01:08:47 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 24E4480011;
-	Thu, 29 Oct 2026 01:08:46 +0000 (UTC)
-Date: Wed, 28 Oct 2026 21:08:44 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Song Liu <song@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, mhiramat@kernel.org, mark.rutland@arm.com,
- kernel-team@meta.com
-Subject: Re: [PATCH v2 07/16] tracepoint: Mark __do_trace_##name() notrace
-Message-ID: <20261028210844.105c431f@fedora>
-In-Reply-To: <CAPhsuW78w86tV3gwRWQMOdWUK7Rcc8dSsp==XypKdB5BMP6QiQ@mail.gmail.com>
-References: <20261023011049.1164625-1-song@kernel.org>
-	<20261023011049.1164625-8-song@kernel.org>
-	<20261023093256.20d3e300@gandalf.local.home>
-	<CAPhsuW78w86tV3gwRWQMOdWUK7Rcc8dSsp==XypKdB5BMP6QiQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF0A606A31D
+	for <live-patching@vger.kernel.org>; Thu, 29 Oct 2026 17:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D667B1F01826
+	for <live-patching@vger.kernel.org>; Thu, 29 Oct 2026 17:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793295669;
+	bh=w4MDwkoXI1zATkJgHvVo1zXWArUgOESYKVJ2mYTk7qI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=A4KQ/1qL7mHlTs+aFc0e345VDHgTW/F2b8hoyvsBnB9B0xv8Wdjyt0sDuDGxxfmrQ
+	 iHz/N6MwvneetlwuyEmsaU7gBxiV+xr4iJWavIv0QLZ8Ux+adpp7YQu5NNjcoXOt+H
+	 ePND6EnvGAc3bgYj8GXWGK95G8rpiEp7M+Kcv/Z6zRC2xsRd5M/Sy4ijTwMEcsBeZZ
+	 J9TqASsM8NQNxIMdqrJLJoKDa64AagErSpnBITiUuVxMYLWzAYqAmXptg7zxsS9u6r
+	 Sr6phKZRLYRtwvJKmn/dX6Eo1LEg1MODNP9jbVFPK7a9TkrIeNzA1JDd9X1WwpSx2v
+	 oJeZQXy6aD7cA==
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93f3c895a0eso205392385a.2
+        for <live-patching@vger.kernel.org>; Thu, 29 Oct 2026 10:41:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByE5zQDnJ/0buZ3SJviaZUsgY9LOL6E7Vz/dXPPSVpff0otlqOyNLWi5GYszojQPDWK/283nKggzfCKy+wf@vger.kernel.org
+X-Gm-Message-State: AFq9FYKaMQv5XHrRqPCSV5nGd9aJf2a2ZqJPnZPY9orMvtkCJ+oqyQOJ
+	oKHfsWKXpfe6wGKdk8PFuVMWoVgyPIhGFnzlFt8gix28bm0yr8zlakRckGHH3iMcLBug7tKZFQQ
+	puiu0y/5Qj+sdVNudaSZpy5tfXXTylkM=
+X-Received: by 2002:a05:620a:1729:b0:93c:2726:77ec with SMTP id
+ af79cd13be357-94408930698mr938682285a.5.1793295669104; Thu, 29 Oct 2026
+ 10:41:09 -0700 (PDT)
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -63,28 +56,52 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: fbiqak3gh69qxotq9ppcdtg358g34ibz
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: 24E4480011
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19OfcNoiNsy0Lzx1Co9eO1IsS1FQ0e7MsU=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=5dUAdbD583w0cxZdPyqG0/8OuDFEv0NHP0fbuKgWWMk=; b=m4tvVkIj2mL1WETv8pacDGjDciq2kEHF3zKuMhpY1mR4RIIIftdq62ztpRYI1IJb9pdg4pQ3E+mwO5mbvbSes+7204gEG0nyjP5Xf79defNIMm69p76YoMnXb0b8+nmCvVHaGuFdNVgYXzLNVbR3pr86mGtGw+8pDFZEOBPygEc=
-X-HE-Tag: 1793236126-653337
-X-HE-Meta: U2FsdGVkX18rdRVD82s61VMXfWJQHgQORymeZdncNXfzImetPHMJjA4YvMPEO2bdg/ywUw+8Kz7xewfI4Zya+iRC1gT/OeRsac6UOyrPIEctFg38NUdSauMmDK3xjTEruTn74FU+IBhetF9jJerKox5lF10/akqpVk37r15c9j1qZfM6HiMqcQCviC7qOQTAytpEi0zwpiyNjjD/zzPI7UukGeZjJ5Xqt+LIezuPfPh7+r9+NRng0TizMWbJ7ZLQEYpuoShhVbj9Sl1sfIVa0fSrWL2CpdM/0sqhda1GxVS5o4WLmDFB9v5CJ6WpiIyTqs2/5ipqval5IVhh6p0cOfQztPSrEhdA
+References: <20261023011049.1164625-1-song@kernel.org> <20261023011049.1164625-8-song@kernel.org>
+ <20261023093256.20d3e300@gandalf.local.home> <CAPhsuW78w86tV3gwRWQMOdWUK7Rcc8dSsp==XypKdB5BMP6QiQ@mail.gmail.com>
+ <20261028210844.105c431f@fedora>
+In-Reply-To: <20261028210844.105c431f@fedora>
+From: Song Liu <song@kernel.org>
+Date: Thu, 29 Oct 2026 10:40:57 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW54Tco1Y_khWHeomq_ZTxvDoHFuX77w9cqojuXCrhGKWg@mail.gmail.com>
+X-Gm-Features: AclHuK9fjwvJ3Xp1aqzF-DTK4K8-TXgRFJbKPS9ckUc2Nj-YxqUVgClutpWoo-0
+Message-ID: <CAPhsuW54Tco1Y_khWHeomq_ZTxvDoHFuX77w9cqojuXCrhGKWg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/16] tracepoint: Mark __do_trace_##name() notrace
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	live-patching@vger.kernel.org, mhiramat@kernel.org, mark.rutland@arm.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 28 Oct 2026 15:20:37 -0700
-Song Liu <song@kernel.org> wrote:
+Hi Steven,
 
-> Do you plan to apply this set to the trace tree (after the merge window,
-> I guess)? If not, how should we proceed?
+On Wed, Oct 28, 2026 at 6:08=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Wed, 28 Oct 2026 15:20:37 -0700
+> Song Liu <song@kernel.org> wrote:
+>
+> > Do you plan to apply this set to the trace tree (after the merge window=
+,
+> > I guess)? If not, how should we proceed?
+>
+> I can take it if we get all the necessary acks, or it can go through
+> the BPF tree. Either way is fine with me.
 
-I can take it if we get all the necessary acks, or it can go through
-the BPF tree. Either way is fine with me.
+> If you prefer me to take it (as I do have a lot of ftrace specific
+> tests), I'll do it. But I'd like acks from maintainers of all the code
+> this touches.
 
-If you prefer me to take it (as I do have a lot of ftrace specific
-tests), I'll do it. But I'd like acks from maintainers of all the code
-this touches.
+I think this should go through the ftrace tree. It has very little to do wi=
+th
+BPF. We discovered the need for this change when building live patches.
 
--- Steve
+Regarding ACKs, it is a bit tricky. For the code we touched in this set,
+there is actually no behavior change at all. OTOH, the real change
+happens to "inline"s that we didn't touch in this set. If such a function
+was left out-of-line by the compiler, it was not traceable before, but is
+traceable after this set. How should we approach this? Maybe we can
+just ask ACKs from the maintainers of all the code touched here.
+
+Thanks,
+Song
