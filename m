@@ -1,60 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793745793;
-	b=ddXTGFVMS6b0V9TAmV916hxG1DmeuvArXvciTMtsRAsScq/gpTWZ67NGIxusiE9bAgq1
-	 7PR0kaHUQUVYVgiiEAXvZ3TLdxTt1nupfnDYleYSUbeqXG+glvOMrDZnFsQ14H4XVxxFD
-	 kUy24/1SqUmJRevkZavPnpzFowbvT0bM8uTutTiCMqQW2IAQJrNgq0ZUF4ki9/zgindfv
-	 8wp4ai4ODhuhCJsOdsuhTFJwgvYkgf3jQ0b4ozPE77sItMhzvb9t+0B9wMtzQvrzEGoc1
-	 foXWUKx40HXSJ2XtLYFwiKO0IcEoODJiSogRTvAKMU2Xi+GM1zRnffFKg6gOkhAXmKg==
+	t=1793749154;
+	b=JUXCdaxJ/pdO+nxXmtejusr1KgKzilJnGyW3dTrNZiHRYmiNTcOb+aN1IS7jgLXwPw5S
+	 Y0GUnJJDUD+pgbfbEi5QwkrvX549u7h/JU0Ln+sCoXF16R+FU+aK76iaQNxpwI4dycGNJ
+	 AieLfkh47NoRbwPOGJzgr2o45fmP3GALVsQswyfHwwSPwM+kImQtnzLXpy7yaG8iT8ZWT
+	 jnLRT7YJTmeNKwJR5edTy3T0pVVPLinhDmN2EO5yPZM4F6ypZfly2ReUoNf1Pn2B7OfAa
+	 JS94iconPkXh4S3/FsYnfD/6WZZB4P49oNFwht0Ye3fFce521O+RdQOtMPrR9AX34CQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793745793;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=WNR4+MDWGECO6jbM87hPWX/gV0rkRn2EWh5tdGZ21Hw=;
-	b=BEWWhdO7RGAKkVFICezNsiEdqNNURAWl3Eubf+WE358GmPkIDL5GX/EsMGzMoigc/Qbj
-	 Raxd5OWSc1gOX7pIKmqbFyNeICoZQ20eUyr5rJ6VYotTDaC2wrIKRjFBBDFMWQy0HVuNe
-	 1UBZD54mY1phjZ9/Hp+MiXhT5b0wx3jveIZsimBJ+zdnV7IAOUvtDNkqPxzq2ra3Fqf56
-	 lN5jMQN65pAlTsJFjRaEYEPCkDFewZodSqK9ggerk+AwfltrGZ/4n6q8Z1D8ELLLdPtF0
-	 2UwiVkgb3hqtDOlm8RIF/j1fAtWlcgOc1AgwgcyNEkZwEjjOGTfhRQhI2RL8yktOrsw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793749154;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-Mailer:Message-ID:
+	 Subject:From:To:Cc:Content-Type;
+	bh=YbWFhMkYlOVKSadJOHDDc5Xn/bx8C+ho8xxQr4Ng2Kw=;
+	b=hsTnEWsK34zmYx2IfhxoK/DOfJpIhw+mV4wUVVUpDwMKCG9gzaY41XkK53NkdkauuUrT
+	 /8fsdM7Ckf2B6OOtMa7c5BW9171GuLEWDy/i7/bIIwHb7/MjpxLlUhOdvDTF9BC6z/l8c
+	 ckF23OdGU1SItb8KJdUENTo+oTqvG69CoSMwqwhXMQRDglgQvnWuC5vaubgft5YM3Yh31
+	 xl+EittaHnM4JNRNkq53n7ZvvMjt/MMTR68ovY8dIFDP/I8IKckGSklHaGhF+sQPwRx/U
+	 K/EChvjAlNkResHg+06d/I7ftaJi8F6+oYFHqQvDP7jb/qINnu1GTiAyXS8YJC0T2UQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HQIA1fa4;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fsb5teVe;
+	arc=none smtp.remote-ip=209.85.210.198
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247CB606A31B
-	for <live-patching@vger.kernel.org>; Tue,  3 Nov 2026 22:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A683606A31B
+	for <live-patching@vger.kernel.org>; Tue,  3 Nov 2026 23:39:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A683606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HQIA1fa4
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B8A1F000C1;
-	Tue,  3 Nov 2026 22:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793745792;
-	bh=WNR4+MDWGECO6jbM87hPWX/gV0rkRn2EWh5tdGZ21Hw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HQIA1fa4OZRNFuz1XkWAvQOg2y9REdcrIE24fopXh+VDpHeOa2iKQLMG7nkEjBc65
-	 At02pIIajZPeSQTLbXeedGohWcC9SSKcAmZerz3sgeNsshGoUA5qlyX1riYBVd7hU0
-	 JCOfNRgYCYvrvYX0rNmekn6Nk9i7tgeLDhzCGpCuQdAwRhmJJ+fSA9yNFfi21CCHy1
-	 HETJ6wTyG7gkpnWOmkZKwWlMwkYsafFDPAy1PXxZPpxW0W665ea2b4eB7igIg8pii9
-	 Wp7nEXKSKN9+Rd1Po9yhMC3+PL2fj4bjU3vEY0SlXpiAA9QYphNzu7EppedT8ZkbTr
-	 4zDNtdzjxDezg==
-Message-ID: <sashiko-outbox-196148@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 1/2] selftests/livepatch: build test modules against
- the selected kernel
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sasha Levin" <sashal@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Miroslav
- Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
-Cc: "Song Liu" <song@kernel.org>, "Marcos Paulo de Souza" <mpdesouza@suse.com>, "Eva
- Kurchatova" <eva.kurchatova@virtuozzo.com>, "Yafang Shao" <laoar.shao@gmail.com>, "Shuah
- Khan" <shuah@kernel.org>, live-patching@vger.kernel.org
-In-Reply-To: <20261103222706.1642224-2-sashal@kernel.org>
-References: <20261103222706.1642224-1-sashal@kernel.org>
- <20261103222706.1642224-2-sashal@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 03 Nov 2026 22:43:11 +0000
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=fsb5teVe
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8a065e2933fso243130b3a.3
+        for <live-patching@vger.kernel.org>; Tue, 03 Nov 2026 15:39:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1793749153; x=1794353953; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=YbWFhMkYlOVKSadJOHDDc5Xn/bx8C+ho8xxQr4Ng2Kw=;
+        b=fsb5teVe9x0BDx4iCcMxA+63LChtRHF7TcSB1Sf+4unuqJkqjDOOSsaD4AEieOWEZL
+         m9VU6FPBFXvL8j3DocHlBhLVFQDQAZVp//EWLnZQcs4LRaAl8TbMtZkLuFIC0MrjB7hC
+         Y/sUqqPd76DTbCxWuqulBLxwvv5C+BJL+kahaFwalwNl+0jrBKEcvo+tHnBI49fvsD+z
+         igW3Zk+ucbId3qDAFjCQP4GJAB0p08UW2ibKisSRtA1FPXw6H21QKUyHDAQQzJT8FNFx
+         K44emYuaqf7AyLigm5qtZjQhoISF99lERSXEFjzTw1oeG4CKtqUYkxpfXyCTvBUcFNoR
+         zuog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793749153; x=1794353953;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YbWFhMkYlOVKSadJOHDDc5Xn/bx8C+ho8xxQr4Ng2Kw=;
+        b=L8KFPQ/3vyos/e/CVv9BRku0DlTRBsQDHCQksDgjoEaovmUjtpJwz1DQFCrXCguNha
+         N2wMo6n8WtWwznIfx6EdgVMvrvU+kKFMwe9LrZ1N/09BCsvPcSPQpsOat5i+MKljWvgC
+         nqmdJ4Iv4hkxNA3xfO5a4qjm0TFHEtA3VjcivS0jkeWqZca/PaESqqON+VO75aNjZ5D+
+         csIoLKxR/4D/REynGELlhwCxw2sOqFDzGKFEOFrTvvPuMjGVKiKzni6JTSWxb+Z/8zdz
+         nqxZgky//pSoP7nUnT5mb+vMe9yWnPFvZFSiV7Lf2+X37b+m1Y4+SjmpPS48QHa5QUmt
+         Burg==
+X-Gm-Message-State: APuU4Z9bV7JSo4or9oLyjFRxlQmRWZpbTbIRUTjt0ScSZzK2wEZWV/rW
+	XFfEXvp5tMIqGkldw37hMxj0HJSUmrblXMt6E25CtHTUhJ/zd6rmlmqfWtEdyMfWQQds/dyqQJB
+	srZZyAXoxZtxvezUtWeT22vWdeQ==
+X-Received: from pfbhx5.prod.google.com ([2002:a05:6a00:8985:b0:89f:4790:689a])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:e11:b0:882:359f:ef17 with SMTP id d2e1a72fcca58-8a9bb7a0b64mr12641184b3a.12.1793749152517;
+ Tue, 03 Nov 2026 15:39:12 -0800 (PST)
+Date: Tue,  3 Nov 2026 23:39:09 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -63,80 +74,122 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.385.gac671c819a-goog
+Message-ID: <20261103233909.1364531-1-dylanbhatch@google.com>
+Subject: [PATCH] klp-build: Allow passing options to make via '--'
+From: Dylan Hatch <dylanbhatch@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dylan Hatch <dylanbhatch@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] selftests/livepatch: KDIR selection ignores .config without Modu=
-le.symvers
---
+Livepatch builds rely on reproducing the original kernel build
+environment. Currently, klp-build invokes bare 'make', which drops any
+command-line variables or flags used during the original build (such as
+'LLVM=1', 'CC=...', 'KBUILD_BUILD_TIMESTAMP=...', or custom wrapper
+Makefiles via '-f').
 
-commit ae4848cae1b2b7420ab6ac44f707bd616ad82b5a
-Author: Sasha Levin <sashal@kernel.org>
+Refactor the make invocations to use a common MAKE array and allow
+passing arbitrary make options after '--' on the klp-build command line:
 
-selftests/livepatch: build test modules against the selected kernel
+  klp-build [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
 
-This commit updates the livepatch selftests build and test scripts to select
-KDIR from O, KBUILD_OUTPUT, or the source tree before falling back to the
-running kernel's build directory, stops forwarding O and KBUILD_OUTPUT to t=
-he
-external module build, and skips building or running tests when
-CONFIG_LIVEPATCH is disabled.
+Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+---
+ scripts/livepatch/klp-build | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
 
-> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/s=
-elftests/livepatch/Makefile
-> index a080eb54a215d..5c631812575dc 100644
-> --- a/tools/testing/selftests/livepatch/Makefile
-> +++ b/tools/testing/selftests/livepatch/Makefile
-> @@ -1,7 +1,26 @@
->  # SPDX-License-Identifier: GPL-2.0
-> =20
-> +ifndef KDIR
-> +LIVEPATCH_OBJTREE :=3D $(firstword $(O) $(KBUILD_OUTPUT))
-> +ifneq ($(and $(LIVEPATCH_OBJTREE),$(wildcard $(LIVEPATCH_OBJTREE)/Module=
-.symvers)),)
-> +KDIR :=3D $(LIVEPATCH_OBJTREE)
-> +else ifneq ($(wildcard ../../../../Module.symvers),)
-> +KDIR :=3D ../../../..
-> +else
-> +KDIR :=3D /lib/modules/$(shell uname -r)/build
-> +endif
-> +endif
-> +override KDIR :=3D $(abspath $(KDIR))
-> +export KDIR
-> +MAKEOVERRIDES :=3D $(filter-out KDIR=3D%,$(MAKEOVERRIDES))
-> +
-> +LIVEPATCH_CONFIG :=3D $(shell if [ -r "$(KDIR)/.config" ]; then \
-> +	grep -qx 'CONFIG_LIVEPATCH=3Dy' "$(KDIR)/.config" && echo y || echo n; =
-fi)
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index b52a8489d9f67..1fd405d43ef43 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -125,7 +125,7 @@ trap trap_err ERR
+ 
+ __usage() {
+ 	cat <<EOF
+-Usage: $SCRIPT [OPTIONS] PATCH_FILE(s)
++Usage: $SCRIPT [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
+ Generate a livepatch module.
+ 
+ Options:
+@@ -158,11 +158,23 @@ process_args() {
+ 	local long
+ 	local args
+ 	local patch
++	local klp_args=()
++	local make_args=()
++
++	while [[ $# -gt 0 ]]; do
++		if [[ "$1" == "--" ]]; then
++			shift
++			make_args=("$@")
++			break
++		fi
++		klp_args+=("$1")
++		shift
++	done
+ 
+ 	short="hfj:o:vdS:T"
+ 	long="help,show-first-changed,jobs:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
+ 
+-	args=$(getopt --options "$short" --longoptions "$long" -- "$@") || {
++	args=$(getopt --options "$short" --longoptions "$long" -- "${klp_args[@]}") || {
+ 		echo; usage; exit
+ 	}
+ 	eval set -- "$args"
+@@ -237,6 +249,7 @@ process_args() {
+ 
+ 	KEEP_TMP="$keep_tmp"
+ 	PATCHES=("$@")
++	MAKE=("make" "${make_args[@]}")
+ 
+ 	for patch in "${PATCHES[@]}"; do
+ 		[[ -f "$patch" ]] || die "$patch doesn't exist"
+@@ -317,12 +330,12 @@ set_kernelversion() {
+ 
+ 	stash_file "$file"
+ 
+-	if [[ -n "$(make -s listnewconfig 2>/dev/null)" ]]; then
++	if [[ -n "$("${MAKE[@]}" -s listnewconfig 2>/dev/null)" ]]; then
+ 		die ".config mismatch, check your .config or run 'make olddefconfig'"
+ 	fi
+-	make syncconfig &>/dev/null || die "make syncconfig failed"
++	"${MAKE[@]}" syncconfig &>/dev/null || die "make syncconfig failed"
+ 
+-	kernelrelease="$(make -s kernelrelease)"
++	kernelrelease="$("${MAKE[@]}" -s kernelrelease)"
+ 	[[ -z "$kernelrelease" ]] && die "failed to get kernel version"
+ 
+ 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
+@@ -526,7 +539,7 @@ fix_patches() {
+ clean_kernel() {
+ 	local cmd=()
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 	cmd+=("--silent")
+ 	cmd+=("-j$JOBS")
+ 	cmd+=("clean")
+@@ -539,7 +552,7 @@ build_kernel() {
+ 	local log="$TMP_DIR/build.log"
+ 	local cmd=()
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 
+ 	# When a patch to a kernel module references a newly created unexported
+ 	# symbol which lives in vmlinux or another kernel module, the patched
+@@ -859,7 +872,7 @@ build_patch_module() {
+ 	cflags+=("-fdata-sections")
+ 	[[ $REPLACE -eq 0 ]] && cflags+=("-DKLP_NO_REPLACE")
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 	if [[ -v VERBOSE ]]; then
+ 		cmd+=("V=1")
+ 	else
+-- 
+2.56.0.385.gac671c819a-goog
 
-[Severity: Medium]
-When KDIR is not explicitly set, KDIR only selects $(LIVEPATCH_OBJTREE) or
-../../../.. if Module.symvers exists in that directory, falling back to
-/lib/modules/$(shell uname -r)/build otherwise. Then LIVEPATCH_CONFIG checks
-$(KDIR)/.config for CONFIG_LIVEPATCH=3Dy.
-
-If a kernel is configured and built with CONFIG_MODULES=3Dn (so CONFIG_LIVE=
-PATCH
-is also disabled), the top-level Makefile clears KBUILD_MODULES and
-scripts/Makefile.modpost sets output-symdump to vmlinux.symvers instead of
-Module.symvers:
-
-scripts/Makefile.modpost:
-output-symdump :=3D $(if $(KBUILD_MODULES), Module.symvers, vmlinux.symvers)
-
-Because Module.symvers is never created in that build, or when running make
-kselftest-all or building only a kernel image target before modules, .config
-exists in $(LIVEPATCH_OBJTREE) or ../../../.. without Module.symvers.
-
-In those cases, wouldn't KDIR ignore the target kernel directory and fall b=
-ack
-to /lib/modules/$(uname -r)/build, causing LIVEPATCH_CONFIG to read the
-running host kernel's .config and attempt to build test_modules against the
-host kernel instead of skipping or using the target kernel tree? Conversely,
-if O=3D points to an unprepared kernel build tree configured with
-CONFIG_LIVEPATCH=3Dy, wouldn't KDIR silently fall back to ../../../.. or
-/lib/modules/$(uname -r)/build instead of using O=3D?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261103222706.1642=
-224-1-sashal@kernel.org?part=3D1
