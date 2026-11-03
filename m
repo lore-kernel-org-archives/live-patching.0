@@ -1,95 +1,61 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793351710;
-	b=oc6EXUe1EXa8ne9maqSypAsiOyw5luq1NzWHL9xLATEyKDTkEIJeHqolYWc+HO5i9BPz
-	 UlAJOZ9fA4Sthbp2/XuVLP7aMIhChf1ptNUBh8d26JSoQXxkZbq9nYwFvPC+oYmHK+QCb
-	 E6JNkik3D/QD5rnaAJqGK5UeOREmqdOg4ZhTFo9OeJEpcZGowSoNCQexX5ad7RmSW35QX
-	 /DFILJbjUdXHq23ZwUdbYUolRydwh6pmQi/zIwrh0eUCK8qmLaLH5UGGAkjLQjGsQ/bwa
-	 p/AHikEKcEyJfuEUbGJ6PovFwdYAzcYHrYLYT0Nxf0sdXDyEPpjpz3E9/c8q1c5Gk+Q==
+	t=1793714541;
+	b=KXXsStNdkk9UGl7U/dyiLjTfNSLpOyC8I0OLKG3FWbuOD5pvfw+oLH9BcftvDcWByuVN
+	 FMyGK0OZIXqNbOgYQhzluDbcQJAAxQBf7p4VLnCdMgY+79qZcdGBz7n0IcFK8GVBRDq1M
+	 i3tsiuMhiEpFDllw0HDAVZljh6pLGe+pvynanqAabx3NXlBYiDM75t+O0TGbNbSnhaiIx
+	 cSSxknG/KxvLtJaiO9L6qcaRB9xLmc9r4Mw7KaFoPHwDnwbVeE5gq+NXhoKShHqJUPrnW
+	 7aM8IM3CW+AVAJZ5m5jccOfA6bbssCdoyXQvYQptqzB98JQTuzuw/zcbh69GTEGJMwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793351710;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=19OoVAzMw0AgVIO1bk9fIbdG8XAGpIkzVZjZ1XRF4Zs=;
-	b=rtRqUCitc0ELJB4mne12F8T5gk2wjQEVdl7RJhfs1jhV5YQ0UHfRkF6no+A6hrf4AEno
-	 UX2UXlJDIy7NYPlTRjTKJdtON03fz2WlXvz4NJoCs+DojzqVTLxleU8lHopzF9oX8J29d
-	 NaTUEw6EmyR8R1riHMw10QCTj3w9CIU6/24vczg5YtWHXxjLa2nkvqrsaFlee8w9ootpm
-	 /P05P44ilBS0dzqrVTSRBfOm+JfYNdim0a5UKA5wLAe4Cz0SghjIw9kEIEON90nexlH0O
-	 Cc1lEHalP6uUMlygCBAd5Lo339sjJ6jf8wVYXEyPuI92nFUU1JcmwHNV74d3VrRQ1sg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793714541;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=rUFuv9Lcbz9KJrmISJFF1XzlsOChkRDcNjfTn3vqFHY=;
+	b=oK6yhCttkZVyKcRqPoCtOm1mt1kgo0Z/9gNm62bINL23dnzuJcFlLZYALOSa/cBcGLz9
+	 Mfxw+ZMcivuCVKnutcLM6/7eSU6V9QUXCeheOB7gp5icy9E/hzsccAADSKbQc1K5o/6j5
+	 M6wPW+ClbEnDEWStuNMovFE8ZkYuaomlOnNcrCs9NrM6DCovcJyFOCk4HjtAO627j5ZXY
+	 /b6xxBNs6rBIPjLtQXG1v5/rjb3eW86g/PkJ+Mw98pTF1votlQvoGuMiBra8kW4/l50Vv
+	 mWkc11xWv9vy5UDAVCzKNEN6AnNbBxbPXa7RimyLQDOj/8p7Mds1VEu/3k9Kf7t/bcg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Ta9GbNcx;
-	arc=none smtp.remote-ip=209.85.128.42
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Sj3HOZa4;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4754B606A325
-	for <live-patching@vger.kernel.org>; Fri, 30 Oct 2026 09:15:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4754B606A325
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2777606A327;
+	Tue,  3 Nov 2026 14:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=Ta9GbNcx
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a7992e2f7dso4198835e9.3
-        for <live-patching@vger.kernel.org>; Fri, 30 Oct 2026 02:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1793351708; x=1793956508; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=19OoVAzMw0AgVIO1bk9fIbdG8XAGpIkzVZjZ1XRF4Zs=;
-        b=Ta9GbNcx5EFZKyrMDesXpSfPPthd7lvTShebqNnK2GzdLOEnoB9UlSWIUBhGUbEjBC
-         RqnUt4GnNmq71/r7AS0+UASXJ1kv3snxFu6QfhSdCmqZrfuwoDHCdFb6zGSyI2kpmfON
-         +IRF9Ls2hqqXnE/3+R02ROjwuiN2Kq3q+0bCVkblTn/zIL6hTn6fMCYKUvoFm9kjL8cL
-         sZiLwOHfY2XfwtBKCazbD4etwSpGCGe8de+S4gG6taAzX7oFRPa8tqhF0ou/GjsRPza+
-         FE5Vz0xgxWdipcs1+/afD6rkNwXGYa0SIldvLNVwWaTuslOnn1wyicPHODj9DFKOhFSO
-         BK1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793351708; x=1793956508;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=19OoVAzMw0AgVIO1bk9fIbdG8XAGpIkzVZjZ1XRF4Zs=;
-        b=sYt5duIayxrk7TWuu/6alHuc+a0MI3KVDk2Y8sWtigEzF/mKCKjTBVodZkiilVs+yT
-         vgsJ2OSLs5f+0uaKlPD9lyAQKDbaQh1EYVCdT8E+geVux4jrikhozo+wb9a2viHg8GCj
-         1qyX3ZnW9P7efSeZRQzqwHmk0abWtpV3gbGHk8SGGc/2xR3PVrnp9kyC3GfVA1zJxkeS
-         ew/SnHD24lQ6YIGFT61elUH6S2An5nZsfQyXeBOmNlYdCixdDsxPVpDfEAoR2fU+xEn1
-         4iJ4AxWORCUiiX5G9tCqqGHRqhO2BGavdmf0NMumtvc9jV4Yh3g8dW661RRwZZIZdFD/
-         WxiA==
-X-Forwarded-Encrypted: i=1; AKwUvBxxLN5cEFZ25xUJC0I1AKk6OOzHxE7MUdX6K2mIS9DPkvlwKx8LEF5P16TyrQuu9DRM3gd19HWTsZRl5amQ@vger.kernel.org
-X-Gm-Message-State: AFq9FYIOwCH4QzEdBKXdPxlnhGQOjHw64l07k5o3EWVPVUQj8rON3tM8
-	I49kLaeMdR01/sDEALXyoPmVrNsxroyukQuWuASWQCRNjsWDQfbpJpaXS0O4re26ieM=
-X-Gm-Gg: AYBFou39kR+0bAq1BDflhRDjvOj2u0rICalgDs0OaSEoxbhRk/hmOZ67pPCInnwX8sl
-	8Jv3YMy35tB/h3SwoNAfyWIZeK6UOOzIaxWm0hHE049CRcqKO5pcV21x9JuxsXmjGV0hOAxL7XW
-	BLc6SMSqEsB0KrMyZSodFeZGpfvLKFnW2UzvJljlOwEHPRul8ebkPEfpWlfO0YvkGVVQUNPL78W
-	T4nIwNgfxac42xPva3q+lymv8RoyvTZ/4M/F8LjBkBo1AQ2E75RGieBOEBo+dSK6nmXz35TjB6U
-	FsJXG/VtZ7eRO5JEoF6bVBCWbLFKJxVimWrccqzpRGqyUmKTvdai3CPKuA0HwHpK0RmnAcqpgOE
-	TBI9DrLmO5mIvjAYKjRTeG+x/y2cDQK58lkcdQScWncly8PsGC/cSZZAoW0MOXCKFr8JzeHPRq6
-	93YpGsfsPrg7jjrtO7q/5BPwh19sv42d/51uI3J4JmgVMA6xPTYOxjWfi8H3QOjSwMHCRRWD077
-	fHtp/3rL3kFISp3Yc9m44kdw3O/p/1d0MCfy09tIcwXJJM8PIt1CjWhHrYDO/DImkIqf3ztWRyI
-	ibcidNPHnr/L0O77rh4hAJquQkVt2Jk=
-X-Received: by 2002:a05:600c:4f8b:b0:4a3:5d64:df91 with SMTP id 5b1f17b1804b1-4ac17ffaf95mr34072735e9.18.1793351707675;
-        Fri, 30 Oct 2026 02:15:07 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4abf396dfdbsm48931045e9.1.2026.10.30.02.15.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 02:15:07 -0700 (PDT)
-Date: Fri, 30 Oct 2026 10:15:04 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Harry Hsu <x90613@gmail.com>
-Cc: jpoimboe@kernel.org, mbenes@suse.cz, joe.lawrence@redhat.com,
-	jikos@kernel.org, live-patching@vger.kernel.org, shuah@kernel.org,
-	song@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/5] livepatch: Fail object initialization on
- duplicate patched function
-Message-ID: <auRgGK3aQyv7tF9J@pathway.suse.cz>
-References: <att7GJXA7hK7Ic64@pathway.suse.cz>
- <20261028164649.337479-1-x90613@gmail.com>
+	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Sj3HOZa4
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C0C1F000C1;
+	Tue,  3 Nov 2026 14:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793714541;
+	bh=rUFuv9Lcbz9KJrmISJFF1XzlsOChkRDcNjfTn3vqFHY=;
+	h=From:To:Cc:Subject:Date;
+	b=Sj3HOZa4mSkVHPVCIar7NYIjomOsx2xitQayxWUctEolyQozwodN7rWqEYVG4wzRB
+	 OxMxSxLis5/Zu0C22WguL9zNaOO93THX4QIfs+76yWJiUKA2+4IDByIFpBlDrzYAS2
+	 HSgiWvtdTM21pV4JkJgNf36MSm94NJngRMh65CgYapo6fn7gxNv8th+bbYFzXttINX
+	 bPx68vtaqFeUndWbbtZne9ZAbNsTwm56MViWH41n0i3tVFXF7cens1FrEmcDJbFrnk
+	 rCQuDHtSGd0Opkd400kIohNvdJbWGEO8Vmh2dljsM7DX7dHC7jBVyAgMcHWuLqu3Kd
+	 OdC2+7pagwLsA==
+From: Sasha Levin <sashal@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] selftests/livepatch: fix building and running outside the host kernel
+Date: Tue,  3 Nov 2026 09:02:16 -0500
+Message-ID: <20261103140218.17568-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -99,62 +65,48 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261028164649.337479-1-x90613@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu 2026-10-29 00:46:49, Harry Hsu wrote:
-> On Fri 2026-10-23, Petr Mladek wrote:
-> > I wonder how to move forward with this patchset. There seems to be
-> > three unresolved problems:
-> >
-> >   1. How to handle aliased functions when replacing two livepatches
-> >      with aliased symbols, aka two NOPs on the same stack [1].
-> >
-> >      My take: I would fix this later on top of scoped atomic replace.
-> >               The aliased symbols should conflict.
-> >   2. Fix the low-level __write_relocate_add() to clean its own
-> >      mess on failure.
-> >
-> >      My take: I would fix this a follow up patch.
-> >
-> >   3. Better describe the purpose of klp_write_object_relocs_limited().
-> >      Or clean its own mess a better way (code duplication)?
-> >
-> >      My take:  This requires v5.
-> 
-> For 1, I have a proposal to create only one NOP in the first place,
-> as in your solution 1 from the earlier mail.
-> 
-> 
-> Recap: The problem
-> -----------
-> 
-> Take two livepatches that are already loaded:
->   A patches __do_sys_fork
->   B patches __x64_sys_fork        (same address as __do_sys_fork)
-> 
-> and an atomic replace livepatch C that patches neither of them.
-> klp_add_nops() finds the functions by name and sympos only, so C
-> inherits two NOPs. Both resolve to the same address and end up on
-> the same ops->func_stack: [A, B, nop1, nop2]. When the transition
-> is reverted, the stack goes from nop2 to nop1 instead of back to B.
-> 
-> 
-> Proposal
-> --------
-> 
-> klp_add_nops() runs from klp_init_patch() before klp_init_object(),
-> so the new NOPs have no address yet. But func->old_func of the old
-> livepatches is already resolved when their object is loaded.
+The livepatch test modules are built against the running host kernel
+even when the selftests are built for a kernel in an output directory,
+and the scripts skip every test on a machine without a kernel build
+tree, even when the modules were built and installed with the
+selftests.
 
-Hmm, this is not good. It would be better to have an universal
-solution which would work even when the livepatched object (module)
-gets loaded later.
+Patch 1 is unchanged from v1. It picks KDIR from O or KBUILD_OUTPUT,
+stops passing O and KBUILD_OUTPUT on to the module build, and skips the
+modules for kernels without CONFIG_LIVEPATCH.
 
-A solution might be to detect this in klp_init_object_loaded()
-and free the duplicated NOP there. I am not 100% sure that this
-would work but it might be worth investigating.
+Patch 2 is new. Sashiko pointed out on v1 that has_kdir() skips the
+tests on installed targets. That check predates this series, but it is
+the run time half of the same problem, so patch 2 checks for the test
+modules instead.
 
-Best Regards,
-Petr
+Tested on v7.4-rc1 with an x86_64 kernel with CONFIG_LIVEPATCH built in
+an output directory. The modules build against it with
+
+  make -C tools/testing/selftests O=... TARGETS=livepatch install
+
+and the installed tree was run in a VM that has no build directory for
+that kernel. Without patch 2 every test skips on the missing KDIR. With
+it all 8 livepatch tests pass, and they skip cleanly when test_modules/
+is missing.
+
+Changes since v1:
+- Add patch 2.
+- Rebase on v7.4-rc1, no changes to patch 1.
+
+v1: https://lore.kernel.org/all/20261014200154.1365200-1-sashal@kernel.org/
+
+Sasha Levin (2):
+  selftests/livepatch: build test modules against the selected kernel
+  selftests/livepatch: skip based on the test modules instead of KDIR
+
+ tools/testing/selftests/livepatch/Makefile    | 27 +++++++++++++++++++
+ .../testing/selftests/livepatch/functions.sh  | 17 +++++-------
+ .../selftests/livepatch/test_modules/Makefile |  6 +++--
+ 3 files changed, 37 insertions(+), 13 deletions(-)
+
+-- 
+2.53.0
+
