@@ -1,83 +1,83 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.178
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793799164;
-	b=NmE+gxjq5Bn3kwY8stHzCwGAFnrKuB4KitsoS9KXksY9jDWlb6qUSySejw/FcBTnUVoU
-	 nUN/81kXaaK3Ut26lr/Xz2UInC9z7vvHPLzlbVvqs6g31QDZvdqSKwigdkbsIJ3QWilFL
-	 Lm+aSRFQpydtKpTA0w3Vo1NBdVHvYlKUOyxY5NmiCjRLRy9vdYWyxn9FbAesinTAVhv/D
-	 GvFhgxGkfklIOGzniZwAPTgnn7g2JicKS+naNemKTjqKchdDSrTjvRhDbiGqZ9OCiWmxs
-	 DI6ugnmTNI5D7shYD7Jgd1X1Yv70y1kSauCMp9Jisw+I3xb7swJ9lzjw6pZt3lTIvWA==
+	b=ML7Oa8p6Ig5nrHPBrdgnzBh5g6rQGm9yEXqS2KsxHDbMjJSTFY5KBrhbnZF+JWEHOi25
+	 LsN4m8VeY/BfsH6kKSePH0q09qrTm877BVKmJ9/AwT1oGpjUC/E77uYElsKA/Peg/qiDX
+	 mFRY3quUoC9Jc5rOcj/Eh78nFmOCux1JZcHi1yWcf9MbZ5Cd123RyNFjN8yvrl1/4L9Yw
+	 8Jn81DJTQ5IDfFPDV0/P5K2N/34JX7HXLk8KLjNVzvPz9xTK42plkI/E72jWUe30mSAt6
+	 XYlQZDXRL+6cotc/+fuUiXpfLcCdod+pEILZ9CQDj4WSyqD671JVKRp6PE/vWfR/myw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793799164;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding;
-	bh=0MivBmeREXA6Z3fHdh+SbjQxmO7h+43RlnHAUjYhb8M=;
-	b=a8AphoGxvGRfI5XF3JCxDOn6KEZlpgQKVwB1b0HoaUqFom2WcLKo8VP2+jEgdaRKf/7W
-	 G04UBhy9GlfOsmX2f7VyLKsK4wVFEbpVDVLx2Bo23BoAAp50Vic84vX7Ahw85vrYNilrI
-	 +s8Q1QCFyx3WLIR5FN7ojnCLKKNIA6IvGMM/ZmFi8yb3p0GnG7zMC+AqbGZ1uPApr1e+X
-	 7+9BQzusPO3aaPganArFYv6XexsCgKSWe7pgXUrMK/MS2xG4H9wKHV2HLvL05rwlEKrrA
-	 8IDQ3WgKMluhCy//XMjCXS9vtm8H1K5DtlX+TLe8KoJ95PdbgaaHZgwR+NUHTUrtJNQ==
+	bh=hsId2+DpgTtxye1Yv6HPoaQDim7S8FopzLEymWWnRm0=;
+	b=TvC3sZykpU7uIWUsLoHS1rIAE7IU/i7jpxjnjj7dEORnrJURW2isH5QEluJDQDM2dS4j
+	 XBDzSj20Dw50eNBRWsd5nA9wi6whruoKRoQzcxlLwG0IpJZCfHQdbIYwuJSrKKOQwV8hD
+	 KhTVCjDlLmZpDfCQSmZ2tWOV4lIRvyw5MuzWoPVeKqxNK0C+F9KsW/33TVqPc3sVXBbbN
+	 ac9I1dQk+MgzZhDUPvWKwIYC0uaQ7p4ZutmwMwRMdffHELAfPGywG47vLsWPNImOQG+HU
+	 NGLh/VdP7Cxfz+T2AxEH2kTY8SWQHHikmIQo8Yy9kdp05Bie5Kr974KR4MtyM7tkQzQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CEC759hT;
-	arc=none smtp.remote-ip=209.85.210.171
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IwmzwBFO;
+	arc=none smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AA6606A329
-	for <live-patching@vger.kernel.org>; Wed,  4 Nov 2026 13:32:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 96AA6606A329
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C04E606A328
+	for <live-patching@vger.kernel.org>; Wed,  4 Nov 2026 13:32:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C04E606A328
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=CEC759hT
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a05b210703so407758b3a.0
-        for <live-patching@vger.kernel.org>; Wed, 04 Nov 2026 05:32:43 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=IwmzwBFO
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a064fac8cbso571196b3a.1
+        for <live-patching@vger.kernel.org>; Wed, 04 Nov 2026 05:32:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793799163; x=1794403963; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793799149; x=1794403949; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0MivBmeREXA6Z3fHdh+SbjQxmO7h+43RlnHAUjYhb8M=;
-        b=CEC759hTxHP0bJYvUrs3JmYInLIte6vrHbHYN4FpK9yMofUmXAeM8RvK3M3T1UTEDj
-         rpRHGBr33PXDxKxEnG5hxFfgh5sPFTd87a5JlHZGJKvZaKAQF33+AbrumepSHv8hxRVU
-         yjFvyiaU4xG1C4AQZo7bF7SWdU+dOCCYdaOCIPvop8VWCJtWek/u/W8XpHZLl4mg8pF3
-         m2MK8YfsfJWTxFjJMGLj6FMLPYf/HnFfSsABUzYki/TTnfir6gYtloIQMw89dz1hJ509
-         1oxFZmgz2GoAVWTCy0JB7goz8/vsuB46li6b7Gg6nOWD9aZGLKxYBdat5+wv6ey1tG3d
-         Ha1g==
+        bh=hsId2+DpgTtxye1Yv6HPoaQDim7S8FopzLEymWWnRm0=;
+        b=IwmzwBFOYv3W0BkI3zvF+i4IG6xcqz20VGMeRB5FrYpv+GPB1cLaaXHz7tyTvV0YFG
+         uVetQwv2dyTV3G78NoOcLMsKjzAwN+yMcCkiX7Tj8F67nwsuP5yTCM2zlXhsMO02Hg4M
+         Il+RF7HAKVt5V69NjauHb2Ur0BIQD7C4sceOUBs+6xOuSArAmjwiR8t8ur2oXsA6TZQt
+         RHl0HOOFTnqSVDdffkhqIrfliZ9BbzvZ27w2nag7/vjqv4vUyYY7FrtJpWl4XzJXyEnd
+         kG3OQf1GKtjcoBUAV8oSFwenIaROH3FIqIZ9A3nculPtTnqR1mfBBaxgoi3Y85tFf8l2
+         FyjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793799163; x=1794403963;
+        d=1e100.net; s=20260707; t=1793799149; x=1794403949;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0MivBmeREXA6Z3fHdh+SbjQxmO7h+43RlnHAUjYhb8M=;
-        b=gnACMlJ8NNnwvYY/Rq/1Jeffx0tlvLXzggt4hnZ0Rp3Ki4xcIwTwX7nvCaWlHLFnlL
-         lYGlwbrR0lvM/6kQGVSoxHU6C+A0vQlcsG7oTlMapR5YK01xAQhpGCN2oSebGckqV/x6
-         oENYQaV/wfukQ9tGxFiNi6wI1TuC7oA2fuvV2rCcwz3S61sURmRs2wcfObnM+Mh3HznY
-         7jietkKCJ3YOpd1CmVDtyaarT/o1HlEkXhk/rL6kCdB//SF6XFgChLwbkllovNyuP1Jh
-         x/0VCwBDlsqu2YH0+YwQuSWsQ1AqlnastCYxff7zdHehvfnLMLTyZuBUHe99iNcQh+mV
-         L+BA==
-X-Forwarded-Encrypted: i=1; AKwUvBzJWvmx6GlpwVzpTAASAcJLCFdjIEaAqYu6uB++XUizJy+JW+2POjjU3zFhFTJHiVbtGZAGXNKmoWEb8xK8@vger.kernel.org
-X-Gm-Message-State: APuU4Z8Fe0rTXJoHbXamk+fJpleWNkDL/FRoFtlyNq4h65n0dXQFgkuQ
-	3G42t0jI+c0D0lx0TlQLviuEtJjP99IUkCr1oP5gPKTWi/1rNoqwfxNN
-X-Gm-Gg: AYBFou0dEBfG34JcvlkcSssD9bfSVADgxSaHuXVTKcg+YitB8zdDLs4ZgxD8Q+WLV0d
-	6qGbOrxfT6rEFedI/VSS9TI1zlMPPq8Ueg/qbNu4OS99Zo2g+0NSn47QlOPnwOfuyXjoZSfBucE
-	J0bqFyPJDsPxF6XI9v1rGGrCEtp1vxk736iWqJfhmzZgLdjXJIcnfEIF4X4aSfI/S3/8bPE3SvM
-	4Z9bcncb9kgWxtbyPOYGJoq6llPyiSi+yVlkfKcb2hd7gowpI79/PXVul15cYC8rFRQp6LKKhfF
-	ycsEpJ/obofWBGVY4HdDYCR1FSCUCuNiqienbBPmFqT+EPZMgnqwvyxKxiCbpzG4kplXNgXxxKa
-	65oNpZNvHet+xerbnrvOHfCBoTOgibkyrqJve466U8m0McEeh0bLdqygeoqIB6MNjGeMDWpO32v
-	fwZ1kQstkqHtD+QKPMRJh4AAiO/pNo5mxixZWwgTGHU6kYrYAWXmITzC9D4clJ/rWJ5SOlvSEqz
-	RY/+xyxiOu1RCiJfC04vCdudgvksWnJYscxb/sUgEOOFXMTAJJkHngvAZrplW61Jkz/2C10j2xk
-	nIFw1AZlLTS4+xwAcJp/OLDS9voWS/l30fZ42IqdKT9U4ioSyA==
-X-Received: by 2002:a05:6a00:99a:b0:89f:7ac5:9d54 with SMTP id d2e1a72fcca58-8a9bdcc5a0cmr14718274b3a.17.1793799162871;
-        Wed, 04 Nov 2026 05:32:42 -0800 (PST)
+        bh=hsId2+DpgTtxye1Yv6HPoaQDim7S8FopzLEymWWnRm0=;
+        b=V7/lp1i0ilZKOkj9cULDzF1rcV5IDAK7qYCxe2vaH58hOF6hdjYSP4IHn8ooVh4C+b
+         BQOufF5RU1cPqJWz/mcMDCzbEPg7F5IMZXKxGnyPDvMv5ZO9tL4I5s79lSmCeLvBzjnU
+         BW/BIca2oMlK9pSMblIFakmxLHQOQcGheWxLhe5dJ0aCa9vJAKgBwDhIL79NC3nHYLqh
+         fCoP+jC1Lgzg829XrYReoW1h2PskbSPdtjQEi11I4tkYXhHKne8wxCEUX3geJSwp5cr4
+         45MLzlpXgQ++VMuOIj0qH5CnZyh/yUq8J3W96rod3ucIP8V0wFvZEtIiRUGoPt3DuGuB
+         QvVw==
+X-Forwarded-Encrypted: i=1; AKwUvBzYYL/cukmibhJkl4PAbdtLlSRXqma1EQY3fTn4dhp4FrQHNWhSGtEtRSrEQSxx/3/H2oF+KImuZD2wItk5@vger.kernel.org
+X-Gm-Message-State: APuU4Z/Q03y9Eq+r6RLPjayVyIz33BIcwR50XFy0s5I/nTgOHpAdR1m2
+	dvpeR6cwsvpapqOvuiX+NvgVbDO0QK0tLm/3ihGeAP04Y/X8VCz8wQ+9
+X-Gm-Gg: AYBFou2Qhq4rimB02+yXk8HdlCl7aVNaKapnXa6EUMHowKXvehe3ric39q/W+YZX+M8
+	Z1qWvUP49J7XeUqV0ykqC65KwdD4eTemgko06NFAkgg1hofU9EvIg72nH666DgBsqfUeWKH1LOF
+	lTYn/Zs2jfOcNuBxijtpa71UQsqthm+gKsQY1Zg3wb6llBUaVC/pgvKcPpvYHuFQ1fAwZK93C0K
+	CKYUzuN5FHr38Fs3S5IcDBjk+FUsNQMq4Rzg8FdKvWKyyda2/ri4uxXSvAyEMa8Q7cLVSwdEDIh
+	Jg6Xp41Uv0jfELwD40h7SdhUm/6brZu1O2L/Cd1FAaLDkTho9sPu80By1qjVGj1VW62GiN/CH5V
+	qkyrGIlhTh+ZRkOrv1tDzXgSqYsytASZFiPdvvHQ2BSpb3rR+TQhNZbI8FhLK/c4xm8aHj24bxz
+	iE3fHjepJPPsuvA8+dZXKEoY8kBrg8BZRi2dbE+MsNC12q9uDpSgAj7cU8SGqRPHnuJQroQBhxY
+	+bT8ESX3LjggT2hx1rFrNtskBjtYBDMdMk1/IUM5dl4H+lQ+AyVvSwk30wzBMD6nKy+fVa997RF
+	zh5YU61Amw/PPfzvulvhev1UDJvkInppfzLkW+J4tfBRLRK6jA==
+X-Received: by 2002:a05:6a00:4694:b0:897:ffff:c18a with SMTP id d2e1a72fcca58-8b17e72e134mr369429b3a.7.1793799149518;
+        Wed, 04 Nov 2026 05:32:29 -0800 (PST)
 Received: from anatasluo-Precision-5560 ([139.226.166.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09a7ce84fsm911369b3a.13.2026.11.04.05.32.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09a7ce84fsm911369b3a.13.2026.11.04.05.32.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 05:32:42 -0800 (PST)
+        Wed, 04 Nov 2026 05:32:29 -0800 (PST)
 From: Longjun Luo <luolongjuna@gmail.com>
 To: jpoimboe@kernel.org,
 	peterz@infradead.org
@@ -94,9 +94,9 @@ Cc: mbenes@suse.cz,
 	llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	Longjun Luo <luolongjuna@gmail.com>
-Subject: [RFC PATCH v2 05/11] objtool/klp: Support reduced and split DWARF
-Date: Wed,  4 Nov 2026 21:31:51 +0800
-Message-ID: <20261104133158.3187525-6-luolongjuna@gmail.com>
+Subject: [RFC PATCH v2 03/11] objtool/klp: Preserve identifier digits when stripping suffixes
+Date: Wed,  4 Nov 2026 21:31:49 +0800
+Message-ID: <20261104133158.3187525-4-luolongjuna@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261104133158.3187525-1-luolongjuna@gmail.com>
 References: <20261104133158.3187525-1-luolongjuna@gmail.com>
@@ -111,188 +111,152 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Read split CUs through libdw and save matching DWO files in a DWP before
-another build overwrites them. Keep the DWP beside each saved object.
-Reading saved DWP files requires libdw 0.191 or newer.
+The name tx.crc32 loses its trailing digits, while tx.crc32.llvm.<hash>
+keeps them because of an early return. ThinLTO promotion can therefore
+break correlation and copy existing static state into the patch.
 
-Read fixed-width array bounds as unsigned so reduced type information
-does not make nonempty arrays appear empty.
+Strip LLVM hashes and complete .<number> suffixes on the same path.
+Keep the counter-stripping rule for __UNIQUE_ID names, including
+Clang's function-prefixed names.
 
-Full LTO with --plugin-opt=dwo_dir requires
--mllvm -split-dwarf-cross-cu-references=true to preserve separate CUs
-and their source paths. Kbuild does not enable this DWO output mode.
+Add a ThinLTO test which checks that the existing crc32 state is reused.
+The available objtool tests pass with GCC 16.2.1 and Clang 22.1.8.
 
-Validated the available objtool tests with GCC 16.2.1 and Clang
-22.1.8. No failures.
-
+Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
+Fixes: 020b71dcafee ("objtool/klp: Remove .llvm suffix in demangle_name()")
 Assisted-by: LLM
 Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
 ---
- scripts/livepatch/klp-build | 18 +++++++++++++++
- tools/objtool/klp-dwarf.c   | 45 ++++++++++++++++++++++++++++---------
- 2 files changed, 53 insertions(+), 10 deletions(-)
+ tools/objtool/elf.c                           | 33 +++++++++++--------
+ .../fixtures/identity/promotion_crc32.c       |  8 +++++
+ .../fixtures/identity/promotion_crc32_user.c  | 15 +++++++++
+ .../generic/test-identity-thinlto-crc32.sh    | 23 +++++++++++++
+ 4 files changed, 66 insertions(+), 13 deletions(-)
+ create mode 100644 tools/objtool/tests/generic/fixtures/identity/promotion_crc32.c
+ create mode 100644 tools/objtool/tests/generic/fixtures/identity/promotion_crc32_user.c
+ create mode 100755 tools/objtool/tests/generic/test-identity-thinlto-crc32.sh
 
-diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
-index e373928123e8..95bea5b2057e 100755
---- a/scripts/livepatch/klp-build
-+++ b/scripts/livepatch/klp-build
-@@ -34,6 +34,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
- FIX_PATCH_LINES="$SCRIPT_DIR/fix-patch-lines"
- 
- OBJTOOL="$PWD/tools/objtool/objtool"
-+DWP="${DWP:-llvm-dwp}"
- CONFIG="$PWD/.config"
- TMP_DIR="$PWD/klp-tmp"
- 
-@@ -265,6 +266,11 @@ validate_config() {
- 	[[ -v CONFIG_KLP_BUILD ]] ||			\
- 		die "CONFIG_KLP_BUILD not enabled"
- 
-+	if [[ -v CONFIG_DEBUG_INFO_SPLIT ]]; then
-+		command -v "$DWP" &>/dev/null ||
-+			die "split DWARF requires llvm-dwp (or set DWP)"
-+	fi
-+
- 	[[ -v CONFIG_GCC_PLUGIN_LATENT_ENTROPY ]] &&	\
- 		die "kernel option 'CONFIG_GCC_PLUGIN_LATENT_ENTROPY' not supported"
- 
-@@ -588,6 +594,15 @@ find_objects() {
- 		    -printf '%P\n'
- }
- 
-+# Save the matching DWOs before the next build overwrites them.
-+save_split_dwarf() {
-+	local file="$1"
-+	local dest="$2"
-+
-+	[[ -v CONFIG_DEBUG_INFO_SPLIT ]] || return 0
-+	"$DWP" -e "$file" -o "$dest.dwp" || die "cannot save split DWARF for $file"
-+}
-+
- # Copy all .o archives to $ORIG_DIR
- copy_orig_objects() {
- 	local files=()
-@@ -608,6 +623,7 @@ copy_orig_objects() {
- 
- 		mkdir -p "$orig_dir"
- 		cp -f "$file" "$orig_dir"
-+		save_split_dwarf "$file" "$orig_file"
- 	done
- 	xtrace_restore
- 
-@@ -647,6 +663,7 @@ copy_patched_objects() {
- 
- 		mkdir -p "$patched_dir"
- 		cp -f "$file" "$patched_dir"
-+		save_split_dwarf "$file" "$patched_file"
- 		found=1
- 	done
- 	xtrace_restore
-@@ -680,6 +697,7 @@ generate_checksums() {
- 
- 		mkdir -p "$(dirname "$dest")"
- 		cp -f "$file" "$dest"
-+		[[ -f "$file.dwp" ]] && cp -f "$file.dwp" "$dest.dwp"
- 		"$OBJTOOL" klp checksum "$dest"
- 	done
- 
-diff --git a/tools/objtool/klp-dwarf.c b/tools/objtool/klp-dwarf.c
-index 99b098ee7904..98d00ea19b7c 100644
---- a/tools/objtool/klp-dwarf.c
-+++ b/tools/objtool/klp-dwarf.c
-@@ -138,6 +138,10 @@ static void normalize_source(char *path)
- 	*write = '\0';
- }
- 
-+/*
-+ * Full LTO with --plugin-opt=dwo_dir can merge CUs and lose TU source
-+ * paths. Kbuild does not enable this output mode.
-+ */
- static int read_unit_source(struct identity_cu *cu, Dwarf_Die *die)
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 71f1a272e468..3ddbf5143260 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -448,32 +448,39 @@ static int read_sections(struct elf *elf)
+  */
+ static ssize_t demangled_name_len(const char *name)
  {
- 	Dwarf_Attribute attr;
-@@ -146,12 +150,12 @@ static int read_unit_source(struct identity_cu *cu, Dwarf_Die *die)
+-	ssize_t idx;
++	ssize_t idx, len;
+ 	const char *p;
  
- 	if (dwarf_tag(die) != DW_TAG_compile_unit)
- 		return 0;
--	if (dwarf_attr(die, DW_AT_name, &attr)) {
-+	if (dwarf_attr_integrate(die, DW_AT_name, &attr)) {
- 		name = dwarf_formstring(&attr);
- 		if (!name)
- 			return die_error(die, "invalid compilation unit name");
+ 	p = strstr(name, ".llvm.");
+-	if (p)
+-		return p - name;
++	len = p ? p - name : strlen(name);
+ 
+-	if (!strstarts(name, "__UNIQUE_ID_") && !strchr(name, '.'))
+-		return strlen(name);
++	if (strstarts(name, "__UNIQUE_ID_") || strstr(name, ".__UNIQUE_ID_")) {
++		for (idx = len - 1; idx >= 0; idx--) {
++			char c = name[idx];
+ 
+-	for (idx = strlen(name) - 1; idx >= 0; idx--) {
+-		char c = name[idx];
++			if (!isdigit(c) && c != '.' && c != '_')
++				break;
++		}
++		return idx + 1;
++	}
++
++	while (len && isdigit(name[len - 1])) {
++		p = name + len - 1;
++		while (p > name && isdigit(*p))
++			p--;
+ 
+-		if (!isdigit(c) && c != '.' && c != '_')
++		if (p == name || *p != '.')
+ 			break;
++		len = p - name;
  	}
--	if (dwarf_attr(die, DW_AT_comp_dir, &attr)) {
-+	if (dwarf_attr_integrate(die, DW_AT_comp_dir, &attr)) {
- 		dir = dwarf_formstring(&attr);
- 		if (!dir)
- 			return die_error(die, "invalid compilation directory");
-@@ -472,6 +476,23 @@ static int add_address(struct identity_reader *reader, struct identity_die *entr
- 	return 0;
+-	if (idx <= 0)
+-		return strlen(name);
+-	return idx + 1;
++	return len;
  }
  
-+/*
-+ * Reduced DWARF can omit the element size of idt_table. Reading its
-+ * DW_FORM_data1 upper bound (255) as -1 would misidentify it as empty.
-+ */
-+static int read_array_bound(Dwarf_Attribute *attr, Dwarf_Sword *bound)
-+{
-+	Dwarf_Word value;
-+
-+	if (dwarf_whatform(attr) == DW_FORM_sdata ||
-+	    dwarf_whatform(attr) == DW_FORM_implicit_const)
-+		return dwarf_formsdata(attr, bound);
-+	if (dwarf_formudata(attr, &value) || value > INT64_MAX)
-+		return -1;
-+	*bound = value;
-+	return 0;
-+}
-+
  /*
-  * The empty features[] in virtio_input.c can share an address with the
-  * nonempty features[] in trans_virtio.c. Exclude the empty object's DIE
-@@ -498,10 +519,10 @@ static bool is_empty_type(Dwarf_Die *type)
- 			return true;
- 		lower = 0;
- 		if (dwarf_attr(&range, DW_AT_lower_bound, &attr) &&
--		    dwarf_formsdata(&attr, &lower))
-+		    read_array_bound(&attr, &lower))
- 			continue;
- 		if (dwarf_attr(&range, DW_AT_upper_bound, &attr) &&
--		    !dwarf_formsdata(&attr, &upper) && upper < lower)
-+		    !read_array_bound(&attr, &upper) && upper < lower)
- 			return true;
- 	} while (!dwarf_siblingof(&range, &range));
- 	return false;
-@@ -752,7 +773,7 @@ static int build_identities(struct identity_reader *reader)
- 	static const Dwfl_Callbacks callbacks = { .section_address = dwfl_offline_section_address };
- 	Dwfl *dwfl = dwfl_begin(&callbacks);
- 	Dwarf_CU *cu = NULL, *next;
--	Dwarf_Die die;
-+	Dwarf_Die die, split;
- 	Dwarf *dwarf;
- 	struct identity_die *entry;
- 	unsigned int bucket;
-@@ -767,11 +788,15 @@ static int build_identities(struct identity_reader *reader)
- 	dwarf = dwfl_module_getdwarf(reader->module, &reader->bias);
- 	if (!dwarf || check_relocations(dwarf))
- 		goto out;
--	while (!(ret = dwarf_get_units(dwarf, cu, &next, NULL, &unit_type, &die, NULL))) {
--		if (unit_type == DW_UT_skeleton ||
--		    unit_type == DW_UT_split_compile || unit_type == DW_UT_split_type) {
--			ret = die_error(&die, "split DWARF is not supported yet");
--			goto out;
-+	while (!(ret = dwarf_get_units(dwarf, cu, &next, NULL, &unit_type, &die, &split))) {
-+		if (unit_type == DW_UT_skeleton) {
-+			/* libdw checks the DWO ID and resolves addresses through the skeleton. */
-+			if (!split.addr) {
-+				ret = die_error(&die,
-+						"missing or mismatched split DWARF file (saved .dwp files require libdw >= 0.191)");
-+				goto out;
-+			}
-+			die = split;
- 		}
- 		if (!is_unit(dwarf_tag(&die))) {
- 			ret = die_error(&die, "invalid unit root");
+  * Remove number suffix of a symbol.
+  *
+- * Specifically, remove trailing numbers for "__UNIQUE_ID_" symbols and
+- * symbols with '.'.
++ * Remove complete .<number> suffixes and trailing numbers from
++ * "__UNIQUE_ID_" symbols.
+  *
+  * With CONFIG_LTO_CLANG_THIN, it is possible to have nested __UNIQUE_ID_,
+  * such as
+diff --git a/tools/objtool/tests/generic/fixtures/identity/promotion_crc32.c b/tools/objtool/tests/generic/fixtures/identity/promotion_crc32.c
+new file mode 100644
+index 000000000000..d95914eacdc0
+--- /dev/null
++++ b/tools/objtool/tests/generic/fixtures/identity/promotion_crc32.c
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2026 Longjun Luo <luolongjuna@gmail.com> */
++unsigned int tx(unsigned int value)
++{
++	static volatile unsigned int crc32;
++
++	return crc32 += value;
++}
+diff --git a/tools/objtool/tests/generic/fixtures/identity/promotion_crc32_user.c b/tools/objtool/tests/generic/fixtures/identity/promotion_crc32_user.c
+new file mode 100644
+index 000000000000..b44fa1d4a75e
+--- /dev/null
++++ b/tools/objtool/tests/generic/fixtures/identity/promotion_crc32_user.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2026 Longjun Luo <luolongjuna@gmail.com> */
++#include "common.h"
++MODINFO;
++
++unsigned int tx(unsigned int value);
++
++unsigned int target(unsigned int value)
++{
++#ifdef PATCHED
++	return tx(value);
++#else
++	return value;
++#endif
++}
+diff --git a/tools/objtool/tests/generic/test-identity-thinlto-crc32.sh b/tools/objtool/tests/generic/test-identity-thinlto-crc32.sh
+new file mode 100755
+index 000000000000..66988d0b7692
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-identity-thinlto-crc32.sh
+@@ -0,0 +1,23 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Copyright (C) 2026 Longjun Luo <luolongjuna@gmail.com>
++# ThinLTO promotion must retain the digits in a static variable's name.
++. "$(dirname "$0")/../identity-lib.sh"
++
++setup
++build_identity_pair thin "" identity/promotion_crc32.c identity/promotion_crc32_user.c
++in_symbols orig.o | awk '$4 == "OBJECT" && $5 == "LOCAL" && $8 == "tx.crc32"' |
++	grep -q . || probe_skip "CRC state was not local before importing"
++in_symbols patched.o | awk '$4 == "OBJECT" && $5 == "GLOBAL" && $8 ~ /^tx\.crc32\.llvm\.[0-9]+$/' |
++	grep -q . || probe_skip "ThinLTO did not promote the CRC state"
++
++assert_checksum_matches tx
++run_diff
++assert_patched target
++assert_not_patched tx
++out_symbols | awk '$4 == "OBJECT" && $7 != "UND" && $8 ~ /^tx\.crc32(\.|$)/' |
++	grep -q . && fail "promoted CRC state was allocated again"
++run_post_link
++assert_original_reference target tx.crc32
++
++pass "digits in static names survive ThinLTO promotion"
 -- 
 2.55.0
 
