@@ -1,63 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794327059;
-	b=OavfBQmDnven9Ee69Dy3GFBTlsr8J9eZYbDeS5gKF1fgEq4XT8owNp4hGByBnmfIp4FX
-	 474gpuS7/3p/kDlXTUYlnCr0NQI8CUIaD8fkwh2MrIU5t7jUI/5yxBJoM05SwlAKB2fT7
-	 Y1Pa9TZqBa5TEOfm9roHK23Ilm07uibzghaMRgNar/oOJU7AkHmeQnSHfyeoIsBwNZiah
-	 zk0tg0zLfyGcX0f/yqBxTLdlKw1L2ODiMKUgEGAqKJwsV+c7qmbcURqcoroqEdZZ4QgpR
-	 u2T/FlPy3uA6pT5o9006gbgs9eU/2Ql0w+Xhg9T2UUEWbtkFoVWDqA9JB/6o93fNh4Q==
+	t=1794328514;
+	b=D8ig5Q18dqPTQMuYEaLf6kk6PKMLW8imKjIeLxpiW8K0v22ojW2dUfrPO2HnKXQEXTZT
+	 qUq/yeUr7Pe7WnGa6eYOTnWMe58qu80ipNX053Yi7U3mzSGpVCifHMK+eVqN0qNBH25+/
+	 2n/WqklDOz0d/YZ/wUxRxN/Je/DKCmGsYjb5nhJreJ35f5kWEk07/MDrPkYlbpm3YlMEu
+	 EBnJwRpKyH4uC0uDcSNnfQo9KlLOT5MQkJgwj2BuOY9z/Kv17Mbv6AivKBAaYsvfHMgp9
+	 a/fLIyAARuCjNs9qWBEnwyhvxpks2Vtwt6r5M1XQwWcijJPLWh0qJ+k9DZPBshtj5bg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794327059;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=AInHf90morvpMUaE46oqpoBtv/4XBNiYa6yW94Kaa3s=;
-	b=qE45s/N610zLbR5JrlXGWX5DQKBV0mWxnOT8fD2WqGX5eAeadGS6+JBEgpH5GXpSWkFb
-	 xlu6iE0oXXgPtvLy5UHXceHJkN8GxCt5KgGg7RVyVguvHdtOkgOVHXSf/xe6qcFQBejlP
-	 5tXD2oHchi/zycBWVfPaGcMafvWRplzon2EgNpgVj0sLEUQVtZc60rjHk96kLQAqdcQRY
-	 wOF19zQOuE8AXK7tSaDdRdP5xX5g6msF/gkaP169MfUmSIZ9u0XB5OrKD9FW5rOoEdzI/
-	 TOy38dsJGindZpPlHMn4HGnYdwXs4JBB+22zF+yohXc56tndTDM8gEnGGLWO4ihmIvw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794328514;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=QwunAeyQcIIUis+s7GEtmUpT6+XX7BrzAJJ3ZXD35YE=;
+	b=TUBwjTX0Exx8Umiv4Qn9u4MttuimQVE8oNgM8waRut8lyzntUFEu5Tq08UQE6RO7uQk4
+	 xmKWcH0+cBZEJ98PTQ1KVP+tSEKZ1SZMTCsOs3v4F/PjW//I324DHOGUoN1Yfwen6VToc
+	 SnaJD6PtrE3VkNF2H54my5fRMgyxa35I4F5YAeQiSzilTpiN5dSt2GkvIEZnddkDgYE91
+	 iciqpAga9b1GNOQaI8E5OVQ1Y8OwoC3qOmklsvUDQ3Fg98ZJvjgRehyNh5g8neLaqsP5/
+	 0G7J3+O5/xces16HwV83cVJPw/GVIzEb5bePVvL65wXz3J7DVB/+gnNquy9jJYNqfbg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O2+pu6uY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boIp9VuJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF6C60A6F7F;
-	Tue, 10 Nov 2026 16:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB376606A228
+	for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 16:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=O2+pu6uY
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD30D1F008A6;
-	Tue, 10 Nov 2026 16:10:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boIp9VuJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CDE1F0089F;
+	Tue, 10 Nov 2026 16:35:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794327059;
-	bh=AInHf90morvpMUaE46oqpoBtv/4XBNiYa6yW94Kaa3s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=O2+pu6uYFzsbGdUmLrXYMxR72TJz+jfs7BImWUp4J8lL1FNOzrGPuixnc8JUN3wiP
-	 uiv0RcN9sMk3QFxj1XUm76/zEm0z+H/AreKts7PW/n3Hd8GDGANFTPzE1/pKFvhgG4
-	 KayAnPQKduLvRmROl6UbkSHna9gNlwUisVZG4ZYFBLLhWxgAtcSqQfeyBIpOhB7yDd
-	 eu+995gcKMqgz6NGBYUqdjoDuidmPRqOP+ElVPVeK9cphb7StfG9RU/mmbaCeXuAJi
-	 Tibp5nqxd5m9vWLPDqFqkwFptRfMnjQfUGbVW9UonmRX7viSb7nHJGXKq0tuhl/wbj
-	 T6npLU7IcdweQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Song Liu <song@kernel.org>,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] selftests/livepatch: run the tests with prebuilt test modules
-Date: Tue, 10 Nov 2026 11:10:50 -0500
-Message-ID: <20261110161050.2451750-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261110161050.2451750-1-sashal@kernel.org>
+	s=k20260515; t=1794328513;
+	bh=QwunAeyQcIIUis+s7GEtmUpT6+XX7BrzAJJ3ZXD35YE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=boIp9VuJ0lJhm/HYzZUQdkGgkP9YO24yCYkNQV+mZRCku83RECbUCw1/6ZqAW7H0e
+	 9wZNo+rw1437nNsIZg4kVxxV0l1PBe/HJR0W6NOXjQOeAUnF5EbTdtCCkGRVNk/nTq
+	 x9Z0Suo4X1ht5qJiqY8v2FgRHjHLq8zFBmqGPqTkG2cIrd40Ihv8BaMzO+A97LFW5V
+	 QwPm3CermDinSWNKi6QY7sx1eQlwwEzqcFnbHb07xUs69EzJU4KmmCqB2SPE6wmMV7
+	 +FK8bzrdGYnhEGLqQ8zlLnWER/eN6ylkw4zSNJ5FdZc28iwYtxxZsUuIbZHFb8gKEx
+	 /z5fbAXiJQ1Cg==
+Message-ID: <sashiko-outbox-207388@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v4 2/4] selftests/livepatch: clean the test modules
+ without a kernel build directory
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sasha Levin" <sashal@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Miroslav
+ Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
+Cc: "Song Liu" <song@kernel.org>, "Marcos Paulo de Souza" <mpdesouza@suse.com>, "Eva
+ Kurchatova" <eva.kurchatova@virtuozzo.com>, "Yafang Shao" <laoar.shao@gmail.com>, "Shuah
+ Khan" <shuah@kernel.org>, live-patching@vger.kernel.org
+In-Reply-To: <20261110161050.2451750-3-sashal@kernel.org>
 References: <20261110161050.2451750-1-sashal@kernel.org>
+ <20261110161050.2451750-3-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 16:35:12 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -66,67 +63,41 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The tests are skipped unless the machine running them has a kernel
-build directory, in $KDIR or /lib/modules/$(uname -r)/build. They do
-not need one when the test modules were built with the selftests,
-because the scripts load the modules from test_modules/.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Low] selftests/livepatch: missing Fixes: trailer in commit message
+--
 
-As a result the tests are skipped on a machine running an installed
-selftests tree without the kernel devel files, for example one
-installed with
+commit d55e0dca037d90570993238825fe598e3b4846aa
+Author: Sasha Levin <sashal@kernel.org>
 
-  make O=/tmp/kselftest TARGETS=livepatch kselftest-install
+> selftests/livepatch: clean the test modules without a kernel build direct=
+ory
+>
+> "make clean" removes the test modules only when KDIR exists, and KDIR
+> defaults to the build directory of the running kernel. Modules built
+> for another kernel are therefore left in the source tree by a plain
+> "make clean" on a machine without the running kernel's devel files,
+> for example after building them as KernelCI does:
+>
+>   make -C tools/testing/selftests O=3D<kernel> KDIR=3D<kernel> TARGETS=3D=
+livepatch
+>   make -C tools/testing/selftests TARGETS=3Dlivepatch clean
+>
+> Removing external modules does not need a configured kernel. Clean
+> them through the kernel source tree that contains the selftests, and
+> do not pass on O=3D or KBUILD_OUTPUT, which the kernel Makefile would
+> take as its build directory.
+>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-although the modules are there.
+[Severity: Low]
+This fixes the KDIR check on the clean target.  Should it include:
 
-Run the tests when the test modules are available, so that they can
-run without the kernel devel files. Without the modules, keep skipping
-the tests when there is no kernel build directory to build them with.
+  Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if ke=
+rnel-devel is missing")
 
-Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if kernel-devel is missing")
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/livepatch/functions.sh | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 8b26b70f92d8c..eebd36b0e0eaf 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -44,14 +44,18 @@ function is_root() {
- 	fi
- }
- 
--# Check if we can compile the modules before loading them
--function has_kdir() {
-+# Check that the test modules were built, or that we can compile them
-+function has_test_modules() {
-+	if compgen -G "test_modules/*.ko" > /dev/null; then
-+		return
-+	fi
-+
- 	if [ -z "$KDIR" ]; then
- 		KDIR="/lib/modules/$(uname -r)/build"
- 	fi
- 
- 	if [ ! -d "$KDIR" ]; then
--		echo "skip all tests: KDIR ($KDIR) not available to compile modules."
-+		echo "skip all tests: test modules are not available and KDIR ($KDIR) is not available to compile them."
- 		exit $ksft_skip
- 	fi
- }
-@@ -151,7 +155,7 @@ function cleanup() {
- function setup_config() {
- 	is_root
- 	[[ -d "$SYSFS_KLP_DIR" ]] || skip "livepatch is not available"
--	has_kdir
-+	has_test_modules
- 	push_config
- 	set_dynamic_debug
- 	set_ftrace_enabled 1
--- 
-2.53.0
-
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110161050.2451=
+750-1-sashal@kernel.org?part=3D2
