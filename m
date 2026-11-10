@@ -1,91 +1,58 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794274706;
-	b=RrhgwIlMNyeTMthQiC2ot3kCTipeBlGoB3SrSdHMYit82IrYSwisoQnuceRBomCGBlgJ
-	 pHEkMSO6SXDaXR5QmagX7rGfO1qt+hRVSTkHfG5rb1Ftqev5pgrGDnmCdbtcL5JLHm9VT
-	 OvQDOq5vEro2zaYR+FvwKwqs3u5hU6sLCDC/HX5Xai86WFqeSEkuz2/oQHrqGbuxyJVz3
-	 rL5FeUEssvzR+tpoKsW7dQxUb5O+skGkhJUilUn4ZGg2tzCJSgaDvj0iH25r5Q4k0wdnH
-	 +zGqn4NykhgxzeArbhMbY0xt/U6K2UxsnBhEySM/tbcaM3xBRFmQdPDho7km8I/gSFQ==
+	t=1794275458;
+	b=0cqNxWsEfpq2hWOplgrzrQErXBmIvC0blQH5J9Rh1oAvT9b/VE3TvbTsovddzad/OLQv
+	 ezXnP26YCOD8HuYJN4JrkR3Lu5UJQzgU3wyVObfZvTBbR2a+UWHhW2jPE7Q9ltQ6XVjgr
+	 OrqG5Q7GUJH6t+dH37Pk5L3WkDIf8CUbrOaHSWOZqANM67DJ9pepCLNnt8Xu/dUxtBcbD
+	 uIfERvY8hmmH5eATNRqtGr//g17e3fg/h8TKOX/t9tCgST11KHP7sU0f9sHBdQ97VCTJF
+	 AuLF6R1dSsMjYAD9S3TIBtSY+W5Isn4PJUzCGNXH6/R0W7znHdLUP694QQdM+x0NDvQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794274706;
-	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
-	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
-	b=UY982qVSlwBWqBkRoMybnZTvT3SIyH8w7v5NPQjUwRz5PnHKHXWC2z3oESNa5uRo7DIQ
-	 8nEUt5Nboj5+4lSOsGTWvAhUdja0i6TVH2U1hrAeq09Cx+fYXxIjiXK5fr7AsezaFV9uF
-	 vcDgdU7E4tPGJagLvz0rsCiWspHMqXb5pHR1t7sV4mIx/DjTk0y8EkQ81aZeN9iRRPodB
-	 EdXMN5JOimGTMwxF1lQYEhkvcpZovBsJ+GbmBHHyxNhkFKTT3+hbrNZZI4LqoP4TStyQ6
-	 crIBFldq+DyIsAzNeQa8M8uSiAqrmW5nSSvBRhV0bIp3vmaKYkMI1xwwCVEALCI219Q==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794275458;
+	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
+	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
+	bh=iBevaI+ckIf1/X2GXL2TLVM1xgMW2RuCaaIi3r/F4RQ=;
+	b=f/bls5MtekGrW9q6FsulMiPmIkCmzqOlDsvfZp54uCVKPX6fVGyAFAhbcpdK7jfcyl58
+	 oLF3ykaXM2YAt80WfT5GI3oxlTs/iTI/UzybmnA402LWX8E057MPbEzZ2Pv0cES630I24
+	 ezsl390pbw2KNl6hu8e0/DOVBPo96BfcDEGvwLqIK/f4zQbWCJYQraRE25DrgotdOTXv4
+	 uXS7magVAj66PgT9hBz86zesYX6pjpG2SdKNudaDBUDYa1RC0m23F9u1Cc9m6DejsydfR
+	 zAUqp0S8Bfe/D7E6rMk62g8enuZxVVigNTTwbUPAfBNYTXvKXt5XB44Y4GB/sTpX5wQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.alibaba.com;
-	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH;
-	arc=none smtp.remote-ip=115.124.30.130
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KTjVQwha;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA97606A337;
-	Tue, 10 Nov 2026 01:38:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BA97606A337
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EFF6606A321;
+	Tue, 10 Nov 2026 01:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1794274702; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
-	b=goqDVIjHZtfWxuBa9AQ/BDM33mg6OTpuRFyL5CwERRi4+lngfmP9jXOZbT016qJNyTHScVWbv+Wq1lPvSy7UKRTPtTyt8XDHSPpFo2j0kePenc3uObcpI83exkWLdePtB8O6Fr0ozkaLUmT8E6stzDKib4TWR0YtFOHmYB6PgxA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0XETOXBV_1794274698;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XETOXBV_1794274698 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 10 Nov 2026 09:38:20 +0800
-From: Shuai Xue <xueshuai@linux.alibaba.com>
-To: palmer@dabbelt.com,
-	pjw@kernel.org,
-	aou@eecs.berkeley.edu
-Cc: alex@ghiti.fr,
-	linux-riscv@lists.infradead.org,
-	oleg@redhat.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	james.clark@linaro.org,
-	jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org,
-	mpdesouza@suse.com,
-	martin@kaiser.cx,
-	kmehltretter@gmail.com,
-	oliver.yang@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 10/10] selftests/livepatch: Add RISC-V syscall wrapper prefix
-Date: Tue, 10 Nov 2026 09:37:50 +0800
-Message-Id: <20261110013750.36800-11-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261110013750.36800-1-xueshuai@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=KTjVQwha
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ACB21F0089F;
+	Tue, 10 Nov 2026 01:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794275457;
+	bh=iBevaI+ckIf1/X2GXL2TLVM1xgMW2RuCaaIi3r/F4RQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KTjVQwhar9Qw2cuX3deiD2c51K1HmRUuDLfB/fXlepswcWI3ToAm1LsIFreURu/gx
+	 Cl98FMlk9DdK1gEwm7A3OPQ2SIAPPXzqY+vpSjPOn6URvwNggXP9DgGsMhF1uNAN9g
+	 xkg/opYNPGqq+OUEPrkhNdpTsrNwU6Vxp8WdBUtVRFcGum+Rx2rBrzk4fNOc4flw8h
+	 0uC9NN6QpzmraPAIenqy5DxUhgggaqiOfyZSCSdmG4mOeCArKeh7WqAOJHatRbgSEI
+	 wN1LPl3D6s4cbs050M+in7aw3IYEHKCCXCc1vSVfLNQO1Dtyl/qbo/JUTnZO92WOPL
+	 zkbTEYx0cCQ7w==
+Message-ID: <sashiko-outbox-205995@kernel.org>
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v7 02/10] riscv: Add KUnit test for stack trace start
+ frames
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Shuai Xue" <xueshuai@linux.alibaba.com>, palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu
+Cc: alex@ghiti.fr, oleg@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, shuah@kernel.org, mpdesouza@suse.com, martin@kaiser.cx, kmehltretter@gmail.com, oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org
+In-Reply-To: <20261110013750.36800-3-xueshuai@linux.alibaba.com>
 References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
  <20261110013750.36800-1-xueshuai@linux.alibaba.com>
+ <20261110013750.36800-3-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 10 Nov 2026 01:50:55 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -94,43 +61,52 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Wang Han <wanghan@linux.alibaba.com>
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue to consider:
+- [Medium] riscv: vmlinux link failure when CONFIG_KUNIT=3Dm with
+  RISCV_STACKTRACE_KUNIT_TEST
+--
 
-The syscall livepatch selftest resolves and patches a syscall wrapper
-symbol. To use that test for RISC-V livepatch validation, add the
-RISC-V FN_PREFIX definition for ARCH_HAS_SYSCALL_WRAPPER.
+commit 88e1ac2e959d970cabee9d276d02925cc3d44f40
+Author: Karl Mehltretter <kmehltretter@gmail.com>
 
-Without this macro, the syscall livepatch selftest cannot resolve the
-RISC-V target symbol, and the syscall-related livepatch test fails on
-RISC-V.
+riscv: Add KUnit test for stack trace start frames
 
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Acked-by: Miroslav Benes <mbenes@suse.cz>
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
-Tested-by: Martin Kaiser <martin@kaiser.cx>
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
----
- .../testing/selftests/livepatch/test_modules/test_klp_syscall.c | 2 ++
- 1 file changed, 2 insertions(+)
+This commit adds a KUnit test suite to verify the starting frame and skip
+counts of stack_trace_save() and ftrace_return_address() on RISC-V.
 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-index 08aacc0e14de..9baa2a5f84c9 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-@@ -24,6 +24,8 @@
-     #define FN_PREFIX __s390x_
-   #elif defined(__aarch64__)
-     #define FN_PREFIX __arm64_
-+  #elif defined(__riscv)
-+    #define FN_PREFIX __riscv_
-   #elif defined(__powerpc__)
-     #define FN_PREFIX
-   #else
--- 
-2.39.3
+Link: https://lore.kernel.org/r/20261010132712.46931-2-kmehltretter@gmail.c=
+om
 
+> diff --git a/arch/riscv/kernel/tests/Kconfig.debug b/arch/riscv/kernel/te=
+sts/Kconfig.debug
+> index 40f8dafffa0ab..eb79df5b2c5a4 100644
+> --- a/arch/riscv/kernel/tests/Kconfig.debug
+> +++ b/arch/riscv/kernel/tests/Kconfig.debug
+> @@ -42,6 +42,18 @@ config RISCV_KPROBES_KUNIT
+> =20
+>           If unsure, say N.
+> =20
+> +config RISCV_STACKTRACE_KUNIT_TEST
+> +	bool "KUnit tests for RISC-V stack trace start frames"
+> +	depends on KUNIT && STACKTRACE && FRAME_POINTER && KALLSYMS
+
+[Severity: Medium]
+Does declaring RISCV_STACKTRACE_KUNIT_TEST as bool while depending on
+tristate KUNIT break the vmlinux link when CONFIG_KUNIT=3Dm and
+CONFIG_RISCV_STACKTRACE_KUNIT_TEST=3Dy (such as under allmodconfig)?
+
+In that configuration, stacktrace_test.o is built into vmlinux while the
+KUnit core symbols it calls (__kunit_do_failed_assertion, kunit_log_append,
+etc.) live in kunit.ko, similar to the issue fixed for RISCV_KPROBES_KUNIT
+in 5fada1605733 ("riscv: tests: Make RISCV_KPROBES_KUNIT tristate").
+
+Should this depend on KUNIT=3Dy instead (since building stacktrace_test as a
+module would also cause sprint_symbol_no_offset() in
+riscv_stacktrace_check_skip() and riscv_return_address_check() to append
+" [stacktrace_test]" to the symbol names)?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110013750.3680=
+0-1-xueshuai@linux.alibaba.com?part=3D2
