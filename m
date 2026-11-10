@@ -1,58 +1,58 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794276624;
-	b=fJ/WM42pg+mDlcTIN8vOpvYu/dZCXAWVuQff/PC3cujWnYzyV99pewBf/aQEkLUNfcU2
-	 dCTJHsWxZMEn5XWL+GeFa30E4kqQSLcBlpggDHvyQ7JOlD2jun/j56PkVYRXljy/a0UpZ
-	 QExdeobN/ymT6VBNZ/NmZveSxiZDSpdOoR6Ns3MzN/eI0avBQigUAdJVzUwGgP35mYypH
-	 SUdsQNWoVMmC5OvbH4FskUNKhSJXfKKXilHQWJnDtm8sXD8d5fy5yOS03IOO5u7mHlQLF
-	 /W5f1ZOH0tw+5llnjvcOkcBWc6JwbIzD5nsEXAcxaj7w6OYqX1R+PH/Lt/a3xYPQM5g==
+	t=1794277254;
+	b=UB6jhqdEM6AUgOTJ53GHQK+AR6TdjUBzbiWi8TAhsircjrKyV58VI3xT5yTS8GiUzkkw
+	 Rh0eHEvX1liCep7htBxjvtElHqPMl+z34Jizv9ZEX0jGZ3YZaY74Av2HQB5WJuqDhlpy8
+	 soxjNlqHQmhOvgTj+8nJz2YNKZhTePyxUrIhRIsiaaXtNvGSwUio1ihM4p7iWqJBrQbzb
+	 T8KRqJLZQs4x2cPK3PbafPc1oiHB5x9Ie/fm3DnUubXa/qn3lOMI1KgKR2yQ1fe+F2o6+
+	 yC5aVUCIItPGxtHAeitr3v3fH1nMCaa3Go8BoDyY2wLSMcEopEjviPYEldE3g2H2iAg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794276624;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794277254;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=nPnnMOZqYt8lLl9l7pm+LsWMW6V6ExRJbWXpfXCeafc=;
-	b=QOvrE1e2ETDhKGffWuWeMK67w/7q/W7YHDnIWTx4NzXhZqFWGunPwd3+h8zZCcC0XdBe
-	 cjtFt1vAlViIO9ujvSFpu0TL8ZMJ/+hGZ8Yo4a17vVlJy+yCj+XfESc2gn3hQxuVLDojf
-	 7YroyB5eGi82+Pn7OFcX++D5kDWY0YIceufxIQEMiWqb8D8e5oui330TB2dZBg/NAwCOI
-	 VFRYdmbYoOr9HXpq4SgBC8hyiTZF5SjsVTEMvUq+3Ng81R6UoJ5GCNzqnya3dogwzDzgT
-	 bdsTTuPf+SemBD1lUxOFhTEcGKaSw2Ok9rqZK2ARpyrnUoJwCs/hPgf8cT7iGdIfqGQ==
+	bh=NIqOQmbsfVs3wvBHQaYPOQv0i+lEO+2NVk/bDq2h60Y=;
+	b=el9p0vOB3zhJA7S58nBQnmLkWKmRlHh0uSFIt5Aep2VfCuaQ0kmlcxc01+eb8fW0b1IV
+	 NS7efikxp+SXjIz2T2/q+A4bvAaUIdp7o6lFsHygv5YLOiG7sisFIyXJNS8zui5OQUW2o
+	 TyRybc5XbmWoxz9er/mi9Be9uujEri1G9gka3OGbJnqCfhhxoJhkKEfcmID6kqzTv/sVN
+	 jGUZx2BGz+d8Ii15CfIKOTTDWptjh+G+78yAUrpUoR3yYx1ZlpOY7JpIHnU7D3BC/fJnO
+	 2PzXM0WkwZQzyTt72t+I0pJtxWgQjGX9tsOFI/OJVyxTogXz+IKFrRk4wYHyr1yOn7w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dYYtq4R3;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ELyIfafJ;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C59606A31C;
-	Tue, 10 Nov 2026 02:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E000E606A321;
+	Tue, 10 Nov 2026 02:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dYYtq4R3
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D661F0089F;
-	Tue, 10 Nov 2026 02:10:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ELyIfafJ
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1ECB1F0089F;
+	Tue, 10 Nov 2026 02:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794276624;
-	bh=nPnnMOZqYt8lLl9l7pm+LsWMW6V6ExRJbWXpfXCeafc=;
+	s=k20260515; t=1794277253;
+	bh=NIqOQmbsfVs3wvBHQaYPOQv0i+lEO+2NVk/bDq2h60Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dYYtq4R3ZId/jd4Hvlul01rATjsJnXAP8BEsjmdUkmixQmtxvuz+oJwby3w5AO5xX
-	 y1CuDC/pY1smjweqqP1jigJ+7H1WHCUdhptx9WCnar+brlDbpx1/W4dp/O5EG0spqb
-	 eWNU2+w+Qxt5OT2Av6ldyIknsUG6LVTGjCfALVZI247mQTse8CTj+3ALdJQhwoHwda
-	 2PuNxOnp+1nLAvhznvOZcuBHP4b7CW5yoC+kO/QtAzxWwJcARlHuT7T4qF+0fT9LZJ
-	 xwbTVIulS7Naw9VgEB9Qo1cDBA+iHJdeyge/Wo0Ne3LOtNmAjUfeI0LdBU9i4wK1VS
-	 cccnkbquyCaww==
-Message-ID: <sashiko-outbox-206030@kernel.org>
+	b=ELyIfafJoLme1SBv2N0kim2ovxiAblyx8rpe39Xe2lJv3YZHR1PtncVAZVOo+pQpK
+	 z3Ds8uM4DD8eqpvJlBPwhAh2rxz60HmswaxL6SoXBwiDYg+09c5Q+Mb0ePV39BvduQ
+	 e0Gbn9lUgEi+QnFXLBsdndXBC9dd1YEs7bzQ7ZjUUjlZLqY85WziElPyNz77GjKUOn
+	 hob0NLZOk3GhFyTDGN8PuElbcMnkJb+H8mrsPap3pEDamsBPatSzcxo+o0jtVGfgDD
+	 Tx4mgxUDW3j388V0JBRbY4Ofk1Bczk1CwqQH2AL7sv3NpCE/QWEzE83oeOBic+oczM
+	 +un1q94/LQWAQ==
+Message-ID: <sashiko-outbox-206040@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 09/10] riscv: Kconfig: enable
- HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+Subject: Re: [PATCH v7 08/10] riscv: stacktrace: switch to frame-pointer
+ based unwinder
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Shuai Xue" <xueshuai@linux.alibaba.com>, palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu
 Cc: alex@ghiti.fr, oleg@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, shuah@kernel.org, mpdesouza@suse.com, martin@kaiser.cx, kmehltretter@gmail.com, oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org
-In-Reply-To: <20261110013750.36800-10-xueshuai@linux.alibaba.com>
+In-Reply-To: <20261110013750.36800-9-xueshuai@linux.alibaba.com>
 References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
  <20261110013750.36800-1-xueshuai@linux.alibaba.com>
- <20261110013750.36800-10-xueshuai@linux.alibaba.com>
+ <20261110013750.36800-9-xueshuai@linux.alibaba.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 02:10:22 +0000
+Date: Tue, 10 Nov 2026 02:20:51 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -64,130 +64,143 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 4 potential
 issues to consider:
-- [High] riscv: module: fault and UAF in apply_relocate_add() for klp
-  relocs
-- [Medium] riscv: stacktrace: ftrace_caller() omits frames in reliable
-  unwind
-- [Medium] riscv: stacktrace: uninitialized frame read in
-  return_to_handler()
-- [Medium] riscv: stacktrace: arch_rethook_trampoline() omits caller
-  frame
+- [High] riscv: stacktrace: broken leaf-function unwind in
+  kunwind_next_frame_record()
+- [High] riscv: stacktrace: broken unwind across ftrace_caller and
+  return_to_handler
+- [Medium] riscv: stacktrace: bogus walk_stackframe entry in
+  __walk_stackframe()
+- [Low] riscv: stacktrace: inaccurate metadata type offset comment
 --
 
-commit 57947c1aaf895b44b13bb74dddecd8c57f82bb66
+commit 263985113a916e8cd08cc4485092812e49e28303
 Author: Wang Han <wanghan@linux.alibaba.com>
 
-riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+riscv: stacktrace: switch to frame-pointer based unwinder
 
-This commit selects HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH on 64-bit
-RISC-V configurations with FRAME_POINTER enabled, and sources
-kernel/livepatch/Kconfig.
+This commit replaces the open-coded frame-pointer stack walker with a
+kunwind state machine, adds arch_stack_walk_reliable(), and routes
+perf_callchain_kernel(), dump_backtrace(), and __get_wchan() through
+arch_stack_walk().
 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index e7891a2a89da6..4512f67bbfd98 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -186,6 +186,7 @@ config RISCV
->  	select HAVE_KRETPROBES
->  	# https://github.com/ClangBuiltLinux/linux/issues/1881
->  	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
-> +	select HAVE_LIVEPATCH if FRAME_POINTER && 64BIT
+> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrac=
+e.c
+> index a5abb705d43ba..490092c28d612 100644
+> --- a/arch/riscv/kernel/stacktrace.c
+> +++ b/arch/riscv/kernel/stacktrace.c
+
+[ ... ]
+
+> +/*
+> + * Unwind from one frame record to the next.
+> + *
+> + * On RISC-V, the frame record sits at fp - sizeof(struct frame_record),
+> + * immediately below the address pointed to by fp/s0. This applies to bo=
+th
+> + * normal frame records and metadata frame records (embedded in pt_regs).
+> + *
+> + * A metadata record is identified by both fp and ra being zero in the
+> + * frame_record portion, with a type value following at fp + 16.
+> + */
+
+[Severity: Low]
+This isn't a bug, but since fp points immediately above struct
+frame_record on RISC-V (meta_base =3D fp - sizeof(struct frame_record)),
+meta->type is located at fp rather than fp + 16.
+
+> +static __always_inline int
+> +kunwind_next_frame_record(struct kunwind_state *state)
+> +{
+> +	unsigned long fp =3D state->common.fp;
+> +	struct frame_record *record;
+> +	struct stack_info *info;
+> +	unsigned long new_fp, new_pc;
+> +	unsigned long record_base;
+> +
+> +	if (fp & 0x7)
+> +		return -EINVAL;
+> +
+> +	record_base =3D fp - sizeof(*record);
+> +
+> +	info =3D unwind_find_stack(&state->common, record_base, sizeof(*record)=
+);
+> +	if (!info)
+> +		return -EINVAL;
+> +
+> +	record =3D (struct frame_record *)record_base;
+> +	new_fp =3D READ_ONCE(record->fp);
+> +	new_pc =3D READ_ONCE(record->ra);
+> +
+> +	if (!new_fp && !new_pc)
+> +		return kunwind_next_frame_record_meta(state);
+> +
+> +	unwind_consume_stack(&state->common, info, record_base,
+> +			     sizeof(*record));
+> +
+> +	state->common.fp =3D new_fp;
+> +	state->common.pc =3D new_pc;
+> +	state->source =3D KUNWIND_SOURCE_FRAME;
+> +
+> +	return 0;
+> +}
 
 [Severity: High]
-Can klp_apply_object_relocs() -> apply_relocate_add() trigger a store page
-fault and use-after-free when applying late .klp.rela.<module>.* relocation=
-s?
+Does unwinding from KUNWIND_SOURCE_REGS_PC corrupt the unwind and leak
+kernel stack addresses when an exception or interrupt hits a leaf
+function?
 
-During load_module(), complete_formation() marks module text and rodata
-(including .plt, .got, and .got.plt) read-only under CONFIG_STRICT_MODULE_R=
-WX
-before klp_enable_patch() or klp_module_coming() runs.  When
-apply_relocate_add() is later called on a module with mod->state !=3D
-MODULE_STATE_UNFORMED, the relocation handlers in arch/riscv/kernel/module.c
-(such as riscv_insn_rmw()) and module_emit_got_entry() /
-module_emit_plt_entry() in arch/riscv/kernel/module-sections.c write direct=
-ly
-to read-only module memory instead of using text patching helpers and
-flushing the instruction cache:
+On RISC-V with CONFIG_FRAME_POINTER=3Dy, leaf functions do not push ra onto
+the stack: they save only the caller's s0 at fp - sizeof(unsigned long)
+(which aliases record->ra), leave the return address in regs->ra, and
+leave fp - 2 * sizeof(unsigned long) (record->fp) as uninitialized stack
+padding or local storage.
 
-arch/riscv/kernel/module.c:riscv_insn_rmw() {
-	...
-	parcel[0] =3D cpu_to_le16(insn);
-	parcel[1] =3D cpu_to_le16(insn >> 16);
-	return 0;
-}
+The previous unwinder checked for this case, whereas kunwind_init_from_regs=
+()
+and kunwind_next_regs_pc() store regs in state->regs without ever reading
+it back, and kunwind_next_frame_record() unconditionally reads record->ra
+as new_pc and record->fp as new_fp.  Because __kernel_text_address()
+filtering is also removed and perf_callchain_kernel() now calls
+arch_stack_walk(), a PMU sample in a leaf function passes the caller's
+saved kernel stack pointer in record->ra to fill_callchain() ->
+perf_callchain_store(), exposing it to userspace, while regs->ra is lost
+and the uninitialized word in record->fp is used as the next frame
+pointer.
 
-In addition, module_frob_arch_sections() caches pointers into the temporary
-info->sechdrs buffer in mod->arch.plt.shdr, mod->arch.got.shdr, and
-mod->arch.got_plt.shdr, which free_copy() frees via vfree() at the end of
-load_module():
+[ ... ]
 
-arch/riscv/kernel/module-sections.c:module_frob_arch_sections() {
-	...
-	for (i =3D 0; i < ehdr->e_shnum; i++) {
-		if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt"))
-			mod->arch.plt.shdr =3D sechdrs + i;
-		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got"))
-			mod->arch.got.shdr =3D sechdrs + i;
-		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".got.plt"))
-			mod->arch.got_plt.shdr =3D sechdrs + i;
-	}
-	...
-}
+> +static __always_inline bool
+> +arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, v=
+oid *cookie)
+> +{
+> +	/*
+> +	 * At an exception boundary we can reliably consume the saved PC. We do
+> +	 * not know whether ra was live when the exception was taken, and
+> +	 * so we cannot perform the next unwind step reliably.
+> +	 *
+> +	 * All that matters is whether the *entire* unwind is reliable, so give
+> +	 * up as soon as we hit an exception boundary.
+> +	 */
+> +	if (state->source =3D=3D KUNWIND_SOURCE_REGS_PC)
+> +		return false;
+> +
+> +	return arch_kunwind_consume_entry(state, cookie);
+> +}
 
-When late livepatch relocations emit GOT or PLT entries,
-module_emit_got_entry() and module_emit_plt_entry() dereference these freed
-shdr pointers (e.g. got_sec->shdr->sh_addr), and re-applying relocations wh=
-en
-a target module is reloaded increments num_entries past max_entries and hits
-BUG_ON().
+[Severity: High]
+Can kunwind_next_frame_record() and arch_stack_walk_reliable() unwind
+across ftrace_caller and return_to_handler?
 
->  	select HAVE_MOVE_PMD
->  	select HAVE_MOVE_PUD
->  	select HAVE_PAGE_SIZE_4KB
-> @@ -195,6 +196,7 @@ config RISCV
->  	select HAVE_PERF_USER_STACK_DUMP
->  	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
->  	select HAVE_REGS_AND_STACK_ACCESS_API
-> +	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && 64BIT
-
-[Severity: Medium]
-Does arch_stack_walk_reliable() silently omit the traced function and its
-caller when unwinding a task inside an ftrace callback or direct trampoline?
-
-With CONFIG_DYNAMIC_FTRACE_WITH_ARGS, the patchable entry of a traced
-function jumps to ftrace_caller before the function sets up its stack frame.
-At that point, t0 holds the traced function's PC, ra holds the return addre=
-ss
-in its caller, and s0 still holds the caller's frame pointer.  In
-arch/riscv/kernel/mcount-dyn.S, SAVE_ABI_REGS saves t0, x1, and x8 into
-struct __arch_ftrace_regs without constructing frame records on the stack or
-updating s0:
+Unlike arm64, RISC-V's ftrace trampolines do not maintain a valid struct
+frame_record chain at s0 - sizeof(struct frame_record):
 
 arch/riscv/kernel/mcount-dyn.S:SAVE_ABI_REGS {
 	addi	sp, sp, -FREGS_SIZE_ON_STACK
 	REG_S	t0,  FREGS_EPC(sp)
 	REG_S	x1,  FREGS_RA(sp)
 	REG_S	x8,  FREGS_S0(sp)
-	...
+    ...
 }
-
-When ftrace_caller calls op->func, op->func saves the unchanged s0 in its
-frame record.  Unwinding that frame record in kunwind_next_frame_record()
-advances directly to the caller's caller with state->source =3D=3D
-KUNWIND_SOURCE_FRAME, which arch_reliable_kunwind_consume_entry() accepts as
-reliable.  During a livepatch transition, klp_check_stack() can miss that a
-preempted or blocked task is executing inside a patched function or its
-caller.
-
-[Severity: Medium]
-Can kunwind_next_frame_record() read uninitialized stack memory when
-unwinding through return_to_handler()?
-
-In arch/riscv/kernel/mcount.S, SAVE_RET_ABI_STATE allocates
-FREGS_SIZE_ON_STACK bytes, saves ra and s0 at low offsets from sp, and sets
-s0 to sp + FREGS_SIZE_ON_STACK before return_to_handler calls
-ftrace_return_to_handler():
 
 arch/riscv/kernel/mcount.S:SAVE_RET_ABI_STATE {
 	addi	sp, sp, -FREGS_SIZE_ON_STACK
@@ -198,47 +211,81 @@ arch/riscv/kernel/mcount.S:SAVE_RET_ABI_STATE {
 	addi	s0, sp, FREGS_SIZE_ON_STACK
 }
 
-The 16 bytes at s0 - 16 (sp + FREGS_SIZE_ON_STACK - 16) are never
-initialized.  When unwinding a task inside ftrace_return_to_handler(),
-kunwind_next_frame_record() restores fp =3D sp + FREGS_SIZE_ON_STACK and on=
- the
-next step reads fp - sizeof(*record) as a struct frame_record, either
-triggering WARN_ON_ONCE(tsk =3D=3D current) in kunwind_next_frame_record_me=
-ta()
-if those bytes happen to be zero or following a bogus frame pointer and
-skipping live frames while returning 0 (reliable).
+In ftrace_caller, SAVE_ABI_REGS saves ftrace_regs without updating s0 or
+creating a frame record, so a C tracer callback saves the traced
+function's caller s0 alongside a return address in ftrace_caller.  Walking
+past the callback jumps straight from ftrace_caller to the caller of the
+traced function, silently skipping both the traced function and its
+immediate caller while arch_stack_walk_reliable() still succeeds.  (Commit
+"riscv: ftrace: always preserve s0 in dynamic ftrace register frame" noted
+that the reliable unwinder would read ftrace_regs_get_frame_pointer(fregs)
+directly, but kunwind has no ftrace_regs handling.)
+
+In return_to_handler, SAVE_RET_ABI_STATE sets s0 to sp +
+FREGS_SIZE_ON_STACK after saving only ra, s0, a0, and a1.  When unwinding
+past ftrace_return_to_handler(), kunwind_next_frame_record() reads
+s0 - sizeof(struct frame_record), which sits in the uninitialized upper
+words of the __arch_ftrace_regs allocation rather than at FREGS_S0(sp).
+
+[ ... ]
+
+> +/*
+>   * The generic code expects the first entry for the current task to be t=
+he
+>   * return address of arch_stack_walk() itself, the way x86 and arm64 rep=
+ort
+> - * it, and stack_trace_save() sizes its skip count accordingly.  Walking=
+ from
+> - * inside a called walk_stackframe() adds that function's own frame on t=
+op,
+> - * so inline the walker here and start from this frame instead.
+> + * it, and stack_trace_save() sizes its skip count accordingly.  Walking
+> + * from inside a called walk_stackframe() adds that function's own frame
+> + * on top, so call the always-inlined walker here and start from this
+> + * frame instead.
+>   */
+> -noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_ent=
+ry, void *cookie,
+> -		     struct task_struct *task, struct pt_regs *regs)
+> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_ent=
+ry,
+> +				      void *cookie, struct task_struct *task,
+> +				      struct pt_regs *regs)
+>  {
+>  	__walk_stackframe(task, regs, consume_entry, cookie);
+>  }
 
 [Severity: Medium]
-Does unwinding from inside arch_rethook_trampoline_callback() omit the call=
-er
-of the probed function while still reporting a reliable stack trace?
+On !CONFIG_FRAME_POINTER builds, doesn't __walk_stackframe() still report
+walk_stackframe as the first entry when unwinding the current task?
 
-When a kretprobed function returns to arch_rethook_trampoline(), its epilog=
-ue
-has already restored s0 to its caller's frame pointer, while the return
-address in the caller is held in current->rethooks.  In
-arch/riscv/kernel/probes/rethook_trampoline.S, arch_rethook_trampoline
-allocates PT_SIZE_ON_STACK without initializing S_STACKFRAME
-(FRAME_META_TYPE_PT_REGS) or updating s0 before calling
-arch_rethook_trampoline_callback():
-
-arch/riscv/kernel/probes/rethook_trampoline.S:arch_rethook_trampoline() {
-	addi sp, sp, -(PT_SIZE_ON_STACK)
-	save_all_base_regs
-
-	move a0, sp /* pt_regs */
-
-	call arch_rethook_trampoline_callback
-	...
+arch/riscv/kernel/stacktrace.c:__walk_stackframe() {
+    ...
+	} else if (task =3D=3D NULL || task =3D=3D current) {
+		sp =3D current_stack_pointer;
+		pc =3D (unsigned long)walk_stackframe;
+	} else {
+    ...
+	ksp =3D (unsigned long *)sp;
+	while (!kstack_end(ksp)) {
+		if (__kernel_text_address(pc) && unlikely(!fn(arg, pc)))
+			break;
+		pc =3D READ_ONCE_NOCHECK(*ksp++);
+	}
 }
 
-When kunwind unwinds arch_rethook_trampoline_callback()'s frame record,
-state->common.pc is inside arch_rethook_trampoline (past the entry address
-checked by is_kretprobe_trampoline()) and state->common.fp is the caller's
-frame pointer.  The next unwind step reads the frame record of the caller's
-caller, skipping the caller of the probed function and returning 0
-(reliable).
+Unlike the removed CONFIG_FRAME_POINTER version (which started at
+level =3D -1 to skip the placeholder pc), the !CONFIG_FRAME_POINTER loop
+calls fn(arg, pc) before reading *ksp++.  As a result, arch_stack_walk()
+reports walk_stackframe before scanning its own stack frame, shifting
+stack_trace_save() and return_address() off by one and printing a bogus
+walk_stackframe entry in dump_backtrace().
+
+Also, since all callers of walk_stackframe() are converted to
+arch_stack_walk() by this patch, walk_stackframe() has no remaining
+callers and its extern declaration in arch/riscv/include/asm/stacktrace.h
+is left without a definition when CONFIG_FRAME_POINTER=3Dy.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110013750.3680=
-0-1-xueshuai@linux.alibaba.com?part=3D9
+0-1-xueshuai@linux.alibaba.com?part=3D8
