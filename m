@@ -1,93 +1,63 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794314735;
-	b=xyC8jzigCHBid0oPIhPt1D7wTpocGjEL7sOz5pyFGU6aewOYfQvFLYW/+eei7/DHEXfz
-	 hXbCMufxPuodvO8O1UZpVj6mKQOaPHIdpdEMrw3oFE6vhayVVQ9ROLiEq/4cnRVqcR2++
-	 zzu3boI2DSRMaCDJezX1Cqd51h3vd4oQQZY94QZ6VnIPQadLNjKQITC108d+/YWHVP/H8
-	 PHXcwfX0p3AJj6ZmoDFsVro9HpnrdKPYPOW9D0GJ+WovXOP0FfJ9x83qvw7Tj66WCET9J
-	 RrpylwW2N82XYsjuDXW6IXuVA3hCs/nEb5wfQWhv4/jr0ZOPXSv2lhcBR1y/SSFd1ZQ==
+	t=1794327056;
+	b=YypW3o+ZnndQTexWmAs9uUZKMQIVyLDAuK9j8NjK112rHi2EyS7Pk06ifOUgA9LArEAB
+	 rTmK9AbgdlPhJDDJLpMLRbX2akIVXzk6j28xKIFtxd56i/r8s8NIofOi+YcOaCIvcRqJY
+	 QeNXSf9MPuY4BDxuTMWJnYcgMZEK60wTPvrz2YJAWvY6VZ+EArdd4VcNtzrgRmLNp/6sc
+	 ABWUuAI1Q9DRrU/V7w5nYbTl2Qx9LCcarOICAvwyo4WB6YTwWeRbuMgbBNGniYtRerRk2
+	 KPKFYc26xdxKyzK7FgbFUGZxmPTa3aiBtjW+3VOIF02273BrESQj69Ybi7iL7/oYK7g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794314735;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-	b=MO6AG58qVjFDsPFFDUOJrLLBwZ2meSR9h1Alg1HT1BXLCcKtKTzvYa3/zcEQkpJ9Sb0f
-	 JzebDZuUOEUefZKRq3mfyTy888qILQ/rxjejuO21Yz4kyoAZns8ev4rSuAUqYOokY2OLu
-	 XX1I8ZFMb5WsjdES8J7FAXBQ1527fDoXnhV2wkJqATSnIrTLXj7C1Jmd70nxSLtt7Pao0
-	 HmSbYAzDIO+UL1WuWxLGp7Gxw8M+x3EfU1cBk7MHFGoj6FArGfdytlyZSykBIjmhjwxMB
-	 76Uh15XaHsBB4I8JglLw9UyI71EGCGDLHT0WbNvpQnVAjFdzpobOQiOcIF4/HrZiKRQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794327056;
+	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+	bh=cD6EstMsPhe7VWF8sbmk9VuB7UraTEV78jy7xsSZcYQ=;
+	b=opSvYyddAUSGo3vm9E/SlWYbVZOwr4PoUmTMEvB5j+tAaBTwrqWLPpJHUu1jqUXtrhah
+	 dI9htFaN5BnWpbLnKT1qk6ZmmzSB5w9b7b1jyLBx8pKYgj/80nptCyjw/VgmKYhwzv8MP
+	 t8X5G6WlM6k1MF/JteifljhrEWSP78x4cInUcljsI86AOlMePMulQMKsTALu7p5227XUI
+	 5FGcH5HzDqgWYPogEaUCh4TgE+RMQuzAjR59X2umxpSYrmSRvDZ7XHkdox33Bn+ftSxzt
+	 HOhj3ZyNgIweyHJqyhIqkwUCwDY7EDty6fp4UN5TD2CpRUX3mEppjNI6kqDABiT4fJA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=suse.com;
-	spf=pass smtp.mailfrom=suse.com;
-	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=dEcZUNmu;
-	arc=none smtp.remote-ip=209.85.128.48
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CD4oVR0G;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31CE7606A32E
-	for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 12:45:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 31CE7606A32E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5038460A382A;
+	Tue, 10 Nov 2026 16:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=dEcZUNmu
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4a549cd7fd2so18195135e9.0
-        for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 04:45:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1794314733; x=1794919533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-        b=dEcZUNmuEyvW10CwwvMzlj73emtXK/fpU4H7CvDEry6gD8AmS9pMZBCHmGO+rTr/6s
-         a1jZcXSIrGxQ4/dzRn/1Oi5yj6+AZa7H3S8HLfDHBQdEeXVaLy5gTLgTxKfPDzwEq+Lo
-         MV0NN62fzU+Phg8hUPH89UJplWl6wCql6scAU2ZeKnhmTEcoeGIQNq3BJIwCn/qvG40M
-         kL8idh1jg7BqKcTWM+XNKEweNrzQKtqQKHke4sOPAlA84d3EDAAjBHFIUI1vnWn6dAzH
-         PHmcCoK9PmgLWAIOXwtUyNVQpLn61o3FhsjUXL50KIAUjEKUaF0BJ/zsdWY5WeJSu+Pi
-         wJVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794314733; x=1794919533;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BfINIDbdnp5YQZaOFA3yDq3s0AajpyTCWSTrx1kczfw=;
-        b=DQ/Izr+wySH+ZTBIFuredxsaZfLkxvhpnHd7/FlPvxESMA3u2Nnxu0ZKyfa666Y1NH
-         YOiajKjc1REphRh0jWwPbPNgEJNahxvgqkQdO/JoBuWrsrVOMTJeo0nYJ3CaytctgBV9
-         a33WkZrrThApXXNUScp8zWVBv18M+snlq+SNdvpWkxNPHYXZe8J8tpoPjqDP2UuH1klZ
-         XDg9KNthXBG3zPXWiQfPnmGyBAyWEJqtt4KLIRXrdB7aIdywQQdWrhwdFQxavtl3sKOg
-         txAlC3sYOhvMcRyiRWwFtLCBfcqIQt3CAZ31JSb6eh+nGXvZALMnA0y+8bDAGyAoP4X4
-         f6rQ==
-X-Gm-Message-State: APuU4Z+xwM9NUH1NLf0xi37tAVHmxQrPjNKnsZrTHc6bw/wwVgO1E8gm
-	nYN4mp3LZyF7SdkgbEd4Ox2ViA9OWSyluA6DbwAOUACMR1VzmLuRe+Uz4cRvv9NkcNM=
-X-Gm-Gg: AYBFou0i99HYsf498WfH7qqKvQKmRQIbfZM14ke3kv0RQ4E978lP8GZ0CSC/sEjnFUG
-	E9SNB2GxVlKsJVmPTgXk1kmJsLffq1BUL2XmHEG3rbGM/Y6HX7cBdwkfrUl1tP7oELTkxLp3JUs
-	FCYms5aeC+lEq9Ez7U7ofIS+qo2BH8mdwEUAKRNVKuR1rpvLPlyeaJKNmOpXqScYE9lxt24RE8+
-	LnE+CqRCPTzExezj0Ihfuf8bQF9Ha37Dg1iK9dUHYXSq1o4FbtaI9I+xPstQm8OWda2YCMlDwVt
-	h6JLZ4Dmak6Ps1aYl0ovR0ICrSaFU+ZJJaS8USaSiVB9hUxhsAb0jVATWl8EVPs6m3UUcJPbfrX
-	Fah3mM31AaMf8nwfR6r5HlMunKrs62twTBPHr5ZbeqzkfYxgRcoPo9fOICLet3boR2PFQGfVKqk
-	hKftASeb6/IRpGYmarC1NJPNo+dJfqjIOQKCaZxwzwYWoF3OdNXLPB7+XRFG4S75uFn/dymJZcn
-	2QIBtdVL1eseDANMxv0NdMMq9S8EdUeeFKk4TuBc5Ov5AHI6l3O9k1JigWxL15CXet9wCpqlNbN
-	zA0uodKCyDx+N7GnLYVnAGeRsJfC3XMerEQ3Cq0UDbdfYw0=
-X-Received: by 2002:a05:600c:6087:b0:4b4:a551:681a with SMTP id 5b1f17b1804b1-4ba0233cbbbmr40551245e9.3.1794314733553;
-        Tue, 10 Nov 2026 04:45:33 -0800 (PST)
-Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4ba02005946sm70546095e9.1.2026.11.10.04.45.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2026 04:45:33 -0800 (PST)
-Date: Tue, 10 Nov 2026 13:45:30 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Song Liu <song@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CD4oVR0G
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5521F008A1;
+	Tue, 10 Nov 2026 16:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794327055;
+	bh=cD6EstMsPhe7VWF8sbmk9VuB7UraTEV78jy7xsSZcYQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=CD4oVR0GMgFk5RjWZD0Kc1//P3K8OMYpcMOx9nkLyVOxQU9a4C3qmF0XWBjES1Zsh
+	 RIK3s3A7pvAXo5/nt2EfNc8VbOU48D6PtNPCSTJB2lVjSe0q3G5SK2bq82k41W55do
+	 aSyUMMuH6qJ3t10ffn3sFJaZoJktEQjMIc8IvmiQGn+/vW/4S0hJNOwlmJLhNO9iUn
+	 GhCiCzrIwK30wwMm4qYkspOqGdatMMPQpDDuvU9qUjEmaAML5WPojO/B/We8M9KA2n
+	 DGs5e80DWsGA2nfEISdepASU1MUb/OJsfJWINzENku6h2B7fdaOVY+LGlAUBPC6xfN
+	 NY65IqWtAhqPw==
+From: Sasha Levin <sashal@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Song Liu <song@kernel.org>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/12] klp-build: Fix dependent patches, add selftests
-Message-ID: <avMR6tKwddVBrkpk@pathway.suse.cz>
-References: <20261028214534.1919398-1-song@kernel.org>
+Subject: [PATCH v4 2/4] selftests/livepatch: clean the test modules without a kernel build directory
+Date: Tue, 10 Nov 2026 11:10:48 -0500
+Message-ID: <20261110161050.2451750-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261110161050.2451750-1-sashal@kernel.org>
+References: <20261110161050.2451750-1-sashal@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -97,51 +67,47 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261028214534.1919398-1-song@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed 2026-10-28 14:45:22, Song Liu wrote:
-> klp-build fails when a later patch in the series depends on an earlier
-> one, because it fixes each patch against the original source on its
-> own.  Patch 1 fixes this by combining the patches into a single patch
-> before adding the #line directives.
-> 
->  scripts/livepatch/Makefile                    |   3 +-
->  scripts/livepatch/klp-build                   | 137 +--------
->  scripts/livepatch/klp-prepare-patch           | 277 ++++++++++++++++++
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/livepatch/README      |  16 +
->  .../livepatch/test_klp_build/Makefile         |  26 ++
->  .../livepatch/test_klp_build/functions.sh     | 149 ++++++++++
->  .../livepatch/test_klp_build/run-tests.sh     |  68 +++++
->  .../livepatch/test_klp_build/test-basic.sh    |  93 ++++++
->  .../test_klp_build/test-cancelling-patches.sh | 102 +++++++
->  .../test-independent-patches.sh               | 124 ++++++++
->  .../test_klp_build/test-line-directives.sh    | 175 +++++++++++
->  .../test-new-and-deleted-files.sh             |  94 ++++++
->  .../test_klp_build/test-offset-and-fuzz.sh    | 120 ++++++++
->  .../test_klp_build/test-patch-not-applying.sh |  73 +++++
->  .../test_klp_build/test-unsupported-files.sh  |  30 ++
->  16 files changed, 1366 insertions(+), 122 deletions(-)
->  create mode 100755 scripts/livepatch/klp-prepare-patch
->  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/Makefile
->  create mode 100644 tools/testing/selftests/livepatch/test_klp_build/functions.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/run-tests.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-basic.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-cancelling-patches.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-independent-patches.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-line-directives.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-new-and-deleted-files.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-offset-and-fuzz.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-patch-not-applying.sh
->  create mode 100755 tools/testing/selftests/livepatch/test_klp_build/test-unsupported-files.sh
+"make clean" removes the test modules only when KDIR exists, and KDIR
+defaults to the build directory of the running kernel. Modules built
+for another kernel are therefore left in the source tree by a plain
+"make clean" on a machine without the running kernel's devel files,
+for example after building them as KernelCI does:
 
-I am sorry, I am overloaded and do not have time for a proper review.
+  make -C tools/testing/selftests O=<kernel> KDIR=<kernel> TARGETS=livepatch
+  make -C tools/testing/selftests TARGETS=livepatch clean
 
-I just see that it adds a lot of new files. And I wonder how much it
-shares with the livepatch selftests. Would it make sense to put
-it into a separate directory, e.g. tools/testing/selftests/klp-build ?
+Removing external modules does not need a configured kernel. Clean
+them through the kernel source tree that contains the selftests, and
+do not pass on O= or KBUILD_OUTPUT, which the kernel Makefile would
+take as its build directory.
 
-Best Regards,
-Petr
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../testing/selftests/livepatch/test_modules/Makefile | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+index eddfb420db320..01eaf2e1755c9 100644
+--- a/tools/testing/selftests/livepatch/test_modules/Makefile
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -32,8 +32,11 @@ ifdef BUILD_TEST_MODS
+ 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+ endif
+ 
+-# Ensure that KDIR exists, otherwise skip the clean target
++# Cleaning external modules needs no configured kernel, so clean them
++# through the kernel source tree that contains this directory. The kernel
++# Makefile would take an O= or KBUILD_OUTPUT passed on from the selftests
++# build as its build directory, so drop them.
++clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
+ clean:
+-ifneq ("$(wildcard $(KDIR))", "")
+-	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+-endif
++	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(TESTMODS_DIR)/../../../../.. \
++		clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+-- 
+2.53.0
+
