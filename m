@@ -1,60 +1,60 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794328514;
-	b=D8ig5Q18dqPTQMuYEaLf6kk6PKMLW8imKjIeLxpiW8K0v22ojW2dUfrPO2HnKXQEXTZT
-	 qUq/yeUr7Pe7WnGa6eYOTnWMe58qu80ipNX053Yi7U3mzSGpVCifHMK+eVqN0qNBH25+/
-	 2n/WqklDOz0d/YZ/wUxRxN/Je/DKCmGsYjb5nhJreJ35f5kWEk07/MDrPkYlbpm3YlMEu
-	 EBnJwRpKyH4uC0uDcSNnfQo9KlLOT5MQkJgwj2BuOY9z/Kv17Mbv6AivKBAaYsvfHMgp9
-	 a/fLIyAARuCjNs9qWBEnwyhvxpks2Vtwt6r5M1XQwWcijJPLWh0qJ+k9DZPBshtj5bg==
+	t=1794329583;
+	b=SOnBr5wM3aUx12mz2DMimNB2uSeCzoxLfiPaiKF4Zwf6NyVUQz1tDzkEEPGyye/YhF+I
+	 gBawcy6mysnm6wiQsMBzX3DQmsVS2pYV5fAmienyje79vdKa7RHKsNX/Oa+wC5A+5K0cF
+	 DuLa9DVPzHEKTyYrn6ejcXjNQx1RuGGPhC0hn1X35JEtm3dgPdyjwgfA3kfEDaeYFj5Fz
+	 jl8Ltvk6hiulPssEGsOJjA1g6DMHgmClkvmeLFMP1lxObcon2R+ldeofiErTHlD6O0HR7
+	 EOxGRLdFkACsi7pXL8JCXb9hS8yE4UceFY8i63/nDvB+qJydq9lSmPfwZZI7SMPytzg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794328514;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794329583;
 	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
 	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=QwunAeyQcIIUis+s7GEtmUpT6+XX7BrzAJJ3ZXD35YE=;
-	b=TUBwjTX0Exx8Umiv4Qn9u4MttuimQVE8oNgM8waRut8lyzntUFEu5Tq08UQE6RO7uQk4
-	 xmKWcH0+cBZEJ98PTQ1KVP+tSEKZ1SZMTCsOs3v4F/PjW//I324DHOGUoN1Yfwen6VToc
-	 SnaJD6PtrE3VkNF2H54my5fRMgyxa35I4F5YAeQiSzilTpiN5dSt2GkvIEZnddkDgYE91
-	 iciqpAga9b1GNOQaI8E5OVQ1Y8OwoC3qOmklsvUDQ3Fg98ZJvjgRehyNh5g8neLaqsP5/
-	 0G7J3+O5/xces16HwV83cVJPw/GVIzEb5bePVvL65wXz3J7DVB/+gnNquy9jJYNqfbg==
+	bh=VVd+3LYfzRastybXiLRAKVd20lXieOqmFqHMCv/4VNk=;
+	b=4krPoDMDBGdGwzGM/XYXRz/tb6dxbB11C4qTDAl7KxQEdy0b/lP8kaCu4iBokizCzUl8
+	 o0PjXSYNtJ+EuskvJ9UslLe1Wznlm19jxTXLsTX8WWz/gtITG8Z3ffi+b4aYbxon7WEeH
+	 yAjsYw6WdWC1ezg0R4p2woitp63T9n+9gQoC59j/97CjtpWxu7i9d/PQaH8WJA3atVKhV
+	 HEiVvrdj5XssEq42+7TmZMbH4GIb9XsEoKTQSMdPmj9cyK4zisDf9lEspq62YqsXMR5fr
+	 mLA4jFqTkNAICMCYnSD/EqmVKItBOUmI36hEek/TzhYp7ynSoQMwi4rq6ZJewgNK4gg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boIp9VuJ;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=STMGcXPc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB376606A228
-	for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 16:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD30E606A336
+	for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 16:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=boIp9VuJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CDE1F0089F;
-	Tue, 10 Nov 2026 16:35:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=STMGcXPc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3A71F0089F;
+	Tue, 10 Nov 2026 16:53:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794328513;
-	bh=QwunAeyQcIIUis+s7GEtmUpT6+XX7BrzAJJ3ZXD35YE=;
+	s=k20260515; t=1794329582;
+	bh=VVd+3LYfzRastybXiLRAKVd20lXieOqmFqHMCv/4VNk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=boIp9VuJ0lJhm/HYzZUQdkGgkP9YO24yCYkNQV+mZRCku83RECbUCw1/6ZqAW7H0e
-	 9wZNo+rw1437nNsIZg4kVxxV0l1PBe/HJR0W6NOXjQOeAUnF5EbTdtCCkGRVNk/nTq
-	 x9Z0Suo4X1ht5qJiqY8v2FgRHjHLq8zFBmqGPqTkG2cIrd40Ihv8BaMzO+A97LFW5V
-	 QwPm3CermDinSWNKi6QY7sx1eQlwwEzqcFnbHb07xUs69EzJU4KmmCqB2SPE6wmMV7
-	 +FK8bzrdGYnhEGLqQ8zlLnWER/eN6ylkw4zSNJ5FdZc28iwYtxxZsUuIbZHFb8gKEx
-	 /z5fbAXiJQ1Cg==
-Message-ID: <sashiko-outbox-207388@kernel.org>
+	b=STMGcXPcf/F5ycE0ZdOUHYFg3wfGDX5TntkLNue1DuBgA94NJx/nH00JmOYrpwnsd
+	 DV5o6JXaIc/we9YxAviGE91vV+UUweLionMs58mnAOmStrVBx3AYURbpGbNUQjTSpp
+	 UheunHv2W7qa3/MRXev4FFi4/i8o8W8WUcfVhjnH6sOm8Z5FVC7JUJQH/ionfUMwdF
+	 HbCylB0bI8vrnWLwWwaZL8F6rtzpWqHDQE5+YLdhd6+n2ZHEDJO8sltkfIZNfHoS9q
+	 rxqPI8TgrS2ni/Dwp/WFasHyTxi0JagaQ9lp9Fi7heHbJm5s9UHCT9os69RccICZ5e
+	 iVjXoMuLOEVLg==
+Message-ID: <sashiko-outbox-207425@kernel.org>
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/4] selftests/livepatch: clean the test modules
- without a kernel build directory
+Subject: Re: [PATCH v4 3/4] selftests/livepatch: build the test modules
+ against the kernel in O=
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Sasha Levin" <sashal@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Miroslav
  Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
 Cc: "Song Liu" <song@kernel.org>, "Marcos Paulo de Souza" <mpdesouza@suse.com>, "Eva
  Kurchatova" <eva.kurchatova@virtuozzo.com>, "Yafang Shao" <laoar.shao@gmail.com>, "Shuah
  Khan" <shuah@kernel.org>, live-patching@vger.kernel.org
-In-Reply-To: <20261110161050.2451750-3-sashal@kernel.org>
+In-Reply-To: <20261110161050.2451750-4-sashal@kernel.org>
 References: <20261110161050.2451750-1-sashal@kernel.org>
- <20261110161050.2451750-3-sashal@kernel.org>
+ <20261110161050.2451750-4-sashal@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 16:35:12 +0000
+Date: Tue, 10 Nov 2026 16:53:01 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -66,38 +66,61 @@ Precedence: list
 
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue to consider:
-- [Low] selftests/livepatch: missing Fixes: trailer in commit message
+- [Medium] selftests/livepatch: KDIR fallback ignores builds without
+  Module.symvers
 --
 
-commit d55e0dca037d90570993238825fe598e3b4846aa
+commit 62f70537bbca33262ec62f1273becbdf534f58fc
 Author: Sasha Levin <sashal@kernel.org>
 
-> selftests/livepatch: clean the test modules without a kernel build direct=
-ory
->
-> "make clean" removes the test modules only when KDIR exists, and KDIR
-> defaults to the build directory of the running kernel. Modules built
-> for another kernel are therefore left in the source tree by a plain
-> "make clean" on a machine without the running kernel's devel files,
-> for example after building them as KernelCI does:
->
->   make -C tools/testing/selftests O=3D<kernel> KDIR=3D<kernel> TARGETS=3D=
-livepatch
->   make -C tools/testing/selftests TARGETS=3Dlivepatch clean
->
-> Removing external modules does not need a configured kernel. Clean
-> them through the kernel source tree that contains the selftests, and
-> do not pass on O=3D or KBUILD_OUTPUT, which the kernel Makefile would
-> take as its build directory.
->
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+selftests/livepatch: build the test modules against the kernel in O=3D
 
-[Severity: Low]
-This fixes the KDIR check on the clean target.  Should it include:
+This commit selects KDIR from O=3D or KBUILD_OUTPUT (or the kernel source
+tree) before falling back to the running kernel's build directory, and
+strips O=3D and KBUILD_OUTPUT when invoking the kernel Makefile for the
+livepatch test modules.
 
-  Fixes: 54ee3526796f ("selftests: livepatch: Avoid running the tests if ke=
-rnel-devel is missing")
+> diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/s=
+elftests/livepatch/Makefile
+> index a080eb54a215d..97478ef90945c 100644
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@ -1,5 +1,31 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> =20
+> +# The test modules are built against the kernel in KDIR. When KDIR is not
+> +# set, use the output directory given with O=3D or KBUILD_OUTPUT if a ke=
+rnel
+> +# was built there, as with
+> +#   make O=3D/tmp/kselftest TARGETS=3Dlivepatch kselftest
+> +# otherwise the kernel source tree if the kernel was built in it, as with
+> +#   cd tools/testing/selftests/livepatch; make
+> +# and otherwise the build directory of the running kernel, which its
+> +# devel files provide. A kernel was built in a directory if it has a
+> +# Module.symvers.
+> +ifndef KDIR
+> +KBUILD_DIR :=3D $(firstword $(O) $(KBUILD_OUTPUT))
+> +ifneq ($(and $(KBUILD_DIR),$(wildcard $(KBUILD_DIR)/Module.symvers)),)
+> +KDIR :=3D $(KBUILD_DIR)
+> +else ifneq ($(wildcard ../../../../Module.symvers),)
+> +KDIR :=3D ../../../..
+> +else
+> +KDIR :=3D /lib/modules/$(shell uname -r)/build
+> +endif
+> +endif
+
+[Severity: Medium]
+Does checking only for Module.symvers cause KDIR to fall back to the host's
+/lib/modules/$(uname -r)/build when the target kernel in O=3D or the source
+tree was built with CONFIG_MODULES=3Dn or an image-only target (which
+produces vmlinux.symvers instead of Module.symvers)?
+
+When that happens and the host has kernel headers with CONFIG_LIVEPATCH=3Dy,
+test_modules/Makefile reads the host's include/config/auto.conf and builds
+the test modules against the running host kernel instead of skipping them
+for the target kernel, which breaks cross-compiled builds or builds where
+the in-tree test modules use newer kernel APIs than the host.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110161050.2451=
-750-1-sashal@kernel.org?part=3D2
+750-1-sashal@kernel.org?part=3D3
