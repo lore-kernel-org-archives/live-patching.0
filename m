@@ -1,58 +1,104 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794277254;
-	b=UB6jhqdEM6AUgOTJ53GHQK+AR6TdjUBzbiWi8TAhsircjrKyV58VI3xT5yTS8GiUzkkw
-	 Rh0eHEvX1liCep7htBxjvtElHqPMl+z34Jizv9ZEX0jGZ3YZaY74Av2HQB5WJuqDhlpy8
-	 soxjNlqHQmhOvgTj+8nJz2YNKZhTePyxUrIhRIsiaaXtNvGSwUio1ihM4p7iWqJBrQbzb
-	 T8KRqJLZQs4x2cPK3PbafPc1oiHB5x9Ie/fm3DnUubXa/qn3lOMI1KgKR2yQ1fe+F2o6+
-	 yC5aVUCIItPGxtHAeitr3v3fH1nMCaa3Go8BoDyY2wLSMcEopEjviPYEldE3g2H2iAg==
+	t=1794292512;
+	b=KhLMOa+Vgy5vp7W6r9GKwDLQcx1KBuPjX/Tt1m++9RKVrT0WPKxZJPwDPZZMdr5OChbv
+	 s7RYkywcCwzGzjQrMVMBJFVl2Nal0EJZCn5SU9G3HVSLq9Ry26AksXLvWW/7TdhCYs5yW
+	 l+VkwD/Hom3d5l8oaXCvy0+/5OISIbs7IvYYZFFjjl7VR6d8duaaqrWVQTeCME8KceFj/
+	 XEyMyYMkA4QkyVJjTqwvYyimf/6iGLRWjfxAm61BqJry3lOz8Hve0+bOs3nhDWIs0EOHI
+	 L9MvZ3Z6u1WEaAh5pc80W/QuxSu2kNtK2ApmHmnRvFY5HIQSJ6BrhrNswNGJGCHKIJw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794277254;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=NIqOQmbsfVs3wvBHQaYPOQv0i+lEO+2NVk/bDq2h60Y=;
-	b=el9p0vOB3zhJA7S58nBQnmLkWKmRlHh0uSFIt5Aep2VfCuaQ0kmlcxc01+eb8fW0b1IV
-	 NS7efikxp+SXjIz2T2/q+A4bvAaUIdp7o6lFsHygv5YLOiG7sisFIyXJNS8zui5OQUW2o
-	 TyRybc5XbmWoxz9er/mi9Be9uujEri1G9gka3OGbJnqCfhhxoJhkKEfcmID6kqzTv/sVN
-	 jGUZx2BGz+d8Ii15CfIKOTTDWptjh+G+78yAUrpUoR3yYx1ZlpOY7JpIHnU7D3BC/fJnO
-	 2PzXM0WkwZQzyTt72t+I0pJtxWgQjGX9tsOFI/OJVyxTogXz+IKFrRk4wYHyr1yOn7w==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794292512;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=SrAtUp9emSKSwdDhGVp75ycz8yJkKPQkr0AQDP+R5XY=;
+	b=j5yVj9WBNZJCvFq79NzaXvdIEcvnQaYQhkXm42JOAH3+PG4EnTFVlACmtMGbXdFFZPee
+	 8MRYhCkvVYCIjf69bV5PzNSvoOgMAkN/YGQHA+kLrBLZlQ2+xOp2cXoM148oFRfDX9wE+
+	 8RPsVFW9pziCx3c/3LAS3Jf4H3j7139tOrtuimG1jE0/FHGPLA89u+Tzyk59GU9fazIms
+	 9NROMI/RDhFDLdcLZqsulDhDZ1HApx9w8/V5kOlMTJHR+ri2YCWEt6wkNG+ull4iav2H7
+	 OEdBBtd8/lgRgaoyfK29vyrJRDooO2amzekJtEDzQ+USeGKtlK9hTno/FM+zdyHUDLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ELyIfafJ;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KvZh9KkF;
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E000E606A321;
-	Tue, 10 Nov 2026 02:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF78606A32A
+	for <live-patching@vger.kernel.org>; Tue, 10 Nov 2026 06:35:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8DF78606A32A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ELyIfafJ
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1ECB1F0089F;
-	Tue, 10 Nov 2026 02:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794277253;
-	bh=NIqOQmbsfVs3wvBHQaYPOQv0i+lEO+2NVk/bDq2h60Y=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ELyIfafJoLme1SBv2N0kim2ovxiAblyx8rpe39Xe2lJv3YZHR1PtncVAZVOo+pQpK
-	 z3Ds8uM4DD8eqpvJlBPwhAh2rxz60HmswaxL6SoXBwiDYg+09c5Q+Mb0ePV39BvduQ
-	 e0Gbn9lUgEi+QnFXLBsdndXBC9dd1YEs7bzQ7ZjUUjlZLqY85WziElPyNz77GjKUOn
-	 hob0NLZOk3GhFyTDGN8PuElbcMnkJb+H8mrsPap3pEDamsBPatSzcxo+o0jtVGfgDD
-	 Tx4mgxUDW3j388V0JBRbY4Ofk1Bczk1CwqQH2AL7sv3NpCE/QWEzE83oeOBic+oczM
-	 +un1q94/LQWAQ==
-Message-ID: <sashiko-outbox-206040@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 08/10] riscv: stacktrace: switch to frame-pointer
- based unwinder
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shuai Xue" <xueshuai@linux.alibaba.com>, palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu
-Cc: alex@ghiti.fr, oleg@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org, mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, james.clark@linaro.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, shuah@kernel.org, mpdesouza@suse.com, martin@kaiser.cx, kmehltretter@gmail.com, oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com, jkchen@linux.alibaba.com, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org
-In-Reply-To: <20261110013750.36800-9-xueshuai@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KvZh9KkF
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-492f0a1b685so1093080f8f.0
+        for <live-patching@vger.kernel.org>; Mon, 09 Nov 2026 22:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1794292511; x=1794897311; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SrAtUp9emSKSwdDhGVp75ycz8yJkKPQkr0AQDP+R5XY=;
+        b=KvZh9KkFCB0l/6Bmr8nRlFNiNAYwTuU4bAbREFGDiprWKCca1D9gjGF60eGJA+3F1m
+         /bv5d5Tc5eWM5D865wZT1/xR3NEMOOdRqy4g1KkEy4dNN0ai3E7ZEOXBKCO9AA5jrZON
+         81noRzABdcThsTx/uPfWP2XKO8tbYcZNnqcldty/UzrmzSJt6LP+9II6IP/t+90m35A4
+         cHdS20nAQY6nLpp4JCwaxwmfEkKJkszzwHAQ0RkC24pcwIC8g2itd/wYEPWH0RU5LloK
+         +jxZ0egu/5nUvtzeuP+y0T3PHWti68rhJPt30aoXkp9b4h0G+AWEqtc8wek4WNU9qfaJ
+         cryg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794292511; x=1794897311;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SrAtUp9emSKSwdDhGVp75ycz8yJkKPQkr0AQDP+R5XY=;
+        b=xVigTmd3vzzn2s/KrZuIXFc9VuMjv0U48GpI+9ajDUwXBTFvh5/XaO3ka7jWrGrgF2
+         NTPMPh8OaVHaeymh5/vk3dfjaWZTaOdIOq8MiMs88SPSmpGShilJo0sGxCZDP8L56bx8
+         QMsjD856jTPN54XPujrCqs7b1oP9uVHVa9wNM1axh1drGu2XSKk5wOEk2SSy2nZI6jps
+         j4eTTar1dvuYkmxgdtah4D+pPwJstFjC81XsI0HFv9LABYMedQPL01OaO8t9IZgWqz+C
+         lfRaxAWACkY44XpfjGwmR39stQevhFUarIr3cjtjWQ57qa/VH/pcjjMZOPFlUmiB1GWS
+         5uXQ==
+X-Forwarded-Encrypted: i=1; AL+hErGZvb1KXgVltKmWcIWuGFZekIHL7vuhMFMv+5Uon7Dx/BXSeTy07XYopVddOoJYeIP8KCnclz2rQmEzQ5Dp@vger.kernel.org
+X-Gm-Message-State: APuU4Z+5veATDwfCieBKxYHy1dSUd3vEKabrX6lopJF2KIuZ8P1EQt78
+	04K/qUBtymvB7i0BRc8NQrqdNSdEJDGz5ldjrUeEBPBtNZ1NvGJcfYkq
+X-Gm-Gg: AYBFou2UF4La/gh+4l5MbUbVV0g/xxFogwd8JoqOCCCz+kDP7gW0xe6EZYiEAQu7M6r
+	oC0dmuRFQIpxxMg1CW+4rGwCx/+dK+OQL0grTZAqbvm9hwqkLBTuuJKtnEs6fLyxeODJ5Hbm/MH
+	aySy/Odu00dlvkgqvE/lawXqyyrxsR3GcvfgjmohRxPR4nLpAYgwE8rKwriiXGdNi8lkR3Cby9w
+	251AGOjabl8lz/NurKugsyAd3L92so1h9voSNTJBorqX+yuJwE7LBTlhgGBxpYjoeLYDXXDYoYD
+	Ah4CPh8uwzYi2RFhGyzdplry1gIdyLmm+12eD75VclNcAuS0J7tBrpk1czTdB7M5XMjCXh8feMV
+	yHbZoJ8W6zDzDuPfIFNVt+UF9AZViV2V7k1nrz44Z0Ct2tSd8sqt+otZOSoctFPPSBo7db8yert
+	Q8aZJ4FjfEOshby7bvqJTYHot1kkKrzTQSeq3LyIH7zf3BlhCr5r64DN5F8WcmXtQ15R7spUxRm
+	k8kaMUIcDvgjJDu4yFqNCEEEDCVKSeblgyvmmbMycoHDoUzSZsjLCGcMvb49UCgr6e8y7o/ugvd
+	cKxi1UBtkC9LSQ9SWIuG3ObvCdPLY45dHYzQsBbT/gSqM2/pJfRUswtZ3A4sRKToPDubhUmW1c/
+	A2lma3nhMfZgk87t8DRUp3bFzx37r0GY3IH0pyWpp3oL2wH1dzy8Z7GoouZ1xVJXG/jtkeMZp/P
+	7Ws9mFpiXqyp/6lKASmghE8SsNo97TNAE=
+X-Received: by 2002:a05:6000:288f:b0:48e:3cec:b852 with SMTP id ffacd0b85a97d-498306d02e3mr2957082f8f.40.1794292510590;
+        Mon, 09 Nov 2026 22:35:10 -0800 (PST)
+Received: from MacBook-Pro-von-Karl (dynamic-2a02-3100-a0e9-dc01-c402-36c1-c306-953c.310.pool.telefonica.de. [2a02:3100:a0e9:dc01:c402:36c1:c306:953c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-498366c500asm3241156f8f.48.2026.11.09.22.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2026 22:35:09 -0800 (PST)
+Date: Tue, 10 Nov 2026 07:35:07 +0100
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Shuai Xue <xueshuai@linux.alibaba.com>
+Cc: palmer@dabbelt.com, pjw@kernel.org, aou@eecs.berkeley.edu, 
+	alex@ghiti.fr, linux-riscv@lists.infradead.org, oleg@redhat.com, 
+	rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, peterz@infradead.org, 
+	mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	james.clark@linaro.org, jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, 
+	pmladek@suse.com, joe.lawrence@redhat.com, shuah@kernel.org, mpdesouza@suse.com, 
+	martin@kaiser.cx, oliver.yang@linux.alibaba.com, zhuo.song@linux.alibaba.com, 
+	jkchen@linux.alibaba.com, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 00/10] riscv: Add reliable stack unwinding for
+ livepatch
+Message-ID: <avK6oydgmtsa_Sjg@gmail.com>
 References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
  <20261110013750.36800-1-xueshuai@linux.alibaba.com>
- <20261110013750.36800-9-xueshuai@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 10 Nov 2026 02:20:51 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -61,231 +107,30 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261110013750.36800-1-xueshuai@linux.alibaba.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issues to consider:
-- [High] riscv: stacktrace: broken leaf-function unwind in
-  kunwind_next_frame_record()
-- [High] riscv: stacktrace: broken unwind across ftrace_caller and
-  return_to_handler
-- [Medium] riscv: stacktrace: bogus walk_stackframe entry in
-  __walk_stackframe()
-- [Low] riscv: stacktrace: inaccurate metadata type offset comment
---
+On Tue, Nov 10, 2026 at 09:37:40AM +0100, Shuai Xue wrote:
+> Changes since v6:
+> 
+> * Rebase onto the current riscv/for-next (based on 7.4-rc1).
+> 
+> * Fold in Karl Mehltretter's two patches [1] as 1/10 and 2/10. Patch
+>   1/10 stops arch_stack_walk() from reporting the walker's own frame as
+>   the first entry, which corrupts the skip-frame accounting of
+>   stack_trace_save() users (page_owner, perf), and adjusts
+>   return_address() level accounting accordingly. Patch 2/10 adds a KUnit
+>   test for the start frames. Both patches keep their original authorship;
+>   I added my Reviewed-by/Tested-by and sign-off. I asked Karl on
+>   3 November whether he would like to see his patches folded into this
+>   series; he has not replied so far. Since 8/10 reuses the walker
+>   extraction from 1/10 for its !CONFIG_FRAME_POINTER fallback, his
+>   patches are included here to keep the series self-contained.
+> 
 
-commit 263985113a916e8cd08cc4485092812e49e28303
-Author: Wang Han <wanghan@linux.alibaba.com>
+Thank you for folding those patches in. I'm fine with that.
 
-riscv: stacktrace: switch to frame-pointer based unwinder
-
-This commit replaces the open-coded frame-pointer stack walker with a
-kunwind state machine, adds arch_stack_walk_reliable(), and routes
-perf_callchain_kernel(), dump_backtrace(), and __get_wchan() through
-arch_stack_walk().
-
-> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrac=
-e.c
-> index a5abb705d43ba..490092c28d612 100644
-> --- a/arch/riscv/kernel/stacktrace.c
-> +++ b/arch/riscv/kernel/stacktrace.c
-
-[ ... ]
-
-> +/*
-> + * Unwind from one frame record to the next.
-> + *
-> + * On RISC-V, the frame record sits at fp - sizeof(struct frame_record),
-> + * immediately below the address pointed to by fp/s0. This applies to bo=
-th
-> + * normal frame records and metadata frame records (embedded in pt_regs).
-> + *
-> + * A metadata record is identified by both fp and ra being zero in the
-> + * frame_record portion, with a type value following at fp + 16.
-> + */
-
-[Severity: Low]
-This isn't a bug, but since fp points immediately above struct
-frame_record on RISC-V (meta_base =3D fp - sizeof(struct frame_record)),
-meta->type is located at fp rather than fp + 16.
-
-> +static __always_inline int
-> +kunwind_next_frame_record(struct kunwind_state *state)
-> +{
-> +	unsigned long fp =3D state->common.fp;
-> +	struct frame_record *record;
-> +	struct stack_info *info;
-> +	unsigned long new_fp, new_pc;
-> +	unsigned long record_base;
-> +
-> +	if (fp & 0x7)
-> +		return -EINVAL;
-> +
-> +	record_base =3D fp - sizeof(*record);
-> +
-> +	info =3D unwind_find_stack(&state->common, record_base, sizeof(*record)=
-);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	record =3D (struct frame_record *)record_base;
-> +	new_fp =3D READ_ONCE(record->fp);
-> +	new_pc =3D READ_ONCE(record->ra);
-> +
-> +	if (!new_fp && !new_pc)
-> +		return kunwind_next_frame_record_meta(state);
-> +
-> +	unwind_consume_stack(&state->common, info, record_base,
-> +			     sizeof(*record));
-> +
-> +	state->common.fp =3D new_fp;
-> +	state->common.pc =3D new_pc;
-> +	state->source =3D KUNWIND_SOURCE_FRAME;
-> +
-> +	return 0;
-> +}
-
-[Severity: High]
-Does unwinding from KUNWIND_SOURCE_REGS_PC corrupt the unwind and leak
-kernel stack addresses when an exception or interrupt hits a leaf
-function?
-
-On RISC-V with CONFIG_FRAME_POINTER=3Dy, leaf functions do not push ra onto
-the stack: they save only the caller's s0 at fp - sizeof(unsigned long)
-(which aliases record->ra), leave the return address in regs->ra, and
-leave fp - 2 * sizeof(unsigned long) (record->fp) as uninitialized stack
-padding or local storage.
-
-The previous unwinder checked for this case, whereas kunwind_init_from_regs=
-()
-and kunwind_next_regs_pc() store regs in state->regs without ever reading
-it back, and kunwind_next_frame_record() unconditionally reads record->ra
-as new_pc and record->fp as new_fp.  Because __kernel_text_address()
-filtering is also removed and perf_callchain_kernel() now calls
-arch_stack_walk(), a PMU sample in a leaf function passes the caller's
-saved kernel stack pointer in record->ra to fill_callchain() ->
-perf_callchain_store(), exposing it to userspace, while regs->ra is lost
-and the uninitialized word in record->fp is used as the next frame
-pointer.
-
-[ ... ]
-
-> +static __always_inline bool
-> +arch_reliable_kunwind_consume_entry(const struct kunwind_state *state, v=
-oid *cookie)
-> +{
-> +	/*
-> +	 * At an exception boundary we can reliably consume the saved PC. We do
-> +	 * not know whether ra was live when the exception was taken, and
-> +	 * so we cannot perform the next unwind step reliably.
-> +	 *
-> +	 * All that matters is whether the *entire* unwind is reliable, so give
-> +	 * up as soon as we hit an exception boundary.
-> +	 */
-> +	if (state->source =3D=3D KUNWIND_SOURCE_REGS_PC)
-> +		return false;
-> +
-> +	return arch_kunwind_consume_entry(state, cookie);
-> +}
-
-[Severity: High]
-Can kunwind_next_frame_record() and arch_stack_walk_reliable() unwind
-across ftrace_caller and return_to_handler?
-
-Unlike arm64, RISC-V's ftrace trampolines do not maintain a valid struct
-frame_record chain at s0 - sizeof(struct frame_record):
-
-arch/riscv/kernel/mcount-dyn.S:SAVE_ABI_REGS {
-	addi	sp, sp, -FREGS_SIZE_ON_STACK
-	REG_S	t0,  FREGS_EPC(sp)
-	REG_S	x1,  FREGS_RA(sp)
-	REG_S	x8,  FREGS_S0(sp)
-    ...
-}
-
-arch/riscv/kernel/mcount.S:SAVE_RET_ABI_STATE {
-	addi	sp, sp, -FREGS_SIZE_ON_STACK
-	REG_S	ra, FREGS_RA(sp)
-	REG_S	s0, FREGS_S0(sp)
-	REG_S	a0, FREGS_A0(sp)
-	REG_S	a1, FREGS_A1(sp)
-	addi	s0, sp, FREGS_SIZE_ON_STACK
-}
-
-In ftrace_caller, SAVE_ABI_REGS saves ftrace_regs without updating s0 or
-creating a frame record, so a C tracer callback saves the traced
-function's caller s0 alongside a return address in ftrace_caller.  Walking
-past the callback jumps straight from ftrace_caller to the caller of the
-traced function, silently skipping both the traced function and its
-immediate caller while arch_stack_walk_reliable() still succeeds.  (Commit
-"riscv: ftrace: always preserve s0 in dynamic ftrace register frame" noted
-that the reliable unwinder would read ftrace_regs_get_frame_pointer(fregs)
-directly, but kunwind has no ftrace_regs handling.)
-
-In return_to_handler, SAVE_RET_ABI_STATE sets s0 to sp +
-FREGS_SIZE_ON_STACK after saving only ra, s0, a0, and a1.  When unwinding
-past ftrace_return_to_handler(), kunwind_next_frame_record() reads
-s0 - sizeof(struct frame_record), which sits in the uninitialized upper
-words of the __arch_ftrace_regs allocation rather than at FREGS_S0(sp).
-
-[ ... ]
-
-> +/*
->   * The generic code expects the first entry for the current task to be t=
-he
->   * return address of arch_stack_walk() itself, the way x86 and arm64 rep=
-ort
-> - * it, and stack_trace_save() sizes its skip count accordingly.  Walking=
- from
-> - * inside a called walk_stackframe() adds that function's own frame on t=
-op,
-> - * so inline the walker here and start from this frame instead.
-> + * it, and stack_trace_save() sizes its skip count accordingly.  Walking
-> + * from inside a called walk_stackframe() adds that function's own frame
-> + * on top, so call the always-inlined walker here and start from this
-> + * frame instead.
->   */
-> -noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_ent=
-ry, void *cookie,
-> -		     struct task_struct *task, struct pt_regs *regs)
-> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_ent=
-ry,
-> +				      void *cookie, struct task_struct *task,
-> +				      struct pt_regs *regs)
->  {
->  	__walk_stackframe(task, regs, consume_entry, cookie);
->  }
-
-[Severity: Medium]
-On !CONFIG_FRAME_POINTER builds, doesn't __walk_stackframe() still report
-walk_stackframe as the first entry when unwinding the current task?
-
-arch/riscv/kernel/stacktrace.c:__walk_stackframe() {
-    ...
-	} else if (task =3D=3D NULL || task =3D=3D current) {
-		sp =3D current_stack_pointer;
-		pc =3D (unsigned long)walk_stackframe;
-	} else {
-    ...
-	ksp =3D (unsigned long *)sp;
-	while (!kstack_end(ksp)) {
-		if (__kernel_text_address(pc) && unlikely(!fn(arg, pc)))
-			break;
-		pc =3D READ_ONCE_NOCHECK(*ksp++);
-	}
-}
-
-Unlike the removed CONFIG_FRAME_POINTER version (which started at
-level =3D -1 to skip the placeholder pc), the !CONFIG_FRAME_POINTER loop
-calls fn(arg, pc) before reading *ksp++.  As a result, arch_stack_walk()
-reports walk_stackframe before scanning its own stack frame, shifting
-stack_trace_save() and return_address() off by one and printing a bogus
-walk_stackframe entry in dump_backtrace().
-
-Also, since all callers of walk_stackframe() are converted to
-arch_stack_walk() by this patch, walk_stackframe() has no remaining
-callers and its extern declaration in arch/riscv/include/asm/stacktrace.h
-is left without a definition when CONFIG_FRAME_POINTER=3Dy.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261110013750.3680=
-0-1-xueshuai@linux.alibaba.com?part=3D8
+Regards,
+Karl
