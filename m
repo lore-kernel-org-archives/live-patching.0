@@ -1,44 +1,44 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794327056;
-	b=YypW3o+ZnndQTexWmAs9uUZKMQIVyLDAuK9j8NjK112rHi2EyS7Pk06ifOUgA9LArEAB
-	 rTmK9AbgdlPhJDDJLpMLRbX2akIVXzk6j28xKIFtxd56i/r8s8NIofOi+YcOaCIvcRqJY
-	 QeNXSf9MPuY4BDxuTMWJnYcgMZEK60wTPvrz2YJAWvY6VZ+EArdd4VcNtzrgRmLNp/6sc
-	 ABWUuAI1Q9DRrU/V7w5nYbTl2Qx9LCcarOICAvwyo4WB6YTwWeRbuMgbBNGniYtRerRk2
-	 KPKFYc26xdxKyzK7FgbFUGZxmPTa3aiBtjW+3VOIF02273BrESQj69Ybi7iL7/oYK7g==
+	t=1794327053;
+	b=YcJognZbm7WlwOHiBs5vREzPJMk2IS4nyu+nd2a9mZunS46xtmTsq1TUvxJGjCy83Ith
+	 volLMj6ahnelV5hm5VsYkIQL3osIoAC1SMGVof5qQpBep4qhFQki4XcPzH8xqQjgDj8Ui
+	 d73SwCY30ZaJB1F4LPE0guXU4KXZKmwvZeCovdQ+G12eh2qWHSut+jjdgLklfD8mv0M3+
+	 ptwY7WfiQf3c05FQpQI4Nu7FlEOCg0EKfFTHQZsvuHv7tqBJKWTC1gMX4+cBpfPTh68Zl
+	 QfNCjYd+P90YTmtvo3uK41Dqcq6MqucS71RGlFf/03dIuVrZ/vvmZ33k358Gm/ROjSw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794327056;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794327053;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-	bh=cD6EstMsPhe7VWF8sbmk9VuB7UraTEV78jy7xsSZcYQ=;
-	b=opSvYyddAUSGo3vm9E/SlWYbVZOwr4PoUmTMEvB5j+tAaBTwrqWLPpJHUu1jqUXtrhah
-	 dI9htFaN5BnWpbLnKT1qk6ZmmzSB5w9b7b1jyLBx8pKYgj/80nptCyjw/VgmKYhwzv8MP
-	 t8X5G6WlM6k1MF/JteifljhrEWSP78x4cInUcljsI86AOlMePMulQMKsTALu7p5227XUI
-	 5FGcH5HzDqgWYPogEaUCh4TgE+RMQuzAjR59X2umxpSYrmSRvDZ7XHkdox33Bn+ftSxzt
-	 HOhj3ZyNgIweyHJqyhIqkwUCwDY7EDty6fp4UN5TD2CpRUX3mEppjNI6kqDABiT4fJA==
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=CV+mdHAL7N59uyblFwGXb2Ju9QjUsdjoyJ/L6DhW424=;
+	b=1EHAjAIhCzUcKrmB6Bh7l6BBOwtw2RutWj2odNnUUGQ7zSJmWNFEkcDPTCgBdcIZSWo8
+	 epXnR/xxPI8fpjn3EJfbTRveoNEaCLzwwudXK2NZv1wqD7vVA2yKpIKph/eqUZ82hluyh
+	 s9fBOwv5liLDh6P+AMUnUHj00VPjprqXk3S08m9BYewvBQkV55REqijVq2N3S9YZZToPo
+	 lvKb1lFN1/DxQUd64fCBy/qvDCGlnzDJZUdOPMPKjfCDmpzCG2yhZAmzgnY4ornf3+NmU
+	 hLJX54xOtnD02RoGJCmoP9U/BXCm0qgX3u4svFrMhn92/UDPrd2z7ktetS7OkhSAUgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CD4oVR0G;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="d/lRLRhg";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5038460A382A;
-	Tue, 10 Nov 2026 16:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1807606A32D;
+	Tue, 10 Nov 2026 16:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=CD4oVR0G
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5521F008A1;
-	Tue, 10 Nov 2026 16:10:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=d/lRLRhg
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648031F0089F;
+	Tue, 10 Nov 2026 16:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794327055;
-	bh=cD6EstMsPhe7VWF8sbmk9VuB7UraTEV78jy7xsSZcYQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=CD4oVR0GMgFk5RjWZD0Kc1//P3K8OMYpcMOx9nkLyVOxQU9a4C3qmF0XWBjES1Zsh
-	 RIK3s3A7pvAXo5/nt2EfNc8VbOU48D6PtNPCSTJB2lVjSe0q3G5SK2bq82k41W55do
-	 aSyUMMuH6qJ3t10ffn3sFJaZoJktEQjMIc8IvmiQGn+/vW/4S0hJNOwlmJLhNO9iUn
-	 GhCiCzrIwK30wwMm4qYkspOqGdatMMPQpDDuvU9qUjEmaAML5WPojO/B/We8M9KA2n
-	 DGs5e80DWsGA2nfEISdepASU1MUb/OJsfJWINzENku6h2B7fdaOVY+LGlAUBPC6xfN
-	 NY65IqWtAhqPw==
+	s=k20260515; t=1794327052;
+	bh=CV+mdHAL7N59uyblFwGXb2Ju9QjUsdjoyJ/L6DhW424=;
+	h=From:To:Cc:Subject:Date;
+	b=d/lRLRhgeBayI/cg9IkKvRv8xdtlAymCkkbQFq8Z93CB1WDUKdgZM3R4yVtMCpI45
+	 xuPNK0Svja993reg4+rZ7tVhXvY9rkDFPxKHK83QhBpGxmttjqtR6yueZ0bXxmtUE7
+	 eELYvPAwOzfy/m6ItQXNE6N4nlw1l2iv9PbbFmASgfbeYWic3Nz1BNpS1tKODCztdj
+	 6cpLsrk4bSgqU/SN7zd26urJ9BhqDqbBSDKO94N9A/bJzX4xOUpDpeuydG9EiqasXa
+	 zpz+qentgI2Jr5vmA5K0A1X/MbGxP67nCFtxgGnkY+xQJmj3QaAk7FjAv0Lxp031Wz
+	 OZJHmdsHcGd5Q==
 From: Sasha Levin <sashal@kernel.org>
 To: Josh Poimboeuf <jpoimboe@kernel.org>,
 	Miroslav Benes <mbenes@suse.cz>,
@@ -52,12 +52,10 @@ Cc: Song Liu <song@kernel.org>,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/4] selftests/livepatch: clean the test modules without a kernel build directory
-Date: Tue, 10 Nov 2026 11:10:48 -0500
-Message-ID: <20261110161050.2451750-3-sashal@kernel.org>
+Subject: [PATCH v4 0/4] selftests/livepatch: build and run the tests outside the running kernel
+Date: Tue, 10 Nov 2026 11:10:46 -0500
+Message-ID: <20261110161050.2451750-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261110161050.2451750-1-sashal@kernel.org>
-References: <20261110161050.2451750-1-sashal@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -69,45 +67,50 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-"make clean" removes the test modules only when KDIR exists, and KDIR
-defaults to the build directory of the running kernel. Modules built
-for another kernel are therefore left in the source tree by a plain
-"make clean" on a machine without the running kernel's devel files,
-for example after building them as KernelCI does:
+The livepatch selftests build their test modules against the running
+kernel and skip every test without its devel files, so they do not
+work when built for one kernel and run on another, as CI systems do.
+In KernelCI, 36 of 69 kselftest builds of mainline fail to compile the
+modules because the kernel lacks CONFIG_LIVEPATCH, and where the
+modules do build, the installed tests skip themselves.
 
-  make -C tools/testing/selftests O=<kernel> KDIR=<kernel> TARGETS=livepatch
-  make -C tools/testing/selftests TARGETS=livepatch clean
+- Patch 1 skips the modules and tests when livepatch is not enabled.
+- Patch 2 lets "make clean" remove the modules without a kernel build
+  directory.
+- Patch 3 builds the modules against the kernel in O= or KBUILD_OUTPUT.
+- Patch 4 runs the tests with the installed modules, without the devel
+  files.
 
-Removing external modules does not need a configured kernel. Clean
-them through the kernel source tree that contains the selftests, and
-do not pass on O= or KBUILD_OUTPUT, which the kernel Makefile would
-take as its build directory.
+Tested on x86_64 against kernels built with O= and in place, a kernel
+without livepatch and the Debian headers. The modules build and clean
+in every case, and the installed tests pass 8/8 in a VM without devel
+files, where they were all skipped before.
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../testing/selftests/livepatch/test_modules/Makefile | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Changes since v3:
+- Split into four patches, rewrote the commit messages and added
+  comments. (Petr)
+- Moved the CONFIG_LIVEPATCH check into test_modules/Makefile, which
+  drops the extra clean target (Petr), and read it from
+  include/config/auto.conf.
+- Patch 4 still skips when neither the modules nor KDIR are available.
+  (Petr)
 
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index eddfb420db320..01eaf2e1755c9 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -32,8 +32,11 @@ ifdef BUILD_TEST_MODS
- 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
- endif
- 
--# Ensure that KDIR exists, otherwise skip the clean target
-+# Cleaning external modules needs no configured kernel, so clean them
-+# through the kernel source tree that contains this directory. The kernel
-+# Makefile would take an O= or KBUILD_OUTPUT passed on from the selftests
-+# build as its build directory, so drop them.
-+clean: MAKEOVERRIDES := $(filter-out O=% KBUILD_OUTPUT=%,$(MAKEOVERRIDES))
- clean:
--ifneq ("$(wildcard $(KDIR))", "")
--	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
--endif
-+	$(Q)env -u KBUILD_OUTPUT $(MAKE) -C $(TESTMODS_DIR)/../../../../.. \
-+		clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+v3: https://lore.kernel.org/all/20261103222706.1642224-1-sashal@kernel.org/
+
+Sasha Levin (4):
+  selftests/livepatch: skip the tests on kernels without livepatch
+  selftests/livepatch: clean the test modules without a kernel build
+    directory
+  selftests/livepatch: build the test modules against the kernel in O=
+  selftests/livepatch: run the tests with prebuilt test modules
+
+ tools/testing/selftests/livepatch/Makefile    | 26 +++++++++++++++++
+ .../testing/selftests/livepatch/functions.sh  | 13 ++++++---
+ .../selftests/livepatch/test_modules/Makefile | 29 ++++++++++++++-----
+ 3 files changed, 57 insertions(+), 11 deletions(-)
+
+
+base-commit: b3dfbde62cf1981c4638939c159dfd087b7a72e9
 -- 
 2.53.0
 
