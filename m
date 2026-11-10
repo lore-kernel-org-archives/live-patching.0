@@ -1,47 +1,47 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.130
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794274705;
-	b=VfgJwMh8uVANQpdQqOdCILmy9QrPmJfCGp+hNFrScNb7t67t+tc6KKP2/xbce69ff/Nd
-	 koKv5soPY189QvD3CdnV87TyPatVILTzEKb7ijR+8CSP61t0x11bw+fFS8q6cKzP6OHB0
-	 4jb5xTuCImTWswl6weheg2ZpnYvh2bgJVE3GUhhJ1LygKJiFolikZQOFA2KXnAKNyMz4X
-	 ncvBULM64PjoSwf2740cpZc8KReo9a2odTOitgswj9QQ+rHLD9j3HUZ4tt65yMm3VxxHe
-	 0LDseB5MpeuSpKQbRSZL4EJTJqAlOXPFdwBR4RP0Y0KAUIuBPEScuMcB/Tk1iblRLWA==
+	t=1794274706;
+	b=RrhgwIlMNyeTMthQiC2ot3kCTipeBlGoB3SrSdHMYit82IrYSwisoQnuceRBomCGBlgJ
+	 pHEkMSO6SXDaXR5QmagX7rGfO1qt+hRVSTkHfG5rb1Ftqev5pgrGDnmCdbtcL5JLHm9VT
+	 OvQDOq5vEro2zaYR+FvwKwqs3u5hU6sLCDC/HX5Xai86WFqeSEkuz2/oQHrqGbuxyJVz3
+	 rL5FeUEssvzR+tpoKsW7dQxUb5O+skGkhJUilUn4ZGg2tzCJSgaDvj0iH25r5Q4k0wdnH
+	 +zGqn4NykhgxzeArbhMbY0xt/U6K2UxsnBhEySM/tbcaM3xBRFmQdPDho7km8I/gSFQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794274705;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794274706;
 	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
 	 Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=C6qqXg66snVjWtvXLaTCarySN21K2eU4ZVWZSHhFYXY=;
-	b=kmYQ8YUJRH+gj1kWPFyHPhwpOWghjwlHTAgP4Qb4VRKZ6krtXnml4nhPyQPOEXFasoAj
-	 PdTFCVVF7pKE/+RLRB2ghun5tf+kE+vTMUTSPn080JmFwweW2bZ4TQ/ntVkdUltQ5JLx+
-	 YQD53sQhtdcGZDy4QvNnNu7b4gfcb9MifbSe4m/0Zc1rO7OJDJXaK18YSZ4OyMvCsrHYK
-	 2cob+AlVMgPi/ovWFHv2S36qcMLi5WJQV4tucyhAr3iLNR32Tt001okOGcRKFDWk3zIPB
-	 gYB5TlhGTzXAy8fXc89VJMtvYVpy9ryWz9IpMzbWygScEjmw6JL5uHHs1j4avzZolQw==
+	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
+	b=UY982qVSlwBWqBkRoMybnZTvT3SIyH8w7v5NPQjUwRz5PnHKHXWC2z3oESNa5uRo7DIQ
+	 8nEUt5Nboj5+4lSOsGTWvAhUdja0i6TVH2U1hrAeq09Cx+fYXxIjiXK5fr7AsezaFV9uF
+	 vcDgdU7E4tPGJagLvz0rsCiWspHMqXb5pHR1t7sV4mIx/DjTk0y8EkQ81aZeN9iRRPodB
+	 EdXMN5JOimGTMwxF1lQYEhkvcpZovBsJ+GbmBHHyxNhkFKTT3+hbrNZZI4LqoP4TStyQ6
+	 crIBFldq+DyIsAzNeQa8M8uSiAqrmW5nSSvBRhV0bIp3vmaKYkMI1xwwCVEALCI219Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.alibaba.com;
 	spf=pass smtp.mailfrom=linux.alibaba.com;
-	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=f98cykkt;
-	arc=none smtp.remote-ip=115.124.30.112
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH;
+	arc=none smtp.remote-ip=115.124.30.130
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A221606A32E;
-	Tue, 10 Nov 2026 01:38:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7A221606A32E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA97606A337;
+	Tue, 10 Nov 2026 01:38:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8BA97606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=f98cykkt
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=goqDVIjH
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1794274701; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=C6qqXg66snVjWtvXLaTCarySN21K2eU4ZVWZSHhFYXY=;
-	b=f98cykktG5+PgveGjBDygLrRpf5avxbLthqoDHCTgUtR+bQv2Jy9Mwvfno1ltMzQMjX/bq5T2dtVfyebhASL4G6grww2X9kehUkVCKbTCqSIV+Aui2tRE9UF8mRrAZdli/5yGBvxcOG5apWz4b61wW/Rf8eXtmvFJNSBQuwfiLE=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0XETOXAn_1794274696;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XETOXAn_1794274696 cluster:ay36)
+	t=1794274702; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=KA065hgUfmTVnISzUpxCY2dMzNQDUES0Dk4O5rmJ7Ak=;
+	b=goqDVIjHZtfWxuBa9AQ/BDM33mg6OTpuRFyL5CwERRi4+lngfmP9jXOZbT016qJNyTHScVWbv+Wq1lPvSy7UKRTPtTyt8XDHSPpFo2j0kePenc3uObcpI83exkWLdePtB8O6Fr0ozkaLUmT8E6stzDKib4TWR0YtFOHmYB6PgxA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0XETOXBV_1794274698;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0XETOXBV_1794274698 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 10 Nov 2026 09:38:18 +0800
+          Tue, 10 Nov 2026 09:38:20 +0800
 From: Shuai Xue <xueshuai@linux.alibaba.com>
 To: palmer@dabbelt.com,
 	pjw@kernel.org,
@@ -79,9 +79,9 @@ Cc: alex@ghiti.fr,
 	linux-perf-users@vger.kernel.org,
 	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 09/10] riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
-Date: Tue, 10 Nov 2026 09:37:49 +0800
-Message-Id: <20261110013750.36800-10-xueshuai@linux.alibaba.com>
+Subject: [PATCH v7 10/10] selftests/livepatch: Add RISC-V syscall wrapper prefix
+Date: Tue, 10 Nov 2026 09:37:50 +0800
+Message-Id: <20261110013750.36800-11-xueshuai@linux.alibaba.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20261110013750.36800-1-xueshuai@linux.alibaba.com>
 References: <20260914092648.51254-1-xueshuai@linux.alibaba.com>
@@ -99,63 +99,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Wang Han <wanghan@linux.alibaba.com>
 
-Now that the metadata frame records, the kunwind state machine and
-arch_stack_walk_reliable() are all in place, advertise the capability
-to the rest of the kernel:
+The syscall livepatch selftest resolves and patches a syscall wrapper
+symbol. To use that test for RISC-V livepatch validation, add the
+RISC-V FN_PREFIX definition for ARCH_HAS_SYSCALL_WRAPPER.
 
-  * select HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT, so
-    only the configurations with the tested metadata records and
-    FP-based reliable walker enable it.
-  * select HAVE_LIVEPATCH under the same condition and source
-    kernel/livepatch/Kconfig so the livepatch menu is reachable from
-    the RISC-V configuration.
+Without this macro, the syscall livepatch selftest cannot resolve the
+RISC-V target symbol, and the syscall-related livepatch test fails on
+RISC-V.
 
-The 64BIT dependency is conservative scoping rather than a hard
-technical requirement: the metadata frame record, kunwind state machine
-and arch_stack_walk_reliable() also build on RV32, and the IRQ-stack
-frame-record adjustment fixes a latent RV32 issue. However, the syscall
-livepatch selftest and module relocation path have only been exercised
-on RV64 QEMU virt so far. The 64BIT gate can be relaxed in a follow-up
-once RV32 has equivalent coverage.
-
-This is split out from the unwinder change so the policy decision and
-the implementation can be reviewed and reverted independently.
-
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Acked-by: Miroslav Benes <mbenes@suse.cz>
 Reviewed-by: Martin Kaiser <martin@kaiser.cx>
 Tested-by: Martin Kaiser <martin@kaiser.cx>
 Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
 Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
 ---
- arch/riscv/Kconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../testing/selftests/livepatch/test_modules/test_klp_syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e7891a2a89da..4512f67bbfd9 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -186,6 +186,7 @@ config RISCV
- 	select HAVE_KRETPROBES
- 	# https://github.com/ClangBuiltLinux/linux/issues/1881
- 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
-+	select HAVE_LIVEPATCH if FRAME_POINTER && 64BIT
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PAGE_SIZE_4KB
-@@ -195,6 +196,7 @@ config RISCV
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
-+	select HAVE_RELIABLE_STACKTRACE if FRAME_POINTER && 64BIT
- 	select HAVE_RETHOOK
- 	select HAVE_RSEQ
- 	select HAVE_RUST if RUSTC_SUPPORTS_RISCV && CC_IS_CLANG
-@@ -1415,3 +1417,5 @@ endmenu # "CPU Power Management"
- source "arch/riscv/kvm/Kconfig"
- 
- source "drivers/acpi/Kconfig"
-+
-+source "kernel/livepatch/Kconfig"
+diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+index 08aacc0e14de..9baa2a5f84c9 100644
+--- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
++++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
+@@ -24,6 +24,8 @@
+     #define FN_PREFIX __s390x_
+   #elif defined(__aarch64__)
+     #define FN_PREFIX __arm64_
++  #elif defined(__riscv)
++    #define FN_PREFIX __riscv_
+   #elif defined(__powerpc__)
+     #define FN_PREFIX
+   #else
 -- 
 2.39.3
 
