@@ -1,103 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794507548;
-	b=AmyDboYb+vssFABJfR7L8AtZdSHSjQjkV8hhbUJtmdBeqt3v37HEu0ETLuCgYZv9K0Ja
-	 HJn9Za10ult4vQ+usbop3UJjmHjAR55eawb8FAKsQVo/OF18SnJDQ+2tSjC4MTT6pvIvE
-	 nMX5LxAofhUMalbKmYWOty2I6ENjj28KLbvcV5D31BZQu7sqQQKahK+HZNjn0oMhj51wl
-	 4+iq23LjGLF/dM0qwrbse/qBtKs+wpR4wutHlulJPeQ1fjNwyvbcOoZqN6G7tHmkg3bqK
-	 bdqr1m/3syX7CFNXWXVb0aEsUPn45J83jA/QHspEDgK3A9cOwDH0bbUYoqIgDClka9Q==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794507548;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.45
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1794507905;
+	b=RToUgfXdnvC0SQyMIZ3gTLtbmM4kPnbqC49KpyXbRKx+WQ5QQFmbK+VBtPk7k8upXGiU
+	 SlCybvlC1zjbz4d5+GZpfRBK7mXQs4/330Pc8z4/wqBuhsEmU3w81y6kjvK2knTwWZVjx
+	 78P6UNthpN11MKF/+MMTTpT2462B3WHac1VrLIFq65EW6rKl4yA5bGY9wyTBKCzN+OawZ
+	 FcVkt5hd7iPmZkbBa85RbApW/K3bTz7O88G13qFv7XN7X5MlOwUE4r5Zm0Y2sZH1RotrE
+	 G+HtpQViUE9SJwfIWYBTjudiMg2O7lLw6mVAtnHKRuQc3cFjdEyIbJg2J6AOiMBrUDw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794507905;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=hB0gGU6/Wvj6DY1CIjnvdF3luMseLxUER3Q6hRYFMuA=;
-	b=WCnSJK284eYl3tjZNQekZlecjnD2vnSGAxNIezY88QcLASL13ft+IarVt35aNHXeVvGQ
-	 ItYeyejdYmyJrqyWjenFS6i0h+nrzh0BFD0xAaNzJWPRe+bpbw9KLPGzDHJgeUc14Wj3G
-	 xt6X/HFo9tuigGopmKthpm1h6EVzeWf8y6kzfTj1w+vREiPp4axYubcOFCDOOblgM2dWU
-	 TdwkG/Eg+jRZL1Xwvny/iYkkJhyVSKgLLhvqH1xg36NvadOD/EL4j/l8pyupBuNUJ0H4n
-	 QbxSwipVG24PIFfhJrPNH0TD6nuDWvPdfCmIaGOP0vUDiKs17B0ddHZYgyBtppINggQ==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aEzGzzhe;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=tzBmIcpghOYCP+r03HK0N7KGo+wgnlo6db5N340fGPI=;
+	b=E/yewTnkteeITJhUGq5NVbIVFnYV0a1ySxkSOz1VzRX90D2UiSPl71TXVAV4+HkGpIQT
+	 gAiw0y1qSp3ITXpSLOebPMrcgmr+1O9whhcU68Ig4lojC3FGvzFQlrPybm97NYr9hkzJR
+	 K0vR0SKWG290Eyg58rgtcuI30IzzRJw5q2Spq8yDSqiZ3f6mFmIryL/J8awAOldCPO0Mx
+	 k9JrzxvhH/v9114etkcqBbcNfIDWepKzeg6be+n2AOuU6r5YvnYHTIVXGIwnKDQgtQCVu
+	 zaBDyljoS/bQNKyQlijPYhPyQjZrffAXjqL9PNi7Q7iVDTAwzR4qSg4n4KvUvMdH6LA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BVkx6KPI;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.45
+Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBCF606A327
-	for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 18:19:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8CBCF606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B76606A321
+	for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 18:25:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68B76606A321
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=aEzGzzhe
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4b7252a32c8so1322255e9.0
-        for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 10:19:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=BVkx6KPI
+Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-98c7798ce74so62547241.1
+        for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 10:25:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1794507903; cv=none;
+        d=google.com; s=arc-20260327;
+        b=c5pAqli/sPHNtO6Y+L4afwl6hxNnu6JEtygFEtiqUUjPTfDhWt+FuC/VmBHCFp7dqj
+         7NhQjNtOhI9YV3z6G3byHbLrjnIGJ/OBFyX/0FQYSJC7mFHxOwNoBjSACImO5US9e0Sl
+         0Dq6CRbMM576UEQIozkUs2uorludFsU4TlCjLG+hYf5UJYAUcWKmByI3qXqjdVtljute
+         aGW7+yczWE3QoKGdJ5AqkM0blj4y0KoQO680AZ16x/BTFVCBupjoVkJ7JfiILrNuVYgB
+         me2yyum5FtW86zkhUX93s8xjmMlPIW/ZPvIL2SIqJd4ooMKysMMhhZKQHUbQggMkmn2j
+         48Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tzBmIcpghOYCP+r03HK0N7KGo+wgnlo6db5N340fGPI=;
+        fh=B35cTsjgz0/XEOecPsvPk5ZbDjQRmro3gxIDSxY2Zlc=;
+        b=JbuWC51fn5cLFRZeYcHKmyslFwhdbiYIApQJxnZj/pcVHcVwBH+0T1byeQ40BjuPdx
+         ymJkk+BWorl7Gul02rwMO09OcnxgELoyn0YpgCKq/s57cdx3UQ9fyzhXgrbr1NjdwhoR
+         3u5s6lF327m+bLOUZBfJZ1dhmk5Gvn/EzHCm+Uptjz7qCqXs8cokIw3+WBfwZXagCRUR
+         GYGCspJpQAFKNZJS6FCG5Lmu1vpqxPehXfawCh9xyC6kdEw1IF7H9AneUxzlhz2dMBfm
+         HOpkJhksy3dI5v75zkizJANAjs/9x5TJ4oNr+rEsn3TOKmBBU/RDMmsdzupDEQTkfB6u
+         dRjA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794507547; x=1795112347; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hB0gGU6/Wvj6DY1CIjnvdF3luMseLxUER3Q6hRYFMuA=;
-        b=aEzGzzhe6EMFNOvAc8cfQlCBSeL+1K/zjWgyK5EZg0KOfXRvCTDR37DN6Dvaxui9Jy
-         kEyTMJCIJoM3sImYaAyUCu/k9QIQwhVdoS90OalO4Hs4hhRPcJEvLB09db+cU40pUXV5
-         drlxgDiARYvqvqh1fag3LhNQw1dMaZ2wnvqMS8k1R13dcPnLeiOXlKWwqjtgWblmifpq
-         y/WADavmJRtrqONZx6E2ynDb0r5XYhApsRbz2dpQ8JMe4c6RiphErUvuVS4pd0LxTRK5
-         DrMPuN4QUkEl1rpwRIn6qwWSb1mJQz2GPIgQboD3O5JNtxt137JkEgUXNCiYp8pr5GPs
-         d4ww==
+        d=google.com; s=20260707; t=1794507903; x=1795112703; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tzBmIcpghOYCP+r03HK0N7KGo+wgnlo6db5N340fGPI=;
+        b=BVkx6KPIfOrWlIonj0+rgg5nNJzXHoUbUSp0K8GIDNsrBudiOXyiZ7bRc1/kFjDdKL
+         OaV7GFdm9nihZ8tQJ0HBcsVap4KpD8CwkJDhH3YJ7GB5uU0ou2fEc9w2wyVtIwnEZ1ru
+         VFQG3ZiARBtjqYTMQCH392by9JNI3/ZSBMjD53m3SigBJ/VXbJ0+Wy3kC48n9W1Rqrrb
+         W3D7CxIF7Hx1FDFcTWIAQzyifwjrGKJpVXBJe5chge/PzyPiUIhyA8ncy3uSUbN+7x+d
+         8u7pWWY2vN9LN1DuqfxIWRi7aiGCme+FSuLDplzDNWtWDc3uQgZE4uucASTsXC90Dxd1
+         Aifw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794507547; x=1795112347;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hB0gGU6/Wvj6DY1CIjnvdF3luMseLxUER3Q6hRYFMuA=;
-        b=0V/49rfl435+OPeJ+ntIV07BIfpbIRXPDDeoIIzdkjWVBEDiw/m6cZAEZ3JDCeBQae
-         PQBPl1WDDQxrl24znOBoGVYH23lJIITb26+YlFgrMjXM3g1k00k5Y3FDMJ4f30R/EBpL
-         XmtlPumk+Eyb8r0YGpdz4GrWWcH6lCAnTNhYxkiTkgrJ42WOx6LbWQX7Z7Jpm9eSR3JC
-         VADs6bWmAuIIJ/n+9rFtCfBAOG92aYooDrsa0KKy73cD+8bgbx4N1dImj7prmFR/7W9m
-         C3Lo8wWj5Qq4vt5HenEMioa/ysCTTJVeIJjqfPX2dlWuqd5uHhiP7ZyQQyscYGzS5xrA
-         hOaA==
-X-Forwarded-Encrypted: i=1; AL+hErFUxF32YBdvayI4zlkabkTcf9q9aiVnLc/Z1QC2eSdlWOLxO6YXloI7Uj16cGZLEVJLnPxKNMhMKEAwwBqu@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Bs6dYbOkvTYuLjhhx/9HA5TlPklcqbT7c5z9VsKI1yzikpy5k
-	gwVQjxZOXgZOAcoJbbxUc7siRsLBQd56srHgTaNs1oXDHybC/LtJR2TQ
-X-Gm-Gg: AYBFou2X/ip1MtYNFETpGNEw2QHAXsKTr/51NrUy+g83YJNd/F5LI6tU0aAZOgaJTOp
-	/IpYjJXdl+hdpkf+x/qoLbnGfalQkmkcDsBXZG7tAyki1JkYe/9r0vwUBy00n497w9jmipdZOLQ
-	Rs74A0up1PkjsAo2LQwXq5dLk9LOEStrSnC2azZJ8TstFObkLOq8yZFW2DW+x4DqJ4uK/+NqwhU
-	M+GRUejUFV7zietGZL5xnBbyxbJ7JXDSpTiJ75fstMOIWvCQl3MFalbcSa3B5Q6WidY/gyU5Qtf
-	MqxT96+hA+7ryTz7szMuaqqYLRslntWl7N3wL9hoZDya4768cQ99z0PItWkhot67DU5KbW44Ks5
-	73b1NKzUiTXlcgeGSMhoc+2D2tAir5Vp+damIrJ7YU5wu/oxNwQAbA+TSxiaBYmYkBCQGP+ubIp
-	lHAFfkhm84DULicec8UTjqbkmH2CgbsYvq0khqdOktHZpS77dzNhR0rVmWjAWsHr89d8aNpO5Ay
-	QgXVB/DM2ZdSge8/W9+ne5uEuz9oWsE4tUqukU3HulUlOLozG2fbL1hz6ZskmyolxvtecgvlUH2
-	Rixy4DdKHW5TMCKoJJwITyiMxy7+F6tkrdmaMZtkATw9FXEZGMmY1GQZnkGTlNcckJPOCYVAIzE
-	Z5w==
-X-Received: by 2002:a05:600c:1912:b0:4a1:c5eb:b445 with SMTP id 5b1f17b1804b1-4bb55ad45admr76185e9.35.1794507546798;
-        Thu, 12 Nov 2026 10:19:06 -0800 (PST)
-Received: from andreayoga.wind3.hub ([31.189.56.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4bb4e27a8b0sm87629935e9.15.2026.11.12.10.19.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2026 10:19:06 -0800 (PST)
-From: Andrea Parri <parri.andrea@gmail.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Andrea Parri <parri.andrea@gmail.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Song Liu <song@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	live-patching@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] livepatch: Fix races between stack check and module load/unload
-Date: Thu, 12 Nov 2026 19:18:55 +0100
-Message-ID: <20261112181856.234172-1-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <avX8UWAA4DN44p6o@pathway.suse.cz>
-References: <20261022134433.3595212-1-parri.andrea@gmail.com> <avX8UWAA4DN44p6o@pathway.suse.cz>
+        d=1e100.net; s=20260707; t=1794507903; x=1795112703;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tzBmIcpghOYCP+r03HK0N7KGo+wgnlo6db5N340fGPI=;
+        b=1AAO1UQNR5QkbKz78gpRXrqJ2LoRhjn83PSTg9oLv2+mRifwLp+CCZBepJ9pBYsKIy
+         IUmDD+qmk9j9eGIUBTxJ2mYUKELabUO9WDdSf1lqMs5guWIn2+Al5eCen3klIimaJoys
+         Uk7s0Rj4icIhF7/vFp89EF7Oi/B8M/xOQQCDR76a6h8eyhr4viH3RuQ3uj5nEUycjDxv
+         SdCe2C0Po+DsdjE7gs3nhikdmVEkM6Gq7N6emNfLkAorWzdH93uPelkYp/nGWKhv6hxs
+         YDY8t1G8MWVJEdPpQPPxd5BazLCIRWZMIElVMJQQ7H4ehsUqPK1BhVVql9RWtFU2gHJ0
+         aVWQ==
+X-Forwarded-Encrypted: i=1; AL+hErFTvrZ0Q4lKN0ct9uVxpPy3dCIotqgjPOFljUrXw1q0Yn8mYsbHU0m+ugeTI4GjG5oREYDgra7aO2juQz8W@vger.kernel.org
+X-Gm-Message-State: APuU4Z+Apyft8N/bduCPf7Cqt+7a9xj3rBUNnrbGcGMGWJ0BUuFRM68f
+	ve+s3xtsqTgmHkVtKebKtXXkfV0Y9gip54bil4WaSpvCDQ6QyrjEZc5muLD3EhfAgafH2kWn12J
+	19IfvAkiRbKLYyuSaI0NLZc5BPR51uqYsKfPWqCUS
+X-Gm-Gg: AYBFou0MuZvp2w2lKcQWIdNxKJ/HtEP2iTRUFoqvLViRw8VgguTk7e6KIN9HIQqpupx
+	Ss1CsLvR/3BVgsBZOwiKCXEdpZe0cKWrwjZt3pv5C8JgVTI8xpPqithq4GiQ/Q1cFXUr7/adj/J
+	N/21QWUlOF5RseFh0hoAaHUiMX+r/hWaQNW0u32j1nigihfo3MDGbKX+0hI5o/yBPC3DbdjFpuQ
+	1HBgB1YBg4jGIn/mTNrk2d6/roZR6Md2MLBsQmOyy+vXDm2vdc5I6/wf8ehVgNk8EziC6eUFp+I
+	hRpUXecptro2LPHDX9A0eBB239oKOnHOrf2QIsbyQP4EqPAVphGAAEEMxusUveQwVJD6UxonKhX
+	lYHvK98P18lY/rio8E8tsUCSxXHykN2inGUMAGacX2v163foblfVOs1mwJnJkkseGKw==
+X-Received: by 2002:a05:6102:a4d:b0:7cc:828b:41f4 with SMTP id
+ ada2fe7eead31-7d64db190fbmr4854137.35.1794507902539; Thu, 12 Nov 2026
+ 10:25:02 -0800 (PST)
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -107,17 +104,56 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261103233909.1364531-1-dylanbhatch@google.com> <avVYkcbr6ah9IzYX@jpoimboe>
+In-Reply-To: <avVYkcbr6ah9IzYX@jpoimboe>
+From: Dylan Hatch <dylanbhatch@google.com>
+Date: Thu, 12 Nov 2026 10:24:49 -0800
+X-Gm-Features: AclHuK-_TAArpRaO2jf5A6e-8RRqPo51or4oUVcum6Bw0xcFyHqgOMVe5Q1IMsE
+Message-ID: <CADBMgpzH8Ogwvr6ORx5PebB=0-2gLNXM96U9=jKa5+PwnapjAA@mail.gmail.com>
+Subject: Re: [PATCH] klp-build: Allow passing options to make via '--'
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, live-patching@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Petr,
+On Wed, Nov 11, 2026 at 10:14=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.or=
+g> wrote:
+>
+> On Tue, Nov 03, 2026 at 11:39:09PM +0000, Dylan Hatch wrote:
+> > Livepatch builds rely on reproducing the original kernel build
+> > environment. Currently, klp-build invokes bare 'make', which drops any
+> > command-line variables or flags used during the original build (such as
+> > 'LLVM=3D1', 'CC=3D...', 'KBUILD_BUILD_TIMESTAMP=3D...', or custom wrapp=
+er
+> > Makefiles via '-f').
+> >
+> > Refactor the make invocations to use a common MAKE array and allow
+> > passing arbitrary make options after '--' on the klp-build command line=
+:
+> >
+> >   klp-build [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
+> >
+> > Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+>
+> Does this enable anything that's not already possible via setting those
+> variables in the environment (or MAKEFLAGS), e.g.:
+>
+>   LLVM=3D1 klp-build
+>
+> ?
 
-On Thu, Nov 12, 2026 at 06:50:09PM +0100, Petr Mladek wrote:
-> I am sorry once again for the late reply. I hope that you still might
-> be able to handle the feedback and eventually test the simplified patch.
+Ah, I hadn't tried MAKEFLAGS, thanks for the pointer.
 
-I'm not planning to pursue this further, so there won't be a v3 from me.
-I'd be happy to see you, or anybody else interested, pick this work up:
-please feel free to reuse any part of v1, v2 and of the reproducer.
+Since Makefiles override env vars by default I had some issues with
+our internal Makefile-based build tool, but trying with MAKEFLAGS it
+does seem to work. In which case, this patch doesn't really add any
+new optionality.
+
+I would argue the [-- MAKE_OPTIONS] still has some value in that it
+makes for a slightly more intuitive command line interface, but that
+is just my subjective opinion.
 
 Thanks,
-  Andrea
+Dylan
