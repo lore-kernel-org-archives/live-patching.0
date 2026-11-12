@@ -1,52 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794510325;
-	b=kZm+W8nHA5AIobYGrL8Xhy7do/UP1+45BYVbFt7sjx34QAKMRFnlg+5HbEnwCaACDmuC
-	 s7i/uzFDoVKxht7QdQ4rk9SjAW5/fMJv+BBacL5B/lEAFrc+OWfA+TEAjWuyOETZ1f5js
-	 Ar1b7nYuiul/cjYmlSPK7nF+aDnytqySMcTbr0krj4IS34jFXVHTzxQfGa70Y2DWecznw
-	 M5GLG3H9DYt9J4P/k2qdIDhE9Befx/ywao2XtbNzHTIymlEIimUKuPuH72P7QGud9NBf7
-	 rR0ihg+4ct8hbDfBiLOw6Kv1epyhMwu3ATvsn8lxUps6k6RDy6X3nzpoMSZyYM0bs7w==
+	t=1794521041;
+	b=N4zLG+x7P5nRB+fChwEKePBYj+5V2BbfPWLHFJ4XATbzmb/1rgJ5J4ibfRMRBMvLB826
+	 2TkUPaM29on/6soGCNPP+71my2mNpE+5RKTgf4TTbPr1fxWPIUwSNH+7zKLyDhLEcL6wQ
+	 oUV/PBPyEBENcNjVkc6IJFhX0SZlic/mUVJdwXLBE2fY+BDGIbnXhc0nzCmP7tuGfZRoq
+	 SXRbwNbXdeaqadmgvECfTejcB8IKe9QsXfcbuQeBkEqOi2uQIUQQRcp3bHYgFN9EXgBYk
+	 2KM2BKYngChvNNQGBdJ2hVSlgPxxrAPuKZhzsAN9yDm+Wdi6h/SA+6bRPRvmU7Klqbw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794510325;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=Nnokj0ICH3uGpo1u86kSYRVQBh/oEWA/5hlPVPpx1Bo=;
-	b=jRjaXluIlOaq5dSSx15OQ5Pbc2s9qWH7pMNd/B3AdNNYe1LgL+VEyFVuO6Ujh0jgF62g
-	 vfbhb9xQHqV9VnA+dmttkIfTK1Uo0EvQKXsUazzDiFY+Z5FE9SUm6mHD2RTwB21+iOvsN
-	 Fh9Ggg5cd13GE4C+cg1mw9j5IHir3xj1MhMQk6VOJTOTiyDf/Wpcdgci0azsVhC2hc6Rk
-	 rD65IZ7LT79mDX0S9AVrGdRuKhObYa/qvXTu2kD0jyr4shbwSrF6pI8tLRbomVDlB7dtD
-	 XZXQKVBl1ofOLbCnEhHgKYe0TUJOXQA2GWC892i+yDBk+XSgljEuHyZi+yIt88t+59g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794521041;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-Mailer:Message-ID:
+	 Subject:From:To:Cc:Content-Type;
+	bh=OApFv+JTRWklrvgE3dh5H3kzXm8cpf7tKiKBdjrK9qk=;
+	b=rrEDyiXvUIYmjNBHWFjL4v9MvUuujWRSO0+ZLRYMausBSP3NdshW36fejd80EQeFjnBY
+	 JV/nMAigrRY0u1G63NEET3kLMkfAiQ9QQTB3TKt1smThBwqtj5shy00CSTtLOAqQysdql
+	 Fy+f2YKxAqZkC9Tts8/ReyuKVqz6yUBzCLix5wqdk+Wax71TZhpB89hy6HPw7XYyvbID1
+	 J4NQhqsuZDPo+b9GM0OVClqG+0w/Rhd5P72mLl5IXbe0kNh0+NuApQ95mifPgHWFNHney
+	 DTgWpMiRHOg5jph25K+xYYoJm3g1f9qj+0ASJ6zeO/ikCOKjMkB4OCbxuChaeceQU6g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEZfkWFF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="i5z/FryY";
+	arc=none smtp.remote-ip=209.85.214.199
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3536A606A335;
-	Thu, 12 Nov 2026 19:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090A3606A31C
+	for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 22:04:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 090A3606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEZfkWFF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468031F000C7;
-	Thu, 12 Nov 2026 19:05:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794510324;
-	bh=Nnokj0ICH3uGpo1u86kSYRVQBh/oEWA/5hlPVPpx1Bo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HEZfkWFFCRZdCy2X9fu+huBtUW7UPG86kTDcuEL9UWHPYq17kmPnqJl47skk97Z2I
-	 q3Omi70f6J6u0U0eR1VBlgC+DrNs2u/GMxSEEjOVEc6+lKBRY3xDYZjhUAQNRGXJCc
-	 HGtZEYnDF07qpdFlu3lA3PMUO0ZPfJGajuCTwLRjdt1uNxvq5WcrFDyjD+0LEgHvqB
-	 +tHB0Zy/Ty8Jo5iWTZ4xhs7jbPq2MBdNsRc+5v+3C7oDqTwmvMSIynS7BUIGTD184U
-	 v9eKLFL1eRLxrBAS9BEHl7NQuh/SW4KbvMDLUP1VBU+u9bZ0NFGSLXAH8dbQrZDjY+
-	 vG++ZAbBgs45w==
-Date: Thu, 12 Nov 2026 11:05:22 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
-	song@kernel.org, live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 0/9] livepatch: Add support for scoped atomic replace
-Message-ID: <avYNu60V0spG_xIf@jpoimboe>
-References: <20261026133651.40061-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=i5z/FryY
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2eb5375cd68so2593095ad.0
+        for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 14:04:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20260707; t=1794521040; x=1795125840; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OApFv+JTRWklrvgE3dh5H3kzXm8cpf7tKiKBdjrK9qk=;
+        b=i5z/FryYinfyYzqyqeviHVNYmTVAzDoNJWWkomkHDyjfAGMv0DsG8PVtoasKXoqTAf
+         T2F6o+QLAX69FFvTyZedumQumkbj1G8r+RsOgSkjpIh3jGkr1c2u/VmIlLpCz8320gtN
+         ICPL04Pe2Wj7oyal7kHKdQ9rGXy+n9MIyOyvT7+LozBk+Fz1TuNl9NOS8CQeOds/fiaB
+         SMQpWik2s4zngd/kayY264Vqr1vKC8APfPF1/WX7YayRuUELMNGZk3uNnhQ8hcVwgBgQ
+         lIQNIjeo9m3cMz3MxeUX9LpHwLBMqiFBrj4lVxG0SVhOUWdvNsJ6kKvXich61HPbCP0H
+         FNaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1794521040; x=1795125840;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OApFv+JTRWklrvgE3dh5H3kzXm8cpf7tKiKBdjrK9qk=;
+        b=tDVb0I8mWQcSzjL+dclezqYfY26cOkFqoR/8Uiog4Yq9uPjHdh2kmcxldx9m8Ryld4
+         Tc1wiW9UEEwH2GkuEdUDQxuvD8ncLB4u5y90L+KvqV4Dmf1aADlY+aJfIbAurk7Tov+u
+         je9eVQdYjduHOgvUZboHibdIfZuHjhMBeKaBS1ZowiEpdffEVBv/jMiwYV9D2BQVdT3O
+         vVfcnRgxsUeR6kM97kPvtNzpARfdf0++Pppeu8oLPiaUNahRGUpNvSBQlAWvuBGZNK1l
+         LQimI19M4ZAzwXbjIjkUP1UQH5xX4qMSZU2rq8kyIsAwAoCqainC8ChY0vi5ESMwFBi6
+         meug==
+X-Gm-Message-State: APuU4Z9S0d0FPAsn01/kJvi9dRP5tI8FXUGq+zk15LGekqGjD+6e05Ou
+	RJZN1PuFvcJb0KDX08yBmktJYKYPu4DAusZyvE4oPnsdeuL+6RRhg54lYRnoOFkiYRyyVJxjExQ
+	7XEr7QlY+5QU73HJoUEMHEbizbw==
+X-Received: from plfh6.prod.google.com ([2002:a17:902:f546:b0:2ed:ab54:eb4f])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:e84a:b0:2e9:7dda:bfc7 with SMTP id d9443c01a7336-2ee0dcd0647mr5450575ad.66.1794521039977;
+ Thu, 12 Nov 2026 14:03:59 -0800 (PST)
+Date: Thu, 12 Nov 2026 22:03:55 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -55,31 +74,132 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20261026133651.40061-1-laoar.shao@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.611.g1030f0b940-goog
+Message-ID: <20261112220355.1952137-1-dylanbhatch@google.com>
+Subject: [PATCH v2] klp-build: Allow passing options to make via '--'
+From: Dylan Hatch <dylanbhatch@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dylan Hatch <dylanbhatch@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 26, 2026 at 09:36:42PM +0800, Yafang Shao wrote:
->   selftests/livepatch: Clarify test module file names
->   selftests/livepatch: Adapt atomic replace tests to provides/obsoletes
->   livepatch: Make klp_find_func() non static
->   livepatch: Call klp_init_patch_early() earlier
->   livepatch: Implement provides and obsoletes for scoped atomic replace
->   livepatch: Deprecate stack_order
+Livepatch builds rely on reproducing the original kernel build
+environment, including any make flags or command-line variables used
+during the original build (such as 'CC=...', 'KBUILD_BUILD_TIMESTAMP=...',
+or custom wrapper Makefiles via '-f').
 
-s/Deprecate/Remove/
+While these options can already be passed through the MAKEFLAGS
+environment variable, passing them directly on the command line is more
+ergonomic.
 
->   selftests/livepatch: Add provides/obsoletes test scenarios
->   selftests/livepatch: Add state test for provides/obsoletes
->   selftests/livepatch: Add function test for provides/obsoletes
-> 
+Refactor the make invocations to use a common MAKE array and allow
+passing arbitrary make options after '--' on the klp-build command line:
 
-With the subject fixed on the above patch:
+  klp-build [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
 
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Acked-by: Song Liu <song@kernel.org>
+Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+---
+v1: https://lore.kernel.org/r/20261103233909.1364531-1-dylanbhatch@google.com
 
-Thanks!
+Changes in v2:
+- Clarify in the commit message that this is an ergonomic alternative to
+  MAKEFLAGS rather than new functionality (Josh Poimboeuf)
 
+ scripts/livepatch/klp-build | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
+
+diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+index b52a8489d9f67..1fd405d43ef43 100755
+--- a/scripts/livepatch/klp-build
++++ b/scripts/livepatch/klp-build
+@@ -125,7 +125,7 @@ trap trap_err ERR
+ 
+ __usage() {
+ 	cat <<EOF
+-Usage: $SCRIPT [OPTIONS] PATCH_FILE(s)
++Usage: $SCRIPT [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
+ Generate a livepatch module.
+ 
+ Options:
+@@ -158,11 +158,23 @@ process_args() {
+ 	local long
+ 	local args
+ 	local patch
++	local klp_args=()
++	local make_args=()
++
++	while [[ $# -gt 0 ]]; do
++		if [[ "$1" == "--" ]]; then
++			shift
++			make_args=("$@")
++			break
++		fi
++		klp_args+=("$1")
++		shift
++	done
+ 
+ 	short="hfj:o:vdS:T"
+ 	long="help,show-first-changed,jobs:,output:,no-replace,verbose,debug,short-circuit:,keep-tmp"
+ 
+-	args=$(getopt --options "$short" --longoptions "$long" -- "$@") || {
++	args=$(getopt --options "$short" --longoptions "$long" -- "${klp_args[@]}") || {
+ 		echo; usage; exit
+ 	}
+ 	eval set -- "$args"
+@@ -237,6 +249,7 @@ process_args() {
+ 
+ 	KEEP_TMP="$keep_tmp"
+ 	PATCHES=("$@")
++	MAKE=("make" "${make_args[@]}")
+ 
+ 	for patch in "${PATCHES[@]}"; do
+ 		[[ -f "$patch" ]] || die "$patch doesn't exist"
+@@ -317,12 +330,12 @@ set_kernelversion() {
+ 
+ 	stash_file "$file"
+ 
+-	if [[ -n "$(make -s listnewconfig 2>/dev/null)" ]]; then
++	if [[ -n "$("${MAKE[@]}" -s listnewconfig 2>/dev/null)" ]]; then
+ 		die ".config mismatch, check your .config or run 'make olddefconfig'"
+ 	fi
+-	make syncconfig &>/dev/null || die "make syncconfig failed"
++	"${MAKE[@]}" syncconfig &>/dev/null || die "make syncconfig failed"
+ 
+-	kernelrelease="$(make -s kernelrelease)"
++	kernelrelease="$("${MAKE[@]}" -s kernelrelease)"
+ 	[[ -z "$kernelrelease" ]] && die "failed to get kernel version"
+ 
+ 	sed -i "2i echo $kernelrelease; exit 0" scripts/setlocalversion
+@@ -526,7 +539,7 @@ fix_patches() {
+ clean_kernel() {
+ 	local cmd=()
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 	cmd+=("--silent")
+ 	cmd+=("-j$JOBS")
+ 	cmd+=("clean")
+@@ -539,7 +552,7 @@ build_kernel() {
+ 	local log="$TMP_DIR/build.log"
+ 	local cmd=()
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 
+ 	# When a patch to a kernel module references a newly created unexported
+ 	# symbol which lives in vmlinux or another kernel module, the patched
+@@ -859,7 +872,7 @@ build_patch_module() {
+ 	cflags+=("-fdata-sections")
+ 	[[ $REPLACE -eq 0 ]] && cflags+=("-DKLP_NO_REPLACE")
+ 
+-	cmd=("make")
++	cmd=("${MAKE[@]}")
+ 	if [[ -v VERBOSE ]]; then
+ 		cmd+=("V=1")
+ 	else
 -- 
-Josh
+2.56.0.611.g1030f0b940-goog
+
