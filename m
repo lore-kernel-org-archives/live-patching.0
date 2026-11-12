@@ -1,56 +1,52 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794509125;
-	b=FRhj2fHYb9lArPANNAqkJF3aLUijBACCmgYWIwu6IKydXSCuhbZqSUDmoXTi56XGPwig
-	 zbfIwd8KK+jqawGZEFWM1KmK5beewsRSC1Z2IZiE9YqAHdn8/17m61c6P3QG+ak50cXz9
-	 v31JV2il5wnYyEEU9u8J2kqJklB3JNloEoNFoq7hEiD3USsDb61enU+AU8zYbzGE8avrJ
-	 P7I2IqN2iKAY85n1hfuUh7gPMJqZyJONX8+cPIof9Oc4tYeZazvL5RU4tBb2eBmJDjRXP
-	 Sgu8SB+Dmu4fvox1NpCwdBaNG6XiL8ROfQIQEpyj1QbVy/wPcg44s5+34BzerKeVRtg==
+	t=1794510325;
+	b=kZm+W8nHA5AIobYGrL8Xhy7do/UP1+45BYVbFt7sjx34QAKMRFnlg+5HbEnwCaACDmuC
+	 s7i/uzFDoVKxht7QdQ4rk9SjAW5/fMJv+BBacL5B/lEAFrc+OWfA+TEAjWuyOETZ1f5js
+	 Ar1b7nYuiul/cjYmlSPK7nF+aDnytqySMcTbr0krj4IS34jFXVHTzxQfGa70Y2DWecznw
+	 M5GLG3H9DYt9J4P/k2qdIDhE9Befx/ywao2XtbNzHTIymlEIimUKuPuH72P7QGud9NBf7
+	 rR0ihg+4ct8hbDfBiLOw6Kv1epyhMwu3ATvsn8lxUps6k6RDy6X3nzpoMSZyYM0bs7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794509125;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794510325;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:
-	 Content-Transfer-Encoding:In-Reply-To;
-	bh=D7ccPnJrKI175b6VGgYIvgjoBXfn0b4AhnASajlohJI=;
-	b=gzj2LmSap4uHSoIYS1yuoqwc9Gt+WnHhjwxsKuWjMF2qMY8XYUmSdZdTYiSbhjKyg3Ml
-	 kX0+2bbWIJElmBtw4wWzecHfp3z6g1X42pVlvW6xj8v0T3CVGbCH53nC7+XhygjHpbFY5
-	 oZnBkcjUpyxc3bNMfVtr0NXRecRKpbkPWebOJ9kaGLnfgLivKV692rkQasY47u56gGpk6
-	 drq0VspMGSllsWPU7XcPplIL1mUWnkoSVon9agpwfw0D4BApek/H06mzC3Dll6U3VIlf6
-	 QVB4h8IlHpWhvG0IbNzqdj8WS4TPhU4uRnr5ZoZEvN1vgc0gm6Uz2pZrqc8vEJhC3LA==
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=Nnokj0ICH3uGpo1u86kSYRVQBh/oEWA/5hlPVPpx1Bo=;
+	b=jRjaXluIlOaq5dSSx15OQ5Pbc2s9qWH7pMNd/B3AdNNYe1LgL+VEyFVuO6Ujh0jgF62g
+	 vfbhb9xQHqV9VnA+dmttkIfTK1Uo0EvQKXsUazzDiFY+Z5FE9SUm6mHD2RTwB21+iOvsN
+	 Fh9Ggg5cd13GE4C+cg1mw9j5IHir3xj1MhMQk6VOJTOTiyDf/Wpcdgci0azsVhC2hc6Rk
+	 rD65IZ7LT79mDX0S9AVrGdRuKhObYa/qvXTu2kD0jyr4shbwSrF6pI8tLRbomVDlB7dtD
+	 XZXQKVBl1ofOLbCnEhHgKYe0TUJOXQA2GWC892i+yDBk+XSgljEuHyZi+yIt88t+59g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XY7bCLpN;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEZfkWFF;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E5E606A321;
-	Thu, 12 Nov 2026 18:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3536A606A335;
+	Thu, 12 Nov 2026 19:05:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XY7bCLpN
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31C21F000C4;
-	Thu, 12 Nov 2026 18:45:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=HEZfkWFF
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468031F000C7;
+	Thu, 12 Nov 2026 19:05:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794509125;
-	bh=D7ccPnJrKI175b6VGgYIvgjoBXfn0b4AhnASajlohJI=;
+	s=k20260515; t=1794510324;
+	bh=Nnokj0ICH3uGpo1u86kSYRVQBh/oEWA/5hlPVPpx1Bo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XY7bCLpNnG7oYe0yXJBjX9V3EURx+/BBXRYjPSGM6tHAmkrqXq63drYucjk7txL8K
-	 i5uB261Mzd1u6FFRS1VxJVJUYZ6ffkPxJtCCCuzBXXCcz5EASPaqTfhXc0989Q9yW0
-	 VoyKp+4qE9qQIDaNadac3GF3Il8ARIHIfAFSliWQ9lWdEc8ELsF12yfneqLJr6FRiN
-	 6EjsCDa8EQgcZX1dzi9C31WuYLRIjUkbOOeqUkcAXBl7ERCkaCNQ9/HV9QCnKqSHkD
-	 AxeaqKUMvcJ9pbRepBxGzpH0ZnUvXrbeTYMHpuZ2IU/5Dlp6pMgLMcgJJ5xRtyKwPT
-	 LL0l3fonpXO7g==
-Date: Thu, 12 Nov 2026 10:45:23 -0800
+	b=HEZfkWFFCRZdCy2X9fu+huBtUW7UPG86kTDcuEL9UWHPYq17kmPnqJl47skk97Z2I
+	 q3Omi70f6J6u0U0eR1VBlgC+DrNs2u/GMxSEEjOVEc6+lKBRY3xDYZjhUAQNRGXJCc
+	 HGtZEYnDF07qpdFlu3lA3PMUO0ZPfJGajuCTwLRjdt1uNxvq5WcrFDyjD+0LEgHvqB
+	 +tHB0Zy/Ty8Jo5iWTZ4xhs7jbPq2MBdNsRc+5v+3C7oDqTwmvMSIynS7BUIGTD184U
+	 v9eKLFL1eRLxrBAS9BEHl7NQuh/SW4KbvMDLUP1VBU+u9bZ0NFGSLXAH8dbQrZDjY+
+	 vG++ZAbBgs45w==
+Date: Thu, 12 Nov 2026 11:05:22 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] klp-build: Allow passing options to make via '--'
-Message-ID: <avYIsWoMgZxDZsg1@jpoimboe>
-References: <20261103233909.1364531-1-dylanbhatch@google.com>
- <avVYkcbr6ah9IzYX@jpoimboe>
- <CADBMgpzH8Ogwvr6ORx5PebB=0-2gLNXM96U9=jKa5+PwnapjAA@mail.gmail.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
+	song@kernel.org, live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 0/9] livepatch: Add support for scoped atomic replace
+Message-ID: <avYNu60V0spG_xIf@jpoimboe>
+References: <20261026133651.40061-1-laoar.shao@gmail.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -62,49 +58,28 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADBMgpzH8Ogwvr6ORx5PebB=0-2gLNXM96U9=jKa5+PwnapjAA@mail.gmail.com>
+In-Reply-To: <20261026133651.40061-1-laoar.shao@gmail.com>
 
-On Thu, Nov 12, 2026 at 10:24:49AM -0800, Dylan Hatch wrote:
-> On Wed, Nov 11, 2026 at 10:14 PM Josh Poimboeuf <jpoimboe@kernel.org> wrote:
-> >
-> > On Tue, Nov 03, 2026 at 11:39:09PM +0000, Dylan Hatch wrote:
-> > > Livepatch builds rely on reproducing the original kernel build
-> > > environment. Currently, klp-build invokes bare 'make', which drops any
-> > > command-line variables or flags used during the original build (such as
-> > > 'LLVM=1', 'CC=...', 'KBUILD_BUILD_TIMESTAMP=...', or custom wrapper
-> > > Makefiles via '-f').
-> > >
-> > > Refactor the make invocations to use a common MAKE array and allow
-> > > passing arbitrary make options after '--' on the klp-build command line:
-> > >
-> > >   klp-build [OPTIONS] PATCH_FILE(s) [-- MAKE_OPTIONS]
-> > >
-> > > Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
-> >
-> > Does this enable anything that's not already possible via setting those
-> > variables in the environment (or MAKEFLAGS), e.g.:
-> >
-> >   LLVM=1 klp-build
-> >
-> > ?
-> 
-> Ah, I hadn't tried MAKEFLAGS, thanks for the pointer.
-> 
-> Since Makefiles override env vars by default I had some issues with
-> our internal Makefile-based build tool, but trying with MAKEFLAGS it
-> does seem to work. In which case, this patch doesn't really add any
-> new optionality.
-> 
-> I would argue the [-- MAKE_OPTIONS] still has some value in that it
-> makes for a slightly more intuitive command line interface, but that
-> is just my subjective opinion.
+On Mon, Oct 26, 2026 at 09:36:42PM +0800, Yafang Shao wrote:
+>   selftests/livepatch: Clarify test module file names
+>   selftests/livepatch: Adapt atomic replace tests to provides/obsoletes
+>   livepatch: Make klp_find_func() non static
+>   livepatch: Call klp_init_patch_early() earlier
+>   livepatch: Implement provides and obsoletes for scoped atomic replace
+>   livepatch: Deprecate stack_order
 
-Yeah, I'm not opposed to that, assuming we don't want to reserve [--]
-for some other purpose.
+s/Deprecate/Remove/
 
-At least the changelog should state that this isn't adding new
-functionality, just creating a more ergonomic way to do it.
+>   selftests/livepatch: Add provides/obsoletes test scenarios
+>   selftests/livepatch: Add state test for provides/obsoletes
+>   selftests/livepatch: Add function test for provides/obsoletes
+> 
+
+With the subject fixed on the above patch:
+
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
+
+Thanks!
 
 -- 
 Josh
