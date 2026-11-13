@@ -1,99 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=74.125.224.52
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
-	t=1794540355;
-	b=y9B8Je61qU5zbitNjPKlfT4UI8r/qiy+HTgLWMGWljHRYqAcOZi4QouYSsXkZUBpqHUG
-	 toM0TiGcgzsaODlzMGA4UzjonJ1MtGhiXIywM2Nn8yL788D9r0ci0deR04uwh1JxfJzw6
-	 HQVtlaNZ9oEf1H6aYBxrYzog4LFv0bW1j6khsiPbo6j9TZfkOvJItB9LWNIgX9uYbkevy
-	 o6/AbnTQ5zZctATcKzscBpk6EG1AtnLQMycpuNUN/sBwSNQb5tpX0f34bIqSzWdXX7Ixc
-	 hLH7I4MboNzQpgAtN4AcPOLmSrQO5mhu9AoaUhniRIu3669Cxdv0EmYu/Fk1RduelHw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794540355;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type;
-	bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
-	b=b7/UdUIHZAIcz8SmGD4+WsbJvk/JdTuGMLqoXafRWOCMfGMrQTZFsmy9eOBABSS+EUC0
-	 0n2zq6tMQSeKub7FB1brARU+P61X4lUZsz/Obpt2nAJzbtQEpbreh9y1L7JuU2kF89CqZ
-	 v7I1wQHY1Qbg+qPPoyczXSF3Ql2AAi+XbVQO0YR6u40a55h3lHkjfl74pBOJmCkBfDBWy
-	 0vMJHSkY7QA7ajNm5uJAioDmjwnUUyDcrYT6bL5xeBlxocRRNRBNlR6iwyoeKJc/sjKCu
-	 8kjhOcMpxVSHR6UQNOwzmZs2M5Sfp13LfnvjU4r8HQJvYfXT6q3bNRFMGKxjMaiCpsQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rWyuZh9n;
-	arc=fail smtp.remote-ip=74.125.224.52
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1794540375;
+	b=j5/CoDgcByt1CErQ5PCtzMie2o6MmReDa21Rxw1YxOtf6T2mpyoNAIXo/eT3xgFpThNx
+	 6txD6HstFhLn27+2G2KXCMjlsmlLy5IscdA6HNDuZuC4sjpZfBLAakOfPtRlSSkJ/oH7g
+	 WGJmUu1kiKxvqmFxLJ17rpxhBJnbRZI9cEWZFveza/AUEgRVXzVBI3i56RP6XEgLpCpkI
+	 C7cVedlQ6dI71PWxDsPSsip+oh/fbFpSDwX7Ml/8u1FryYipxlNdr6j2bf5h1QsWduS5C
+	 vd9Rj4rv3iEfUt4cdS8UAPi5TJnFWTnslXSZ4CpgCYzHdUPmPvmv9JEiQILioPbg5CA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794540375;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
+	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
+	bh=417pJEna1raurgsv7ENLMfGf8yuMXWK58o/ChkD7YuA=;
+	b=nfFsdzEF77ZJePihd4P9yVw78qxciVD1vQUQ+/3rzrtj+k3QtvUXXTkAXo3byfIPdaVW
+	 ylRUjQz7iL8zfGaNwyIveUFrINk4FCTBp63ikqJr/uSZXmzL4h82JpG6cpEbuVx88wwQU
+	 D3ZgKeMoavYmAqwGRTtgzsv5jY+8CNTY8L+P1IxWgMRAfMcr4nW4b1iPIUAPFycNOxC0k
+	 tDN6FWrwLcudiZF3H1ueEFvjX6BU9mWmfcJ2ZPe10av8ypwkEeY658fRc1unA0CFYddJP
+	 ZEr5DveKai+6o/j+bx4dgyCurwRRlYvHyRVgFJW7ixEgiL0KJi0c34VpUxa29o4aGjQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XjMIGn9T;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053C1606A321
-	for <live-patching@vger.kernel.org>; Fri, 13 Nov 2026 03:25:54 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 053C1606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0C9606A31C;
+	Fri, 13 Nov 2026 03:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=rWyuZh9n
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67bef25eb92so651870d50.0
-        for <live-patching@vger.kernel.org>; Thu, 12 Nov 2026 19:25:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1794540354; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hjkLMe5StswW/zCpCZAYsAIcoo8o6pYA9ANCiu6jgGqmz2xA8qgUBP1dpQypjFrC1c
-         QMQ3GDcNYJCFa6XbUbUHtoCvuE/noACyUOeSp+kYDe9buw5bD+nZJIvQDenUPMt8j5V5
-         idO31AL111v2yxX6HUlIXDeI24ZaRKYi55qllek3Wm1mhrQ9+7jPMnRZwKeVJ9iW4Krx
-         g4Ynbey7Tlt8lmzPXMheX43un5kcxSvgDinIxV5HoncasXzq2Wtd+/TLuqBzfEu03qIF
-         NS4CSOTvWpmARnZo49YFmAr9RiKLic7vCbKXnUAn1xqfnIJ/M6hBeSj6ccli166MU3lp
-         knDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
-        fh=5l9AiWqiWX3wBrJBkKAEqU91eJC7VuFIeBf742he4QE=;
-        b=oSVOWJhBHKNZ2vcBw2fX7fchzj/e4KoAKF08D/wmNdYum46mlgzG/L6rm/75gSsa0e
-         +1lUBWal3WmFnWj08IYtegRIvH4DFsxhdZSXqXyS716NMC7o1OATfEWHchV3hm6S9rRm
-         G1JibwxfBlK/I5FVCcDPY4G5OfMimKd4IkDqrXVyehp1QCCiugPUmXWW6qZy4Z2sFynw
-         CzcSF1VQUtH3l6fw7mz0kMgnlUsQaKUTwwjImEJUQwGOB2qhereUPcGrL6BwT8smP767
-         R3ljZfmkYtUj/VEgDv3RKYWcQgr3RTK+CrgdHBy4RU6ZDJoM09OX3hRosygMhfVw3HAl
-         5/dw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1794540354; x=1795145154; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
-        b=rWyuZh9ncAL9UrhsASQ33vhsC9Ry4vF1V+wyYFaYkPdLxpSxFJT5vlO1kb2cmssnUI
-         +faioBCB0OiH3o/HudNp3OTfkizChiyGZyGzBVvYLXsg22Gq4vrSVZEGAHmQH8hD4vhc
-         V07kQEQPCQA9sJS5vKD+3KvPKRBDBZXDDO3bema3tcoFKeW4U2Ys7NVZ1EZZ8+tjnzIX
-         4tsLv0VFJrV0XC6WtW//Uy2bVQcjI2+cASO5GvUWtpyws5pFR8KqRpiGdmVqcL1/bKIi
-         olv0lPnC5BhDkUSceZxB9PL7zYP3cY1CpwmqmE230RE/mdwWfpU2tl260lHyw3yKC0wF
-         p5jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794540354; x=1795145154;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=aXCJsCYj0PyBwLDRuwVNDFBGr1fh79IyzXO5yeZz6ng=;
-        b=FdnAkwd2QZAtSUIA0vTuarIR7xyD8vpVr6Vu2PUk+luWtC9uPt6jhtNuJlzOQP/QAT
-         2LN7PYjUcE9cTk+BVE7EUT5aEkuqAXiXbv9O6aB3z1A4GvW1xEf9JVSMw+4o9v1fjY2O
-         vzVHPbmCQQQ1A3d7wouCI79Z087vM4YPE8xDEsES8LVLjxKi2YQKm//58kMOVeXmMZ0p
-         K9UDpvs3FoxTH0Vnm3lETnwDKiTCapHsTHwDX1TnYs2JKkrWo2SQg5fIadwh4jCAxmRh
-         epr1DdWnTMcd7w9W+kQ3D7kOKaUbiQtVN6DS0DAznQHGPuJxoLN2Dcd+8Ap5WdQlGqno
-         dNOw==
-X-Forwarded-Encrypted: i=1; AL+hErGVO/DHaAZRRNVTAWgEWigSzlqDQpP1zwQWJxnZgEzc4/q22CqWiMslpcfzBAKwXhqo4x346Jqa4wK/Nf3C@vger.kernel.org
-X-Gm-Message-State: APuU4Z/Mf4jofrN50dYWrFkEJ6HTCNlAsy7pTZX923HhDnIYhvXY4bfm
-	lV7ARzNqqsPnJUnADgeAeboGL8oMBIJEJ1c38RBSukILBISJzUZXg6tVfkfuD7s776IE0M31K3J
-	GxuANciSBMaiyAGxlEE2AXwmgFFmzim4=
-X-Gm-Gg: AYBFou1XKad2b8QB/Es8Z8sikNdcvPrpvJMVB8Jv9Xpl+Xivw91tOXYIvGbRoT3QPgq
-	fj0oN67SUW1RpIVBKEiHO52uIQrXLBPJrtdFnybRDc6fMBJSsTdRz4sd+0WWjt6KLZFgFyC/Oxh
-	B0BYk0RSyqmTrxguEq8ncvO1nkQ4pc5LLEhoub78cM35mNL0rgja8t7GkVwxvkh0lpyK7RmNR9i
-	edYOTpb+uoyhvdITPJuIiQV6D/vhZkJdhIzXTf5fPpALhVnjf6krrrZTe6li3qQEtc82KI4Lj/+
-	8NADSQ9dkIiyvjVxlql0yof3J7daqyrVX5J7yl/O2WQyj2Ka+yIOTGiGM43WpB/X7kJPaqmT0nK
-	OfdfSqbsMamGn6v9wzh91FWjeUm8gxwiEnJJ5iFhrZhTgUic0BkPsPo5p/6o=
-X-Received: by 2002:a05:690e:1697:b0:67a:6b2b:b851 with SMTP id
- 956f58d0204a3-67c7907e144mr2968859d50.40.1794540354022; Thu, 12 Nov 2026
- 19:25:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XjMIGn9T
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852B61F000C4;
+	Fri, 13 Nov 2026 03:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1794540375;
+	bh=417pJEna1raurgsv7ENLMfGf8yuMXWK58o/ChkD7YuA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XjMIGn9Tk3GYj6kUNLctq2fVWzIA7wq3Tz8ZKxI6rYifGkvjY+tHy0DRor8hB+Uve
+	 Ft748nw1mooWJ2kqM3/BTTxo8E24hDj6v04UD9TWReyEZbW4ryMsVo1KeKFJkSrnQy
+	 q5z8y4IzycX26waOfWeL+wMLo5ItUdLo2+t2VwzEPrUXP6jXM4MIG5Q+r+QodRfGRF
+	 1AGs0z/QxrOpM4HltyZK6nl12e6M4nyR9sV+jH7QnPcVfdsqMAp9k4zqkspdkF6ikY
+	 NtIO9+FISp2UvC2yxzFMw3Dh/VmqrEsQe82lQWu98CntM/TNX/7qTA6YwQhL0DSV4w
+	 lsvGWwJppJyKQ==
+Date: Thu, 12 Nov 2026 19:26:13 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Longjun Luo <luolongjuna@gmail.com>
+Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol
+ correlation
+Message-ID: <avZ9Ku61M8z-2axF@jpoimboe>
+References: <20261104133158.3187525-1-luolongjuna@gmail.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -103,26 +59,78 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261104133158.3187525-1-luolongjuna@gmail.com> <avZ20mdxRnzTPY4c@jpoimboe>
-In-Reply-To: <avZ20mdxRnzTPY4c@jpoimboe>
-From: Longjun Luo <luolongjuna@gmail.com>
-Date: Fri, 13 Nov 2026 11:25:42 +0800
-X-Gm-Features: AclHuK__CJ53_9mRKoHEMyp5nR9AtpphyE9a9Wbd0i2YCf9S8k8HQ6zn3MAuAnQ
-Message-ID: <CAKL4jwXwgsjrA2d64bh1iUD6nZAwy5NoCyL2i+EEmBB=dKu2jw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol correlation
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, 
-	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
-	justinstitt@google.com, live-patching@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20261104133158.3187525-1-luolongjuna@gmail.com>
 
-Understood, I'll follow up inline on those threads directly.
+On Wed, Nov 04, 2026 at 09:31:46PM +0800, Longjun Luo wrote: > Open Questions and Next Steps
+> -----------------------------
+> 
+> This is a substantial change: 1,755 of the 4,010 added lines are tests,
+> and about 1,300 implement the DWARF reader and identity layer. Before
+> preparing a merge-ready series, I would like explicit maintainer guidance
+> on how to stage its integration. My proposed sequence is:
+> 
+> - Submit Patches 1-3 separately with their regression tests.
+> - Prepare the identity representation, DWARF reader, and ELF cross-checks
+>   as a foundation that can be reviewed separately from twin matching.
+> - Integrate the matching changes in Patches 7-10 together: reference
+>   extension pairs repeated statics, and the reference checks reject
+>   remaining ambiguous data references.
+> - Submit the memory optimizations separately and pursue explicit state
+>   annotations in a separate RFC.
+> 
+> This RFC retains upstream expectations for the three policy tests to
+> make the behavior changes visible. For the merge-ready series, I will
+> update their assertions to reflect the agreed policy and move Patch 11's
+> tests alongside the changes they cover.
+> 
+> I plan to add triple-based DWARF correctness tests in upstream compilers,
+> using known source definitions and optimization variants to check
+> coverage, non-conflict, and attribution accuracy (with clones, pieces,
+> anonymous scopes, and folding checked according to their respective
+> semantics) without locking in a specific DIE layout or suffix scheme. My
+> earlier bug reports and fixes on IPA-ICF, weak-override attribution, and
+> assembly CU selection [2-6] provide concrete test inputs, and the same
+> attribution model applies to consumers such as AutoFDO [7].
+> 
+> I would appreciate feedback on four questions:
+> 
+> 1. Would maintainers prefer to integrate the identity representation and
+>    reader first, then evolve twin matching in a follow-up series, or keep
+>    them together for integration?
+> 2. Is constraining candidates by the identity triple and extending twins
+>    via checksums and unchanged-function references the right foundation
+>    for correlation, and how should the final ELF fallback be bounded?
+> 3. Is the handling boundary in Case D reasonable, and should explicit
+>    state annotations (such as `KLP_NEW_STATIC()` / `KLP_DEL_STATIC()`) be
+>    pursued in a separate RFC?
+> 4. How should we structure upstream compiler tests around the identity
+>    triple to protect both DWARF producers and livepatch consumers?
 
-I sent v2 out as a new series mainly because it covers the next layer of
-the design: v1 introduced the (source, scope, name) identity, and v2
-builds on that to do the actual symbol matching using checksums and
-reference context.
+There are a LOT of words in this cover letter.  The whole thing is a bit
+overwhelming to try to review, much less answer these questions.  Please
+don't use LLM-generated text, as it can be very difficult to follow.
 
-Longjun
+Also, I noticed the cover letter has several back-references to v1,
+adding to my confusion.  The cover letter should be self-contained, such
+that a reviewer can easily understand what the patch series does without
+first studying v1.
+
+DWARF is the most controversial and complex part of this series.  Before
+going there, we should look at whatever can be improved *without*
+relying on DWARF.  That will then make it much easier to evaluate what
+additional benefits can be provided by DWARF later on.
+
+klp-build is very much a pragmatic tool, and most likely will never be
+able to handle all possible AI-imagined edge cases.  It should always be
+used with caution, with someone (or something) double checking its
+results at the end.
+
+I suggest splitting up the patch series, focusing on fixing the more
+realistic and tractable issues first.  Maybe even one issue at a time.
+Human reviewer attention is spread very thin right now, please make
+legibility a top priority.
+
+-- 
+Josh
