@@ -1,58 +1,57 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794594474;
-	b=zeJ7VCmq+s/IvCD9UjWZtVQoeC/gcP1+rLro54WiNOrpbVLVoFMPgJvxQYCeJ4Q2/w3Z
-	 wKY0K0DJXTp0aS1F58P5IpTpTUk46J4YZWdcjfXUs2F80gCOZlj7y0x0Jk6Lz7J3Kp4wW
-	 X0B89XhX6ChWVTDyOxj0zz24BMW8oHRF/ykTJGG465jXMr1AzZPDP0hZLKuJWptRusLK/
-	 KXkRVfT6sd/V7DG8U8eTXsyespZAUc8tX13PZPVYT/f1da8LGJuIhtjEPuLLzxA+rsXGs
-	 a/ZK6nx164XRRC29eu8/8hXDVRRiHh46YLSO0C2JRKQZTrfQ93LvRKIjnDAFMZXNaXQ==
+	t=1794594844;
+	b=DOJDbLIjeKTZTGV+TlTzXZpYSHSO3asHBRnRYcjFYIoQ39cBWyaEE648KOzj/5uljGyK
+	 oxPbWJXcTNZJNI8i/+zeVFILizRTaucvqephQwesevO6HPbw4lVPE37fdP7/LiF18dIXJ
+	 u3k+isNviBsW9fxnbM7yfBTXVVZsCb/kiEjdHWq9/rUncCjIXX43HH7vECe6CYo0/gslv
+	 wxwiir6ABpExSa2QPA7ECAl7KquWPLDb4CfRzBMhqVW46OiruGdWoTS12gA+aK/bByqZH
+	 r8FTMpWr3rR16nYumV99aPTmZuAV/M85TCXT0TOMy6Gb/nKJgN1oEGZFZ3g6qibwO2A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794594474;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794594844;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=XgiL43Tq6jpJoDdSXDyRa25ecfhsKUOXQPW5HWxvCUs=;
-	b=jYTPAl6CLwzePJMx3znskQEmAz+zIYH7Fk3KJ/eHcrQLqkNc/1cbANZ3yd/3MB/At/iI
-	 IP/lCAtPFmhxZu7aEXnodXtILHXlfaPegFu61XvjnGHVtAN8NLG2u0Rjt/ydPmqjPqSUm
-	 6zjoJU9EbxYiWyWOLm4Esd+L275RTm7PMXJry1irum6X6eAuq59kxYrHT7ELl9U/aEIrH
-	 frqcAHDjozuMVSgZzmytLFVYsgIsFvnN9bDfNVB6+EiUyfJcmpyvdrN0itCm0WR0PWyQ/
-	 iJSRzlesrUuIu7sJINHKWMD0aMLltnXptSLX14StGrCEnxTIBOWN1bJBthAIR8Logbg==
+	bh=oaQhh+OUaneKvMweWF8ZyU1MwloL7jZ9x7ji0DPo+Wk=;
+	b=ttyBvps+2WENR7Ap/svmxmaRPnAM37VikmccmQ3DASLdKJw/77YoUgCL4fBOjDF/ehXL
+	 lAYAqZmkT0Arpl1SYOkqEes+tjhSbsZnlzpvXtCQicpfV5cGwHRdGzJaObJcLpVGkvTYY
+	 6tH9VBmuI8hv95Cablg9dJIuXjfC3drqqzB0crmPHN8//8gUSxxI0kCF/WFYe3iMNI37y
+	 vtlA8JNilq08C22kMaJYrTVzUdbd7bH+q5tmitxgxyql3bihnI5RfnlIXJx/DZ10gLlvG
+	 5Oy5IhzZ+yP1uivjHCOKMTGdj6KmAax/DNx8NLtPz8H1xDDgS31PrrgJv26bz+nTNQQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NZW+kC2a;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZ1086Fz;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3D4606A323;
-	Fri, 13 Nov 2026 18:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7019606A327;
+	Fri, 13 Nov 2026 18:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=NZW+kC2a
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C051F000C4;
-	Fri, 13 Nov 2026 18:27:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZ1086Fz
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495A91F000C4;
+	Fri, 13 Nov 2026 18:34:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794594473;
-	bh=XgiL43Tq6jpJoDdSXDyRa25ecfhsKUOXQPW5HWxvCUs=;
+	s=k20260515; t=1794594844;
+	bh=oaQhh+OUaneKvMweWF8ZyU1MwloL7jZ9x7ji0DPo+Wk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NZW+kC2aqaTRO+1mDk1qvHG3VrZfRzQx7JBMREQSnofe8qIQP2Mo+1VuL2F45WnsE
-	 H0d/drhYGkJbwuJWov3qabhQIKlXcHqZDF9afj2CzxojiusGCL3MH42MFwR9T3THmI
-	 vWUOMXwS1D6XFN7xANBi4xQ40h62L1vizgItg0U804ItXM0ouviUOM7BlE92BidgY/
-	 037sIgf4+7uYWnTfRk+QxaQJgEUl0Dz6/uLP+I+Vc9+0zkGX94ypnHbERzm/9nLj/E
-	 pGi5nn7T9ryxXpO/mTnlnNLg2n+liXzWOZGVkRRrceUzvvSO+eA2UtCIzm+ZQ8ZaDi
-	 c2avZq7muWZrg==
-Date: Fri, 13 Nov 2026 10:27:51 -0800
+	b=ZZ1086FzH91iVXWyrIQAbmA+4VKgd6hgeP9KgDIq7htPi8caWMneXeYCkHLDQvad0
+	 80nHSaspgyKpRo3U9nAUKlcSOj/lKSebNswKERvqronWsKpZrm5p97IVcgjwlrpAHS
+	 CCjZzeH9P9aLLLYphv/mOffu0Gs/k2IZEcNNMiOGEOiPH1l0Zp7vMAqcM0iSeVKDym
+	 ioml1YtyaWhwZSmSxXICwOW6lvcEzmv3UtHuyMbQRiSOm2c+PBgbHCuHcSV4lSbQC5
+	 fv2phVOLaUTmYQQsFQ0rfbIvD6q51ruFBoNBkJD2fOV8kYm7ImqcOUaWjtAi4h9B4w
+	 14mL7QvN3GjKQ==
+Date: Fri, 13 Nov 2026 10:34:01 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Longjun Luo <luolongjuna@gmail.com>
 Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
 	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, nathan@kernel.org, 
 	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
 	live-patching@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/11] objtool/klp: Fix checksums and copying of
- wide strings
-Message-ID: <avdWaZboJeDyyOMs@jpoimboe>
+Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol
+ correlation
+Message-ID: <avdWz3m2YJnlGgnS@jpoimboe>
 References: <20261104133158.3187525-1-luolongjuna@gmail.com>
- <20261104133158.3187525-2-luolongjuna@gmail.com>
- <avZ3jEbnuVu5Qv2G@jpoimboe>
- <CAKL4jwX=ctyjXmm=Oz_+HXe89vOHWHgT_-KGyL47fOBEQTYJiQ@mail.gmail.com>
+ <avZ9Ku61M8z-2axF@jpoimboe>
+ <CAKL4jwXA4OBVLFGAP4DWw6i9d5bneU=Ur=D58FnrssOt7ygm6A@mail.gmail.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -64,62 +63,30 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKL4jwX=ctyjXmm=Oz_+HXe89vOHWHgT_-KGyL47fOBEQTYJiQ@mail.gmail.com>
+In-Reply-To: <CAKL4jwXA4OBVLFGAP4DWw6i9d5bneU=Ur=D58FnrssOt7ygm6A@mail.gmail.com>
 
-On Fri, Nov 13, 2026 at 12:32:20PM +0800, Longjun Luo wrote:
-> Sorry, I left out the debugging context here. Both comments refer to
-> specific kernel build artifacts:
+On Fri, Nov 13, 2026 at 11:58:31AM +0800, Longjun Luo wrote:
+> I understand the concern about readability. Since English is not my
+> native language, I drafted the content myself and used AI to help with
+> the English writing before reviewing and sending it out. I'll keep the
+> information density in mind going forward.
 > 
-> On Thu, Nov 12, 2026 at 06:42:36PM -0800, Josh Poimboeuf wrote:
-> > Please give example(s) of such "wide strings" in the changelog.
-> >
-> > > +/* Wide strings, such as the u16 PSR setup table, end at an all-zero element. */
-> > > +ssize_t elf_string_len(struct section *sec, unsigned long offset)
-> >
-> > What is the "u16 PSR setup table"?
+> Just to clarify the background: this design comes from my practical work
+> on userspace livepatch, and v1/v2 were meant to present the two
+> layers of that design as a whole. While dealing with LTO in practice, I
+> ran into many recurring correlation issues, so I tried to abstract and
+> model the problem systematically rather than hunting for corner cases,
+> and I brought that modeling process into this review.
 > 
-> PSR stands for Panel Self Refresh.
+> As noted in the RFC, this patchset is intended to validate the
+> feasibility of the approach. I wanted feedback on the overall design
+> before deciding whether to take it further.
 > 
-> Source    : drivers/gpu/drm/display/drm_dp_helper.c: drm_dp_psr_setup_time()
->             /* macros expanded */
->             static const u16 psr_setup_time_us[] = { 330, 275, 220,
-> 165, 110, 55, 0 };
-> Section   : .rodata.str2.2 (SHF_STRINGS, sh_entsize = 2, Clang ThinLTO)
-> Bytes     : 4a 01 13 01 dc 00 a5 00 6e 00 37 00 00 00
->                         ^^^^^
->                         220 (0x00dc) contains a zero byte at offset +5
-> 
-> objtool   : strlen() returns 5. The checksum hashes only 5 bytes, and
->             the copy includes only 6 of the table's 14 bytes.
-> 
-> > > + /*
-> > > + * FIXME: GCC's range_string() uses a one-past-end string pointer.
-> > > + * strlen() reads past the section; preserve the string base and addend.
-> > > + */
-> > > + if (entsize == 1)
-> > > + return strlen(sec->data->d_buf + offset);
-> >
-> > I don't understand what this comment means either.  Please make sure all
-> > comments and changelogs are written by humans, as LLMs tend to write
-> > nonsensically.
-> 
-> Source    : lib/vsprintf.c: range_string()
->             p = string_nocheck(p, pend, "[range ", default_str_spec);
-> Section   : .rodata.range_string.isra.0.str1.1 (8 bytes: "[range \0")
-> Reloc     : range_string.isra.0+0x9a: R_X86_64_32S .LC22+8
-> 
-> GCC note  : Uses .LC22+8 (one-past-the-end pointer) as a loop bound without
->             dereferencing it.
-> objtool   : Passes offset = 8 to strlen(sec->data->d_buf + 8), reading past
->             the 8-byte section. Fixing this requires tracking the base
->             string (.LC22) and the +8 addend separately (left as a FIXME).
-> 
-> I came across both while testing on full kernel builds rather than in
-> production livepatching, so I'll leave it to you whether they are worth
-> addressing in practice.
+> Thanks for taking the time to review and share your thoughts.
 
-It's probably worth fixing, just the comments and commit log need to be
-clear about what exactly we're fixing.
+Thanks, that makes sense, but for upstreaming I think we will need to
+take a more iterative approach, even if it ends up causing some
+intermediate patches to be obsoleted by later ones.
 
 -- 
 Josh
