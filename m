@@ -1,55 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794537345;
-	b=KT3EBTjcts79C/YRP9Mi0KwB00TuhOp9geNojBpxrmXd6p8KmH2A7VUf8I2mvLMUWtuh
-	 5qKFn08kSzL1nr0vYB8EKkGZ7nmVWGoFplMmK00fEQc0nbVu16qrDS+J7X80mzzjEkNWp
-	 S03qKXSnWI4U9pYFvtxkPNw7mO//TsaRcBc6tWfZTHbNbS9UsGXoBPoY760RbvMejDUPw
-	 jXQcx/Tdss5pJlA4KSIcgSyBD4JdVDaSBSXHJOGcu69+t6k0wEBBeIftbZ6ukN4om8a39
-	 1rf1Fld9RkJwB0ED8f6pco+FFvHj0MmmmPt9DdWSejaTvTVqZShdkLTZhz0cnbY2Muw==
+	t=1794537759;
+	b=gt5PnLOxK6ySWhGg+bJC9btN3mZHOYeQ9r6amV8ZKTT0AdB/TKxMLHuRSJW3/wvuQmUJ
+	 onDbAmXpB3yyfaO0tbSOZIpvOLTFT3MauIUKvpE6MoOGHzkIG0U/XPsZ1DVCb7aCI+d4R
+	 16i1uVLKz2xihxRFah1nK/vtGvwEykBWq0yuE350t9u/YM/mTBIkvM1bq2D3DsX+vHZOT
+	 KDrmUVeV0twoS6xz7aNRkAz29Ke9tQ0h90lHNvnuGLfVsboH03O8thWdIh5MGi6fqw1mE
+	 ZTLNb0WgEEeenp/GzQWIOSaKqsF/k7JTGidFxBn5oaX8CjWrmDtAeiHT2zKTaZTVl1g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794537345;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794537759;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=1AxAtbzl4o18Dc8S2gGBClHTTNXWSJfjlQEN5YnJVP8=;
-	b=Db0VN68I6iw3I7AV7fFER+DKByI405Jndval1z57jKb25V9mwSsJGKFOnPmVU540ho7z
-	 FaraepMBThYGP8YIaVvy6Hz3mbe+qxETvDvbwL204UivxgHjgy6S1lODFwyOlZWvcrBbV
-	 urxq5WoAZLr8rdEEmQAeyOYaWQeTDT1vevwcg/679bw/qiEUpZg8CN/ElLI22GUc75/gY
-	 pjJrbjTnDnHoq6D76S0JbS3vErx7XCAJhiaHYgIsVtzN12x2GfDtc0C0ZGB/AirF1tquU
-	 kFrDcjSeyecm+MXPbKJlrYdVTVf8LhC3VbFJXwZAHJTme6VybDZJHEv/ah/LiKtL6hQ==
+	bh=jQRGsd7cMv6GWPamWfpww1CqH3rlOptCcJ9oQe+sBGg=;
+	b=JALVUBcfy5chA0XAQekrKNpKIKRQuOYTUt6Oj/CqleCBJaUkHaNj0ZplAPJQoCg1IxI3
+	 q6zvjE9ee9Al1QAjKzvVdwxa7ytrd2+AVaEKk2w9v/RiMBtCc35e1Bkdl+cmBActmofT5
+	 RHBp5nhSGxtqYPDkxfhMCPTCHUuiMMhpcW8w/Pnz1RXWyE0FkKCCTkN5US9Z5y8XfPgzN
+	 1hRSJFuQtlXJihv0w5HPkxsYOw6cFGnA7kW98QPgJeJCjArX71b7y8jWGxN/8npxc8bgi
+	 MZhsRdpw2Ma6g9PzVNoVO0llT38GL82F+442lW3/8rMpDsxz/LG3rBmQWKpVVITKkjg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="XNOj/6KS";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OE0b+NA8;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F52606A31C;
-	Fri, 13 Nov 2026 02:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91A9606A330;
+	Fri, 13 Nov 2026 02:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=XNOj/6KS
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7E11F000C4;
-	Fri, 13 Nov 2026 02:35:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=OE0b+NA8
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC1D91F000C4;
+	Fri, 13 Nov 2026 02:42:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794537345;
-	bh=1AxAtbzl4o18Dc8S2gGBClHTTNXWSJfjlQEN5YnJVP8=;
+	s=k20260515; t=1794537758;
+	bh=jQRGsd7cMv6GWPamWfpww1CqH3rlOptCcJ9oQe+sBGg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XNOj/6KSTfv/2SzV949emJkrw8rux9axLtj3Zfxm/nA34D9iEQTAAnJDKTWdEoQo0
-	 ZyUXBNwMqXX0/gR7BileAWjtPyAj7gUskaJZe4zVxfABW97qVOOF+6dfRz/zCw5a5G
-	 aJAtXp3Y2sL29Y/mlKgpO0O9hrzN6sBo4mhtLhVZ3EpJxCyRXQUR2iIpel1ze5KAmr
-	 H0tSEROneypuQUXkAt1Mn/SmAM4ryM+222HGqdbEDT+G6MUhnq7KGtlYQy59VO1tR0
-	 OHRmkqcXZrCB+aw7vQM8KpjloNZ31J59+BivSgyJT2ijdwpfQXh/v0AYyJuFdGW2l2
-	 FuJUGeka40kUw==
-Date: Thu, 12 Nov 2026 18:35:42 -0800
+	b=OE0b+NA8xUWU6fbC4NV8Ynxt3V43jQEqtwT9grvgeXAyoQ1qVxA1c4zTRJySzfFND
+	 Tq8ko47QSBZx7ZAZ4m+18/Am7EdW3xbN3cF+8ruLeT4Fcbgo61CrDkKL3N3PggxO9i
+	 lw2bsC1NGw4D4N0ToxkKfLrhGTqvzq7W37hq+AGTmFm2bcjWVNdg41UoCilcdM0J+e
+	 3+EYP2voUdO6r3J5rFoEJE0bF4q/c2+8E05yp0zsZtpMTQf3Vq/eBcVoRC6wA5LhMW
+	 I5pRW/bT7gyziWMQi/fKkP9dBVjx+EyiAUf72Zgh07VWdKLU2neyeFJCrSEWeFB0QD
+	 tymQ47M+EBAWg==
+Date: Thu, 12 Nov 2026 18:42:36 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Longjun Luo <luolongjuna@gmail.com>
 Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
 	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, nathan@kernel.org, 
 	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
 	live-patching@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 00/11] objtool/klp: DWARF-based cross-build symbol
- correlation
-Message-ID: <avZ20mdxRnzTPY4c@jpoimboe>
+Subject: Re: [RFC PATCH v2 01/11] objtool/klp: Fix checksums and copying of
+ wide strings
+Message-ID: <avZ3jEbnuVu5Qv2G@jpoimboe>
 References: <20261104133158.3187525-1-luolongjuna@gmail.com>
+ <20261104133158.3187525-2-luolongjuna@gmail.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -61,45 +62,71 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261104133158.3187525-1-luolongjuna@gmail.com>
+In-Reply-To: <20261104133158.3187525-2-luolongjuna@gmail.com>
 
-On Wed, Nov 04, 2026 at 09:31:46PM +0800, Longjun Luo wrote:
-> Responses to v1 Review (Guide)
-> ------------------------------
+On Wed, Nov 04, 2026 at 09:31:47PM +0800, Longjun Luo wrote:
+> SHF_STRINGS sections can contain elements wider than one byte. Using
+> strlen() truncates their contents at an embedded zero byte, hiding
+> changes and copying incomplete strings into the patch.
 > 
-> Thanks to Josh for reviewing v1. v2 responds as follows:
+> Find the terminating zero element using sh_entsize. Use the resulting
+> length for both reference checksums and copying, and propagate errors
+> through checksum calculation. Keep single-byte string handling unchanged.
 > 
-> 1. `CONFIG_DEBUG_INFO` and split/reduced DWARF: as suggested, `klp-build`
->    now requires `CONFIG_DEBUG_INFO` and uses Kbuild's debug flags
->    (Patch 6). Reduced and split DWARF are supported (Patch 5). See
->    "Compatibility Limits and Build Requirements".
+> Add a test for two- and four-byte strings, including references from data.
 > 
-> 2. Repeated macro statics and the one-line test: building on the
->    referencing-function idea, unchanged-function references resolve
->    repeated statics (Patch 9). The tree-wide test reduces v1's
->    `no correlation` warnings from 682/764 to zero (GCC/Clang). See
->    "Evaluation and Performance Overhead".
+> Validated the available objtool tests with GCC 16.2.1 and Clang
+> 22.1.8. No failures.
+
+Please give example(s) of such "wide strings" in the changelog.
+
+> Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
+> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> Fixes: 873a2208ea31 ("objtool/klp: Calculate object checksums")
+> Assisted-by: LLM
+> Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
+> ---
+>  tools/objtool/elf.c                           | 29 +++++++++
+>  tools/objtool/include/objtool/elf.h           |  1 +
+>  tools/objtool/klp-checksum.c                  | 44 ++++++++-----
+>  tools/objtool/klp-diff.c                      | 14 ++--
+>  .../tests/generic/fixtures/identity/common.h  | 15 +++++
+>  .../generic/fixtures/identity/wide_string.c   | 36 ++++++++++
+>  .../generic/test-checksum-wide-string.sh      | 39 +++++++++++
+>  tools/objtool/tests/identity-lib.sh           | 65 +++++++++++++++++++
+>  8 files changed, 223 insertions(+), 20 deletions(-)
+>  create mode 100644 tools/objtool/tests/generic/fixtures/identity/common.h
+>  create mode 100644 tools/objtool/tests/generic/fixtures/identity/wide_string.c
+>  create mode 100755 tools/objtool/tests/generic/test-checksum-wide-string.sh
+>  create mode 100644 tools/objtool/tests/identity-lib.sh
 > 
-> 3. Upgrading `no correlation` to an error and explicit annotations:
->    following this direction, v2 rejects ambiguous data references and
->    allows verified new data (Patch 10). See Case D for the
->    state-inheritance boundary, its kernel-wide impact, and proposed
->    annotations.
-> 
-> 4. Referencing functions, ThinLTO naming flags, and Full LTO: in ELF, the
->    referencing function only approximates the defining scope, and
->    `STT_FILE` and `.llvm.<hash>` suffixes only approximate the defining
->    TU. Definition identity distinguishes inlined helpers' state and
->    survives LTO renaming and `STT_FILE` merging; see Cases A-B.
-> 
-> 5. Toolchain reliability and performance: v2 cross-checks DWARF against
->    ELF and measures checksum/diff costs, including a separate memory
->    prototype. See "Design Overview", "Evaluation and Performance
->    Overhead", and "Open Questions and Next Steps".
- 
-Going forward, please reply directly to the review comments (including
-sashiko reviews), as threaded emails are much easier to follow/discuss
-than a summary like the above.
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index a791f4ea6ec1..71f1a272e468 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -1382,6 +1382,35 @@ struct elf *elf_create_file(GElf_Ehdr *ehdr, const char *name)
+>  	return elf;
+>  }
+>  
+> +/* Wide strings, such as the u16 PSR setup table, end at an all-zero element. */
+> +ssize_t elf_string_len(struct section *sec, unsigned long offset)
+
+What is the "u16 PSR setup table"?
+
+> +{
+> +	size_t entsize = sec->sh.sh_entsize, size, len;
+> +	const char *str;
+> +
+> +	/*
+> +	 * FIXME: GCC's range_string() uses a one-past-end string pointer.
+> +	 * strlen() reads past the section; preserve the string base and addend.
+> +	 */
+> +	if (entsize == 1)
+> +		return strlen(sec->data->d_buf + offset);
+
+I don't understand what this comment means either.  Please make sure all
+comments and changelogs are written by humans, as LLMs tend to write
+nonsensically.
 
 -- 
 Josh
