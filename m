@@ -1,75 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.200
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794891187;
-	b=lcCFvo9TxRGDmmQa4jUc0eVymxKRdo9MG18OFXCws34e6pkounbfBU16SEu7maZAZpIB
-	 b/5eIJOCiYW9APti4ZfUOZhIqbfDVI8deHUYqBybACSb2oH9+OxTg4ADqQwslPIpk/Grh
-	 fex9sgYBxt7UfzKrq7LxTXXJHJ994CX3GAyrjBoeRZ5Ii+NmI7ulYhVqLuV+cvhUl3cUl
-	 UeRV8Zp7XsXtzBRzonl9r81oZlDXmozrKU0oljoXRCPI2OFFPi9gODbdP97K5XLlm6CkX
-	 gEuqcAwgvTEwfc60T8pIQmOCjDknX0YVBt3KK0MgNmVsL1dgu5b6g9psvSC7rRL2lFA==
+	t=1794914277;
+	b=HjVRv7hRAc0PYX7FVWPnQ1eNjk3h4BWFCSskzzhRJciKpmcxyi6/pg4NVSui+S8oi1im
+	 ELl/GrJgwEYK3fEX4mYNcidY57guBcIz2SsO4HVGgLzcLxOXcqtCPmGZdL4L+LKP5DVTj
+	 +S9vL9GeJ8eytr+BzxmoXdNlp5fU89U81YvY9bZJBMG3twN0p6NqlD/r8Ykd2JyQRLyJC
+	 Qb4ZYHXf0tRHqka5nGb00qJStiJY66zQvDTfMtUbYsqxeZ7/GkeInIq0+woYbrBSWpMnd
+	 foQsGIYB5pn3IGKUo799Ks/sQFJS2dQ79AN/s0qL3ONAMrp1bwAOHc2Q8mAMhKzJWOA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794891187;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=HkjF6bCupjXjMpu5POuuvoE7+5QnihoNMN3ajOMbfaI=;
-	b=2RHHQWynMJleLysAmZpXmjjE9QaM+7E3o06d8TBTL1mmL2gIvgSHyShZDv1560XVVFtZ
-	 7fpNoingO1jJIy6o6wpHehllCY2wQeNHBkEY9rbjgbGnASuZ7u0yRpTyERDH9xgUW7Kks
-	 UMtPQ3j73xbxbG6FegSpC+1tkT3Z/jdsXZxnSG0yNPFg/Rq56qFRQfRRMdFSMwfKsWZFL
-	 vjFgmnbcz/Vy9uYF37BviFFI5cZ0V7bVFUBvk5p1Em6uKqGT0NgYEtG0zeZPKqKHOUBFC
-	 KbS3ejUxJ0n6jTp01B3MNlY8eRaeuVuuhhP6LtPO06vl3YIwwyGg9waMONTq2bOY/fw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794914277;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:In-Reply-To:X-WP-MailID:
+	 X-WP-AV:X-WP-SPAM;
+	bh=lacrfJAZc9PxSg1vvmhQyROqUQhgxiKoLysqHqcOGXI=;
+	b=AcOmS0vo3i3yN2mr6yMT1mJGvMwc5odWwfW8Kp7UpkwOGRBX4KZXsaNu/L4aQDShHCX8
+	 BniijMDX5ToX9iFudLYKp7ICuXVbGrvXuz61QUqNIKlaqqeJggdTOJV14mp07+kCh3A2W
+	 aoptMVqrl2GPiEu6xg0lzf1nPl8LzBfQM9WywjX24VahotOOqa2K4T8ba7sXyX5B36vGp
+	 KOBWJe0+yhARBFS38qcllyE/s2ShA1c9SwEt0ANHnVVnS+XNyXoRf6ar99o7qy2WsaHWe
+	 F3v76IB9C1pwnzOL5NX93ztlvUaVtBQ/n+yi83tQvw439q+oH5Cq6/owU1xMZ7zn4dg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=g3BjBajD;
-	arc=none smtp.remote-ip=209.85.210.200
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=wp.pl;
+	spf=pass smtp.mailfrom=wp.pl;
+	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=krDZcyq4;
+	arc=none smtp.remote-ip=212.77.101.12
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D785606A323
-	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 04:53:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D785606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B68606A32F
+	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 11:17:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 38B68606A32F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=g3BjBajD
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8a01e2962a1so4400372b3a.2
-        for <live-patching@vger.kernel.org>; Mon, 16 Nov 2026 20:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794891187; x=1795495987; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HkjF6bCupjXjMpu5POuuvoE7+5QnihoNMN3ajOMbfaI=;
-        b=g3BjBajDDHX9aVpwdp8+vZRFKvhz6d6VTvKferHuOAECCMUE6vZSoIdbmcCtXMIbD0
-         aJLDyHiqa72Rdw1omWnx+oCb9tdGdkjkNd9GHZIjMNkdkUMrUd6wEubR4CJBKNZR1T+D
-         9bobZYgMTACh+bAKPUOEaYiQJB4JvPpNNQ4P0fJ/lyt5hEhHRm7m0L3P7RgVio0cqRGZ
-         KCgZOfxWstH93ok4aIsIqfTmICa+U662ZYIBCmz24mPgXJ9dccUczNvuBLu5AXIvyOpE
-         oK+KAK+c0U5cqioIGyEgNXeqfPB/y9R2g4lFqmUW3AcNHvU8HnXINJvVCtIpE/NPwDAQ
-         eMkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794891187; x=1795495987;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=HkjF6bCupjXjMpu5POuuvoE7+5QnihoNMN3ajOMbfaI=;
-        b=uU9fKfkykudSGwE1QJWlAASRs111ZzzLKnao49iAJKZkpwZqQFsswBum2Zc1NoG2ax
-         qxoKQAa9wP4sNCrBZTXb3DKk6j/o05Rv7z2YcGXgnAeeig+QV75P6CG8IoopQDQXr5my
-         eBry/GCoFT/gPIUqIHadC/67gQwNH9XTb2wQtkZoClwl39QJUGKiI7x2NtD6cPgiglSz
-         oiaCd91zGs2OZErLq/LwSNaqIEehcg1CjDBZtM2hU+3giltxnpuMtBDBSF4dmlFdbaqM
-         Sw6aixUtw+gaMzom3aFqGOtxyhtstVxCSpGrBk+JaMh7zxLqpGMOHfXPDC+ecq3yUuUV
-         Ku4g==
-X-Forwarded-Encrypted: i=1; AL+hErHKt9oi5hAtCRLaPABQqoKxSWSWBgNXxdh0GrAjNNvavUkkXtbr7bQz4+ZIIWMEiYfs2fODzR6xXT1ndZ90@vger.kernel.org
-X-Gm-Message-State: APuU4Z/qW4Wtv8gLuFdVvDFv+t3nxOI7vO7WMTreL0ZKxIetDj9wnsUU
-	TGx6PXY61dzTGjn+bMjSETMXdaCIiRsvEYS/dSxEykAfhdU5uaXuuUR6fntkDneyKJdti/c94U2
-	bBRHW5iGEMxFiEeOEVWyEbDX59g==
-X-Received: from pgcle4-n2.prod.google.com ([2002:a05:6a02:8b84:20b0:cca:bb35:aa7b])
- (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:3293:b0:3de:94b:7e68 with SMTP id adf61e73a8af0-3f7a4dbff9amr12222591637.8.1794891186049;
- Mon, 16 Nov 2026 20:53:06 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:52:54 +0000
-In-Reply-To: <20261117045254.1048298-1-dylanbhatch@google.com>
+	dkim=pass (2048-bit key, unprotected) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=krDZcyq4
+Received: (wp-smtpd smtp.wp.pl 27972 invoked from network); 17 Nov 2026 12:17:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=s20261001;
+          t=1794914273; bh=lacrfJAZc9PxSg1vvmhQyROqUQhgxiKoLysqHqcOGXI=;
+          h=From:To:Cc:Subject;
+          b=krDZcyq4M6w44sq/2G7++7hEuIo+5D8uenjztHEL3QyX5QpiXYR1+QDZTsEbKFx5A
+           zbDQ5lm6rswxursNM2fcLIX7id4AisJV+kPNkF/FOtwwtXPRGuswG3zF47VS7ZUmOt
+           GqygzPVKHffCad7cT5e1lxbat1NzHYjKsyz+8gAobfYm+sS8ZKDNSBjA+DvsPcqKnE
+           DSs95DOZ+X17zBaxfMcjt5vrfSG2LcpyLeM0K0LqDjlMbkUmyLnAHDMjxkrnTypxPy
+           hWYv8Y7QDHdkhyOH55CweX1lYo4P00iFpd31vgm9WKYtE8z3HGQoaHJosdPjy8/h4d
+           qbo6KSG9U52rg==
+Received: from localhost (77-236-5-223.static.play.pl [77.236.5.223])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <petr.pavlu@suse.com>; 17 Nov 2026 12:17:53 +0100
+Date: Tue, 17 Nov 2026 12:17:52 +0100
+From: Stanislaw Gruszka <stf_xl@wp.pl>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jordan Rome <linux@jordanrome.com>,
+	Viktor Malik <vmalik@redhat.com>, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 2/2] module/kallsyms: sort function symbols and use
+ binary search
+Message-ID: <avw34F1WLGdyYUkN@wp.pl>
+References: <20260327110005.16499-1-stf_xl@wp.pl>
+ <20260327110005.16499-2-stf_xl@wp.pl>
+ <11c8e139-f9f3-4b22-863a-4e021a3947e7@suse.com>
+ <20260424091330.GA31168@wp.pl>
+ <88ae41dc-e5e0-442a-9b95-5125adf31e75@suse.com>
+ <20260428082330.GA2757@wp.pl>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -78,264 +77,94 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261117045254.1048298-1-dylanbhatch@google.com>
-X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117045254.1048298-3-dylanbhatch@google.com>
-Subject: [PATCH 2/2] selftests/livepatch: Add cond_resched() kthread
- transition test
-From: Dylan Hatch <dylanbhatch@google.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dylan Hatch <dylanbhatch@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260428082330.GA2757@wp.pl>
+X-WP-MailID: f9197c6689b43e0d8ad86c0c3de46d46
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [oaPU]                               
 
-Add a livepatch kselftest (test-cond-resched.sh) and helper module
-(test_klp_cond_resched) to verify that a livepatch transition completes
-while CPU-bound kthreads spin in a cpu_relax() +
-cond_resched_tasks_rcu_qs() loop on other online CPUs.
+Hi,
 
-After commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-live-patching"), klp_sched_try_switch() was moved from cond_resched()
-into __schedule() and gated on TASK_FREEZABLE. A sole runnable kthread
-spinning in a cond_resched() loop never gets TIF_NEED_RESCHED set and
-does not have TASK_FREEZABLE set, causing the livepatch transition to
-stall.
+My apologies for the very long delay in responding.
 
-Note that because _cond_resched() is a no-op under CONFIG_PREEMPTION=y,
-a sole runnable spinning kthread enters __schedule(SM_PREEMPT) via
-preempt_schedule_irq() with an in-kernel interrupt pt_regs frame on the
-stack. Passing this test without another runnable task on the CPU
-therefore requires arch_stack_walk_reliable() to support unwinding
-across in-kernel exception frames (such as x86_64 with
-CONFIG_UNWINDER_ORC=y); on architectures or configs where
-arch_stack_walk_reliable() currently rejects in-kernel exception frames
-(arm64, powerpc, s390, or x86 with CONFIG_FRAME_POINTER=y), this test
-exposes the lack of exception-boundary reliable unwinding.
+I wanted to understand the livepatch relocation issue before getting
+back to this patch, but I kept struggling with it and putting it off.
+Eventually, I got some help from AI to understand how livepatch
+relocations work and why reordering symtab entries breaks them.
 
-Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
----
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../selftests/livepatch/test-cond-resched.sh  | 73 ++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |  1 +
- .../test_modules/test_klp_cond_resched.c      | 94 +++++++++++++++++++
- 4 files changed, 170 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/livepatch/test-cond-resched.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
+On Tue, Apr 28, 2026 at 10:23:30AM +0200, Stanislaw Gruszka wrote:
+> > >> I'm not sure if it is ok to limit the search only to function symbols
+> > >> when the address lies in MOD_TEXT. The text can theoretically contain
+> > >> non-function symbols.
+> > > 
+> > > Yes, the patch assumes that the only valid symbols in the MOD_TEXT
+> > > are functions. If there are defined OBJECT symbols in .text, the patch
+> > > would break lookup for those.
+> > > 
+> > > While it’s theoretically possible (e.g. hand-written assembly placing
+> > > data in .text ?), I’m not sure this is a practical concern. In general,
+> > > having data in executable segments is discouraged for security reasons. 
+> > > 
+> > >> Could this optimization be adjusted to sort all
+> > >> MOD_TEXT symbols (excluding anonymous and mapping symbols) and move them
+> > >> to the front of the symbol table?
+> > > 
+> > > That’s possible. We could track .text sections indices in
+> > > __layout_sections() and include all valid symbols from those sections,
+> > > and also reorder typetab accordingly.
+> > > 
+> > > However, this adds complexity. I would prefer to first confirm whether
+> > > OBJECT symbols in MOD_TEXT is a real issue before going in that direction.
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index a080eb54a215d..14741d8da4209 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -11,7 +11,8 @@ TEST_PROGS := \
- 	test-ftrace.sh \
- 	test-sysfs.sh \
- 	test-syscall.sh \
--	test-kprobe.sh
-+	test-kprobe.sh \
-+	test-cond-resched.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-cond-resched.sh b/tools/testing/selftests/livepatch/test-cond-resched.sh
-new file mode 100755
-index 0000000000000..4a7c013c863db
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-cond-resched.sh
-@@ -0,0 +1,73 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_LIVEPATCH=test_klp_livepatch
-+MOD_COND_RESCHED=test_klp_cond_resched
-+
-+setup_config
-+
-+if [[ $(nproc) -lt 3 ]]; then
-+	skip "test-cond-resched requires at least 3 online CPUs"
-+fi
-+
-+function cleanup_cond_resched() {
-+	# Stop the spinning kthread first so any stalled livepatch transition
-+	# can complete before unloading the livepatch module.
-+	rmmod $MOD_COND_RESCHED 2>/dev/null || true
-+	if [[ -e "$SYSFS_KLP_DIR/$MOD_LIVEPATCH" ]]; then
-+		echo 0 > "$SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled" 2>/dev/null || true
-+		loop_until '[[ ! -e "$SYSFS_KLP_DIR/$MOD_LIVEPATCH" ]]' || true
-+	fi
-+	rmmod $MOD_LIVEPATCH 2>/dev/null || true
-+	cleanup
-+}
-+trap cleanup_cond_resched EXIT INT TERM HUP
-+
-+# - start CPU-bound kthreads spinning in a cpu_relax() +
-+#   cond_resched_tasks_rcu_qs() loop on other online CPUs
-+# - load a livepatch and verify the patching transition completes
-+# - disable and unload the livepatch and verify the unpatching transition
-+#   completes
-+# - unload the cond_resched kthread module
-+
-+start_test "kthread spinning in cond_resched() transition"
-+
-+load_mod $MOD_COND_RESCHED
-+
-+load_lp $MOD_LIVEPATCH
-+
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+unload_mod $MOD_COND_RESCHED
-+
-+check_result "% insmod test_modules/$MOD_COND_RESCHED.ko
-+$MOD_COND_RESCHED: cond_resched_fn: spinning in cond_resched()
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% echo 0 > $SYSFS_KLP_DIR/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH
-+% rmmod $MOD_COND_RESCHED
-+$MOD_COND_RESCHED: cond_resched_fn: stopping"
-+
-+exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index a13d398585dcb..1502ff9070b88 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -6,6 +6,7 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_callbacks_demo.o \
- 	test_klp_callbacks_demo2.o \
- 	test_klp_callbacks_mod.o \
-+	test_klp_cond_resched.o \
- 	test_klp_kprobe.o \
- 	test_klp_livepatch.o \
- 	test_klp_mod_patch.o \
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c b/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
-new file mode 100644
-index 0000000000000..ae1d1e3aab106
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * test_klp_cond_resched.c - Support module for testing livepatch
-+ * transitions while a CPU-bound kthread spins in cond_resched().
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/completion.h>
-+#include <linux/cpumask.h>
-+#include <linux/kernel.h>
-+#include <linux/kthread.h>
-+#include <linux/module.h>
-+#include <linux/processor.h>
-+#include <linux/rcupdate.h>
-+#include <linux/sched.h>
-+#include <linux/smp.h>
-+
-+#define NUM_COND_RESCHED_TASKS 2
-+
-+static struct task_struct *cond_resched_tsks[NUM_COND_RESCHED_TASKS];
-+static atomic_t cond_resched_ready = ATOMIC_INIT(NUM_COND_RESCHED_TASKS);
-+static DECLARE_COMPLETION(cond_resched_started);
-+
-+static int cond_resched_fn(void *data)
-+{
-+	if (atomic_dec_and_test(&cond_resched_ready)) {
-+		pr_info("%s: spinning in cond_resched()\n", __func__);
-+		complete(&cond_resched_started);
-+	}
-+	while (!kthread_should_stop()) {
-+		cpu_relax();
-+		cond_resched_tasks_rcu_qs();
-+	}
-+	return 0;
-+}
-+
-+static void stop_cond_resched_tasks(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < NUM_COND_RESCHED_TASKS; i++) {
-+		if (cond_resched_tsks[i]) {
-+			kthread_stop(cond_resched_tsks[i]);
-+			cond_resched_tsks[i] = NULL;
-+		}
-+	}
-+}
-+
-+static int test_klp_cond_resched_init(void)
-+{
-+	int cur_cpu, cpu, i = 0;
-+	int target_cpus[NUM_COND_RESCHED_TASKS];
-+
-+	cur_cpu = get_cpu();
-+	for_each_online_cpu(cpu) {
-+		if (cpu != cur_cpu)
-+			target_cpus[i++ % NUM_COND_RESCHED_TASKS] = cpu;
-+	}
-+	put_cpu();
-+
-+	if (i < NUM_COND_RESCHED_TASKS)
-+		return -EINVAL;
-+
-+	for (i = 0; i < NUM_COND_RESCHED_TASKS; i++) {
-+		struct task_struct *tsk;
-+
-+		tsk = kthread_create_on_cpu(cond_resched_fn, NULL,
-+					    target_cpus[i],
-+					    "klp_cond_resched/%u");
-+		if (IS_ERR(tsk)) {
-+			stop_cond_resched_tasks();
-+			return PTR_ERR(tsk);
-+		}
-+		cond_resched_tsks[i] = tsk;
-+	}
-+
-+	for (i = 0; i < NUM_COND_RESCHED_TASKS; i++)
-+		wake_up_process(cond_resched_tsks[i]);
-+
-+	wait_for_completion(&cond_resched_started);
-+	return 0;
-+}
-+
-+static void test_klp_cond_resched_exit(void)
-+{
-+	stop_cond_resched_tasks();
-+	pr_info("cond_resched_fn: stopping\n");
-+}
-+
-+module_init(test_klp_cond_resched_init);
-+module_exit(test_klp_cond_resched_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Livepatch test: cond_resched() kthread transition");
--- 
-2.56.0.679.gc527c65306-goog
+It turns out that identifying MOD_TEXT symbols is straightforward.
+The section's memory type is already encoded in
+sec->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT, where sec is obtained from
+the symbol's st_shndx.
 
+> > I'm not aware of specific OBJECT symbols that end up in MOD_TEXT.
+> > Nonetheless, it is a valid case and it is preferable that an
+> > optimization doesn't break their lookup by address.
+> >
+> > In general, I'm worried about the several edge cases and inconsistencies
+> > that this optimization introduces. This also includes the fact that it
+> > doesn't work for livepatch modules.
+> > 
+> > An alternative could be to keep the symbol table untouched and have
+> > a separate array with symbol indexes that is sorted by their addresses,
+> > but it requires evaluation if the additional memory usage is worth it.
+
+I've implemented this approach. As a bonus, sorting during module
+loading is actually faster, since only the indexes need to be moved
+instead of entire symbol table entries.
+
+To get a rough estimate of the additional memory usage, I ran the
+following command on my system:
+
+awk 'NF == 4 && ($2 == "T" || $2 == "t")' /proc/kallsyms | wc -l
+
+It reports 83593 symbols, which would correspond to roughly 326kB
+of additional memory for 32-bit indexes across all loaded modules.
+
+For comparison, the total size of loaded modules on this system is:
+
+lsmod | awk 'NR > 1 { sum += $2 } END { printf "%.2f MB\n", sum / 1024 / 1024 }'
+49.74 MB
+
+Thus, the additional index would account for roughly 0.64% of the
+total memory occupied by modules.
+
+> I personally prefer not to over-engineer for cases that may never occur.
+> That said, your concerns about edge cases, consistency, and livepatch 
+> handling are valid.
+> 
+> Let me take some time to think this through and experiment with possible
+> solutions that handle these cases properly. I can’t work on this
+> immediately, but I’ll get back to it.
+
+I'll post v3 shortly. 
+
+Regards
+Stanislaw
