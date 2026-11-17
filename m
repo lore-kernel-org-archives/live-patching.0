@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794890117;
-	b=BSXQZK0671mwZOyhPprXhQd7O6xFzGu7Z2pI7DfdkrEIKPYEBm39VlJbmQO9z3XOEs/H
-	 Ske2TPxwQi9e2R9Ma7uy4FpZuJq3HQZzsRvJytW8O6Z0bd24ytnZ6NKzBEMgXbY0sfu4X
-	 uT+3Ng3vnCB0OjCPpEpHM2toZyFegECoQd+ce6h7w6NHGD3uIi5cjlH6V9RPBQRC7Txpg
-	 rAklu6CHDcNqeEb1vIIsOTrVtQor1TkOVuqDK3MH9cyXXmTAkjxRzcN/zwyIJN+Otfkv8
-	 g6xda9SiVGwPd/HXI/JC+Q0r0+f0eBWLpCngu6CnYq+IOCw1s0cQ7MxAt+kO9w+LU+g==
+	t=1794890118;
+	b=VQi4GjZXlHkzyUTdBkcWJRytLsaSL6qX4p8E6EXqa1qZUFJg6CfoVd3o8YZOiNqwfm+K
+	 V6dZEyOkuJhFpbFZG4SZ0H1i0wgKmZcuKBupIv4DvLlAHUxB7x9lRI+EF3nqZMhkJgoYs
+	 TeCWaRHxXS7uvSJ1kLSx+OIpdJ+B3hoWFMP76ECQRw5T8fo6200H86KsPm6bKyWRgUckN
+	 gJj7U4/XOPsbOpxUGmG+tUxcmUBI/5sG9Eo5IkYJ2P7vHaDK0f+/eKfH4+dRoVMxCNSnt
+	 JvPbU2sKu1IeWRSMgNHoCfT/I48qEy9OBvkigEobMcHWWv5pLqV613iP9LYzWL3ZA3A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794890117;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794890118;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=T9/NqaAntZwSlf5Fz/R2wLuVPSPsxm3+6aPKCupi3FE=;
-	b=AyYH53eA0mDjrALkZIEzXS5+YCxo/CoTxEt9K0q1yaftBsOHol0WOASvaaelKVqNRWaq
-	 ywcKVRvHg0p6LlwYP8TEy1CRsYrpTFAf2XFYWtanMoIhdgh38PyZoHQoXPCN+AH5Q/nRs
-	 UBrHxVMM6420jWyly3LD0XB8OAdsFpF66BXzfil+gPuZTk0Gn7tmE8FQhUNLIJGlrU5/2
-	 Hv+TNYeKfoZcX3+07b4yA9WLo/lSH9dX2F5dYBkWUZ/NleFc2WJ+MzkJ7Xqexfbx1k6TU
-	 07hmeePBuBUQoJBOhtsdP+M1X8mNVCpYMVqECG4YgFkUDl82dZbBw82ahqM3mJGNjHg==
+	bh=z05eBXZtj33QVuPoWyFJ9ACiczNoA+RtpuXMjmRS3N8=;
+	b=mpSxxJtVwr2Auy3znSQPNueb/1Y9y8vjV8n9dbtYydAXJys1MP5fajb4J0FM2FDz4yJL
+	 gBsSw7oqqzHs9w/X34Cf0zf3ypWhS7RTzFUBMcz6q1cj9rOlljI0s1sZ7Yj6cuOWYZLnQ
+	 DC2r1nRlw7qH0FQrnhnKqJou6ZNqZY/5VRTh891mgm0ByFa6cQAtA+J0wW5HHsBE2EWmZ
+	 HGFmdKaUpBStOdjOzRrCvvfErT/A66Nu/XE2nEskezuZQEvRc1PE28tnd3mB2hlvf9Efe
+	 mjoURz9lBxcCIKj+qEviXBC7CXjFcFZa6u9GGkQxed/4r8WvcQUuyK5sEEAsqvfvDgg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="lRm/KDRI";
-	arc=none smtp.remote-ip=209.85.216.70
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WCoq3akY;
+	arc=none smtp.remote-ip=209.85.214.197
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003D060A2620
-	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 04:35:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 003D060A2620
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16855606A88A
+	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 04:35:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 16855606A88A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=lRm/KDRI
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3b1755b2f26so3880058a91.2
-        for <live-patching@vger.kernel.org>; Mon, 16 Nov 2026 20:35:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=WCoq3akY
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2ed08904845so27012735ad.3
+        for <live-patching@vger.kernel.org>; Mon, 16 Nov 2026 20:35:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794890116; x=1795494916; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794890117; x=1795494917; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=T9/NqaAntZwSlf5Fz/R2wLuVPSPsxm3+6aPKCupi3FE=;
-        b=lRm/KDRISPIGTbTIjJY+0i6GPVwIVwWBS3s5pHWI2El0XhUcnQCcM7w063yqV6cVkW
-         Ymr3q20vH2lOjI9MOlgctv7+vc9N5wLqv9qB2mjfrig6z7A8PjzAc1SSqJ6TdBpoVH5d
-         PiGz1nfQJFbq2sCbiNWZKBnZvf9wnjBlfTElZkLo7S/9SLI6wOQEUepEaS9Y1xq9/dh1
-         oOKiKsXLmdjSA/Q+HdYms3vVj6OUOsu5opj55vmXVijWxZYBXQOxLLlOt1jXmirNNJ+g
-         4auN2CqOKBJuZc1FH9yOrTDK+fh/imoEi+LU9w+PLkzBWNEs7CBipfUrB6uNUSjNCrPK
-         s60Q==
+        bh=z05eBXZtj33QVuPoWyFJ9ACiczNoA+RtpuXMjmRS3N8=;
+        b=WCoq3akYRAP6Ivzb65Waa9CTV82p4veXdLecmsebPNG1Z9SUIXFQ4923lbNJVbmFsg
+         vm4R3SM2zQXTfvqfCGvPrTcvS5vgMXfUKTpfl1PJHcfHemVZgKPAE0ivzjxgllUeIHsZ
+         oKgNO5jq269k8A7ow34lTnYbwgLhE+GmKfqUX+w1B1w67IlF7biIE4PoE4gEmFn/Bz5/
+         LPsg7QJPDuwDGrZyC0n+qrBpvb4+BUiHTEsVe2jEZGKMFBl6NvlzH45xD1UTlIoBydPV
+         RnCf+huVJoHO6xI5F4kFkI7N2mXBZuirzBxCvPifO3tkLM3+2/q1JWAEuGOzuKzSv2Lq
+         LULw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794890116; x=1795494916;
+        d=1e100.net; s=20260707; t=1794890117; x=1795494917;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=T9/NqaAntZwSlf5Fz/R2wLuVPSPsxm3+6aPKCupi3FE=;
-        b=kCVlmIY3jiZYrvFKfeRReK7yqCHGxlzmlFv0/muTue1JZmlReqpX1Qh9aShiGzr6G+
-         CybC2p0/vVfV/U2tgsW4bJ47nXRnqGt4fUeye5NLH3gZjWTXyhLFzkPc+orIMp8HCMmY
-         2du60Rp2mMZO/avPmM86jH8z64T2VrAqvpeu//HjmD3rDyO4/gFW35KypgpUutFL/jr3
-         vU7na6Vwqei9P5GPHdLb/Mq+DU2Ncx+l8VaPu6Dci0KfD2MJ+J7t/uwXSu1FA3exiyCD
-         BW5VTZN/meai51Z9ZfaEJwhWkwDek+UxgQ54uld/XGqV+D/Q0coSJosat+njwm2st9yX
-         H7Hg==
-X-Forwarded-Encrypted: i=1; AL+hErHk0s6zpH1JDXrE6gcGQ5gRIXPnuzkcKn7aheFLjVJo9ltDs+9CnqVx1UNbz6A7kOja+zAB4zUS5ETEnKWZ@vger.kernel.org
-X-Gm-Message-State: APuU4Z9vgDlB8R34K4DIgtbLczcKVS7/+iLaVpSjVJqK9dqVVhkrBGwr
-	V/OW/R33ubE93hR90PFW1mCnw+2yIVnHq4vY1V1zTdnxa5aX7YPMOMz5irL8gIaIglMElJEr63p
-	OPqOD3PNp14ASfcl+FgQoAYq2fQ==
-X-Received: from plqw18.prod.google.com ([2002:a17:902:a712:b0:2e9:4ce7:154a])
+        bh=z05eBXZtj33QVuPoWyFJ9ACiczNoA+RtpuXMjmRS3N8=;
+        b=Ezuflu3KyvbKjmFrhrSrb7p//HDBT75auypaoPFy31ARMDY/dNtcDQ8IK8cs3hznxP
+         P/AwEdpYbYKNGag1seoa6m7kNk80sO3vqxu2hrPUXPVMqYCC5wZulJqaXm1Wm7GSF1VI
+         qWBNfvbtWH85YqZL3CGuX2mVXYRphAIwJICfPHz7ubioIhSeYtpBsZ2S6S+qZ9zAqzuU
+         GOY0jS6lJo/IgJvT2XMl9EN7KsoMhh2+I/orFAdG/J4Z2glB/5FZDQNyD5SLZb6paIxX
+         t4+J181fjLy6hpwc35jOtxoDclZq+5ky0/YC1eQfWlkUnndwqKeIK6pNU3Hssg52paeq
+         7WTQ==
+X-Forwarded-Encrypted: i=1; AL+hErEBcfO89oeC+b9iS9Udt7AoQYaBXI5k6JH8DssseYe9HJiLqg2/PM/RyLKPFvbYJwxqZs3L8qoakLVTtCW+@vger.kernel.org
+X-Gm-Message-State: APuU4Z9u5iT1nv8mytqVMiu7OdVwmaa5VZ719adipsDQgzrvFBZH2e+f
+	wFIsXSuLTxQt8u65A7h9MEkKxzJBQV30den+tafIFy6EdIfq/DHmGcAVdCCu9u+HCBXl4DFr6ZW
+	c13oiaegqvMUQrGgzRe1IcB8bDQ==
+X-Received: from plbju12.prod.google.com ([2002:a17:903:428c:b0:2e8:44b9:5c18])
  (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:f710:b0:2e8:93b1:49cc with SMTP id d9443c01a7336-2ee0dc2a5a9mr131239395ad.35.1794890115946;
- Mon, 16 Nov 2026 20:35:15 -0800 (PST)
-Date: Tue, 17 Nov 2026 04:34:58 +0000
+ 2002:a17:903:1b50:b0:2ee:1f51:32ea with SMTP id d9443c01a7336-2ee1f513339mr100649615ad.25.1794890117329;
+ Mon, 16 Nov 2026 20:35:17 -0800 (PST)
+Date: Tue, 17 Nov 2026 04:34:59 +0000
 In-Reply-To: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261117043504.1021063-1-dylanbhatch@google.com>
 X-Mailer: git-send-email 2.56.0.679.gc527c65306-goog
-Message-ID: <20261117043504.1021063-7-dylanbhatch@google.com>
-Subject: [RFC PATCH 06/12] scripts/gen_lr_unwind: add --dump option to inspect
- .lr_unwind tables
+Message-ID: <20261117043504.1021063-8-dylanbhatch@google.com>
+Subject: [RFC PATCH 07/12] scripts/sorttable: sort .lr_unwind_fde by start_offset
 From: Dylan Hatch <dylanbhatch@google.com>
 To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
 	Mark Rutland <mark.rutland@arm.com>
@@ -100,366 +99,104 @@ Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemlof
 	Dylan Hatch <dylanbhatch@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add a --dump (-d) flag to scripts/gen_lr_unwind to dump .lr_unwind FDEs
-and instruction ranges in human-readable format. Support dumping both
-linked/post-processed objects containing .lr_unwind_fde and individual
-relocatable .o files containing only .eh_frame.
+Normalize the PC-relative start_offset word of each 8-byte struct lr_fde
+entry in .lr_unwind_fde, qsort by virtual address, and denormalize back
+to PC-relative offsets without modifying range_desc.
 
 Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
 ---
- scripts/gen_lr_unwind.c | 268 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 257 insertions(+), 11 deletions(-)
+ scripts/sorttable.c | 50 ++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 38 insertions(+), 12 deletions(-)
 
-diff --git a/scripts/gen_lr_unwind.c b/scripts/gen_lr_unwind.c
-index f65edd86ac78c..2058601ec6135 100644
---- a/scripts/gen_lr_unwind.c
-+++ b/scripts/gen_lr_unwind.c
-@@ -35,6 +35,8 @@ struct lr_unwind_ctx {
- 	const Elf64_Shdr *eh_sec;
- 	const Elf64_Shdr *rela_eh_sec;
- 	const Elf64_Shdr *fde_sec;
-+	const Elf64_Shdr *rela_fde_sec;
-+	const Elf64_Shdr *ranges_sec;
- 	unsigned int	symtab_shndx;
+diff --git a/scripts/sorttable.c b/scripts/sorttable.c
+index 88e49a5c42512..38495c39e404b 100644
+--- a/scripts/sorttable.c
++++ b/scripts/sorttable.c
+@@ -600,6 +600,37 @@ static void get_mcount_loc(struct elf_mcount_loc *emloc, Elf_Shdr *symtab_sec,
+ static inline int parse_symbols(const char *fname) { return 0; }
+ #endif
  
- 	const Elf64_Rela *eh_relas;
-@@ -67,6 +69,13 @@ struct elf_writer {
- 	size_t		str_sz;
- };
- 
-+struct dump_sym {
-+	u64		addr;
-+	unsigned int	shndx;
-+	bool		is_func;
-+	const char	*name;
-+};
++static int compare_relative_table(const void *a, const void *b)
++{
++	int32_t av = (int32_t)elf_parser.r(a);
++	int32_t bv = (int32_t)elf_parser.r(b);
 +
- static int append_fde_entry(struct lr_unwind_ctx *ctx,
- 			    const Elf64_Rela *eh_rela,
- 			    s64 byte_off, u32 desc)
-@@ -478,6 +487,225 @@ static int emit_lr_unwind_sections(const char *fname, struct lr_unwind_ctx *ctx,
- 	return ret;
++	if (av < bv)
++		return -1;
++	if (av > bv)
++		return 1;
++	return 0;
++}
++
++static void sort_lr_unwind_fde(char *fde_image, int image_size)
++{
++	int i;
++
++	for (i = 0; i < image_size; i += 8) {
++		uint32_t *loc = (uint32_t *)(fde_image + i);
++
++		elf_parser.w(elf_parser.r(loc) + i, loc);
++	}
++
++	qsort(fde_image, image_size / 8, 8, compare_relative_table);
++
++	for (i = 0; i < image_size; i += 8) {
++		uint32_t *loc = (uint32_t *)(fde_image + i);
++
++		elf_parser.w(elf_parser.r(loc) - i, loc);
++	}
++}
++
+ static int do_sort(Elf_Ehdr *ehdr,
+ 		   char const *const fname,
+ 		   table_sort_t custom_sort)
+@@ -609,6 +640,7 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	Elf_Shdr *strtab_sec = NULL;
+ 	Elf_Shdr *symtab_sec = NULL;
+ 	Elf_Shdr *extab_sec = NULL;
++	Elf_Shdr *lr_fde_sec = NULL;
+ 	Elf_Shdr *string_sec;
+ 	Elf_Sym *sym;
+ 	const Elf_Sym *symtab;
+@@ -656,6 +688,8 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 		idx = shdr_name(shdr);
+ 		if (!strcmp(secstrings + idx, "__ex_table"))
+ 			extab_sec = shdr;
++		if (!strcmp(secstrings + idx, ".lr_unwind_fde"))
++			lr_fde_sec = shdr;
+ 		if (!strcmp(secstrings + idx, ".symtab"))
+ 			symtab_sec = shdr;
+ 		if (!strcmp(secstrings + idx, ".strtab"))
+@@ -759,6 +793,10 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 		      extable_ent_size, compare_extable);
+ 	}
+ 
++	if (lr_fde_sec)
++		sort_lr_unwind_fde((char *)ehdr + shdr_offset(lr_fde_sec),
++				   shdr_size(lr_fde_sec));
++
+ 	/* find the flag main_extable_sort_needed */
+ 	sym_start = (void *)ehdr + shdr_offset(symtab_sec);
+ 	sym_end = sym_start + shdr_size(symtab_sec);
+@@ -833,18 +871,6 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	return rc;
  }
  
-+static int cmp_dump_sym(const void *a, const void *b)
-+{
-+	const struct dump_sym *sa = a, *sb = b;
-+
-+	if (sa->shndx != sb->shndx)
-+		return sa->shndx < sb->shndx ? -1 : 1;
-+	if (sa->addr != sb->addr)
-+		return sa->addr < sb->addr ? -1 : 1;
-+	if (sa->is_func != sb->is_func)
-+		return sa->is_func ? 1 : -1;
-+	return 0;
-+}
-+
-+static const struct dump_sym *find_dump_sym(const struct dump_sym *syms,
-+					    size_t nr_syms,
-+					    unsigned int shndx, u64 addr)
-+{
-+	size_t lo = 0, hi = nr_syms;
-+	const struct dump_sym *best = NULL;
-+
-+	while (lo < hi) {
-+		size_t mid = lo + (hi - lo) / 2;
-+		const struct dump_sym *s = &syms[mid];
-+
-+		if ((shndx && s->shndx < shndx) ||
-+		    ((!shndx || s->shndx == shndx) && s->addr <= addr)) {
-+			if (!shndx || s->shndx == shndx)
-+				best = s;
-+			lo = mid + 1;
-+		} else {
-+			hi = mid;
-+		}
-+	}
-+
-+	return best;
-+}
-+
-+static const char *mode_name(enum lr_unwind_mode mode)
-+{
-+	switch (mode) {
-+	case LR_UNWIND_LIVE:
-+		return "LIVE";
-+	case LR_UNWIND_FP:
-+		return "FP";
-+	case LR_UNWIND_SP:
-+		return "SP";
-+	default:
-+		return "UNKNOWN";
-+	}
-+}
-+
-+static int dump_lr_unwind(struct lr_unwind_ctx *ctx, const Elf64_Shdr *shdrs,
-+			  unsigned int shnum, const char *shstrtab)
-+{
-+	const struct lr_fde *fdes;
-+	const Elf64_Rela *relas = NULL;
-+	const lr_range_t *ranges = NULL;
-+	size_t nr_fdes, nr_ranges = 0;
-+	const Elf64_Sym *elf_syms = NULL;
-+	size_t nr_elf_syms = 0;
-+	const char *strtab = NULL;
-+	struct dump_sym *dsyms = NULL;
-+	size_t nr_dsyms = 0;
-+	bool is_rel = (((const Elf64_Ehdr *)ctx->map)->e_type == ET_REL);
-+
-+	if (ctx->fde_sec) {
-+		fdes = ctx->map + ctx->fde_sec->sh_offset;
-+		nr_fdes = ctx->fde_sec->sh_size / sizeof(struct lr_fde);
-+		if (ctx->rela_fde_sec)
-+			relas = ctx->map + ctx->rela_fde_sec->sh_offset;
-+		if (ctx->ranges_sec) {
-+			ranges = ctx->map + ctx->ranges_sec->sh_offset;
-+			nr_ranges = ctx->ranges_sec->sh_size / sizeof(lr_range_t);
-+		}
-+	} else {
-+		if (!ctx->eh_sec || !ctx->rela_eh_sec || !ctx->symtab_shndx) {
-+			fprintf(stderr, "No .lr_unwind_fde or .eh_frame section found\n");
-+			return -1;
-+		}
-+		if (parse_eh_frame(ctx) < 0)
-+			return -1;
-+		fdes = ctx->fdes;
-+		nr_fdes = ctx->nr_fdes;
-+		relas = ctx->fde_relas;
-+		ranges = ctx->ranges;
-+		nr_ranges = ctx->nr_ranges;
-+	}
-+
-+	if (ctx->symtab_shndx) {
-+		const Elf64_Shdr *sym_sec = &shdrs[ctx->symtab_shndx];
-+
-+		elf_syms = ctx->map + sym_sec->sh_offset;
-+		nr_elf_syms = sym_sec->sh_size / sizeof(Elf64_Sym);
-+		strtab = ctx->map + shdrs[sym_sec->sh_link].sh_offset;
-+
-+		dsyms = malloc(nr_elf_syms * sizeof(*dsyms));
-+		if (!dsyms)
-+			return -1;
-+
-+		for (size_t i = 0; i < nr_elf_syms; i++) {
-+			const Elf64_Sym *s = &elf_syms[i];
-+			unsigned char type = ELF64_ST_TYPE(s->st_info);
-+			const char *name = strtab + s->st_name;
-+
-+			if (s->st_shndx == SHN_UNDEF ||
-+			    s->st_shndx >= SHN_LORESERVE)
-+				continue;
-+			if (type != STT_FUNC && type != STT_NOTYPE)
-+				continue;
-+			if (!name[0] || name[0] == '$' ||
-+			    !strncmp(name, ".L", 2))
-+				continue;
-+
-+			dsyms[nr_dsyms++] = (struct dump_sym){
-+				.addr = s->st_value,
-+				.shndx = is_rel ? s->st_shndx : 0,
-+				.is_func = (type == STT_FUNC),
-+				.name = name,
-+			};
-+		}
-+
-+		qsort(dsyms, nr_dsyms, sizeof(*dsyms), cmp_dump_sym);
-+	}
-+
-+	for (size_t i = 0; i < nr_fdes; i++) {
-+		const struct lr_fde *fde = &fdes[i];
-+		u32 desc = fde->range_desc;
-+		u32 sp_off = LR_FDE_SP_OFF_BYTES(desc);
-+		lr_range_t inline_ranges[4];
-+		const lr_range_t *r_list;
-+		u32 r_cnt, total_insns = 0, insn_off = 0;
-+
-+		if (desc & LR_FDE_INLINE) {
-+			lr_fde_unpack_inline(desc, inline_ranges);
-+			r_list = inline_ranges;
-+			r_cnt = 4;
-+		} else {
-+			u32 idx = LR_OOL_IDX(desc);
-+
-+			r_cnt = LR_OOL_COUNT(desc);
-+			if (idx + r_cnt > nr_ranges) {
-+				free(dsyms);
-+				return -1;
-+			}
-+			r_list = &ranges[idx];
-+		}
-+
-+		for (u32 j = 0; j < r_cnt; j++)
-+			total_insns += LR_RANGE_LEN(r_list[j]);
-+
-+		printf("FDE[%zu] ", i);
-+		if (relas && elf_syms) {
-+			u32 sym_idx = ELF64_R_SYM(relas[i].r_info);
-+
-+			if (sym_idx < nr_elf_syms) {
-+				const Elf64_Sym *sym = &elf_syms[sym_idx];
-+				unsigned int shndx = sym->st_shndx;
-+				u64 off = sym->st_value + relas[i].r_addend;
-+
-+				if (shndx < shnum && shndx < SHN_LORESERVE) {
-+					const char *sec_name =
-+						shstrtab + shdrs[shndx].sh_name;
-+					const struct dump_sym *ds =
-+						find_dump_sym(dsyms, nr_dsyms,
-+							      shndx, off);
-+
-+					if (ds)
-+						printf("%s+0x%lx <%s+0x%lx>",
-+						       sec_name,
-+						       (unsigned long)off,
-+						       ds->name,
-+						       (unsigned long)(off - ds->addr));
-+					else
-+						printf("%s+0x%lx", sec_name,
-+						       (unsigned long)off);
-+				}
-+			}
-+		} else if (ctx->fde_sec) {
-+			u64 field_addr = ctx->fde_sec->sh_addr +
-+					 i * sizeof(struct lr_fde);
-+			u64 pc = field_addr + (s64)fde->start_offset;
-+			const struct dump_sym *ds =
-+				find_dump_sym(dsyms, nr_dsyms, 0, pc);
-+
-+			if (ds)
-+				printf("0x%016lx <%s+0x%lx>", (unsigned long)pc,
-+				       ds->name, (unsigned long)(pc - ds->addr));
-+			else
-+				printf("0x%016lx", (unsigned long)pc);
-+		}
-+
-+		if (desc & LR_FDE_INLINE)
-+			printf(" (len=0x%x, inline, sp_off=0x%x):\n",
-+			       total_insns << 2, sp_off);
-+		else
-+			printf(" (len=0x%x, ool[%u..%u), sp_off=0x%x):\n",
-+			       total_insns << 2, LR_OOL_IDX(desc),
-+			       LR_OOL_IDX(desc) + r_cnt, sp_off);
-+
-+		for (u32 j = 0; j < r_cnt; j++) {
-+			u32 len = LR_RANGE_LEN(r_list[j]);
-+			enum lr_unwind_mode mode = LR_RANGE_MODE(r_list[j]);
-+
-+			if (!len)
-+				continue;
-+			printf("  [+0x%04x..+0x%04x) %4u insns  %s",
-+			       insn_off << 2, (insn_off + len) << 2,
-+			       len, mode_name(mode));
-+			if (mode == LR_UNWIND_SP)
-+				printf(" (sp+0x%x)", sp_off);
-+			printf("\n");
-+			insn_off += len;
-+		}
-+	}
-+
-+	free(dsyms);
-+	return 0;
-+}
-+
- int main(int argc, char *argv[])
+-static int compare_relative_table(const void *a, const void *b)
+-{
+-	int32_t av = (int32_t)elf_parser.r(a);
+-	int32_t bv = (int32_t)elf_parser.r(b);
+-
+-	if (av < bv)
+-		return -1;
+-	if (av > bv)
+-		return 1;
+-	return 0;
+-}
+-
+ static void sort_relative_table(char *extab_image, int image_size)
  {
- 	struct lr_unwind_ctx ctx = { 0 };
-@@ -485,22 +713,29 @@ int main(int argc, char *argv[])
- 	const Elf64_Ehdr *ehdr;
- 	const Elf64_Shdr *shdrs;
- 	const char *shstrtab;
-+	const char *fname;
-+	bool dump = false;
- 	struct stat sb;
- 	int fd, ret = 1;
- 
--	if (argc != 2) {
--		fprintf(stderr, "Usage: %s <file>\n", argv[0]);
-+	if (argc == 3 && (!strcmp(argv[1], "--dump") || !strcmp(argv[1], "-d"))) {
-+		dump = true;
-+		fname = argv[2];
-+	} else if (argc == 2 && argv[1][0] != '-') {
-+		fname = argv[1];
-+	} else {
-+		fprintf(stderr, "Usage: %s [--dump] <file>\n", argv[0]);
- 		return 1;
- 	}
- 
--	fd = open(argv[1], O_RDONLY);
-+	fd = open(fname, O_RDONLY);
- 	if (fd < 0) {
- 		fprintf(stderr, "gen_lr_unwind: cannot open %s: %s\n",
--			argv[1], strerror(errno));
-+			fname, strerror(errno));
- 		return 1;
- 	}
- 	if (fstat(fd, &sb) < 0 || (size_t)sb.st_size < sizeof(Elf64_Ehdr)) {
--		fprintf(stderr, "gen_lr_unwind: invalid file %s\n", argv[1]);
-+		fprintf(stderr, "gen_lr_unwind: invalid file %s\n", fname);
- 		close(fd);
- 		return 1;
- 	}
-@@ -510,7 +745,7 @@ int main(int argc, char *argv[])
- 	close(fd);
- 	if (ctx.map == MAP_FAILED) {
- 		fprintf(stderr, "gen_lr_unwind: mmap failed on %s: %s\n",
--			argv[1], strerror(errno));
-+			fname, strerror(errno));
- 		return 1;
- 	}
- 
-@@ -518,10 +753,12 @@ int main(int argc, char *argv[])
- 	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG) ||
- 	    ehdr->e_ident[EI_CLASS] != ELFCLASS64 ||
- 	    ehdr->e_ident[EI_DATA] != ELFDATA2LSB ||
--	    ehdr->e_type != ET_REL ||
-+	    (!dump && ehdr->e_type != ET_REL) ||
-+	    (dump && ehdr->e_type != ET_REL && ehdr->e_type != ET_EXEC &&
-+	     ehdr->e_type != ET_DYN) ||
- 	    ehdr->e_machine != EM_AARCH64) {
--		fprintf(stderr, "gen_lr_unwind: %s is not an AArch64 ET_REL ELF\n",
--			argv[1]);
-+		fprintf(stderr, "gen_lr_unwind: unsupported ELF file %s\n",
-+			fname);
- 		goto out;
- 	}
- 
-@@ -536,6 +773,10 @@ int main(int argc, char *argv[])
- 
- 		if (!strcmp(name, ".lr_unwind_fde"))
- 			ctx.fde_sec = &shdrs[i];
-+		else if (!strcmp(name, ".rela.lr_unwind_fde"))
-+			ctx.rela_fde_sec = &shdrs[i];
-+		else if (!strcmp(name, ".lr_unwind_ranges"))
-+			ctx.ranges_sec = &shdrs[i];
- 		else if (!strcmp(name, ".eh_frame") ||
- 			 !strcmp(name, ".init.eh_frame"))
- 			ctx.eh_sec = &shdrs[i];
-@@ -546,6 +787,11 @@ int main(int argc, char *argv[])
- 			ctx.symtab_shndx = i;
- 	}
- 
-+	if (dump) {
-+		ret = dump_lr_unwind(&ctx, shdrs, shnum, shstrtab) ? 1 : 0;
-+		goto out;
-+	}
-+
- 	if (ctx.fde_sec) {
- 		ret = 0;
- 		goto out;
-@@ -558,11 +804,11 @@ int main(int argc, char *argv[])
- 
- 	if (!parse_eh_frame(&ctx) &&
- 	    (!ctx.nr_fdes ||
--	     !emit_lr_unwind_sections(argv[1], &ctx, shnum, shstrndx)))
-+	     !emit_lr_unwind_sections(fname, &ctx, shnum, shstrndx)))
- 		ret = 0;
- 	else
- 		fprintf(stderr, "gen_lr_unwind: failed to generate .lr_unwind for %s\n",
--			argv[1]);
-+			fname);
- 
- out:
- 	if (ctx.map)
+ 	int i = 0;
 -- 
 2.56.0.679.gc527c65306-goog
 
