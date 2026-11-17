@@ -1,72 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.197
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794874122;
-	b=LFsqMP0WXSwrGA2asO944sR+SlTN+rsJy3bwIeXX4Vip19N/OmUsTqAGJuOEirWAA4Ru
-	 p2vsrZ1J2A6LAOjexFU4oGdzyH0Wq1ixUxA+Tzl49N9XYB+cZmLOn9V9MmE3m1PdXNhCF
-	 GHybia2tE+E3V0MUpHTXF0SUBeHPkfLv6XwnVwVyVyHlOqwlNbJGdjoJ43clxAfoZYvJ9
-	 Zh5qUzKzPmWQWz0PaKLQgV8mgS7/odo/CGPlAvaSclNGA9XF7GlAsB/4KVmJF9sVDoHpn
-	 8520W3meIwgWhOv29jeUk4ORFPQzBfS8eaLoPvzimPO+nrSkDs4OpCkOOqBtG/Ps7qQ==
+	t=1794874124;
+	b=UUrSIFbiaw6X+LOsEZcJXq95obh6+NkxqS8t95xLo5x/IoUvLx27/5bI27WykhH2Of3l
+	 wy8W+STEXOM5lmig5WajcjGOnj7gFjSuGmi66ywctkRb8guV8N3V06I3fc8C6w8cTJUBu
+	 MlmUyHi187lLgnxMDfRnvlrT4/I6mvnmcZvqGPUlgynUjBg2e0lORpQ95ZLERPH6V9vjP
+	 +X5i++JCXrwKMIaH15HiwP1PRCuhesd4JNr4HA51o3rca/lxk+4Rfp5IommdGedNTxUKU
+	 p11b7/gqMKvZhI0ioKgHWHzKIIvx9Q9PVEXW6A787DOo15PAzSeVBGuYinA8uN5wPKg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794874122;
+	a=rsa-sha256; c=relaxed/relaxed; t=1794874124;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Received:Date:In-Reply-To:Mime-Version:
 	 References:X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
-	bh=oWMis7rJvxkqS+rj264WdJn+/Y9mj3so8eTBQ0Zbl/s=;
-	b=E3gJZqKL4hgb4uDhyZlfh9PqG/Ni/RfkbEIfbzO1CsosfSxJdE3wR64rYWCAmthz7I/U
-	 SwSdsADi5WkNL+3ga75LZ7OBYyI7VogyYVIg/M3lrZ7PIfOsoW9gTK9Gsn3ZrXhg8QqiD
-	 ZqECxE79iOPBAs+pgY0WMhBt+BpZE5lU4CcBpmKoomm2EuCa+3fTbYARso4UYlQiX1MRc
-	 wLfWkmZ8l1NnWnPLWhztdndQmZfWFd704aaG6f0eXtzdEfEmgve/jUjtTzB3tqT8KHEsF
-	 yGlcVCNuCaLtyh3y6ZpPkNa663fImZc/e8qJjiWDYkCj+sAfQEPs0y/tydkVJNNYQDQ==
+	bh=M8VsiQr91jw4RdzaOSHDXAxpS85+QdzLOQpKPeTp+Vw=;
+	b=Kf9OcowFcJsQJnWBq8jq8V/UoUNisyBDxgKmbEdmxp3ZzGKBnabDz4IuZ6m/HJXk5QmP
+	 ZzNDWEtfUNTQq0fAHtEmE5NFkHffKH+6baX9DbkJ2wavzi9VxvAiCPjdb4R73PGaj2x7H
+	 rmiX0CMLCT1cGGEYRv3SLaEPvk17ewsG2YeatsP6gnb+ZmYSbZdKv/TeezNZgXI90r5AK
+	 cUXsbixE7fohAeseLzpPqYvW9Q+8+0iHrRqEMzEeRietlvAITNZBydz0xodS6SLrGM/TJ
+	 EglhS4kYSQ9O64TP4E9Ay25NW0Ztz+XYczq9MemSE/0Bt4gM8+HFbqJhJ118kpMaD/g==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O6Fb7h15;
-	arc=none smtp.remote-ip=209.85.210.69
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PaXVB2Ud;
+	arc=none smtp.remote-ip=209.85.167.197
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4870E606A332
-	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 00:08:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4870E606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A41606A337
+	for <live-patching@vger.kernel.org>; Tue, 17 Nov 2026 00:08:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A2A41606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O6Fb7h15
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-8488f31d754so2922077a34.0
-        for <live-patching@vger.kernel.org>; Mon, 16 Nov 2026 16:08:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=PaXVB2Ud
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-5735cd94235so1700928b6e.0
+        for <live-patching@vger.kernel.org>; Mon, 16 Nov 2026 16:08:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1794874121; x=1795478921; darn=vger.kernel.org;
+        d=google.com; s=20260707; t=1794874122; x=1795478922; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oWMis7rJvxkqS+rj264WdJn+/Y9mj3so8eTBQ0Zbl/s=;
-        b=O6Fb7h15XBmAtolhjVZ0PMGOTT5pxZ0JwoByJsSQUaBj+d0j9lt28WMbNA1AWiEVB+
-         mSIv5ifjeAu+djnBOrYhol0bnwrbAoaM4NlWaFqYuyJ/REWVEf2ScSUlolfI1x7GDjX6
-         IFEBo44A1l2HXfZ8ZlsPijzLsdkH24Xpkw431XsWkmPN1GTX5a/bt7IFDx7SPLp4XOqY
-         4a8Fn5f/7FYSFkta8tfmgUdet7/54k8cd6oI52CMK1hyOmoIP43gFk9cagYf6AbAIZcN
-         7rVmpcj68jPxyQZJ8pixEn9GUBEaaAXLB1Zut8Xzia/B+8onBbm4ipm+rfOndmhVpMPe
-         cRoA==
+        bh=M8VsiQr91jw4RdzaOSHDXAxpS85+QdzLOQpKPeTp+Vw=;
+        b=PaXVB2Ud2Xnra8Eo4+OabH12DmgJH4mWt+VX/E7RSodzrv4Lk/86tK9T4P2lsPc5sj
+         xuC5kTzFcFlYnlcUeb8qi0z8sS8qSEofV7lwzpQcXWW9fChWeO2qewe+QrT4WdEDeKX9
+         QD2JOKOdKfyEsp4XJM7vV4ihqR+P6/OZlMRDN6Fhhgb+q1ZcfgXRHwings5PH4FFPJ4Z
+         y3y8YRCckM3JSvC3Nvl2fq0DnsIIdZD7kCh9vb7Vn75D5xsnovi8ZE8JlLdQMZaM0f57
+         dks/Pro8iafvGMc36G8zZrIKgHkAEkyFJcpk9vKem5PFUNsVRus81bH4Tr4KenjQwUbo
+         PERw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1794874121; x=1795478921;
+        d=1e100.net; s=20260707; t=1794874122; x=1795478922;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oWMis7rJvxkqS+rj264WdJn+/Y9mj3so8eTBQ0Zbl/s=;
-        b=LR4gt5OnQrAvfnDmGm6gX/E701fuQWbL1nXoXuGwk1dlSbnu8hrnt3l6DYnyvjHQDA
-         fges6FDk8JyicsgETDVh0gjdZrmZjbId1iXwxlxfU91eodFytEkz3jsRWebp5SPfZMio
-         uwI4Sg/T77HG/M/ulAp9duDb7CXfBw9hXDbv1liX4wbswyRF1GRULbr1tlNqZLzBCLB9
-         2oXd/bLO21mbfkSFeliQWrmHw43gIkiV5bVHyZ0H0hGw+NVJx2dC/87ulNyF+RiC5UB8
-         lEBjApiuxmKlBMa5Apoy2twwwZMJxFv0018L11J75d632xXTfaP3g1UxcQaIlxlicz+F
-         CqTw==
-X-Gm-Message-State: APuU4Z/HgCXh6ML+ZR1j3DcWGl19F4VQ6eVMABIscbNsYBuBfTMhuCPG
-	n0VZfvUm1gutvYV91MifD6YuuvY8Bl8jUg8dK4dO+aXLHhDj4nkHMAn7hAmRSS9ZhA9yfFDSWDm
-	Q14t6tgO75A==
-X-Received: from oacff39.prod.google.com ([2002:a05:6871:51e7:b0:4ad:864c:9c16])
- (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:320d:b0:55c:928:6a0f
- with SMTP id 5614622812f47-56e65c57faemr9880831b6e.52.1794874121014; Mon, 16
- Nov 2026 16:08:41 -0800 (PST)
-Date: Tue, 17 Nov 2026 00:08:31 +0000
+        bh=M8VsiQr91jw4RdzaOSHDXAxpS85+QdzLOQpKPeTp+Vw=;
+        b=AegWlLpLOY69RLizxbptn7xlGIGkGIAcWzqXMkss80aZ47eou81EjjY+jf+ukr7M/e
+         m6m2AMkx9prmtgsIqVuFNBTSPruhMXUXEN1vBeFka2rWCRFDtV3iwRrnOML8vOcE88so
+         u9b61OyQthTHF6K3/uFQR5MoH8GveI834e3vNfDDF6aB0P1yj5in5QThenFt5bqAnOaS
+         ghfhXLjwZZrISNAY6+UoqXpn/uroDL5zjLhmWuY1Wy46gNrtkohtmdcFitV0IFI0yM/e
+         Y5sd4k00zkd1c1N7jGvoXjQbl7pPYGHYO4RFA+hTlueNQQSAL4SICMt2i4hQHB7pwQPn
+         1/IA==
+X-Gm-Message-State: APuU4Z/GBws2UOWkUlM+64B/hlQNLF0Yt72GWoVeYtSmbLKiK5fHdu36
+	hzGiGD2oKy8QeLagBE4QF3wjvmF75yq1UtZfVDKkqW1L3dYmj/VsJhW19t9hejmNUztaU3eS9Hp
+	lJvvJSTCo0A==
+X-Received: from ilx12.prod.google.com ([2002:a05:6e02:16cc:b0:53b:d747:38b5])
+ (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6808:150b:b0:4cb:f21c:a794
+ with SMTP id 5614622812f47-56e641c9fe8mr8362109b6e.28.1794874122181; Mon, 16
+ Nov 2026 16:08:42 -0800 (PST)
+Date: Tue, 17 Nov 2026 00:08:32 +0000
 In-Reply-To: <20261117000835.1992893-1-wfelipe@google.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
@@ -79,9 +79,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261117000835.1992893-1-wfelipe@google.com>
 X-Mailer: git-send-email 2.56.1.703.gf848ed807c-goog
-Message-ID: <20261117000835.1992893-2-wfelipe@google.com>
-Subject: [PATCH 1/2] objtool/klp: Disambiguate global symbols colliding with
- local symbols
+Message-ID: <20261117000835.1992893-3-wfelipe@google.com>
+Subject: [PATCH 2/2] objtool/klp: Add test for global/local symbol name collisions
 From: Wilson Felipe Pereira <wfelipe@google.com>
 To: Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
 	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
@@ -91,104 +90,150 @@ Cc: live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Wilson Felipe Pereira <wfelipe@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-klp_find_sympos() returns 0 for any non-STB_LOCAL symbol, symid_needed()
-skips non-local symbols when emitting .klp.symid entries for vmlinux.o,
-and clone_reloc_klp() hardcodes sympos = 0 when a relocation targets a
-restricted or module export.
+Add a test covering sympos disambiguation when a defined STB_GLOBAL symbol
+shares its name with a static STB_LOCAL symbol in another translation
+unit:
+- A unique non-exported global continues to emit sympos 0.
+- On the module path, a static in the first TU and a non-exported global
+  in the second TU emit sympos 1 and 2 in .symtab order.
+- On the vmlinux (.klp.symid) path, placing the global at a lower address
+  than the static emits sympos 1 in linked address order, both for an
+  unexported global and for an EXPORT_SYMBOL_FOR_MODULES() export.
 
-However, a global symbol in one translation unit can share its name with a
-static (STB_LOCAL) symbol in another translation unit (for example,
-cgroup_storage_lookup in kernel/bpf/local_storage.c vs
-kernel/bpf/bpf_cgrp_storage.c). At runtime, both
-kallsyms_on_each_match_symbol() and module_kallsyms_on_each_symbol() count
-local and global symbols together, so emitting sympos 0 for the global
-symbol fails module load in klp_find_object_symbol() with 'unresolvable
-ambiguity for symbol'.
-
-Allow defined non-local symbols to receive .klp.symid entries when
-duplicate names exist in vmlinux.o, compute sympos for defined non-local
-symbols in klp_find_sympos() (returning 0 when unique and skipping
-undefined and non-alloc symbols), and resolve sympos via klp_find_sympos()
-in clone_reloc_klp() when the exported target is defined in the patched
-object.
+Verified by reverting each hunk in klp-sympos.c, klp-symid.c, and
+klp-diff.c individually and confirming the corresponding subtest fails.
 
 Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
 ---
- tools/objtool/klp-diff.c   | 11 +++++++++++
- tools/objtool/klp-symid.c  |  2 +-
- tools/objtool/klp-sympos.c |  9 ++++++---
- 3 files changed, 18 insertions(+), 4 deletions(-)
+ .../tests/generic/fixtures/sympos_vmlinux.c   |  6 ++
+ .../tests/generic/test-sympos-global-dup.sh   | 99 +++++++++++++++++++
+ 2 files changed, 105 insertions(+)
+ create mode 100755 tools/objtool/tests/generic/test-sympos-global-dup.sh
 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 34da55e45609..37ad315d00af 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1404,9 +1404,20 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
- 	 */
+diff --git a/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+index d5e70994c582..68d6fca414e4 100644
+--- a/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
++++ b/tools/objtool/tests/generic/fixtures/sympos_vmlinux.c
+@@ -26,8 +26,14 @@ static const char __modinfo[]
+ 	__attribute__((section(".modinfo"), used, aligned(1))) = "\0name=vmlinux";
+ #endif
  
- 	if (export) {
-+		const char *modname = find_modname(e);
-+
-+		if (!modname)
-+			return -1;
-+
- 		sym_modname = export->mod;
- 		sym_orig_name = export->sym;
- 		sympos = 0;
-+		if (!strcmp(export->mod, modname) &&
-+		    patched_sym->twin && !is_undef_sym(patched_sym->twin)) {
-+			sympos = klp_find_sympos(e->orig, patched_sym->twin);
-+			if (sympos == ULONG_MAX)
-+				return -1;
-+		}
- 	} else {
- 		sym_modname = find_modname(e);
- 		if (!sym_modname)
-diff --git a/tools/objtool/klp-symid.c b/tools/objtool/klp-symid.c
-index b19f76dff13e..d01c13b8ffa8 100644
---- a/tools/objtool/klp-symid.c
-+++ b/tools/objtool/klp-symid.c
-@@ -52,7 +52,7 @@ static bool symid_needed(struct elf *elf, struct symbol *sym)
++#ifdef GLOBAL_DUP
++int dup_counter = 2;
++#elif defined(EXTERN_DUP)
++extern int dup_counter;
++#else
+ /* volatile so it survives as an STT_OBJECT rather than being folded away */
+ static volatile int dup_counter __attribute__((section(VARSEC))) = 1;
++#endif
+ 
+ int FUNC_NAME(int x)
  {
- 	struct symbol *s;
- 
--	if (!is_local_sym(sym) || is_undef_sym(sym))
-+	if (is_undef_sym(sym))
- 		return false;
- 
- 	if (!is_func_sym(sym) && !is_object_sym(sym))
-diff --git a/tools/objtool/klp-sympos.c b/tools/objtool/klp-sympos.c
-index dfca9dd74681..087892ef3593 100644
---- a/tools/objtool/klp-sympos.c
-+++ b/tools/objtool/klp-sympos.c
-@@ -381,14 +381,14 @@ unsigned long klp_find_sympos(struct elf *elf, struct symbol *sym)
- 	bool has_dup = false;
- 	struct symbol *s;
- 
-+	if (is_undef_sym(sym))
-+		return 0;
+diff --git a/tools/objtool/tests/generic/test-sympos-global-dup.sh b/tools/objtool/tests/generic/test-sympos-global-dup.sh
+new file mode 100755
+index 000000000000..b309b1f3f7f8
+--- /dev/null
++++ b/tools/objtool/tests/generic/test-sympos-global-dup.sh
+@@ -0,0 +1,99 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# A defined STB_GLOBAL symbol in one translation unit can share its name with a
++# static (STB_LOCAL) symbol in another translation unit (for example,
++# cgroup_storage_lookup in kernel/bpf/local_storage.c vs
++# kernel/bpf/bpf_cgrp_storage.c).
++#
++# At runtime, kallsyms_on_each_match_symbol() and
++# module_kallsyms_on_each_symbol() count both local and global symbols of that
++# name, so emitting sympos 0 for the global reference fails module load with
++# "unresolvable ambiguity for symbol". Both the module path (symtab order) and
++# the vmlinux path (.klp.symid address order) must disambiguate the global
++# symbol with its 1-based position while still emitting 0 when the global name
++# is unique.
 +
- 	if (is_init_sym(sym)) {
- 		ERROR("%s: can't patch or reference init code/data", sym->name);
- 		return ULONG_MAX;
- 	}
- 
--	if (sym->bind != STB_LOCAL)
--		return 0;
--
- 	/*
- 	 * vmlinux: the final link reorders symbols relative to vmlinux.o,
- 	 * so the position needs to be derived from the linked orig vmlinux via
-@@ -403,6 +403,9 @@ unsigned long klp_find_sympos(struct elf *elf, struct symbol *sym)
- 	 * module_kallsyms_on_each_symbol().
- 	 */
- 	for_each_sym(elf, s) {
-+		if (is_sec_sym(s) || is_file_sym(s) || is_undef_sym(s) ||
-+		    !(s->sec->sh.sh_flags & SHF_ALLOC))
-+			continue;
- 		if (!strcmp(s->name, sym->name)) {
- 			nr_matches++;
- 			if (s == sym)
++. "$(dirname "$0")/../lib.sh"
++
++# 1. Unique non-exported global: sympos must remain 0.
++setup
++build_one sympos_vmlinux.c def_g.o     -DFUNC_NAME=def_g -DGLOBAL_DUP
++build_one sympos_vmlinux.c use_orig.o  -DFUNC_NAME=caller -DEXTERN_DUP -DNO_MODINFO
++build_one sympos_vmlinux.c use_patch.o -DFUNC_NAME=caller -DEXTERN_DUP -DNO_MODINFO \
++	-DPATCHED
++
++partial_link "$workdir/orig.o"    "$workdir/def_g.o" "$workdir/use_orig.o" ||
++	probe_skip "partial link unavailable"
++partial_link "$workdir/patched.o" "$workdir/def_g.o" "$workdir/use_patch.o" ||
++	probe_skip "partial link unavailable"
++
++run_diff
++assert_klp_sympos dup_counter 0
++cleanup
++
++# 2. Module path: STB_LOCAL in first TU + non-exported STB_GLOBAL in second TU.
++#    In ELF .symtab, STB_LOCAL symbols precede STB_GLOBAL symbols, so the local
++#    is position 1 and the global is position 2.
++setup
++for p in "" "-DPATCHED"; do
++	# shellcheck disable=SC2086
++	build_one sympos_vmlinux.c "loc$p.o" -DFUNC_NAME=use_local $p
++	# shellcheck disable=SC2086
++	build_one sympos_vmlinux.c "glob$p.o" -DFUNC_NAME=use_global \
++		-DGLOBAL_DUP -DNO_MODINFO $p
++done
++
++partial_link "$workdir/orig.o"    "$workdir/loc.o"         "$workdir/glob.o" ||
++	probe_skip "partial link unavailable"
++partial_link "$workdir/patched.o" "$workdir/loc-DPATCHED.o" "$workdir/glob-DPATCHED.o" ||
++	probe_skip "partial link unavailable"
++
++[ "$(count_input_symbols orig.o dup_counter)" = 2 ] ||
++	fail "fixture did not produce two dup_counter symbols"
++
++run_diff
++assert_klp_sympos dup_counter 1
++assert_klp_sympos dup_counter 2
++out_symbols | grep -qE '\.klp\.sym\.[^.]+\.dup_counter,0([[:space:]]|$)' &&
++	fail "sympos 0 emitted for global symbol colliding with local symbol"
++cleanup
++
++# 3. vmlinux path (.klp.symid): with -fdata-sections the STB_GLOBAL lands in
++#    .data.dup_counter (lower address) while the STB_LOCAL lands in .data.zzz
++#    (higher address), opposite to ELF .symtab order where locals come first.
++#    Patching only the global caller must emit sympos 1 (address order).
++setup
++build_one sympos_vmlinux.c loc.o -DFUNC_NAME=use_local -DVARSEC='".data.zzz"'
++build_one sympos_vmlinux.c glob_orig.o -DFUNC_NAME=use_global -DGLOBAL_DUP \
++	-DNO_MODINFO
++build_one sympos_vmlinux.c glob_patch.o -DFUNC_NAME=use_global -DGLOBAL_DUP \
++	-DNO_MODINFO -DPATCHED
++
++make_vmlinux_pair "$workdir/loc.o" "$workdir/glob_orig.o" \
++	       -- "$workdir/loc.o" "$workdir/glob_patch.o"
++
++[ "$(count_input_symbols vmlinux.o dup_counter)" = 2 ] ||
++	fail "vmlinux fixture did not produce two dup_counter symbols"
++
++# Premise: in ELF .symtab the local comes first (higher address .data.zzz),
++# while in address order the global comes first (.data.aaa).
++first_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2; exit }')"
++low_addr="$(in_symbols vmlinux | awk '$8 == "dup_counter" { print $2 }' | sort | head -1)"
++[ "$first_addr" != "$low_addr" ] ||
++	probe_skip "linker did not place global before local in address order"
++
++run_diff
++assert_klp_sympos dup_counter 1
++out_symbols | grep -qE '\.klp\.sym\.[^.]+\.dup_counter,(0|2)([[:space:]]|$)' &&
++	fail "wrong sympos emitted for vmlinux global colliding with higher-addr local"
++
++# 4. Same vmlinux collision when the global uses EXPORT_SYMBOL_FOR_MODULES(),
++#    which takes the export branch in clone_reloc_klp().
++add_exports_ns vmlinux "module:other" dup_counter
++run_diff
++assert_klp_sympos dup_counter 1
++out_symbols | grep -qE '\.klp\.sym\.[^.]+\.dup_counter,(0|2)([[:space:]]|$)' &&
++	fail "wrong sympos emitted for module-restricted export colliding with local"
++
++pass "global symbol colliding with static local gets disambiguated sympos"
 -- 
 2.56.1.703.gf848ed807c-goog
 
