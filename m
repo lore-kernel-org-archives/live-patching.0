@@ -1,70 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=212.77.101.12
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794978481;
-	b=rMIk1WFHkzXPm3DkrEJAJuIMt0tKZApbGqD8RumM/MUC1QbisVT2ysjrDqWtcUTZdM8z
-	 Wa11e6gn9eTbHDEZvQcb1of1+lWVm8OTMzGOgOO88DTGf8/D77zzaxbVdIvUEm+mKYgb1
-	 8cNqGnbEjiWD6whPJw14kHmfHQYiztCb0lxkxYpLZtuXsD4x9uI5gJJG4yhimDnV1PjJU
-	 Y6w4kiDrkxHGwwYdOUAfw4FOwJpdP1WB0lgfPiB31IV/bvpS6g8bzkaIcigtxX0HTKY+9
-	 OBNyIU9AX7mzwFVnUczD+Xzak0lIu7Ok6ptFDH19GxvxBZIMeiheIzQ9MiXB92A1PjA==
+	t=1795013495;
+	b=zeeRHgwmkfslxerKCRyihlbE/lMytg4FpslOpf7PTVTef9ieQKA4lHNHnzpdo0leh8rP
+	 /JVy9fIb1pX+Aw0Fw1386lrvCu67C4/VhINmSdhXPi89ZkdSwyuno5JzSuoDVuMqBcKVD
+	 SEwOvpFt40bixss9Yx9mC24XTaxfqp9I+lqD7oa117ezRChRXjWXleVqqoVAjjCkVSp+5
+	 iSfFvwsSMXiO4hoaXtbCY7FLhQmMhCbLVfcaP+56RfbStNSCUtUGypqjNg2eBMHQWrwXX
+	 0kpKT5yVIwA4uxPHRyJGCw+B1UDBs2y5l9SB0FwPBDgAD3LEQCH6xUTy2bmunAJ04jA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794978481;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
-	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=mGkb+EjOSlLHs2Hp50X4VPuLXnV4T0Mq79/QyiPYW5E=;
-	b=Q81ObXOAfbQI7NVklFsJY+c2GzUSt1dgOFuyRIkYU0LQZPQGRtrSlAZUnd7rujkN+/EB
-	 Fry3kYgvBsMuneYe55fy1kaMKHusTyKf7hsRHUnFlQLkvuDQcJVBnsTp+QaamKEO5R6GO
-	 rIzqvIGf7BEPlsRla6bBH2Xo4RMoGAlfjOUGFbEpyZWW7R/UJo5JDFCf8ePfqAPzyeRRX
-	 1paa/OEEeDkzrWO0zHAfC2Kg5f21F/tE1cKYFynQUP2QM1mgv0D/fPstt5DKNI4QmzdZM
-	 FM96S+InehVfAxQSXc9mQmiJM4gEZGLeT8gW6AUDYKoSlehzIoHZNorqOXI0xHPnigQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795013495;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+	 X-WP-MailID:X-WP-AV:X-WP-SPAM;
+	bh=4RxBtY9vxc+Kp6wVwu6gxnSGPF/eTmawoe5vFTJzFaQ=;
+	b=tkBrSu04m8uuV9d2cH4tsPT4FYAL+sIy11QkXOGy8amYJowUkMw1m4FD25xrMktVyaIS
+	 2zhzmcKiV6Njp8xWUyjgJLk3RPUncTPgEe7pJBsIRkq7CBPbAmYJW0E5IQB6DmUCvXn3t
+	 P9ihEnzui5qeNjXXY3Ii0C+NruaEd41+il+4OZHQORLZ3PlpIOv8QgHdgdoZQThdOqiHj
+	 UZq1nSGUJiAl6iO1MZVpRBz2ug7aQlwwv084E8UU0zjge6pY/pQSFir5R+ixhLGdkJS2f
+	 nEa+UZ+9RptYIcEsVOhbf4gikNkf5U2O7dU/hCIoREqUgXZA6hHmlEAch74x3FLXt3A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YXeiifdf;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=wp.pl;
+	spf=pass smtp.mailfrom=wp.pl;
+	dkim=pass header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=V152Dstj;
+	arc=none smtp.remote-ip=212.77.101.12
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FF3606A31C;
-	Wed, 18 Nov 2026 05:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F05E606A330
+	for <live-patching@vger.kernel.org>; Wed, 18 Nov 2026 14:51:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0F05E606A330
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=YXeiifdf
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675D71F000C4;
-	Wed, 18 Nov 2026 05:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1794978481;
-	bh=mGkb+EjOSlLHs2Hp50X4VPuLXnV4T0Mq79/QyiPYW5E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YXeiifdf0c/VhG5hMZSwUNR54qAqBFdaXyJZbh5XcO/2sqRss6CDwRKOn3GvreXYA
-	 N8sol7JhMY1rQdccZSTvUitx5wYvboW86yXgWSWAqMyOJFFfLQaulb3z3D+J1KKGNj
-	 KDMuYXlqz5Q94NnaURODLkdhuwDGTuqKRTVpXT3y3saAU73g2ANCWZTuKGPqc7N+23
-	 Q8zu1NrpoUOL6Gvlb3JNFhApR/lkmZ4+eUo6/6hPvi61HJLTfYG85N7R02b51F/fjT
-	 iEBaFvS4e9nIPbqwTLRgJSI+dEhsnuXdSkDG8vMrQvHYn8169Rt/V6pDb5vdckAerd
-	 hjtaO/DrnzNPA==
-Date: Tue, 17 Nov 2026 21:07:58 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Weinan Liu <wnliu@google.com>, Jens Remus <jremus@linux.ibm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-crypto@vger.kernel.org,
-	llvm@lists.linux.dev, Josh Poimboeuf <jpoimboe@kernel.org>,
+	dkim=pass (2048-bit key, unprotected) header.d=wp.pl header.i=@wp.pl header.a=rsa-sha256 header.s=s20261001 header.b=V152Dstj
+Received: (wp-smtpd smtp.wp.pl 21108 invoked from network); 18 Nov 2026 15:51:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=s20261001;
+          t=1795013485; bh=4RxBtY9vxc+Kp6wVwu6gxnSGPF/eTmawoe5vFTJzFaQ=;
+          h=From:To:Cc:Subject;
+          b=V152DstjlIjXzLnu8NjZyYwreeWqWXoXKShNNSeIv3bo67RwR+wEVyqN4g9YsFjFI
+           xOmptL4yTOchd1zAlsCZR5W+LyTQf6U65AKe2Ww47a6mQTgWXtAew+s42fK1qnKo7A
+           0Ztcn/8a00QwX2omBLvASgTLVrr4rhA36zEExBxXyGpigEmXrSC7NcPzc24EeIGRvb
+           9Jen104NvxdwGozEgTC0ATVLys69IPg53+uhuDb18aP8EGJtgi6fBrMhS/RItLECac
+           f/JoCv5FsdZaU/JA2zqrsq3gA6Jjzyd9A8PMdpRV8YB8aNR4z60wKnxRbGGydOd74M
+           moEIyAmrEqtmA==
+Received: from localhost (77-236-5-223.static.play.pl [77.236.5.223])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <linux-modules@vger.kernel.org>; 18 Nov 2026 15:51:25 +0100
+From: Stanislaw Gruszka <stf_xl@wp.pl>
+To: linux-modules@vger.kernel.org,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
 	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Indu Bhagat <ibhagatgnu@gmail.com>,
-	Prasanna Kumar T S M <ptsm@linux.microsoft.com>,
-	live-patching@vger.kernel.org
-Subject: Re: [RFC PATCH 11/12] arm64, crypto/lib: annotate leaf functions
- with CFI info
-Message-ID: <20261118050758.GD3400@sol>
-References: <20261117043504.1021063-1-dylanbhatch@google.com>
- <20261117043504.1021063-12-dylanbhatch@google.com>
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jordan Rome <linux@jordanrome.com>,
+	Viktor Malik <vmalik@redhat.com>,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v3 0/3] module/kallsyms: sort function symbols and use binary search
+Date: Wed, 18 Nov 2026 15:51:22 +0100
+Message-ID: <20261118145125.29399-1-stf_xl@wp.pl>
+X-Mailer: git-send-email 2.52.0
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -74,48 +75,40 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261117043504.1021063-12-dylanbhatch@google.com>
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 113bda48f6e52cef21e1ab72afaf099d
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000B [0RNE]                               
 
-On Tue, Nov 17, 2026 at 04:35:03AM +0000, Dylan Hatch wrote:
-> Several arm64 assembly functions are leaf functions (they do not call
-> other functions and do not modify x30). Add SYM_[TYPED_]LEAF_FUNC_*
-> macros in <asm/linkage.h> that emit .cfi_startproc / .cfi_endproc so
-> that .eh_frame entries are generated for these leaf functions and LR can
-> be recovered by the unwinder when an exception is taken from one of
-> them.
-> 
-> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
-> ---
->  arch/arm64/crypto/aes-ce-ccm-core.S    | 12 +++----
->  arch/arm64/crypto/aes-neonbs-core.S    | 16 +++++-----
->  arch/arm64/crypto/ghash-ce-core.S      | 20 ++++++++----
->  arch/arm64/crypto/sm4-ce-ccm-core.S    | 16 +++++-----
->  arch/arm64/crypto/sm4-ce-cipher-core.S |  4 +--
->  arch/arm64/crypto/sm4-ce-core.S        | 44 +++++++++++++-------------
->  arch/arm64/crypto/sm4-ce-gcm-core.S    | 16 +++++-----
->  arch/arm64/crypto/sm4-neon-core.S      | 12 +++----
->  arch/arm64/include/asm/linkage.h       | 33 +++++++++++++++++++
->  arch/arm64/kernel/entry.S              |  7 ----
->  arch/arm64/lib/clear_user.S            |  4 +--
->  arch/arm64/lib/copy_from_user.S        |  4 +--
->  arch/arm64/lib/copy_page.S             |  4 +--
->  arch/arm64/lib/copy_to_user.S          |  4 +--
->  arch/arm64/lib/memchr.S                |  4 +--
->  arch/arm64/lib/memcmp.S                |  4 +--
->  arch/arm64/lib/memcpy.S                |  8 ++---
->  arch/arm64/lib/memset.S                |  8 ++---
->  arch/arm64/lib/mte.S                   | 28 ++++++++--------
->  arch/arm64/lib/strchr.S                |  4 +--
->  arch/arm64/lib/strcmp.S                |  4 +--
->  arch/arm64/lib/strlen.S                |  4 +--
->  arch/arm64/lib/strncmp.S               |  4 +--
->  arch/arm64/lib/strnlen.S               |  4 +--
->  arch/arm64/lib/strrchr.S               |  4 +--
->  arch/arm64/lib/tishift.S               | 12 +++----
+This series enables binary search over a separate index of core text
+symbols, preserving symbol-table order and supporting livepatch modules.
 
-Presumably you'll need to update lib/crypto/arm64/*.S and
-lib/crc/arm64/*.S as well.
+v3:
+ - preserve core symtab order by sorting a separate index array
+ - index core text symbols rather than only function symbols
+ - enable indexed text lookup for livepatch modules
+ - rebase and update commit messages and subjects
+ - sort equal-address by descending symbol index so binary search
+   selects the same alias as linear search
 
-- Eric
+v2: https://lore.kernel.org/linux-modules/20260327110005.16499-1-stf_xl@wp.pl/
+ - fix searching data symbols for CONFIG_KALLSYMS_ALL
+ - use kallsyms_symbol_value() in elf_sym_cmp()
+
+v1: https://lore.kernel.org/linux-modules/20260317110423.45481-1-stf_xl@wp.pl/
+
+Stanislaw Gruszka (3):
+  module/kallsyms: include empty names in is_ignored_kernel_symbol()
+  module/kallsyms: sort text symbol indices and use binary search
+  module/kallsyms: enable indexed text lookup for livepatch modules
+
+ include/linux/module.h        |   2 +
+ include/linux/module_symbol.h |   6 +-
+ kernel/module/internal.h      |   2 +
+ kernel/module/kallsyms.c      | 202 +++++++++++++++++++++++++---------
+ scripts/mod/modpost.h         |   2 +-
+ 5 files changed, 161 insertions(+), 53 deletions(-)
+
+-- 
+2.52.0
+
