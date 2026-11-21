@@ -1,52 +1,61 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795294887;
-	b=IwPnAwnhwRHewoVCyyTQZjeSoQEV0p7ppB2wbncuXt8QC0oUj2ilyiw9yo+IrelZgmRn
-	 X4Sp7SDQDKwiIxox94Rbcna8GzyC4qphvtZozpN5zNU8M7CJH6rsopAUko+FdMJ4cqYmr
-	 bUjpNQrMBIm5oUvqhKRwkfh3Ok/xRh3j/icfYVMcJn5KvoTKQwCNnitvmbjfkjAhIVoHf
-	 M6qO8f1+4rr4MJ/YHbwk3/Z+Y9opubRg6sM+fpqpz1QzYq74sPktldlgGhgIi/Zs7Y7ZB
-	 H28unQQhhtVKVtd1Obj097Y9XQubcx/wob0JWnTgtZSWA7O8IKxvtUQu5nFsdsmVnRg==
+	t=1795298142;
+	b=yQaFUzMOIhfUu5LsJ+JaZfSb58c/ye9ToTmC7nDCtbLswG/byTR8I/FXKZ63jRoEo9UR
+	 8a7Bb8sjlR4xpC1Pm5+d0AuDURmEoW6A1uZWQHNFvUkc0MG/mdL12kWuKj+Ld7XXv6vOo
+	 DeN4pHejvkXyUYfCity8uDuxnRJVQiks5wuwUc27v54CVrbqvd8L1O/bCWL1ne4NkPQtM
+	 gwaHwPWR5fKSB7ecEM2wBi4aBDZYqFbIWWN1VpP9FfWM1SJdQC+DzRFkYOmo4P/+Ho2r4
+	 4a3eS0n35Qn6LymVhCgufqTDR2fg6A1+cySaIVOvsDevvqy9z9jLmuZRqLG2O4d7rrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795294887;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795298142;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=62zNnSv/5OwcioeFLjZHN1oIXQgOF6jZ0dIhGJCk0F8=;
-	b=BpPNxk9lS6ts8wCUMvLwn3RbuEG6oIfUJch65rvjE8E/hj7z1ivRug/5bLv1SgTMnTUx
-	 827SWBgbJ/1bLPwbiQc4lOOlzfbgnHGWtjPEduVILQZfGX7SUUITPPiMErGRRu8nzzjKQ
-	 kq91F25+W2IIHJPpt3tqbp9fVrum5zH0Q1kOiIdRjKwl3YnbQm2Ml3PLoomKdv4D69Va9
-	 wa+60q5DXvYJZcd3irAJG7LkHH2nCQyB/zrQHS8hPoiJ52LfzW/u6pYVvyR2/AY5MzcxY
-	 fHpoD9q6FrgzPapzP03doTIGW0xy15nv5/sPLIwD6zB3XDVqS1PpV7FZXjR8hcu2kXQ==
+	bh=M+VY7WrwsBtiuZdXQn3KrjU1Jy0B0DjsHMk6Q6K2UpU=;
+	b=zbrpVGdqcEpyvJGweZ+TlL6KMijmp0oBGPTYV8p8LUIVSYS6EG0JyEdjSlsO98B3RbqG
+	 rAzrkWIZalFUEuiP4/EzX17zgGOK0fI2N9eaMrbLaybX6ntnRUuN/cc5/4DpzIosqjUwT
+	 xHWHWSxbeNtUXYzSrRewlipRP17Nic5TZhGuE6Us4URzLtpQL/ccMFAQ20Yu6FPOGSbHw
+	 IWZyrmwiQwaF5cmbwE1kzDfrpenG7cUM94tyY0J3/uRtJuYm19gtY9c7vOVCv5AWjm5S5
+	 xq5x7tdPx8qJ1Tds9NYgTSKpiia9Gvqst0Sb6uv6ZVGW6oqkxsVzixCeU3JntGksbxw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S7R1TqVV;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="iPqRfy/w";
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456F1606A32C
-	for <live-patching@vger.kernel.org>; Sat, 21 Nov 2026 21:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C107606A333;
+	Sat, 21 Nov 2026 21:55:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=S7R1TqVV
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03371F000CF;
-	Sat, 21 Nov 2026 21:01:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPqRfy/w
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED741F000C0;
+	Sat, 21 Nov 2026 21:55:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795294887;
-	bh=62zNnSv/5OwcioeFLjZHN1oIXQgOF6jZ0dIhGJCk0F8=;
+	s=k20260515; t=1795298141;
+	bh=M+VY7WrwsBtiuZdXQn3KrjU1Jy0B0DjsHMk6Q6K2UpU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=S7R1TqVVBRZ/X/J4vURSEIe3pgYkfk3VMhWuq6O4ZHwQAi1iZzWX1RV/9yQ4STo0y
-	 ktu2xBxiW2ktwZYYdqOpft374bGb48YZkpo4YNbkV5aWFi57uhDJ1kWP1FMuDuUchT
-	 Xp280PgrMKaojw6oR69eYqHRweZy4H2Lrluhrs2iSL2ndj4WHy9tKScsg/K1PQAwm0
-	 Y2u+Z3OJKvJQXGw6AHnea16wSnJx2B2Euo7o6k3NCks9RySpRTT2lxc04i7J8wWP/e
-	 kmTFb6JjzMksA597efJrm9O546yk1x7tMG9aW8+JqN9suoZtu+KZAzZo3SZ2hSznB9
-	 KKsiCL9mxFqWA==
-Date: Sat, 21 Nov 2026 13:01:25 -0800
+	b=iPqRfy/wBR9cKrARIIXT4Hu6ZqEts9+yPUAKv+YYLr8YbVK7lGuyeVq/7eKeZzyGl
+	 6wvgupOG+3lYBI3ygoP19oUR4UXmZGr5uTSsvE7HA/8jKhhDgHBv6aazyKRhVELQ7K
+	 WzXhRzh0xEpSA6GQ/b+K0kV9hVE1sGGku2YQ3H/RToyTk/3EwrU25ZfSUSwCHL0Kfg
+	 0c1Vv07P56zI7btUZpRTTGyseT8jDfsf1HLZJtYBd9tz9xLl8gsErl5kNZvLfYzhxE
+	 LiwW/qYzcEz/kJEP0TsSWwHe51MCx0EvAapMkqX5iUNqGBCIZCKHp8uwBKI/ud5YrY
+	 od4s27Wuiz+gA==
+Date: Sat, 21 Nov 2026 13:55:39 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
-	song@kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH] livepatch: Avoid blocking tasklist_lock too long
-Message-ID: <awIDmjHwiQqwuSC8@jpoimboe>
-References: <20261117130848.65142-1-laoar.shao@gmail.com>
+To: Dylan Hatch <dylanbhatch@google.com>
+Cc: Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Shuah Khan <shuah@kernel.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound
+ tasks
+Message-ID: <awIMltMpXzhXiDpU@jpoimboe>
+References: <20261117045254.1048298-1-dylanbhatch@google.com>
+ <20261117045254.1048298-2-dylanbhatch@google.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -58,184 +67,152 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261117130848.65142-1-laoar.shao@gmail.com>
+In-Reply-To: <20261117045254.1048298-2-dylanbhatch@google.com>
 
-On Tue, Nov 17, 2026 at 09:08:48PM +0800, Yafang Shao wrote:
-> Problem
-> =======
+On Tue, Nov 17, 2026 at 04:52:53AM +0000, Dylan Hatch wrote:
+> Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
+> live-patching") moved klp_sched_try_switch() from cond_resched() into
+> __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
+> This causes livepatch transitions to stall when a CPU-bound kthread or
+> PF_USER_WORKER thread (such as vhost-<pid>) spins in a kernel loop with
+> cond_resched() for two reasons:
 > 
-> As more and more patches accumulate in the cumulative livepatch, we see an
-> increasing number of latency spikes from latency-sensitive services during
-> livepatch upgrades. The most recent case is the redis data_server [0].
+> 1. A sole runnable task on a CPU (cfs_rq->nr_queued == 1) never has
+>    TIF_NEED_RESCHED set during sched_tick(), and wake_up_state(task,
+>    TASK_INTERRUPTIBLE) in klp_send_signals() is a no-op for a
+>    TASK_RUNNING kthread. Because _cond_resched() is a no-op under
+>    CONFIG_PREEMPTION=y, the task only enters __schedule(SM_PREEMPT) on
+>    return from interrupts via irqentry_exit_cond_resched() when
+>    TIF_NEED_RESCHED is set.
+> 2. Even when __schedule() is entered via preemption or an unfreezable
+>    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
+>    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
+>    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
+>    Livepatch safety in __schedule() is already guaranteed by
+>    stack_trace_save_tsk_reliable() inside klp_check_stack().
 > 
-> With some tracing added to the userspace redis code and a hard trace in the
-> kernel, we finally tracked the root cause down to tasklist_lock contention
-> during livepatch transition.
+> Fix both issues by:
+> - Removing the TASK_FREEZABLE check from klp_sched_try_switch() and
+>   checking TIF_PATCH_PENDING inline via klp_sched_need_resched().
+> - Calling resched_curr(rq) in sched_tick() when klp_sched_need_resched()
+>   is true for the current task, ensuring CPU-bound tasks with a pending
+>   livepatch enter __schedule() at the next timer tick.
 > 
-> When redis flushes data, it clones a new task, which takes the write side of
-> tasklist_lock. If a livepatch upgrade is in progress at the same time,
-> tasklist_lock is held for the whole transition. Below is the trace we
-> captured while reproducing the issue:
+> Note that when a CPU-bound task is the sole runnable task on its CPU,
+> entering __schedule(SM_PREEMPT) from preempt_schedule_irq() leaves an
+> in-kernel interrupt pt_regs frame on the stack during
+> klp_sched_try_switch(). Completing the transition in that context
+> requires arch_stack_walk_reliable() to support unwinding across
+> in-kernel exception frames (as CONFIG_UNWINDER_ORC=y does on x86_64);
+> configs and architectures whose reliable unwinder rejects in-kernel
+> exception frames (x86 with CONFIG_FRAME_POINTER=y, arm64, powerpc, and
+> s390) still require another runnable task to context-switch the spinning
+> task out until exception-boundary reliable unwinding (e.g. via SFrame)
+> is available.
 > 
-> === [2026-11-15 15:18:06] tid=1635309 comm=data_server  WRITE wait=79372 us
-> 
->         queued_write_lock_slowpath+276
->         queued_write_lock_slowpath+276
->         _raw_write_lock_irq+69
->         copy_process+3474
->         kernel_clone+157
->         __do_sys_clone+102
->         __x64_sys_clone+37
->         do_syscall_64+56
->         entry_SYSCALL_64_after_hwframe+100
-> 
-> === [2026-11-15 15:18:06] klp scan held tasklist_lock(read) ~ 96864 us (comm=insmod)
-> 
->         klp_enable_patch.cold+247
->         init_module+477
->         do_one_initcall+70
->         do_init_module+82
->         load_module+2526
->         __do_sys_finit_module+200
->         __x64_sys_finit_module+24
->         do_syscall_64+56
->         entry_SYSCALL_64_after_hwframe+100
-> 
-> === [2026-11-15 15:18:08] klp scan held tasklist_lock(read) ~ 3504145 us (comm=kworker/8:2)
-> 
->         klp_transition_work_fn+36
->         process_one_work+492
->         worker_thread+83
->         kthread+235
->         ret_from_fork+31
-> 
->   crash> p klp_signals_cnt
->   klp_signals_cnt = $1 = 1
-> 
-> The latency budget of our redis workload is 50 ms, while the clone() call
-> observed during the livepatch transition took ~79 ms.
-> 
-> Environment used for the reproduction
-> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
->   server: 256C AMD EPYC server
->   tasks: 1000~2000
->   number of patched functions: around 80
-> 
-> Solution
-> ========
-> 
-> The redis application can work around this issue by removing the clone()
-> from its data flush path, but I believe we should improve this in the kernel
-> if we can.
-> 
-> In 2025, we discussed completely replacing tasklist_lock with RCU [1], but
-> Petr pointed out that it is far more complicated than we expected [2], so we
-> ended up abandoning that idea.
-> 
-> We still have a more lightweight way to partially replace this heavy
-> tasklist_lock with RCU, as Josh suggested [3]:
-> 
->   : Maybe klp_try_complete_transition() could iterate the tasks in two
->   : passes?  The first pass would use rcu_read_lock().  Then if all tasks
->   : appear to be patched, try again with tasklist_lock.
-> 
-> This patch implements that suggestion.
-> 
-> Verification
-> ============
-> 
-> I verified this solution on my test server:
-> 
->   server: 64C AMD virtual server
->   tasks: ~2000 processes with ~8000 threads, ~30 running
->   number of patched functions: 200
-> 
-> - Before this patch
->   the maximum clone() latency during the livepatch transition exceeded
->   500 ms.
-> 
-> - After this patch
->   the maximum clone() latency during the livepatch transition is below
->   20 ms, which is within the range expected by the redis side.
-> 
-> Link: https://github.com/redis/redis [0]
-> Link: https://lore.kernel.org/all/20250227024733.16989-1-laoar.shao@gmail.com/ [1]
-> Link: https://lore.kernel.org/all/Z8CRXxfI24E9_IHC@pathway.suse.cz/ [2]
-> Link: https://lore.kernel.org/all/20250213013603.i6uxtjvc3qxlsqwc@jpoimboe/ [3]
-> Suggested-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Fixes: 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and live-patching")
+
+Oof, so Peter's patch broke all non-ORC for this case :-(
+
+Not sure what we can do about that other than get kernel sframe/eh_frame
+working for exception boundary unwinding, as you mention.
+
+> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
 > ---
->  kernel/livepatch/transition.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+>  include/linux/livepatch_sched.h | 13 +++++++++++--
+>  kernel/sched/core.c             |  3 ++-
+>  2 files changed, 13 insertions(+), 3 deletions(-)
 > 
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-> index 2351a19ac2a9..e058d21d84b7 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -444,7 +444,27 @@ void klp_try_complete_transition(void)
->  	 *
->  	 * Usually this will transition most (or all) of the tasks on a system
->  	 * unless the patch includes changes to a very common function.
-> +	 *
-> +	 * To avoid holding the tasklist_lock for too long, we iterate over the
-> +	 * tasks in two passes. In the first pass, we use the lightweight RCU
-> +	 * read lock to iterate through most tasks. This pass will cover the
-> +	 * majority of tasks, except for some newly forked tasks which may be
-> +	 * added into the tasklist concurrently. In the second pass, we acquire
-> +	 * the tasklist_lock to handle the tasks missed in the first pass.
->  	 */
+> diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
+> index 065c185f27638..748b6012e2e06 100644
+> --- a/include/linux/livepatch_sched.h
+> +++ b/include/linux/livepatch_sched.h
+> @@ -11,15 +11,24 @@ void __klp_sched_try_switch(void);
+>  
+>  DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
+>  
+> +static __always_inline bool klp_sched_need_resched(struct task_struct *curr)
+> +{
+> +	return static_branch_unlikely(&klp_sched_try_switch_key) &&
+> +	       unlikely(test_tsk_thread_flag(curr, TIF_PATCH_PENDING));
+> +}
 > +
-> +	/* First pass: Iterate over tasks using the lightweight RCU read lock. */
-> +	rcu_read_lock();
-> +	for_each_process_thread(g, task) {
-> +		/* klp_check_stack() requires preemption to be disabled */
-> +		if (task == current)
-> +			continue;
-> +
-> +		klp_try_switch_task(task);
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	/* Second pass: Iterate over missed tasks, holding tasklist_lock. */
->  	read_lock(&tasklist_lock);
->  	for_each_process_thread(g, task)
->  		if (!klp_try_switch_task(task))
+>  static __always_inline void klp_sched_try_switch(struct task_struct *curr)
+>  {
+> -	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
+> -	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
+> +	if (klp_sched_need_resched(curr))
+>  		__klp_sched_try_switch();
+>  }
+>  
+>  #else /* !CONFIG_LIVEPATCH */
+>  static inline void klp_sched_try_switch(struct task_struct *curr) {}
+> +static inline bool klp_sched_need_resched(struct task_struct *curr)
+> +{
+> +	return false;
+> +}
+>  #endif /* CONFIG_LIVEPATCH */
+>  
+>  #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 04b62c16fa8ca..fcea9cea3edf1 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -5854,7 +5854,8 @@ void sched_tick(void)
+>  	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
+>  	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
+>  
+> -	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
+> +	if ((dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY)) ||
+> +	    klp_sched_need_resched(curr))
+>  		resched_curr(rq);
 
-I think the performance can be improved further by only doing the 2nd
-pass if the 1st pass fully succeeded?
+Hm, so for unpatched tasks this forces a full preemption and stack walk
+on every scheduler tick?
 
+Instead can we just kick the thread in the existing klp_send_signals()
+escalation path like below (untested)?
+
+diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
+index 065c185f27638..77161f5725dcc 100644
+--- a/include/linux/livepatch_sched.h
++++ b/include/linux/livepatch_sched.h
+@@ -13,8 +13,7 @@ DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
+ 
+ static __always_inline void klp_sched_try_switch(struct task_struct *curr)
+ {
+-	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
+-	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
++	if (static_branch_unlikely(&klp_sched_try_switch_key))
+ 		__klp_sched_try_switch();
+ }
+ 
 diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index e058d21d84b75..8cbfc61ce87cf 100644
+index e058d21d84b75..1ccbae2051c72 100644
 --- a/kernel/livepatch/transition.c
 +++ b/kernel/livepatch/transition.c
-@@ -460,16 +460,22 @@ void klp_try_complete_transition(void)
- 		if (task == current)
- 			continue;
- 
--		klp_try_switch_task(task);
-+		if (!klp_try_switch_task(task))
-+			complete = false;
- 	}
- 	rcu_read_unlock();
- 
--	/* Second pass: Iterate over missed tasks, holding tasklist_lock. */
--	read_lock(&tasklist_lock);
--	for_each_process_thread(g, task)
--		if (!klp_try_switch_task(task))
--			complete = false;
--	read_unlock(&tasklist_lock);
-+	/*
-+	 * If the first pass succeeded, grab the more heavyweight tasklist lock
-+	 * to check current and any newly forked tasks.
-+	 */
-+	if (complete) {
-+		read_lock(&tasklist_lock);
-+		for_each_process_thread(g, task)
-+			if (!klp_try_switch_task(task))
-+				complete = false;
-+		read_unlock(&tasklist_lock);
-+	}
- 
- 	/*
- 	 * Ditto for the idle "swapper" tasks.
+@@ -402,12 +402,22 @@ static void klp_send_signals(void)
+ 		 * Meanwhile the task could migrate itself and the action
+ 		 * would be meaningless. It is not serious though.
+ 		 */
+-		if (task->flags & PF_KTHREAD) {
++		if (task->flags & (PF_KTHREAD | PF_USER_WORKER)) {
+ 			/*
+ 			 * Wake up a kthread which sleeps interruptedly and
+ 			 * still has not been migrated.
+ 			 */
+-			wake_up_state(task, TASK_INTERRUPTIBLE);
++			if (wake_up_state(task, TASK_INTERRUPTIBLE))
++				continue;
++
++			/*
++			 * If it's running, force it through __schedule() so
++			 * it can switch itself in klp_sched_try_switch().
++			 */
++			if (task_curr(task)) {
++				set_tsk_need_resched(task);
++				kick_process(task);
++			}
+ 		} else {
+ 			/*
+ 			 * Send fake signal to all non-kthread tasks which are
