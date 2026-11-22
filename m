@@ -1,54 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795329245;
-	b=VluBhhgvR0rAFRizWVI5Ce0YWjzT8QUJOUtE5lnLEdTFP3/Laf1PWgiQK/C3caVCzlnk
-	 kOUrd+nP2xIZKs9nQ7fjAhdBmcCNkEDykh78eHtDC0HnRMASLPQbET6GJX7lBHalGeYIT
-	 9/oY0pM/ljSCzJyeFUMlvLbIek952aMlnUzs1RQHtYHZpqQgbX+lKHmZwGBASSe3v1CNJ
-	 Z/qGB+gZ0qAtw1sYyIhU0gl+aT2BAd8huL8OrS/6AbteS+J5y0jWvcgeHVmKEI5vCLtPw
-	 yALSzQDcer5OSndGMEU/TEDeqQVrGM4r0o/Th1QdXyJ9fGdUpdh7+Y1AI7eE6XN4Slw==
+	t=1795330766;
+	b=thwzY/rpVhFC70cdjOBt2aypETKlKgsdcOlTF7xHUQodWhATjhi+Tr5EJBjrntdz5Rbm
+	 dfS4nxplEtmrerIVOp4QybYSvPHrcnTdzUcIcBplOvMxaOnEKZ0DnRhyteTtFVjeOBtmy
+	 AY4ed3g9AXqE41ccLfGOETcb5NnzbfRvDzc2kAREnR4vKIfyE9v1E9aG2+2vrziau/NQ5
+	 4Mr0YkmwybZMN6baKMvOQ2rOaX20T9PKpxwCuLC0H/M7Z17+sK0AUGGetA4K+6kxwioZd
+	 y8EQGaAjWJZbEpbw3YAptlOF1AIwu+e0d65hFFBRBTKQStq2ud7N8fj+/LcVm5DRbag==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795329245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795330766;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=stPO3VWIRXZkgCy3QK4QVfL/1O7xv0UwD94qJWnSO00=;
-	b=GZMNAEmyX3J+4R1v06cg9mVfDlUbPqjNIywNsnlsKBdQiDc7XKe20ZntwGjS3yaFGD2I
-	 dwPU8B4gOXDmEQnR64pCqi9hAcnG0mTcV0kNMBfkgkH/iB2nJeDoc9Hn5B9+wqBNb8Sep
-	 CqoY1Mcv9wOSYj3f4VNtluadukA1nufZShgSOVeLw/0mBVfwHTPKVGkya1hjA1BYu5dp8
-	 xEJ73U4ilRjIpsAS/jQJHjdmQSktUfFBgK7BitgbfFdUlto3asfLYIPX9ddKp2wtNafum
-	 L13ApJn8yPcmAww7Vz652+ZFQ+NrcHUQpDV+ypf1ov8kfysFEwjUBOwiCZaZFjt/gbQ==
+	bh=c4NckgM/hKf1r0IfgHyxm4hsgrGGjRw4xZB41IbLUPc=;
+	b=jx1+EjlXMFQyooIdTi0UPqLcNu6BD4RGx2h5jTPUr2s7eF9T1NiDLBMhD5ptwaKAzg1H
+	 J9K6I6rlozjQJQPEaMCfZiWiH+Ow0rmvYcMLKYV+KWprdcBZc+vGzW5kk8Fgbio5XkYIF
+	 atEEi0DbwVDuamoXXcxPrQ6ynUNCoQ4IqunbyQyI6U2CVPDGP19aQ4L5tHlv8nic0+ZSQ
+	 5xDFl62Yra19SF3Hcx16X6FtWeDSyaXg/n7JQWQ1J/M+j9FkKrBdHut9gSGnUVRNnVQwG
+	 PIkUrgUbtZa88UR1OuGnKbqCGvvleuexmkp+fYF/nJ/fIizDb4JPqk8CSxJXTMd8b/w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqCDZ58x;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nX+Px6Zc;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5210606A320
-	for <live-patching@vger.kernel.org>; Sun, 22 Nov 2026 06:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF0B606A320
+	for <live-patching@vger.kernel.org>; Sun, 22 Nov 2026 06:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=PqCDZ58x
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E4E1F000C0;
-	Sun, 22 Nov 2026 06:34:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nX+Px6Zc
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F701F000C4;
+	Sun, 22 Nov 2026 06:59:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795329245;
-	bh=stPO3VWIRXZkgCy3QK4QVfL/1O7xv0UwD94qJWnSO00=;
+	s=k20260515; t=1795330766;
+	bh=c4NckgM/hKf1r0IfgHyxm4hsgrGGjRw4xZB41IbLUPc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PqCDZ58xGKzEW/RxbjzXFES3aY5or6RMfb9Nc/07hptXrYmZdsKRARMjHKv5gHFM/
-	 FBPxxcQHoOTXnu6HsjNMJ9bteyeIeRlmuBu1vWpums5jfHtvRfb25Mrteadvrkycw5
-	 aTGP1leet4aPcR6bUUdV69QgRm4T8NJIhdUFGVt2arTia0/AwQC/b9gsbmEdOjwNAo
-	 988X3N3raOUrZN+E1j1FQmrYgI46E5HiJIIPUbkM7mslstsx4X345hDRmNpG8VmGQo
-	 SSHUO9DipUaLQfqroBaBk0l6sPAbwsvmd+gNi52v2gLEZfEx2ge+y0e3rgEJ7W8vwA
-	 w8Cz5xlOG/Szw==
-Date: Sat, 21 Nov 2026 22:34:03 -0800
+	b=nX+Px6ZcDAyF4TLu0lKmHD0Dz3gHL6YA3XUyXfqNxj3yN9MusE89UoAxTO5WP0vhX
+	 hUs6Cy/ZPnq5PWh0jqOu90ThrknpCi3oh9Ck2VCNkJCS4zDB6ikwI/B1hJNLxj6HH/
+	 hehbhCFJElvVIdSXvrFkPQ3WjpLvaKquVA//3fB8lSYSfP7S+/DryRqjJuzi2ONxjv
+	 Z5kd1r+61O4c+V4SxMuA/L92nKL0zwmHB+BdbIqLsNZdZJV54VzkTYf8tzdzBS9B5g
+	 thaOHu2rrTOelWaMFCH16gKFoCYuGDNmzexPTacbb8O3W5Jy0bbLMANWeTRht9CIjo
+	 BjsZUhGScarKQ==
+Date: Sat, 21 Nov 2026 22:59:24 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: live-patching@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
-	Song Liu <song@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 0/3] objtool/klp: Reject changed functions without an
- ftrace call site
-Message-ID: <awKMzQbMkVuWjVNm@jpoimboe>
-References: <20261022171637.3298443-1-puranjay@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: live-patching@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz, 
+	pmladek@suse.com, joe.lawrence@redhat.com
+Subject: Re: [PATCH] objtool/klp: Fix detection of static keys defined in
+ other files
+Message-ID: <awKSm5V0ay0chjJj@jpoimboe>
+References: <20261006071003.291679-1-song@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -60,17 +59,66 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261022171637.3298443-1-puranjay@kernel.org>
+In-Reply-To: <20261006071003.291679-1-song@kernel.org>
 
-On Thu, Oct 22, 2026 at 10:16:33AM -0700, Puranjay Mohan wrote:
-> Changelog:
-> v1: https://lore.kernel.org/all/20261022122544.125305-1-puranjay@kernel.org/
-> Changes in v2:
-> - test-special-sections: check __mcount_loc in its own block instead of
->   inside the section loop (Joe)
-> - Collected Joe's Acked-by on patches 2 and 3
+On Tue, Oct 06, 2026 at 12:10:03AM -0700, Song Liu wrote:
+> validate_special_section_klp_reloc() finds the key of a __jump_table or
+> .static_call_sites entry by looking for a reloc to an STT_OBJECT symbol.
+> But a key is STT_OBJECT only in the object file which defines it.  In
+> any other object file it is an undefined symbol, which is STT_NOTYPE,
+> and the check misses it.  For example, with tracepoint keys:
+> 
+>   Patched file            Tracepoint          Key defined in       Type
+>   ----------------------  ------------------  -------------------  ------
+>   vmlinux:
+>   kernel/sched/core.c     sched_switch        same file            OBJECT
+>   kernel/sched/fair.c     sched_stat_runtime  kernel/sched/core.c  NOTYPE
+>   kvm.ko:
+>   arch/x86/kvm/x86.c      kvm_msr             same file            OBJECT
+>   arch/x86/kvm/lapic.c    kvm_apic_ipi        arch/x86/kvm/x86.c   NOTYPE
+>   cachefiles.ko:
+>   fs/cachefiles/io.c      netfs_sreq          vmlinux              NOTYPE
+>   kvm-intel.ko:
+>   arch/x86/kvm/vmx/vmx.c  kvm_exit            kvm.ko               NOTYPE
+> 
+> Missing a key in vmlinux is harmless, as the check accepts vmlinux keys
+> anyway.  Their entries are cloned with a normal reloc to the key if
+> vmlinux exports it to all modules, as for netfs_sreq, and with a klp
+> reloc otherwise, which the module loader applies before it initializes
+> the livepatch module's static branches and static calls.
+> 
+> But a livepatch can't use a key defined in a module, so klp-diff has to
+> disable such tracepoints, as it does for kvm_msr above.  For keys
+> defined in another file of the same module, as for kvm_apic_ipi, or in
+> another module, as for kvm_exit, it instead clones the entries with klp
+> relocs for their keys.
+> 
+> The resulting patch module crashes the kernel on load.  The livepatch
+> module's static calls and static branches get initialized while their key
+> fields still wait for the klp relocs.  The static call init rewrites the
+> call instruction, so applying its klp reloc fails:
+> 
+>   module: x86/modules: Invalid relocation target, existing value is nonzero for sec 66, idx 16, type 4, loc ffffffffa04021f3, val ffffffffffffe0f5
+> 
+> and static_call_del_module() then dereferences the bogus key while
+> cleaning up after the failed init:
+> 
+>   BUG: unable to handle page fault for address: ffffffffa2373994
+>   RIP: 0010:static_call_del_module+0x38/0x80
+>   Call Trace:
+>    static_call_module_notify+0x42/0x1a0
+>    notifier_call_chain+0x5f/0xd0
+>    blocking_notifier_call_chain+0x41/0x60
+>    do_init_module+0x23d/0x2a0
+> 
+> Also treat undefined symbols as keys.  The other relocs of these entries
+> refer to code in the patched object, which is always defined.
+> 
+> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
+> Assisted-by: Claude:claude-opus-5
+> Signed-off-by: Song Liu <song@kernel.org>
 
-Queued, thanks!
+Ack, can you add a test?
 
 -- 
 Josh
