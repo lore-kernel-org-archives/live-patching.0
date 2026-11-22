@@ -1,53 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795330766;
-	b=thwzY/rpVhFC70cdjOBt2aypETKlKgsdcOlTF7xHUQodWhATjhi+Tr5EJBjrntdz5Rbm
-	 dfS4nxplEtmrerIVOp4QybYSvPHrcnTdzUcIcBplOvMxaOnEKZ0DnRhyteTtFVjeOBtmy
-	 AY4ed3g9AXqE41ccLfGOETcb5NnzbfRvDzc2kAREnR4vKIfyE9v1E9aG2+2vrziau/NQ5
-	 4Mr0YkmwybZMN6baKMvOQ2rOaX20T9PKpxwCuLC0H/M7Z17+sK0AUGGetA4K+6kxwioZd
-	 y8EQGaAjWJZbEpbw3YAptlOF1AIwu+e0d65hFFBRBTKQStq2ud7N8fj+/LcVm5DRbag==
+	t=1795330818;
+	b=14LvX0UeckBU57DhFWy3FhqMpzEKXOcFYUBjaZqemPFJEzMcRuCAk4Iwpifrz1oe/2Q5
+	 aXPO+70wiA0gWfM8nCA9ug2JW0hzOXfgu0qZLKcG3BRF0uYyqajgn/qQxms3h0/OQ03zO
+	 YqXgTdRjOZ3x+xLlHVWNMXLzj/dpDczQgqnsb7ipJxPA0SAQHltU/aDSa6Cgxx7fq4Ijc
+	 YoM69BeYyJTsF/AYb+P0hf/rDBNGorPMj0CC2zcEn94or6t5S+/DVC4T5TG6RGe5T1PzL
+	 uIn4/zoWYWDExAuOB99mVos2rindaD0vQJvPdn8EOmkzqg1A7Os9qgVRN16rRI4AZOw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795330766;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795330818;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=c4NckgM/hKf1r0IfgHyxm4hsgrGGjRw4xZB41IbLUPc=;
-	b=jx1+EjlXMFQyooIdTi0UPqLcNu6BD4RGx2h5jTPUr2s7eF9T1NiDLBMhD5ptwaKAzg1H
-	 J9K6I6rlozjQJQPEaMCfZiWiH+Ow0rmvYcMLKYV+KWprdcBZc+vGzW5kk8Fgbio5XkYIF
-	 atEEi0DbwVDuamoXXcxPrQ6ynUNCoQ4IqunbyQyI6U2CVPDGP19aQ4L5tHlv8nic0+ZSQ
-	 5xDFl62Yra19SF3Hcx16X6FtWeDSyaXg/n7JQWQ1J/M+j9FkKrBdHut9gSGnUVRNnVQwG
-	 PIkUrgUbtZa88UR1OuGnKbqCGvvleuexmkp+fYF/nJ/fIizDb4JPqk8CSxJXTMd8b/w==
+	bh=nIYQf39JPVEE3EcOjZPlpobu516qhCSZcCXOowR13Ms=;
+	b=zbgCcQgbue8/decbUKU1amn7GYh/mteo7GQ1vVzIYpNWbyBEKrjKDvmPZKAYvYq9NTQw
+	 VYID3ZxV4xV8DLXl37L9oaeAKRH1GoG6FEP4SmSjbFupPrK73CS/D9YLH0dmo+sfG4B1k
+	 v8rRQHHEH5hzCgma4YISz7UE2Obhmt6tSf8/BI5HDxBBNeBEsawoLD31VI2Or6EcMRDlE
+	 Zup8AFA/drPW0+KzSXQJf9SLAj2JOwICPe2u7IWGdS5aleae+5ZZYDG/sv6SU3WoRE21Y
+	 uD5AixxHrvCubpDpRTNGbbIv6R347kSKyD3o2PphNaB55pBpLuENv5Tyr/5TJ1PLgUg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nX+Px6Zc;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qj54I7x2;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF0B606A320
-	for <live-patching@vger.kernel.org>; Sun, 22 Nov 2026 06:59:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811EF606A320;
+	Sun, 22 Nov 2026 07:00:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nX+Px6Zc
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F701F000C4;
-	Sun, 22 Nov 2026 06:59:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=Qj54I7x2
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C7B1F000C0;
+	Sun, 22 Nov 2026 07:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795330766;
-	bh=c4NckgM/hKf1r0IfgHyxm4hsgrGGjRw4xZB41IbLUPc=;
+	s=k20260515; t=1795330818;
+	bh=nIYQf39JPVEE3EcOjZPlpobu516qhCSZcCXOowR13Ms=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nX+Px6ZcDAyF4TLu0lKmHD0Dz3gHL6YA3XUyXfqNxj3yN9MusE89UoAxTO5WP0vhX
-	 hUs6Cy/ZPnq5PWh0jqOu90ThrknpCi3oh9Ck2VCNkJCS4zDB6ikwI/B1hJNLxj6HH/
-	 hehbhCFJElvVIdSXvrFkPQ3WjpLvaKquVA//3fB8lSYSfP7S+/DryRqjJuzi2ONxjv
-	 Z5kd1r+61O4c+V4SxMuA/L92nKL0zwmHB+BdbIqLsNZdZJV54VzkTYf8tzdzBS9B5g
-	 thaOHu2rrTOelWaMFCH16gKFoCYuGDNmzexPTacbb8O3W5Jy0bbLMANWeTRht9CIjo
-	 BjsZUhGScarKQ==
-Date: Sat, 21 Nov 2026 22:59:24 -0800
+	b=Qj54I7x25az/X3a05tHbr17Aed4I5kPScv1MIGn4qMCi2HfG5SGo185OVvQSa9j31
+	 X1x2q9cz8MyNDaq/jGZdDfs1apiCT60O+tKGcp+dzShTNmCQERvthAiV9jPq0RsGpJ
+	 JCw1/Vq91JIaRNaf6KootMZ67sdwjek27YsnWxSc2NLkPd8AkC3ySjWXzU0latwdlu
+	 +nEoCj1b6r/ZT4sdfmT6YK15q9y7Rzv9271bhi3iiQaCOxZ3Vkd+CCGhDhfPuGj//n
+	 pY2PDDhfRyTpf8MMW1ghy7d5n+DrRnwvOKrHCYCgdMQVqnpLWbvTogKWjG41wcOtJO
+	 Oxd3m8IE016Jg==
+Date: Sat, 21 Nov 2026 23:00:16 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 To: Song Liu <song@kernel.org>
-Cc: live-patching@vger.kernel.org, jikos@kernel.org, mbenes@suse.cz, 
-	pmladek@suse.com, joe.lawrence@redhat.com
-Subject: Re: [PATCH] objtool/klp: Fix detection of static keys defined in
- other files
-Message-ID: <awKSm5V0ay0chjJj@jpoimboe>
-References: <20261006071003.291679-1-song@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com, 
+	shuah@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] klp-build: Reuse the target kernel randstruct seed
+Message-ID: <awKS7r98LjmecdIM@jpoimboe>
+References: <20261020212341.706367-1-song@kernel.org>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -59,66 +59,54 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261006071003.291679-1-song@kernel.org>
+In-Reply-To: <20261020212341.706367-1-song@kernel.org>
 
-On Tue, Oct 06, 2026 at 12:10:03AM -0700, Song Liu wrote:
-> validate_special_section_klp_reloc() finds the key of a __jump_table or
-> .static_call_sites entry by looking for a reloc to an STT_OBJECT symbol.
-> But a key is STT_OBJECT only in the object file which defines it.  In
-> any other object file it is an undefined symbol, which is STT_NOTYPE,
-> and the check misses it.  For example, with tracepoint keys:
+On Tue, Oct 20, 2026 at 02:23:41PM -0700, Song Liu wrote:
+> CONFIG_RANDSTRUCT randomizes struct layouts based on a seed which kbuild
+> generates from /dev/urandom.  A livepatch has to observe the same layouts
+> as the kernel it is loaded into, but klp-build runs 'make clean', after
+> which kbuild generates a new seed, and the resulting module can't be
+> loaded:
 > 
->   Patched file            Tracepoint          Key defined in       Type
->   ----------------------  ------------------  -------------------  ------
->   vmlinux:
->   kernel/sched/core.c     sched_switch        same file            OBJECT
->   kernel/sched/fair.c     sched_stat_runtime  kernel/sched/core.c  NOTYPE
->   kvm.ko:
->   arch/x86/kvm/x86.c      kvm_msr             same file            OBJECT
->   arch/x86/kvm/lapic.c    kvm_apic_ipi        arch/x86/kvm/x86.c   NOTYPE
->   cachefiles.ko:
->   fs/cachefiles/io.c      netfs_sreq          vmlinux              NOTYPE
->   kvm-intel.ko:
->   arch/x86/kvm/vmx/vmx.c  kvm_exit            kvm.ko               NOTYPE
+>   module livepatch_foo: .gnu.linkonce.this_module
+>   section size must match the kernel's built struct module size at run time
 > 
-> Missing a key in vmlinux is harmless, as the check accepts vmlinux keys
-> anyway.  Their entries are cloned with a normal reloc to the key if
-> vmlinux exports it to all modules, as for netfs_sreq, and with a klp
-> reloc otherwise, which the module loader applies before it initializes
-> the livepatch module's static branches and static calls.
+> struct module had grown 64 bytes of padding relative to the running
+> kernel (0x540 vs 0x500).  Every other randomized struct the patch touches
+> would be read at the wrong offsets too, so this is not just a loader nit.
 > 
-> But a livepatch can't use a key defined in a module, so klp-diff has to
-> disable such tracepoints, as it does for kvm_msr above.  For keys
-> defined in another file of the same module, as for kvm_apic_ipi, or in
-> another module, as for kvm_exit, it instead clones the entries with klp
-> relocs for their keys.
+> Reuse the seed of the kernel being patched, taken from --randstruct-seed
+> or from scripts/basic/randstruct.seed in the tree, and refuse to build
+> when CONFIG_RANDSTRUCT is on and no valid seed is available.  A wrong
+> module is worse than no module.
 > 
-> The resulting patch module crashes the kernel on load.  The livepatch
-> module's static calls and static branches get initialized while their key
-> fields still wait for the klp relocs.  The static call init rewrites the
-> call instruction, so applying its klp reloc fails:
+> Pin scripts/gen-randstruct-seed.sh rather than the generated seed file:
+> clean_kernel() removes scripts/basic/.randstruct.seed.cmd, so kbuild's
+> if_changed finds no saved command and regenerates the seed no matter what
+> the file already holds.  The generator is stashed, so it is restored on
+> exit like scripts/setlocalversion.
 > 
->   module: x86/modules: Invalid relocation target, existing value is nonzero for sec 66, idx 16, type 4, loc ffffffffa04021f3, val ffffffffffffe0f5
+> Read the seed before set_kernelversion(), but pin the generator after it.
+> set_kernelversion() runs 'make listnewconfig' and 'make syncconfig', which
+> build scripts/basic as well, so after a 'make clean' they would replace
+> the seed before the default seed file is read.  But if the generator is
+> already modified when 'make kernelrelease' runs, setlocalversion appends
+> "-dirty" to the kernel release and the module's vermagic no longer
+> matches the target kernel.
 > 
-> and static_call_del_module() then dereferences the bogus key while
-> cleaning up after the failed init:
+> The Clang and GCC plugin implementations both derive their layouts only
+> from scripts/basic/randstruct.seed, so pinning the seed covers
+> CONFIG_GCC_PLUGIN_RANDSTRUCT too.  Drop the check that rejected it.  The
+> plugin requires a 64 character seed, which is what gen-randstruct-seed.sh
+> writes, so validate exactly that format.
 > 
->   BUG: unable to handle page fault for address: ffffffffa2373994
->   RIP: 0010:static_call_del_module+0x38/0x80
->   Call Trace:
->    static_call_module_notify+0x42/0x1a0
->    notifier_call_chain+0x5f/0xd0
->    blocking_notifier_call_chain+0x41/0x60
->    do_init_module+0x23d/0x2a0
+> An explicit option is needed rather than deriving the path from
+> uname -r, because the build host is usually not running the kernel being
+> patched.
 > 
-> Also treat undefined symbols as keys.  The other relocs of these entries
-> refer to code in the patched object, which is always defined.
-> 
-> Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-> Assisted-by: Claude:claude-opus-5
 > Signed-off-by: Song Liu <song@kernel.org>
 
-Ack, can you add a test?
+Seems fine, can you address the Sashiko comments?
 
 -- 
 Josh
