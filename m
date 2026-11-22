@@ -1,61 +1,56 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795298142;
-	b=yQaFUzMOIhfUu5LsJ+JaZfSb58c/ye9ToTmC7nDCtbLswG/byTR8I/FXKZ63jRoEo9UR
-	 8a7Bb8sjlR4xpC1Pm5+d0AuDURmEoW6A1uZWQHNFvUkc0MG/mdL12kWuKj+Ld7XXv6vOo
-	 DeN4pHejvkXyUYfCity8uDuxnRJVQiks5wuwUc27v54CVrbqvd8L1O/bCWL1ne4NkPQtM
-	 gwaHwPWR5fKSB7ecEM2wBi4aBDZYqFbIWWN1VpP9FfWM1SJdQC+DzRFkYOmo4P/+Ho2r4
-	 4a3eS0n35Qn6LymVhCgufqTDR2fg6A1+cySaIVOvsDevvqy9z9jLmuZRqLG2O4d7rrQ==
+	t=1795310376;
+	b=V7BUEJdag2SPaX4w15LlF7BVApgYB6YG4qtj1vK+LWOaw0+nGYs3AvxMiU09zrqaAbTb
+	 Nnv74NiDywJhrde+PpFk2no0UCl0DHQgQmluVTnGTuBtAbXsAeqmhda1YxLG8AIpZpfZr
+	 VNSsBOKSKiQZ8U3yJcQZAx/uI1tlrdR6DKTdpYaKJY0iGp+veOpFRIsDylfUyiqcUIkLL
+	 0RmptzIB+oieA1/R1es6csgF9xWWdA9UpH20tmWtGOvqRiLTDri7jvQZGNEV7XUyXqsss
+	 Mk3tUrTCBQ/MlvODarD8z33FUtsllAUaBG66VQRpsvHUjrlwqYY1yW0YfVY9W+TmLPQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795298142;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795310376;
 	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-ID:
 	 References:MIME-Version:Content-Type:Content-Disposition:In-Reply-To;
-	bh=M+VY7WrwsBtiuZdXQn3KrjU1Jy0B0DjsHMk6Q6K2UpU=;
-	b=zbrpVGdqcEpyvJGweZ+TlL6KMijmp0oBGPTYV8p8LUIVSYS6EG0JyEdjSlsO98B3RbqG
-	 rAzrkWIZalFUEuiP4/EzX17zgGOK0fI2N9eaMrbLaybX6ntnRUuN/cc5/4DpzIosqjUwT
-	 xHWHWSxbeNtUXYzSrRewlipRP17Nic5TZhGuE6Us4URzLtpQL/ccMFAQ20Yu6FPOGSbHw
-	 IWZyrmwiQwaF5cmbwE1kzDfrpenG7cUM94tyY0J3/uRtJuYm19gtY9c7vOVCv5AWjm5S5
-	 xq5x7tdPx8qJ1Tds9NYgTSKpiia9Gvqst0Sb6uv6ZVGW6oqkxsVzixCeU3JntGksbxw==
+	bh=W90DcGRkyt3+2wp7PXRX8KbAZmHuW0scIoqRVWqUO7Q=;
+	b=ExoxoD3veYdt2V2Hp7WvMnjs+3gHJWGsbRxmQkqyhEGZZkpQVcK3zAxmbPIX4l0dG6L6
+	 QBiH9UvUAc6faClYWB+O7koKrFIGZBf+qkgRXlK5PiadcqnoDsmosDJ8F859dJ6kWZZlB
+	 LjC7NSBUOw0Y6mu6LKSh2E9arPDcBcwLLLMzr/hj9VswnqGDiwGI6KI5zPlCen6A1XhS3
+	 NKLQFMa8FCC4sb4kpm8aRpoFKqnaA1Ews3ZfpGNYbN8koz5I2fMBMlSuxheuB07C8FSLY
+	 vabD0GpUvRv7jG4VxRY9vKn+DSl2AlTBI1QEN3piQM3TUYlmUxsMAXfvc2EN6Y4W+mw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b="iPqRfy/w";
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JnD4BXXq;
 	arc=none smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C107606A333;
-	Sat, 21 Nov 2026 21:55:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B143606A33C;
+	Sun, 22 Nov 2026 01:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=iPqRfy/w
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED741F000C0;
-	Sat, 21 Nov 2026 21:55:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=JnD4BXXq
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9581F000CA;
+	Sun, 22 Nov 2026 01:19:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795298141;
-	bh=M+VY7WrwsBtiuZdXQn3KrjU1Jy0B0DjsHMk6Q6K2UpU=;
+	s=k20260515; t=1795310376;
+	bh=W90DcGRkyt3+2wp7PXRX8KbAZmHuW0scIoqRVWqUO7Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iPqRfy/wBR9cKrARIIXT4Hu6ZqEts9+yPUAKv+YYLr8YbVK7lGuyeVq/7eKeZzyGl
-	 6wvgupOG+3lYBI3ygoP19oUR4UXmZGr5uTSsvE7HA/8jKhhDgHBv6aazyKRhVELQ7K
-	 WzXhRzh0xEpSA6GQ/b+K0kV9hVE1sGGku2YQ3H/RToyTk/3EwrU25ZfSUSwCHL0Kfg
-	 0c1Vv07P56zI7btUZpRTTGyseT8jDfsf1HLZJtYBd9tz9xLl8gsErl5kNZvLfYzhxE
-	 LiwW/qYzcEz/kJEP0TsSWwHe51MCx0EvAapMkqX5iUNqGBCIZCKHp8uwBKI/ud5YrY
-	 od4s27Wuiz+gA==
-Date: Sat, 21 Nov 2026 13:55:39 -0800
+	b=JnD4BXXqF6hJhzMW3QsPQLV/cRI4lvn4MkT5AAp/434P/q0P94pfXXSL7wjYa2AM9
+	 wXd1cL35PgktshKZlPJd1C8KD11uB6N+OIdobDGaCtSN0pPAamDOCZfuKpauSdGr7a
+	 5fYRBSFWQT0Cx9Q/Mg7VEbukiOFtF6JTY2dGbikuBF2PUPf0/iMienn35KqlzkdTkj
+	 zOdigQM4a8wyhIsFGZU4lMLqkclAtiN4QB88D8+WNCwqphrF1ZwqeYxciRfpsuVDDe
+	 p0791PsogerP+ubMy7hx4ArX2GZLPD8f3M+xbfePTzYM1ZYZG6EkHsTWdglC9358vn
+	 Qq3cZjOcvj88A==
+Date: Sat, 21 Nov 2026 17:19:34 -0800
 From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Shuah Khan <shuah@kernel.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound
- tasks
-Message-ID: <awIMltMpXzhXiDpU@jpoimboe>
-References: <20261117045254.1048298-1-dylanbhatch@google.com>
- <20261117045254.1048298-2-dylanbhatch@google.com>
+To: Wilson Felipe Pereira <wfelipe@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Miroslav Benes <mbenes@suse.cz>, 
+	Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Song Liu <song@kernel.org>, live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dylan Hatch <dylanbhatch@google.com>, Yi Zhu <chuyee@google.com>
+Subject: Re: [PATCH 1/2] objtool/klp: Disambiguate global symbols colliding
+ with local symbols
+Message-ID: <awJCWTSXV0J11rqP@jpoimboe>
+References: <20261117000835.1992893-1-wfelipe@google.com>
+ <20261117000835.1992893-2-wfelipe@google.com>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -67,152 +62,82 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261117045254.1048298-2-dylanbhatch@google.com>
+In-Reply-To: <20261117000835.1992893-2-wfelipe@google.com>
 
-On Tue, Nov 17, 2026 at 04:52:53AM +0000, Dylan Hatch wrote:
-> Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-> live-patching") moved klp_sched_try_switch() from cond_resched() into
-> __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
-> This causes livepatch transitions to stall when a CPU-bound kthread or
-> PF_USER_WORKER thread (such as vhost-<pid>) spins in a kernel loop with
-> cond_resched() for two reasons:
+On Tue, Nov 17, 2026 at 12:08:31AM +0000, Wilson Felipe Pereira wrote:
+> klp_find_sympos() returns 0 for any non-STB_LOCAL symbol, symid_needed()
+> skips non-local symbols when emitting .klp.symid entries for vmlinux.o,
+> and clone_reloc_klp() hardcodes sympos = 0 when a relocation targets a
+> restricted or module export.
 > 
-> 1. A sole runnable task on a CPU (cfs_rq->nr_queued == 1) never has
->    TIF_NEED_RESCHED set during sched_tick(), and wake_up_state(task,
->    TASK_INTERRUPTIBLE) in klp_send_signals() is a no-op for a
->    TASK_RUNNING kthread. Because _cond_resched() is a no-op under
->    CONFIG_PREEMPTION=y, the task only enters __schedule(SM_PREEMPT) on
->    return from interrupts via irqentry_exit_cond_resched() when
->    TIF_NEED_RESCHED is set.
-> 2. Even when __schedule() is entered via preemption or an unfreezable
->    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
->    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
->    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
->    Livepatch safety in __schedule() is already guaranteed by
->    stack_trace_save_tsk_reliable() inside klp_check_stack().
+> However, a global symbol in one translation unit can share its name with a
+> static (STB_LOCAL) symbol in another translation unit (for example,
+> cgroup_storage_lookup in kernel/bpf/local_storage.c vs
+> kernel/bpf/bpf_cgrp_storage.c). At runtime, both
+> kallsyms_on_each_match_symbol() and module_kallsyms_on_each_symbol() count
+> local and global symbols together, so emitting sympos 0 for the global
+> symbol fails module load in klp_find_object_symbol() with 'unresolvable
+> ambiguity for symbol'.
 > 
-> Fix both issues by:
-> - Removing the TASK_FREEZABLE check from klp_sched_try_switch() and
->   checking TIF_PATCH_PENDING inline via klp_sched_need_resched().
-> - Calling resched_curr(rq) in sched_tick() when klp_sched_need_resched()
->   is true for the current task, ensuring CPU-bound tasks with a pending
->   livepatch enter __schedule() at the next timer tick.
+> Allow defined non-local symbols to receive .klp.symid entries when
+> duplicate names exist in vmlinux.o, compute sympos for defined non-local
+> symbols in klp_find_sympos() (returning 0 when unique and skipping
+> undefined and non-alloc symbols), and resolve sympos via klp_find_sympos()
+> in clone_reloc_klp() when the exported target is defined in the patched
+> object.
 > 
-> Note that when a CPU-bound task is the sole runnable task on its CPU,
-> entering __schedule(SM_PREEMPT) from preempt_schedule_irq() leaves an
-> in-kernel interrupt pt_regs frame on the stack during
-> klp_sched_try_switch(). Completing the transition in that context
-> requires arch_stack_walk_reliable() to support unwinding across
-> in-kernel exception frames (as CONFIG_UNWINDER_ORC=y does on x86_64);
-> configs and architectures whose reliable unwinder rejects in-kernel
-> exception frames (x86 with CONFIG_FRAME_POINTER=y, arm64, powerpc, and
-> s390) still require another runnable task to context-switch the spinning
-> task out until exception-boundary reliable unwinding (e.g. via SFrame)
-> is available.
-> 
-> Fixes: 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and live-patching")
-
-Oof, so Peter's patch broke all non-ORC for this case :-(
-
-Not sure what we can do about that other than get kernel sframe/eh_frame
-working for exception boundary unwinding, as you mention.
-
-> Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
+> Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
 > ---
->  include/linux/livepatch_sched.h | 13 +++++++++++--
->  kernel/sched/core.c             |  3 ++-
->  2 files changed, 13 insertions(+), 3 deletions(-)
+>  tools/objtool/klp-diff.c   | 11 +++++++++++
+>  tools/objtool/klp-symid.c  |  2 +-
+>  tools/objtool/klp-sympos.c |  9 ++++++---
+>  3 files changed, 18 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
-> index 065c185f27638..748b6012e2e06 100644
-> --- a/include/linux/livepatch_sched.h
-> +++ b/include/linux/livepatch_sched.h
-> @@ -11,15 +11,24 @@ void __klp_sched_try_switch(void);
+> diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
+> index 34da55e45609..37ad315d00af 100644
+> --- a/tools/objtool/klp-diff.c
+> +++ b/tools/objtool/klp-diff.c
+> @@ -1404,9 +1404,20 @@ static int clone_reloc_klp(struct elfs *e, struct reloc *patched_reloc,
+>  	 */
 >  
->  DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
->  
-> +static __always_inline bool klp_sched_need_resched(struct task_struct *curr)
-> +{
-> +	return static_branch_unlikely(&klp_sched_try_switch_key) &&
-> +	       unlikely(test_tsk_thread_flag(curr, TIF_PATCH_PENDING));
-> +}
+>  	if (export) {
+> +		const char *modname = find_modname(e);
 > +
->  static __always_inline void klp_sched_try_switch(struct task_struct *curr)
->  {
-> -	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-> -	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
-> +	if (klp_sched_need_resched(curr))
->  		__klp_sched_try_switch();
->  }
->  
->  #else /* !CONFIG_LIVEPATCH */
->  static inline void klp_sched_try_switch(struct task_struct *curr) {}
-> +static inline bool klp_sched_need_resched(struct task_struct *curr)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_LIVEPATCH */
->  
->  #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 04b62c16fa8ca..fcea9cea3edf1 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -5854,7 +5854,8 @@ void sched_tick(void)
->  	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
->  	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
->  
-> -	if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY))
-> +	if ((dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY)) ||
-> +	    klp_sched_need_resched(curr))
->  		resched_curr(rq);
+> +		if (!modname)
+> +			return -1;
+> +
+>  		sym_modname = export->mod;
+>  		sym_orig_name = export->sym;
+>  		sympos = 0;
+> +		if (!strcmp(export->mod, modname) &&
+> +		    patched_sym->twin && !is_undef_sym(patched_sym->twin)) {
+> +			sympos = klp_find_sympos(e->orig, patched_sym->twin);
+> +			if (sympos == ULONG_MAX)
+> +				return -1;
+> +		}
+>  	} else {
+>  		sym_modname = find_modname(e);
+>  		if (!sym_modname)
 
-Hm, so for unpatched tasks this forces a full preemption and stack walk
-on every scheduler tick?
+This could be simplified a bit?
 
-Instead can we just kick the thread in the existing klp_send_signals()
-escalation path like below (untested)?
+	if (export) {
+		sym_modname = export->mod;
+		sym_orig_name = export->sym;
+	} else {
+		sym_modname = find_modname(e);
+		if (!sym_modname)
+			return -1;
 
-diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
-index 065c185f27638..77161f5725dcc 100644
---- a/include/linux/livepatch_sched.h
-+++ b/include/linux/livepatch_sched.h
-@@ -13,8 +13,7 @@ DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
- 
- static __always_inline void klp_sched_try_switch(struct task_struct *curr)
- {
--	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
--	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
-+	if (static_branch_unlikely(&klp_sched_try_switch_key))
- 		__klp_sched_try_switch();
- }
- 
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index e058d21d84b75..1ccbae2051c72 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -402,12 +402,22 @@ static void klp_send_signals(void)
- 		 * Meanwhile the task could migrate itself and the action
- 		 * would be meaningless. It is not serious though.
- 		 */
--		if (task->flags & PF_KTHREAD) {
-+		if (task->flags & (PF_KTHREAD | PF_USER_WORKER)) {
- 			/*
- 			 * Wake up a kthread which sleeps interruptedly and
- 			 * still has not been migrated.
- 			 */
--			wake_up_state(task, TASK_INTERRUPTIBLE);
-+			if (wake_up_state(task, TASK_INTERRUPTIBLE))
-+				continue;
-+
-+			/*
-+			 * If it's running, force it through __schedule() so
-+			 * it can switch itself in klp_sched_try_switch().
-+			 */
-+			if (task_curr(task)) {
-+				set_tsk_need_resched(task);
-+				kick_process(task);
-+			}
- 		} else {
- 			/*
- 			 * Send fake signal to all non-kthread tasks which are
+		sym_orig_name = patched_sym->twin->name;
+	}
+
+	sympos = 0;
+	if (patched_sym->twin) {
+		sympos = klp_find_sympos(e->orig, patched_sym->twin);
+		if (sympos == ULONG_MAX)
+			return -1;
+	}
+
+-- 
+Josh
