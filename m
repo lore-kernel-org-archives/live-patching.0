@@ -1,79 +1,78 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795467175;
-	b=hNPS+f1/u/hdO8f2tqxQyn2Sva0Y3r3SC/ha8DLQi4LldTqSBy/ZatcWXRLQRglH6QhV
-	 0cgRMb3RvxQxOphy+ejLXlcdWnDnRwDAK+Oe3u+eqM1ICJzMBoG5OAOl9bMOh81wOp8W2
-	 MxhlNV57zebw8TRzsTy8HPUejbyuCeXSB5g/fjdEKZOFUTD+yva5uvRt/s8BaPvmYqf+L
-	 eCwULLm0/1yKt3KBseBhL9xhO9U5U6GL4P+A+53O0NmHfWhbQd6F2UER2VxFBnoEafRn3
-	 t0LS75Jw39PmZZS6BIQVnWBNF/IoxiLkRQkgTm9ONB28qlS5OM4biVaw/IHTWTGZCDQ==
+	t=1795467177;
+	b=jnDe2Q4mX7GqXJHYX8E7BMXXC5tZMW306o7bC3IRlqo797qDcMxpwXHjGZrUdo1/03SF
+	 eKImpVQ1VgKjOfOppElYy8piU6UyVl+kg11koo0JW50+OxueJK+gerrH3IFbw1Jj4Y6Dr
+	 2UVOb8GsoksBIwUwZeweJRN/7dyNzKTDBZz/vCZ0yjnNQHiI0IQUlFc+88bDsUDPw95QL
+	 sdk//fXTT5atq4M2Y3IBqkOzTOr+VOOD2VA1r/kgQLxvwipBXC+7pB9gwZvqtkJi8EDPG
+	 mqO5QcbdzzoPC+19L00vkavyFejyBYJZMfKOtN+sa65FnDpGAJcchdYv5apCzQHtg0w==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795467175;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795467177;
 	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
 	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Uk/Nx9AqOgbIP3+/mGNkZuIOYeo78ZScYOlbWVpMcH4=;
-	b=1/xLiiOtkIWOXXIQ2wY1HkoWPHBXA+BeVhbn/25UTFZKMOhxTjha4KaaFq7gk/WHy9JJ
-	 aooGjNDz7w2kdWxlhgVf8B1x01Jte+h+K8lt+NVWURm5BeqOlBtPQFgz7mZmpF8g5MTit
-	 VKpKUXbYRxQlW5ebXKyjP9zMzIpl7ROsU0yOpqA9Xz864K5oAGvcv8hK+hG0OVXO9QsNI
-	 8SxShADwPV5lRtg9ZvtVTaCzjtDTpOqVUqxkE+bmxOK8Yi8vbol+BkZIkSwErn79oxlxQ
-	 WP83ah7FCEIeI5If158GZMUK9HJPl3+H4D3VYn2uGDIxJpnGPz7nAZ4tR3i/rVPLW3A==
+	bh=wK+wIXjcAlTX5Hq8+BkCkD9G9YP95vK3PD6G0LiWqOA=;
+	b=DmBfid9oCwXrRp6Me8pa2pwCrWnAsFn4w1PcSCi0RTJHHk96BPLXMqoPOvJCb0OjH8r5
+	 kWe0lvoKzcE4I16WgnMXa0zkp6kfCa/vNwREMP33hVtjjHT1HWGUbkgoeVz+NI5xvNYn3
+	 5eGSt/fjjmOpvmiYNwLyi4UnUKtF40hDuRRlzWfzzS2U6WiaNETAEDv2S7d5rhIz5xTQC
+	 rEfu5Ea9LbV+Qo0frM93ACuNXjpVMiMGT7YM6HUqCYDgyr8pUY53Q0ucmuu4MG+PmLGgo
+	 2YDpnFYLpALXr4Vzf7/s/QnCbHel2H9K6Lb2GEg/6v/rhwq/xe1NW6er/696uAodwgw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BHZBqkoh;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gABVn3ar;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D9C606A332;
-	Mon, 23 Nov 2026 20:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3131606A335;
+	Mon, 23 Nov 2026 20:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=BHZBqkoh
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=gABVn3ar
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795467174;
-	b=uA/RXrLFOQ5SkOGXriK8QiCw1X7DFGLgZgEvTpx7lCaBCQFc86EdvxhX7obz+0XeKGN1
-	 fy6IB31hfD5cxAi61Twj+UxNOWBMDGTKnrAl0DricxbdTT1nAsLIth6UOmRWUQ3AJlC7i
-	 3joCNC/wZszST+oXcgdQ9FrSPgFS63BTnCTwbxdAmZW5mIGi6eG/A9fNZ8nNJ7q72zlBv
-	 6pfuxs2INFAVFjGsAyzKriI9uCsWNSisjkikl+8GOPzCUg/9jaFLu08yy+oJIfTQN34+q
-	 rZqvCfVWzpLK1kSDNGrrGGn9kQm/SupoUImYfoZQwu8pkWZpOond/6Lamp+5slVL9Hg==
+	t=1795467177;
+	b=hB0jJQWF135jvTWtDRe4AV379gVo8LK4T7UXXj14KvtvXXRIDH1JQUEfAtw+kP9l9uWT
+	 xQMDBy9TbO/xQZkisJ0UWqy6g77P4jsBdVju84UD8GNmgYmiY0lBPtUmQN3CIwPIcpZbD
+	 RvzL3TOfHg6a+6qTtzqlXmiFaynZONFnyajDuRZzBNWak/XuXGVxhbTYzpilH//LsLW8J
+	 GRqaa/6o2lmOZs4N/tIdPFbsqrzpu6VuSLr3ig9W4nxr+YZz3YQcAbAJHVGfq3Em9Semp
+	 KqX6+xjrovLXIto0EbWl+6Wa/6hkSjsgp2cQ3bVvqHF25mILfrmty17GR/5cL/m9jZA==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795467174;
+	c=relaxed/relaxed; t=1795467177;
 	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
 	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
 	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
 	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=Uk/Nx9AqOgbIP3+/mGNkZuIOYeo78ZScYOlbWVpMcH4=;
-	b=QlEKjvaP7K1vZbMYM+U9/zH9getNArhbWDrhNLwe1K0e8+QeWIX6yBE0s90n6OE3Vlnw
-	 t55VJfoRf5wNNRtNhn/tv3urO+Ry8kT8EtsVbreNNjZOchj3v46jIzFjcW2KT/YWsd9qo
-	 lCjPmges6JaF8BEVOEKCFAwOLANBRtUBb4XIXbjhFEzjl4Se2k4mfG4RXl209Y9LMgN86
-	 RrV1jm2ADlRo3c5AugDJI8ykAHhPAFIQdT9169CyIWoRcJd9dm09AnU54OOKHqq9Xm7/C
-	 hzJV/2TrVnUEphHWSicAx0EPbCB4cXTpM7hbmwEc0qmWVufY2R1/f2NcPTy4HqM/fRw==
+	bh=wK+wIXjcAlTX5Hq8+BkCkD9G9YP95vK3PD6G0LiWqOA=;
+	b=EzFFWwaBP4RtkCJvscc7Ip3QWkz/UE83nmk3Za4upCrJsd4UQy1c5Vqu76KWGAlf4Tjn
+	 1AzICTbmtbY8OFVRyMqf9jh/9DL2mx/W+YZQvuC9lX9Ll7d1rnt2jymtxjHdAd0piU2dE
+	 LB5V+krJRp5u6mrxHeK2Otf3BcMC5v2zBodt3jbCvT2kjYzCRkPN4UQNqLMBQGXTAzwgZ
+	 Z65dNYLokrfoSXc+U73AshAlafSVi8QgN1sGkhRrJ3dDdMuO70mBIxC4xY+AGUmLSRPti
+	 zeevYLN/5ax5+h2Wzl4h5h9T4m+v94abooQ4TBQ6xCdY8GFNCAdC/KXE2wUMV+2nRZA==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 062621F000C6;
+	by smtp.kernel.org (Postfix) with ESMTPS id 1F6A21F000CA;
 	Mon, 23 Nov 2026 20:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795467174;
-	bh=Uk/Nx9AqOgbIP3+/mGNkZuIOYeo78ZScYOlbWVpMcH4=;
+	s=k20260515; t=1795467177;
+	bh=wK+wIXjcAlTX5Hq8+BkCkD9G9YP95vK3PD6G0LiWqOA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=BHZBqkohVUsHt/7ihArBqmF/x8Gz8c+L5Hiw6SgagRn6lnFbQSMp7IkY4KDIgo2B+
-	 g6UefixIZo12Ss32XU3rLosAigNOSO2I0zf+D6mX2WDzBXh4YQmVEusWWGwXTu27b8
-	 PiAIhu2WmjS0hk+D3W1fLT8ZC7xmd7Gtc8EEqvdfkojOS80ahKMhE3tzlmlY5K4HIO
-	 9lj3jXACSuqRek68V0iyEAGWrbwxHa7DbbdVNR7OheGBMWlTijBG3xifaqEyeW0DS5
-	 KKwWG/Xsu73sAIkhTTaTZ3vMA4jDq+8Rr7kBOZywvZbkSh7DgNt4rt9gjmUFccLbmc
-	 q1E8A7PBOidVw==
+	b=gABVn3ary6p8qoDv/pfaymWCtXK13vx4D98z91ElfVO/fVbclzOrLE4Q4q+QZhb8Z
+	 BaR9j/8rbIJdzc3lz45br3y5MLCqdmpuTsgTK4KYZCpFpCXbsPoXw1l03IHjvFjytR
+	 7WiYV5RTs1cxGfAUqOjN4oECcbeC5hHttCESMBek2HPv5H3PP4jhA9CA3Fe5PKPyXd
+	 5TBrY94y4LyoSS9ArV1JDOAPjIfHMclbQJlJ1FuzOyolpN8VNG1WFJ6h/LvVxOWocG
+	 b4o4GvXyESUof64Yx+qk9ltsZ1KxgVGAlpRkLEYMmPdUfzK84x4LkSE5eHMTSvW4Pn
+	 +YRCX8R7pcKog==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 8BF644C72D;
+	by lkml.kernel.org (Postfix) with ESMTP id A5B5A4C736;
 	Mon, 23 Nov 2026 20:52:43 +0000 (UTC)
 From: Binoy Ravindran via B4 Relay <devnull+binoy.vt.edu@kernel.org>
-Date: Mon, 23 Nov 2026 15:52:15 -0500
-Subject: [PATCH 1/2] rcu-tasks: Add helpers to visit tasks on the exit
- lists
+Date: Mon, 23 Nov 2026 15:52:16 -0500
+Subject: [PATCH 2/2] livepatch: Include exiting tasks in the transition
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -84,7 +83,7 @@ List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261123-klp-series-v3-v1-1-427c95811d9b@vt.edu>
+Message-Id: <20261123-klp-series-v3-v1-2-427c95811d9b@vt.edu>
 References: <20261123-klp-series-v3-v1-0-427c95811d9b@vt.edu>
 In-Reply-To: <20261123-klp-series-v3-v1-0-427c95811d9b@vt.edu>
 To: "Paul E. McKenney" <paulmck@kernel.org>, 
@@ -103,11 +102,11 @@ Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
  live-patching@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>, 
  Jaidev Shastri <jaidevshastri@vt.edu>, Binoy Ravindran <binoy@vt.edu>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795467163; l=6044;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795467163; l=7421;
  i=binoy@vt.edu; s=20261123; h=from:subject:message-id;
- bh=rqHs0w3UOy9Xw9vI+yBkCYnZ7G4WelNoCJGsuFqHgcE=;
- b=mw7+imUXCQaN0xhkxXztOeUYmcI0mZEeexUYx3DRVCPx3OEFWkWTTcNi/dWaXA1NlgDU6pubi
- j067hk+6sycDhX+3Li0PuX6lxHgu4qT9Uu0GlrPsNiZlrLGxUh/G88f
+ bh=DICXGKJPQRZsHdvzpkCU+AkCDTBnYgA2Bym/JeoST64=;
+ b=9LGWfXDI3VkCdbrIIvoD5DE/NFNApyZ71G+KuUBj7IeOtCe8XzjaLAshZSLzWS+T7UZazhtu0
+ XJ2+lklkdwYAMehFUge1IsU4p8IPgKK1S+g5KQAKDYugrJaA/uax4of
 X-Developer-Key: i=binoy@vt.edu; a=ed25519;
  pk=4cNdKPHP0InmhK/9bb7Tm2ZMUXUvLGfw1pmVt5b98fA=
 X-Endpoint-Received: by B4 Relay for binoy@vt.edu/20261123 with
@@ -118,158 +117,194 @@ Content-Transfer-Encoding: 7bit
 
 From: Binoy Ravindran <binoy@vt.edu>
 
-A task joins its CPU's RCU-tasks exit list in exit_tasks_rcu_start(),
-before exit_notify() unhashes it from the task list, and leaves it in
-exit_tasks_rcu_finish(), after do_exit() has disabled preemption for the
-final switch. While on the list the task is no longer found by
-for_each_process_thread(), but it still runs do_exit() and may sleep
-there. Code that must reach every task that can still be descheduled,
-such as the livepatch transition, has no way to find it.
+The transition walks tasks with for_each_process_thread(). A
+self-reaping task is unhashed in exit_notify() but keeps running the rest
+of do_exit(), so the walk never sees it. The transition can then
+complete, and with atomic replace the previous patch module can be
+freed, while that task is still executing, or about to return into, the
+previous module's copy of a patched function. This is the race discussed
+in the thread linked below.
 
-Add two helpers. rcu_tasks_visit_exiting() calls a function on each
-task on the exit lists under the list locks, without allocating.
-rcu_tasks_snapshot_exiting() copies the tasks into a caller-supplied
-array with a reference held on each, for callers that must sleep or take
-other locks while examining them. Without CONFIG_TASKS_RCU there are no
-exit lists, and the helpers do nothing.
+Make every step of a transition also visit the tasks on the RCU-tasks
+exit lists, using the helpers from the previous patch.
+klp_init_transition(), klp_start_transition(), klp_complete_transition(),
+klp_reverse_transition() and klp_force_transition() only set fields and
+flags, so they walk the lists in place under the list locks and cannot
+fail. klp_try_complete_transition() may inspect a task's stack, so it
+takes a snapshot with a reference on each task. If the snapshot cannot
+be allocated, or more tasks start exiting than it has room for, the
+transition is treated as incomplete and retried. An exiting task must
+therefore switch, like any other task, before the transition can
+complete.
 
-rcu_tasks_postscan() keeps its place in an exit list with a bare
-list_head while it drops the lock to reschedule, relying on nobody else
-traversing the list. Move that cursor into struct rcu_tasks_percpu,
-next to the list it marks, so that the new helpers can recognize and
-skip it. Only the grace-period kthread runs postscan, one CPU's list at
-a time, so one cursor per CPU suffices.
+Covering the initialization and completion steps matters as well:
+otherwise an exiting task keeps a stale patch_state from an earlier
+transition, which can equal the new target. Likewise, the reverse path
+clears TIF_PATCH_PENDING on exiting tasks and the force path updates
+their patch state, so neither leaves an exiting task behind.
+klp_send_signals() is not extended: a task that has passed exit_notify()
+never returns to user space, so a fake signal cannot help it switch.
 
+After exit_tasks_rcu_finish() the task runs with preemption disabled
+until its final switch, so it cannot sleep or be preempted while it is
+off both lists. Kernels without CONFIG_TASKS_RCU have no exit lists, so
+this change does not cover them.
+
+Testing was done on v6.12.1, x86-64, under QEMU/KVM; this posting is a
+forward port of that change. The test alternates two atomic-replace
+livepatches that both replace do_exit() while self-reaping tasks exit
+continuously, with a debug-only msleep() after exit_notify() to widen
+the window. Without this series, 11 of 12 runs crash in the removed
+module; with it, 0 of 12, and 0 of 12 for a control pair that does not
+patch do_exit(). With the series, there were also no crashes in 1,200
+replace cycles of a /proc mount/unmount stress test, or in 400 cycles
+with preempt=full, with and without a real-time task contending for the
+CPU of a busy-waiting exiting task. Without the delay, the series did
+not change transition time: the median was 0.29 s with it and 0.27 to
+0.31 s per run without it. The series does not change the exit path
+itself.
+
+Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency model")
+Link: https://lore.kernel.org/all/20250127063526.76687-1-laoar.shao@gmail.com/
 Reviewed-by: Jaidev Shastri <jaidevshastri@vt.edu>
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Binoy Ravindran <binoy@vt.edu>
 ---
- include/linux/rcupdate.h |  9 +++++++
- kernel/rcu/tasks.h       | 67 +++++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 70 insertions(+), 6 deletions(-)
+ kernel/livepatch/transition.c | 72 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 3f74ae6d6e1f..55b8b4a0fa94 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -214,6 +214,15 @@ static inline void exit_tasks_rcu_start(void) { }
- static inline void exit_tasks_rcu_finish(void) { }
- #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
- 
-+typedef void (*rcu_tasks_exiting_fn_t)(struct task_struct *t, void *arg);
-+#ifdef CONFIG_TASKS_RCU
-+void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg);
-+int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max);
-+#else
-+static inline void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg) { }
-+static inline int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max) { return 0; }
-+#endif
-+
- /**
-  * cond_resched_tasks_rcu_qs - Report potential quiescent states to RCU
-  *
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index fcac7361ec51..a231d30ebf81 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -49,6 +49,7 @@ struct rcu_tasks_percpu {
- 	struct rcu_head barrier_q_head;
- 	struct list_head rtp_blkd_tasks;
- 	struct list_head rtp_exit_list;
-+	struct list_head rtp_exit_cursor;
- 	int cpu;
- 	int index;
- 	struct rcu_tasks *rtpp;
-@@ -1068,7 +1069,6 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
- 		struct task_struct *t;
- 		struct task_struct *t1;
--		struct list_head tmp;
- 
- 		raw_spin_lock_irq_rcu_node(rtpcp);
- 		list_for_each_entry_safe(t, t1, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-@@ -1081,14 +1081,15 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 				continue;
- 
- 			// Keep our place in the list while pausing.
--			// Nothing else traverses this list, so adding a
--			// bare list_head is OK.
--			list_add(&tmp, &t->rcu_tasks_exit_list);
-+			// The cursor lives in rtpcp so that the exit-list
-+			// visitors can recognize and skip it.
-+			list_add(&rtpcp->rtp_exit_cursor, &t->rcu_tasks_exit_list);
- 			raw_spin_unlock_irq_rcu_node(rtpcp);
- 			cond_resched(); // For CONFIG_PREEMPT=n kernels
- 			raw_spin_lock_irq_rcu_node(rtpcp);
--			t1 = list_entry(tmp.next, struct task_struct, rcu_tasks_exit_list);
--			list_del(&tmp);
-+			t1 = list_entry(rtpcp->rtp_exit_cursor.next, struct task_struct,
-+					rcu_tasks_exit_list);
-+			list_del(&rtpcp->rtp_exit_cursor);
- 			j = jiffies + 1;
- 		}
- 		raw_spin_unlock_irq_rcu_node(rtpcp);
-@@ -1332,6 +1333,60 @@ void exit_tasks_rcu_finish(void)
- 	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
+diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+index 2351a19ac2a9..cab167417190 100644
+--- a/kernel/livepatch/transition.c
++++ b/kernel/livepatch/transition.c
+@@ -10,6 +10,7 @@
+ #include <linux/cpu.h>
+ #include <linux/stacktrace.h>
+ #include <linux/static_call.h>
++#include <linux/slab.h>
+ #include "core.h"
+ #include "patch.h"
+ #include "transition.h"
+@@ -74,6 +75,70 @@ static void klp_synchronize_transition(void)
+ 	schedule_on_each_cpu(klp_sync);
  }
  
-+/*
-+ * Call fn on every task on the exit lists, in place, with the per-CPU list
-+ * lock held and interrupts disabled. fn must not sleep. Does not allocate.
-+ * These are the tasks that have passed exit_tasks_rcu_start() but not
-+ * exit_tasks_rcu_finish(). Once exit_notify() has run they are no longer on
-+ * the task list, but they still run do_exit() and may sleep there.
-+ */
-+void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg)
-+{
-+	int cpu;
-+	unsigned long flags;
-+	struct task_struct *t;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
-+
-+		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
-+		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-+			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
-+				continue;
-+			fn(t, arg);
-+		}
-+		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
-+	}
-+}
++static bool klp_try_switch_task(struct task_struct *task);
 +
 +/*
-+ * Copy up to max tasks on the exit lists into buf, taking a reference on
-+ * each. Returns the number of tasks on the lists, which may exceed max.
++ * Tasks past exit_notify() are off the task list but still run do_exit() and its
++ * callees, possibly from this patch's or a replaced patch's code, so the
++ * transition must cover them too. The try step inspects stacks, which needs a
++ * reference on each task, so it works on a snapshot of the exit lists.
 + */
-+int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max)
++static bool klp_visit_exiting_tasks(rcu_tasks_exiting_fn_t fn, void *arg)
 +{
-+	int cpu, n = 0;
-+	unsigned long flags;
-+	struct task_struct *t;
++	struct task_struct **xt;
++	int i, n, max;
 +
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
-+
-+		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
-+		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-+			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
-+				continue;
-+			if (n < max) {
-+				get_task_struct(t);
-+				buf[n] = t;
-+			}
-+			n++;
-+		}
-+		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
++	/*
++	 * Size the array from a count taken now, plus slack for tasks that
++	 * start exiting before the copy is made. If even more arrive, report
++	 * an incomplete walk: klp_try_complete_transition() runs again later.
++	 */
++	max = rcu_tasks_snapshot_exiting(NULL, 0) + 64;
++	xt = kvmalloc_array(max, sizeof(*xt), GFP_KERNEL);
++	if (!xt)
++		return false;
++	n = rcu_tasks_snapshot_exiting(xt, max);
++	for (i = 0; i < min(n, max); i++) {
++		fn(xt[i], arg);
++		put_task_struct(xt[i]);
 +	}
-+	return n;
++	kvfree(xt);
++	return n <= max;
 +}
 +
- #else /* #ifdef CONFIG_TASKS_RCU */
- void exit_tasks_rcu_start(void) { }
- void exit_tasks_rcu_finish(void) { }
++static void klp_exiting_init(struct task_struct *t, void *arg)
++{
++	t->patch_state = *(int *)arg;
++}
++
++static void klp_exiting_start(struct task_struct *t, void *arg)
++{
++	if (t->patch_state != klp_target_state)
++		set_tsk_thread_flag(t, TIF_PATCH_PENDING);
++}
++
++static void klp_exiting_try(struct task_struct *t, void *arg)
++{
++	if (!klp_try_switch_task(t))
++		*(bool *)arg = false;
++}
++
++static void klp_exiting_complete(struct task_struct *t, void *arg)
++{
++	clear_tsk_thread_flag(t, TIF_PATCH_PENDING);
++	t->patch_state = KLP_TRANSITION_IDLE;
++}
++
++static void klp_exiting_clear_pending(struct task_struct *t, void *arg)
++{
++	clear_tsk_thread_flag(t, TIF_PATCH_PENDING);
++}
++
++static void klp_exiting_force(struct task_struct *t, void *arg)
++{
++	klp_update_patch_state(t);
++}
++
+ /*
+  * The transition to the target patch state is complete.  Clean up the data
+  * structures.
+@@ -124,6 +189,7 @@ static void klp_complete_transition(void)
+ 		task->patch_state = KLP_TRANSITION_IDLE;
+ 	}
+ 	read_unlock(&tasklist_lock);
++	rcu_tasks_visit_exiting(klp_exiting_complete, NULL);
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		task = idle_task(cpu);
+@@ -450,6 +516,8 @@ void klp_try_complete_transition(void)
+ 		if (!klp_try_switch_task(task))
+ 			complete = false;
+ 	read_unlock(&tasklist_lock);
++	if (!klp_visit_exiting_tasks(klp_exiting_try, &complete))
++		complete = false;
+ 
+ 	/*
+ 	 * Ditto for the idle "swapper" tasks.
+@@ -527,6 +595,7 @@ void klp_start_transition(void)
+ 		if (task->patch_state != klp_target_state)
+ 			set_tsk_thread_flag(task, TIF_PATCH_PENDING);
+ 	read_unlock(&tasklist_lock);
++	rcu_tasks_visit_exiting(klp_exiting_start, NULL);
+ 
+ 	/*
+ 	 * Mark all idle tasks as needing a patch state update.  They'll switch
+@@ -580,6 +649,7 @@ void klp_init_transition(struct klp_patch *patch, int state)
+ 		task->patch_state = initial_state;
+ 	}
+ 	read_unlock(&tasklist_lock);
++	rcu_tasks_visit_exiting(klp_exiting_init, &initial_state);
+ 
+ 	/*
+ 	 * Ditto for the idle "swapper" tasks.
+@@ -643,6 +713,7 @@ void klp_reverse_transition(void)
+ 	for_each_process_thread(g, task)
+ 		clear_tsk_thread_flag(task, TIF_PATCH_PENDING);
+ 	read_unlock(&tasklist_lock);
++	rcu_tasks_visit_exiting(klp_exiting_clear_pending, NULL);
+ 
+ 	for_each_possible_cpu(cpu)
+ 		clear_tsk_thread_flag(idle_task(cpu), TIF_PATCH_PENDING);
+@@ -715,6 +786,7 @@ void klp_force_transition(void)
+ 	for_each_process_thread(g, task)
+ 		klp_update_patch_state(task);
+ 	read_unlock(&tasklist_lock);
++	rcu_tasks_visit_exiting(klp_exiting_force, NULL);
+ 
+ 	for_each_possible_cpu(cpu)
+ 		klp_update_patch_state(idle_task(cpu));
 
 -- 
 2.39.5
