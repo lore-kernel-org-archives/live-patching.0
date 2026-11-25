@@ -1,154 +1,78 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.200.98
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795648149;
-	b=EZWcb0w/Nfpo5En5xhcbCafNLH9NIvido4uhrPc8P5MhXKi/NB2og5r2PX01K0tlwqsB
-	 pB7cjdhv9vMd8uv8fY/cUAF1W2kG9ZZ0W+paoe/QUDIkIwL1jdSk7LvxzZ5petgRmfV2S
-	 3QorEBn28QeOpecyRW4k0wEwVwoUu2JgKqLV7GBISLLLlfsmGZSt6oO4f4PE5nLV7S14a
-	 q9NQTDjaFjSe2hL0u8KVrJVhYUQdmg4uD/wInCkPQOX5C4AvtIqW0eBggoTu38d7qolkh
-	 GDEoCg6uaXzPENk12uoVdntAWDQV8x/5GwrgSDNbrGyCazsSIyZLkvxxa75MMk6TIiA==
+	t=1795648337;
+	b=4glsV77KPeSm5X6U6HFDAcpJZR560kO3qyDlAAz3rAXfcwTdOUVFrpaFYyhLiaIV4oZk
+	 LbcAdeUWbjyq2k6y9Vw8wSPMHPDfRcLNW99Oyxrrfl4/VIHel0GG9ZQ8+BVefrw2eSZWK
+	 UZxuiKx4sb044Ai2UEaJXjc2J+5JWFX7+cS5UGmsB/XKMaWTBJlDvUpXb9HOjthucTZTi
+	 00XOBhzLOLWUL9fPXUJMxhbnMOMi+pLo5KHflmtzZ27mnpVeqKTGHOMKHBWJ8FsUQvhnp
+	 Z9jS6TQbN5aQ5h6oHoxzUy69UqahI1VE2yNY/qqL6RXV5IwnTsJdK6DQeOi7vDYkxAQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795648149;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 msip_labels:x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-ms-exchange-senderadcheck:
-	 x-ms-exchange-antispam-relay:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:x-forefront-antispam-report:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-	 X-MS-Exchange-CrossTenant-userprincipalname:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=5PiyDVhNF0dRr1J2kLFRQZyuceWh1Ki+1kWbHNtK0fg=;
-	b=fJvDLl3QWMZ/jtqWg5xgINSRPEkNyk8HFEjOUOVutKQ8PHC8S4SaD571e4etJ2igJLCI
-	 s7As3FmA0KMRw2pL+r8zUEoGzeUWjnKL1iJd4sidhfoLHpnzTGetPkeciTZl+3PzzAQwZ
-	 qlwaIsVO6WVmhgtI7YZkOu4yumnAuNKCMJS26eyJ3JekIkgNQV6B3NpU0Rew6rrrsCEQf
-	 1V13pCPbWAKne274WiKGY+Lvy1JEjwYmz+a4IZw4JRdaKDPN6gUpIuOx5luoGm6QvuX9F
-	 TA5tuUekWCGjleFNlSQbdRFEE5FMOuGgcn6SKU8QxkHi3tWyh15bklsfzgUm//2fvoA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795648337;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=JxOz4tZV1m2Hck3wrwJdkTZz6iX3ghPkIF8+sOMG0gc=;
+	b=0pL+EVyxKOxX5ja9bov/NvX4nCw4BHmd3W3eFpbF3RR6fAIXTozxnXmgCGHuO5HB+6Ca
+	 CufX+mb6q2Zh898zG6peH8uncSxdkw2QfTEDvizM3CZW8XDhkScnuVCu4j3185OggkjTn
+	 bLYPUA0qmTz4dscXQ3k/H8a/obmH39K+HdZeiuEJtWkkSjdZUSKZDhsEJ9IeJ5zVTgRtE
+	 8WJ/gYbkJbStrmY4hw6NOKhkgE1PXsxlneH9RQZfwNwdbv+kHyyXiw3jkog/VuAbu2wDt
+	 tFZUCeWaFWaHV3ZZ8ecBCSTujCQIocSZAP58jGsm8mQlsDRF2TlYdJC2JpVF3cSVMdw==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=vt.edu;
-	spf=pass smtp.mailfrom=vt.edu;
-	dkim=pass header.d=VirginiaTech.onmicrosoft.com header.i=@VirginiaTech.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-VirginiaTech-onmicrosoft-com header.b=aglEhUsb;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=40.107.200.98
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11022098.outbound.protection.outlook.com [40.107.200.98])
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZhyiGzR;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB86606A323;
-	Wed, 25 Nov 2026 23:09:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EAB86606A323
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=vt.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vt.edu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35350606A31E;
+	Wed, 25 Nov 2026 23:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=VirginiaTech.onmicrosoft.com header.i=@VirginiaTech.onmicrosoft.com header.a=rsa-sha256 header.s=selector1-VirginiaTech-onmicrosoft-com header.b=aglEhUsb
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F0EPYT8O94QQJngG/O7oXAPJEVO9OYNcfXy+jz2SBKk8pPkGmLdMFoHtnOP5HYGgxVrYV31WbAiAypuB8BlmjBrFCrmpiGOvyXbGTyKfWTxq02aKSLT/GTRowrmexlG96DsvwnjqOV/8+qpw4Q/CUaz4uxDtIrggmA+m8ScZYKJBTKbVuKo534pUXka87QaGku6WCLV5JhudfLdY6maM6/1T8lY/nn7EJhXxEFHn/SsCAjwBy+My0VQME28wBpfLhnG4ynzY4Jp1QnASLETfjiPlGbabVNE3RaEdgIebMeuuDaUMTcKjg7SmAoUXI32SV/S98oD2PWWp60JSkJ4aGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=5PiyDVhNF0dRr1J2kLFRQZyuceWh1Ki+1kWbHNtK0fg=;
- b=W6zDwupKPl0FJtrs8JzkbEDVFbjINQX+JBNQR345EYK1VFmzTAwV/nFP54vvFkgYslxn2aK1XNLYiY1qz7R+5g5HEW+OgmBwApzS+uIKxssCBF4ATigjzsNI8jiYexa2LReyRdEyTNrEjAaGjRlDfYcqwvxsXcxbHlUJ90UKGQvZRg2yKHjzMiwFq2OVxTvPkjAMZtxHF+SOULhcxn1AFEoa6urHtllhig9WJka7E3pgTkxFbu++xwOsCQ53rDn/W7lcv2NpACuF06tBvBzRj3+M5weuf+pZPnTrYKYA6PAyOjSMMKVdWERNj+byJ1HjEmNZ7claohhloe7Z2t2TZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vt.edu; dmarc=pass action=none header.from=vt.edu; dkim=pass
- header.d=vt.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=VirginiaTech.onmicrosoft.com; s=selector1-VirginiaTech-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5PiyDVhNF0dRr1J2kLFRQZyuceWh1Ki+1kWbHNtK0fg=;
- b=aglEhUsblJvh4Yv99cSn3M6DJqTmWsdM3cWWdYBLdCNuLQHrPe4Orq5twN5hmEoj23T9Y4cWZgqDjApNYGGEx9fdb4oN4sQ3B+k+FJs14m+3a9b/kZMF1pZ0XnQ4rD2ZA+ZqMBjZGYptDhp1yWeJx8hkoEorLKcrK5GlCx+B36I=
-Received: from DM6PR05MB4137.namprd05.prod.outlook.com (2603:10b6:5:81::28) by
- SN6PR05MB6638.namprd05.prod.outlook.com (2603:10b6:805:107::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.615.14; Wed, 25 Nov
- 2026 23:08:59 +0000
-Received: from DM6PR05MB4137.namprd05.prod.outlook.com
- ([fe80::a6db:3b91:d780:cd9b]) by DM6PR05MB4137.namprd05.prod.outlook.com
- ([fe80::a6db:3b91:d780:cd9b%5]) with mapi id 15.21.0662.004; Wed, 25 Nov 2026
- 23:08:58 +0000
-From: "Ravindran, Binoy" <binoy@vt.edu>
-To: Yafang Shao <laoar.shao@gmail.com>
-CC: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker
-	<frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel
- Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Steven
- Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
-	<joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, Ingo Molnar
-	<mingo@kernel.org>, Jiri Kosina <jikos@kernel.org>, "rcu@vger.kernel.org"
-	<rcu@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "live-patching@vger.kernel.org"
-	<live-patching@vger.kernel.org>, "Shastri, Jaidev" <jaidevshastri@vt.edu>
-Subject: Re: [PATCH v2 2/3] livepatch: Include exiting tasks in the transition
-Thread-Topic: [PATCH v2 2/3] livepatch: Include exiting tasks in the
- transition
-Thread-Index: AQHdfClvNP3k139GOk6eHZFGrstIR7c+0a0AgACYqmI=
-Date: Wed, 25 Nov 2026 23:08:58 +0000
-Message-ID:
- <DM6PR05MB4137BC9878BC4D758AC9C191D1432@DM6PR05MB4137.namprd05.prod.outlook.com>
-References: <20261124-klp-series-v3-v2-0-50d20829a337@vt.edu>
- <20261124-klp-series-v3-v2-2-50d20829a337@vt.edu>
- <CALOAHbAtgHUU+eY7LMOscmua23mqEd0EpU8v7Z0wG-E3qh-dvA@mail.gmail.com>
-In-Reply-To:
- <CALOAHbAtgHUU+eY7LMOscmua23mqEd0EpU8v7Z0wG-E3qh-dvA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vt.edu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR05MB4137:EE_|SN6PR05MB6638:EE_
-x-ms-office365-filtering-correlation-id: 5e9321cf-4a68-4ab5-abf9-08df4b491619
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|10070799003|7416014|366016|23010399003|786006|376014|1800799024|38070700021|261022075727099003|261026121527099003|4143699003|11063799006|10067099003|261028144727099003|261022105027099003|261026140227099003|56012099006|261009223027099003|18002099003|22082099003;
-x-microsoft-antispam-message-info:
- S47CRz83soi1KLvDsHJgPeuiUORJoDerKhfozwP/ODx7I8Ogw82g2+i+g3zOYEzCAzQJtvs3LCbyi8U2EeTK0RH3m39+xc8Mhmr3Tq7bO6IrIC+RIjO+/BKDLMo1a91ptdkuV+MMkn1eoRJdzd1PkTXUabyDuA2GUjK5c6hIl7KzmN/SJ/q5H+qMUBJ/Fd0+4ENoBouFXHdWsjsLJkBOp7kQ16NphcWFXr2doyzH+0La1de7hNv+0LCEWMyRUUQKNYn2slgnWJnVGRggy5KWFpJzdgDOKnlfoht0p4KhTJTrwpdKe1lxSuyHF6TgY0RJ1OpiBVF58PHrjuodRKIn8xHxjKfkXOBERTKnYUhmUQTJV5fwDYZIyTXk9ROrIvF5oK5PuPVeX+j/4w4REvNjPRJdiAUaIrt2NMmWDILF1virSzop630+sAURJSnG3P29e7ERYi0GuNbejjlZz8U7qMg6a7uKQnc5cG+QxCXCoCJs4GJz5yU48euVu2hvNAYZjZYWzw390YaHskW8aOLd/tRBH1QRbTD5QG0DRBNSp8zqoMpexffkHVgBmR9AJdwOHOW24p4gxxR+0wAUEbYL3fQdbkzr+LJGxNBvwfdO8+G73Bm1/LYv20OrsmfBGGn16VJBqnXbrCGEN2kJv3pekjYKpN7/287XdXzxYHAeU5hhTZEsxFH+fmhJAfrQLIfF9qa+XqffZV+m+3Ga4GBIUMTJb224fAAao3bVAp5+6Kc=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR05MB4137.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(366016)(23010399003)(786006)(376014)(1800799024)(38070700021)(261022075727099003)(261026121527099003)(4143699003)(11063799006)(10067099003)(261028144727099003)(261022105027099003)(261026140227099003)(56012099006)(261009223027099003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?L4PzBZ9E3KGF09wXPEcL/eRAyBtqJO1HrMzjdxrl1lg3X5s6IH8iKsz0qV?=
- =?iso-8859-1?Q?QKiyHTt48m6tMHQTKXyulCpsy/w/jc4SxU7dj/dudD6jMJWM41CdM7ohVm?=
- =?iso-8859-1?Q?f5tl7y2B7jRhR5o+wlBUfbsaGbkC4w5Y6FXYuBu9QGRo/QUK+aGX855WdY?=
- =?iso-8859-1?Q?yKCcrqREQW92zumoHs0RXRjF6T36C7IsNpl1hxPex5ufdzP8DOkatgAV8M?=
- =?iso-8859-1?Q?uchfoQ0k2cpCS0Zmn+I1RNnWXLuefu0qud/vLvEXDdwXPovP8AUV8PA3ro?=
- =?iso-8859-1?Q?xnUWJk0SDwgjEr0aGxuD2UqHa34WD9EPtDIiRn11wASK55LOY2zC0edF/o?=
- =?iso-8859-1?Q?9NvCr63BX1FDzK4sGFlQxNwHGmCTpqAwwO9KuYoYn2unBMXj8UJZ+C13rh?=
- =?iso-8859-1?Q?cYAbwX7deI+BVuOT6fX8WPke8/LUbtLgZLQQPvge2p76HOwvVKO2C3XrDY?=
- =?iso-8859-1?Q?+xaa1IINaDhWbq4W0mM9xfsaNck0oiWycjFEiZahxRKxcZ1tAAx40s8E0x?=
- =?iso-8859-1?Q?e5eupEKP2qGhH4DbkB/4+oXIAfjqcAlUKCDXNmHddSfuhkwZZg7mnmaE+B?=
- =?iso-8859-1?Q?GIHRlZgwXXzcJ+jGjmDnw9M1G70bzqz26Hg89cqhKLxy6P9rBzHxeCCR6G?=
- =?iso-8859-1?Q?+f8UWX+bATNwbnpCQywJmG6TEBawKp8zTy6NkWmATJu6+BaM1dsMDCWjQc?=
- =?iso-8859-1?Q?syipzJzutKmvWEX0bNcfamNTE76FNeAiyt9W8yB8V3bnjJsnaKEBxXBNrt?=
- =?iso-8859-1?Q?kASCsKRyrsDsntRcIeEgUvqUMdNdiD+no9S81PzmzoZSiAeJtIypJx8lhm?=
- =?iso-8859-1?Q?ulV1WyUlAKpuNW70xi1vnVXmGvBEtI3yG1ZOnU8RvrDhDckFsrdKolg19L?=
- =?iso-8859-1?Q?yS26r2W6gGolUVeBITrAi44fXiBf8KzgAiHe/bWxkx7hD66L3PGuBEixhv?=
- =?iso-8859-1?Q?19E/qh9IHUmmqPts6LHaqfGS8WtVXVtGYQxpxF6advo0cbM5wjBrHOy28Z?=
- =?iso-8859-1?Q?dE7bWj7+C2A4C4D181G7fjq7GK5lxxJR2lC3HoJ0gbQ1yvOYBSCKfqg3QC?=
- =?iso-8859-1?Q?MZfgH7hsUI7oEeyrxyKA1mKWij27h7gLcc1yifeotEeNlVxq9N9A1bUcgY?=
- =?iso-8859-1?Q?vjTJtXZC+OVjwwXeqtkmW3Snhk8et6hauXxrlHmslqZgs6Axu3lG/1loGD?=
- =?iso-8859-1?Q?CM6/6fTPNKAj08RfaA2lKiHDNtI5tuq+CS6UeNo8pug7xb/nWVAH/7R8Lo?=
- =?iso-8859-1?Q?Gezvn6I32djv9sc4RmV/j0R6nNKkxswny8aJOfONa/f3mEMv8icuE1TevG?=
- =?iso-8859-1?Q?vnjGTU9CRxXXvNN8svSmLiOvdZZ5CIUd0HsZl4nIKWQoD1QG/PsJiK/ShU?=
- =?iso-8859-1?Q?2iDhVixA5AwJrKU1Ds8J/tSLMk+Vjj/Dr0iftHFSrPZiE3TMHhD54kUsPU?=
- =?iso-8859-1?Q?ulzLUuaZQLPFftXzZ03i/ovUBy5AfPDMujJI41RiVBM+azh9Y29BE/zjx+?=
- =?iso-8859-1?Q?CmGES4dYcUTOkzeRGJ1rCp+HWb82L8xlT70UY0oduvHBAkmC8KclW5cl66?=
- =?iso-8859-1?Q?oLCFsEcmk9RAwefBx2+u2AixShL7MABQUvQ4+P6yhn2Ft2XEl8ZBQ0xP3u?=
- =?iso-8859-1?Q?4uuJ2/PLOBG1RVpAeWaZOOBtGuxncYG4k/cGNYVjXcdkr4Ah1WztiScHQ1?=
- =?iso-8859-1?Q?RXFstqN6MfDhOog5yXgeKBu2eYHxuu688hopV+NwnscQ8uYpSajJ3ommO5?=
- =?iso-8859-1?Q?Ast5W9zriAYPq0bgo1d+XqZMbFynuZP9iVge1HRWCeMZDd?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=ZZhyiGzR
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795648336;
+	b=GP6zOz5Qx+DAVMDC284Bmw2I/GsFfv6mUDKkMFFoxQGy3dh+wN5SH03tHn3rJSLaSixA
+	 /86ic/a/e+Bebo4a0tIV2KHyvE03ZhwOdDJdr+IihBUbs63XPeOnwzk6yWbcFoqGVegFa
+	 lHr0ajUeWvvk3taEP/juHYb5GyuJJ5Iw8pHqHGDIUTqvrnexQj2URzeb2KIzw0s/mSSyU
+	 hfKrkAqLjVT+b/1/h8bRVXQL+gE9GUU43ZeV/VdZ1Rrx9nvjFUXkvXgVK7FgaSQwpCYk4
+	 hD0M+bcsNRATxQxL4CIvc1gPWgRmA2Jc8/qCDNsKTR6Kc2wKdk6JDs7q3nK9ehz+/QQ==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795648336;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=JxOz4tZV1m2Hck3wrwJdkTZz6iX3ghPkIF8+sOMG0gc=;
+	b=jIW8msYsSiBwszGKEixLDOUNm8K7e9IL7+1nXZK78hg/Ca3yjPLYc6zV1PmN05NjPveu
+	 5eNY1H0VyU4D3jbeyTj0ysDh9yrbDyixRr8SAVOUD4ZGnSxww+9GXgSiCy70eQz8Ay7Tl
+	 PNrEqsNkkc1+JMckQ5QzsUaVL9o3blV0bnrUVWXA96KIVZ+fOmB6qcx+AnaPu2RsrqTjB
+	 oCX/KIm0ovY3RaOpphdVo70koYlpXGNq7YCM3AOCQ4T8bEorh1q2SFAZVaosh0zBfOQpU
+	 lJbgVES5lEqoYiuHcUu8W6WMgWTXgut1Euh0Z/QxWu1C67pfYEbdFcS/BeqXX7hSw0Q==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by smtp.kernel.org (Postfix) with ESMTPS id 24B161F00A19;
+	Wed, 25 Nov 2026 23:12:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795648336;
+	bh=JxOz4tZV1m2Hck3wrwJdkTZz6iX3ghPkIF8+sOMG0gc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=ZZhyiGzRLjM/j8ARBZj7O6WAbmAWy7l78dhYVqqyPpC2MH5Z6G0KfRXJoGpKGs0Za
+	 rhwgQKT/QnuR0M2bMaGeKZF0Fn5l90FH593tLOyOwqQVJ6X1QyNgZ6T/UkohF7+IB4
+	 fUCwgbn29RWDHPUDyEMQwfdZ2mY7fofFDKWy9a3Z7y553Yo5XgKmoIfc43BbS+5FYR
+	 0y1UvjMrb6pYaBLxYOn5L6B7DN52m0n1ZvhUmkAQwY9/B5T9hXfWI+sdVWpdYS7RoZ
+	 ZOOTu/e3FfJwGUGtVWfjvp0XjtnQDT9Y3kSFa8kHPOcqgZgBR+UeL46t+ryCbE/3Xi
+	 IDNUb7oHoOGeQ==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id A17CF4D0AE;
+	Wed, 25 Nov 2026 23:12:07 +0000 (UTC)
+From: Binoy Ravindran via B4 Relay <devnull+binoy.vt.edu@kernel.org>
+Date: Wed, 25 Nov 2026 18:11:48 -0500
+Subject: [PATCH v3 3/3] livepatch: Select TASKS_RCU
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -158,57 +82,76 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: vt.edu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR05MB4137.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e9321cf-4a68-4ab5-abf9-08df4b491619
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2026 23:08:58.4790
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60956884-10ad-40fa-863d-4f32c1e3a37a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lFFGi/t1tVu7rj9iG8R7+JkqYp0SXrrCC5pYZrwk8QuOEzCQzbxw1aEfcY6Kws6L
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB6638
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261125-klp-series-v3-v3-3-b1e0f79af331@vt.edu>
+References: <20261125-klp-series-v3-v3-0-b1e0f79af331@vt.edu>
+In-Reply-To: <20261125-klp-series-v3-v3-0-b1e0f79af331@vt.edu>
+To: "Paul E. McKenney" <paulmck@kernel.org>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+ Joel Fernandes <joelagnelf@nvidia.com>, 
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, 
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+ Song Liu <song@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>
+Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ live-patching@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>, 
+ Jaidev Shastri <jaidevshastri@vt.edu>, Binoy Ravindran <binoy@vt.edu>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795648326; l=1360;
+ i=binoy@vt.edu; s=20261123; h=from:subject:message-id;
+ bh=O07DZ6njJy/t9NEqF60nH7AFPGu6AH+JcyxcLxcqN68=;
+ b=hTqH85UxJt6RZeHENYlKuc6P1efIPyhLZTzhr/RuQOIg6OPmzKe4cJLTnKZlEyPzRynceEwmf
+ nLqpiCHuojsAaU3UyTxyzK1++faIIHDRgLCEwQw9C7sRkfVp34koRAN
+X-Developer-Key: i=binoy@vt.edu; a=ed25519;
+ pk=4cNdKPHP0InmhK/9bb7Tm2ZMUXUvLGfw1pmVt5b98fA=
+X-Endpoint-Received: by B4 Relay for binoy@vt.edu/20261123 with
+ auth_id=1622
+X-Original-From: Binoy Ravindran <binoy@vt.edu>
+Reply-To: binoy@vt.edu
+Content-Transfer-Encoding: 7bit
 
-=0A=
-On Wed, Nov 25, 2026, Yafang Shao wrote:=0A=
-> klp_exiting_try() is the only function ever passed as @fn, so does the=0A=
-> callback indirection buy us anything?  We could drop @fn and @arg and=0A=
-> let klp_visit_exiting_tasks() return the result directly, which would=0A=
-> also get rid of the "*(bool *)arg =3D false".=0A=
-=0A=
-No, it does not. v3 replaces klp_visit_exiting_tasks() and=0A=
-klp_exiting_try() with=0A=
-=0A=
-  static bool klp_try_switch_exiting_tasks(void)=0A=
-=0A=
-which returns false if a task in the snapshot has not switched yet or=0A=
-the snapshot was incomplete. It sits right before=0A=
-klp_try_complete_transition(), so the forward declaration of=0A=
-klp_try_switch_task() goes away too.=0A=
-=0A=
-> Can we use synchronize_rcu() instead in the two places this series=0A=
-> adds, the same way rcu_tasks_postgp() does?=0A=
-=0A=
-Yes. Both waits only cover the do_exit() tail after=0A=
-exit_tasks_rcu_finish(), which runs with preemption disabled, in normal=0A=
-kernel context, until the final schedule(). synchronize_rcu() waits for=0A=
-that region, which is exactly what rcu_tasks_postgp() relies on, and I=0A=
-agree that the "RCU is not watching" argument behind=0A=
-klp_synchronize_transition() does not apply here. It also avoids=0A=
-queuing work on every CPU.=0A=
-=0A=
-I reran the tests with both changes. The reproducer, the lockdep and=0A=
-PROVE_RCU runs, and 20,000 replace cycles without the injected sleep all=0A=
-passed with no fault or report. One cost showed up: with preempt=3Dfull,=0A=
-the median transition time in my exit-storm test rose from 8 ms to=0A=
-0.8 s, while the 90th and 99th percentiles stayed about the same. I=0A=
-think that is acceptable, since a transition is not latency-critical,=0A=
-but I can go back to klp_synchronize_transition() if you prefer. The=0A=
-details are in the v3 cover letter, which I am sending now.=0A=
-=0A=
-Thanks for the review.=0A=
-=0A=
-Binoy=0A=
-=0A=
-=0A=
+From: Binoy Ravindran <binoy@vt.edu>
+
+The transition finds exiting tasks through the RCU-tasks exit lists,
+which exist only with CONFIG_TASKS_RCU. Every kernel that can enable
+LIVEPATCH already builds TASKS_RCU. TASKS_RCU defaults to
+NEED_TASKS_RCU && PREEMPTION. LIVEPATCH depends on dynamic ftrace, so
+FUNCTION_TRACER is set, and it selects NEED_TASKS_RCU. Every
+architecture that selects HAVE_LIVEPATCH also selects
+ARCH_HAS_PREEMPT_LAZY, which rules out PREEMPT_VOLUNTARY, and none
+selects ARCH_NO_PREEMPT, which PREEMPT_NONE requires, so PREEMPTION is
+always set.
+
+Select TASKS_RCU explicitly, so that the dependency is documented and
+holds even if those defaults change. This changes no configuration
+today.
+
+Suggested-by: Yafang Shao <laoar.shao@gmail.com>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Binoy Ravindran <binoy@vt.edu>
+---
+ kernel/livepatch/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/livepatch/Kconfig b/kernel/livepatch/Kconfig
+index 4c0a9c18d0b2..683d6993e207 100644
+--- a/kernel/livepatch/Kconfig
++++ b/kernel/livepatch/Kconfig
+@@ -12,6 +12,7 @@ config LIVEPATCH
+ 	depends on KALLSYMS_ALL
+ 	depends on HAVE_LIVEPATCH
+ 	depends on !TRIM_UNUSED_KSYMS
++	select TASKS_RCU
+ 	help
+ 	  Say Y here if you want to support kernel live patching.
+ 	  This option has no runtime impact until a kernel "patch"
+
+-- 
+2.39.5
+
+
