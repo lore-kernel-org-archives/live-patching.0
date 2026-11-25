@@ -1,64 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795581988;
-	b=E0drwjMPxB/9UB6FHqCaqCoCust+Sr2tJ6D9WJ9BtkT8BP8W2DulfyQ8bHBo8yqrN3IM
-	 ZboaPYomd9CDCve3dHWrhkkeErwGKkOCw3AP7nQEsvGw/0ZOmXJ8tQk4A+HRCznHOEQWU
-	 A16AtvpAADZqEguzmPqLq61F7lYAinTaNfuSKEm4VowufRBuctc4ka1DMhXzNdhPyjBTX
-	 2BCWZlciv3eqDzE+aSR2mpmOFDvJPEtSk1MYz0zqByrOCM6rvp1Xh8k7I27ORTiEFKYxK
-	 INTJjzrKYIHqsDowkmVzKYKMfIQVW1w5f/Fb8L/54IxIW+juRTxwmDa5JaviNCsAxyg==
+	t=1795600267;
+	b=A9exNv0E6vzFkcM3chqLYTkg6gUCfcfIywYarDLyZQ1eEzLUuCrxGpUWQQXTrTArh11h
+	 EjWGW6fQ1Iazf3fvIMkm9P47pr2Xj9J0Q45yk4f+ro1by49k2c3eV8tn5T7zScB0PWiF9
+	 aPYcB1ThDv5t86wjeA2NMXcZGO92zNeEK/8xOvA9Mo61+4Y5n6HfGT1YVPsNuAktwYVOQ
+	 Hv9AAONaE90PrOM333PRnDuZr9A3xfpPTlY8GTGw24y8FIDILdmjt9dny66bqVQMQmoqB
+	 dJx6QLha/pn7IfSACXgRrbjQX8g8yfiAabhXYtfCVGhx0N4ekZxArEfb1bWFcLKeknw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795581988;
-	h=Received:DKIM-Signature:Message-ID:From:Subject:Reply-To:To:Cc:
-	 In-Reply-To:References:Content-Type:Content-Transfer-Encoding:Date;
-	bh=w5IFRfRWnbjbRoQCF0p762hOgKmmU2wQjQdXX9xoXfk=;
-	b=a3bA+pdHVn75vcuEILN0bKozsklZA+Cfx1fViIBhgnY0Lbf87fTwwABMvQI71m9g6nrM
-	 MHMps9ziCGIVWZ4ESIfVHCprwHdQSH8EkXioz0KDFyN/oi8I4BSX7MppbECUEU9HmTPEW
-	 Ddfl3QK04uuIDRsWpjTYufI8Rp6j4RbFa6j0WpDWPFEbwiREO8hUtbPafOLfunqBncq9Y
-	 fFK8ZQpSlAPkTpUFLkDoVfsltCBzNo+O69LvrFUM3OVx63azAV6fA6Syv0Maxt0sf/+lA
-	 aPay+wvPBGt7JItrNURPE6kMBxLkNjRTs3HQ1P3FWSJlhmnpmtFWBLl+yhOhWOpprNw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795600267;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=AxLOvMePbTstK1DQaZxy8Zd4nIn0KeC9fjuiHgv2EPA=;
+	b=sWBSVa8A2nJ9OiskZ5aDQyT+giGN7/8QcSDQgIE6PrIY0McKIwkUF86trtwSn6+LOfXB
+	 sjUUmfXTr4oV0xsXOk4KTr4FF43Q4QR80nukh49FZvzUmKUv7mu7+JvQI0PPv6Q0Po+Ik
+	 LiYdFg3WQjg5CGZRSqwujqISt9Yix0wXrLsiIGp34cfFWVyt28YdWGK3Eh/Be1VhRd8D5
+	 G9him4Bnt00LIOm2zTOrWZEm8dwln5VVEEC2HvVWVUR0/vki9+qqSEuy5zLruKcMEJaKO
+	 MoYrw8/LGaw6tlTja8c7NjDfsJ18oe8KDwRzl/1sC7THD+SappIgf8+oMJltD4rVNiw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=alvK4Byz;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=lPPMUnQw;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA338606A31E
-	for <live-patching@vger.kernel.org>; Wed, 25 Nov 2026 04:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E85B606A31E;
+	Wed, 25 Nov 2026 09:51:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2E85B606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=alvK4Byz
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392091F000CA;
-	Wed, 25 Nov 2026 04:46:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795581988;
-	bh=w5IFRfRWnbjbRoQCF0p762hOgKmmU2wQjQdXX9xoXfk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=alvK4ByzwjuMFO+s+yCqCWs2l52SIp0o/ftUUg77NE5tLngKewjHHET4puA7SD0Yy
-	 LvGzQxbQkPSv60etMUWG5QjZZzxxhHleJ9wy0KlPxdA3/b2vWNnaeSDXF5Cra4Jhy/
-	 1bdPQDai6zO4YC2WZxGYaTZhR474KmRkUJeNZbAd2JWeyEiZ26uF98UrY3JQolNYlB
-	 RrLbJc+iYxX6fMEM7t8DrQQAQMBxManunHJS3+S7xJRiP6SSmEv5AanDLJjEe9YrUz
-	 3HVTFNSgaR8itAKdQ4XBVwWJwnJn7z0f4JKeBxW1jDGt1gDJtXi62dImZ3edospeev
-	 heY2ADsjSgilQ==
-Message-ID: <sashiko-outbox-232592@kernel.org>
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 1/2] sched, livepatch: Fix transition stall for
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=lPPMUnQw
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=AxLOvMePbTstK1DQaZxy8Zd4nIn0KeC9fjuiHgv2EPA=; b=lPPMUnQwGoj6MlAqBh6Km74I49
+	5sQ+/J8NI+Nr5rHiBEWHAopVyLCf8JFNU/c3KAq32ud9lwlG9yjgxclrt0mHa/dwwXBSIzjPMKh/K
+	zBO/U3yGqg6OJjnUs/tdiRFWD3C2z99elIQuEBRxnKfIxPTZX3J1j+6G1Xzu3D+YKK5fT8C9yqI5m
+	bkjjtC/R44RK/NbU5kMjo6jBX8tyrTY9ZVwYX96cV0NXkybYmI1FN7NkyCeqPA9lL5nWrvXxbGNaT
+	yHOEqoK76OnipdSenQmU0mAbWKJCEzUTB/4h1GB0d26kbsVRkrWnd16LYemGeof5LGGkBVLcH2h3B
+	t/34hU2w==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xW9eT-0000000A7SR-12Iy;
+	Wed, 25 Nov 2026 09:50:57 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A10EF300446; Wed, 25 Nov 2026 10:50:56 +0100 (CET)
+Date: Wed, 25 Nov 2026 10:50:56 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Dylan Hatch <dylanbhatch@google.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] sched, livepatch: Fix transition stall for
  CPU-bound tasks
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Dylan Hatch" <dylanbhatch@google.com>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Miroslav
- Benes" <mbenes@suse.cz>, "Petr Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>, "Song
- Liu" <song@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, "Peter Zijlstra" <peterz@infradead.org>, "Juri
- Lelli" <juri.lelli@redhat.com>, "Vincent Guittot" <vincent.guittot@linaro.org>, "Shuah
- Khan" <shuah@kernel.org>
-Cc: "Dietmar Eggemann" <dietmar.eggemann@arm.com>, "Steven Rostedt" <rostedt@goodmis.org>, "Ben
- Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>, "Valentin
- Schneider" <vschneid@redhat.com>, "K Prateek Nayak" <kprateek.nayak@amd.com>, "Sebastian
- Andrzej Siewior" <bigeasy@linutronix.de>, "Thomas Gleixner" <tglx@kernel.org>, live-patching@vger.kernel.org
-In-Reply-To: <20261125041900.3243569-2-dylanbhatch@google.com>
+Message-ID: <20261125095056.GZ2668804@noisy.programming.kicks-ass.net>
 References: <20261125041900.3243569-1-dylanbhatch@google.com>
- <20261125041900.3243569-2-dylanbhatch@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 25 Nov 2026 04:46:26 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -67,77 +78,29 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261125041900.3243569-1-dylanbhatch@google.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue to consider:
-- [High] livepatch: klp_sched_try_switch() transitions task inside
-  klp_ftrace_handler()
---
+On Wed, Nov 25, 2026 at 04:18:58AM +0000, Dylan Hatch wrote:
+> Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
+> live-patching") moved klp_sched_try_switch() from _cond_resched() into
+> __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
+> This causes livepatch transitions to stall when CPU-bound kthreads,
+> PF_USER_WORKER threads (such as vhost-<pid>), or user tasks in long
+> kernel loops spin with cond_resched():
+> 
+> 1. Even when __schedule() is entered via preemption or an unfreezable
+>    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
+>    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
+>    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
+> 2. A sole runnable task spinning in the kernel never gets
+>    TIF_NEED_RESCHED set during sched_tick(). In klp_send_signals(),
+>    wake_up_state(task, TASK_INTERRUPTIBLE) is a no-op for a
+>    TASK_RUNNING task, and set_notify_signal() sets TIF_NOTIFY_SIGNAL
+>    without TIF_NEED_RESCHED, so the resulting reschedule IPI returns to
+>    kernel mode without entering __schedule().
 
-commit 838d28a5585cbc1f5e4b8cf8405e19da19b1f60d
-Author: Dylan Hatch <dylanbhatch@google.com>
-
-sched, livepatch: Fix transition stall for CPU-bound tasks
-
-This commit removes the TASK_FREEZABLE check from klp_sched_try_switch() and
-updates klp_send_signals() to wake PF_USER_WORKER threads and call
-resched_cpu() on running tasks with pending livepatch transitions.
-
-> diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sc=
-hed.h
-> index 065c185f27638..533b754f10da4 100644
-> --- a/include/linux/livepatch_sched.h
-> +++ b/include/linux/livepatch_sched.h
-> @@ -14,7 +14,7 @@ DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
->  static __always_inline void klp_sched_try_switch(struct task_struct *cur=
-r)
->  {
->  	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-> -	    READ_ONCE(curr->__state) & TASK_FREEZABLE)
-> +	    unlikely(test_tsk_thread_flag(curr, TIF_PATCH_PENDING)))
->  		__klp_sched_try_switch();
->  }
-
-[Severity: High]
-Can removing the TASK_FREEZABLE check switch a task while it is preempted
-at the end of klp_ftrace_handler(), after the handler has already redirected
-ftrace_regs to the previous patch state's function?
-
-During an unpatch transition (or a stacked/replace patch transition), a task
-with current->patch_state =3D=3D KLP_TRANSITION_PATCHED calling a patched
-function can be preempted before ftrace_caller transfers control to the
-selected target:
-
-ftrace_caller
-  klp_ftrace_handler()
-    ftrace_test_recursion_trylock()       /* disables preemption */
-    ftrace_regs_set_instruction_pointer(fregs, func->new_func)
-    ftrace_test_recursion_unlock()
-      preempt_enable_notrace()
-        preempt_schedule_notrace()
-          __schedule(SM_PREEMPT)
-            klp_sched_try_switch()
-              klp_check_stack()           /* sees only func->old_func */
-              klp_update_patch_state()    /* sets KLP_TRANSITION_UNPATCHED =
-*/
-  /* returns to func->new_func while task is KLP_TRANSITION_UNPATCHED */
-
-ftrace_regs_set_instruction_pointer() only updates the saved IP inside
-ftrace_regs; the return address slot unwound by arch_stack_walk_reliable()
-still holds func->old_func + MCOUNT_INSN_SIZE until klp_ftrace_handler()
-returns to ftrace_caller.  When klp_target_state is KLP_TRANSITION_UNPATCHED
-(or when patching over a stacked patch), klp_check_stack_func() checks the
-stack against func->new_func (or prev->new_func), so klp_check_stack()
-succeeds and transitions the task.
-
-When __schedule() returns, ftrace_caller jumps into func->new_func even
-though the task's patch_state is now KLP_TRANSITION_UNPATCHED, breaking
-per-task consistency.  If __schedule() context-switches the task out after
-klp_sched_try_switch() marks it unpatched, klp_complete_transition() and
-klp_synchronize_transition() can also finish unpatching and allow the
-livepatch module to be unloaded before the task is scheduled back in and
-jumps to the freed func->new_func address.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20261125041900.3243=
-569-1-dylanbhatch@google.com?part=3D1
+How does the freezer handle this? I mean, systems doing this must also
+still suspend, right?
