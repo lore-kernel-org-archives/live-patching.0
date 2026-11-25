@@ -1,100 +1,72 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.217.43
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795580297;
-	b=1oO2vAd+IPrVwdz+abkPH5g5a9Me8vwwz0MiikBZXm9ZYMBAVwfStCTn3zAz7k/s+z0m
-	 0IKxie24Qj+1dheO47shEmrBkFVK/Q0tX9ld/HYdcyZqDf3Qmoh4XbLB55M7ubz/NQjLf
-	 YcwQzIKp1Sp/3+JT+sqsc+0kuJ/LomDKulZJh3imF1oPTEhQlr1U3Cq4w+wZNrE7cKpL6
-	 J5oeY25y6ZZkqY25M6Le32sTE+ARuMALdK7YUGOBFmPGBAscEuTNL44ozPZCSNL3oRJ+3
-	 w21/ZGUoRdEeEvc6mU5CQUMAYwA3AjM6ojWnqtTyLFHPufVrLD/Eg7xxNyh7Cg3m7iQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795580297;
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.214.199
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1795580363;
+	b=Wq72Hy6RTd3L1/xuwIdeauP/R/dj9M2MUBCjWc98sfubELPK5gGCznCU/U/1jhuX1y+w
+	 AvMii1oXlMVsdNuzVMaw/c2VzNPgzQjh1v/viZGAowOZ3e35iXTCabZu1oDPNFe/VEDSM
+	 TMlrhh5AZBcletU7hKmdbOpdxD8TMq4RWub+yrRzoT/1xSnX1RuqeXBbEwk1iEDgtACmT
+	 cDlVQHjDlMUrOemy5V+Kj8Xu5p4d9bH9gDJgt9z3MLq+CEsfo+XliW9AJS2StM1Xg+y4f
+	 VEItxVc5Key27BSIIToChKcIT07Xpyw/HEc0e3OEtTRCNcysOKcBPMQvQ+x5TagOpMQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795580363;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=kLeHDG2VnEXhT3JsLotiTiwhgWFVUUN1QQojkOZhb2I=;
-	b=c+dI5a4rrMz6dFoG9YyCkKRvDq+jfisYtIDERhfbjqy+PanRAJZe4VqCWoB5ja793LaO
-	 a/ZMZ1+wNXZ08TJJjuNsLVUxoN0L8c8M3ETTFY5geVwNFnwI3mUNYjnNl0LQNqKkkBRkz
-	 A18YepDQnCid2GPMLGyHG7q1ZW/biBoj+wxdupJWujl9ADUpvilbMpQtbEm5QHV6iSUN5
-	 jymb69WkaZ9o8m00+AC+NzHOL71SN0nof44TfmHMeXiKurPb7jmlVDPxk6kODwoXS9k7s
-	 qMALdWz/u6Hk9cJatZw6Vy9PvuyHlrtJQGbCfWTmMZWLXoYvkasdEgsDHs6eDmbgk/g==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:Mime-Version:
+	 X-Mailer:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=RYnkiQyubE+RoSa9gUQ9ASOysahxUWtjtOAnaQCLo/U=;
+	b=udI4XaCmc6rExKaw4wS5J1xIi6HYa2lUCX4ZLBAVAse3aPhP1iIby+8THTTMipF1R5U9
+	 Dnr2xNVCgWoJ/QqLALP8OKnXdo8XqXYyhbwa9CV/L4cHJGfyeiwL4D+na+zdvEhqxxB+0
+	 d8bKQ1FtgiD42qnL/KVyM17DNqCmzB5hNXfNcWGwJADTjj/+39LIVES9msj5ncy7c3J3k
+	 CHmDYLjDrtFWlHT1TDW9LpYH+5Aj57cgGqaz6gne1Usa8qQ8LCuzBBjvD9fSDk+urDPGV
+	 wuLAweYPk11Yx4Jp3Hm8TjG+5TCH/tChn57JSuD+CW8UUQbDLWu8eg4Z3bAAX1p/OHQ==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gr4V25J5;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.217.43
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+	spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=E8RYveAk;
+	arc=none smtp.remote-ip=209.85.214.199
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FD1606A321
-	for <live-patching@vger.kernel.org>; Wed, 25 Nov 2026 04:18:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 24FD1606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8DF606A323
+	for <live-patching@vger.kernel.org>; Wed, 25 Nov 2026 04:19:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9B8DF606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dylanbhatch.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=Gr4V25J5
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-7d2d95c5d81so3669233137.0
-        for <live-patching@vger.kernel.org>; Tue, 24 Nov 2026 20:18:16 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1795580296; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mHvAn7bkoicEDHQYZnIvLqyFxoJcrvDApEKHqEioLJPJUBp3UiMLOFVovajiMYyEKq
-         uV4Ghs8CsaXrbAMYgmL6lDaY/HE++9TGdQsF6VECSzfgf5V+FyEY8wwPH3Ge8iqN+m7u
-         NTXjSCM6UHiFWEa3a8G9nLuUH2BN7ThQeQTs+3E9g6mwcpBkDlNLM2oW6wPlORyjwIsh
-         itakgDaCDnJEr9wLOcVPwWYjyoahtBFSB8K+44+xxDoIqS8moRnceHMa2Ev4Ku6khT9M
-         qZvfRqPnQPpFWOMgokWlnyEHkfnq+RJHC50QRXQvFKytQl5gh0n7/gMDcJwjjcrifSEf
-         RYtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kLeHDG2VnEXhT3JsLotiTiwhgWFVUUN1QQojkOZhb2I=;
-        fh=hKnitUo6Vw2nWRSAOxXSfemlcKOX5W24GNT+FETlGTw=;
-        b=ktDy4mg3nXo4R9FIx1p1BSE1Z/5BFyN/0QYGSspGFnk67G715TOGAaenR49iuR3Fnr
-         0Vcd9/ImXMHOLy49tDyrNzLLTlhrTvhVsEWzS3FvLGeTj5oGVioTSxgYCQH8OlAxaaQZ
-         faK0JIN84S2QzGrTjoVgLKl94/9ckqd3BtassWWzQ6v+1mh00fnABb+Aa+cRLObpm5DN
-         +/RAbLOKqihUVhvYgDeeMxJnmeThp+k7KKdovZgjja6NP2cnJPazPzfa4WiazSC9v0Lo
-         K0hcgwUAD3TQbv+ov10yRhktQS4SpC599ojIJdrlmjshdloCL8kgSPUBC0qi9d/VYsyH
-         IRGA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=E8RYveAk
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2edd25534afso44739585ad.2
+        for <live-patching@vger.kernel.org>; Tue, 24 Nov 2026 20:19:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20260707; t=1795580296; x=1796185096; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kLeHDG2VnEXhT3JsLotiTiwhgWFVUUN1QQojkOZhb2I=;
-        b=Gr4V25J5P7BKBn0hrLKwdOaxCKfi33xlDSKABVG9b3SBg7R49I/LmFG/rHdDo+/IDj
-         8ABDwK3CAw+gRQE7tMTvB/me+goYNKDSPf/+CXTiO4lsY4mdOSgJsUYeFwKxy7tKNkcn
-         N8qi46Fw3QR151tdVh3lddwqDAv2gPij7WkmvoLz8Lirw4fjJvx5OZemRS1kTSkZXLTa
-         kfo1Lm+wSMhAtdWExiTl9EsbBYmC+J8d/1dfUSmExuybUJmGpKmfhYSzQU7VfqjIAz95
-         pmjSXmMMZ28kMPG69JhJltRejSQFGg5AMgKnOKhgRX2ShFWSfenhoeYPOmRYbQQisxhA
-         oYgw==
+        d=google.com; s=20260707; t=1795580362; x=1796185162; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RYnkiQyubE+RoSa9gUQ9ASOysahxUWtjtOAnaQCLo/U=;
+        b=E8RYveAkeEIukDtM/Boc8gSnLVh3QA5sID71kcwgek7WjlJnYphsQ13PNqTHEHeNdS
+         crDWnOi2uUMfHbIOX1QZiaxVNAiTHWW2Mu3cWYDWwB8D+NkYJjqUS17lGjHR7rJtO7BE
+         UbJZUcp8gVcavT6TC3/E/odyQ3RLMGPOrvokaK3gU5xuUlGWzywpSP65hdudiEJx8ST+
+         cUemHtAskDjg//sJLlQidfhvEAR/mBAtJcm1sXNcGkf4zMLl6IU1RyubIbauvXPX0KTg
+         qvL319c8wSoyTXrJxO5irh9sORVwWZgwlKjbECw4BmEPvOFIcCClfRdvzLBl4FFOtQW7
+         3vYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795580296; x=1796185096;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1795580362; x=1796185162;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kLeHDG2VnEXhT3JsLotiTiwhgWFVUUN1QQojkOZhb2I=;
-        b=iZSi+yQVi/15o1fQovTm/bFILXoM2nFuGx/ryRTXfnXPvAZnNB1JddUUpuX7tQjv5I
-         j+tc7fg2ZeGghrmPb9qCGtW9LYMxYjBW0Nxd4TTMY9MspH25BR9GvytcosqRt05GYyAn
-         e0rvfvsOgmotHrMYSK5fQOiFF0orxsBzpBkkUEnUByDycRXpvy9GhwxzPkyfgDJKLhTJ
-         Tf8LBE89pucr/E4J+jdWhqDyOySa4TPaH9fpkcYID4jrhVIQnWastuA8wzacgE3cI1cL
-         A8YVxTd5XZ+gFxBbF5uMwTRFsb8zUppOa+8AvV4sMNQlZ8/zXVtXKGiAXxfttGc5b/6O
-         XizA==
-X-Forwarded-Encrypted: i=1; AL+hErHOnEGs7E6vJrE70mSSqjJKQHDKui7ABiMcHXisEfYqYdeO3sIOkJRBhMdFDO235Vo34WpR329Nr+9vkvfT@vger.kernel.org
-X-Gm-Message-State: APuU4Z8czonxJAo+g0vaTAugh4OrdRp4RgBFLTVjc2XfPNs71FLZwwoM
-	7Ii5wWFIB/GQiqOJKs+S7Ubg5nTFYDwE6211ZjIfDBa+aTcuUuFF0E9cGjz8tAZLR1CRnMiIe8t
-	1Gj/A/lRMu3nWM2iQo4V5wckmdstfvYvs+uNBvQM9
-X-Gm-Gg: AZFdTZcUAdqKNz7sVJB2cz7Lg1ITSgpM3TjnfIozZMz4Z2ZksGGC8r9Laxeg8kE0r/S
-	LIxXib4dV8QwPgddbYFMgT7HHKNEGq5PDm/KkZa1ToTMs/EAVf2UpYZ+BrqcART2YF2nkrZxlVm
-	8UWVZYMXGkKaVCbdNkIFRm+I3QLrNFWPbkKmdgEeGI8qa9Nl0C3q4QTHE1D1FK3riTuUN+X8tKh
-	1zDgPVNiZASYH12M5Rx3twyTZBQbQS4Sic8zKzVkhfWPaYOILommIGz0Xu1csstJSOLPA1IqAll
-	QetHtd9h3DMDsSubNseubN3tZZGqfvMd7SwzCZN077TBmy4PxrIpvtsCtrzSTtpuV/Yf+xsRY7C
-	T3GZDSvBnwjBvPCgCdjxipk6/wkLg72Bu0Nkf6d3BcwYxgLBOtdRIuYgyRQ==
-X-Received: by 2002:a05:6102:41a3:b0:7a3:b2c2:2e70 with SMTP id
- ada2fe7eead31-7d7395e32c3mr5734305137.11.1795580295324; Tue, 24 Nov 2026
- 20:18:15 -0800 (PST)
+        bh=RYnkiQyubE+RoSa9gUQ9ASOysahxUWtjtOAnaQCLo/U=;
+        b=Qdw06nm01z6IydwlS/2ZbBuCkg0OYFHAek7BO/ojW0KLTuKpLdyZlk3uyyXC3XjLOC
+         S98R6Pbcstlp8zyxzMIGzTjOkMcY9n8LUar9dLnznJwpXjz4bThkKgpbTq1u/3CrQLxH
+         uoOEEbPzfyhnM/ZBjtygiJl0duyZmEe2NmnVxq/tvhSXO5vtaSu2mfJZ2mSlgToj92P+
+         3CI7PSEAINB80HqsBSNLQM7ZK7fzlJlGYVFH93DbFr5GvzHzaAa9tAZ6fdYSdkEaFrvp
+         ZII0NsGswDtspE715+w1tWUw0/eEhegvXune5qn59BHYrlIbk1bU/mIPleL7HxqGMP3Y
+         stNw==
+X-Forwarded-Encrypted: i=1; AL+hErEpT7R+M3X4Iee1BkmLHc3E9t883KOlGDSPj8Z8YHkMSuJzqh99qKVK58uiASEfJy9/upeIv47+r6F7/7Wi@vger.kernel.org
+X-Gm-Message-State: APuU4Z98uHoyqIFJQYMAwPNwj1cElw31kJhuK2JH/V3NrLyiaCDnR+6M
+	+jM87Q5ilSuXq01SWwiLvGZaSOvkjEX0e4e7bMarehtlOyd9XhVZrYMSZ/VFhUm2UTRf+9PL2By
+	/Nlu1h7Q6PYkk2WJnzLtRArqQAg==
+X-Received: from pglk23-n2.prod.google.com ([2002:a05:6a02:6b97:20b0:cd8:2b49:af45])
+ (user=dylanbhatch job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:2701:b0:3a4:acde:1e3b with SMTP id 98e67ed59e1d1-3b41c8dd232mr15615461a91.13.1795580361641;
+ Tue, 24 Nov 2026 20:19:21 -0800 (PST)
+Date: Wed, 25 Nov 2026 04:18:58 +0000
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -103,213 +75,108 @@ List-Subscribe: <mailto:live-patching+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-References: <20261117045254.1048298-1-dylanbhatch@google.com>
- <20261117045254.1048298-2-dylanbhatch@google.com> <awIMltMpXzhXiDpU@jpoimboe>
-In-Reply-To: <awIMltMpXzhXiDpU@jpoimboe>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.1.839.g22a8290db9-goog
+Message-ID: <20261125041900.3243569-1-dylanbhatch@google.com>
+Subject: [PATCH v2 0/2] sched, livepatch: Fix transition stall for CPU-bound tasks
 From: Dylan Hatch <dylanbhatch@google.com>
-Date: Tue, 24 Nov 2026 20:18:04 -0800
-X-Gm-Features: Aa3M54pyIniNB_vn7eg13DbCLk1cWp5ylttVhb4AKr3piHRNkIg2PU3xZVlnsAY
-Message-ID: <CADBMgpzifnY=3wF2vt01UTaqPE68N2e9oe5WoSMDUrdgBSWgvA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound tasks
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
 	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>, 
 	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Shuah Khan <shuah@kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
 	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dylan Hatch <dylanbhatch@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Josh,
+Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
+live-patching") moved klp_sched_try_switch() from _cond_resched() into
+__schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
+This causes livepatch transitions to stall when CPU-bound kthreads,
+PF_USER_WORKER threads (such as vhost-<pid>), or user tasks in long
+kernel loops spin with cond_resched():
 
-On Sat, Nov 21, 2026 at 1:55=E2=80=AFPM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> On Tue, Nov 17, 2026 at 04:52:53AM +0000, Dylan Hatch wrote:
-> > Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-> > live-patching") moved klp_sched_try_switch() from cond_resched() into
-> > __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
-> > This causes livepatch transitions to stall when a CPU-bound kthread or
-> > PF_USER_WORKER thread (such as vhost-<pid>) spins in a kernel loop with
-> > cond_resched() for two reasons:
-> >
-> > 1. A sole runnable task on a CPU (cfs_rq->nr_queued =3D=3D 1) never has
-> >    TIF_NEED_RESCHED set during sched_tick(), and wake_up_state(task,
-> >    TASK_INTERRUPTIBLE) in klp_send_signals() is a no-op for a
-> >    TASK_RUNNING kthread. Because _cond_resched() is a no-op under
-> >    CONFIG_PREEMPTION=3Dy, the task only enters __schedule(SM_PREEMPT) o=
-n
-> >    return from interrupts via irqentry_exit_cond_resched() when
-> >    TIF_NEED_RESCHED is set.
-> > 2. Even when __schedule() is entered via preemption or an unfreezable
-> >    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
-> >    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
-> >    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
-> >    Livepatch safety in __schedule() is already guaranteed by
-> >    stack_trace_save_tsk_reliable() inside klp_check_stack().
-> >
-> > Fix both issues by:
-> > - Removing the TASK_FREEZABLE check from klp_sched_try_switch() and
-> >   checking TIF_PATCH_PENDING inline via klp_sched_need_resched().
-> > - Calling resched_curr(rq) in sched_tick() when klp_sched_need_resched(=
-)
-> >   is true for the current task, ensuring CPU-bound tasks with a pending
-> >   livepatch enter __schedule() at the next timer tick.
-> >
-> > Note that when a CPU-bound task is the sole runnable task on its CPU,
-> > entering __schedule(SM_PREEMPT) from preempt_schedule_irq() leaves an
-> > in-kernel interrupt pt_regs frame on the stack during
-> > klp_sched_try_switch(). Completing the transition in that context
-> > requires arch_stack_walk_reliable() to support unwinding across
-> > in-kernel exception frames (as CONFIG_UNWINDER_ORC=3Dy does on x86_64);
-> > configs and architectures whose reliable unwinder rejects in-kernel
-> > exception frames (x86 with CONFIG_FRAME_POINTER=3Dy, arm64, powerpc, an=
-d
-> > s390) still require another runnable task to context-switch the spinnin=
-g
-> > task out until exception-boundary reliable unwinding (e.g. via SFrame)
-> > is available.
-> >
-> > Fixes: 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and live=
--patching")
->
-> Oof, so Peter's patch broke all non-ORC for this case :-(
->
-> Not sure what we can do about that other than get kernel sframe/eh_frame
-> working for exception boundary unwinding, as you mention.
->
-> > Signed-off-by: Dylan Hatch <dylanbhatch@google.com>
-> > ---
-> >  include/linux/livepatch_sched.h | 13 +++++++++++--
-> >  kernel/sched/core.c             |  3 ++-
-> >  2 files changed, 13 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_=
-sched.h
-> > index 065c185f27638..748b6012e2e06 100644
-> > --- a/include/linux/livepatch_sched.h
-> > +++ b/include/linux/livepatch_sched.h
-> > @@ -11,15 +11,24 @@ void __klp_sched_try_switch(void);
-> >
-> >  DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
-> >
-> > +static __always_inline bool klp_sched_need_resched(struct task_struct =
-*curr)
-> > +{
-> > +     return static_branch_unlikely(&klp_sched_try_switch_key) &&
-> > +            unlikely(test_tsk_thread_flag(curr, TIF_PATCH_PENDING));
-> > +}
-> > +
-> >  static __always_inline void klp_sched_try_switch(struct task_struct *c=
-urr)
-> >  {
-> > -     if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-> > -         READ_ONCE(curr->__state) & TASK_FREEZABLE)
-> > +     if (klp_sched_need_resched(curr))
-> >               __klp_sched_try_switch();
-> >  }
-> >
-> >  #else /* !CONFIG_LIVEPATCH */
-> >  static inline void klp_sched_try_switch(struct task_struct *curr) {}
-> > +static inline bool klp_sched_need_resched(struct task_struct *curr)
-> > +{
-> > +     return false;
-> > +}
-> >  #endif /* CONFIG_LIVEPATCH */
-> >
-> >  #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
-> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> > index 04b62c16fa8ca..fcea9cea3edf1 100644
-> > --- a/kernel/sched/core.c
-> > +++ b/kernel/sched/core.c
-> > @@ -5854,7 +5854,8 @@ void sched_tick(void)
-> >       hw_pressure =3D arch_scale_hw_pressure(cpu_of(rq));
-> >       update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
-> >
-> > -     if (dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY)=
-)
-> > +     if ((dynamic_preempt_lazy() && tif_test_bit(TIF_NEED_RESCHED_LAZY=
-)) ||
-> > +         klp_sched_need_resched(curr))
-> >               resched_curr(rq);
->
-> Hm, so for unpatched tasks this forces a full preemption and stack walk
-> on every scheduler tick?
->
-> Instead can we just kick the thread in the existing klp_send_signals()
-> escalation path like below (untested)?
+1. Even when __schedule() is entered via preemption or an unfreezable
+   sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
+   sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
+   TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
+2. A sole runnable task spinning in the kernel never gets
+   TIF_NEED_RESCHED set during sched_tick(). In klp_send_signals(),
+   wake_up_state(task, TASK_INTERRUPTIBLE) is a no-op for a
+   TASK_RUNNING task, and set_notify_signal() sets TIF_NOTIFY_SIGNAL
+   without TIF_NEED_RESCHED, so the resulting reschedule IPI returns to
+   kernel mode without entering __schedule().
 
-Sounds good to me, moving to klp_send_signals() for v2. I encountered
-two issues with your suggested diff as-is:
+Patch 1 fixes both issues by dropping the TASK_FREEZABLE check from
+klp_sched_try_switch() (relying on stack_trace_save_tsk_reliable() in
+klp_check_stack()) and kicking still-running unmigrated tasks via
+resched_cpu() in klp_send_signals() (as well as waking interruptibly
+sleeping PF_USER_WORKER tasks).
 
-1. Based on kernel/trace/rv/monitors/opid/opid.c it looks like we
-can't call set_tsk_need_resched from here:
+Patch 2 adds a livepatch kselftest (test-cond-resched.sh) exercising the
+klp_send_signals() reschedule path for both CPU-bound kthreads and user
+tasks spinning in kernel mode.
 
-rv: monitor opid does not allow event sched_need_resched on state any
-with env irq_off=3D0,preempt_off=3D1
+Note on reliable stacktraces across exception boundaries:
+Because _cond_resched() is a no-op under CONFIG_PREEMPTION=y, a sole
+runnable spinning task enters __schedule(SM_PREEMPT) from
+preempt_schedule_irq() with an in-kernel interrupt pt_regs frame on the
+stack. Switching the task in klp_sched_try_switch() therefore requires
+arch_stack_walk_reliable() to support unwinding across in-kernel
+exception frames. This works on x86_64 with CONFIG_UNWINDER_ORC=y, where
+test-cond-resched.sh passes with this series.
 
-It looks like resched_cpu() works (suggested by my AI tool), so
-sending v2 calling this instead.
+On architectures or configurations where arch_stack_walk_reliable()
+currently rejects in-kernel exception frames (arm64, powerpc, s390, or
+x86 with CONFIG_FRAME_POINTER=y), test-cond-resched.sh exposes this
+limitation and will fail until exception-boundary unwinding is
+supported. On arm64, the test passes when combined with the proposed
+kernel SFrame unwinder series [1] or equivalent .eh_frame-derived
+unwind tables [2].
 
-2. I think this also misses user tasks stuck in the kernel with the
-same behavior, so I moved the resched logic out of the (PF_KTHREAD |
-PF_USER_WORKER) block. I also added coverage in the selftest, so the
-same cond_resched situation is also created from a user task.
+These patches are available on github [3], with an additional commit
+containing extra tracepoint validation.
 
->
-> diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sc=
-hed.h
-> index 065c185f27638..77161f5725dcc 100644
-> --- a/include/linux/livepatch_sched.h
-> +++ b/include/linux/livepatch_sched.h
-> @@ -13,8 +13,7 @@ DECLARE_STATIC_KEY_FALSE(klp_sched_try_switch_key);
->
->  static __always_inline void klp_sched_try_switch(struct task_struct *cur=
-r)
->  {
-> -       if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-> -           READ_ONCE(curr->__state) & TASK_FREEZABLE)
-> +       if (static_branch_unlikely(&klp_sched_try_switch_key))
->                 __klp_sched_try_switch();
->  }
->
-> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.=
-c
-> index e058d21d84b75..1ccbae2051c72 100644
-> --- a/kernel/livepatch/transition.c
-> +++ b/kernel/livepatch/transition.c
-> @@ -402,12 +402,22 @@ static void klp_send_signals(void)
->                  * Meanwhile the task could migrate itself and the action
->                  * would be meaningless. It is not serious though.
->                  */
-> -               if (task->flags & PF_KTHREAD) {
-> +               if (task->flags & (PF_KTHREAD | PF_USER_WORKER)) {
->                         /*
->                          * Wake up a kthread which sleeps interruptedly a=
-nd
->                          * still has not been migrated.
->                          */
-> -                       wake_up_state(task, TASK_INTERRUPTIBLE);
-> +                       if (wake_up_state(task, TASK_INTERRUPTIBLE))
-> +                               continue;
-> +
-> +                       /*
-> +                        * If it's running, force it through __schedule()=
- so
-> +                        * it can switch itself in klp_sched_try_switch()=
-.
-> +                        */
-> +                       if (task_curr(task)) {
-> +                               set_tsk_need_resched(task);
-> +                               kick_process(task);
-> +                       }
->                 } else {
->                         /*
->                          * Send fake signal to all non-kthread tasks whic=
-h are
->
+Ref:
+[1]: https://lore.kernel.org/all/20261117020648.323464-1-dylanbhatch@google.com/
+[2]: https://lore.kernel.org/all/20261117043504.1021063-1-dylanbhatch@google.com/
+[3]: https://github.com/dylanbhatch/linux/tree/stall-v2
+
+---
+Changes since v1:
+https://lore.kernel.org/all/20261117045254.1048298-1-dylanbhatch@google.com/
+
+ - (Josh) Drop the sched_tick() hook and instead force still-running
+   tasks through __schedule() from klp_send_signals(), avoiding per-tick
+   preemption and reliable stack-walk overhead on unpatched tasks.
+ - Use resched_cpu() rather than set_tsk_need_resched() + kick_process()
+   when kicking remote tasks in klp_send_signals(), and apply it to all
+   still-running tasks (including user tasks spinning in kernel mode).
+ - Update test-cond-resched.sh to deterministically exercise the
+   klp_send_signals() reschedule path for both kthreads and user tasks
+   spinning in kernel mode.
+ - (Sashiko) Bounds-check target_cpu against nr_cpu_ids before calling
+   cpu_online() in test_klp_cond_resched.
+
+Dylan Hatch (2):
+  sched, livepatch: Fix transition stall for CPU-bound tasks
+  selftests/livepatch: Add cond_resched() transition tests
+
+ include/linux/livepatch_sched.h               |   2 +-
+ include/linux/sched.h                         |   1 +
+ kernel/livepatch/transition.c                 |  19 +-
+ tools/testing/selftests/livepatch/Makefile    |   3 +-
+ .../selftests/livepatch/test-cond-resched.sh  | 204 ++++++++++++++++++
+ .../selftests/livepatch/test_modules/Makefile |   1 +
+ .../test_modules/test_klp_cond_resched.c      | 141 ++++++++++++
+ 7 files changed, 365 insertions(+), 6 deletions(-)
+ create mode 100755 tools/testing/selftests/livepatch/test-cond-resched.sh
+ create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_cond_resched.c
+
+-- 
+2.56.1.839.g22a8290db9-goog
+
