@@ -1,79 +1,80 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1795648339;
-	b=S2NL3HGTsQaQIuOLzYS+11JAI1gUL4YcPIqGcItqdm7+3yjn0Bp9uRE1QuLq+db/emG9
-	 P3aT41Y2g1POkX/+GwSurrfH6BQV+ofV+VF3exzl2DB0EH+coKgJCXoXqbX+VOpCHi0eQ
-	 ZX3YMAKxZUBofYPn0KfHecyrux+LPuRzT7WCiNb0noiov+lQJvWOJ8iXbwMUEfPhNwWCO
-	 08iHsk7uJRzWZSZAtUlUHDgSCHILaxbMHw0LXqL8uMh4Uqn27/DF3GhMSlEGUoIzsGwSL
-	 yJF+1nrmmJphqixUNutY/jnfLm5u5oJE5o0RERrnxV0tL3YI8xgpD+QS2Adu9DbKxKQ==
+	t=1795648346;
+	b=QB1G0+bdvJLK8Bsnnr4eCKehPe1dmbOIQDJvofeIE8jujw0KY7xf5DP8nsUKm+bAhCCi
+	 AxWXYED7nY+RzkAuQHbtN/S8vDMlDoMeBCM1QRDGNWZLT7da3b4nVDPQE9ohUG/BEWZSf
+	 PFSXtd0qKkAFB32ZpoHSIAOoFF2ElkA2GIa5IB4XwKoVVp04KcpYPHerHEz1SEO/Q4G20
+	 IfC4AsXGgMVwjGVjZTd+dG3lv4TdmXZtbCo628h4IJy/IUEc6sgshAeD8iKWqu0Axg5X0
+	 Xd9Mb3wYr7WlQwxKuCzUxCl3mfJCcIxRr8pyDltFXaiqmE3fA9uI36H+wcW+RFtJDag==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795648339;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
-	b=ZREZS6M0s4HdwWQ9krfXydeM/FmPUdmqsK5bJcPKzRM/LJEXd33W/s6mT8jz+ile8QTm
-	 WU4cGWi5GLZjWF8dOU/LFX4ocm2e1Py+6ehx5WvzPyQeCYO4ZjdF9aO+dzyQ3X2RK9D1m
-	 ikmTy3ARUFMaOQOw8G2kAy1LJQUHhwWsSj9/9/iw/+xDoX0Nn5Gn8Xpc75XDyn+WBH4j9
-	 Kb+BNTxFVcbkMtFtxP2pnIlgKCH8seOqQ4BKOhUC2OTqcOAJbNY2cPZw277nWaMgobaRN
-	 KTauAVKPGFcvvUUVYEOnAwGUh0+nuxAawzB3f71r0Lx0V502j9O5LsV+wUeDFC7kLhg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795648346;
+	h=Received:DKIM-Signature:Received:From:Subject:Date:Message-Id:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Endpoint-Received:X-Original-From:Reply-To;
+	bh=WAL9GS8gm4ZhwTck2VGOi+Qh7YlizBKQQ4wMZbwKUqE=;
+	b=MDb/9vlMZ0q/c2ysbny1r0zvTVQEr3k5SpeDCUCauPolAc9tnE7qhOHH7qEU/kBYTQu5
+	 8ZSptAEMBMtmpT6SJlPIr3QqrIklbhvKk8YuwPPgdmr1LavjOdfp9MZ03ZnihQXSkLNz6
+	 Lb28due4Mpe2UFowYzdSpYGVvPnji3mcAR0eiaNHGwM7mRHnnTh66fE0Zvsj7YbqlnuyF
+	 HpnKlBGt1l/ztueElpxAlnpJ8b0gmS+MILLhMUxXI42NyC1fAvfpGvdKNakXp+urNwPZC
+	 rF4xNi70TyL8MwYsbfzhNmnEQJQwFEWhU++NwNwIXRxEPTdA7XkzUNdWOwYXaWOTJZA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a1WDfvwY;
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IA4OtX+M;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74125606A680;
-	Wed, 25 Nov 2026 23:12:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4A9606A33A;
+	Wed, 25 Nov 2026 23:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=a1WDfvwY
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=IA4OtX+M
 Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
 ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1795648339;
-	b=QP+0+QFDlTnM2Yr/LnKYeGvBRooZe2qHaoymxpl6nEo1U9XR02v8s93hjLlIFgB+Lq+g
-	 sVgglWzSAjGgQ+v9jYnJXcVCxj2RwcckmqekftowrJn9mDmCrMV/AZuvZKFm2WdfWtzne
-	 qQdIkJqHVGsfOEflslsKRgUw5tryGapQeXjJj4pLRvwJqDwPXUSaVplwMUk1hos8I60CL
-	 QQnkkosz+XXDZZmyWqDOXdYyOIjzubgSJ5DxvYgH+bvQJGRtn5WcwxI43syl0+UQAeoJC
-	 cigDsM8KsKdqNMhgcWLIL51BNvvVrC6vRBOF7Jzj4NIqx+dRyN0Ic1GTExbI4rTe6lg==
+	t=1795648346;
+	b=EcbwUCvSaAl9gf1OOPeMDgDaAIWL7vIQJcY9MtS+TrsIDs/JxgbKyxU2NwIcbBwj4WiD
+	 JtJv+OEUDgb15jM8+oKbSGg8hAMk06QBqYpoEi6B6yaAaR+605INmOodS5tyXHE9FH7WK
+	 ibY8QGqeEt0O0EJPcM3pttdWonMXsv/KNVKPrtMlQDEl68Rc9RDnzK3pWIfcD9d3GRvPl
+	 HqdYyZReLLW7Q6vAASAw2oRa2MURvYhh0qGSwlAKNtmucp+T5aY2hKha1jsdIMhqAyoMj
+	 bBHrZYBqYGjGCAsBR9a2rWjfBSuE+jtZHPbhrw3lJuF8Sqjc+J9RFJ4DUkKc5QHbIwg==
 ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795648339;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
-	b=lcBI/i3z0/oagmLeBKZQjiY6gXx3mnsre1yUBmKX+d9+wUw7kdTs9B6f/1STaUD2Iq1i
-	 dtNnZ8XCahrDmDtUB58IHPPuuatNWaRhZRvjXmixTRvpydDmaam1O2+lH9G8Y3XbhX47T
-	 Fj2cSZJjjC7vNd3g+0YRRc1hznqycbUeo+iP3KW9vsarvhe+4tLmmzcMpz4Psnkfh9SJH
-	 G6XMwoAQ1YogBX0JG4GrwiVBAClmEvK7pS7oixILrOn5RXe7fM7sskpkSdwPpyU0cjwWj
-	 bjxARIZkYgT/Ibw8zDT1/DzVc6W1Y98AslCeNDyYRuwfmoFDk3QxuG/ZKCGs14iJRvw==
+	c=relaxed/relaxed; t=1795648346;
+	h=DKIM-Signature:Received:From:Subject:Date:Message-Id:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:X-B4-Tracking:X-Change-ID:To:
+	 Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To;
+	bh=WAL9GS8gm4ZhwTck2VGOi+Qh7YlizBKQQ4wMZbwKUqE=;
+	b=no9X+ZsbOjxI/ckSGCCRpog0YPB6ZmL6YSynztKmyn05/kY+Wa7lUcnEm7nsxfnL9wXc
+	 y6jbgCCOLg1Q5Mr6eVNj00Z3eo+yeerN9LUkIm6McBqI2NOMIO3qjVQaCWiO1tWhwHgHy
+	 vKurzEPhE9X2jLWs6GaVH+o3ntNBDrnhFePKJc+6qgKkdJnhxzLj17Xr9iBqNf0lQkZvn
+	 xISKyjElj+21tft7ON8mXWn5ICZu0gCqRgd7XCO3Sr5T+9t5MxmMqitgoL2YtAz2irqem
+	 m/3aLqAf+2DU6VIcWOKVjb8oPh7Tp2/Nj68TbhJovKW0zluPFM6eYnUOpeBorWxVYug==
 ARC-Authentication-Results: i=1; smtp.kernel.org; 
 	arc=none smtp.remote-ip=100.80.115.77
 Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id D85981F00AE3;
+	by smtp.kernel.org (Postfix) with ESMTPS id D856F1F00ADE;
 	Wed, 25 Nov 2026 23:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1795648339;
-	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
-	b=a1WDfvwYu2VISMGJyUnAAerJbYFD65jiv/VrJ+WlpNLWTBGsPHJAD8wMjzfs+W/w7
-	 vAd6UEm30FfyYt/JqoVII3kwAB1P6kb1z3LaA/FTWSBkq2A2XJHm3IeVRom3xMBosj
-	 diGXwiBvum1sv9wvYMmA84cc+edv8erjvoxZZrXA0/mWONNQ3XW+80hQ0FkSnPtf5r
-	 QJB1AT0Ln7dYsNA0MtYQwdi9vWZsc7djbKSvAGE/bCex3Bg5qcuDtVIzts/skSAAEz
-	 jeDPJJTfgyZcIv95d32S3Fn4fNQVGS3SEst5bAUvQwyaLHXXlqCc4QVyjBF3KCMqtI
-	 4/MYhsofPXtBw==
+	s=k20260515; t=1795648346;
+	bh=WAL9GS8gm4ZhwTck2VGOi+Qh7YlizBKQQ4wMZbwKUqE=;
+	h=From:Subject:Date:To:Cc:Reply-To;
+	b=IA4OtX+MQ52e1dEIayGOUYywB4aai9RLwFsmUSX5V/fhHY7jxvJMnI/u6E7SjD6PP
+	 oAyXbpVEJX6nZ+eWVcB6PC5OSNpYjpaDqgbmARfGE2DMhzBWqrUGuSs+PrEq3gVo8G
+	 QRKpDxcQHVHQnjCIcd8gKTZHidxi/mgbEaY25kwNLSDgGvIBTgNMmy8ltNxF0P5yQZ
+	 E0QK3sJlywywyHZ4QQ/Ky/I3NDZ74xstIzhlgPuO+pvuxuBaTl04GMvSJtaN5yr8VK
+	 ZG73djBPfYjlfBZcS17tuP1iDsH2Z1NiBQzeUEg3UVJsrFbLbKr+6T7vszYrIKAXG7
+	 VMyW9SZOgBOJg==
 Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id 5FD5C4D0A5;
+	by lkml.kernel.org (Postfix) with ESMTP id 34B654D0A6;
 	Wed, 25 Nov 2026 23:12:07 +0000 (UTC)
 From: Binoy Ravindran via B4 Relay <devnull+binoy.vt.edu@kernel.org>
-Date: Wed, 25 Nov 2026 18:11:46 -0500
-Subject: [PATCH v3 1/3] rcu-tasks: Add helpers to visit tasks on the exit
- lists
+Subject: [PATCH v3 0/3] livepatch: Do not lose exiting tasks during a
+ transition
+Date: Wed, 25 Nov 2026 18:11:45 -0500
+Message-Id: <20261125-klp-series-v3-v3-0-b1e0f79af331@vt.edu>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -84,9 +85,12 @@ List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261125-klp-series-v3-v3-1-b1e0f79af331@vt.edu>
-References: <20261125-klp-series-v3-v3-0-b1e0f79af331@vt.edu>
-In-Reply-To: <20261125-klp-series-v3-v3-0-b1e0f79af331@vt.edu>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADFrB2sC/3WN0QqCMBhGXyX+6xbbP6euq94jutBt5ipUNh2F+
+ O5tChFBlwe+c74ZvHHWeDjuZnAmWG/7LgLf70C1VXc1xOrIgBRzxpCT+2Mgm0MCJ1pgIXNFhaQ
+ NRGdwprHPtXe+bOyn+mbUmCJp0Vo/9u61HgaWdv/agRFKMiyUFCVjWtanMB6MniCFA36r2a+KU
+ RVUIy1RVpwXH3VZljeaGyBj9AAAAA==
+X-Change-ID: 20261123-klp-series-v3-d52796c0590f
 To: "Paul E. McKenney" <paulmck@kernel.org>, 
  Frederic Weisbecker <frederic@kernel.org>, 
  Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
@@ -103,183 +107,128 @@ Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
  live-patching@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>, 
  Jaidev Shastri <jaidevshastri@vt.edu>, Binoy Ravindran <binoy@vt.edu>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1795648326; l=6595;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795648326; l=5443;
  i=binoy@vt.edu; s=20261123; h=from:subject:message-id;
- bh=yjPjOhb/Atfnqas8UHt57mA11woD8FJQKXxBGP8uW1s=;
- b=OOX3MLXZUTgTGf1OGUUjxS2LU7Wfbp/7YjNNYtcr0/+dzeQc+tKrGWp2NMOGRyTev78mFbN0f
- zBiw5QtUZbJDm9JRkJGY9oq9pKdmYjYSJyoqPYKxgojYQduEtUHLZ5u
+ bh=oeulflrpaOtQWHSfhsh+UIlfdExERenQnmbTmiZ3tNo=;
+ b=lwnaW0EwcTZ9LN4bkX3r57sXyi/w/nY9K3ax+AWLdjGPp6Tbg+iUpFS482LiYSX9dqWOFt2NK
+ tG2NjOltWmUAOi/O3gMdhyjwcicOMslD5u0BihtC+2OcaO8WTA0RoMf
 X-Developer-Key: i=binoy@vt.edu; a=ed25519;
  pk=4cNdKPHP0InmhK/9bb7Tm2ZMUXUvLGfw1pmVt5b98fA=
 X-Endpoint-Received: by B4 Relay for binoy@vt.edu/20261123 with
  auth_id=1622
 X-Original-From: Binoy Ravindran <binoy@vt.edu>
 Reply-To: binoy@vt.edu
-Content-Transfer-Encoding: 7bit
 
-From: Binoy Ravindran <binoy@vt.edu>
+After exit_notify(), a self-reaping task is unhashed from the task list
+but keeps running the rest of do_exit(). The livepatch transition walks
+the task list, so it can complete while such a task still runs code from
+a patch module that atomic replace is about to free. Yafang Shao and
+Petr Mladek discussed this race in [1], and Josh Poimboeuf suggested a
+similar approach in [2]. The race is hard to hit, but any livepatch that
+replaces a function on the exit path can reach it, for example a fix to
+do_exit() itself.
 
-A task joins its CPU's RCU-tasks exit list in exit_tasks_rcu_start(),
-before exit_notify() unhashes it from the task list, and leaves it in
-exit_tasks_rcu_finish(), after do_exit() has disabled preemption for the
-final switch. Once exit_notify() has unhashed it, the task is no longer
-found by for_each_process_thread(), but it still runs do_exit() and may
-sleep there. Code that must reach every task that can still be
-descheduled, such as the livepatch transition, has no way to find it.
+Every exiting task is on an RCU-tasks exit list from
+exit_tasks_rcu_start(), before exit_notify(), until
+exit_tasks_rcu_finish(). Patch 1 adds helpers to visit the tasks on
+these lists. Patch 2 makes every transition step, including reverse and
+force, visit them too. After exit_tasks_rcu_finish(), do_exit() runs
+with preemption disabled until the task's final switch. Patch 2 waits
+that stretch out with synchronize_rcu() before func->transition is set
+and before the transition completes. The exit
+path itself is unchanged. Patch 3, suggested by Yafang, makes LIVEPATCH
+select TASKS_RCU, which every livepatch kernel already builds, so that
+the exit lists are always there.
 
-Add two helpers. rcu_tasks_visit_exiting() calls a function on each
-task on the exit lists under the list locks, without allocating.
-rcu_tasks_snapshot_exiting() copies the tasks into a caller-supplied
-array with a reference held on each, for callers that must sleep or take
-other locks while examining them. Without CONFIG_TASKS_RCU there are no
-exit lists, and the helpers do nothing.
+Tested on v7.4-rc2, x86-64, under QEMU/KVM, with two klp-build
+livepatches that each replace do_exit() and replace each other ten
+times per run, and a debug-only 2 s sleep after exit_notify(). Without
+the series, 9 of 12 runs crashed; with it, all 12 completed their 120
+replace cycles. With lockdep, PROVE_RCU and DEBUG_ATOMIC_SLEEP
+enabled, the series ran 180 replace cycles, 120 of them with the sleep,
+with no reports. Without the sleep, 20,000 replace cycles with the
+series, in both the default and preempt=full modes, completed without a
+fault. Compared with v7.4-rc2 alone (about 30,000 transitions per
+mode), the median transition time rose from 8 to 12 ms in the default
+mode and from 8 ms to 0.8 s with preempt=full, while the 90th and 99th
+percentiles stayed at about 1.6 s and 1.8 s. v2, which waited with
+klp_synchronize_transition(), kept the median at 7 to 8 ms in both
+modes. The wait is the only functional change from v2, so we attribute
+the increase to the synchronize_rcu() calls. Each commit
+builds without new warnings with and without CONFIG_LIVEPATCH. A
+reproducer and the logs are available on request.
 
-rcu_tasks_postscan() keeps its place in an exit list with a bare
-list_head while it drops the lock to reschedule, relying on nobody else
-traversing the list. Move that cursor into struct rcu_tasks_percpu,
-next to the list it marks, so that the new helpers can recognize and
-skip it. Only the grace-period kthread runs postscan, one CPU's list at
-a time, so one cursor per CPU suffices.
+checkpatch.pl in v7.4-rc2 reports the Assisted-by: trailer as
+non-standard. The trailer follows
+Documentation/process/coding-assistants.rst.
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Binoy Ravindran <binoy@vt.edu>
+[1] https://lore.kernel.org/all/20250127063526.76687-1-laoar.shao@gmail.com/
+[2] https://lore.kernel.org/live-patching/20250124010848.pdcxokfsk2ngrowl@jpoimboe/
+
 ---
- include/linux/rcupdate.h |  9 +++++++
- kernel/rcu/tasks.h       | 69 +++++++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 72 insertions(+), 6 deletions(-)
+Changes in v3:
+- Wait out the do_exit() tail with synchronize_rcu() instead of
+  klp_synchronize_transition(), as rcu_tasks_postgp() does
+  (Yafang Shao). With preempt=full this raises the median transition
+  time in our test from 8 ms to 0.8 s; the 90th and 99th
+  percentiles stay about the same. See the test notes above.
+- Replace the callback-based snapshot walk, which had a single user,
+  with klp_try_switch_exiting_tasks() (Yafang Shao).
+- Link to v2: https://patch.msgid.link/20261124-klp-series-v3-v2-0-50d20829a337@vt.edu
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 3f74ae6d6e1f..55b8b4a0fa94 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -214,6 +214,15 @@ static inline void exit_tasks_rcu_start(void) { }
- static inline void exit_tasks_rcu_finish(void) { }
- #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
- 
-+typedef void (*rcu_tasks_exiting_fn_t)(struct task_struct *t, void *arg);
-+#ifdef CONFIG_TASKS_RCU
-+void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg);
-+int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max);
-+#else
-+static inline void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg) { }
-+static inline int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max) { return 0; }
-+#endif
-+
- /**
-  * cond_resched_tasks_rcu_qs - Report potential quiescent states to RCU
-  *
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index fcac7361ec51..b5fa5a3a8503 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -33,6 +33,8 @@ typedef void (*postgp_func_t)(struct rcu_tasks *rtp);
-  * @barrier_q_head: RCU callback for barrier operation.
-  * @rtp_blkd_tasks: List of tasks blocked as readers.
-  * @rtp_exit_list: List of tasks in the latter portion of do_exit().
-+ * @rtp_exit_cursor: Placeholder that rcu_tasks_postscan() parks on @rtp_exit_list
-+ *	while it drops the lock, so that exit-list walkers can skip it.
-  * @cpu: CPU number corresponding to this entry.
-  * @index: Index of this CPU in rtpcp_array of the rcu_tasks structure.
-  * @rtpp: Pointer to the rcu_tasks structure.
-@@ -49,6 +51,7 @@ struct rcu_tasks_percpu {
- 	struct rcu_head barrier_q_head;
- 	struct list_head rtp_blkd_tasks;
- 	struct list_head rtp_exit_list;
-+	struct list_head rtp_exit_cursor;
- 	int cpu;
- 	int index;
- 	struct rcu_tasks *rtpp;
-@@ -1068,7 +1071,6 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
- 		struct task_struct *t;
- 		struct task_struct *t1;
--		struct list_head tmp;
- 
- 		raw_spin_lock_irq_rcu_node(rtpcp);
- 		list_for_each_entry_safe(t, t1, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-@@ -1081,14 +1083,15 @@ static void rcu_tasks_postscan(struct list_head *hop)
- 				continue;
- 
- 			// Keep our place in the list while pausing.
--			// Nothing else traverses this list, so adding a
--			// bare list_head is OK.
--			list_add(&tmp, &t->rcu_tasks_exit_list);
-+			// The cursor lives in rtpcp so that the exit-list
-+			// visitors can recognize and skip it.
-+			list_add(&rtpcp->rtp_exit_cursor, &t->rcu_tasks_exit_list);
- 			raw_spin_unlock_irq_rcu_node(rtpcp);
- 			cond_resched(); // For CONFIG_PREEMPT=n kernels
- 			raw_spin_lock_irq_rcu_node(rtpcp);
--			t1 = list_entry(tmp.next, struct task_struct, rcu_tasks_exit_list);
--			list_del(&tmp);
-+			t1 = list_entry(rtpcp->rtp_exit_cursor.next, struct task_struct,
-+					rcu_tasks_exit_list);
-+			list_del(&rtpcp->rtp_exit_cursor);
- 			j = jiffies + 1;
- 		}
- 		raw_spin_unlock_irq_rcu_node(rtpcp);
-@@ -1332,6 +1335,60 @@ void exit_tasks_rcu_finish(void)
- 	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
- }
- 
-+/*
-+ * Call fn on every task on the exit lists, in place, with the per-CPU list
-+ * lock held and interrupts disabled. fn must not sleep. Does not allocate.
-+ * These are the tasks that have passed exit_tasks_rcu_start() but not
-+ * exit_tasks_rcu_finish(). Once exit_notify() has run they are no longer on
-+ * the task list, but they still run do_exit() and may sleep there.
-+ */
-+void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg)
-+{
-+	int cpu;
-+	unsigned long flags;
-+	struct task_struct *t;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
-+
-+		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
-+		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-+			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
-+				continue;
-+			fn(t, arg);
-+		}
-+		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
-+	}
-+}
-+
-+/*
-+ * Copy up to max tasks on the exit lists into buf, taking a reference on
-+ * each. Returns the number of tasks on the lists, which may exceed max.
-+ */
-+int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max)
-+{
-+	int cpu, n = 0;
-+	unsigned long flags;
-+	struct task_struct *t;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
-+
-+		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
-+		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
-+			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
-+				continue;
-+			if (n < max) {
-+				get_task_struct(t);
-+				buf[n] = t;
-+			}
-+			n++;
-+		}
-+		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
-+	}
-+	return n;
-+}
-+
- #else /* #ifdef CONFIG_TASKS_RCU */
- void exit_tasks_rcu_start(void) { }
- void exit_tasks_rcu_finish(void) { }
+Changes in v2:
+- Walk the exit lists under tasklist_lock and skip tasks that are
+  still hashed, so that each task is visited exactly once (Sashiko).
+- Call klp_synchronize_transition() after initializing the transition,
+  before func->transition is set, and before completing it, to wait
+  out tasks past exit_tasks_rcu_finish() (Sashiko).
+- Document rtp_exit_cursor in the kernel-doc comment (Sashiko).
+- Add patch 3, which makes LIVEPATCH select TASKS_RCU (Yafang Shao).
+- Test on v7.4-rc2 instead of v6.12.1, including lockdep and
+  natural-timing runs.
+- Link to v1: https://patch.msgid.link/20261123-klp-series-v3-v1-0-427c95811d9b@vt.edu
 
--- 
-2.39.5
+To: "Paul E. McKenney" <paulmck@kernel.org>
+To: Frederic Weisbecker <frederic@kernel.org>
+To: Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+To: Josh Triplett <josh@joshtriplett.org>
+To: Boqun Feng <boqun@kernel.org>
+To: Uladzislau Rezki <urezki@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Lai Jiangshan <jiangshanlai@gmail.com>
+To: Zqiang <qiang.zhang@linux.dev>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Miroslav Benes <mbenes@suse.cz>
+To: Petr Mladek <pmladek@suse.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+To: Song Liu <song@kernel.org>
+To: Ingo Molnar <mingo@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>
+Cc: rcu@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: live-patching@vger.kernel.org
+Cc: Yafang Shao <laoar.shao@gmail.com>
+Cc: Jaidev Shastri <jaidevshastri@vt.edu>
+
+---
+Binoy Ravindran (3):
+      rcu-tasks: Add helpers to visit tasks on the exit lists
+      livepatch: Include exiting tasks in the transition
+      livepatch: Select TASKS_RCU
+
+ include/linux/rcupdate.h      |  9 ++++
+ kernel/livepatch/Kconfig      |  1 +
+ kernel/livepatch/transition.c | 99 +++++++++++++++++++++++++++++++++++++++++++
+ kernel/rcu/tasks.h            | 69 +++++++++++++++++++++++++++---
+ 4 files changed, 172 insertions(+), 6 deletions(-)
+---
+base-commit: 7475ea8b58616b33c04afb976cf0fbaad9dd63fb
+change-id: 20261123-klp-series-v3-d52796c0590f
+
+Best regards,
+--  
+Binoy Ravindran <binoy@vt.edu>
 
 
