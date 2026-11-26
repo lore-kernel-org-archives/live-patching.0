@@ -1,98 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795691824;
-	b=GA0VNBpv12kVtEra3X/6qNloB7qNcOz9LO0z91o+2ILSbJBSvasDF9Tld4TuKfaLtIr4
-	 +9LSVlVvMXXj+yjTlgD3t6g7kN2u/Yml3bzV+ucCmHOl7ziJZJvvOzNuvvpGQSqKY/ImG
-	 WvFIPns2KDXLA2r1EF3nXc70iVzDjWtttWilsb+S6I3wTCHMlpZg6XmIj4pCO65MIMcp4
-	 EAKspWI1q6OuTHoMPPZcRkip2uPTi5YcmvxARSUbWHx6K3uvOEg60VECZxkP6HFypyBm+
-	 FVdH+wSYnlbx8eY+MP4Kvi4U1hHQhiMlKHFVJzThYyullZmxmnMbIWDBTCLMP5R+Gog==
+	t=1795701967;
+	b=KuewT0X/POxysfVLECQuCMaazq6o37wftTLwohPXapoJ3WBYwFblTsFYMDMR3tN39f1C
+	 gEotYPJ6zF9i5N1MhYpvMX9CB0uz3Z++pWBerzuaBMv9JFc1kzblj7z5Z7SqsX224H3Vf
+	 z/TkI2VVZANNmrdAlbuk3A6f3Cb0mQOD2QW8VfO4TL2goYYnHzyzIr6i3T/SyJP524MW/
+	 uxM3nKEob1w9EsD99WvM44yHCa2ikABMaeWQcl4efUOnl0+TW4sGnkTYBOjd4ZpbtlcTl
+	 WFJVwjy0c6tZf3oXHrbda7XBwrlrCLEZ0s2GH8sAYcHU24uuBXpRgepzSpBwvPWqntw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795691824;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=czYZBdxur363VXW6RXUxmSDqGWBQiPGaiVhIHEEkG5Y=;
-	b=xJ2axEJrxSy2Iqt0oHxvTc7ql7Z5umuX1/nSVg6qSp0YwqhMFnC1NIo0YqMm+4sbqHca
-	 2Gh2ke/Kf5BjobIWCztbo+/YVxM0LlnxBwFu5rPgofe6vh9S8dS3MfYRIvyJbcixXgyNQ
-	 SfmEjPWYHKp1veEpwV7hnuhINb5L8eFcLjMJNCEyq8o30+a16noXHKChX4NDlasInsR9K
-	 hfzRsQPdoMuT3tZMG0f1cK8k/FXKgPBh9DzT0cQmu2uty3yfDMNUWKmWhpdJ/ISh4wh/b
-	 3zo28iEx2g8qbOVwb20aP9t1BZs08nosfLDBrVOvaUKRVDZp4upNUdRl6sHd7UMmxkw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1795701967;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
+	 Subject:Message-ID:References:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To;
+	bh=/KDx6PRDjEGDYnhz2VHuKJaW+Yap8yQnZ51Ns2dL25s=;
+	b=BM9RJ79VXmpLj/aitAKZSbePqDqEBZr+D5674PoWURJ7cg0WiTRx1oizcVP6LyokUbhO
+	 WZJWZIIrAMlCrftI7Ns6T1FvEBa6kGhUk4SyPYg2JFpv+Bwe5MPrcVI5FHtDlbjDQVMCA
+	 OcrnnBRuuWm6UpJ2EtehXVxZfCDPh1AOplDh437GBWAHbXODQMppQJPpKrse3PPioh0tv
+	 OQIo+by+HHysC0y037RYveBwQQ+442kmPSrMEU0IWTwHX0WDhIwFqsjOgNE52+8pDD1jv
+	 85THDxV0hSgN08VDHvdvqGhFuimKGfdvI50J0J8LzZFxD27CKg5BY49lrtIajZleeBg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EyBQWANz;
-	arc=none smtp.remote-ip=209.85.216.47
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=infradead.org;
+	spf=pass smtp.mailfrom=infradead.org;
+	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=R5s36xpL;
+	arc=none smtp.remote-ip=90.155.50.34
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D7C606A32D
-	for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 11:17:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8D7C606A32D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9F8606A31C;
+	Thu, 26 Nov 2026 14:06:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D9F8606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=EyBQWANz
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3ac78f4c10bso3288956a91.1
-        for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 03:17:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795691823; x=1796296623; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=czYZBdxur363VXW6RXUxmSDqGWBQiPGaiVhIHEEkG5Y=;
-        b=EyBQWANz1j1qfPDvGVsN8LvCj9Os8HsQNaVi1Kkr4N1NqYCaVX8CHFoeRWyGxLiwBM
-         VAHKsW1r7PVcgOT0vR9krYofh3FEUe1+8VMOXLzr1btv8LL04hDFpzQ+l0mL1ls8lJYY
-         CX3zOUiqEqWlFIggAMOPRfpn+IO7fJVox0XxGir7kQew5jnfOO9hVq/sLGV9uEwOgNMW
-         AsudbaRDmrXHpVZyazL7tHR5vu0OFeik206wiFwDa3m/lFKYfcR6W0IB3bfE4B+hfAJU
-         Jbyzeud8ApQOpR529kcNq9gifJxVbZf+vwAszcqyUn0TeBs/lz/uCeyJgzTk83mszXHB
-         KOWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795691823; x=1796296623;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=czYZBdxur363VXW6RXUxmSDqGWBQiPGaiVhIHEEkG5Y=;
-        b=nzR3xgSqQBmzH4jRGok6ZAPXzz0SXLTvZrnFL8OWxsny8QTGyFIzU0zfLQlAdF9+Eu
-         vH1SbrV4KVNtVltGobvytimrabKj//z/2tYfncuiLslyw7FIMkLc0/+dDrWbwCmY29Mw
-         qF8Q5orlZeug0XuuKtlLG1/URQHVEsPVOU4GoaZFmbYaf8xr7UqpepasLbYppZ0enexL
-         VAF6WO38PTkR7/ltJJDmJOkbloXT1SmMRGbC4cq3ERl+tFGznb7Ttd5QHg5ZQMN9ecZC
-         jwb9qOH8Vdt8qR6zDZx7LR+g1ZtQfSCTKd5t5VTor1aNOYnMvs53tdQ91XBJfjLCTG/3
-         IR4A==
-X-Forwarded-Encrypted: i=1; AL+hErEK/AI0XdSdNhNFZLnIrP0wzgSDq5Vy/67MyF2FJp3w3q2f4xnN6KbuDIPUPrMsZ9oVFVxfJGzYfZe0f5oI@vger.kernel.org
-X-Gm-Message-State: APuU4Z8hqxDKSTCWW6umbavloRFT0E+PPCEsxbcPEb9FEStoL6JLDAN5
-	mnfAxY51DKxjoURlPB95l6M3hIGbbHS3SIti/oVMPa+GE6VN1FDZdcil
-X-Gm-Gg: AZFdTZednxPw1+rjoS0wemjcfcJNxhKw5+JlG4jjLCECvDxuogN+lgjVE5gX203ksf5
-	sdOUMFbUW4TxqwaDCrNOuyuiIgoGIyPW1Q4OWd5QfLEsdeb+u/cWp0l1V+EA3ZHXqCe96u6k2+a
-	NG1oQaT6ziRHAohKtFfWGBNKBAbmp8RJtLFIozoipErNCPrK6mcNQMv5vEeYCx0QRimkWPmzMI1
-	wrmWGollGPKvqL0iGcpZ9O7XPhM+dN3tdmlIb+TbiqQ5SfOWkemLE8XIkjiJUI33EUJqOPs72R6
-	2IefGmStqLRAv9r/q0KFPLgHp1fSkYw5P1FMh1P69tDTFbBaWGHdB7A3xMfo/VmRCrbRRT/Bnq8
-	50+iWTK8z7ttcsRT7H+NU5CDF2IvB5EpT7kWwlt/lYv59WcgxHEJ+lSB/ux9ezRyz6rvMst1rua
-	33tDe+rEcYVyUvgYLjeP4MPuKEB1vGa6codsHR0AnM2cUeL/DnDhOeoASEHZuSd+arxTosHXm0+
-	1mrfpZiVkwrNNlQv8EY22x6FvULTK+8Dr/Ft5TucWFeA/08rSAbTon7WOJ4/RfF6X4OKgme+Ik+
-	YsZxtwygtgFgN1o6OAG1NvT5hDaJF14MOWe2XC6uKKSo+OMiDSs=
-X-Received: by 2002:a17:90b:4a47:b0:3b3:fc1f:a5c4 with SMTP id 98e67ed59e1d1-3b41c8dc821mr19907158a91.20.1795691823100;
-        Thu, 26 Nov 2026 03:17:03 -0800 (PST)
-Received: from anatasluo-Precision-5560 ([2408:820c:d29:db90:58ff:756e:834a:9b39])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b44b8c2fcesm11796830a91.4.2026.11.26.03.16.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 03:17:02 -0800 (PST)
-From: Longjun Luo <luolongjuna@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: Longjun Luo <luolongjuna@gmail.com>,
-	live-patching@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Song Liu <song@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v2 1/3] objtool/klp: Build test fixtures with ftrace
-Date: Thu, 26 Nov 2026 19:16:10 +0800
-Message-ID: <20261126111625.2523320-1-luolongjuna@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261022171637.3298443-2-puranjay@kernel.org>
-References: <20261022171637.3298443-1-puranjay@kernel.org> <20261022171637.3298443-2-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=R5s36xpL
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/KDx6PRDjEGDYnhz2VHuKJaW+Yap8yQnZ51Ns2dL25s=; b=R5s36xpLZZgPLm9uLI7A4NQRBp
+	BcPgrPg+UI4fudIwP0wP6NTooKgKiXNWPYZpuS/veOMyx1kOm4nEw771tf7kE1zfnN8w3pELMShiN
+	aYwdVBEvtUzJbAfsPevaUf519f/405eaGSY8InuwM3EgTs8Xb96n3CkaCCQqfQ6QHZJu4X8FdgWw8
+	HBv+R/JOMiqAWTMxYfzFskKB/zrGOeT22awtZfEWXrRhI6AfDVniH/bG/zthugHR4EwOgbilFbKzi
+	KhKsTHLS9qNxHMKPEmWju28vjo5bK0sRpWl9cA9RNj+90TMeK7/tuz3xYlExMN2UGkCAjyAUwQ8Sl
+	0eaVhJPg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
+	id 1xWa6p-00000004qEY-2zZJ;
+	Thu, 26 Nov 2026 14:05:59 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 7E534302186; Thu, 26 Nov 2026 15:05:58 +0100 (CET)
+Date: Thu, 26 Nov 2026 15:05:58 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Dylan Hatch <dylanbhatch@google.com>, Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched, livepatch: Fix transition stall for CPU-bound
+ tasks
+Message-ID: <20261126140558.GF49833@noisy.programming.kicks-ass.net>
+References: <20261117045254.1048298-1-dylanbhatch@google.com>
+ <20261117045254.1048298-2-dylanbhatch@google.com>
+ <awIMltMpXzhXiDpU@jpoimboe>
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -102,12 +81,41 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <awIMltMpXzhXiDpU@jpoimboe>
 
-When I rebased my patches onto tip/objtool/core (b99a5337da3c), I ran
-the test suite on x86-64 with Debian GCC 12.2.0.
+On Sat, Nov 21, 2026 at 01:55:39PM -0800, Josh Poimboeuf wrote:
 
-This GCC defaults to PIE. I got the same 35 failures with and without
-my patches. For example, test-abs-and-addressable reported
-"target: no ftrace call site, can't patch". With -fno-pie, 49 tests
-passed and 4 were skipped.
+> diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
+> index e058d21d84b75..1ccbae2051c72 100644
+> --- a/kernel/livepatch/transition.c
+> +++ b/kernel/livepatch/transition.c
+> @@ -402,12 +402,22 @@ static void klp_send_signals(void)
+>  		 * Meanwhile the task could migrate itself and the action
+>  		 * would be meaningless. It is not serious though.
+>  		 */
+> -		if (task->flags & PF_KTHREAD) {
+> +		if (task->flags & (PF_KTHREAD | PF_USER_WORKER)) {
+>  			/*
+>  			 * Wake up a kthread which sleeps interruptedly and
+>  			 * still has not been migrated.
+>  			 */
+> -			wake_up_state(task, TASK_INTERRUPTIBLE);
+> +			if (wake_up_state(task, TASK_INTERRUPTIBLE))
+> +				continue;
+> +
+> +			/*
+> +			 * If it's running, force it through __schedule() so
+> +			 * it can switch itself in klp_sched_try_switch().
+> +			 */
+> +			if (task_curr(task)) {
+> +				set_tsk_need_resched(task);
+
+That's broken. Preempt state is more than just the TIF bit.
+
+> +				kick_process(task);
+> +			}
+>  		} else {
+>  			/*
+>  			 * Send fake signal to all non-kthread tasks which are
