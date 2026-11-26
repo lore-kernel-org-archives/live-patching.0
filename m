@@ -1,105 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.178
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795690434;
-	b=ioJKJRhNGaS+AaB+5NDwhGx8FnjI1TxkP8wO84KPBoEUmfdtld/3VpIu/to2F+cW4a3x
-	 /f2jAD6JtiNWasOl4TruxjDYx60aqp/aksPRBbj9vsuI1yHDSpfZycVQkIrgHGHsduM9N
-	 qzmRmo6YGE7FPPdq1+mV6BAIYVcZvvmIFWcYDdmNz7gwUiPATCugImbyDVOYWIL0riaoB
-	 inRZDd566IyzTtaOuXeUYBIkksJtktItTEY8eFXD906+IZWa1ch+oEtFapfr6zd8vXTnz
-	 2Ykv8azMseKfZnEAoeZhBICS4pVWIG/QknHSDfiQaHCcWWaFillGF66EPQuelpZ2sTg==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795690434;
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795690850;
+	b=FkxsPTVi9KTpoCUOTz3uwFMVQ6gJqHzhw2b53YZ5OKoKnQTzX9FUzuEdjfLsrXrHpdQ6
+	 BxADjCBP3Wrx0ljnoFbbVZLno3i2lGjAiv+gUQcz8SDs1bxR1IdVtayw5cEIGlySNB+Hm
+	 po9UkGy7+Axt56LaAHhJmjEjLthF2d+4OWXS+Cuo73WTJ+N4yxSffEl3dDZPJDCiN5hz3
+	 JZ5ZS8E1y5/UuoXJMLFsYE9e2/xRkiVj2LmI0A+vEnZRpj2PS9Q0XEDPgDL6LgBjichzW
+	 78d7ZdOz1Hle2LUPGkVfxbGkwkbyYq/0iX8p1AJlmhsHjropBTQspeLGt4AMAT99/BQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795690850;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
-	b=hpERGg7rvOyRAupUtwH2a9H83KE7x+gzVsSgprWSEfOGibNPjiOVhvl4UyTdbfMCexgk
-	 VOR0EAo1EB0Qxtc2AbEQvAG+1ceZHm5zUquV6mJCwVdTH68lNpiinB7h3VHRrVFlo0pVS
-	 11fsS9Zw5MUaJ2OjS9HXfj+4kVZRy+7Ox2O81fUsDWJebLe9tee00qmjkbenWAnACow+6
-	 dU4bXhKWbO/ksH+c9mbiAq0SqdRjRteCyl2907p4LNh/e1Sb7+l+wM7jns4j4qkUQxZia
-	 BjVTMZaIm0YevZAx3+pWN7KViCfAPIsTFrbruPfv9xI65cfVb7zBJbQDRfFLGzDNaGg==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
+	b=vgeEBZXRTEDTfkGrsEdUSRTs6fcBciXZ/9HpPf2+j1JnleggXsyI6iYlijx6KxPb69VO
+	 eNlv6TBqHSuj+T0VYrGMuTcVKDMXCPgQsGoE/lpFzd+YLGS2gzyc4GAWVLD1DguIB/Tt+
+	 Tn+p+V092tQjEbsiEJc+umk/FLWTyfSAHvfYLx804TMm7AD03e2joXQcZE640E3S+a0M1
+	 yoNQgbbitJflQYZQwzI+ukXDSst20W1mWoCAEHoFzajT9VfUkCObOycn0NqBWddv2LZZT
+	 npoGztuzI4MW0HAC4rQmh9/xaYze+oTDOd5IfqPUcrpzyJZ7+3p2nrx7NQduEGJ1hHw==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YZOpALXm;
-	arc=none smtp.remote-ip=209.85.215.178
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pvS1hfLx;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.43
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4FC606A321
-	for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 10:53:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4D4FC606A321
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9359A606A327
+	for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 11:00:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9359A606A327
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=YZOpALXm
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ccca948203aso5049020a12.3
-        for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 02:53:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pvS1hfLx
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-67da7d18f2fso7742689d50.0
+        for <live-patching@vger.kernel.org>; Thu, 26 Nov 2026 03:00:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795690850; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gWTGiUIcJiLEZvdXpyFE9PuZNYneBlmYV1xvlPfXkNoN1nYhcTJMhSP0/WG1jfylxA
+         qSw7/HFI+bUp360ilYaLB86mbIXgEPtQ321cg1g1v3NWxOSEBqXMBkrPJZgxZWiP7yTj
+         d2OU91noZYPFk4QI5o1cEnY3a4cIj7Mwb6BjeOk6ehrKkkMksQGn3LDaIywRpotDBb7o
+         s+nMFsLLuOtAbcM7/8VjZ423W94+kxN7XTjjGt+BwVTkwBEiFB90Q3slacR0SA3M7/Ms
+         SYmoc6sxTir1LcBg+Yc3gZrBspnIyA8bT19NZAtptpQxdvEa0cwzJPste07MT67+6n82
+         oHzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
+        fh=N7tcN1cDpqdzrSFjBP1batJ1IaiuAipqJcFICK4UQTc=;
+        b=W5cjgj5MSaAz50GdGREt57uKQPUEP1flS5dzAfffGjZYol+TUKCLAqYW3kLh3Y0HPq
+         IcWjBFJ1mmxz6l3/1qaBNKXCM+DQbRy85JN+BXFmzh3PjJI5Q5WuYdmy3CI1+fVmhYuw
+         yrT4jXHWdGXj/oPWMhCbJcEvwgn8XEKEErVjwKvJfqVnjhg2OhGjgthZxhuQNm31fqHW
+         /DNOTCWKbSOt14mHOBcxs4u6mUJ6H811XU4tfm4Y7jVBikL+t0Rq6H8rUQCtuCdYrY1j
+         I9wGS2PvDoNnqxEnQ3w1MySzYx1zwhjx9sDriwto0Zy0uMMdlUMLUOz3Ov6MW7V0sWKi
+         ooAQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1795690432; x=1796295232; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
-        b=YZOpALXmHBFxDKolZlaqblavXWXFKNa/oyoKwP1k9KQ7y/lfIqi83cuku7ysOyxmyM
-         iQ0xDrAuqKpmNsvtIHKONtTCZtX1fwMjenCE+lRJnymV97OgVPK/uMkltGZwftoNkaTx
-         MMVyu03fbWPzQRzfhWwx3a1HEkpGnlzKHP+1inWojL5rjQHiMQAfmRjjjzxpV7MDsjPY
-         bTMbwaE9IB2EV004SOgfpFPpe5WJCZYyaz7wiq/iXS0XEgSPT9dUT22Vn9qlif4P5W2K
-         PGHsKQL8NS81wuEJjIN5PY/7L905ZyfLqtcVQEO+dyuwpQQMarTMqRi35AS73yxbWvaw
-         Gi+A==
+        d=gmail.com; s=20260707; t=1795690850; x=1796295650; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
+        b=pvS1hfLxhlftEaWbAgidd2ly8kGrGI4XkzJQDvuzbvyETadHYLmBq7EEkYpOCtwMkn
+         XdER0L0sZyTM0GDLXrOe1uAC59a5Z7IHbTpipsKWfqA8s/CA3xE4ynITkny/kxfZwKP6
+         jLPiZAE9faAhc7/sO0ymg/Pa7sxvAv8PYYCpHVMKbGebBVlytTmF1IXEMraNZNRLdIpM
+         OOPwiJuvYuy/vmLJB8TJVRQFlA/NPikevlKIQ23YP4R43TEnaxmAWEGvs7VLW7lXQyTb
+         5+sVjLgppZPh8f7JVhiRoOk+/3ySPlcJ+6flvWPxv0GvulqZjViIqqcf8ICAokobqj+3
+         Ce/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1795690432; x=1796295232;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OLWKll3wpoHUCYYXUcYjGv3MdRIE3PcigYZXM4He/NA=;
-        b=D/5CcY/nE/JkX5Qts241wKIA4uh174yY+1nkGsm4nyA0tpOi/iSNaWo3JXq4O/A8eE
-         maG/NQ5JYaGzphakgyRZeQbxJoqX2Jie2/A+fiaHq4OqFUc7TPtuKtWiGyJjodCTNQ+L
-         37IuMPdcJnFeSZNLFVhQpJMWR/JNv/sYX3SAGrYOiRvWV08Ei4XB1qdigoNW3F1ns1Uf
-         uWDiae8ug9PJiYEUFbe0B94vEA8/DEAcHL4EWveTpNOwxgCPDbKehK/sDguNbfshVAMn
-         vwOhIrlrbL+v5Qo7ahELsc4NceznosSnYqoHsH1eH/TW9le4k58DLJ1Px1jpe+sgOHMd
-         OjOQ==
-X-Forwarded-Encrypted: i=1; AL+hErGOVGv0P8DDcyinxFc05WQjMbCjFvu3NTKqPJL5jzHmh4flHOFKK1u6sV4jGJFl+oohfGaVE+Xm2jM4yA/z@vger.kernel.org
-X-Gm-Message-State: APuU4Z9kytep2K0zS1dtwxsi4p8RmOlrgDafZxEM5CgPEmDwj4Xne+Jc
-	Gc71uHYlk6YIipvEEImOCsWTKwcD8XI5EETw68lk5OKUuR1Y92S1fO+3
-X-Gm-Gg: AZFdTZemBGiPvXYlY21YyrKQ2ZAPgws2+Amt2Ti114hWhEZGXQAlTsON1POyGzILDCe
-	Hm9D+E3pDFgHGUL6Rx3nOD1irC5aJVd11PIv0Ml4vh3YEhX/7uqNubYixmcf/gE3ilwkiZtmu7y
-	i8HztlAe7E3bAQeGuKwtjSsqx1adKx/sX8GngghCOW3r4eU2x+AmArKt70yhBSoAxoXJGdKYPpH
-	SokxY4v7AjVEUZGGlUuFChdIfIsemrCUkova0FZFdz8t19Y87W3d8u6MVUVx2IaIbFyJY0cKV0L
-	nwL+1dyck31hqCilGAMnl6cmR2EEiP40f6JenbLlugjzAEAaMSebw/mjs+C/P99IDE6i5lTX7Vp
-	usLFZNj3mqpOaVnHalxPQHFK+TT7erO+wBMt2738cNFMHeT4OARhXBgFbin09Ud3xnda9ugls1X
-	FO5SKGYgf2ZIvH6zW7JTvGu64MKJobDj8YZHG5J9cClzsDz4j2MKUTwxx7VUitx7VOd4GXA1hBk
-	PJjAFB67bbCuxRbIVk+OLFijJZONgDLqcCR5YpoUxqxqXfllxQjAodmHMm7Q6eSyKCJtCdNLJZ2
-	97bYTnQ/l+SralCuCdseaDG5pYt66SaMfXqoGgOW8RU/xd4gpP8=
-X-Received: by 2002:a17:90b:4b05:b0:3a0:516d:9f88 with SMTP id 98e67ed59e1d1-3b41c911c9emr18727345a91.26.1795690432434;
-        Thu, 26 Nov 2026 02:53:52 -0800 (PST)
-Received: from anatasluo-Precision-5560 ([2408:820c:d29:db90:58ff:756e:834a:9b39])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3b40578dca0sm35469676a91.2.2026.11.26.02.53.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2026 02:53:52 -0800 (PST)
-From: Longjun Luo <luolongjuna@gmail.com>
-To: jpoimboe@kernel.org,
-	peterz@infradead.org
-Cc: mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	song@kernel.org,
-	puranjay@kernel.org,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Longjun Luo <luolongjuna@gmail.com>
-Subject: [PATCH 2/2] objtool/klp: Fix string sentinels referenced through .L labels
-Date: Thu, 26 Nov 2026 18:53:25 +0800
-Message-ID: <20261126105325.2521938-2-luolongjuna@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261126105325.2521938-1-luolongjuna@gmail.com>
-References: <20261126105325.2521938-1-luolongjuna@gmail.com>
+        d=1e100.net; s=20260707; t=1795690850; x=1796295650;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YBjrgG7MLY5ulGSrGu9idWUw2qJwnhY95Q5JsiJ363Y=;
+        b=MSPm1r4L1Xfl+17f07lCa4G7GgGxoLV0aC2JyoWeAjKj7yTB5WXzRUvKx1bHZ4mHHZ
+         JRsnZ/pfuGM6o/+G8650KVSspgsfofdgfU8iFwzaxmLuKW5+HQyg1Iib9RsLcGE82bWz
+         WxhjAyrrv9eMFzaizdy9b8dhIUttXNNcxQrFYTQr3Iwk+OcgprZ6hN8jRnAFeXkNq9tr
+         spbqcBrNSj3A4U2iHf+YrItzri06fa9FhFmywYufz4pdV9WHK71aNBoO0WNPq99JcnLb
+         A0d0U6e/CHplnk/d/dH3c2fyfs02uT4EITG8Yr538MZG7xG4e8iOsknDsasE4/uUy3ze
+         h9cA==
+X-Forwarded-Encrypted: i=1; AL+hErFX1y2CTT2iVYMLEJM+gLijzB3D7EwAGbE0yRjzYxAswQBFUWlSiPu8pwV0rtIGYGNSHdnwR8ORbqhTE47r@vger.kernel.org
+X-Gm-Message-State: APuU4Z8TOScPP0Kw7yrmuhF2HhqGDz//fJL1QqD8171S4W2GxMWN/a+6
+	f4I48KMKYGI1XinjAe60oCI40e0InotNQIhZTKSqnfmaltoEttXviFmpf41kYv5tP+Ow1gg3U/4
+	SU1e/AbXVBUaMgMlLyjqFDm3dwbxBc6c=
+X-Gm-Gg: AZFdTZehqzVcEEQ6vWtuHKMNjoMpcZQsApk4T6OMtGBQVGNpe8LxJX/vL7EIIzpCz15
+	gmM7qqQ4c+tI5wRyBokzDh/de3aJBwa1754wNJeEIUQrW+f4scCnaq1HJk8qrZYxx8astOUzB0e
+	vd9VMMQ9FtpgfL1PX9zRrd+kHkEnRopeSYMlzkvGHbY8Cb+BSDeLqfI6BEwJk+EM4WVvhycEeGR
+	lWcS3abhZTJPe5gyzHHqWnni5AFL+N1xOhnaGvnp733QngUmPWyI/i1XsBFAlpGW6Z4bT7MPgsx
+	2crixUEfGzTjzCtL+IrQcxANQ2IT9CwCUVBHzJb5NcyiDh71pkpT6b+uih56WXkgHmGbbEHNzaH
+	KRj0zn2PFqy9ztb1wj+mYlhR8eOq1jTL597MKWw==
+X-Received: by 2002:a05:690e:480c:b0:67c:6bcd:b905 with SMTP id
+ 956f58d0204a3-67df440791dmr4500687d50.10.1795690849512; Thu, 26 Nov 2026
+ 03:00:49 -0800 (PST)
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -109,274 +104,94 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20261104133158.3187525-1-luolongjuna@gmail.com>
+ <20261104133158.3187525-2-luolongjuna@gmail.com> <avZ3jEbnuVu5Qv2G@jpoimboe>
+ <CAKL4jwX=ctyjXmm=Oz_+HXe89vOHWHgT_-KGyL47fOBEQTYJiQ@mail.gmail.com> <avdWaZboJeDyyOMs@jpoimboe>
+In-Reply-To: <avdWaZboJeDyyOMs@jpoimboe>
+From: Longjun Luo <luolongjuna@gmail.com>
+Date: Thu, 26 Nov 2026 19:00:37 +0800
+X-Gm-Features: Aa3M54rwjsZu7jMc1Fcx0xLlcwpmIPWCqXj01ITTPuucs-yBR6GhxYBGJrQyqJo
+Message-ID: <CAKL4jwXZQKf2XrkRmpws3BK6x6iyMD+BRY-NMfqzR1DMmowadg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 01/11] objtool/klp: Fix checksums and copying of
+ wide strings
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: peterz@infradead.org, mbenes@suse.cz, pmladek@suse.com, 
+	joe.lawrence@redhat.com, song@kernel.org, puranjay@kernel.org, 
+	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, live-patching@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-String relocations can be used for string loads or sentinel checks.
-For example, with GCC 16, range_string() in lib/vsprintf.c uses .LC22 + 8
-as a loop bound. Treating a sentinel as the start of a string can cause
-objtool to read past the end of the referenced string.
+I sent string-related fixes as a separate series.
+https://lore.kernel.org/live-patching/20261126105325.2521938-1-luolongjuna@=
+gmail.com/
 
-Encode each string reference as [byte offset, whole string] in the
-checksum to distinguish references at different offsets.
-
-Keep the symbol-based form for sentinel-related relocations to preserve
-their offsets from the same string label. Then handle them as normal
-data references.
-
-With GCC and Clang, moving the bound from +7 to +8 changes the checksum
-even though the string stays the same.
-
-Fixes: 0d83da43b1e1 ("objtool/klp: Add --checksum option to generate per-function checksums")
-Fixes: dd590d4d57eb ("objtool/klp: Introduce klp diff subcommand for diffing object files")
-Fixes: 873a2208ea31 ("objtool/klp: Calculate object checksums")
-Signed-off-by: Longjun Luo <luolongjuna@gmail.com>
----
- tools/objtool/klp-checksum.c                  | 43 ++++++++++++++-----
- tools/objtool/klp-diff.c                      | 42 +++++++++++++++---
- .../tests/generic/fixtures/checksum_insn.c    | 15 +++++++
- .../tests/generic/test-checksum-insn.sh       | 21 +++++++--
- 4 files changed, 101 insertions(+), 20 deletions(-)
-
-diff --git a/tools/objtool/klp-checksum.c b/tools/objtool/klp-checksum.c
-index 2547e142794b..05437c52c26a 100644
---- a/tools/objtool/klp-checksum.c
-+++ b/tools/objtool/klp-checksum.c
-@@ -67,6 +67,36 @@ static bool is_anonymous_const_data(struct symbol *sym)
- 	       (is_sec_sym(sym) || strstarts(sym->name, ".LC"));
- }
- 
-+/*
-+ * Encode a string reference as [byte offset, whole string]. This can express
-+ * differences in either the offset or the string.
-+ *
-+ * - For a string sentinel, the compiler uses this relocation for a boundary
-+ *   check without reading from the referenced address.
-+ * - The referenced part stays the same but the whole string changes, for
-+ *   example when the code uses &s[1] and s changes from "kfree" to "vfree".
-+ */
-+static void checksum_update_string(struct symbol *sym, struct instruction *insn,
-+				   struct reloc *reloc, s64 offset)
-+{
-+	struct symbol *target = reloc->sym;
-+	unsigned long start = is_sec_sym(target) ? offset : target->offset;
-+	s64 addend = is_sec_sym(target) ? 0 : offset;
-+	const char *str = target->sec->data->d_buf + start;
-+	size_t len = elf_strlen(target->sec, start);
-+
-+	if (insn) {
-+		__checksum_update_insn(sym, insn, &addend, sizeof(addend));
-+		__checksum_update_insn(sym, insn, str, len);
-+	} else {
-+		unsigned long sym_offset = reloc_offset(reloc) - sym->offset;
-+
-+		__checksum_update_object(sym, sym_offset, "reloc addend",
-+					 &addend, sizeof(addend));
-+		__checksum_update_object(sym, sym_offset, "reloc string", str, len);
-+	}
-+}
-+
- static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
- 				 struct instruction *insn)
- {
-@@ -135,11 +165,7 @@ static void checksum_update_insn(struct objtool_file *file, struct symbol *func,
- 	offset = arch_insn_adjusted_addend(insn, reloc);
- 
- 	if (is_string_sec(sym->sec)) {
--		char *str;
--
--		str = sym->sec->data->d_buf + sym->offset + offset;
--		__checksum_update_insn(func, insn, str,
--				       elf_strlen(sym->sec, sym->offset + offset));
-+		checksum_update_string(func, insn, reloc, offset);
- 		goto alts;
- 	}
- 
-@@ -212,12 +238,7 @@ static void checksum_update_object(struct objtool_file *file, struct symbol *sym
- 		offset = reloc_addend(reloc);
- 
- 		if (is_string_sec(target->sec)) {
--			char *str;
--
--			str = target->sec->data->d_buf + target->offset + offset;
--			__checksum_update_object(sym, sym_offset,
--						 "reloc string", str,
--						 elf_strlen(target->sec, target->offset + offset));
-+			checksum_update_string(sym, NULL, reloc, offset);
- 			continue;
- 		}
- 
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index dd5c4d604be3..c32054bff84e 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -923,6 +923,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
- 
- 	if (data_too && !is_undef_sym(patched_sym)) {
- 		struct section *patched_sec = patched_sym->sec;
-+		size_t sym_size = patched_sym->len;
- 
- 		out_sec = find_section_by_name(elf, patched_sec->name);
- 		if (!out_sec) {
-@@ -935,7 +936,12 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
- 				return NULL;
- 		}
- 
--		if (is_string_sec(patched_sym->sec)) {
-+		/* String at the label will be copied as normal data. */
-+		if (is_string_sec(patched_sec) && !is_sec_sym(patched_sym) && !sym_size)
-+			sym_size = elf_strlen(patched_sec, patched_sym->offset) +
-+				   (patched_sec->sh.sh_entsize ?: 1);
-+
-+		if (is_string_sec(patched_sec) && is_sec_sym(patched_sym)) {
- 			out_sym = elf_create_section_symbol(elf, out_sec);
- 			if (!out_sym)
- 				return NULL;
-@@ -946,7 +952,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
- 		if (!is_sec_sym(patched_sym))
- 			offset = ALIGN(sec_size(out_sec), out_sec->sh.sh_addralign);
- 
--		if (patched_sym->len || is_sec_sym(patched_sym)) {
-+		if (sym_size || is_sec_sym(patched_sym)) {
- 			void *data = NULL;
- 			size_t size;
- 
-@@ -957,7 +963,7 @@ static struct symbol *__clone_symbol(struct elf *elf, struct symbol *patched_sym
- 			if (is_sec_sym(patched_sym))
- 				size = sec_size(patched_sym->sec);
- 			else
--				size = patched_sym->len;
-+				size = sym_size;
- 
- 			if (!elf_add_data(elf, out_sec, data, size))
- 				return NULL;
-@@ -1258,6 +1264,26 @@ static bool klp_reloc_needed(struct reloc *patched_reloc)
- 	return true;
- }
- 
-+/*
-+ * String relocations can be used for string loads or sentinel checks.
-+ * For a string sentinel, we must keep its offset from the string's start.
-+ * To achieve this, keep both relocations relative to the same string label
-+ * when it can be identified.
-+ */
-+static struct symbol *find_string_label(struct reloc *reloc)
-+{
-+	struct symbol *sym = reloc->sym;
-+	struct section *sec = sym->sec;
-+
-+	if (!is_string_sec(sec) || !(sec->sh.sh_flags & SHF_MERGE))
-+		return NULL;
-+
-+	if (is_sec_sym(sym))
-+		sym = find_symbol_by_offset(sec, arch_adjusted_addend(reloc));
-+
-+	return sym && is_local_label(sym) ? sym : NULL;
-+}
-+
- /* Return -1 error, 0 success, 1 skip */
- static int convert_reloc_sym_to_secsym(struct elf *elf, struct reloc *reloc)
- {
-@@ -1290,6 +1316,10 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
- 	if (sym && sym->len == sec_size(sec))
- 		goto found_sym;
- 
-+	sym = find_string_label(reloc);
-+	if (sym)
-+		goto found_sym;
-+
- 	/* No dedicated section; find the symbol manually */
- 	sym = find_symbol_containing_inclusive(sec, arch_adjusted_addend(reloc));
- 	if (!sym) {
-@@ -1327,7 +1357,7 @@ static int convert_reloc_secsym_to_sym(struct elf *elf, struct reloc *reloc)
- 
- /*
-  * Sections with anonymous or uncorrelated data (strings, UBSAN data, Clang
-- * anonymous constants) need section symbol references.
-+ * anonymous constants) normally use section symbol references.
-  */
- static bool is_uncorrelated_section(struct section *sec)
- {
-@@ -1348,7 +1378,7 @@ static int convert_reloc_sym(struct elf *elf, struct reloc *reloc)
- 	if (reloc_type(reloc) == R_NONE)
- 		return 1;
- 
--	if (is_uncorrelated_section(sec))
-+	if (is_uncorrelated_section(sec) && !find_string_label(reloc))
- 		return convert_reloc_sym_to_secsym(elf, reloc);
- 
- 	/* Everything else: references should use named symbols. */
-@@ -1599,7 +1629,7 @@ static int clone_reloc(struct elfs *e, struct reloc *patched_reloc,
- 	 * "offset is outside the section".
- 	 * So for this case, create temp symbol to use symbol-based relocation.
- 	 */
--	if (is_string_sec(patched_sym->sec)) {
-+	if (is_string_sec(patched_sym->sec) && is_sec_sym(patched_sym)) {
- 		long str_off = arch_adjusted_addend(patched_reloc);
- 		const char *str = patched_sym->sec->data->d_buf + str_off;
- 		struct section *out_sec = out_sym->sec;
-diff --git a/tools/objtool/tests/generic/fixtures/checksum_insn.c b/tools/objtool/tests/generic/fixtures/checksum_insn.c
-index 70c2e9106f8a..5e794df2c7de 100644
---- a/tools/objtool/tests/generic/fixtures/checksum_insn.c
-+++ b/tools/objtool/tests/generic/fixtures/checksum_insn.c
-@@ -50,6 +50,21 @@ void set_priv(int i, int v)
- #define MESSAGE "original"
- #endif
- 
-+#ifdef STRING_END
-+int walk(const char *start, const char *end);
-+
-+int range_string(void)
-+{
-+	const char *p = "[range ";
-+	const char *end = p + sizeof("[range ");
-+
-+#if defined(MOVE_END) && !defined(PATCHED)
-+	end--;
-+#endif
-+	return walk(p, end);
-+}
-+#endif
-+
- int target(int x)
- {
- 	int r;
-diff --git a/tools/objtool/tests/generic/test-checksum-insn.sh b/tools/objtool/tests/generic/test-checksum-insn.sh
-index 692ab1b174b2..08b9dafc2088 100755
---- a/tools/objtool/tests/generic/test-checksum-insn.sh
-+++ b/tools/objtool/tests/generic/test-checksum-insn.sh
-@@ -4,9 +4,10 @@
- # What a function's checksum has to cover beyond its instruction bytes.
- #
- # checksum_update_insn() hashes the raw bytes, and then what any relocation on
--# the instruction refers to: a string section contributes the string's
--# contents, anything else the target symbol's name and the adjusted addend,
--# with a reference to a static resolved back through its section symbol first.
-+# the instruction refers to: a string section contributes the byte offset
-+# within the string and its full contents, anything else the target symbol's
-+# name and the adjusted addend, with a reference to a static resolved back
-+# through its section symbol first.
- #
- # None of these show up in the bytes.  A rel32 operand is zero in the object
- # and supplied by the relocation, so every change below leaves the encoded
-@@ -64,4 +65,18 @@ if $READELF -h "$workdir/patched.o" | grep -q 'Machine:.*X86-64'; then
- 		fail "wide_string() lost its PC-relative string reference"
- fi
- 
-+# Place MESSAGE after "[range " to catch hashing the next literal at the loop bound.
-+string_flags=(-fno-pic -fno-data-sections)
-+build_pair checksum_insn.c -DSTRING_END -DSTR_CONTENT "${string_flags[@]}"
-+assert_checksum_matches range_string
-+
-+# Move the bound from the terminating NUL to one past it.
-+build_pair checksum_insn.c -DSTRING_END -DMOVE_END "${string_flags[@]}"
-+assert_checksum_differs range_string
-+run_diff
-+section_relocs .text.range_string | awk '
-+	$5 ~ /^\.L/ && $6 == "+" { base[$7] = $4 " " $5 }
-+	END { exit !(0 in base && 8 in base && base[0] == base[8]) }' ||
-+	fail "range_string() lost the common base of its two references"
-+
- pass "instruction checksums cover reloc targets, addends and string contents"
--- 
-2.53.0
-
+On Sat, Nov 14, 2026 at 2:27=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org=
+> wrote:
+>
+> On Fri, Nov 13, 2026 at 12:32:20PM +0800, Longjun Luo wrote:
+> > Sorry, I left out the debugging context here. Both comments refer to
+> > specific kernel build artifacts:
+> >
+> > On Thu, Nov 12, 2026 at 06:42:36PM -0800, Josh Poimboeuf wrote:
+> > > Please give example(s) of such "wide strings" in the changelog.
+> > >
+> > > > +/* Wide strings, such as the u16 PSR setup table, end at an all-ze=
+ro element. */
+> > > > +ssize_t elf_string_len(struct section *sec, unsigned long offset)
+> > >
+> > > What is the "u16 PSR setup table"?
+> >
+> > PSR stands for Panel Self Refresh.
+> >
+> > Source    : drivers/gpu/drm/display/drm_dp_helper.c: drm_dp_psr_setup_t=
+ime()
+> >             /* macros expanded */
+> >             static const u16 psr_setup_time_us[] =3D { 330, 275, 220,
+> > 165, 110, 55, 0 };
+> > Section   : .rodata.str2.2 (SHF_STRINGS, sh_entsize =3D 2, Clang ThinLT=
+O)
+> > Bytes     : 4a 01 13 01 dc 00 a5 00 6e 00 37 00 00 00
+> >                         ^^^^^
+> >                         220 (0x00dc) contains a zero byte at offset +5
+> >
+> > objtool   : strlen() returns 5. The checksum hashes only 5 bytes, and
+> >             the copy includes only 6 of the table's 14 bytes.
+> >
+> > > > + /*
+> > > > + * FIXME: GCC's range_string() uses a one-past-end string pointer.
+> > > > + * strlen() reads past the section; preserve the string base and a=
+ddend.
+> > > > + */
+> > > > + if (entsize =3D=3D 1)
+> > > > + return strlen(sec->data->d_buf + offset);
+> > >
+> > > I don't understand what this comment means either.  Please make sure =
+all
+> > > comments and changelogs are written by humans, as LLMs tend to write
+> > > nonsensically.
+> >
+> > Source    : lib/vsprintf.c: range_string()
+> >             p =3D string_nocheck(p, pend, "[range ", default_str_spec);
+> > Section   : .rodata.range_string.isra.0.str1.1 (8 bytes: "[range \0")
+> > Reloc     : range_string.isra.0+0x9a: R_X86_64_32S .LC22+8
+> >
+> > GCC note  : Uses .LC22+8 (one-past-the-end pointer) as a loop bound wit=
+hout
+> >             dereferencing it.
+> > objtool   : Passes offset =3D 8 to strlen(sec->data->d_buf + 8), readin=
+g past
+> >             the 8-byte section. Fixing this requires tracking the base
+> >             string (.LC22) and the +8 addend separately (left as a FIXM=
+E).
+> >
+> > I came across both while testing on full kernel builds rather than in
+> > production livepatching, so I'll leave it to you whether they are worth
+> > addressing in practice.
+>
+> It's probably worth fixing, just the comments and commit log need to be
+> clear about what exactly we're fixing.
+>
+> --
+> Josh
