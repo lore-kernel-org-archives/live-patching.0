@@ -1,76 +1,79 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=90.155.50.34
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1795704118;
-	b=nD0A2G4cRmKIV0b//htLP5J4h4D6PpPeazWeQ58AUdEfv9CAn3fH72v3vESsBKYBybrB
-	 9fZC3K9HU5+lAGhLpICfZ1vZJVfNNic1G25LZDX8q5ZqMvJNttK+nUVniiP4U8y5MEhrB
-	 8A3uhOh0aHZPRzqz7QNaRBzo1fKEb4C4ccefDvmUhDykeytVolcj3A/2LXCNAOsoNS71B
-	 /MvKzSHy5hESD+yY80z7m58zyBpl10Ai8j6PDXqKVIUrvSuOEtRat+FWkGs1kfRq4GHpW
-	 rc2qeZFq08ZeC1ANJKWnR5uQqWeRswaPdNbJgcJ954xxz4z+2VaXsUIIYkMVf4qF8KA==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1795704118;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:Date:From:To:Cc:
-	 Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To;
-	bh=rdNueW4QXzChDxHqUnOiyjaxZJ2JAneVGEC0pK9unoo=;
-	b=fEBy3OiSNHQHrokqbC67uyry9Wj3XjGbn2v9K3KD6+wAiX2YOXCEUR7LXKkQTh68nq+U
-	 dvwNFB6A/PbS6wrDGw0/wKlNCq4hJd+Srw4++Ckr4IRCDwhsooq42F5XQ+/NueOFJ1JIr
-	 2xjCfCDRYyuN91ai0DfkRtNz/vMsyAZg1V+dCj8hwbozYruMLQ5zGdiA+XFT7xvRyB9u5
-	 X8/+cM1G5p+p8b6zt4Ib09oOzbwlUNR++2EzcgdznSMCHlqTrHCGk2OqdtTnuN4NoJtDu
-	 OBqF/pG+TU9JK/8rviR97/d5I3RLJGe3rjmYNC4Va7wLk6JvoqCjXUeUNQUWAG+RsNw==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=infradead.org;
-	spf=pass smtp.mailfrom=infradead.org;
-	dkim=pass header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=irjBJ4pO;
-	arc=none smtp.remote-ip=90.155.50.34
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1795711317;
+	b=TdurHD0XJw7U0NOa8Jwgj8+LuBAQslO5MIs0i5VqbnHA8WzSy9Us5VdNBNGBGmgg9ZH+
+	 jGCfvznC6c0/nm2NVs7nGVIyuUk9jTwg6JVYzMMm3hsjkNa3niEQ8cDgwKEfZpChhcFzA
+	 2/TpmdSZskwdixb9QYgsLbwtBMEVhLYAxD0w6HOX+/XBuyNOtDJnPhZzlIJ/kbOVESO/2
+	 fp+6II5u15QFm0Um+/Nq620kiTDGbjZZJgdNeoeEw9pQMa5i7IC1kR/uQ/Ny9urHN9KsY
+	 YcrOqumNNzZOGqRyiqLP0xC2nSU4xyYj4QNMGeGbWrkSaC1aSbBV4SWDBaYrhaMtVRw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1795711317;
+	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
+	 Content-Type:Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
+	b=fl6itvXjOXmQPafoPoHVln1anbB/cCgdXWbuEPrfD5/I39oKl2lw3XLNICQ9OdVB0rN+
+	 lC88iAe83+TwsT1402C1emLTEpKKN0OfPVnfzNqlDU5qOSSSyhXY7XgkgAxJMTCfm5xFL
+	 esN/AIIjBzvRZpVEnJN29KBDopn8aIol6sfZsZtNgNznWMPJzlNNo4csZ2mWResyi/1vL
+	 iZAFcYq0qrvhFzOKIsDEZy8gxfppD2w1zer/fvr/f6CgH9gFT8p3ImXb2jhfK428NSYp0
+	 eR9QR/yQedouVidJvCktIb6v6rgpcaaFkF/23cIfz3O0/wbDMXtT/cAN9ndRHTKLWLA==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hWZQCSri;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A1E606A321;
+	Thu, 26 Nov 2026 16:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=hWZQCSri
+Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
+ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
+	t=1795711316;
+	b=h7diWlj7iDwEWt842v7eO29fII2ynDngXs9Wv7wgI+mRl1IbkoVyN0tB3ziTdKdYbi55
+	 km2AQ40vztDo8edHode0sSbUOuMBA3iRU5kr9Vutv7mRnYp8fMFfhZDBuyM3LAkKYuuxk
+	 ptZbMuRFlUISGgaR/KQlTT6/W52aAjIOE1VXyFtmP/Hif29uKlGOFNEKJmFpGiomJJ4B6
+	 qweBj2ovBR2UHENvuubC+8S4wOdwbjNg5Is+ybrPPRZwJGzxc8e2uvfshaUjNQF1NpM1Z
+	 cN9fcjA4PI47S/tJuSHtRlkA7ih9rVUJhLoKFIyPcBt2X8We3qZqIplgzLqbLlBVUCA==
+ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795711316;
+	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
+	 Message-Id:References:In-Reply-To:To:Cc:X-Mailer:
+	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
+	 X-Original-From:Reply-To:Content-Transfer-Encoding;
+	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
+	b=YCSG1qCaI8lEs3PT1a0noNxMYwa3RBmJxmr8y5BWW2R4yikOAFcVeHY7VY+TynrfTehO
+	 VPC76+BvivjAtXO5LMrqRmDoUUXde5/CVTzXwT6ipFntlDEt0i4JJLa9SoHskAm8vE7Qk
+	 C5CUsX1nK3xngsbC+Y/fEo7vAlOLRsB3KsU9bl3uL8lodik0CGewCQBGZrRmQ/bfS8no+
+	 2+7HD1C/z1GpacXRJd0Mlyas0bhlblWpf4EFEB/hgHBCgV8jYjhJgbyvvqMgYH/rD9vLV
+	 bl6w0FfaRaWfzvDF6GOEKCo3fIazH4FwSPKR9RLkP1gc7wlqD7YNe0cbF5zucgSTFnQ==
+ARC-Authentication-Results: i=1; smtp.kernel.org; 
+	arc=none smtp.remote-ip=100.80.115.77
+Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E7E606A31C;
-	Thu, 26 Nov 2026 14:41:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 05E7E606A31C
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.a=rsa-sha256 header.s=casper.20170209 header.b=irjBJ4pO
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=rdNueW4QXzChDxHqUnOiyjaxZJ2JAneVGEC0pK9unoo=; b=irjBJ4pOaN8hlYqdi9z0/tZ5QE
-	T9+aD1Td7neEkAk3fz+FM6LDYPbo9nBVGUAdvGjvdarYhQNG+NlYK1h6aumaKO7FtCJntoqhtgDOm
-	VOUyC9rheVuZQmN033KGXuAzQ0F9gMTwF3u+wuCeu1VIgCR2qm5Ce+aBHdXNP67zeYoWnmqO4Nwzk
-	5+M7vfYK9XJWC3fQBL0WSYHC+NElfrz/DL4WYaw7MDm/qK7NvoYEayG2L4RiG5t8tbCg70xbRr1NU
-	JxjvifuZl1C5RgCEcF87Q/g5KUooFMY36uVFmyMZEoJNO75wd9dJnLsk/63VxxBV9Xdj/JDvss41q
-	wbZFYs1g==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.100.1 #2 (Red Hat Linux))
-	id 1xWafY-00000005V92-1py9;
-	Thu, 26 Nov 2026 14:41:52 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 63146303082; Thu, 26 Nov 2026 15:41:51 +0100 (CET)
-Date: Thu, 26 Nov 2026 15:41:51 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Dylan Hatch <dylanbhatch@google.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Thomas Gleixner <tglx@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] sched, livepatch: Fix transition stall for
- CPU-bound tasks
-Message-ID: <20261126144151.GC83911@noisy.programming.kicks-ass.net>
-References: <20261125041900.3243569-1-dylanbhatch@google.com>
- <20261126142919.GG49833@noisy.programming.kicks-ass.net>
+	by smtp.kernel.org (Postfix) with ESMTPS id E6EF61F000ED;
+	Thu, 26 Nov 2026 16:41:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1795711316;
+	bh=VygsRWMu19YlnfF9gsoqmfWMLGEp1qEBqKlVHOIN/xU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To;
+	b=hWZQCSriccAZ+bqj8mal26ynme6sUFw8mykHOEXpOrDP67kE0bnZt2Fa6HpohuD+3
+	 xMfwfcwfQeFKywrA5gZ8KVMYBhoQXEIR9c5c0MafWdE44jMvjvbsVwl2kOt4HPLrHX
+	 ePy5nelODrCNIQ3seBtYdIkJDCi9g7A76jINNy3dvLTMZ4cSPDLhpCe98g7/ovDinD
+	 GW3tsA/c6HtfksHlaa8thsahAyNGsGFEbiRIRTMuASvLVmooA0C2bUBCttwXq0OqXP
+	 GjcBLEdUr0P8A8QRhlboc4Ki2/9XbsDHcKTjOQvLnHi4juYrbCbAv0yJosNK5wJQkk
+	 ry2+xdAaTASdA==
+Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
+	by lkml.kernel.org (Postfix) with ESMTP id 77B814D721;
+	Thu, 26 Nov 2026 16:41:46 +0000 (UTC)
+From: Binoy Ravindran via B4 Relay <devnull+binoy.vt.edu@kernel.org>
+Date: Thu, 26 Nov 2026 11:41:32 -0500
+Subject: [PATCH v4 1/3] rcu-tasks: Add helpers to visit tasks on the exit
+ lists
 X-Mailing-List: live-patching@vger.kernel.org
 List-Id: <live-patching.vger.kernel.org>
 List-Post: <mailto:live-patching@vger.kernel.org>
@@ -80,118 +83,203 @@ List-Unsubscribe: <mailto:live-patching+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:live-patching+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261126142919.GG49833@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <20261126-klp-series-v3-v4-1-2ad73e9c9254@vt.edu>
+References: <20261126-klp-series-v3-v4-0-2ad73e9c9254@vt.edu>
+In-Reply-To: <20261126-klp-series-v3-v4-0-2ad73e9c9254@vt.edu>
+To: "Paul E. McKenney" <paulmck@kernel.org>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+ Joel Fernandes <joelagnelf@nvidia.com>, 
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>, 
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+ Song Liu <song@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>
+Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ live-patching@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>, 
+ Jaidev Shastri <jaidevshastri@vt.edu>, Binoy Ravindran <binoy@vt.edu>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1795711306; l=6595;
+ i=binoy@vt.edu; s=20261123; h=from:subject:message-id;
+ bh=yjPjOhb/Atfnqas8UHt57mA11woD8FJQKXxBGP8uW1s=;
+ b=9JjPDopv/FzV2BE3xbWYnLkY5+zY4UuS+0XPxoaBGbdW7BTJTeK0Pcql70MxVQZWLAQPAeXBn
+ XAIT0NcWOufAJvcIHZsR7T3op/SkJsYzkKuc1LbDvY7bmUXkAHIB2WY
+X-Developer-Key: i=binoy@vt.edu; a=ed25519;
+ pk=4cNdKPHP0InmhK/9bb7Tm2ZMUXUvLGfw1pmVt5b98fA=
+X-Endpoint-Received: by B4 Relay for binoy@vt.edu/20261123 with
+ auth_id=1622
+X-Original-From: Binoy Ravindran <binoy@vt.edu>
+Reply-To: binoy@vt.edu
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 26, 2026 at 03:29:19PM +0100, Peter Zijlstra wrote:
-> On Wed, Nov 25, 2026 at 04:18:58AM +0000, Dylan Hatch wrote:
-> > Commit 676e8cf70cb0 ("sched,livepatch: Untangle cond_resched() and
-> > live-patching") moved klp_sched_try_switch() from _cond_resched() into
-> > __schedule() and gated it on READ_ONCE(curr->__state) & TASK_FREEZABLE.
-> > This causes livepatch transitions to stall when CPU-bound kthreads,
-> > PF_USER_WORKER threads (such as vhost-<pid>), or user tasks in long
-> > kernel loops spin with cond_resched():
-> > 
-> > 1. Even when __schedule() is entered via preemption or an unfreezable
-> >    sleep (such as PF_NOFREEZE kthreads or PF_USER_WORKER threads
-> >    sleeping in TASK_INTERRUPTIBLE), curr->__state does not have
-> >    TASK_FREEZABLE set, so klp_sched_try_switch() skips the task.
-> > 2. A sole runnable task spinning in the kernel never gets
-> >    TIF_NEED_RESCHED set during sched_tick(). In klp_send_signals(),
-> >    wake_up_state(task, TASK_INTERRUPTIBLE) is a no-op for a
-> >    TASK_RUNNING task, and set_notify_signal() sets TIF_NOTIFY_SIGNAL
-> >    without TIF_NEED_RESCHED, so the resulting reschedule IPI returns to
-> >    kernel mode without entering __schedule().
-> > 
-> > Patch 1 fixes both issues by dropping the TASK_FREEZABLE check from
-> > klp_sched_try_switch() (relying on stack_trace_save_tsk_reliable() in
-> > klp_check_stack()) and kicking still-running unmigrated tasks via
-> > resched_cpu() in klp_send_signals() (as well as waking interruptibly
-> > sleeping PF_USER_WORKER tasks).
-> 
-> So I didn't get a reply on my v1 comment, and I still have the same
-> quesiton; how isn't any of this a problem for the freezer?
-> 
-> The intent was to make sure that a patch problem is a freezer problem
-> and we fix both together.
-> 
-> Both cases above would also delay freezing, no?
-> 
-> It seems I have overlooked try_to_freezer() /
-> kthread_freezable_should_stop(). Those should also do the patching
-> thing. And then its a matter of adding either of those to whatever loops
-> you think are lacking.
+From: Binoy Ravindran <binoy@vt.edu>
 
-Perhaps something like so?
+A task joins its CPU's RCU-tasks exit list in exit_tasks_rcu_start(),
+before exit_notify() unhashes it from the task list, and leaves it in
+exit_tasks_rcu_finish(), after do_exit() has disabled preemption for the
+final switch. Once exit_notify() has unhashed it, the task is no longer
+found by for_each_process_thread(), but it still runs do_exit() and may
+sleep there. Code that must reach every task that can still be
+descheduled, such as the livepatch transition, has no way to find it.
 
+Add two helpers. rcu_tasks_visit_exiting() calls a function on each
+task on the exit lists under the list locks, without allocating.
+rcu_tasks_snapshot_exiting() copies the tasks into a caller-supplied
+array with a reference held on each, for callers that must sleep or take
+other locks while examining them. Without CONFIG_TASKS_RCU there are no
+exit lists, and the helpers do nothing.
+
+rcu_tasks_postscan() keeps its place in an exit list with a bare
+list_head while it drops the lock to reschedule, relying on nobody else
+traversing the list. Move that cursor into struct rcu_tasks_percpu,
+next to the list it marks, so that the new helpers can recognize and
+skip it. Only the grace-period kthread runs postscan, one CPU's list at
+a time, so one cursor per CPU suffices.
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Binoy Ravindran <binoy@vt.edu>
 ---
-diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-index 0a8c6c4d1a82..479e35b4f2cf 100644
---- a/include/linux/freezer.h
-+++ b/include/linux/freezer.h
-@@ -9,6 +9,7 @@
- #include <linux/wait.h>
- #include <linux/atomic.h>
- #include <linux/jump_label.h>
-+#include <linux/livepatch_sched.h>
+ include/linux/rcupdate.h |  9 +++++++
+ kernel/rcu/tasks.h       | 69 +++++++++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 72 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 3f74ae6d6e1f..55b8b4a0fa94 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -214,6 +214,15 @@ static inline void exit_tasks_rcu_start(void) { }
+ static inline void exit_tasks_rcu_finish(void) { }
+ #endif /* #else #ifdef CONFIG_TASKS_RCU_GENERIC */
  
- #ifdef CONFIG_FREEZER
- DECLARE_STATIC_KEY_FALSE(freezer_active);
-@@ -56,6 +57,7 @@ extern void thaw_process(struct task_struct *p);
- static inline bool try_to_freeze(void)
- {
- 	might_sleep();
-+	klp_try_to_freeze();
- 	if (likely(!freezing(current)))
- 		return false;
- 	if (!(current->flags & PF_NOFREEZE))
-@@ -87,7 +89,11 @@ static inline void thaw_processes(void) {}
- static inline void thaw_kernel_threads(void) {}
- static inline void thaw_process(struct task_struct *p) {}
++typedef void (*rcu_tasks_exiting_fn_t)(struct task_struct *t, void *arg);
++#ifdef CONFIG_TASKS_RCU
++void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg);
++int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max);
++#else
++static inline void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg) { }
++static inline int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max) { return 0; }
++#endif
++
+ /**
+  * cond_resched_tasks_rcu_qs - Report potential quiescent states to RCU
+  *
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index fcac7361ec51..b5fa5a3a8503 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -33,6 +33,8 @@ typedef void (*postgp_func_t)(struct rcu_tasks *rtp);
+  * @barrier_q_head: RCU callback for barrier operation.
+  * @rtp_blkd_tasks: List of tasks blocked as readers.
+  * @rtp_exit_list: List of tasks in the latter portion of do_exit().
++ * @rtp_exit_cursor: Placeholder that rcu_tasks_postscan() parks on @rtp_exit_list
++ *	while it drops the lock, so that exit-list walkers can skip it.
+  * @cpu: CPU number corresponding to this entry.
+  * @index: Index of this CPU in rtpcp_array of the rcu_tasks structure.
+  * @rtpp: Pointer to the rcu_tasks structure.
+@@ -49,6 +51,7 @@ struct rcu_tasks_percpu {
+ 	struct rcu_head barrier_q_head;
+ 	struct list_head rtp_blkd_tasks;
+ 	struct list_head rtp_exit_list;
++	struct list_head rtp_exit_cursor;
+ 	int cpu;
+ 	int index;
+ 	struct rcu_tasks *rtpp;
+@@ -1068,7 +1071,6 @@ static void rcu_tasks_postscan(struct list_head *hop)
+ 		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
+ 		struct task_struct *t;
+ 		struct task_struct *t1;
+-		struct list_head tmp;
  
--static inline bool try_to_freeze(void) { return false; }
-+static inline bool try_to_freeze(void)
-+{
-+	klp_try_to_freeze();
-+	return false;
-+}
+ 		raw_spin_lock_irq_rcu_node(rtpcp);
+ 		list_for_each_entry_safe(t, t1, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
+@@ -1081,14 +1083,15 @@ static void rcu_tasks_postscan(struct list_head *hop)
+ 				continue;
  
- static inline void set_freezable(void) {}
- 
-diff --git a/include/linux/livepatch_sched.h b/include/linux/livepatch_sched.h
-index 065c185f2763..8b9acffa3b64 100644
---- a/include/linux/livepatch_sched.h
-+++ b/include/linux/livepatch_sched.h
-@@ -18,8 +18,18 @@ static __always_inline void klp_sched_try_switch(struct task_struct *curr)
- 		__klp_sched_try_switch();
+ 			// Keep our place in the list while pausing.
+-			// Nothing else traverses this list, so adding a
+-			// bare list_head is OK.
+-			list_add(&tmp, &t->rcu_tasks_exit_list);
++			// The cursor lives in rtpcp so that the exit-list
++			// visitors can recognize and skip it.
++			list_add(&rtpcp->rtp_exit_cursor, &t->rcu_tasks_exit_list);
+ 			raw_spin_unlock_irq_rcu_node(rtpcp);
+ 			cond_resched(); // For CONFIG_PREEMPT=n kernels
+ 			raw_spin_lock_irq_rcu_node(rtpcp);
+-			t1 = list_entry(tmp.next, struct task_struct, rcu_tasks_exit_list);
+-			list_del(&tmp);
++			t1 = list_entry(rtpcp->rtp_exit_cursor.next, struct task_struct,
++					rcu_tasks_exit_list);
++			list_del(&rtpcp->rtp_exit_cursor);
+ 			j = jiffies + 1;
+ 		}
+ 		raw_spin_unlock_irq_rcu_node(rtpcp);
+@@ -1332,6 +1335,60 @@ void exit_tasks_rcu_finish(void)
+ 	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
  }
  
-+static __always_inline void klp_try_to_freeze(void)
++/*
++ * Call fn on every task on the exit lists, in place, with the per-CPU list
++ * lock held and interrupts disabled. fn must not sleep. Does not allocate.
++ * These are the tasks that have passed exit_tasks_rcu_start() but not
++ * exit_tasks_rcu_finish(). Once exit_notify() has run they are no longer on
++ * the task list, but they still run do_exit() and may sleep there.
++ */
++void rcu_tasks_visit_exiting(rcu_tasks_exiting_fn_t fn, void *arg)
 +{
-+	if (static_branch_unlikely(&klp_sched_try_switch_key) &&
-+	    !(current->flags & PF_NOFREEZE)) {
-+		guard(preempt)();
-+		__klp_sched_try_switch();
++	int cpu;
++	unsigned long flags;
++	struct task_struct *t;
++
++	for_each_possible_cpu(cpu) {
++		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
++
++		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
++		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
++			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
++				continue;
++			fn(t, arg);
++		}
++		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
 +	}
 +}
 +
- #else /* !CONFIG_LIVEPATCH */
- static inline void klp_sched_try_switch(struct task_struct *curr) {}
-+static inline void klp_try_to_freeze(void) {}
- #endif /* CONFIG_LIVEPATCH */
- 
- #endif /* _LINUX_LIVEPATCH_SCHED_H_ */
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index fdb8fb07f40b..87a13421da7a 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -198,6 +198,8 @@ bool kthread_freezable_should_stop(bool *was_frozen)
- 
- 	might_sleep();
- 
-+	klp_try_to_freeze();
++/*
++ * Copy up to max tasks on the exit lists into buf, taking a reference on
++ * each. Returns the number of tasks on the lists, which may exceed max.
++ */
++int rcu_tasks_snapshot_exiting(struct task_struct **buf, int max)
++{
++	int cpu, n = 0;
++	unsigned long flags;
++	struct task_struct *t;
 +
- 	if (unlikely(freezing(current)))
- 		frozen = __refrigerator(true);
- 
++	for_each_possible_cpu(cpu) {
++		struct rcu_tasks_percpu *rtpcp = per_cpu_ptr(rcu_tasks.rtpcpu, cpu);
++
++		raw_spin_lock_irqsave_rcu_node(rtpcp, flags);
++		list_for_each_entry(t, &rtpcp->rtp_exit_list, rcu_tasks_exit_list) {
++			if (&t->rcu_tasks_exit_list == &rtpcp->rtp_exit_cursor)
++				continue;
++			if (n < max) {
++				get_task_struct(t);
++				buf[n] = t;
++			}
++			n++;
++		}
++		raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
++	}
++	return n;
++}
++
+ #else /* #ifdef CONFIG_TASKS_RCU */
+ void exit_tasks_rcu_start(void) { }
+ void exit_tasks_rcu_finish(void) { }
+
+-- 
+2.39.5
+
+
